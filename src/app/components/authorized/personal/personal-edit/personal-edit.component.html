@@ -1,0 +1,487 @@
+<section class="page-body profile-body home-body">
+  <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
+  <div class="container">
+    <div class="profile-wrapper clearfix">
+      <!-- <div class="left-panel large">
+        <mat-card class="left-nav sticky">
+          <mat-nav-list>
+            <div mat-subheader>
+              <mat-icon mat-list-icon>account_box</mat-icon>
+              Personal Details
+            </div>
+            <mat-list-item (click)="navigateToSection(Personal)">
+              <mat-icon mat-list-icon>pets</mat-icon>
+              <div mat-line>Personal Info</div>
+            </mat-list-item>
+
+            <mat-list-item (click)="navigateToSection(Education)">
+              <mat-icon mat-list-icon>perm_contact_calendar</mat-icon>
+              <div mat-line>Education</div>
+            </mat-list-item>
+            
+            <mat-list-item (click)="navigateToSection(Oraganizaiton)">
+              <mat-icon mat-list-icon>bookmarks</mat-icon>
+              <div mat-line>Oraganizaiton</div>
+            </mat-list-item>
+            
+            <mat-list-item (click)="navigateToSection(Relations)">
+              <mat-icon mat-list-icon>face</mat-icon>
+              <div mat-line>Relations</div>
+            </mat-list-item>
+            
+            <mat-list-item (click)="navigateToSection(Service)">
+              <mat-icon mat-list-icon>face</mat-icon>
+              <div mat-line>Service Providers</div>
+            </mat-list-item>
+            
+            <mat-list-item (click)="navigateToSection(Repository)">
+              <mat-icon mat-list-icon>face</mat-icon>
+              <div mat-line>Repository</div>
+            </mat-list-item>
+          </mat-nav-list>
+        </mat-card>
+      </div> -->
+      <div class="right-panels large">
+        <div class="flex-containers space-between page-heading-action">
+          <div class="flex-item">
+            <h4 class="name"><mat-icon>account_box</mat-icon>Personal Details</h4>
+          </div>
+          <div class="flex-item" *ngIf="errorMessage">
+            <mat-error>{{errorMessage}}</mat-error>
+          </div>
+        </div>
+        <div class="personal-form-wrapper">
+          <form [formGroup]="personalDetailsForm">
+    
+            <mat-accordion class="personal-details" multi>
+              <mat-expansion-panel expanded hideToggle disabled>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <span #Personal>Personal Details</span>
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    <button mat-icon-button routerLink="/auth/personal">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="savePersonalDetails()">
+                      <mat-icon>save</mat-icon>
+                    </button>
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <div class="form-continer">
+                    <div class="list flex-containers flex-start wrap">
+                      <div class="list-item-3 outline">
+                        <mat-label>Gender</mat-label>
+                        <mat-form-field appearance="outline">
+                          <mat-label>Gender</mat-label>
+                          <mat-select formControlName="gender">
+                            <mat-option value="Male">Male</mat-option>
+                            <mat-option value="Female">Female</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                      <div class="list-item-3 outline">
+                        <mat-label>DOB</mat-label>
+                        <mat-form-field appearance="outline">
+                          <input 
+                            matInput 
+                            [matDatepicker]="picker"
+                            [max]="maxDate" 
+                            placeholder="DOB" 
+                            formControlName="dob" 
+                            autocomplete="off"/>
+                          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                          <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                      <div class="list-item-3 outline">
+                        <mat-label>Maritial Status</mat-label>
+                        <mat-form-field appearance="outline">
+                          <mat-label>Maritial Status</mat-label>
+                          <mat-select formControlName="maritalstatus">
+                            <mat-option value="Single">Single</mat-option>
+                            <mat-option value="Married">Married</mat-option>
+                            <mat-option value="Divorced">Divorced</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                    </div>
+        
+                    <div class="list flex-containers flex-start wrap">
+                      <div class="list-item-3 outline">
+                        <mat-label>Father's Name</mat-label>
+                        <mat-form-field appearance="outline">
+                          <input matInput placeholder="Father's Name" formControlName="fathername" maxlength="50" autocomplete="off"/>
+                        </mat-form-field>
+                      </div>
+                      <div class="list-item-3 outline">
+                        <mat-label>Mother's Name</mat-label>
+                        <mat-form-field appearance="outline">
+                          <input matInput placeholder="Mother's Name" formControlName="mothername" maxlength="50" autocomplete="off"/>
+                        </mat-form-field>
+                      </div>
+                      <div class="list-item-3 outline">
+                        <mat-label>Birth City</mat-label>
+                        <mat-form-field appearance="outline">
+                          <input matInput placeholder="Birth City" formControlName="birthcity" maxlength="50" autocomplete="off"/>
+                        </mat-form-field>
+                      </div>
+                    </div>
+        
+    
+                    <div class="list flex-containers flex-start wrap">
+                      <div class="list-item-3 outline">
+                        <mat-label>Current City</mat-label>
+                        <mat-form-field appearance="outline">
+                          <input matInput placeholder="Current City" formControlName="leavingcity" maxlength="50" autocomplete="off"/>
+                        </mat-form-field>
+                      </div>
+                      <div class="list-item-3 outline">
+                        <mat-label>Blood Group</mat-label>
+                        <mat-form-field appearance="outline">
+                          <input matInput placeholder="Blood Group" formControlName="bloodgroup" maxlength="50" autocomplete="off"/>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                   
+                </div>
+              </mat-expansion-panel>
+
+              <mat-expansion-panel expanded hideToggle disabled>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <span #Education>Education</span>
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    <button mat-icon-button routerLink="/auth/personal">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="savePersonalDetails()">
+                      <mat-icon>save</mat-icon>
+                    </button>
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <div class="inline-progress-wrapper" *ngIf="isDeleting['education']">
+                  <mat-progress-bar mode="indeterminate" color="secondary"></mat-progress-bar>
+                </div>
+                <div class="btn-main-right-wrapper top-sapce" style="margin-right: 10px;">
+                  <button type="button" mat-stroked-button class="primary-btn-gray" 
+                    (click)="addFormItem('education')" 
+                    *ngIf="!personalDetailsForm.get('education')['controls'].length">
+                      Add Education
+                  </button>
+                </div>
+                <div class="flex-containers space-between" 
+                  formArrayName="education" *ngFor="let edu of personalDetailsForm.get('education')['controls']; index as i; last as isLast; first as isFirst">
+                  <ng-container [formGroupName]="i">
+                    <div class="list flex-containers flex-start wrap">
+                      <div class="list-item-5 outline">
+                        <mat-label>Education</mat-label>
+                        <mat-form-field appearance="outline">
+                          <mat-label>Education</mat-label>
+                          <mat-select formControlName="qualifiation">
+                            <mat-option *ngFor="let edu of educationTypes" [value]="edu.value">{{edu.title}}</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                      <div class="list-item-3 outline">
+                        <mat-label>Institution</mat-label>
+                        <mat-form-field appearance="outline">
+                          <input matInput placeholder="Institution" formControlName="institution" maxlength="100" autocomplete="off"/>
+                        </mat-form-field>
+                      </div>
+                      <div class="list-item-7 outline">
+                        <mat-label>Year</mat-label>
+                        <mat-form-field appearance="outline">
+                          <input matInput placeholder="Year" formControlName="year" maxlength="4" autocomplete="off"/>
+                        </mat-form-field>
+                      </div>
+                      <div class="list-item-4 outline">
+                        <mat-label>Choose/Change Image</mat-label>
+                        <app-image-cropper 
+                          [imageType]="'Education'"
+                          [imagePath]="personal.education[i]?.path ? personal.education[i].path : ''"
+                          (uploadCompleted)="onUploadCompleted($event, edu)">
+                        </app-image-cropper>
+                      </div>
+                    </div>
+                    <div class="list add-remove-button">
+                      <button type="button" mat-icon-button type="button" (click)="addFormItem('education')" *ngIf="isLast" [disabled]="isDeleting['education']">
+                        <mat-icon>add</mat-icon>
+                      </button>
+                      <button type="button" mat-icon-button class="del-icon" (click)="deleteRecord(edu, 'education', 'education', i)" [disabled]="isDeleting['education']">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
+                  </ng-container>
+                </div>
+              </mat-expansion-panel>
+
+              <mat-expansion-panel expanded hideToggle disabled>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <span #Oraganizaiton>Oraganizaiton</span>
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    <button mat-icon-button routerLink="/auth/personal">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="savePersonalDetails()">
+                      <mat-icon>save</mat-icon>
+                    </button>
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <div class="form-continer">
+                    <div class="list flex-containers flex-start wrap">
+                      <div class="list-item-2 outline">
+                        <mat-label>Company Name</mat-label>
+                        <mat-form-field appearance="outline">
+                          <input matInput placeholder="Company Name" formControlName="comapanyname" maxlength="50" autocomplete="off"/>
+                        </mat-form-field>
+                        </div>
+                        <div class="list-item-2 outline">
+                        <mat-label>Company Location</mat-label>
+                        <mat-form-field appearance="outline">
+                          <input matInput placeholder="Company Location" formControlName="comapanyloc" maxlength="50" autocomplete="off"/>
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div class="list flex-containers flex-start wrap">
+                      <div class="list-item-2 outline">
+                        <mat-label>Designation</mat-label>
+                        <mat-form-field appearance="outline">
+                          <input matInput placeholder="Designation" formControlName="designation" maxlength="50" autocomplete="off"/>
+                        </mat-form-field>
+                      </div>
+                      <div class="list-item-2 outline">
+                        <mat-label>Company Email</mat-label>
+                        <mat-form-field appearance="outline">
+                          <input matInput placeholder="Company Email" formControlName="companyemail" maxlength="50" autocomplete="off"/>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                </div>
+              </mat-expansion-panel>              
+    
+              <mat-expansion-panel expanded hideToggle disabled>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <span #Relations>My Relations</span>
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    <button mat-icon-button routerLink="/auth/personal">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="savePersonalDetails()">
+                      <mat-icon>save</mat-icon>
+                    </button>
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <div class="inline-progress-wrapper" *ngIf="isDeleting['relations']">
+                  <mat-progress-bar mode="indeterminate" color="secondary"></mat-progress-bar>
+                </div>
+                <div class="btn-main-right-wrapper top-sapce" style="margin-right: 10px;">
+                  <button type="button" mat-stroked-button class="primary-btn-gray" 
+                    (click)="addFormItem('relations')" 
+                    *ngIf="!personalDetailsForm.get('relations')['controls'].length">
+                      Add Relation
+                  </button>
+                </div>
+                <div class="flex-containers space-between" 
+                  formArrayName="relations" *ngFor="let relation of personalDetailsForm.get('relations')['controls']; index as i; last as isLast; first as isFirst">
+                  <ng-container [formGroupName]="i">
+                    <div class="list flex-containers flex-start wrap">
+                      <div class="list-item-5 outline">
+                        <mat-label>Relation Type</mat-label>
+                        <mat-form-field appearance="outline">
+                          <mat-label>Relation Type</mat-label>
+                          <mat-select formControlName="relation_type">
+                            <mat-option *ngFor="let type of relationTypes | keyvalue" [value]="type.value.value">{{type.value.title}}</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                      <div class="list-item-5 outline">
+                        <mat-label>Name</mat-label>
+                        <mat-form-field appearance="outline">
+                          <input matInput placeholder="Name" formControlName="name" maxlength="100" autocomplete="off"/>
+                        </mat-form-field>
+                      </div>
+                      <div class="list-item-5 outline">
+                        <mat-label>Email</mat-label>
+                        <mat-form-field appearance="outline">
+                          <input matInput placeholder="Email" formControlName="email" maxlength="100" autocomplete="off"/>
+                        </mat-form-field>
+                      </div>
+                      <div class="list-item-5 outline">
+                        <mat-label>Phone No</mat-label>
+                        <mat-form-field appearance="outline">
+                          <input matInput placeholder="Phone No" formControlName="phoneno" maxlength="15" autocomplete="off"/>
+                        </mat-form-field>
+                      </div>
+                      <div class="list-item-5 outline">
+                        <mat-label>Location</mat-label>
+                        <mat-form-field appearance="outline">
+                          <input matInput placeholder="Location" formControlName="location" maxlength="100" autocomplete="off"/>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="list add-remove-button">
+                      <button type="button" mat-icon-button type="button" (click)="addFormItem('relations')" *ngIf="isLast" [disabled]="isDeleting['relations']">
+                        <mat-icon>add</mat-icon>
+                      </button>
+                      <button type="button" mat-icon-button class="del-icon" (click)="deleteRecord(relation, 'relations', 'relations', i)" [disabled]="isDeleting['relations']">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
+                  </ng-container>
+                </div>
+              </mat-expansion-panel>
+    
+    
+              <mat-expansion-panel expanded hideToggle disabled>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <span #Service>My Service Providers</span>
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    <button mat-icon-button routerLink="/auth/personal">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="savePersonalDetails()">
+                      <mat-icon>save</mat-icon>
+                    </button>
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <div class="inline-progress-wrapper" *ngIf="isDeleting['providers']">
+                  <mat-progress-bar mode="indeterminate" color="secondary"></mat-progress-bar>
+                </div>
+                <div class="btn-main-right-wrapper top-sapce" style="margin-right: 10px;">
+                  <button type="button" mat-stroked-button class="primary-btn-gray" 
+                    (click)="addFormItem('serviceproviders')" 
+                    *ngIf="!personalDetailsForm.get('serviceproviders')['controls'].length">
+                      Add Service Provider
+                  </button>
+                </div>
+                <div class="flex-containers space-between" 
+                  formArrayName="serviceproviders" *ngFor="let provider of personalDetailsForm.get('serviceproviders')['controls']; index as i; last as isLast; first as isFirst">
+                  <ng-container [formGroupName]="i">
+                    <div class="list flex-containers flex-start wrap">
+                      <div class="list-item-5 outline">
+                        <mat-label>Type</mat-label>
+                        <mat-form-field appearance="outline">
+                          <mat-label>Type</mat-label>
+                          <mat-select formControlName="relation_type">
+                            <mat-option *ngFor="let type of serviceProvidersTypes | keyvalue" [value]="type.value.value">{{type.value.title}}</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                      <div class="list-item-5 outline">
+                        <mat-label>Name</mat-label>
+                        <mat-form-field appearance="outline">
+                          <input matInput placeholder="Name" formControlName="name" maxlength="100" autocomplete="off"/>
+                        </mat-form-field>
+                      </div>
+                      <div class="list-item-5 outline">
+                        <mat-label>Email</mat-label>
+                        <mat-form-field appearance="outline">
+                          <input matInput placeholder="Email" formControlName="email" maxlength="100" autocomplete="off"/>
+                        </mat-form-field>
+                      </div>
+                      <div class="list-item-5 outline">
+                        <mat-label>Phone No</mat-label>
+                        <mat-form-field appearance="outline">
+                          <input matInput placeholder="Phone No" formControlName="phoneno" maxlength="15" autocomplete="off"/>
+                        </mat-form-field>
+                      </div>
+                      <div class="list-item-5 outline">
+                        <mat-label>Location</mat-label>
+                        <mat-form-field appearance="outline">
+                          <input matInput placeholder="Location" formControlName="location" maxlength="100" autocomplete="off"/>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="list add-remove-button">
+                      <button type="button" mat-icon-button type="button" (click)="addFormItem('serviceproviders')" *ngIf="isLast">
+                        <mat-icon>add</mat-icon>
+                      </button>
+                      <button type="button" mat-icon-button class="del-icon" (click)="deleteRecord(provider, 'providers', 'providers', i)" [disabled]="isDeleting['relations']">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
+                  </ng-container>
+                </div>
+              </mat-expansion-panel>
+    
+              <mat-expansion-panel expanded hideToggle disabled>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <span #Repository>My Repository</span>
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    <button mat-icon-button routerLink="/auth/personal">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="savePersonalDetails()">
+                      <mat-icon>save</mat-icon>
+                    </button>
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <div class="inline-progress-wrapper" *ngIf="isDeleting['records']">
+                  <mat-progress-bar mode="indeterminate" color="secondary"></mat-progress-bar>
+                </div>
+                <div class="btn-main-right-wrapper top-sapce" style="margin-right: 10px;">
+                  <button type="button" mat-stroked-button class="primary-btn-gray" 
+                    (click)="addFormItem('records')" 
+                    *ngIf="!personalDetailsForm.get('records')['controls'].length">
+                      Add Record
+                  </button>
+                </div>
+                <div class="flex-containers space-between" 
+                  formArrayName="records" *ngFor="let record of personalDetailsForm.get('records')['controls']; index as i; last as isLast; first as isFirst">
+                  <ng-container [formGroupName]="i">
+                    <div class="list flex-containers flex-start wrap">
+                      <div class="list-item-4 outline">
+                        <mat-label>Type</mat-label>
+                        <mat-form-field appearance="outline">
+                          <mat-label>Type</mat-label>
+                          <mat-select formControlName="image_type">
+                            <mat-option *ngFor="let type of recordTypes | keyvalue" [value]="type.value.value">{{type.value.title}}</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                      <div class="list-item-3 outline">
+                        <mat-label>Name</mat-label>
+                        <mat-form-field appearance="outline">
+                          <input matInput placeholder="Name" formControlName="name" maxlength="100" autocomplete="off"/>
+                        </mat-form-field>
+                      </div>
+                      <div class="list-item-3 outline">
+                        <mat-label>Choose/Change Image</mat-label>
+                        <app-image-cropper 
+                          [imageType]="'Records'"
+                          [imagePath]="personal.records[i]?.path ? personal.records[i].path : ''"
+                          (uploadCompleted)="onUploadCompleted($event, record)">
+                        </app-image-cropper>
+                      </div>
+    
+                    </div>
+                    <div class="list add-remove-button">
+                      <button type="button" mat-icon-button type="button" (click)="addFormItem('records')" *ngIf="isLast">
+                        <mat-icon>add</mat-icon>
+                      </button>
+                      <button type="button" mat-icon-button class="del-icon" (click)="deleteRecord(record, 'records', 'records', i)" [disabled]="isDeleting['relations']">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
+                  </ng-container>
+                </div>
+              </mat-expansion-panel>
+    
+            </mat-accordion>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

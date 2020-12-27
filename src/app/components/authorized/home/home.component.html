@@ -1,0 +1,113 @@
+<section class="page-body home-bodys">
+  <div class="container">
+    <div class="home-wrapper">
+      <!-- Community Pages -->
+      
+      <div class="clearfix my-community-body">
+        <!-- <div class="left-pannel">
+          <app-account-details></app-account-details>
+          <app-recent-deals></app-recent-deals>
+        </div> -->
+        <div class="home-panel">
+          <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
+          <mat-horizontal-stepper [linear]="false" #stepper>
+            <mat-step>
+              <ng-template matStepLabel>Add Source File</ng-template>
+              <mat-card class="border no-rounded list shrare-post">
+                <h1 class="share-post-title">Create Your<span class="red"> Analysis</span></h1>
+                <app-progress-bar [message]="'Create your Analysis...'" class="page" *ngIf="isShareLoading"></app-progress-bar>
+                <form [formGroup]="sharePostForm">
+                  <div class="form-continer">
+                    <div class="list flex-containers flex-start wrap">
+                      <div class="list-item-2 outline">
+                        <mat-label>Analysis Title</mat-label>
+                        <mat-form-field appearance="outline">
+                          <input matInput placeholder="Analysis Title" formControlName="name" maxlength="50" autocomplete="off"/>
+                        </mat-form-field>
+                      </div>
+                      <div class="list-item-3 outline" *ngIf="!isShareLoading">
+                        <mat-label>Upload CSV</mat-label>
+                        <app-image-cropper 
+                          [imageType]="'Community'"
+                          [fileTypes]="'application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*'"
+                          [imagePath]="''"
+                          (uploadCompleted)="onUploadCompleted($event, sharePostForm)">
+                        </app-image-cropper>
+                      </div>
+                    </div>
+                    <div class="list flex-containers flex-start wrap">
+                      <div class="list-item-1 outline">
+                        <mat-label>Description</mat-label>
+                        <mat-form-field appearance="outline">
+                          <textarea matInput placeholder="Description" formControlName="description" maxlength="250" autocomplete="off"></textarea>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+                <div class="act-btn-wrapper">
+                    <button mat-stroked-button class="primary-btn-gray">Next <mat-icon>arrow_forward</mat-icon></button>
+                </div>
+                <!-- <div class="btns-wrapper">
+                  <button mat-button class="share-btn" (click)="shareWithCommunity()" [disabled]="isShareLoading">
+                    <mat-icon>share</mat-icon>Share with community
+                  </button>
+                </div> -->
+              </mat-card>
+            </mat-step>
+
+            <mat-step>
+              <ng-template matStepLabel>Define CDE</ng-template>
+              <mat-card class="border no-rounded list shrare-post">
+                <h1 class="share-post-title">Define<span class="red"> CDE</span></h1>
+                <app-progress-bar [message]="'Create your Analysis...'" class="page" *ngIf="isShareLoading"></app-progress-bar>
+                <div class="col-selector-wrapper">
+                  <app-column-selector 
+                    [availableColumnsLabel]="'Available Columns'"
+                    [selectedColumnsLabel]="'Selected Columns'"
+                    [availableColumns]="availableColumns"
+                    [selectedColumns]="selectedColumns"
+                    [formControl]="columnsForm.controls.columns"
+                  >
+                  </app-column-selector>
+                </div>
+                <div class="act-btn-wrapper">
+                  <button mat-stroked-button class="primary-btn-gray white"><mat-icon>arrow_back</mat-icon> Back</button>
+                  <button mat-stroked-button class="primary-btn-gray">Next <mat-icon>arrow_forward</mat-icon></button>
+                </div>
+              </mat-card>
+            </mat-step>
+            
+            <mat-step>
+              <ng-template matStepLabel>Define Rules</ng-template>
+              <mat-card class="border no-rounded list shrare-post">
+                <h1 class="share-post-title">Define<span class="red"> Rules</span></h1>
+                <app-progress-bar [message]="'Create your Analysis...'" class="page" *ngIf="isShareLoading"></app-progress-bar>
+                
+                <div class="act-btn-wrapper">
+                  <button mat-stroked-button class="primary-btn-gray white"><mat-icon>arrow_back</mat-icon> Back</button>
+                  <button mat-stroked-button class="primary-btn-gray">Next <mat-icon>arrow_forward</mat-icon></button>
+                </div>
+              </mat-card>
+            </mat-step>
+
+            <mat-step>
+              <ng-template matStepLabel>Complete Analysis</ng-template>
+              <mat-card class="border no-rounded list shrare-post">
+                <h1 class="share-post-title">Complete<span class="red"> Analysis</span></h1>
+                <app-progress-bar [message]="'Create your Analysis...'" class="page" *ngIf="isShareLoading"></app-progress-bar>
+                
+                <div class="act-btn-wrapper">
+                  <button mat-stroked-button class="primary-btn-gray white"><mat-icon>arrow_back</mat-icon> Back</button>
+                  <button mat-stroked-button class="primary-btn-gray">Next <mat-icon>arrow_forward</mat-icon></button>
+                </div>
+              </mat-card>
+            </mat-step>
+          </mat-horizontal-stepper>
+          
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

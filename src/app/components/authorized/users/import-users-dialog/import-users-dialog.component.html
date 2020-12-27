@@ -1,0 +1,25 @@
+<div class="page-body">
+  <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
+
+  <h1 mat-dialog-title>Import Users</h1>
+  <div mat-dialog-content>
+    <div class="contacts-form-wrapper page-body outline">
+      <div class="image-crop-wrapper">
+        <mat-card class="image-crop-card border">
+          <div class="file-form-group">
+            <input type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" (change)="fileChangeEvent($event)" #fileInput>
+          </div>
+          <div class="error-messages-wrapper">
+            <mat-error *ngIf="errorMessage">
+              {{errorMessage}}
+            </mat-error>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+  <div class="btn-main-right-wrapper">
+    <button mat-stroked-button (click)="onCloseClick()" class="primary-btn-gray white">Cancel</button>
+    <button mat-stroked-button class="primary-btn-gray" cdkFocusInitial (click)="saveImportContactDetails()" [disabled]="!selectedFile.name">Save</button>
+  </div>
+</div>

@@ -1,0 +1,75 @@
+
+<div class="car-wrapper" *ngIf="items && items.length > 3">
+  <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
+  <h4 class="sub-title" *ngIf="title">{{title}}</h4>
+  <div class="car-btn-wrapper text-right">
+    <button mat-stroked-button class="secondary-btn prev-next-btn" (click)="owlCar.prev()">
+      <mat-icon>keyboard_arrow_left</mat-icon>
+    </button>
+    <button mat-stroked-button class="secondary-btn prev-next-btn" (click)="owlCar.next()">
+      <mat-icon>keyboard_arrow_right</mat-icon>
+    </button>
+  </div>
+  
+  <owl-carousel-o [options]="OwlOptions" #owlCar>
+    <ng-container *ngFor="let item of items">
+      <ng-template carouselSlide [width]="'180px'">
+        <mat-card class="flex-item border award">
+          <h4 *ngIf="!item.path"><mat-icon>image</mat-icon></h4>
+          <h4 *ngIf="item.path && (item.path | fileformat) === 'docs'">
+            <a href="{{appConfig.imgBaseUrl}}{{item.path}}" target="_blank">
+              <mat-icon>picture_as_pdf</mat-icon>
+            </a>
+          </h4>
+          <div *ngIf="item.path && (item.path | fileformat) === 'images'" class="img-preview">
+            <a href="{{appConfig.imgBaseUrl}}{{item.path}}" target="_blank">
+              <div class="img" [ngStyle]="{'background-image': 'url(' + appConfig.imgBaseUrl + item.path + ')'}"></div>
+            </a>
+          </div>
+          <h4>{{item.name}}</h4>
+          <p class="desc word-wrap" *ngIf="item.description" title="{{item.description}}">{{item.description}}</p>
+          <!-- Sharing menu -->
+          <mat-menu #shareMenu="matMenu" class="share-menu-wrapper">
+            <button mat-menu-item (click)="shareWithCommunity(item)">Share with Community</button>
+          </mat-menu>
+      
+          <button mat-icon-button class="more-icon-btn" [matMenuTriggerFor]="shareMenu" *ngIf="communityShare" [disabled]="isLoading" [class.loading]="isLoading">
+            <mat-icon class="more-icon">more_vert</mat-icon>
+          </button>
+        </mat-card>
+      </ng-template>
+    </ng-container>
+  </owl-carousel-o>
+</div>
+
+<div class="car-wrapper" *ngIf="items && items.length <= 3">
+  <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
+  <h4 class="sub-title block" *ngIf="title">{{title}}</h4>
+  <div class="list bt-border flex-containers flex-start">
+    <mat-card class="flex-item list-item-3 border award" *ngFor="let item of items">
+      <h4 *ngIf="!item.path"><mat-icon>image</mat-icon></h4>
+      <h4 *ngIf="item.path && (item.path | fileformat) === 'docs'">
+        <a href="{{appConfig.imgBaseUrl}}{{item.path}}" target="_blank">
+          <mat-icon>picture_as_pdf</mat-icon>
+        </a>
+      </h4>
+      <div *ngIf="item.path && (item.path | fileformat) === 'images'" class="img-preview">
+        <a href="{{appConfig.imgBaseUrl}}{{item.path}}" target="_blank">
+          <div class="img" [ngStyle]="{'background-image': 'url(' + appConfig.imgBaseUrl + item.path + ')'}"></div>
+        </a>
+      </div>
+      <h4>{{item.name}}</h4>
+      <p class="desc word-wrap" *ngIf="item.description" title="{{item.description}}">{{item.description}}</p>
+
+      <!-- Sharing menu -->
+      <mat-menu #shareMenu="matMenu" class="share-menu-wrapper">
+        <button mat-menu-item (click)="shareWithCommunity(item)">Share with Community</button>
+      </mat-menu>
+  
+      <button mat-icon-button class="more-icon-btn" [matMenuTriggerFor]="shareMenu" *ngIf="communityShare" [disabled]="isLoading" [class.loading]="isLoading">
+        <mat-icon class="more-icon">more_vert</mat-icon>
+      </button>
+
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+<section class="page-body notification-body home-body">
+  <div class="container">
+    <div class="flex-containers space-between page-heading-action">
+      <div class="flex-item">
+        <h4 class="name">Notifications</h4>
+      </div>
+    </div>
+    <div class="row">
+      <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
+      <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="noti-wrapper">
+          <mat-card class="list notification flex-containers space-between" 
+            *ngFor="let notification of notifications; index as i"
+            (click)="makeNotificationRead(notification)">
+            <div class="flex-item">
+              <label class="label">{{notification.createdAt | date:'MMM dd, yyyy hh:mm a'}}</label>
+              <h4 [class.unread]="!notification.status">{{notification.subject}}</h4>
+              <p *ngIf="notification.showMsg" [innerHTML]="notification.description"></p>
+            </div>
+            <div class="flex-item" *ngIf="!notification.status">
+              <mat-icon class="unread-icon">brightness_1</mat-icon>
+            </div>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

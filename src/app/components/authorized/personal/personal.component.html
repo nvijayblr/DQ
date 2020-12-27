@@ -1,0 +1,298 @@
+<section class="page-body profile-body home-body">
+  <div class="container">
+    <div class="profile-wrapper clearfix">
+      <div class="left-panel large">
+        <app-account-details></app-account-details>
+        <mat-card class="left-nav sticky">
+          <mat-nav-list>
+            <div mat-subheader>
+              <mat-icon mat-list-icon>account_box</mat-icon>
+              Personal Details
+            </div>
+            <mat-list-item (click)="navigateToSection(Personal)">
+              <mat-icon mat-list-icon>pets</mat-icon>
+              <div mat-line>Personal Info</div>
+            </mat-list-item>
+
+            <mat-list-item (click)="navigateToSection(Education)">
+              <mat-icon mat-list-icon>perm_contact_calendar</mat-icon>
+              <div mat-line>Education</div>
+            </mat-list-item>
+            
+            <mat-list-item (click)="navigateToSection(Oraganizaiton)">
+              <mat-icon mat-list-icon>bookmarks</mat-icon>
+              <div mat-line>Oraganizaiton</div>
+            </mat-list-item>
+            
+            <mat-list-item (click)="navigateToSection(Relations)">
+              <mat-icon mat-list-icon>face</mat-icon>
+              <div mat-line>My Relations</div>
+            </mat-list-item>
+            
+            <mat-list-item (click)="navigateToSection(Service)">
+              <mat-icon mat-list-icon>face</mat-icon>
+              <div mat-line>My Service Providers</div>
+            </mat-list-item>
+            
+            <mat-list-item (click)="navigateToSection(Repository)">
+              <mat-icon mat-list-icon>face</mat-icon>
+              <div mat-line>My Repository</div>
+            </mat-list-item>
+          </mat-nav-list>
+        </mat-card>
+      </div>
+      <div class="right-panel large">
+        <div class="flex-containers space-between page-heading-action">
+          <div class="flex-item">
+            <h4 class="name"><mat-icon>account_box</mat-icon>Personal Details</h4>
+          </div>
+        </div>
+        <app-progress-bar message="Loading personal details..." class="page" *ngIf="isLoading"></app-progress-bar>
+        <mat-accordion class="personal-details" multi>
+          <mat-expansion-panel expanded hideToggle disabled>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <span #Personal>Personal Info</span>
+              </mat-panel-title>
+              <mat-panel-description>
+                <button mat-icon-button routerLink="/auth/personal/update">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="mat-expansion-panel-body-margin">
+              <div class="list flex-containers flex-start">
+                <div class="list-item-3 no-margin">
+                  <label class="label">Gender</label>
+                  <h4>{{personal.gender}}</h4>
+                </div>
+                <div class="list-item-3 no-margin">
+                  <label class="label">DOB</label>
+                  <h4>{{personal.dob | date:'mediumDate'}}</h4>
+                </div>
+                <div class="list-item-3 no-margin">
+                  <label class="label">Maritial Status</label>
+                  <h4>{{personal.maritalstatus}}</h4>
+                </div>
+                <div class="list-item-3 no-margin">
+                  <label class="label">Blood Group</label>
+                  <h4>{{personal.bloodgroup}}</h4>
+                </div>
+              </div>
+              <div class="list flex-containers flex-start">
+                <div class="list-item-3 no-margin">
+                  <label class="label">Father Name</label>
+                  <h4>{{personal.fathername}}</h4>
+                </div>
+                <div class="list-item-3 no-margin">
+                  <label class="label">Mother Name</label>
+                  <h4>{{personal.mothername}}</h4>
+                </div>
+                <div class="list-item-3 no-margin">
+                  <label class="label">Birth City</label>
+                  <h4>{{personal.birthcity}}</h4>
+                </div>
+                <div class="list-item-3 no-margin">
+                  <label class="label">Current City</label>
+                  <h4>{{personal.leavingcity}}</h4>
+                </div>
+              </div>
+            </div>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel expanded hideToggle disabled>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <span #Education>Education</span>
+              </mat-panel-title>
+              <mat-panel-description>
+                <button mat-icon-button routerLink="/auth/personal/update">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="mat-expansion-panel-body-margin">
+              <div class="list bt-border flex-containers space-between education-wrp" *ngFor="let education of personal.education">
+                <div class="flex-item no-margin">
+                  <label class="label">{{education.year}}</label>
+                  <h4>{{education.qualifiation}}, {{education.institution}}</h4>
+                </div>
+                <div class="flex-item">
+                  <div class="img-preview" *ngIf="education.certificate && education.certificate.indexOf('blank.png') < 0">
+                    <div class="img" [ngStyle]="{'background-image': 'url(' + appConfig.imgBaseUrl + education.certificate + ')'}"></div>
+                  </div>
+                  <button mat-icon-button title="View / Download" *ngIf="education.certificate && education.certificate.indexOf('blank.png') < 0">
+                    <mat-icon>attachment</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </mat-expansion-panel>
+          <mat-expansion-panel expanded hideToggle disabled>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <span #Oraganizaiton>Oraganizaiton</span>
+              </mat-panel-title>
+              <mat-panel-description>
+                <button mat-icon-button routerLink="/auth/personal/update">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="mat-expansion-panel-body-margin">
+              <div class="list flex-containers flex-start">
+                <div class="list-item-2 no-margin">
+                  <label class="label">Oraganizaiton</label>
+                  <h4>{{personal.comapanyname}}</h4>
+                </div>
+                <div class="list-item-2 no-margin">
+                  <label class="label">Location</label>
+                  <h4>{{personal.comapanyloc}}</h4>
+                </div>
+              </div>
+              <div class="list flex-containers flex-start">
+                <div class="list-item-2 no-margin">
+                  <label class="label">Designation</label>
+                  <h4>{{personal.designation}}</h4>
+                </div>
+                <div class="list-item-2 no-margin">
+                  <label class="label">Email</label>
+                  <h4>{{personal.companyemail}}</h4>
+                </div>
+              </div>
+            </div>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel expanded hideToggle disabled>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <span #Relations>My Relations</span>
+              </mat-panel-title>
+              <mat-panel-description>
+                <button mat-icon-button routerLink="/auth/personal/update">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="mat-expansion-panel-body-margin">
+              <h4 class="sub-title">Spouse</h4>
+              <div class="list bt-border flex-containers space-between" *ngFor="let spouse of personal.spouse">
+                <h4 class="list-item-4 no-margin">{{spouse.name}}</h4>
+                <h4 class="list-item-4 no-margin">{{spouse.location}}</h4>
+                <h4 class="list-item-4 no-margin">{{spouse.phoneno}}</h4>
+                <h4 class="list-item-4 no-margin">{{spouse.email}}</h4>
+              </div>
+  
+              <h4 class="sub-title">Friends</h4>
+              <div class="list bt-border flex-containers space-between" *ngFor="let friend of personal.friends">
+                <h4 class="list-item-4 no-margin">{{friend.name}}</h4>
+                <h4 class="list-item-4 no-margin">{{friend.location}}</h4>
+                <h4 class="list-item-4 no-margin">{{friend.phoneno}}</h4>
+                <h4 class="list-item-4 no-margin">{{friend.email}}</h4>
+              </div>
+  
+              <h4 class="sub-title">Relatives</h4>
+              <div class="list bt-border flex-containers space-between" *ngFor="let relative of personal.relatives">
+                <h4 class="list-item-4 no-margin">{{relative.name}}</h4>
+                <h4 class="list-item-4 no-margin">{{relative.location}}</h4>
+                <h4 class="list-item-4 no-margin">{{relative.phoneno}}</h4>
+                <h4 class="list-item-4 no-margin">{{relative.email}}</h4>
+              </div>
+            </div>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel expanded hideToggle disabled>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <span #Service>My Service Providers</span>
+              </mat-panel-title>
+              <mat-panel-description>
+                <button mat-icon-button routerLink="/auth/personal/update">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="mat-expansion-panel-body-margin">
+              <h4 class="sub-title">Doctors</h4>
+              <div class="list bt-border flex-containers space-between" *ngFor="let doctor of personal.doctors">
+                <h4 class="list-item-4 no-margin">{{doctor.name}}</h4>
+                <h4 class="list-item-4 no-margin">{{doctor.location}}</h4>
+                <h4 class="list-item-4 no-margin">{{doctor.phoneno}}</h4>
+                <h4 class="list-item-4 no-margin">{{doctor.email}}</h4>
+              </div>
+
+              <h4 class="sub-title">Accountants</h4>
+              <div class="list bt-border flex-containers space-between" *ngFor="let accountant of personal.accountant">
+                <h4 class="list-item-4 no-margin">{{accountant.name}}</h4>
+                <h4 class="list-item-4 no-margin">{{accountant.location}}</h4>
+                <h4 class="list-item-4 no-margin">{{accountant.phoneno}}</h4>
+                <h4 class="list-item-4 no-margin">{{accountant.email}}</h4>
+              </div>
+
+              <h4 class="sub-title">Drivers</h4>
+              <div class="list bt-border flex-containers space-between" *ngFor="let driver of personal.drivers">
+                <h4 class="list-item-4 no-margin">{{driver.name}}</h4>
+                <h4 class="list-item-4 no-margin">{{driver.location}}</h4>
+                <h4 class="list-item-4 no-margin">{{driver.phoneno}}</h4>
+                <h4 class="list-item-4 no-margin">{{driver.email}}</h4>
+              </div>
+  
+              <h4 class="sub-title">Lawyers</h4>
+              <div class="list bt-border flex-containers space-between" *ngFor="let lawyer of personal.lawyers">
+                <h4 class="list-item-4 no-margin">{{lawyer.name}}</h4>
+                <h4 class="list-item-4 no-margin">{{lawyer.location}}</h4>
+                <h4 class="list-item-4 no-margin">{{lawyer.phoneno}}</h4>
+                <h4 class="list-item-4 no-margin">{{lawyer.email}}</h4>
+              </div>
+  
+              <h4 class="sub-title">Servant</h4>
+              <div class="list bt-border flex-containers space-between" *ngFor="let servant of personal.servants">
+                <h4 class="list-item-4 no-margin">{{servant.name}}</h4>
+                <h4 class="list-item-4 no-margin">{{servant.location}}</h4>
+                <h4 class="list-item-4 no-margin">{{servant.phoneno}}</h4>
+                <h4 class="list-item-4 no-margin">{{servant.email}}</h4>
+              </div>
+            </div>
+            
+          </mat-expansion-panel>
+          
+          
+          <mat-expansion-panel class="repository-wrp" expanded hideToggle disabled>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <span #Repository>My Repository</span>
+              </mat-panel-title>
+              <mat-panel-description>
+                <button mat-icon-button routerLink="/auth/personal/update">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="mat-expansion-panel-body-margin">
+              <div class="list" *ngIf="personal.idproofs && personal.idproofs.length">
+                <app-mn-carousel [items]="personal.idproofs" title="ID Proofs"></app-mn-carousel>
+              </div>
+  
+              <div class="list" *ngIf="personal.awards && personal.awards.length">
+                <app-mn-carousel [items]="personal.awards" title="Awards"></app-mn-carousel>
+              </div>
+  
+              <div class="list" *ngIf="personal.assets && personal.assets.length">
+                <app-mn-carousel [items]="personal.assets" title="Assets"></app-mn-carousel>
+              </div>
+  
+              <div class="list" *ngIf="personal.libilities && personal.libilities.length">
+                <app-mn-carousel [items]="personal.libilities" title="Libilities"></app-mn-carousel>
+              </div>
+              
+              <div class="list" *ngIf="personal.homeAppliances && personal.homeAppliances.length">
+                <app-mn-carousel [items]="personal.homeAppliances" title="Home Appliances"></app-mn-carousel>
+              </div>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </div>
+    
+  </div>
+</section>

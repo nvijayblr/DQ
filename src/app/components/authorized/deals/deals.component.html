@@ -1,0 +1,475 @@
+<section class="page-body profile-body home-body">
+  <div class="container">
+    <div class="flex-containers space-between page-heading-action">
+      <p class="info-msg" *ngIf="!user.phonenoVerified && !user.emailVerified">
+        <mat-icon>info</mat-icon>
+        Please verify your phone number or email to create the delas.
+      </p>
+    </div>
+    <div class="row deals-header">
+      <div class="col-md-4 text-right">
+        <img src="./../assets/images/deal-illustration.svg" class="deal-bg" />
+      </div>
+      <div class="col-md-6">
+        <div class="title-wrp">
+          <h4 class="name">My Deals</h4>
+          <p class="desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
+        </div>
+      </div>
+      <div class="col-md-2 text-right">
+        <button mat-stroked-button class="primary-btn-red" 
+          (click)="showCreateEditDeals()" 
+          [disabled]="(!user.phonenoVerified && !user.emailVerified) || accountLoading">Create Deal
+        </button>
+      </div>
+    </div>
+
+    <div class="deals-wrapper personal-details">
+      <mat-tab-group (selectedTabChange)="tabChange($event)">  
+        <mat-tab label="My Deals">
+          <div class="deals-card-wrapper">
+            <app-progress-bar [message]="loadingMsg" class="page" *ngIf="isLoading"></app-progress-bar>
+
+            <mat-card *ngFor="let deals of dealsList; index as i" class="deal-card">
+              <div class="list flex-containers flex-start">
+                <div class="status {{deals.status.toLowerCase()}}">
+                  <div class="status-line"></div>
+                </div>
+                <div class="list-item-5 no-margin">
+                  <div class="deals-image-wrapper">
+                    <h4 *ngIf="!deals.path" class="icon-image">
+                      <mat-icon>image</mat-icon>
+                    </h4>
+                    <h4 *ngIf="deals.path && (deals.path | fileformat) === 'docs'" class="icon-image">
+                      <a href="{{appConfig.imgBaseUrl}}{{deals.path}}" target="_blank">
+                        <mat-icon>picture_as_pdf</mat-icon>
+                      </a>
+                    </h4>
+                    <div *ngIf="deals.path && (deals.path | fileformat) === 'images'" class="img-preview">
+                      <a href="{{appConfig.imgBaseUrl}}{{deals.path}}" target="_blank">
+                        <div class="img" [ngStyle]="{'background-image': 'url(' + appConfig.imgBaseUrl + deals.path + ')'}"></div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="list-item-1 no-margin">
+                  <div class="list no-margin">
+                    <div class="flex-containers space-between">
+                      <div class="flex-item">
+                        <h4 class="title word-wrap">
+                          {{deals.name}} 
+                          <span class="status {{deals.status.toLowerCase()}}">
+                            <mat-icon *ngIf="deals.status === 'Closed'">check</mat-icon>
+                            {{deals.status}}
+                          </span>
+                          <span class="status {{deals.active ? 'active' : 'deactive'}}" *ngIf="deals.status !== 'Closed'">| {{deals.active ? 'Active' : 'Deactive'}}</span>
+                        </h4>
+                      </div>
+                      <div class="flex-item">
+                        <!-- History -->
+                        <button mat-button class="" *ngIf="!deals.showHistory" (click)="showHideHistory(deals, true)">
+                          <mat-icon>history</mat-icon>
+                          SHOW HISTORY
+                          <mat-icon class="suffix">keyboard_arrow_down</mat-icon>
+                        </button>
+                        <button mat-button class="" *ngIf="deals.showHistory" (click)="showHideHistory(deals, false)">
+                          <mat-icon>history</mat-icon>
+                          HIDE HISTORY
+                          <mat-icon class="suffix">keyboard_arrow_up</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+                    <p class="desc word-wrap">{{deals.description}}</p>
+
+                    <div class="list flex-containers flex-start rating-wrapper">
+                      <div class="list-item-4 no-margin">
+                        <label class="label">RATING to me</label>
+                        <star-rating [value]="deals.ownerrating ? deals.ownerrating : 0" totalstars="5" checkedcolor="#b00000" uncheckedcolor="#ccc" size="18px" readonly="true"></star-rating>
+                      </div>
+                      <div class="list-item-4 no-margin">
+                        <label class="label">RATING to Proffession</label>
+                        <star-rating [value]="deals.assignerating ? deals.assignerating : 0" totalstars="5" checkedcolor="#b00000" uncheckedcolor="#ccc" size="18px" readonly="true"></star-rating>
+                      </div>
+                    </div>
+
+                    <div class="list flex-containers deal-stats flex-start">
+                      <div class="list-item-4 no-margin">
+                        <label class="label">Created On</label>
+                        <h4>{{deals.createdAt | date:'mediumDate'}}</h4>
+                      </div>
+                      <div class="list-item-4 no-margin">
+                        <label class="label">Due On</label>
+                        <h4>{{deals.due_date | date:'mediumDate'}}</h4>
+                      </div>
+                      <div class="list-item-4 no-margin">
+                        <label class="label">Location</label>
+                        <h4>{{deals.location}}</h4>
+                      </div>
+                      <div class="list-item-4 no-margin">
+                        <label class="label">Assiged To</label>
+                        <h4><a routerLink="/auth/professional" [queryParams]="{id: deals.assigned_userId}">{{deals.assignedto}}</a></h4>
+                      </div>
+                      <div class="list-item-4 no-margin">
+                        <label class="label">Amount</label>
+                        <h4>₹ {{deals.amount}}</h4>
+                      </div>
+                      <div class="list-item-4 no-margin">
+                        <label class="label">Amount Paid</label>
+                        <h4>₹ {{deals.amountpaid ? deals.amountpaid : 0}}</h4>
+                      </div>
+                    </div>
+
+                    <div class="deal-btn-wrapper">
+                      <!-- Status - NEW -->
+                      <span *ngIf="deals.status === 'New'">
+                        <button mat-stroked-button class="primary-btn-gray white" *ngIf="!deals.showReqestors && deals.isRequested" (click)="showHideRequestors(deals, true)">
+                          Show Requestors
+                          <mat-icon class="suffix">keyboard_arrow_down</mat-icon>
+                        </button>
+                        <button mat-stroked-button class="primary-btn-gray white" *ngIf="deals.showReqestors && deals.isRequested" (click)="showHideRequestors(deals, false)">
+                          Hide Requestors
+                          <mat-icon class="suffix">keyboard_arrow_up</mat-icon>
+                        </button>
+                      </span>
+
+                      <!-- Status - NEW -->
+                      <span *ngIf="deals.status === 'New' && !deals.showComment">
+                        <button mat-stroked-button class="primary-btn-gray white" (click)="showCreateEditDeals(deals)">Edit</button>
+                        <button mat-stroked-button class="primary-btn-gray white" *ngIf="deals.active" (click)="activeDeactiveUserDeals(deals, false, i)">Deactivate</button>
+                        <button mat-stroked-button class="primary-btn-gray white" *ngIf="!deals.active" (click)="activeDeactiveUserDeals(deals, true, i)">Activate</button>
+                        <button mat-stroked-button class="primary-btn-gray white" (click)="deleteDeals(deals, i)">Delete</button>
+                        
+                        <button 
+                          mat-stroked-button class="primary-btn-gray"
+                          *ngIf="deals.active" 
+                          routerLink="/auth/search" [queryParams]="{option: 'profession', q: '', location: '', dealId: ''}">
+                          Assign
+                        </button>
+                      </span>
+                      
+                      <!-- Status - Assigned, Accepted, Inprogress -->
+                      <span *ngIf="(deals.status === 'Assigned' || deals.status === 'Accepted' || deals.status === 'Inprogress') && !deals.showComment">
+                        <button mat-stroked-button class="primary-btn-gray" (click)="showHideStatusComment(deals, true, 'New')">Cancel / Re assign</button>
+                      </span>
+
+                      <!-- Status - Rejected -->
+                      <span *ngIf="deals.status === 'Rejected' && !deals.showComment">
+                        <button mat-stroked-button class="primary-btn-gray white" (click)="showHideStatusComment(deals, true, 'New')">Accept Rejection</button>
+                      </span>
+
+                      <!-- Status - Completed -->
+                      <span *ngIf="deals.status === 'Completed' && !deals.showComment">
+                        <button mat-stroked-button class="primary-btn-gray white" (click)="showHideStatusComment(deals, true, 'Closed')">Close</button>
+                        <button mat-stroked-button class="primary-btn-gray white" (click)="showHideStatusComment(deals, true, 'New')">Not Satisfactory</button>
+                      </span>
+                    
+                    </div>
+
+                    <!-- Status Comment -->
+                    <div class="list comment" *ngIf="deals.showComment">
+                      <form class="deal-requst-form outline">
+                        <mat-form-field appearance="outline">
+                          <mat-label>Leave a comment</mat-label>
+                          <textarea matInput placeholder="Ex. Assign, Close comments" [(ngModel)]="deals.comment" name="comment"></textarea>
+                        </mat-form-field>
+                        <div class="list-item-2 no-margin state-image-wrapper outline">
+                          <app-image-cropper 
+                            [imageType]="'Deals'"
+                            [fileTypes]="'application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*'"
+                            [imagePath]="deals.status_path ? deals.status_path : ''"
+                            (uploadCompleted)="onUploadCompleted($event, deals)">
+                          </app-image-cropper>
+                        </div>
+                        <div class="list-item-2 no-margin outline">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Amount Paid</mat-label>
+                            <input matInput (keypress)="inputValidation.numericOnly($event)" maxlength="10" placeholder="1000" [(ngModel)]="deals.amountpaid" name="amountpaid" autocomplete="off"/>
+                          </mat-form-field>
+                        </div>
+                        <div class="ratting-wrapper" *ngIf="deals.showRating">
+                          <mat-label>Rating to Profession</mat-label>
+                          <star-rating value="0" totalstars="5" checkedcolor="#b00000" uncheckedcolor="#ccc" size="18px" readonly="false" (rate)="onRatting($event, deals, 'ownerrating')"></star-rating>
+                        </div>
+                        <div class="btn-main-right-wrapper">
+                          <button mat-stroked-button class="primary-btn-gray white small" (click)="showHideStatusComment(deals, false)">Cancel</button>
+                          <button mat-stroked-button class="primary-btn-gray small" (click)="onUpdateDealsStatus(deals)" [disabled]="!deals.comment">Update</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+
+                  <!-- Request Accept with comment -->
+                  <div class="list no-margin req-wrapper" *ngIf="deals.requestors && deals.showReqestors">
+                    <mat-card class="list deal-stats no-border" *ngFor="let reqestors of deals.requestors">
+                      <h5><a routerLink="/auth/professional" [queryParams]="{id: reqestors.user_id}">{{reqestors.username}}</a> | {{reqestors.phoneno}} | {{reqestors.email}}</h5>
+                      <h5>{{reqestors.req_description}}</h5>
+
+                      <div class="abs-btn-wrapper">
+                        <!-- <button mat-stroked-button class="primary-btn-gray white small" (click)="showHideStatusComment(reqestors, true)" *ngIf="!reqestors.showComment">Reject</button> -->
+                        <button mat-stroked-button class="primary-btn-gray small" (click)="showHideStatusComment(reqestors, true)" *ngIf="!reqestors.showComment">Accept</button>
+                      </div>
+                      <div class="list comment" *ngIf="reqestors.showComment">
+                        <form class="deal-requst-form outline">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Leave a comment</mat-label>
+                            <textarea matInput placeholder="Ex. It makes me feel..." [(ngModel)]="reqestors.comment" name="comment"></textarea>
+                          </mat-form-field>
+                          <div class="btn-main-right-wrapper">
+                            <button mat-stroked-button class="primary-btn-gray white small" (click)="showHideStatusComment(reqestors, false)">Cancel</button>
+                            <button mat-stroked-button class="primary-btn-gray small" (click)="onAcceptDealsRequest(reqestors, deals)" [disabled]="!reqestors.comment">Assign</button>
+                          </div>
+                        </form>
+                      </div>
+
+                    </mat-card>
+                    <mat-card *ngIf="!deals.requestors.length" class="not-found-msg with-border">
+                      <h5>No requestors found.</h5>
+                    </mat-card>
+                  </div>
+                </div>
+              </div>
+
+              <!-- History -->
+              <div class="list no-margin req-wrapper" *ngIf="deals.history && deals.showHistory">
+                <h4 class="h-title">
+                  <mat-icon>history</mat-icon>
+                  History
+                </h4>
+
+                <mat-card class="list with-border" *ngFor="let history of deals.history" class="history-card">
+                  <div class="flex-containers space-between">
+                    <div class="flex-item">
+                      <h5>{{history.createdAt | date:'MMM dd, yyyy hh:mm a'}}</h5>
+                    </div>
+                    <div class="flex-item">
+                      <span class="status {{history.status.toLowerCase()}}">
+                        <strong>Status:</strong> {{history.status}}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="flex-containers list space-between no-margin">
+                    <div class="flex-item list-item no-margin">
+                      <p class="desc word-wrap">{{history.description}}</p>
+                    </div>
+                    <div class="flex-item list-item-5 no-margin">
+                      <div class="deals-image-wrapper small">
+                        <!-- <h4 *ngIf="!history.path" class="icon-image"><mat-icon>image</mat-icon></h4> -->
+                        <h4 *ngIf="history.path && (history.path | fileformat) === 'docs'" class="icon-image">
+                          <a href="{{appConfig.imgBaseUrl}}{{history.path}}" target="_blank">
+                            <mat-icon>picture_as_pdf</mat-icon>
+                          </a>
+                        </h4>
+                        <div *ngIf="history.path && (history.path | fileformat) === 'images'" class="img-preview">
+                          <a href="{{appConfig.imgBaseUrl}}{{history.path}}" target="_blank">
+                            <div class="img" [ngStyle]="{'background-image': 'url(' + appConfig.imgBaseUrl + history.path + ')'}"></div>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </mat-card>
+                <mat-card *ngIf="!deals.history.length" class="not-found-msg with-border">
+                  <h5>No history found.</h5>
+                </mat-card>
+              </div>              
+            </mat-card>
+          </div>
+        </mat-tab>
+
+        <!-- Assigned to me -->
+        <mat-tab label="Assigned to me">
+          <div class="deals-card-wrapper">
+            <app-progress-bar [message]="loadingMsg" class="page" *ngIf="isLoading"></app-progress-bar>
+            <mat-card *ngFor="let deals of dealsList; index as i" class="deal-card">
+              <div class="list flex-containers flex-start">
+                <div class="status {{deals.status.toLowerCase()}}">
+                  <div class="status-line"></div>
+                </div>
+                <div class="list-item-5 no-margin">
+                  <div class="deals-image-wrapper">
+                    <h4 *ngIf="!deals.path" class="icon-image">
+                      <mat-icon>image</mat-icon>
+                    </h4>
+                    <h4 *ngIf="deals.path && (deals.path | fileformat) === 'docs'" class="icon-image">
+                      <a href="{{appConfig.imgBaseUrl}}{{deals.path}}" target="_blank">
+                        <mat-icon>picture_as_pdf</mat-icon>
+                      </a>
+                    </h4>
+                    <div *ngIf="deals.path && (deals.path | fileformat) === 'images'" class="img-preview">
+                      <a href="{{appConfig.imgBaseUrl}}{{deals.path}}" target="_blank">
+                        <div class="img" [ngStyle]="{'background-image': 'url(' + appConfig.imgBaseUrl + deals.path + ')'}"></div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="list-item-1 no-margin">
+                  <div class="list no-margin">
+                    <div class="flex-containers space-between">
+                      <div class="flex-item">
+                        <h4 class="title">
+                          {{deals.name}} 
+                          <span class="status {{deals.status.toLowerCase()}}">
+                            <mat-icon *ngIf="deals.status === 'Closed'">check</mat-icon>
+                            {{deals.status}}
+                          </span>
+                          <span class="status {{deals.active ? 'active' : 'deactive'}}" *ngIf="deals.status !== 'Closed'">| {{deals.active ? 'Active' : 'Deactive'}}</span>
+                        </h4>
+                      </div>
+                      <div class="flex-item">
+                        <!-- History -->
+                        <button mat-button class="" *ngIf="!deals.showHistory" (click)="showHideHistory(deals, true)">
+                          <mat-icon>history</mat-icon>
+                          SHOW HISTORY
+                          <mat-icon class="suffix">keyboard_arrow_down</mat-icon>
+                        </button>
+                        <button mat-button class="" *ngIf="deals.showHistory" (click)="showHideHistory(deals, false)">
+                          <mat-icon>history</mat-icon>
+                          HIDE HISTORY
+                          <mat-icon class="suffix">keyboard_arrow_up</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+                    <p class="desc word-wrap">{{deals.description}}</p>
+
+                    <div class="list flex-containers flex-start rating-wrapper">
+                      <div class="list-item-4 no-margin">
+                        <label class="label">Rating to me</label>
+                        <star-rating [value]="deals.assignerating ? deals.assignerating : 0" totalstars="5" checkedcolor="#b00000" uncheckedcolor="#ccc" size="18px" readonly="true"></star-rating>
+                      </div>
+                      <div class="list-item-4 no-margin">
+                        <label class="label">Rating to Proffession</label>
+                        <star-rating [value]="deals.ownerrating ? deals.ownerrating : 0" totalstars="5" checkedcolor="#b00000" uncheckedcolor="#ccc" size="18px" readonly="true"></star-rating>
+                      </div>
+                    </div>
+
+                    <div class="list flex-containers deal-stats flex-start">
+                      <div class="list-item-4 no-margin">
+                        <label class="label">Created On</label>
+                        <h4>{{deals.createdAt | date:'mediumDate'}}</h4>
+                      </div>
+                      <div class="list-item-4 no-margin">
+                        <label class="label">Due On</label>
+                        <h4>{{deals.due_date | date:'mediumDate'}}</h4>
+                      </div>
+                      <div class="list-item-4 no-margin">
+                        <label class="label">Location</label>
+                        <h4>{{deals.location}}</h4>
+                      </div>
+                      <div class="list-item-4 no-margin">
+                        <label class="label">Assiged To</label>
+                        <h4><a routerLink="/auth/professional" [queryParams]="{id: deals.assigned_userId}">{{deals.assignedto}}</a></h4>
+                      </div>
+                      <div class="list-item-4 no-margin">
+                        <label class="label">Amount</label>
+                        <h4>₹ {{deals.amount}}</h4>
+                      </div>
+                      <div class="list-item-4 no-margin">
+                        <label class="label">Amount Paid</label>
+                        <h4>₹ {{deals.amountpaid ? deals.amountpaid : 0}}</h4>
+                      </div>
+                    </div>
+
+                    <div class="deal-btn-wrapper" *ngIf="!deals.showComment">
+                      <!-- Status - Accepted -->
+                      <span *ngIf="deals.status === 'Assigned'">
+                        <button mat-stroked-button class="primary-btn-gray white" (click)="showHideStatusComment(deals, true, 'Rejected')">Reject</button>
+                        <button mat-stroked-button class="primary-btn-gray" (click)="showHideStatusComment(deals, true, 'Accepted')">Accept</button>
+                      </span>
+                      
+                      <!-- Status - Accepted -->
+                      <span *ngIf="deals.status === 'Accepted'">
+                        <button mat-stroked-button class="primary-btn-gray white" (click)="showHideStatusComment(deals, true, 'Rejected')">Reject</button>
+                        <button mat-stroked-button class="primary-btn-gray" (click)="showHideStatusComment(deals, true, 'Inprogress')">In Progress</button>
+                      </span>
+
+                      <!-- Status - Inprogress -->
+                      <span *ngIf="deals.status === 'Inprogress'">
+                        <button mat-stroked-button class="primary-btn-gray white" (click)="showHideStatusComment(deals, true, 'Rejected')">Reject</button>
+                        <button mat-stroked-button class="primary-btn-gray" (click)="showHideStatusComment(deals, true, 'Completed');">Completed</button>
+                      </span>
+                    
+                    </div>
+
+                    <!-- Status Comment -->
+                    <div class="list comment" *ngIf="deals.showComment">
+                      <form class="deal-requst-form outline">
+                        <mat-form-field appearance="outline">
+                          <mat-label>Leave a comment</mat-label>
+                          <textarea matInput placeholder="Ex. Acception, Inprogress, Completion, Rejection comments" [(ngModel)]="deals.comment" name="comment"></textarea>
+                        </mat-form-field>
+                        <div class="list-item-2 no-margin outline">
+                          <app-image-cropper 
+                            [imageType]="'Deals'"
+                            [fileTypes]="'application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*'"
+                            [imagePath]="deals.status_path ? deals.status_path : ''"
+                            (uploadCompleted)="onUploadCompleted($event, deals)">
+                          </app-image-cropper>
+                        </div>
+                        <div class="ratting-wrapper" *ngIf="deals.showRating">
+                          <mat-label>Ratting to Owner</mat-label>
+                          <star-rating value="0" totalstars="5" checkedcolor="#b00000" uncheckedcolor="#ccc" size="18px" readonly="false" (rate)="onRatting($event, deals, 'assignerating')"></star-rating>
+                        </div>
+  
+                        <div class="btn-main-right-wrapper">
+                          <button mat-stroked-button class="primary-btn-gray white small" (click)="showHideStatusComment(deals, false)">Cancel</button>
+                          <button mat-stroked-button class="primary-btn-gray small" (click)="onUpdateDealsStatus(deals)" [disabled]="!deals.comment">Update</button>
+                        </div>
+                      </form>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              <!-- History -->
+              <div class="list no-margin req-wrapper" *ngIf="deals.history && deals.showHistory">
+                <h4 class="h-title">
+                  <mat-icon>history</mat-icon>
+                  History
+                </h4>
+
+                <mat-card class="list with-border" *ngFor="let history of deals.history" class="history-card">
+                  <div class="flex-containers space-between">
+                    <div class="flex-item">
+                      <h5>{{history.createdAt | date:'MMM dd, yyyy hh:mm a'}}</h5>
+                    </div>
+                    <div class="flex-item">
+                      <span class="status {{history.status.toLowerCase()}}">
+                        <strong>Status:</strong> {{history.status}}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="flex-containers list space-between no-margin">
+                    <div class="flex-item list-item no-margin">
+                      <p class="desc word-wrap">{{history.description}}</p>
+                    </div>
+                    <div class="flex-item list-item-5 no-margin">
+                      <div class="deals-image-wrapper small">
+                        <!-- <h4 *ngIf="!history.path" class="icon-image"><mat-icon>image</mat-icon></h4> -->
+                        <h4 *ngIf="history.path && (history.path | fileformat) === 'docs'" class="icon-image">
+                          <a href="{{appConfig.imgBaseUrl}}{{history.path}}" target="_blank">
+                            <mat-icon>picture_as_pdf</mat-icon>
+                          </a>
+                        </h4>
+                        <div *ngIf="history.path && (history.path | fileformat) === 'images'" class="img-preview">
+                          <a href="{{appConfig.imgBaseUrl}}{{history.path}}" target="_blank">
+                            <div class="img" [ngStyle]="{'background-image': 'url(' + appConfig.imgBaseUrl + history.path + ')'}"></div>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </mat-card>
+                <mat-card *ngIf="!deals.history.length" class="not-found-msg with-border">
+                  <h5>No history found.</h5>
+                </mat-card>
+              </div>              
+            </mat-card>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+    
+
+  </div>
+</section>

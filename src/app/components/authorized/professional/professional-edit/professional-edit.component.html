@@ -1,0 +1,362 @@
+<section class="page-body profile-body home-body">
+  <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
+  <div class="container">
+    <div class="flex-containers space-between page-heading-action">
+      <div class="flex-item">
+        <h4 class="name"><mat-icon>supervised_user_circle</mat-icon>Professional Details</h4>
+      </div>
+      <div class="btns-wrapper">
+        <div class="error-messages-wrapper">
+          <mat-error *ngIf="errorMessage">
+            {{errorMessage}}
+          </mat-error>
+        </div>
+      </div>
+    </div>
+    <div class="personal-form-wrapper">
+      <form [formGroup]="professionalDetailsForm">
+
+        <mat-accordion class="personal-details" multi>
+          <mat-expansion-panel expanded hideToggle disabled>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Professional Experience
+              </mat-panel-title>
+              <mat-panel-description>
+                <button mat-icon-button routerLink="/auth/professional">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <button mat-icon-button (click)="saveProfessionalDetails()">
+                  <mat-icon>save</mat-icon>
+                </button>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="form-continer">
+                <div class="list flex-containers flex-start wrap">
+                  <div class="list-item-3 outline">
+                    <mat-label>Company / Individual</mat-label>
+                    <mat-form-field appearance="outline">
+                      <input matInput placeholder="Company / Individual" formControlName="company" maxlength="50" autocomplete="off"/>
+                    </mat-form-field>
+                  </div>
+                  <div class="list-item-3 outline">
+                    <mat-label>Professional</mat-label>
+                    <mat-form-field appearance="outline">
+                      <input matInput placeholder="Professional" formControlName="profession" maxlength="50" autocomplete="off"/>
+                    </mat-form-field>
+                  </div>
+                  <div class="list-item-3 outline">
+                    <mat-label>Location</mat-label>
+                    <mat-form-field appearance="outline">
+                      <input matInput placeholder="Location" formControlName="location" maxlength="50" autocomplete="off"/>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="list flex-containers flex-start wrap">
+                  <div class="list-item-8 outline">
+                    <mat-label>Experience (Years)</mat-label>
+                    <mat-form-field appearance="outline">
+                      <input matInput (keypress)="inputValidation.numericOnly($event)" maxlength="2" placeholder="Experience" formControlName="exp" maxlength="2" autocomplete="off"/>
+                    </mat-form-field>
+                  </div>
+                  <div class="list-item-8 outline">
+                    <mat-label>Self Rating</mat-label>
+                    <mat-form-field appearance="outline">
+                      <input matInput (keypress)="inputValidation.numericOnly($event)" maxlength="2" placeholder="Rating" formControlName="rating" maxlength="2" autocomplete="off"/>
+                    </mat-form-field>
+                  </div>
+                  <div class="list-item-4 outline">
+                    <mat-label>Skill Level</mat-label>
+                    <mat-form-field appearance="outline">
+                      <mat-select formControlName="skilltype">
+                        <mat-option *ngFor="let skill of skillTypes" [value]="skill.value">{{skill.title}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="list-item-2 outline">
+                    <mat-label>Highest Qualification</mat-label>
+                    <mat-form-field appearance="outline">
+                      <input matInput placeholder="Highest Qualification" formControlName="qualification" maxlength="100" autocomplete="off"/>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="list flex-containers flex-start wrap">
+                  <div class="list-item-2 outline">
+                    <mat-label>Personal Website</mat-label>
+                    <mat-form-field appearance="outline">
+                      <input matInput placeholder="Personal Website" formControlName="perwebsite" maxlength="50" autocomplete="off"/>
+                    </mat-form-field>
+                  </div>
+                  <div class="list-item-2 outline">
+                    <mat-label>Office Website</mat-label>
+                    <mat-form-field appearance="outline">
+                      <input matInput placeholder="Office Website" formControlName="offwebsite" maxlength="50" autocomplete="off"/>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="list flex-containers flex-start wrap">
+                  <div class="list-item-1 outline">
+                    <mat-label>Skiills</mat-label>
+                    <mat-form-field appearance="outline">
+                      <mat-chip-list #produtsChipsList formControlName="skills">
+                        <mat-chip
+                          *ngFor="let skill of professionalDetailsForm.get('skills').value"
+                          [selectable]="selectable"
+                          [removable]="removable"
+                          (removed)="removeTags(skill, 'skills')">
+                          {{skill}}
+                          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                        </mat-chip>
+                        <input
+                          placeholder="Skiills..."
+                          #prodcutInput
+                          [matChipInputFor]="produtsChipsList"
+                          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                          (matChipInputTokenEnd)="addTags($event, 'skills')" 
+                        />
+                      </mat-chip-list>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="list flex-containers flex-start wrap">
+                  <div class="list-item-1 outline">
+                    <mat-label>Service Locations</mat-label>
+                    <mat-form-field appearance="outline">
+                      <mat-chip-list #locationChipsList formControlName="serLocations">
+                        <mat-chip
+                          *ngFor="let product of professionalDetailsForm.get('serLocations').value"
+                          [selectable]="selectable"
+                          [removable]="removable"
+                          (removed)="removeTags(product, 'serLocations')">
+                          {{product}}
+                          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                        </mat-chip>
+                        <input
+                          placeholder="New service location..."
+                          #locationInput
+                          autocomplete="off"
+                          [matChipInputFor]="locationChipsList"
+                          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                          (matChipInputTokenEnd)="addTags($event, 'serLocations')" 
+                        />
+                      </mat-chip-list>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="list flex-containers flex-start wrap">
+                  <div class="list-item-1 outline">
+                    <mat-label>About me</mat-label>
+                    <mat-form-field appearance="outline">
+                      <textarea matInput placeholder="About me" formControlName="description" rows="4" autocomplete="off"></textarea>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+            </div>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel expanded hideToggle disabled>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Address
+              </mat-panel-title>
+              <mat-panel-description>
+                <button mat-icon-button routerLink="/auth/professional">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <button mat-icon-button (click)="saveProfessionalDetails()">
+                  <mat-icon>save</mat-icon>
+                </button>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="form-continer">
+              <div class="list flex-containers flex-start wrap">
+                <div class="list-item-2 outline">
+                  <mat-label>Street</mat-label>
+                  <mat-form-field appearance="outline">
+                    <input matInput placeholder="Street" formControlName="street" maxlength="50" autocomplete="off"/>
+                  </mat-form-field>
+                </div>
+                <div class="list-item-2 outline">
+                  <mat-label>City</mat-label>
+                  <mat-form-field appearance="outline">
+                    <input matInput placeholder="City" formControlName="city" maxlength="50" autocomplete="off"/>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="list flex-containers flex-start wrap">
+                <div class="list-item-3 outline">
+                  <mat-label>State</mat-label>
+                  <mat-form-field appearance="outline">
+                    <input matInput placeholder="State" formControlName="state" maxlength="50" autocomplete="off"/>
+                  </mat-form-field>
+                </div>
+                <div class="list-item-3 outline">
+                  <mat-label>Country</mat-label>
+                  <mat-form-field appearance="outline">
+                    <input matInput placeholder="Country" formControlName="country" maxlength="50" autocomplete="off"/>
+                  </mat-form-field>
+                </div>
+                <div class="list-item-3 outline">
+                  <mat-label>Zipcode</mat-label>
+                  <mat-form-field appearance="outline">
+                    <input matInput (keypress)="inputValidation.numericOnly($event)" placeholder="Zipcode" formControlName="zipcode" maxlength="6" autocomplete="off"/>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel expanded hideToggle disabled>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Achivements
+              </mat-panel-title>
+              <mat-panel-description>
+                <button mat-icon-button routerLink="/auth/professional">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <button mat-icon-button (click)="saveProfessionalDetails()">
+                  <mat-icon>save</mat-icon>
+                </button>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="inline-progress-wrapper" *ngIf="isDeleting['achivements']">
+              <mat-progress-bar mode="indeterminate" color="secondary"></mat-progress-bar>
+            </div>
+            <div class="btn-main-right-wrapper top-sapce" style="margin-right: 10px;">
+              <button type="button" mat-stroked-button class="primary-btn-gray" 
+                (click)="addFormItem('achivements')" 
+                *ngIf="!professionalDetailsForm.get('achivements')['controls'].length">
+                  Add Achivement
+              </button>
+            </div>
+            <div class="flex-containers space-between" 
+              formArrayName="achivements" *ngFor="let achivement of professionalDetailsForm.get('achivements')['controls']; index as i; last as isLast; first as isFirst">
+              <ng-container [formGroupName]="i">
+                <div class="list flex-containers flex-start wrap">
+                  <div class="list-item-3 outline">
+                    <mat-label>Name</mat-label>
+                    <mat-form-field appearance="outline">
+                      <input matInput placeholder="Name" formControlName="name" maxlength="100" autocomplete="off"/>
+                    </mat-form-field>
+                  </div>
+                  <div class="list-item-2 outline">
+                    <mat-label>Description</mat-label>
+                    <mat-form-field appearance="outline">
+                      <input matInput placeholder="Description" formControlName="description" maxlength="255" autocomplete="off"/>
+                    </mat-form-field>
+                  </div>
+                  <div class="list-item-6">
+                    <mat-label>Choose/Change Image</mat-label>
+                    <app-image-cropper 
+                      [imageType]="'Achivements'"
+                      [fileTypes]="'application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*'"
+                      [imagePath]="professional.achivements[i]?.path ? professional.achivements[i].path : ''"
+                      (uploadCompleted)="onUploadCompleted($event, achivement)">
+                    </app-image-cropper>
+                  </div>
+                </div>
+                <div class="list add-remove-button">
+                  <button type="button" mat-icon-button (click)="addFormItem('achivements')" *ngIf="isLast" [disabled]="isDeleting['achivements']">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                  <button type="button" mat-icon-button class="del-icon" (click)="deleteRecord(achivement, 'achivements', 'records', i)" [disabled]="isDeleting['achivements']">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </ng-container>
+            </div>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel expanded hideToggle disabled>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Clients
+              </mat-panel-title>
+              <mat-panel-description>
+                <button mat-icon-button routerLink="/auth/professional">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <button mat-icon-button (click)="saveProfessionalDetails()">
+                  <mat-icon>save</mat-icon>
+                </button>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="inline-progress-wrapper" *ngIf="isDeleting['clients']">
+              <mat-progress-bar mode="indeterminate" color="secondary"></mat-progress-bar>
+            </div>
+            <div class="btn-main-right-wrapper top-sapce" style="margin-right: 10px;">
+              <button type="button" mat-stroked-button class="primary-btn-gray" 
+                (click)="addFormItem('clients')" 
+                *ngIf="!professionalDetailsForm.get('clients')['controls'].length">
+                  Add client
+              </button>
+            </div>
+            <div class="flex-containers space-between" 
+              formArrayName="clients" *ngFor="let client of professionalDetailsForm.get('clients')['controls']; index as i; last as isLast; first as isFirst">
+              <ng-container [formGroupName]="i">
+                <div class="list flex-containers flex-start wrap">
+                  <div class="list-item-3 outline">
+                    <mat-label>Client Name</mat-label>
+                    <mat-form-field appearance="outline">
+                      <input matInput placeholder="Client Name" formControlName="clientname" maxlength="100" autocomplete="off"/>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- <div class="list-item-5">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Work Type</mat-label>
+                      <mat-select formControlName="work_type">
+                        <mat-option *ngFor="let type of workTypes" [value]="type.value">{{type.title}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div> -->
+
+                  <div class="list-item-4 outline">
+                    <mat-label>Email</mat-label>
+                    <mat-form-field appearance="outline">
+                      <input matInput placeholder="Email" formControlName="email" maxlength="100" autocomplete="off"/>
+                    </mat-form-field>
+                  </div>
+                  <div class="list-item-5 outline">
+                    <mat-label>Phone No</mat-label>
+                    <mat-form-field appearance="outline">
+                      <input matInput placeholder="Phone No" formControlName="phoneno" maxlength="15" autocomplete="off"/>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="list-item-5 outline">
+                    <mat-label>Choose/Change Image</mat-label>
+                    <app-image-cropper 
+                      [imageType]="'Client'"
+                      [imagePath]="professional.clients[i]?.path ? professional.clients[i].path : ''"
+                      (uploadCompleted)="onUploadCompleted($event, client)">
+                    </app-image-cropper>
+                  </div>
+
+                </div>
+                <div class="list add-remove-button">
+                  <button type="button" mat-icon-button (click)="addFormItem('clients')" *ngIf="isLast" [disabled]="isDeleting['clients']">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                  <button type="button" mat-icon-button class="del-icon" (click)="deleteRecord(client, 'clients', 'clients', i)" [disabled]="isDeleting['clients']">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </ng-container>
+            </div>
+          </mat-expansion-panel>
+
+        </mat-accordion>
+      </form>
+    </div>
+    
+
+  </div>
+</section>

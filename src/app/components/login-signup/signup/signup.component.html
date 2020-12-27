@@ -1,0 +1,125 @@
+
+<div class="login-wrapper">
+  <div class="flex-containers login-container center">
+    <div class="title-wrp">
+      <h1 class="page-title">Build Your Network With Real Professionals</h1>
+      <img class="login-image" src="./../assets/images/Joinnow-illustration.svg" />
+
+    </div>
+    <mat-card class="login-card ">
+      <!-- <div class="logo-wrapper">
+        <img class="logo" src="./../assets/images/logo-horizontal.svg" alt="Moneyism" />
+      </div> -->
+      <h1 class="title">A right <strong>destination for professionals</strong></h1>
+
+      <div mat-dialog-content>
+        <mat-error class="box-error-msg" *ngIf="errorMessage">
+          {{errorMessage}}
+        </mat-error>
+        <div class="mat-error custom-mat-error" *ngIf="isConfirmPasswordError">
+          Passsword and Confirm Password didn't match.
+        </div>
+        <div class="signup-form-wrapper" [hidden]="isOtpScreen">
+          <div class="signup-form">
+            <form [formGroup]="signupForm" class="custom-login-wrapper">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-icon matPrefix>account_circle</mat-icon>
+                <input matInput placeholder="Username" cdkFocusInitial formControlName="username">
+                <mat-error>
+                  Please provide a valid username.
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-icon matPrefix>vpn_key</mat-icon>
+                <input matInput type="password" placeholder="Password" formControlName="password" (keyup)="isConfirmPasswordError=false">
+                <mat-error>
+                  Please provide a valid password.
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-icon matPrefix>vpn_key</mat-icon>
+                <input matInput type="password" placeholder="Confirm Password" formControlName="confirm_password" (change)="isConfirmPasswordError=false">
+                <mat-error>
+                  Please provide a valid confirm password.
+                </mat-error>
+              </mat-form-field>
+  
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-icon matPrefix>email</mat-icon>
+                <input matInput placeholder="Email" formControlName="email">
+                <mat-error>
+                  Please provide a valid Email.
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-icon matPrefix>phone</mat-icon>
+                <input matInput (keypress)="inputValidation.numericOnly($event)" placeholder="Phone number" formControlName="phoneno">
+                <mat-error>
+                  Please provide a valid Phone number.
+                </mat-error>
+              </mat-form-field>
+  
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-icon matPrefix>account_box</mat-icon>
+                <input matInput placeholder="Full name" formControlName="fullname">
+                <mat-error>
+                  Please provide a valid Full name.
+                </mat-error>
+              </mat-form-field>
+
+              <div class="btn-wrapper-text">
+                <p>
+                  By clicking Agree & Join, you agree to the Moneyism 
+                  <a routerLink="">User Agreement</a>, 
+                  <a routerLink="">Privacy Policy</a>, and <a routerLink="">Cookie Policy</a>.
+                </p>
+                <div class="login-btn-wrpper">
+                  <button mat-raised-button color="primary" (click)="doSignup()" class="login-primary-btn" [disabled]="isLoading" [class.loading]="isLoading">
+                    Agree & Join
+                  </button>
+                </div>
+              </div>
+              <div class="account-btn-wrpper" style="text-align: center;">
+                Already on Moneyism? <a routerLink="/login">SIGN IN</a>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="otp-wrpper page-body" [hidden]="!isOtpScreen">
+          <app-progress-bar [message]="loaderMsg" class="page component" *ngIf="isLoading"></app-progress-bar>
+          <!-- <p><b>Your Moneyism account has been created successfully. Please verify your mobile number to get the deals and other notifications.</b><br/><br/></p> -->
+          <p>The OTP has been Sent to your phone. Please input the OTP before 5 minutes.</p>
+          <form [formGroup]="otpForm" class="custom-login-wrapper outline" style="margin-top: 24px; font-size: 12px;">
+            <mat-form-field  appearance="outline">
+              <mat-label>One Time Password</mat-label>
+              <input matInput placeholder="One Time Password" cdkFocusInitial formControlName="otpnum" autocomplete="off">
+            </mat-form-field>
+            <div class="login-btn-wrpper">
+              <button mat-raised-button color="primary" class="login-primary-btn" (click)="validateOtp()" [disabled]="isLoading" [class.loading]="isLoading">
+                Verify and Sign in
+              </button>
+            </div>
+            <div class="login-btn-wrpper">
+              <button mat-button color="primary" (click)="generateOtp()" [disabled]="isLoading" [class.loading]="isLoading">
+                Resend OTP?
+              </button>
+            </div>
+            <div class="login-btn-wrpper">
+              <button mat-button color="primary" (click)="verifyOTPLater()" [disabled]="isLoading" [class.loading]="isLoading">
+                Verify Later
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </mat-card>
+  </div>
+  
+</div>
+
+

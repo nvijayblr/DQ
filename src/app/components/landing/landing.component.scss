@@ -1,0 +1,114 @@
+.landing-wrapper {
+  height: 100vh;
+  .landing-card {
+    width: 600px;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 0;
+    padding: 44px 55px 33px 55px;
+    box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+    -o-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+    -ms-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+  }
+  .title-container {
+    width: 100%;
+    margin: 180px 0 0 150px;
+    max-width: 680px;
+    font-weight: 400;
+    .page-title {
+      font-size: 44px;
+      letter-spacing: 0px;
+      color: #FFFFFF;
+      font-weight: 400;
+    }
+    .sub-title {
+      font-size: 18px;
+      color: #DFDFDF;
+      margin: 25px 0 50px 0;
+    }
+    .login-btn-wrpper {
+    }
+  }
+  .logo-wrapper {
+    text-align: center;
+    margin: 24px 0 124px;
+    .logo {
+      width: 180px;
+    }
+  }
+  .account-btn-wrpper {
+    margin-top: 62px;
+    text-align: center;
+  }
+  .btn-wrapper-text {
+    margin-top: 20px; 
+    text-align: center;
+    line-height: 22px;
+    width: 400px;
+    margin: auto;    
+  }
+  .login-primary-btn {
+    background-color: #D74F31 !important;
+    line-height: 39px !important;
+    font-size: 18px;
+    font-weight: 400;
+    border-radius: 24px;
+    margin-right: 24px;
+    padding: 0 24px;
+    width: 260px;
+    height: 50px;
+    &.white {
+      background-color: #fff !important;
+      border: 2px solid #D74F31;
+      color: #D74F31;
+    }
+  }
+
+  .header {
+    height: 80px;
+    line-height: 80px;
+    opacity: 1;
+    transition: opacity 0.25s ease-out, height 0.15s ease, background-color 0.15s ease;
+    border-bottom: 1px solid #ebe9e9;  
+    box-shadow: 0px 3px 6px #00000029;
+  }
+
+  .bg-wrapper {
+    height: calc(100vh - 152px);
+    min-height: 520px;
+  }
+  .left-bg {
+    background: url('./../../../assets/images/landing-bg.svg') no-repeat top right;
+    background-size: cover;
+    height: 100%;
+    width: 60%;
+  }
+  .right-bg {
+    background: url('./../../../assets/images/landing-illustration.svg') no-repeat center left;
+    background-size: contain;
+    height: 100%;
+    width: 40%;
+    max-height: 460px;
+    margin-left: 100px;
+    margin-top: 50px;
+  }
+  .footer {
+    border-top: 2px solid #FF2A0A;
+    padding: 24px 0;
+    .copyright {
+      letter-spacing: 0px;
+      color: #0C0C0C;
+      font-weight: 400;
+    }
+    .footer-links {
+      text-align: right;
+      a {
+        display: inline-block;
+        margin-left: 20px;
+      }
+    }
+  }
+}

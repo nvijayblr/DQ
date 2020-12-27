@@ -1,0 +1,98 @@
+.task-date-wrapper {
+  text-align: center;
+  background: #A4C995 0% 0% no-repeat padding-box;
+  border: 2px solid #54A134;
+  margin-right: 24px;
+  margin-top: 12px;
+  h4 {
+    font-size: 46px !important;
+    font-weight: 100 !important;
+    margin: 0 !important;
+    letter-spacing: 0px;
+    padding: 0;
+    color: #33601A;
+    font-weight: 400 !important;
+  }
+  h5 {
+    font-size: 17px !important;
+    font-weight: 400 !important;
+    margin: 0 !important;
+    letter-spacing: 0px;
+    color: #33601A;
+    margin-bottom: 5px !important;
+  }
+  h6.task-icons {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border-top: 2px solid #54A134;
+    padding: 10px 0 4px 0 !important;
+  }
+  .mat-icon {
+    margin: 0 5px;
+    cursor: pointer;
+  }
+}
+.reminder-on {
+  color: #00a300;
+}
+.reminder-off {
+  color: #ff0000;
+}
+.repetive-on {
+  color: #037d84;
+}
+.repetive-off {
+  color: #6c6c6c;
+}
+.task-list.list.bt-border-dark {
+  padding-bottom: 0 !important;
+  margin-bottom: 40px !important;
+  border-bottom: 1px dashed #cacaca;
+  position: relative;
+}
+
+.tasks-wrapper {
+  .task-card {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #00000029;
+    border: 1px solid #EBEBEB;
+    padding: 30px !important;
+    margin-bottom: 30px;
+    .task-title {
+      color: #2D2D2D;
+      font-size: 24px;
+      font-weight: 400;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #2D2D2D;
+      .mat-icon {
+        position: relative;
+        top: 4px;
+        margin-right: 6px;
+      }
+    }
+    .task-desc {
+      color: #2D2D2D;
+      font-size: 18px;
+      font-weight: 300;
+    }
+  }
+  .more-wrapper {
+    position: absolute;
+    top: 20px;
+    right: 18px;
+    .mat-icon-button {
+      color: #318BDB;
+    }
+    .delete-btn {
+      color: #C9422E;
+    }
+  }
+}
+.mat-calendar {
+  background-color: #FFFFFF;
+}
+.mat-calendar-body-selected {
+  background-color: #5CB85C;
+}
+.mat-calendar-header {
+  background-color: #5CB85C;
+}

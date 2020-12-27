@@ -1,0 +1,21 @@
+
+.footer {
+  border-top:  1px solid #ebe9e9;
+  .footer-copyright {
+    padding: 20px 0;
+    color: #000000;    
+    a {
+      color: #656565;
+      &:hover {
+        color: #000;
+      }
+    }
+    .terms {
+      a {
+        display: inline-block;
+        margin-left: 30px;
+      }
+    }
+  }
+}
+

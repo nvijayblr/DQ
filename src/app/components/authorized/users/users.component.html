@@ -1,0 +1,45 @@
+<section class="page-body profile-body home-body">
+  <div class="container">
+    <div class="flex-containers space-between page-heading-action">
+      <div class="flex-item">
+        <h4 class="name"><mat-icon>supervisor_account</mat-icon>Users</h4>
+      </div>
+      <div class="flex-item">
+        <div class="btn-main-right-wrapper">
+          <button mat-stroked-button class="primary-btn-red" (click)="showImportContacts()">Import User</button>
+          <!-- <button mat-stroked-button class="primary-btn-red" (click)="showCreateContact()">Create User</button> -->
+        </div>
+      </div>
+    </div>
+    <div class="contacts-wrapper personal-details">
+      <mat-card class="contacts-card flex-containers flex-start wrap" style="min-height: calc(100vh - 265px)">
+        <ag-grid-angular
+          #agGrid
+          style="width: 100%; height: calc(100vh - 265px)"
+          class="ag-theme-alpine"
+          animateRows
+          autoSizeColumns
+          suppressCellSelection="true"
+          enableFilter= "true"
+          [gridOptions]="gridOptions"
+          [floatingFilter]="true"
+          [rowData]="isLoading ? [] : contactsList"
+          [rowSelection]="false"
+          [suppressRowClickSelection]="true"
+          [defaultColDef]="defaultColDef"
+          [columnDefs]="columnDefs"
+          [pagination]="true"
+          [paginationPageSize]="20"
+          colResizeDefault='true'
+          [rowHeight]="50"
+        >
+        </ag-grid-angular>
+    
+        <!-- Loading overlay -->
+        <div class="ag-overlay" aria-hidden="true" ref="overlayWrapper" *ngIf="isLoading">
+          <app-progress-bar message="Loading users..." class="page" *ngIf="isLoading"></app-progress-bar>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</section>

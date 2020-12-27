@@ -1,0 +1,117 @@
+<section class="page-body profile-body home-body">
+  <div class="container">
+    <div class="flex-containers space-between page-heading-action">
+      <div class="flex-item">
+        <h4 class="name">
+          <mat-icon>chrome_reader_mode</mat-icon>
+          Contacts</h4>
+      </div>
+      <div class="flex-item">
+        <div class="btn-main-right-wrapper">
+          <button mat-stroked-button class="primary-btn-red" (click)="showImportContacts()">Import Contacts</button>
+          <button mat-stroked-button class="primary-btn-red" (click)="showCreateContact()">Create Contact</button>
+        </div>
+      </div>
+    </div>
+    <div class="contacts-wrapper personal-details">
+      <mat-card class="contacts-card flex-containers flex-start wrap" style="min-height: calc(100vh - 265px)">
+        <ag-grid-angular
+          #agGrid
+          style="width: 100%; height: calc(100vh - 265px)"
+          class="ag-theme-alpine"
+          animateRows
+          autoSizeColumns
+          suppressCellSelection="true"
+          enableFilter= "true"
+          [gridOptions]="gridOptions"
+          [floatingFilter]="true"
+          [rowData]="isLoading ? [] : contactsList"
+          [rowSelection]="false"
+          [suppressRowClickSelection]="true"
+          [defaultColDef]="defaultColDef"
+          [columnDefs]="columnDefs"
+          [pagination]="true"
+          [paginationPageSize]="20"
+          colResizeDefault='true'
+          [rowHeight]="50"
+        >
+        </ag-grid-angular>
+    
+        <!-- Loading overlay -->
+        <div class="ag-overlay" aria-hidden="true" ref="overlayWrapper" *ngIf="isLoading">
+          <app-progress-bar message="Loading contacts..." class="page" *ngIf="isLoading"></app-progress-bar>
+        </div>
+
+      </mat-card>
+      <!-- <mat-card class="deals-card flex-containers flex-start wrap">
+        <mat-card class="border contact-card list list-item-3">
+          <label class="label">Software Engineer, Bangalore</label>
+          <h4>Vijay N</h4>
+          <h4>9591191405</h4>
+          <h4>nvijay.blr@gmail.com</h4>
+          <div class="more-wrapper">
+            <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>more_vert</mat-icon></button>
+            <mat-menu #menu="matMenu">
+              <button class="nav-category-item" mat-menu-item routerLink="">Edit</button>
+              <button class="nav-category-item" mat-menu-item routerLink="">Delete</button>
+            </mat-menu>
+          </div>
+        </mat-card>
+        <mat-card class="border contact-card list list-item-3">
+          <label class="label">Software Engineer, Bangalore</label>
+          <h4>Vijay N</h4>
+          <h4>9591191405</h4>
+          <h4>nvijay.blr@gmail.com</h4>
+          <div class="more-wrapper">
+            <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>more_vert</mat-icon></button>
+            <mat-menu #menu="matMenu">
+              <button class="nav-category-item" mat-menu-item routerLink="">Edit</button>
+              <button class="nav-category-item" mat-menu-item routerLink="">Delete</button>
+            </mat-menu>
+          </div>
+        </mat-card>
+        <mat-card class="border contact-card list list-item-3">
+          <label class="label">Software Engineer, Bangalore</label>
+          <h4>Vijay N</h4>
+          <h4>9591191405</h4>
+          <h4>nvijay.blr@gmail.com</h4>
+          <div class="more-wrapper">
+            <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>more_vert</mat-icon></button>
+            <mat-menu #menu="matMenu">
+              <button class="nav-category-item" mat-menu-item routerLink="">Edit</button>
+              <button class="nav-category-item" mat-menu-item routerLink="">Delete</button>
+            </mat-menu>
+          </div>
+        </mat-card>
+        <mat-card class="border contact-card list list-item-3">
+          <label class="label">Software Engineer, Bangalore</label>
+          <h4>Vijay N</h4>
+          <h4>9591191405</h4>
+          <h4>nvijay.blr@gmail.com</h4>
+          <div class="more-wrapper">
+            <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>more_vert</mat-icon></button>
+            <mat-menu #menu="matMenu">
+              <button class="nav-category-item" mat-menu-item routerLink="">Edit</button>
+              <button class="nav-category-item" mat-menu-item routerLink="">Delete</button>
+            </mat-menu>
+          </div>
+        </mat-card>
+        <mat-card class="border contact-card list list-item-3">
+          <label class="label">Software Engineer, Bangalore</label>
+          <h4>Vijay N</h4>
+          <h4>9591191405</h4>
+          <h4>nvijay.blr@gmail.com</h4>
+          <div class="more-wrapper">
+            <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>more_vert</mat-icon></button>
+            <mat-menu #menu="matMenu">
+              <button class="nav-category-item" mat-menu-item routerLink="">Edit</button>
+              <button class="nav-category-item" mat-menu-item routerLink="">Delete</button>
+            </mat-menu>
+          </div>
+        </mat-card>
+      </mat-card> -->
+    </div>
+    
+
+  </div>
+</section>

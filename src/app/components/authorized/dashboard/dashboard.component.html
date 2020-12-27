@@ -1,0 +1,154 @@
+<section class="page-body home-body">
+  <div class="container">
+    <div class="home-wrapper">
+      <!-- Community Pages -->
+      
+      <div class="clearfix my-community-body">
+        <div class="left-pannel">
+          <app-account-details></app-account-details>
+          <app-recent-deals></app-recent-deals>
+        </div>
+        <div class="community-panel">
+          <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
+          <mat-tab-group (selectedTabChange)="tabChange($event)">  
+            <mat-tab label="All Post">
+              <mat-card class="border no-rounded list" *ngFor="let post of posts; let i = index">
+                <div class="flex-item user-image">
+                  <div class="user-profile-img" *ngIf="post.path">
+                    <div class="profile-pic-small pic-xs img" [ngStyle]="{'background-image': 'url(' + appConfig.imgBaseUrl + post.path + ')'}"></div>
+                  </div>
+                  <div class="user-profile-name" *ngIf="!post.path">
+                    <div class="user-initials">{{post.initials}}</div>
+                  </div>
+                </div>
+                <div class="flex-item post-user-info">
+                  <div class="user-info">
+                    <p class="name">
+                      <a routerLink="/auth/professional" [queryParams]="{id: post.user_id}">{{post.fullname}}</a> 
+                      <label class="label date">{{post.createdOn | date:'MMM dd, yyyy hh:mm a'}}</label>
+                    </p>
+                    <label class="label" *ngIf="post.designation">{{post.designation}}, {{post.company}}, {{post.location}}</label>
+                  </div>
+    
+                  <h4 class="comm-title">{{post.records[0]?.name}}</h4>
+                  <p class="comm-desc word-wrap">{{post.records[0]?.description}}</p>
+                  <!-- {{post.records[0]?.path}}
+                  <h4 *ngIf="deals.path && (deals.path | fileformat) === 'docs'" class="icon-image">
+                    <a href="{{appConfig.imgBaseUrl}}{{deals.path}}" target="_blank">
+                      <mat-icon>picture_as_pdf</mat-icon>
+                    </a>
+                  </h4>
+                  <div *ngIf="deals.path && (deals.path | fileformat) === 'images'" class="img-preview">
+                    <a href="{{appConfig.imgBaseUrl}}{{deals.path}}" target="_blank">
+                      <div class="img" [ngStyle]="{'background-image': 'url(' + appConfig.imgBaseUrl + deals.path + ')'}"></div>
+                    </a>
+                  </div> -->
+
+
+                  <div class="img-wrapper documents" *ngIf="post.records && post.records.length && post.records[0]?.path && (post.records[0]?.path | fileformat) === 'docs'">
+                    <a href="{{appConfig.imgBaseUrl}}{{post.records[0]?.path}}" class="pdf" target="_blank">
+                      <mat-icon>picture_as_pdf</mat-icon>
+                    </a>
+                  </div>
+                  
+                  <div class="img-wrapper" *ngIf="post.records && post.records.length && post.records[0]?.path && (post.records[0]?.path | fileformat) === 'images'">
+                    <div class="img" [ngStyle]="{'background-image': 'url(' + appConfig.imgBaseUrl + post.records[0]?.path + ')'}"></div>
+                  </div>
+                  
+                  <div class="likes-wrapper flex-containers wrap v-center" [class.liked]="post.isLiked" (click)="likeUnlikePost(post, !post.isLiked)">
+                    <div class="likes-icon flex-item">
+                      <mat-icon>thumb_up</mat-icon>
+                    </div>
+                    <div class="likes-count flex-item">
+                      {{post.likesCount}}
+                    </div>
+                  </div>
+                </div>
+              </mat-card>
+            </mat-tab>
+            <mat-tab label="My Post">
+              <mat-card class="border no-rounded list shrare-post">
+                <h1 class="share-post-title">Create <span class="red">Your Post</span></h1>
+                <app-progress-bar [message]="'Sharing your Post...'" class="page" *ngIf="isShareLoading"></app-progress-bar>
+                <form [formGroup]="sharePostForm">
+                  <div class="form-continer">
+                    <div class="list flex-containers flex-start wrap">
+                      <div class="list-item-2 outline">
+                        <mat-form-field appearance="outline">
+                          <input matInput placeholder="Title" formControlName="name" maxlength="50" autocomplete="off"/>
+                        </mat-form-field>
+                      </div>
+                      <div class="list-item-3 outline" *ngIf="!isShareLoading">
+                        <app-image-cropper 
+                          [imageType]="'Community'"
+                          [fileTypes]="'application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*'"
+                          [imagePath]="''"
+                          (uploadCompleted)="onUploadCompleted($event, sharePostForm)">
+                        </app-image-cropper>
+                      </div>
+                    </div>
+                    <div class="list flex-containers flex-start wrap">
+                      <div class="list-item-1 outline">
+                        <mat-form-field appearance="outline">
+                          <textarea matInput placeholder="Description" formControlName="description" maxlength="250" autocomplete="off"></textarea>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+                <button mat-button class="share-btn" (click)="shareWithCommunity()" [disabled]="isShareLoading">
+                  <mat-icon>share</mat-icon>Share with community
+                </button>
+              </mat-card>
+              <mat-card class="border no-rounded list" *ngFor="let post of posts; let i = index">
+                <div class="flex-item user-image">
+                  <div class="user-profile-img" *ngIf="post.path">
+                    <div class="profile-pic-small pic-xs img" [ngStyle]="{'background-image': 'url(' + appConfig.imgBaseUrl + post.path + ')'}"></div>
+                  </div>
+                  <div class="user-profile-name" *ngIf="!post.path">
+                    <div class="user-initials">{{post.initials}}</div>
+                  </div>
+                </div>
+                <div class="flex-item post-user-info">
+                  <div class="user-info">
+                    <p class="name">
+                      <a routerLink="/auth/professional" [queryParams]="{id: post.user_id}">{{post.fullname}}</a> 
+                      <label class="label date"> 
+                        {{post.createdOn | date:'MMM dd, yyyy hh:mm a'}}
+                        <button mat-button class="primary-btn-gray remove-btn" (click)="removePost(post, i)">Remove</button>
+                      </label>
+                    </p>
+                    <label class="label" *ngIf="post.designation">{{post.designation}}, {{post.company}}, {{post.location}}</label>
+                  </div>
+    
+                  <h4 class="comm-title">{{post.records[0]?.name}}</h4>
+                  <p class="comm-desc word-wrap">{{post.records[0]?.description}}</p>
+
+                  <div class="img-wrapper documents" *ngIf="post.records && post.records.length && post.records[0]?.path && (post.records[0]?.path | fileformat) === 'docs'">
+                    <a href="{{appConfig.imgBaseUrl}}{{post.records[0]?.path}}" class="pdf" target="_blank">
+                      <mat-icon>picture_as_pdf</mat-icon>
+                    </a>
+                  </div>
+                  
+                  <div class="img-wrapper" *ngIf="post.records && post.records.length && post.records[0]?.path && (post.records[0]?.path | fileformat) === 'images'">
+                    <div class="img" [ngStyle]="{'background-image': 'url(' + appConfig.imgBaseUrl + post.records[0]?.path + ')'}"></div>
+                  </div>
+
+                  <div class="likes-wrapper flex-containers wrap v-center" [class.liked]="post.isLiked" (click)="likeUnlikePost(post, !post.isLiked)">
+                    <div class="likes-icon flex-item">
+                      <mat-icon>thumb_up</mat-icon>
+                    </div>
+                    <div class="likes-count flex-item">
+                      {{post.likesCount}}
+                    </div>
+                  </div>
+                </div>
+              </mat-card>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

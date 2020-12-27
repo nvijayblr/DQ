@@ -1,0 +1,168 @@
+<section class="page-body profile-body home-body">
+  <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
+  <div class="container">
+    <div class="settings-form-wrapper">
+      <div class="setting-wrp clearfix">
+        <div class="left-panel large">
+          <mat-card class="left-nav">
+            <mat-nav-list>
+              <div mat-subheader>
+                <mat-icon mat-list-icon>settings</mat-icon>
+                Settings
+              </div>
+              <mat-list-item>
+                <mat-icon mat-list-icon>account_circle</mat-icon>
+                <div mat-line>Account Details</div>
+              </mat-list-item>
+              <mat-list-item>
+                <mat-icon mat-list-icon>vpn_key</mat-icon>
+                <div mat-line>Reset Password</div>
+              </mat-list-item>
+              <mat-list-item>
+                <mat-icon mat-list-icon>notification_important</mat-icon>
+                <div mat-line>Notification Prefrences</div>
+              </mat-list-item>
+            </mat-nav-list>
+          </mat-card>
+        </div>
+        <div class="right-panel large">
+          <div class="flex-containers space-between page-heading-action">
+            <div class="flex-item">
+              <h4 class="name"><mat-icon>settings</mat-icon>Settings</h4>
+            </div>
+          </div>
+          <mat-accordion class="personal-details" multi>
+            <mat-expansion-panel expanded hideToggle disabled>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <mat-icon mat-list-icon>account_circle</mat-icon>
+                  Account Details
+                </mat-panel-title>
+                <mat-panel-description>
+                  <button mat-icon-button (click)="saveAccountDetails()">
+                    <mat-icon>save</mat-icon>
+                  </button>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <form [formGroup]="userDetailsForm">
+                <div class="form-continer">
+                  <div class="list flex-containers flex-start wrap">
+                    <div class="list-item-3 outline">
+                      <mat-label>Username</mat-label>
+                      <mat-form-field appearance="outline">
+                        <input matInput placeholder="Username" formControlName="username" maxlength="50" autocomplete="off"/>
+                      </mat-form-field>
+                    </div>
+                    <div class="list-item-3 outline">
+                      <mat-label>Email</mat-label>
+                      <mat-form-field appearance="outline">
+                        <input matInput placeholder="Email" formControlName="email" maxlength="50" autocomplete="off"/>
+                      </mat-form-field>
+                    </div>
+                    <div class="list-item-3 outline">
+                      <mat-label>Phone number</mat-label>
+                      <mat-form-field appearance="outline">
+                        <input matInput placeholder="Phone number" formControlName="phoneno" maxlength="50" autocomplete="off"/>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="list flex-containers flex-start wrap">
+                    <div class="list-item-2 outline">
+                      <mat-label>Full Name</mat-label>
+                      <mat-form-field appearance="outline">
+                        <input matInput placeholder="Full Name" formControlName="fullname" maxlength="100" autocomplete="off"/>
+                      </mat-form-field>
+                    </div>
+                    <div class="list-item-2 outline">
+                      <mat-label>Choose/Change Image</mat-label>
+                      <app-image-cropper 
+                        [imageType]="'Profile'"
+                        [imagePath]="user?.path ? user.path : ''"
+                        (uploadCompleted)="onUploadCompleted($event, userDetailsForm)">
+                      </app-image-cropper>
+                    </div>
+                    
+                  </div>
+                </div>
+              </form>
+            </mat-expansion-panel>
+    
+            <!-- Reset Password -->
+            <mat-expansion-panel expanded hideToggle disabled>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <mat-icon mat-list-icon>vpn_key</mat-icon>
+                  Reset Password
+                </mat-panel-title>
+                <mat-panel-description>
+                  <button mat-icon-button (click)="resetPassword()">
+                    <mat-icon>save</mat-icon>
+                  </button>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <form [formGroup]="resetPasswordForm">
+                <div class="form-continer">
+                  <div class="list flex-containers flex-start wrap">
+                    <div class="list-item-3 outline">
+                      <mat-label>Current Password</mat-label>
+                      <mat-form-field appearance="outline">
+                        <input type="password" matInput placeholder="Current Password" formControlName="current_password" maxlength="50" autocomplete="off"/>
+                      </mat-form-field>
+                    </div>
+                    <div class="list-item-3 outline">
+                      <mat-label>New Password</mat-label>
+                      <mat-form-field appearance="outline">
+                        <input type="password" matInput placeholder="New Password" formControlName="password" maxlength="50" autocomplete="off"/>
+                      </mat-form-field>
+                    </div>
+                    <div class="list-item-3 outline">
+                      <mat-label>Confirm New Password</mat-label>
+                      <mat-form-field appearance="outline">
+                        <input type="password" matInput placeholder="Confirm New Password" formControlName="confirm_password" maxlength="50" autocomplete="off"/>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </form>
+              <div class="btns-wrapper">
+                <div class="error-messages-wrapper">
+                  <mat-error *ngIf="passwordErrorMessage">
+                    {{passwordErrorMessage}}
+                  </mat-error>
+                  <div class="mat-error" *ngIf="isConfirmPasswordError">
+                    Passsword and Confirm Password didn't match.
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>  
+            
+            
+            <!-- Notification Prefrences -->
+            <mat-expansion-panel expanded hideToggle disabled>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <mat-icon mat-list-icon>notification_important</mat-icon>
+                  Notification Prefrences
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="form-continer">
+                <div class="list flex-containers flex-start wrap">
+                  <div class="list-item-3">
+                    <mat-slide-toggle [(ngModel)]="notification.isEmail" color="warn" (change)="updateNotificationPref('email', notification.isEmail)">Email</mat-slide-toggle>
+                  </div>
+                  <div class="list-item-3">
+                    <mat-slide-toggle  [(ngModel)]="notification.isPhone" color="warn" (change)="updateNotificationPref('phone', notification.isPhone)">Mobile</mat-slide-toggle>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>          
+          </mat-accordion>
+        </div>
+      </div>
+      
+    </div>
+    
+
+  </div>
+</section>
+

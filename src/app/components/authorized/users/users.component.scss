@@ -1,0 +1,49 @@
+// AG-Grid
+.ag-input-field-input.ag-text-field-input {
+  border-radius: 0 !important;
+}
+.contacts-card {
+  font-size: 16px;
+  font-weight: 300;
+  box-shadow: 0px 3px 6px #00000029;
+  border: 1px solid #EBEBEB;
+  .ag-root-wrapper-body {
+    font-size: 16px;
+  }
+  .ag-theme-alpine .ag-header-cell, .ag-theme-alpine .ag-header-group-cell {
+    font-weight: 500;
+  }
+  .ag-theme-alpine .ag-ltr input[class^='ag-'][type='text'] {
+    border-color: #777;
+  }
+  .initials {
+    width: 36px;
+    display: inline-block;
+    text-align: center;
+    height: 36px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    line-height: 36px;
+    font-weight: 500;
+    font-size: 16px;  
+    margin-right: 5px;  
+  }
+  .ag-theme-alpine .ag-ltr .ag-cell {
+    padding-top: 5px;
+    font-size: 16px;
+  }
+}
+.verified {
+    font-size: 10px;
+    padding: 3px;
+    border: 1px solid #049c09;
+    background: #049c09;
+    color: #fff;
+}
+.unverified {
+  font-size: 10px;
+  padding: 3px;
+  border: 1px solid #c03d38;
+  background: #c03d38;
+  color: #fff;
+}

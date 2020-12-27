@@ -1,0 +1,125 @@
+<div class="page-body">
+  <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
+  <h1 class="mat-dialog-title">{{contact.id ? 'Edit' : 'Create'}} <span class="red">Contact</span></h1>
+  <div mat-dialog-content>
+    <div class="contacts-form-wrapper page-body outline">
+      <form [formGroup]="contactsForm">
+        <div class="form-continer">
+  
+          <div class="list flex-containers flex-start wrap">
+            <div class="list-item-2">
+              
+              <mat-form-field appearance="outline">
+                <mat-label>Salutation</mat-label>
+                <mat-select formControlName="salutation">
+                  <mat-option *ngFor="let salution of salutationTypes" [value]="salution.value">{{salution.title}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="list-item-2">
+              <mat-form-field appearance="outline">
+                <mat-label>Firstname</mat-label>
+                <input matInput placeholder="Firstname" formControlName="firstname" maxlength="50" autocomplete="off"/>
+              </mat-form-field>
+            </div>
+          </div> 
+  
+          <div class="list flex-containers flex-start wrap">
+            <div class="list-item-2">
+              <mat-form-field appearance="outline">
+                <mat-label>Middlename</mat-label>
+                <input matInput placeholder="Middlename" formControlName="middlename" maxlength="50" autocomplete="off"/>
+              </mat-form-field>
+            </div>
+            <div class="list-item-2">
+              <mat-form-field appearance="outline">
+                <mat-label>Surname</mat-label>
+                <input matInput placeholder="Surname" formControlName="surname" maxlength="50" autocomplete="off"/>
+              </mat-form-field>
+            </div>
+          </div> 
+  
+          <div class="list flex-containers flex-start wrap">
+            <div class="list-item-2">
+              <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput placeholder="Email" formControlName="email" maxlength="50" autocomplete="off"/>
+              </mat-form-field>
+            </div>
+            <div class="list-item-2">
+              <mat-form-field appearance="outline">
+                <mat-label>DOB</mat-label>
+                <input 
+                  matInput 
+                  [matDatepicker]="picker" 
+                  placeholder="Target Date" 
+                  formControlName="birth_date" 
+                  autocomplete="off"/>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+  
+          <div class="list flex-containers flex-start wrap">
+            <div class="list-item-2">
+              <mat-form-field appearance="outline">
+                <mat-label>Mobile number</mat-label>
+                <input matInput placeholder="Mobile number" formControlName="mobileno" maxlength="12" autocomplete="off"/>
+              </mat-form-field>
+            </div>
+            <div class="list-item-2">
+              <mat-form-field appearance="outline">
+                <mat-label>Phone number</mat-label>
+                <input matInput placeholder="Phone number" formControlName="phoneno" maxlength="12" autocomplete="off"/>
+              </mat-form-field>
+            </div>
+          </div> 
+  
+          <div class="list flex-containers flex-start wrap">
+            <div class="list-item-2">
+              <mat-form-field appearance="outline">
+                <mat-label>Street</mat-label>
+                <input matInput placeholder="Street" formControlName="street" maxlength="50" autocomplete="off"/>
+              </mat-form-field>
+            </div>
+            <div class="list-item-2">
+              <mat-form-field appearance="outline">
+                <mat-label>City</mat-label>
+                <input matInput placeholder="City" formControlName="city" maxlength="50" autocomplete="off"/>
+              </mat-form-field>
+            </div>
+          </div> 
+  
+          <div class="list flex-containers flex-start wrap">
+            <div class="list-item-3">
+              <mat-form-field appearance="outline">
+                <mat-label>State</mat-label>
+                <input matInput placeholder="State" formControlName="state" maxlength="20" autocomplete="off"/>
+              </mat-form-field>
+            </div>
+            <div class="list-item-3">
+              <mat-form-field appearance="outline">
+                <mat-label>Country</mat-label>
+                <input matInput placeholder="Country" formControlName="country" maxlength="20" autocomplete="off"/>
+              </mat-form-field>
+            </div>
+            <div class="list-item-3">
+              <mat-form-field appearance="outline">
+                <mat-label>Zipcode</mat-label>
+                <input matInput placeholder="Zipcode" formControlName="zipcode" maxlength="10" autocomplete="off"/>
+              </mat-form-field>
+            </div>
+          </div> 
+  
+  
+        </div>
+      </form>
+    </div>
+    
+  </div>
+  <div class="btn-main-right-wrapper">
+    <button mat-stroked-button (click)="onCloseClick()" class="primary-btn-gray white">Cancel</button>
+    <button mat-stroked-button class="primary-btn-gray" cdkFocusInitial (click)="saveContactDetails()">Save</button>
+  </div>
+</div>

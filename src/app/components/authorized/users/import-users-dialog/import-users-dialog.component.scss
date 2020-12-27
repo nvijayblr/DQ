@@ -1,0 +1,17 @@
+.import-contact-dialog {
+  width: 420px;
+  height: 230px;
+  .contacts-form-wrapper {
+    min-height: auto;
+    padding: 0;
+  }
+  .mat-dialog-container {
+    overflow: hidden;
+    .page-body {
+      padding: 0;
+    }
+    .btn-main-right-wrapper {
+      margin-top: 16px;
+    }
+  }
+}

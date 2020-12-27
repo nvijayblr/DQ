@@ -1,0 +1,19 @@
+.progress-wrapper {
+  width: 200px;
+  padding: 50px 0;
+  margin: auto;
+  .title {
+    text-align: center;
+    margin-bottom: 5px;
+    font-size: 10px;
+    padding-bottom: 8px;
+  }
+}
+
+::ng-deep .mat-progress-bar-fill::after {
+  background-color: #b00000;
+}
+
+::ng-deep .mat-progress-bar-buffer {
+  background: #eb907c;
+}
