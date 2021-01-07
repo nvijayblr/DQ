@@ -17,14 +17,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login-signup/login/login.component';
 import { SignupComponent } from './components/login-signup/signup/signup.component';
-import { LandingComponent } from './components/landing/landing.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     SignupComponent,
-    LandingComponent,
   ],
   imports: [
     BrowserModule,

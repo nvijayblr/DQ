@@ -3,7 +3,6 @@ import { Routes, RouterModule, CanActivate } from '@angular/router';
 import { AuthGuardService as AuthGaurd } from './services/auth-guard.service';
 import { LoginComponent } from './components/login-signup/login/login.component';
 import { SignupComponent } from './components/login-signup/signup/signup.component';
-import { LandingComponent } from './components/landing/landing.component';
 
 const routes: Routes = [
   // { path: '', component: LandingComponent },
