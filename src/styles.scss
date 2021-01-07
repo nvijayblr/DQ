@@ -1061,6 +1061,7 @@ owl-date-time-container {
   border-bottom: 1px solid #484848;
   padding: 0 !important;
   margin: 0 36px;
+  border-radius: 0 !important;
 }
 .mat-expansion-panel-body-margin {
   margin: 0 13px;
@@ -1123,8 +1124,8 @@ owl-date-time-container {
     }
   }
 }
-.list.add-remove-button {
-  margin-top: 25px;
+.add-remove-button {
+  margin-top: 28px;
   .del-icon:enabled {
     color: #C9422E;
   }
@@ -1153,5 +1154,15 @@ mat-paginator.mat-paginator {
   .mat-step-label {
     font-size: 20px;
     font-weight: 400;
+  }
+}
+.rule-step-wrapper {
+  .add-remove-button {
+    margin-top: 0;
+  }
+  .rule-label {
+    font-weight: 400;
+    color: #000000;
+    margin-top: 10px;
   }
 }

@@ -10,101 +10,237 @@
         </div> -->
         <div class="home-panel">
           <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
-          <mat-horizontal-stepper [linear]="false" #stepper>
-            <mat-step>
-              <ng-template matStepLabel>Add Source File</ng-template>
-              <mat-card class="border no-rounded list shrare-post">
-                <h1 class="share-post-title">Create Your<span class="red"> Analysis</span></h1>
-                <app-progress-bar [message]="'Create your Analysis...'" class="page" *ngIf="isShareLoading"></app-progress-bar>
-                <form [formGroup]="sharePostForm">
-                  <div class="form-continer">
-                    <div class="list flex-containers flex-start wrap">
-                      <div class="list-item-2 outline">
-                        <mat-label>Analysis Title</mat-label>
-                        <mat-form-field appearance="outline">
-                          <input matInput placeholder="Analysis Title" formControlName="name" maxlength="50" autocomplete="off"/>
-                        </mat-form-field>
+          <form [formGroup]="analysisForm">
+            <mat-horizontal-stepper [linear]="false" #stepper>
+              <mat-step>
+                  <ng-template matStepLabel>Add Source File</ng-template>
+                  <mat-card class="border no-rounded list shrare-post">
+                    <h1 class="share-post-title">Create Your<span class="red"> Analysis</span></h1>
+                    <app-progress-bar [message]="'Create your Analysis...'" class="page" *ngIf="isShareLoading"></app-progress-bar>
+                      <div class="form-continer">
+                        <div class="list flex-containers flex-start wrap">
+                          <div class="list-item-2 outline">
+                            <mat-label>Analysis Title</mat-label>
+                            <mat-form-field appearance="outline">
+                              <input matInput placeholder="Analysis Title" formControlName="name" maxlength="50" autocomplete="off"/>
+                            </mat-form-field>
+                          </div>
+                          <div class="list-item-2 outline">
+                            <mat-label>Description</mat-label>
+                            <mat-form-field appearance="outline">
+                              <input matInput placeholder="Description" formControlName="description" maxlength="250" autocomplete="off"/>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="list flex-containers flex-start wrap">
+                          <div class="list-item-3 outline" *ngIf="!isShareLoading">
+                            <mat-label>Source Data (csv)</mat-label>
+                            <app-image-cropper 
+                              [imageType]="'Source'"
+                              [fileTypes]="'application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*'"
+                              [imagePath]="''"
+                              (uploadCompleted)="onUploadCompleted($event, analysisForm)">
+                            </app-image-cropper>
+                          </div>
+                        </div>
                       </div>
-                      <div class="list-item-3 outline" *ngIf="!isShareLoading">
-                        <mat-label>Upload CSV</mat-label>
-                        <app-image-cropper 
-                          [imageType]="'Community'"
-                          [fileTypes]="'application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*'"
-                          [imagePath]="''"
-                          (uploadCompleted)="onUploadCompleted($event, sharePostForm)">
-                        </app-image-cropper>
+                      
+                      <div class="list">
+                        <div class="flex-containers space-between" 
+                          formArrayName="referenceCSV" *ngFor="let reference of analysisForm.get('referenceCSV')['controls']; index as i; last as isLast; first as isFirst">
+                          <ng-container [formGroupName]="i">
+                            <div class="list flex-containers flex-start">
+                              <div class="list-item-3 outline">
+                                <mat-label>Reference Data (csv) {{i+1}}</mat-label>
+                                <app-image-cropper 
+                                  [imageType]="'Reference'"
+                                  [fileTypes]="'application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*'"
+                                  [imagePath]="''"
+                                  (uploadCompleted)="onUploadCompleted($event, analysisForm)">
+                                </app-image-cropper>
+                              </div>
+                              <div class="list-item-5 add-remove-button">
+                                <button type="button" mat-icon-button (click)="addFormItem('referenceCSV')" *ngIf="isLast">
+                                  <mat-icon>add</mat-icon>
+                                </button>
+                                <button type="button" mat-icon-button class="del-icon" (click)="removeFormItem('referenceCSV', i)">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                            </div>
+                          </ng-container>
+                        </div>
                       </div>
-                    </div>
-                    <div class="list flex-containers flex-start wrap">
-                      <div class="list-item-1 outline">
-                        <mat-label>Description</mat-label>
-                        <mat-form-field appearance="outline">
-                          <textarea matInput placeholder="Description" formControlName="description" maxlength="250" autocomplete="off"></textarea>
-                        </mat-form-field>
-                      </div>
-                    </div>
-                  </div>
-                </form>
-                <div class="act-btn-wrapper">
-                    <button mat-stroked-button class="primary-btn-gray">Next <mat-icon>arrow_forward</mat-icon></button>
-                </div>
-                <!-- <div class="btns-wrapper">
-                  <button mat-button class="share-btn" (click)="shareWithCommunity()" [disabled]="isShareLoading">
-                    <mat-icon>share</mat-icon>Share with community
-                  </button>
-                </div> -->
-              </mat-card>
-            </mat-step>
 
-            <mat-step>
-              <ng-template matStepLabel>Define CDE</ng-template>
-              <mat-card class="border no-rounded list shrare-post">
-                <h1 class="share-post-title">Define<span class="red"> CDE</span></h1>
-                <app-progress-bar [message]="'Create your Analysis...'" class="page" *ngIf="isShareLoading"></app-progress-bar>
-                <div class="col-selector-wrapper">
-                  <app-column-selector 
-                    [availableColumnsLabel]="'Available Columns'"
-                    [selectedColumnsLabel]="'Selected Columns'"
-                    [availableColumns]="availableColumns"
-                    [selectedColumns]="selectedColumns"
-                    [formControl]="columnsForm.controls.columns"
-                  >
-                  </app-column-selector>
-                </div>
-                <div class="act-btn-wrapper">
-                  <button mat-stroked-button class="primary-btn-gray white"><mat-icon>arrow_back</mat-icon> Back</button>
-                  <button mat-stroked-button class="primary-btn-gray">Next <mat-icon>arrow_forward</mat-icon></button>
-                </div>
-              </mat-card>
-            </mat-step>
-            
-            <mat-step>
-              <ng-template matStepLabel>Define Rules</ng-template>
-              <mat-card class="border no-rounded list shrare-post">
-                <h1 class="share-post-title">Define<span class="red"> Rules</span></h1>
-                <app-progress-bar [message]="'Create your Analysis...'" class="page" *ngIf="isShareLoading"></app-progress-bar>
-                
-                <div class="act-btn-wrapper">
-                  <button mat-stroked-button class="primary-btn-gray white"><mat-icon>arrow_back</mat-icon> Back</button>
-                  <button mat-stroked-button class="primary-btn-gray">Next <mat-icon>arrow_forward</mat-icon></button>
-                </div>
-              </mat-card>
-            </mat-step>
+                    <div class="act-btn-wrapper">
+                        <button mat-stroked-button class="primary-btn-gray">Next <mat-icon>arrow_forward</mat-icon></button>
+                    </div>
+                    <!-- <div class="btns-wrapper">
+                      <button mat-button class="share-btn" (click)="shareWithCommunity()" [disabled]="isShareLoading">
+                        <mat-icon>share</mat-icon>Share with community
+                      </button>
+                    </div> -->
+                  </mat-card>
+                </mat-step>
 
-            <mat-step>
-              <ng-template matStepLabel>Complete Analysis</ng-template>
-              <mat-card class="border no-rounded list shrare-post">
-                <h1 class="share-post-title">Complete<span class="red"> Analysis</span></h1>
-                <app-progress-bar [message]="'Create your Analysis...'" class="page" *ngIf="isShareLoading"></app-progress-bar>
+                <mat-step>
+                  <ng-template matStepLabel>Define CDE</ng-template>
+                  <mat-card class="border no-rounded list shrare-post">
+                    <h1 class="share-post-title">Define<span class="red"> Critical Data Element</span></h1>
+                    <app-progress-bar [message]="'Create your Analysis...'" class="page" *ngIf="isShareLoading"></app-progress-bar>
+                    <div class="col-selector-wrapper">
+                      <app-column-selector 
+                        [availableColumnsLabel]="'Available Columns'"
+                        [selectedColumnsLabel]="'Selected Columns'"
+                        [availableColumns]="availableColumns"
+                        [selectedColumns]="selectedColumns"
+                        [formControl]="columnsForm.controls.columns"
+                      >
+                      </app-column-selector>
+                    </div>
+                    <div class="act-btn-wrapper">
+                      <button mat-stroked-button class="primary-btn-gray white"><mat-icon>arrow_back</mat-icon> Back</button>
+                      <button mat-stroked-button class="primary-btn-gray">Next <mat-icon>arrow_forward</mat-icon></button>
+                    </div>
+                  </mat-card>
+                </mat-step>
                 
-                <div class="act-btn-wrapper">
-                  <button mat-stroked-button class="primary-btn-gray white"><mat-icon>arrow_back</mat-icon> Back</button>
-                  <button mat-stroked-button class="primary-btn-gray">Next <mat-icon>arrow_forward</mat-icon></button>
-                </div>
-              </mat-card>
-            </mat-step>
-          </mat-horizontal-stepper>
-          
+                <mat-step>
+                  <ng-template matStepLabel>Define Rules</ng-template>
+                  <mat-card class="border no-rounded list shrare-post">
+                    <h1 class="share-post-title">Define<span class="red"> Rules</span></h1>
+                    <app-progress-bar [message]="'Create your Analysis...'" class="page" *ngIf="isShareLoading"></app-progress-bar>
+                    
+                    <mat-expansion-panel expanded hideToggle disabled>
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>
+                          Column 1
+                        </mat-panel-title>
+                        <mat-panel-description>
+                          <button mat-icon-button routerLink="/auth/professional">
+                            <mat-icon>close</mat-icon>
+                          </button>
+                          <button mat-icon-button (click)="saveProfessionalDetails()">
+                            <mat-icon>save</mat-icon>
+                          </button>
+                        </mat-panel-description>
+                      </mat-expansion-panel-header>
+                      <div class="flex-containers space-between rule-step-wrapper" 
+                        formArrayName="rules" *ngFor="let rule of analysisForm.get('rules')['controls']; index as i; last as isLast; first as isFirst">
+                        <ng-container [formGroupName]="i">
+                          <div class="list flex-containers flex-start wrap">
+                            <div class="list-item-8 outline">
+                              <mat-label class="rule-label">Rule #{{i+1}}</mat-label>
+                            </div>
+                            <div class="list-item-4 outline">
+                              <mat-form-field appearance="outline">
+                                <mat-select formControlName="type">
+                                  <mat-option *ngFor="let item of ruleTypes" [value]="item.value">{{item.label}}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                              <!-- <mat-form-field appearance="outline">
+                                <input matInput placeholder="Rule" formControlName="rule" maxlength="100" autocomplete="off"/>
+                              </mat-form-field> -->
+                            </div>
+                            <div class="list-item-4 outline">
+                              <mat-form-field appearance="outline" *ngIf="rule.get('type').value === 'Type'">
+                                <mat-select formControlName="value">
+                                  <mat-option *ngFor="let item of dataTypes" [value]="item.value">{{item.label}}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                              <mat-form-field appearance="outline" *ngIf="rule.get('type').value !== 'Type'">
+                                <input matInput placeholder="Value" formControlName="value" maxlength="10" autocomplete="off"/>
+                              </mat-form-field>
+                            </div>
+                            <div class="list-item-4 add-remove-button">
+                              <button type="button" mat-icon-button (click)="addFormItem('rules')" *ngIf="isLast">
+                                <mat-icon>add</mat-icon>
+                              </button>
+                              <button type="button" mat-icon-button class="del-icon" (click)="removeFormItem('rules', i)">
+                                <mat-icon>delete</mat-icon>
+                              </button>
+                            </div>
+                          </div>
+                        </ng-container>
+                      </div>
+                    </mat-expansion-panel>
+
+                    <mat-expansion-panel expanded hideToggle disabled>
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>
+                          Column 2
+                        </mat-panel-title>
+                        <mat-panel-description>
+                          <button mat-icon-button routerLink="/auth/professional">
+                            <mat-icon>close</mat-icon>
+                          </button>
+                          <button mat-icon-button (click)="saveProfessionalDetails()">
+                            <mat-icon>save</mat-icon>
+                          </button>
+                        </mat-panel-description>
+                      </mat-expansion-panel-header>
+                      <div class="flex-containers space-between rule-step-wrapper" 
+                        formArrayName="rules1" *ngFor="let rule of analysisForm.get('rules1')['controls']; index as i; last as isLast; first as isFirst">
+                        <ng-container [formGroupName]="i">
+                          <div class="list flex-containers flex-start wrap">
+                            <div class="list-item-8 outline">
+                              <mat-label class="rule-label">Rule #{{i+1}}</mat-label>
+                            </div>
+                            <div class="list-item-4 outline">
+                              <mat-form-field appearance="outline">
+                                <mat-select formControlName="type">
+                                  <mat-option *ngFor="let item of ruleTypes" [value]="item.value">{{item.label}}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                              <!-- <mat-form-field appearance="outline">
+                                <input matInput placeholder="Rule" formControlName="rule" maxlength="100" autocomplete="off"/>
+                              </mat-form-field> -->
+                            </div>
+                            <div class="list-item-4 outline">
+                              <mat-form-field appearance="outline" *ngIf="rule.get('type').value === 'Type'">
+                                <mat-select formControlName="value">
+                                  <mat-option *ngFor="let item of dataTypes" [value]="item.value">{{item.label}}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                              <mat-form-field appearance="outline" *ngIf="rule.get('type').value !== 'Type'">
+                                <input matInput placeholder="Value" formControlName="value" maxlength="10" autocomplete="off"/>
+                              </mat-form-field>
+                            </div>
+                            <div class="list-item-4 add-remove-button">
+                              <button type="button" mat-icon-button (click)="addFormItem('rules1')" *ngIf="isLast">
+                                <mat-icon>add</mat-icon>
+                              </button>
+                              <button type="button" mat-icon-button class="del-icon" (click)="removeFormItem('rules1', i)">
+                                <mat-icon>delete</mat-icon>
+                              </button>
+                            </div>
+                          </div>
+                        </ng-container>
+                      </div>
+                    </mat-expansion-panel>
+
+                    <div class="act-btn-wrapper">
+                      <button mat-stroked-button class="primary-btn-gray white"><mat-icon>arrow_back</mat-icon> Back</button>
+                      <button mat-stroked-button class="primary-btn-gray">Next <mat-icon>arrow_forward</mat-icon></button>
+                    </div>
+                  </mat-card>
+                </mat-step>
+
+                <mat-step>
+                  <ng-template matStepLabel>Launch Analysis</ng-template>
+                  <mat-card class="border no-rounded list shrare-post">
+                    <h1 class="share-post-title">Launch Your<span class="red"> Analysis</span></h1>
+                    <app-progress-bar [message]="'Create your Analysis...'" class="page" *ngIf="isShareLoading"></app-progress-bar>
+                    
+                    <div class="act-btn-wrapper">
+                      <button mat-stroked-button class="primary-btn-gray white"><mat-icon>arrow_back</mat-icon> Back</button>
+                      <button mat-stroked-button class="primary-btn-gray">Launch <mat-icon>arrow_forward</mat-icon></button>
+                    </div>
+                  </mat-card>
+                </mat-step>
+            </mat-horizontal-stepper>
+          </form>
+
         </div>
       </div>
     </div>

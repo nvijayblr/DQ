@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit {
   isLoading = false;
   loaderMsg = '';
   posts: any = [];
-  sharePostForm: FormGroup;
+  analysisForm: FormGroup;
   isShareLoading = false;
 
   availableColumns: any = [{
@@ -50,8 +50,37 @@ export class HomeComponent implements OnInit {
     id: 7,
     title: 'Column 7'
   }];
+
   selectedColumns: any = [];
   columnsForm: FormGroup;
+
+  ruleTypes = [{
+    value: 'Type',
+    label: 'Type'
+  }, {
+    value: 'Length',
+    label: 'Length'
+  }, {
+    value: 'MinLength',
+    label: 'Min Length'
+  }, {
+    value: 'MaxLength',
+    label: 'Max Length'
+  }, {
+    value: 'Custom',
+    label: 'Custom'
+  }];
+
+  dataTypes = [{
+    value: 'Numeric',
+    label: 'Numeric'
+  }, {
+    value: 'Text',
+    label: 'Text'
+  }, {
+    value: 'AlhpaNumberic',
+    label: 'Alhpa Numberic'
+  }];
 
   constructor(
     private fb: FormBuilder,
@@ -75,27 +104,84 @@ export class HomeComponent implements OnInit {
     localStorage.removeItem('isInitLoad');
     // this.getAllPosts();
     
-    this.sharePostForm = this.fb.group({
+    this.analysisForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(100)]],
       description: ['', [Validators.required, Validators.maxLength(500)]],
-      image_type: ['Community'],
-      path: [''],
+      sourceCSV: ['Community'],
+      referenceCSV: this.fb.array([]),
+      rules: this.fb.array([]),
+      rules1: this.fb.array([]),
     });
 
     this.columnsForm = this.fb.group({
       columns: ['', [Validators.required]],
     });
+
+    const referenceCSV = this.analysisForm.controls.referenceCSV as FormArray;
+    const refCSVList = [{
+      id: 1,
+      csv: ''
+    }]
+    refCSVList.map(achivement => {
+      referenceCSV.push(this.intiFormArrays('referenceCSV', achivement));
+    });
+
+    const rules = this.analysisForm.controls.rules as FormArray;
+    const ruleList = [{
+      id: 1,
+      type: '',
+      value: '',
+    }]
+    ruleList.map(rule => {
+      rules.push(this.intiFormArrays('rules', rule));
+    });
+
+    const rules1 = this.analysisForm.controls.rules1 as FormArray;
+    ruleList.map(rule => {
+      rules1.push(this.intiFormArrays('rules', rule));
+    });
+
   }
+
+  intiFormArrays(field, value: any = {}) {
+    if (field === 'referenceCSV') {
+      return this.fb.group({
+        id: [value.id],
+        csv: [value.csv],
+      });
+    }
+    if (field === 'rules') {
+      return this.fb.group({
+        id: [value.id],
+        rule: [value.rule],
+        value: [value.value],
+        type: [value.type],
+      });
+    }
+  }
+
+  get f(): any { return this.analysisForm.controls; }
+
+  addFormItem(arrayName) {
+    const fbArray = this.analysisForm.get(arrayName) as FormArray;
+    fbArray.push(this.intiFormArrays(arrayName));
+  }
+
+  removeFormItem(arrayName, index) {
+    const fbArray = this.analysisForm.get(arrayName) as FormArray;
+    fbArray.removeAt(index);
+  }
+
 
   onUploadCompleted(e, formControl) {
     formControl.controls.path.setValue(e.path);
   }
 
   shareWithCommunity() {
-    if (this.sharePostForm.invalid) {
+    if (this.analysisForm.invalid) {
       return;
     }
-    const post = this.sharePostForm.value;
+    const post = this.analysisForm.value;
     this.isShareLoading = true;
     this.loaderMsg = 'Creating Post...';
     const payload = {
@@ -110,9 +196,9 @@ export class HomeComponent implements OnInit {
     }
     this.http.createPost(this.userId, payload).subscribe((result: any) => {
       this.isShareLoading = false;
-      this.sharePostForm.controls.name.setValue('');
-      this.sharePostForm.controls.path.setValue('');
-      this.sharePostForm.controls.description.setValue('');
+      this.analysisForm.controls.name.setValue('');
+      this.analysisForm.controls.path.setValue('');
+      this.analysisForm.controls.description.setValue('');
       this.getMyPosts();
     }, (error) => {
       this.isShareLoading = false;
