@@ -16,8 +16,8 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
 import { FileFormatPipe } from '../services/file-format-pipe';
 import { MnCarouselComponent } from './mn-carousel/mn-carousel.component';
 import { AccountDetailsComponent } from './account-details/account-details.component';
-// import { ColumnSelectorComponent } from './column-selector/column-selector.component';
-// import { DragDropListComponent } from './column-selector/drag-drop-list/drag-drop-list.component';
+import { ColumnSelectorComponent } from './column-selector/column-selector.component';
+import { DragDropListComponent } from './column-selector/drag-drop-list/drag-drop-list.component';
 
 @NgModule({
   imports: [
@@ -41,6 +41,8 @@ import { AccountDetailsComponent } from './account-details/account-details.compo
     FileFormatPipe,
     MnCarouselComponent,
     AccountDetailsComponent,
+    ColumnSelectorComponent,
+    DragDropListComponent,
   ],
   exports: [
     FormsModule,
@@ -59,6 +61,8 @@ import { AccountDetailsComponent } from './account-details/account-details.compo
     RatingModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
+    ColumnSelectorComponent,
+    DragDropListComponent,
   ],
   providers: [
     DatePipe

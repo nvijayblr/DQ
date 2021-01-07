@@ -89,14 +89,14 @@
                     <h1 class="share-post-title">Define<span class="red"> Critical Data Element</span></h1>
                     <app-progress-bar [message]="'Create your Analysis...'" class="page" *ngIf="isShareLoading"></app-progress-bar>
                     <div class="col-selector-wrapper">
-                      <!-- <app-column-selector 
+                      <app-column-selector 
                         [availableColumnsLabel]="'Available Columns'"
                         [selectedColumnsLabel]="'Selected Columns'"
                         [availableColumns]="availableColumns"
                         [selectedColumns]="selectedColumns"
                         [formControl]="columnsForm.controls.columns"
                       >
-                      </app-column-selector> -->
+                      </app-column-selector>
                     </div>
                     <div class="act-btn-wrapper">
                       <button mat-stroked-button class="primary-btn-gray white"><mat-icon>arrow_back</mat-icon> Back</button>

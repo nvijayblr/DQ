@@ -1,0 +1,17 @@
+<div class="awa-drop-list-container" cdkDropList [class.item-dragging]="dragging"
+  (cdkDropListDropped)="droppedIntoList($event)">
+  <div *ngFor="let item of items; let index = index" class="col-list-item" [class.selected]="isSelected(index)" cdkDrag
+    (cdkDragStarted)="dragStarted($event, index)" (cdkDragEnded)="dragEnded()" (cdkDragDropped)="dropped($event)"
+    (click)="select($event, index)"  [cdkDragDisabled]="isDisabled">
+    <div *ngIf="!dragging || !isSelected(index)">
+      <ng-container *ngTemplateOutlet="templateRef; context: { $implicit: item, item: item, index: index }">
+      </ng-container>
+      <div *cdkDragPreview>
+        <div *ngFor="let index of selections" class="col-list-item">{{items[index].title}}</div>
+        <div *ngIf="!selections.length">
+          <div class="col-list-item">{{item.title}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
