@@ -11,7 +11,10 @@
         <div class="home-panel">
           <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
           <form [formGroup]="analysisForm">
-            <mat-horizontal-stepper [linear]="false" #stepper>
+            <mat-horizontal-stepper [linear]="false" #stepper 
+              [selectedIndex]="stepIndex" 
+              (selectionChange)="stepperSelectionChange($event)"
+              (animationDone)="stepperAnimationDone()">
               <mat-step>
                   <ng-template matStepLabel>Add Source File</ng-template>
                   <mat-card class="border no-rounded list shrare-post">
@@ -37,8 +40,9 @@
                             <mat-label>Source Data (csv)</mat-label>
                             <app-image-cropper 
                               [imageType]="'Source'"
-                              [fileTypes]="'application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*'"
+                              [fileTypes]="'*.csv'"
                               [imagePath]="''"
+                              (fileSelected)="onSourceCSVSelected($event)"
                               (uploadCompleted)="onUploadCompleted($event, analysisForm)">
                             </app-image-cropper>
                           </div>
@@ -51,7 +55,7 @@
                           <ng-container [formGroupName]="i">
                             <div class="list flex-containers flex-start">
                               <div class="list-item-3 outline">
-                                <mat-label>Reference Data (csv) {{i+1}}</mat-label>
+                                <mat-label>Reference Data (csv) #{{i+1}}</mat-label>
                                 <app-image-cropper 
                                   [imageType]="'Reference'"
                                   [fileTypes]="'application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, image/*'"
@@ -63,7 +67,7 @@
                                 <button type="button" mat-icon-button (click)="addFormItem('referenceCSV')" *ngIf="isLast">
                                   <mat-icon>add</mat-icon>
                                 </button>
-                                <button type="button" mat-icon-button class="del-icon" (click)="removeFormItem('referenceCSV', i)">
+                                <button type="button" mat-icon-button class="del-icon" (click)="removeFormItem('referenceCSV', i)" *ngIf="!isFirst || !isLast">
                                   <mat-icon>delete</mat-icon>
                                 </button>
                               </div>
@@ -73,7 +77,7 @@
                       </div>
 
                     <div class="act-btn-wrapper">
-                        <button mat-stroked-button class="primary-btn-gray">Next <mat-icon>arrow_forward</mat-icon></button>
+                        <button mat-stroked-button class="primary-btn-gray" (click)="gotoStepper(1)">Next <mat-icon>arrow_forward</mat-icon></button>
                     </div>
                     <!-- <div class="btns-wrapper">
                       <button mat-button class="share-btn" (click)="shareWithCommunity()" [disabled]="isShareLoading">
@@ -99,142 +103,107 @@
                       </app-column-selector>
                     </div>
                     <div class="act-btn-wrapper">
-                      <button mat-stroked-button class="primary-btn-gray white"><mat-icon>arrow_back</mat-icon> Back</button>
-                      <button mat-stroked-button class="primary-btn-gray">Next <mat-icon>arrow_forward</mat-icon></button>
+                      <button mat-stroked-button class="primary-btn-gray white" (click)="gotoStepper(0)"><mat-icon>arrow_back</mat-icon> Back</button>
+                      <button mat-stroked-button class="primary-btn-gray" (click)="gotoStepper(2); getColumnRules();">Next <mat-icon>arrow_forward</mat-icon></button>
                     </div>
                   </mat-card>
                 </mat-step>
                 
                 <mat-step>
                   <ng-template matStepLabel>Define Rules</ng-template>
-                  <mat-card class="border no-rounded list shrare-post">
+                  <mat-card class="border no-rounded list shrare-post" style="width: 1200px !important;">
                     <h1 class="share-post-title">Define<span class="red"> Rules</span></h1>
+                    <div class="category-list-wrapper clearfix" *ngIf="showCDECar">
+                      <div class="left-arrow">
+                        <button mat-stroked-button class="gv-secondary-btn primary-btn-gray prev-next-btn" (click)="owlCar.prev()">
+                          <mat-icon>keyboard_arrow_left</mat-icon>
+                        </button>
+                      </div>
+                      <div class="category-list" #carouselHolder>
+                        <owl-carousel-o [options]="OwlCategoryOptions" #owlCar (initialized)="owlInitialized()">
+                          <!-- Items -->
+                          <ng-container *ngFor="let rule of rulesList">
+                            <ng-template carouselSlide [id]="rule.column">
+                              <div class="category-item" [class.selected]="rule.column === selectedRuleColumn" (tap)="gotoRuleColumn(rule.column)">
+                                <h3 class="cat-title">{{rule.column}}</h3>
+                              </div>
+                            </ng-template>
+                          </ng-container>
+                        </owl-carousel-o>
+                      </div>
+                      <div class="right-arrow">
+                        <button mat-stroked-button class="gv-secondary-btn primary-btn-gray prev-next-btn" (click)="owlCar.next()">
+                          <mat-icon>keyboard_arrow_right</mat-icon>
+                        </button>
+                      </div>
+                    </div>
                     <app-progress-bar [message]="'Create your Analysis...'" class="page" *ngIf="isShareLoading"></app-progress-bar>
                     
-                    <mat-expansion-panel expanded hideToggle disabled>
-                      <mat-expansion-panel-header>
-                        <mat-panel-title>
-                          Column 1
-                        </mat-panel-title>
-                        <mat-panel-description>
-                          <button mat-icon-button >
-                            <mat-icon>close</mat-icon>
-                          </button>
-                          <button mat-icon-button >
-                            <mat-icon>save</mat-icon>
-                          </button>
-                        </mat-panel-description>
-                      </mat-expansion-panel-header>
-                      <div class="flex-containers space-between rule-step-wrapper" 
-                        formArrayName="rules" *ngFor="let rule of analysisForm.get('rules')['controls']; index as i; last as isLast; first as isFirst">
-                        <ng-container [formGroupName]="i">
-                          <div class="list flex-containers flex-start wrap">
-                            <div class="list-item-8 outline">
-                              <mat-label class="rule-label">Rule #{{i+1}}</mat-label>
+                    <mat-expansion-panel expanded hideToggle disabled  
+                      *ngFor="let columns of analysisForm.get('selectedColumns')['controls']; index as i;" 
+                      formArrayName="selectedColumns"
+                      [hidden]="columns['controls'].column.value !== selectedRuleColumn">
+                      <ng-container [formGroupName]="i">
+                        <mat-expansion-panel-header>
+                          <mat-panel-title>
+                            {{columns['controls'].column.value}}
+                          </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="flex-containers space-between rule-step-wrapper rule-list-wrp"
+                          *ngFor="let rule of columns.get('rules')['controls']; index as j; last as isLast; first as isFirst" formArrayName="rules">
+                          <ng-container [formGroupName]="j">
+                            <div class="list flex-containers flex-start wrap">
+                              <div class="list-item-8 outline">
+                                <mat-label class="rule-label">Rule #{{j+1}}</mat-label>
+                              </div>
+                              <div class="list-item-4 outline">
+                                <mat-form-field appearance="outline">
+                                  <mat-select formControlName="rule">
+                                    <mat-option *ngFor="let item of ruleTypes" [value]="item.value">{{item.label}}</mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                              </div>
+                              <div class="list-item-4 outline">
+                                <mat-form-field appearance="outline" *ngIf="rule.get('rule').value === 'DataType'">
+                                  <mat-select formControlName="value">
+                                    <mat-option *ngFor="let item of dataTypes" [value]="item.value">{{item.label}}</mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" *ngIf="rule.get('rule').value !== 'DataType'">
+                                  <input matInput placeholder="Value" formControlName="value" maxlength="10" autocomplete="off"/>
+                                </mat-form-field>
+                              </div>
+                              <div class="list-item-4 add-remove-button">
+                                <button type="button" mat-icon-button (click)="addRules(columns, 'rules')" *ngIf="isLast">
+                                  <mat-icon>add</mat-icon>
+                                </button>
+                                <button type="button" mat-icon-button class="del-icon" (click)="removeRules(columns, 'rules', j)" *ngIf="!isFirst || !isLast">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
                             </div>
-                            <div class="list-item-4 outline">
-                              <mat-form-field appearance="outline">
-                                <mat-select formControlName="type">
-                                  <mat-option *ngFor="let item of ruleTypes" [value]="item.value">{{item.label}}</mat-option>
-                                </mat-select>
-                              </mat-form-field>
-                              <!-- <mat-form-field appearance="outline">
-                                <input matInput placeholder="Rule" formControlName="rule" maxlength="100" autocomplete="off"/>
-                              </mat-form-field> -->
-                            </div>
-                            <div class="list-item-4 outline">
-                              <mat-form-field appearance="outline" *ngIf="rule.get('type').value === 'Type'">
-                                <mat-select formControlName="value">
-                                  <mat-option *ngFor="let item of dataTypes" [value]="item.value">{{item.label}}</mat-option>
-                                </mat-select>
-                              </mat-form-field>
-                              <mat-form-field appearance="outline" *ngIf="rule.get('type').value !== 'Type'">
-                                <input matInput placeholder="Value" formControlName="value" maxlength="10" autocomplete="off"/>
-                              </mat-form-field>
-                            </div>
-                            <div class="list-item-4 add-remove-button">
-                              <button type="button" mat-icon-button (click)="addFormItem('rules')" *ngIf="isLast">
-                                <mat-icon>add</mat-icon>
-                              </button>
-                              <button type="button" mat-icon-button class="del-icon" (click)="removeFormItem('rules', i)">
-                                <mat-icon>delete</mat-icon>
-                              </button>
-                            </div>
-                          </div>
-                        </ng-container>
-                      </div>
-                    </mat-expansion-panel>
+                          </ng-container>
+                        </div>
+                      </ng-container>
 
-                    <mat-expansion-panel expanded hideToggle disabled>
-                      <mat-expansion-panel-header>
-                        <mat-panel-title>
-                          Column 2
-                        </mat-panel-title>
-                        <mat-panel-description>
-                          <button mat-icon-button >
-                            <mat-icon>close</mat-icon>
-                          </button>
-                          <button mat-icon-button >
-                            <mat-icon>save</mat-icon>
-                          </button>
-                        </mat-panel-description>
-                      </mat-expansion-panel-header>
-                      <div class="flex-containers space-between rule-step-wrapper" 
-                        formArrayName="rules1" *ngFor="let rule of analysisForm.get('rules1')['controls']; index as i; last as isLast; first as isFirst">
-                        <ng-container [formGroupName]="i">
-                          <div class="list flex-containers flex-start wrap">
-                            <div class="list-item-8 outline">
-                              <mat-label class="rule-label">Rule #{{i+1}}</mat-label>
-                            </div>
-                            <div class="list-item-4 outline">
-                              <mat-form-field appearance="outline">
-                                <mat-select formControlName="type">
-                                  <mat-option *ngFor="let item of ruleTypes" [value]="item.value">{{item.label}}</mat-option>
-                                </mat-select>
-                              </mat-form-field>
-                              <!-- <mat-form-field appearance="outline">
-                                <input matInput placeholder="Rule" formControlName="rule" maxlength="100" autocomplete="off"/>
-                              </mat-form-field> -->
-                            </div>
-                            <div class="list-item-4 outline">
-                              <mat-form-field appearance="outline" *ngIf="rule.get('type').value === 'Type'">
-                                <mat-select formControlName="value">
-                                  <mat-option *ngFor="let item of dataTypes" [value]="item.value">{{item.label}}</mat-option>
-                                </mat-select>
-                              </mat-form-field>
-                              <mat-form-field appearance="outline" *ngIf="rule.get('type').value !== 'Type'">
-                                <input matInput placeholder="Value" formControlName="value" maxlength="10" autocomplete="off"/>
-                              </mat-form-field>
-                            </div>
-                            <div class="list-item-4 add-remove-button">
-                              <button type="button" mat-icon-button (click)="addFormItem('rules1')" *ngIf="isLast">
-                                <mat-icon>add</mat-icon>
-                              </button>
-                              <button type="button" mat-icon-button class="del-icon" (click)="removeFormItem('rules1', i)">
-                                <mat-icon>delete</mat-icon>
-                              </button>
-                            </div>
-                          </div>
-                        </ng-container>
-                      </div>
                     </mat-expansion-panel>
 
                     <div class="act-btn-wrapper">
                       <button mat-stroked-button class="primary-btn-gray white"><mat-icon>arrow_back</mat-icon> Back</button>
-                      <button mat-stroked-button class="primary-btn-gray">Next <mat-icon>arrow_forward</mat-icon></button>
+                      <button mat-stroked-button class="primary-btn-red" (click)="gotoStepper(3);">Lanuch <mat-icon>arrow_forward</mat-icon></button>
                     </div>
                   </mat-card>
                 </mat-step>
 
                 <mat-step>
-                  <ng-template matStepLabel>Launch Analysis</ng-template>
+                  <ng-template matStepLabel>Analysis</ng-template>
                   <mat-card class="border no-rounded list shrare-post">
                     <h1 class="share-post-title">Launch Your<span class="red"> Analysis</span></h1>
                     <app-progress-bar [message]="'Create your Analysis...'" class="page" *ngIf="isShareLoading"></app-progress-bar>
                     
                     <div class="act-btn-wrapper">
                       <button mat-stroked-button class="primary-btn-gray white"><mat-icon>arrow_back</mat-icon> Back</button>
-                      <button mat-stroked-button class="primary-btn-gray">Launch <mat-icon>arrow_forward</mat-icon></button>
+                      <button mat-stroked-button class="primary-btn-red">Finish</button>
                     </div>
                   </mat-card>
                 </mat-step>

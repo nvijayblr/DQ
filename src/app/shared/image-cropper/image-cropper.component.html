@@ -4,9 +4,9 @@
     <div class="file-form-group" [hidden]="croppedImage">
       <input type="file" [accept]="fileTypes" class="gv-file-input" (change)="fileChangeEvent($event)" #fileInput>
     </div>
-    <button mat-button class="primary-btn upload-btn" title="Upload" (click)="uploadImage()" *ngIf="selectedFile.name && !isUploadDone">
+    <!-- <button mat-button class="primary-btn upload-btn" title="Upload" (click)="uploadImage()" *ngIf="selectedFile.name && !isUploadDone">
       Upload
-    </button>
+    </button> -->
     <button mat-icon-button class="done-btn" *ngIf="isUploadDone">
       <mat-icon>done</mat-icon>
     </button>

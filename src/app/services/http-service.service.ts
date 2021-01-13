@@ -32,6 +32,25 @@ export class HttpService  {
     this.rootUrl = env.baseUrl;
   }
 
+  uploadSourceCSV(payload): Observable<any> {
+    return this.http.post<any>(`https://3fgcd9up5f.execute-api.us-east-1.amazonaws.com/dev/upload`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  getColumnsRules(payload): Observable<any> {
+    return this.http.post<any>(`https://3fgcd9up5f.execute-api.us-east-1.amazonaws.com/dev/rules`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
 
 
   loginRequest(payload): Observable<any> {
