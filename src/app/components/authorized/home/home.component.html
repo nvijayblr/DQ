@@ -19,7 +19,6 @@
                   <ng-template matStepLabel>Add Source File</ng-template>
                   <mat-card class="border no-rounded list shrare-post">
                     <h1 class="share-post-title">Create Your<span class="red"> Analysis</span></h1>
-                    <app-progress-bar [message]="'Create your Analysis...'" class="page" *ngIf="isShareLoading"></app-progress-bar>
                       <div class="form-continer">
                         <div class="list flex-containers flex-start wrap">
                           <div class="list-item-2 outline">
@@ -36,7 +35,7 @@
                           </div>
                         </div>
                         <div class="list flex-containers flex-start wrap">
-                          <div class="list-item-3 outline" *ngIf="!isShareLoading">
+                          <div class="list-item-3 outline">
                             <mat-label>Source Data (csv)</mat-label>
                             <app-image-cropper 
                               [imageType]="'Source'"
@@ -45,6 +44,7 @@
                               (fileSelected)="onSourceCSVSelected($event)"
                               (uploadCompleted)="onUploadCompleted($event, analysisForm)">
                             </app-image-cropper>
+                            <div class="success-msg" *ngIf="isSourceUploaded">Source CSV uploaded successfully.</div>
                           </div>
                         </div>
                       </div>
@@ -91,7 +91,6 @@
                   <ng-template matStepLabel>Define CDE</ng-template>
                   <mat-card class="border no-rounded list shrare-post">
                     <h1 class="share-post-title">Define<span class="red"> Critical Data Element</span></h1>
-                    <app-progress-bar [message]="'Create your Analysis...'" class="page" *ngIf="isShareLoading"></app-progress-bar>
                     <div class="col-selector-wrapper">
                       <app-column-selector 
                         [availableColumnsLabel]="'Available Columns'"
@@ -111,9 +110,9 @@
                 
                 <mat-step>
                   <ng-template matStepLabel>Define Rules</ng-template>
-                  <mat-card class="border no-rounded list shrare-post" style="width: 1200px !important;">
+                  <mat-card class="border no-rounded list shrare-post">
                     <h1 class="share-post-title">Define<span class="red"> Rules</span></h1>
-                    <div class="category-list-wrapper clearfix" *ngIf="showCDECar">
+                    <div class="category-list-wrapper clearfix" *ngIf="showCDECar && !isLoading">
                       <div class="left-arrow">
                         <button mat-stroked-button class="gv-secondary-btn primary-btn-gray prev-next-btn" (click)="owlCar.prev()">
                           <mat-icon>keyboard_arrow_left</mat-icon>
@@ -125,7 +124,7 @@
                           <ng-container *ngFor="let rule of rulesList">
                             <ng-template carouselSlide [id]="rule.column">
                               <div class="category-item" [class.selected]="rule.column === selectedRuleColumn" (tap)="gotoRuleColumn(rule.column)">
-                                <h3 class="cat-title">{{rule.column}}</h3>
+                                <h3 class="cat-title">{{rule.column ? rule.column : '-'}}</h3>
                               </div>
                             </ng-template>
                           </ng-container>
@@ -137,7 +136,6 @@
                         </button>
                       </div>
                     </div>
-                    <app-progress-bar [message]="'Create your Analysis...'" class="page" *ngIf="isShareLoading"></app-progress-bar>
                     
                     <mat-expansion-panel expanded hideToggle disabled  
                       *ngFor="let columns of analysisForm.get('selectedColumns')['controls']; index as i;" 
@@ -189,7 +187,7 @@
                     </mat-expansion-panel>
 
                     <div class="act-btn-wrapper">
-                      <button mat-stroked-button class="primary-btn-gray white"><mat-icon>arrow_back</mat-icon> Back</button>
+                      <button mat-stroked-button class="primary-btn-gray white" (click)="gotoStepper(1);"><mat-icon>arrow_back</mat-icon> Back</button>
                       <button mat-stroked-button class="primary-btn-red" (click)="gotoStepper(3);">Lanuch <mat-icon>arrow_forward</mat-icon></button>
                     </div>
                   </mat-card>
@@ -199,10 +197,9 @@
                   <ng-template matStepLabel>Analysis</ng-template>
                   <mat-card class="border no-rounded list shrare-post">
                     <h1 class="share-post-title">Launch Your<span class="red"> Analysis</span></h1>
-                    <app-progress-bar [message]="'Create your Analysis...'" class="page" *ngIf="isShareLoading"></app-progress-bar>
                     
                     <div class="act-btn-wrapper">
-                      <button mat-stroked-button class="primary-btn-gray white"><mat-icon>arrow_back</mat-icon> Back</button>
+                      <button mat-stroked-button class="primary-btn-gray white" (click)="gotoStepper(2);"><mat-icon>arrow_back</mat-icon> Back</button>
                       <button mat-stroked-button class="primary-btn-red">Finish</button>
                     </div>
                   </mat-card>

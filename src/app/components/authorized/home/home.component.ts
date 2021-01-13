@@ -26,9 +26,7 @@ export class HomeComponent implements OnInit {
   isCurrentUser = false;
   isLoading = false;
   loaderMsg = '';
-  posts: any = [];
-  analysisForm: FormGroup;
-  isShareLoading = false;
+  isSourceUploaded = false;
 
   OwlCategoryOptions: OwlOptions = {
     loop: false,
@@ -63,6 +61,7 @@ export class HomeComponent implements OnInit {
   stepIndex = 0;
   availableColumns: any = [];
   selectedColumns: any = [];
+  analysisForm: FormGroup;
   columnsForm: FormGroup;
 
   selectedRuleColumn = '';
@@ -94,17 +93,8 @@ export class HomeComponent implements OnInit {
     label: 'Alhpa Numberic'
   }];
 
-  
-  rulesList = [{
-    column: 'YEAR',
-    rules: [{rule: 'DataType', value: 'Numeric'}, {rule: 'Length', value: 4}]
-  }, {
-    column: 'MONTH',
-    rules: [{rule: 'DataType', value: 'AlhpaNumberic'}, {rule: 'Length', value: 2}]
-  }, {
-    column: 'DAY',
-    rules: [{rule: 'DataType', value: 'Text'}, {rule: 'Length', value: 3}]
-  }]
+
+  rulesList = [];
   showCDECar = false;
 
   constructor(
@@ -128,7 +118,7 @@ export class HomeComponent implements OnInit {
     }
     localStorage.removeItem('isInitLoad');
     // this.getAllPosts();
-    
+
     this.analysisForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(100)]],
       description: ['', [Validators.required, Validators.maxLength(500)]],
@@ -145,17 +135,10 @@ export class HomeComponent implements OnInit {
     const refCSVList = [{
       id: 1,
       csv: ''
-    }]
+    }];
     refCSVList.map(achivement => {
       referenceCSV.push(this.intiFormArrays('referenceCSV', achivement));
     });
-
-    const selectedColumns = this.analysisForm.controls.selectedColumns as FormArray;
-
-    this.rulesList.map(rule => {
-      selectedColumns.push(this.intiFormArrays('selectedColumns', rule));
-    });
-
   }
 
   intiFormArrays(field, value: any = {}) {
@@ -170,9 +153,9 @@ export class HomeComponent implements OnInit {
         return this.fb.group({
           rule: [rule.rule],
           value: [rule.value],
-        })
-      }))
-      console.log(rulesGroup)
+        });
+      }));
+      console.log(rulesGroup);
       return this.fb.group({
         column: [value.column],
         rules: this.fb.array(rulesGroup)
@@ -181,6 +164,13 @@ export class HomeComponent implements OnInit {
   }
 
   get f(): any { return this.analysisForm.controls; }
+
+  initRulesFormArray() {
+    const selectedColumns = this.analysisForm.controls.selectedColumns as FormArray;
+    this.rulesList.map(rule => {
+      selectedColumns.push(this.intiFormArrays('selectedColumns', rule));
+    });
+  }
 
   addRules(columns, arrayName) {
     const fbRules = columns.get(arrayName) as FormArray;
@@ -216,18 +206,22 @@ export class HomeComponent implements OnInit {
     const formData: any = new FormData();
     formData.append('file[]', file);
     this.isLoading = true;
+    this.isSourceUploaded = false;
     this.loaderMsg = 'Uploading the source cvs...';
     this.http.uploadSourceCSV(formData).subscribe((result: any) => {
       this.isLoading = false;
-      const columns = ['YEAR','MONTH','DAY','DAY_OF_WEEK','AIRLINE','FLIGHT_NUMBER','TAIL_NUMBER'];
-      this.availableColumns = result[0]['flights_new.csv'].map((column, index) => {
+      console.log(result);
+      const columns = (result && result.columns) ? result.columns : [];
+      this.availableColumns = columns.map((column, index) => {
         return {
-            id: (index+1),
+            id: (index + 1),
             title: column
-        }
+        };
       });
+      this.isSourceUploaded = true;
     }, (error) => {
       this.isLoading = false;
+      this.isSourceUploaded = false;
     });
   }
 
@@ -236,11 +230,12 @@ export class HomeComponent implements OnInit {
     this.loaderMsg = 'Fetching column rules...';
     const columns = [];
     this.selectedColumns.map(column => {
-      columns.push(column.title)
-    })
+      columns.push(column.title);
+    });
     this.http.getColumnsRules(columns).subscribe((result: any) => {
       this.isLoading = false;
-      console.log(result);
+      this.rulesList = result;
+      this.initRulesFormArray();
     }, (error) => {
       this.isLoading = false;
     });
@@ -252,17 +247,16 @@ export class HomeComponent implements OnInit {
 
   stepperSelectionChange(event) {
     this.stepIndex = event.selectedIndex;
-    console.log('stepperSelectionChange', event)
+    console.log('stepperSelectionChange', event);
   }
 
   stepperAnimationDone() {
-    console.log(this.stepIndex)
     if (this.stepIndex === 2) {
       this.showCDECar = true;
     } else {
       this.showCDECar = false;
     }
-    console.log('stepperAnimationDone')
+    console.log('stepperAnimationDone');
   }
 
   gotoRuleColumn(column) {
