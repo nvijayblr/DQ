@@ -22,7 +22,7 @@
                       <div class="form-continer">
                         <div class="list flex-containers flex-start wrap">
                           <div class="list-item-2 outline">
-                            <mat-label>Analysis Title</mat-label>
+                            <mat-label>Analysis Title<span class="red">*</span></mat-label>
                             <mat-form-field appearance="outline">
                               <input matInput placeholder="Analysis Title" formControlName="name" maxlength="50" autocomplete="off"/>
                             </mat-form-field>
@@ -36,7 +36,7 @@
                         </div>
                         <div class="list flex-containers flex-start wrap">
                           <div class="list-item-3 outline">
-                            <mat-label>Source Data (csv)</mat-label>
+                            <mat-label>Source Data (csv)<span class="red">*</span></mat-label>
                             <app-image-cropper 
                               [imageType]="'Source'"
                               [fileTypes]="'*.csv'"
@@ -77,13 +77,10 @@
                       </div>
 
                     <div class="act-btn-wrapper">
-                        <button mat-stroked-button class="primary-btn-gray" (click)="gotoStepper(1)">Next <mat-icon>arrow_forward</mat-icon></button>
+                        <button mat-stroked-button class="primary-btn-gray"
+                        [disabled]="!afControls.name.value || !afControls.sourceCSV.value"
+                        (click)="gotoStepper(1, 'CSV')">Next <mat-icon>arrow_forward</mat-icon></button>
                     </div>
-                    <!-- <div class="btns-wrapper">
-                      <button mat-button class="share-btn" (click)="shareWithCommunity()" [disabled]="isShareLoading">
-                        <mat-icon>share</mat-icon>Share with community
-                      </button>
-                    </div> -->
                   </mat-card>
                 </mat-step>
 
@@ -103,7 +100,9 @@
                     </div>
                     <div class="act-btn-wrapper">
                       <button mat-stroked-button class="primary-btn-gray white" (click)="gotoStepper(0)"><mat-icon>arrow_back</mat-icon> Back</button>
-                      <button mat-stroked-button class="primary-btn-gray" (click)="gotoStepper(2); getColumnRules();">Next <mat-icon>arrow_forward</mat-icon></button>
+                      <button mat-stroked-button class="primary-btn-gray" 
+                        [disabled]="columnsForm.controls.columns.value && !columnsForm.controls.columns.value.length"
+                        (click)="gotoStepper(2); getColumnRules();">Next <mat-icon>arrow_forward</mat-icon></button>
                     </div>
                   </mat-card>
                 </mat-step>
@@ -120,7 +119,7 @@
                       </div>
                       <div class="category-list" #carouselHolder>
                         <owl-carousel-o [options]="OwlCategoryOptions" #owlCar (initialized)="owlInitialized()">
-                          <!-- Items -->
+                          <!-- Carousel Items -->
                           <ng-container *ngFor="let rule of rulesList">
                             <ng-template carouselSlide [id]="rule.column">
                               <div class="category-item" [class.selected]="rule.column === selectedRuleColumn" (tap)="gotoRuleColumn(rule.column)">
@@ -138,8 +137,8 @@
                     </div>
                     
                     <mat-expansion-panel expanded hideToggle disabled  
-                      *ngFor="let columns of analysisForm.get('selectedColumns')['controls']; index as i;" 
-                      formArrayName="selectedColumns"
+                      *ngFor="let columns of afControls.columnRules.controls; index as i;" 
+                      formArrayName="columnRules"
                       [hidden]="columns['controls'].column.value !== selectedRuleColumn">
                       <ng-container [formGroupName]="i">
                         <mat-expansion-panel-header>
@@ -188,7 +187,8 @@
 
                     <div class="act-btn-wrapper">
                       <button mat-stroked-button class="primary-btn-gray white" (click)="gotoStepper(1);"><mat-icon>arrow_back</mat-icon> Back</button>
-                      <button mat-stroked-button class="primary-btn-red" (click)="gotoStepper(3);">Lanuch <mat-icon>arrow_forward</mat-icon></button>
+                      <button mat-stroked-button class="primary-btn-red" 
+                        (click)="gotoStepper(3); launchAnalysis();">Lanuch <mat-icon>arrow_forward</mat-icon></button>
                     </div>
                   </mat-card>
                 </mat-step>
@@ -196,8 +196,46 @@
                 <mat-step>
                   <ng-template matStepLabel>Analysis</ng-template>
                   <mat-card class="border no-rounded list shrare-post">
-                    <h1 class="share-post-title">Launch Your<span class="red"> Analysis</span></h1>
-                    
+                    <h1 class="share-post-title">Your<span class="red"> Analysis</span></h1>
+                    <div class="analysis-preview">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th>Column</th>
+                            <th>Completness</th>
+                            <th>Validity</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let data of analyseData;">
+                            <td>{{data.airline}}</td>
+                            <td>
+                              <span 
+                                *ngIf="data.completness?.details.length"
+                                #tooltip="matTooltip"
+                                [matTooltip]="data.completness?.details | json"
+                                [matTooltipPosition]="'above'"
+                                matTooltipHideDelay="10"
+                                class="red"
+                              >{{data.completness?.value}}%</span>
+                              <span *ngIf="!data.completness?.details.length">{{data.completness?.value}}%</span>
+                            </td>
+                            <td>
+                              <span 
+                                *ngIf="data.Validity?.details.length"
+                                #tooltip="matTooltip"
+                                [matTooltip]="data.Validity?.details | json"
+                                [matTooltipPosition]="'above'"
+                                matTooltipHideDelay="10"
+                                class="red"
+                              >{{data.Validity?.value}}%</span>
+                              <span *ngIf="!data.Validity?.details.length">{{data.Validity?.value}}%</span>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+
+                    </div>
                     <div class="act-btn-wrapper">
                       <button mat-stroked-button class="primary-btn-gray white" (click)="gotoStepper(2);"><mat-icon>arrow_back</mat-icon> Back</button>
                       <button mat-stroked-button class="primary-btn-red">Finish</button>

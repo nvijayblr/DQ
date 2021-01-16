@@ -55,11 +55,11 @@ export class MnCarouselComponent implements OnInit {
     const payload = {
       [this.shareKey]: item.id
     };
-    this.http.shareWithCommunity(this.userId, payload).subscribe((result: any) => {
-      this.isLoading = false;
-    }, (error) => {
-      this.isLoading = false;
-    });
+    // this.http.shareWithCommunity(this.userId, payload).subscribe((result: any) => {
+    //   this.isLoading = false;
+    // }, (error) => {
+    //   this.isLoading = false;
+    // });
   }
 
   ngOnInit() {

@@ -96,6 +96,7 @@ export class HomeComponent implements OnInit {
 
   rulesList = [];
   showCDECar = false;
+  analyseData = [];
 
   constructor(
     private fb: FormBuilder,
@@ -121,10 +122,10 @@ export class HomeComponent implements OnInit {
 
     this.analysisForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(100)]],
-      description: ['', [Validators.required, Validators.maxLength(500)]],
-      sourceCSV: ['sourceCSV'],
+      description: [''],
+      sourceCSV: [''],
       referenceCSV: this.fb.array([]),
-      selectedColumns: this.fb.array([]),
+      columnRules: this.fb.array([]),
     });
 
     this.columnsForm = this.fb.group({
@@ -148,14 +149,13 @@ export class HomeComponent implements OnInit {
         csv: [value.csv],
       });
     }
-    if (field === 'selectedColumns') {
+    if (field === 'columnRules') {
       const rulesGroup = value.rules.map((rule => {
         return this.fb.group({
           rule: [rule.rule],
           value: [rule.value],
         });
       }));
-      console.log(rulesGroup);
       return this.fb.group({
         column: [value.column],
         rules: this.fb.array(rulesGroup)
@@ -163,12 +163,12 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  get f(): any { return this.analysisForm.controls; }
+  get afControls(): any { return this.analysisForm.controls; }
 
   initRulesFormArray() {
-    const selectedColumns = this.analysisForm.controls.selectedColumns as FormArray;
+    const selectedRuleColumns = this.afControls.columnRules as FormArray;
     this.rulesList.map(rule => {
-      selectedColumns.push(this.intiFormArrays('selectedColumns', rule));
+      selectedRuleColumns.push(this.intiFormArrays('columnRules', rule));
     });
   }
 
@@ -208,6 +208,7 @@ export class HomeComponent implements OnInit {
     this.isLoading = true;
     this.isSourceUploaded = false;
     this.loaderMsg = 'Uploading the source cvs...';
+    this.afControls.sourceCSV.setValue(file.name);
     this.http.uploadSourceCSV(formData).subscribe((result: any) => {
       this.isLoading = false;
       console.log(result);
@@ -229,25 +230,46 @@ export class HomeComponent implements OnInit {
     this.isLoading = true;
     this.loaderMsg = 'Fetching column rules...';
     const columns = [];
-    this.selectedColumns.map(column => {
+    const selectedColumns = this.columnsForm.value.columns;
+    selectedColumns.map(column => {
       columns.push(column.title);
     });
+    // Clear the columns array
+    this.afControls.columnRules = this.fb.array([]);
     this.http.getColumnsRules(columns).subscribe((result: any) => {
       this.isLoading = false;
       this.rulesList = result;
+      if (this.rulesList.length) {
+        this.selectedRuleColumn = this.rulesList[0].column;
+      }
       this.initRulesFormArray();
     }, (error) => {
       this.isLoading = false;
     });
   }
 
-  gotoStepper(index) {
+  launchAnalysis() {
+    this.isLoading = true;
+    this.loaderMsg = 'Launching analysis...';
+    console.log(this.afControls.columnRules.value);
+    this.http.launchAnalysis(this.afControls.columnRules.value).subscribe((result: any) => {
+      this.isLoading = false;
+      this.analyseData = result ? result : [];
+    }, (error) => {
+      this.isLoading = false;
+    });
+  }
+
+  gotoStepper(index, tab = '') {
+    // if (tab === 'CSV') {
+    //   console.log(this.afControls.sourceCSV);
+    //   return;
+    // }
     this.stepIndex = index;
   }
 
   stepperSelectionChange(event) {
     this.stepIndex = event.selectedIndex;
-    console.log('stepperSelectionChange', event);
   }
 
   stepperAnimationDone() {
@@ -256,7 +278,6 @@ export class HomeComponent implements OnInit {
     } else {
       this.showCDECar = false;
     }
-    console.log('stepperAnimationDone');
   }
 
   gotoRuleColumn(column) {
@@ -264,109 +285,6 @@ export class HomeComponent implements OnInit {
   }
 
   owlInitialized() {
-    // this.owlCar.to('YEAR');
   }
-
-
-  // shareWithCommunity() {
-  //   if (this.analysisForm.invalid) {
-  //     return;
-  //   }
-  //   const post = this.analysisForm.value;
-  //   this.isShareLoading = true;
-  //   this.loaderMsg = 'Creating Post...';
-  //   const payload = {
-  //     "userSharedSet": [
-  //       {
-  //           "image_type": "Community",
-  //           "name": post.name,
-  //           "path": post.path,
-  //           "description": post.description
-  //       }
-  //     ]
-  //   }
-  //   this.http.createPost(this.userId, payload).subscribe((result: any) => {
-  //     this.isShareLoading = false;
-  //     this.analysisForm.controls.name.setValue('');
-  //     this.analysisForm.controls.path.setValue('');
-  //     this.analysisForm.controls.description.setValue('');
-  //     this.getMyPosts();
-  //   }, (error) => {
-  //     this.isShareLoading = false;
-  //   });
-  // }
-
-  // getAllPosts() {
-  //   this.isLoading = true;
-  //   this.loaderMsg = 'Loading community details...';
-  //   this.http.sharedByOthers(this.userId).subscribe((result: any) => {
-  //     this.isLoading = false;
-  //     this.posts = result && result.communityResponse ? result.communityResponse : [];
-  //   }, (error) => {
-  //     this.isLoading = false;
-  //   });
-  // }
-
-  // getMyPosts() {
-  //   this.isLoading = true;
-  //   this.loaderMsg = 'Loading my community details...';
-  //   this.http.sharedByMe(this.userId).subscribe((result: any) => {
-  //     this.isLoading = false;
-  //     this.posts = result && result.communityResponse ? result.communityResponse : [];
-  //   }, (error) => {
-  //     this.isLoading = false;
-  //   });
-  // }
-
-  // likeUnlikePost(post, isLiked) {
-  //   this.http.likeUnlikePost(this.userId, post.id, isLiked).subscribe((result: any) => {
-  //     if (isLiked) {
-  //       post.likesCount = post.likesCount + 1;
-  //       post.isLiked = true;
-  //     } else {
-  //       post.likesCount = post.likesCount - 1;
-  //       post.isLiked = false;
-  //     }
-  //   }, (error) => {
-  //     this.isLoading = false;
-  //   });
-  // }
-
-  // removePost(post, index) {
-  //   this.isLoading = true;
-  //   this.loaderMsg = 'Removing post from community...';
-  //   this.http.removePost(this.userId, post.id).subscribe((result: any) => {
-  //     this.isLoading = false;
-  //     this.posts.splice(index, 1);
-  //   }, (error) => {
-  //     this.isLoading = false;
-  //   });
-  // }
-
-  // showVerifyEmailPhoneDialog() {
-  //   const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-  //     width: '400px',
-  //     data: {
-  //       title: 'Notification',
-  //       message: `Please verify you email or phone number to create deals.`,
-  //       cancelLable: '',
-  //       okLable: 'Close'
-  //     }
-  //   });
-
-  //   dialogRef.afterClosed().subscribe(action => {
-  //   });
-  // }
-
-  // tabChange(tab) {
-  //   if (tab.index === 0) {
-  //     this.getAllPosts();
-  //   }
-  //   if (tab.index === 1) {
-  //     this.getMyPosts();
-  //   }
-  // }
-
-
 
 }

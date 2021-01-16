@@ -1165,9 +1165,16 @@ mat-paginator.mat-paginator {
     margin-top: 10px;
   }
 }
+.required {
+  color: #b00100;
+}
 .success-msg {
   font-size: 12px !important;
   color: #056905;
   font-weight: 400;
   margin-top: 10px;
+}
+.table tbody td {
+  font-size: 16px;
+  font-weight: 400;  
 }
