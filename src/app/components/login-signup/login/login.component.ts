@@ -26,7 +26,22 @@ export class LoginComponent implements OnInit {
   loaderMsg = '';
   isOtpScreen = false;
   isOtpGenerated = false;
-
+  users = [{
+    id: 1,
+    username: 'admin',
+    password: 'admin',
+    role: 'RULE_ANALYST'
+  }, {
+    id: 2,
+    username: 'operation',
+    password: 'operation',
+    role: 'OPERATION_ANALYST'
+  }, {
+    id: 3,
+    username: 'viewer',
+    password: 'viewer',
+    role: 'VIEWER'
+  }];
   constructor(
     private fb: FormBuilder,
     private socialAuthService: SocialAuthService,
@@ -51,7 +66,7 @@ export class LoginComponent implements OnInit {
     });
 
     this.otpForm = this.fb.group({
-      phoneno: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern("^[0-9]*$")]],
+      phoneno: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern('^[0-9]*$')]],
       otpnum: ['']
     });
   }
@@ -62,10 +77,12 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.invalid) {
       return;
     }
-    let user = this.loginForm.value;
-    if (user.username === 'admin' && user.password === 'admin') {
-      user.id = 1;
-      this.setLoginSessionAndRouting(user);
+    const user = this.loginForm.value;
+    const loggedUser = this.users.filter((data) => {
+      return (data.username === user.username && data.password === user.password);
+    });
+    if (loggedUser.length) {
+      this.setLoginSessionAndRouting(loggedUser[0]);
     }
     // this.isLoading = true;
     // this.http.loginRequest(this.loginForm.value).subscribe((result: any) => {
@@ -178,8 +195,12 @@ export class LoginComponent implements OnInit {
     };
     localStorage.setItem('dq_token', JSON.stringify(session));
     localStorage.setItem('isInitLoad', JSON.stringify({isInitLoad: true}));
-    this.messageService.sendLoginMessage(session);
-    this.router.navigate([`auth/home`]);
+    const analysis = this.messageService.getAnalysis();
+    if (analysis) {
+      this.router.navigate([`auth/dashboard`]);
+    } else {
+      this.router.navigate([`auth/analysis`]);
+    }
   }
 
   signInWithGoogle(): void {

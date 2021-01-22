@@ -3,15 +3,19 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuardService as AuthGaurd } from 'src/app/services/auth-guard.service';
 import { AuthorizedComponent } from './authorized.component';
 
-
 const routes: Routes = [
   {
     path: '', component: AuthorizedComponent,
     children: [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       {
-        path: 'home',
-        loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
+        path: 'dashboard',
+        loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
+        // canActivate: [AuthGaurd]
+      },
+      {
+        path: 'analysis',
+        loadChildren: () => import('./analysis/analysis.module').then(m => m.AnalysisModule),
         // canActivate: [AuthGaurd]
       },
       {

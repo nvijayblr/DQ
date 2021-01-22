@@ -29,6 +29,12 @@ export class AuthGuardService implements CanActivate {
     return this.session && this.session ? this.session : {};
   }
 
+  public getUserRole() {
+    console.log(this.session);
+    return this.session && this.session ? this.session : {};
+  }
+
+
   public getLoggedInUserDetails() {
     return this.session ? this.session : {};
   }

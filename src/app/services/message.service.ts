@@ -24,4 +24,10 @@ export class MessageService {
         return this.message.asObservable();
     }
 
+    getAnalysis() {
+        const analysisObj = localStorage.getItem('analysis');
+        const analysis = analysisObj ? JSON.parse(analysisObj) : '';
+        return analysis;
+    }
+
 }

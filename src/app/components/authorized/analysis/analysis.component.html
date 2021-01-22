@@ -78,7 +78,7 @@
 
                     <div class="act-btn-wrapper">
                         <button mat-stroked-button class="primary-btn-gray"
-                        [disabled]="!afControls.name.value || !afControls.sourceCSV.value"
+                        [disabled]="!afControls.name.value"
                         (click)="gotoStepper(1, 'CSV')">Next <mat-icon>arrow_forward</mat-icon></button>
                     </div>
                   </mat-card>
@@ -249,7 +249,7 @@
                     </div>
                     <div class="act-btn-wrapper">
                       <button mat-stroked-button class="primary-btn-gray white" (click)="gotoStepper(2);"><mat-icon>arrow_back</mat-icon> Back</button>
-                      <button mat-stroked-button class="primary-btn-red">Finish</button>
+                      <button mat-stroked-button class="primary-btn-red" routerLink="/auth/dashboard">Finish</button>
                     </div>
                   </mat-card>
                 </mat-step>

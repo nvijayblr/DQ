@@ -10,11 +10,11 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-d
 import { OwlOptions } from 'ngx-owl-carousel-o';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  selector: 'app-analysis',
+  templateUrl: './analysis.component.html',
+  styleUrls: ['./analysis.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class AnalysisComponent implements OnInit {
   @ViewChild('owlCar', {static: false}) owlCar;
 
   user: any = {};
@@ -118,20 +118,35 @@ export class HomeComponent implements OnInit {
       // this.showVerifyEmailPhoneDialog();
     }
     localStorage.removeItem('isInitLoad');
-    // this.getAllPosts();
 
+    this.columnsForm = this.fb.group({
+      columns: ['', [Validators.required]],
+    });
+
+    // this.getAllPosts();
+    const analysis = this.messageService.getAnalysis();
+    console.log(analysis);
     this.analysisForm = this.fb.group({
-      name: ['', [Validators.required, Validators.maxLength(100)]],
-      description: [''],
-      rulesetName: ['', [Validators.required, Validators.maxLength(100)]],
+      name: [analysis.name || '', [Validators.required, Validators.maxLength(100)]],
+      description: [analysis.description || ''],
+      rulesetName: [analysis.rulesetName || '', [Validators.required, Validators.maxLength(100)]],
       sourceCSV: [''],
       referenceCSV: this.fb.array([]),
       columnRules: this.fb.array([]),
     });
 
-    this.columnsForm = this.fb.group({
-      columns: ['', [Validators.required]],
-    });
+    if (analysis) {
+      this.rulesList = analysis.rules;
+      this.selectedColumns = analysis.selectedColumns;
+      this.availableColumns = analysis.columns.filter((column) => {
+        const colFound = analysis.selectedColumns.filter((col) => {
+          return column.title === col.title;
+        });
+        return !colFound.length;
+      });
+      this.columnsForm.controls.columns.setValue(this.selectedColumns);
+      this.initRulesFormArray();
+    }
 
     const referenceCSV = this.analysisForm.controls.referenceCSV as FormArray;
     const refCSVList = [{
@@ -212,7 +227,6 @@ export class HomeComponent implements OnInit {
     this.afControls.sourceCSV.setValue(file.name);
     this.http.uploadSourceCSV(formData).subscribe((result: any) => {
       this.isLoading = false;
-      console.log(result);
       const columns = (result && result.columns) ? result.columns : [];
       this.availableColumns = columns.map((column, index) => {
         return {
@@ -255,6 +269,7 @@ export class HomeComponent implements OnInit {
       description: this.afControls.description.value,
       rulesetName: this.afControls.rulesetName.value,
       columns: this.availableColumns,
+      availableColumns: this.availableColumns,
       selectedColumns: this.selectedColumns,
       rules: this.afControls.columnRules.value,
     };
