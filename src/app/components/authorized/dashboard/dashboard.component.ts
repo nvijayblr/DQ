@@ -16,6 +16,7 @@ export class DashboardComponent implements OnInit {
   loaderMsg = '';
   role = '';
   isSourceUploaded = false;
+  selectedRule = '';
 
   constructor(private http: HttpService, private messageService: MessageService, private auth: AuthGuardService) {
     const analysis = this.messageService.getAnalysis();

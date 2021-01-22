@@ -60,10 +60,20 @@
                         </app-image-cropper>
                         <div class="success-msg" *ngIf="isSourceUploaded">Source CSV uploaded successfully.</div>                        
                       </td>
-
-                      <td>{{data.rulesetName}}</td>
                       <td>
-                        <button mat-stroked-button class="primary-btn-red" (click)="launchAnalysis(data)" >Launch</button>
+                        <div class="outline" style="width: 310px;">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Select Ruleset</mat-label>
+                            <mat-select [(ngModel)]="selectedRule">
+                              <mat-option *ngFor="let rule of analysisList;" [value]="data.rulesetName">
+                                {{rule.rulesetName}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </td>
+                      <td>
+                        <button mat-stroked-button class="primary-btn-red" (click)="launchAnalysis(data)" [disabled]="!selectedRule">Launch</button>
                       </td>
                     </tr>
                   </tbody>
@@ -98,7 +108,16 @@
 
             <!-- Analysis -->
             <mat-card class="border no-rounded list shrare-post" *ngIf="showAnalysis">
-              <h1 class="share-post-title">Your<span class="red"> Analysis</span></h1>
+              <div class="list flex-containers analysis-wrp flex-start wrap">
+                <div class="list-item-2 outline">
+                  <h1 class="share-post-title">Your<span class="red"> Analysis</span></h1>
+                </div>
+                <div class="list-item-2 outline">
+                  <div class="act-btn-wrapper">
+                    <button mat-stroked-button class="primary-btn-gray white" (click)="gotoList();"><mat-icon>arrow_back</mat-icon> Back</button>
+                  </div>
+                </div>
+              </div>
               <div class="analysis-preview">
                 <table class="table">
                   <thead>
@@ -137,9 +156,6 @@
                   </tbody>
                 </table>
 
-              </div>
-              <div class="act-btn-wrapper">
-                <button mat-stroked-button class="primary-btn-gray white" (click)="gotoList();"><mat-icon>arrow_back</mat-icon> Back</button>
               </div>
             </mat-card>            
           </div>
