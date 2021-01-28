@@ -18,7 +18,7 @@
               <mat-step>
                   <ng-template matStepLabel>Add Source File</ng-template>
                   <mat-card class="border no-rounded list shrare-post">
-                    <h1 class="share-post-title">Create Your<span class="red"> Analysis</span></h1>
+                    <h1 class="share-post-title">Create Your<span class="red"> Source</span></h1>
                       <div class="form-continer">
                         <div class="list flex-containers flex-start wrap">
                           <div class="list-item-2 outline">
@@ -197,50 +197,53 @@
 
                     <div class="act-btn-wrapper">
                       <button mat-stroked-button class="primary-btn-gray white" (click)="gotoStepper(1);"><mat-icon>arrow_back</mat-icon> Back</button>
-                      <button mat-stroked-button class="primary-btn-red" 
+                      <button mat-stroked-button class="primary-btn-gray" 
                         [disabled]="!afControls.rulesetName.value || !afControls.columnRules.value.length"
-                        (click)="launchAnalysis();">Lanuch <mat-icon>arrow_forward</mat-icon></button>
+                        (click)="generatePreview();">Next <mat-icon>arrow_forward</mat-icon></button>
                     </div>
                   </mat-card>
                 </mat-step>
 
                 <mat-step>
-                  <ng-template matStepLabel>Analysis</ng-template>
+                  <ng-template matStepLabel>Preview</ng-template>
                   <mat-card class="border no-rounded list shrare-post">
-                    <h1 class="share-post-title">Your<span class="red"> Analysis</span></h1>
+                    <h1 class="share-post-title">Analysis<span class="red"> Preview</span></h1>
                     <div class="analysis-preview">
                       <table class="table">
-                        <thead>
-                          <tr>
-                            <th>Column</th>
-                            <th>Completness</th>
-                            <th>Validity</th>
-                          </tr>
-                        </thead>
+
                         <tbody>
-                          <tr *ngFor="let data of analyseData;">
-                            <td>{{data.airline}}</td>
-                            <td>
-                              <span 
-                                *ngIf="data.completness?.details.length"
-                                #tooltip="matTooltip"
-                                [matTooltip]="data.completness?.details | json"
-                                [matTooltipPosition]="'above'"
-                                matTooltipHideDelay="10"
-                                class="red"
-                              >{{data.completness?.value}}%</span>
-                              <span *ngIf="!data.completness?.details.length">{{data.completness?.value}}%</span>
+                          <tr>
+                            <td><div class="label">Source Name</div></td>
+                            <td>{{analysis.sourceName}}</td>
+                          </tr>
+                          <tr>
+                            <td><div class="label">Selected CDE</div></td>
+                          <td>
+                            <span *ngFor="let column of analysis.selectedColumns">
+                              {{column.title}},
+                            </span>
                             </td>
-                            <td>
-                              <span 
-                                *ngIf="data.Validity?.details.length"
-                                #tooltip="matTooltip"
-                                [matTooltip]="data.Validity?.details | json"
-                                [matTooltipPosition]="'above'"
-                                matTooltipHideDelay="10"
-                                class="red"
-                              >{{data.Validity?.value}}%</span>
-                              <span *ngIf="!data.Validity?.details.length">{{data.Validity?.value}}%</span>
+                          </tr>
+                          <tr>
+                            <td><div class="label">Ruleset Name</div></td>
+                            <td>{{analysis.rulesetName}}</td>
+                          </tr>
+                          <tr>
+                            <td colspan="2"><div class="label">Rules</div></td>
+                          </tr>
+                          <tr>
+                            <td colspan="2">
+                              <div *ngFor="let col of analysis.rules">
+                                <h4>{{col.column}}</h4>
+                                <table class="table rule-table">
+                                  <tbody>
+                                    <tr *ngFor="let rule of col.rules">
+                                      <td><div class="label">{{rule.rule}}</div></td>
+                                      <td>{{rule.value}}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
                             </td>
                           </tr>
                         </tbody>
@@ -249,7 +252,7 @@
                     </div>
                     <div class="act-btn-wrapper">
                       <button mat-stroked-button class="primary-btn-gray white" (click)="gotoStepper(2);"><mat-icon>arrow_back</mat-icon> Back</button>
-                      <button mat-stroked-button class="primary-btn-red" routerLink="/auth/dashboard">Finish</button>
+                      <button mat-stroked-button class="primary-btn-red" (click)="saveAnalysis()">Finish</button>
                     </div>
                   </mat-card>
                 </mat-step>

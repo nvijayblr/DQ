@@ -62,6 +62,17 @@ export class HttpService  {
     );
   }
 
+  saveAnalysis(payload) {
+    return this.http.post<any>(`${this.rootUrl}/dev/CreateAnalysis`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+
 
   loginRequest(payload): Observable<any> {
     return this.http.post<any>(`${this.rootUrl}user/login`, payload).pipe(

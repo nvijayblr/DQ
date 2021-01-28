@@ -22,13 +22,18 @@
                       <td>{{data.name}}</td>
                       <td>{{data.rulesetName}}</td>
                       <td>
-                        <button type="button" mat-icon-button routerLink="/auth/analysis">
+                        <button type="button" class="del-icon" mat-icon-button matTooltip="Create Ruleset">
+                          <mat-icon>add</mat-icon>
+                        </button>
+                        <button type="button" mat-icon-button routerLink="/auth/analysis" matTooltip="Edit Ruleset">
                           <mat-icon>edit</mat-icon>
                         </button>
-                        <button type="button" class="del-icon" mat-icon-button>
+                        <button type="button" class="del-icon" mat-icon-button matTooltip="Delete Ruleset">
                           <mat-icon>delete</mat-icon>
                         </button>
-                        <button mat-stroked-button class="primary-btn-red" (click)="launchAnalysis(data)" >Launch</button>
+                        <button class="primary-btn-red del-icon" mat-stroked-button mat-icon-button (click)="launchAnalysis(data)" matTooltip="Launch Analysis">
+                          <mat-icon>launch</mat-icon>
+                        </button>
                       </td>
                     </tr>
                   </tbody>

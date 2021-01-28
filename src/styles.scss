@@ -140,6 +140,10 @@ button {
   font-weight: 400;
   font-size: 14px;
   padding: 0 20px !important;
+  &.mat-icon-button {
+    border-radius: 50% !important;
+    padding: 0 !important;
+  }
   &.white {
     border: 1px solid #000000 !important;
     background-color: #FFFFFF !important;

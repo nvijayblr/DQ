@@ -27,6 +27,7 @@ export class AnalysisComponent implements OnInit {
   isLoading = false;
   loaderMsg = '';
   isSourceUploaded = false;
+  analysis: any = {};
 
   OwlCategoryOptions: OwlOptions = {
     loop: false,
@@ -125,7 +126,6 @@ export class AnalysisComponent implements OnInit {
 
     // this.getAllPosts();
     const analysis = this.messageService.getAnalysis();
-    console.log(analysis);
     this.analysisForm = this.fb.group({
       name: [analysis.name || '', [Validators.required, Validators.maxLength(100)]],
       description: [analysis.description || ''],
@@ -213,7 +213,6 @@ export class AnalysisComponent implements OnInit {
     fbArray.removeAt(index);
   }
 
-
   onUploadCompleted(e, formControl) {
     formControl.controls.path.setValue(e.path);
   }
@@ -263,26 +262,26 @@ export class AnalysisComponent implements OnInit {
     });
   }
 
-  launchAnalysis() {
-    const analysis = {
-      name: this.afControls.name.value,
+  generatePreview() {
+    this.analysis = {
+      sourceName: this.afControls.name.value,
       description: this.afControls.description.value,
       rulesetName: this.afControls.rulesetName.value,
       columns: this.availableColumns,
-      availableColumns: this.availableColumns,
       selectedColumns: this.selectedColumns,
       rules: this.afControls.columnRules.value,
     };
-    if (!analysis.name || !analysis.rulesetName) {
+    if (!this.analysis.sourceName || !this.analysis.rulesetName) {
       return;
     }
-    localStorage.setItem('analysis', JSON.stringify(analysis));
-    this.isLoading = true;
-    this.loaderMsg = 'Launching analysis...';
     this.gotoStepper(3);
-    this.http.launchAnalysis(this.afControls.columnRules.value).subscribe((result: any) => {
+  }
+
+  saveAnalysis() {
+    this.isLoading = true;
+    this.loaderMsg = 'Save analysis...';
+    this.http.saveAnalysis(this.afControls.columnRules.value).subscribe((result: any) => {
       this.isLoading = false;
-      this.analyseData = result ? result : [];
     }, (error) => {
       this.isLoading = false;
     });
