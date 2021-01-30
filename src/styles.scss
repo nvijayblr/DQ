@@ -1133,7 +1133,12 @@ owl-date-time-container {
     color: #C9422E;
   }
 }
-
+.no-margin {
+  margin: 0 !important;
+}
+.dash-title {
+  margin-bottom: 20px ​!important;
+}
 mat-paginator.mat-paginator {
   background: transparent;
   font-size: 17px;

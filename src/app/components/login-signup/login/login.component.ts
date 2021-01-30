@@ -28,8 +28,8 @@ export class LoginComponent implements OnInit {
   isOtpGenerated = false;
   users = [{
     id: 1,
-    username: 'admin',
-    password: 'admin',
+    username: 'analyst',
+    password: 'analyst',
     role: 'RULE_ANALYST'
   }, {
     id: 2,

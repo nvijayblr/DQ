@@ -98,6 +98,8 @@ export class AnalysisComponent implements OnInit {
   rulesList = [];
   showCDECar = false;
   analyseData = [];
+  analysisId = '';
+  rulesetId = '';
 
   constructor(
     private fb: FormBuilder,
@@ -109,12 +111,21 @@ export class AnalysisComponent implements OnInit {
     private authGuardService: AuthGuardService,
     private messageService: MessageService) {
       this.appConfig = appConfig;
+      this.route.queryParams.subscribe(params => {
+        this.analysisId = params.analysisId;
+        this.rulesetId = params.rulesetId;
+        if (!params.analysisId) {
+          localStorage.removeItem('analysis');
+        }
+      });
+
     }
 
   ngOnInit() {
     this.isUserLoggedIn = this.authGuardService.isUserLoggedIn();
     this.user = this.authGuardService.getLoggedInUserDetails();
     this.userId = this.user.user_id;
+
     if (localStorage.getItem('isInitLoad') && !this.user.emailVerified && !this.user.phonenoVerified) {
       // this.showVerifyEmailPhoneDialog();
     }
@@ -127,8 +138,10 @@ export class AnalysisComponent implements OnInit {
     // this.getAllPosts();
     const analysis = this.messageService.getAnalysis();
     this.analysisForm = this.fb.group({
-      name: [analysis.name || '', [Validators.required, Validators.maxLength(100)]],
+      name: [analysis.sourceName || '', [Validators.required, Validators.maxLength(100)]],
+      sourceFilename: [analysis.sourceFilename || ''],
       description: [analysis.description || ''],
+      sourcepath: [analysis.sourcepath || ''],
       rulesetName: [analysis.rulesetName || '', [Validators.required, Validators.maxLength(100)]],
       sourceCSV: [''],
       referenceCSV: this.fb.array([]),
@@ -220,12 +233,20 @@ export class AnalysisComponent implements OnInit {
   onSourceCSVSelected(file) {
     const formData: any = new FormData();
     formData.append('file[]', file);
+    formData.append('data', JSON.stringify({
+        sourceFilename: file.name
+      })
+    );
+    const filename = file.name.split('.')[0];
+    this.afControls.sourceFilename.setValue(file.name);
+    this.afControls.name.setValue(filename);
+    this.afControls.rulesetName.setValue(filename);
     this.isLoading = true;
     this.isSourceUploaded = false;
     this.loaderMsg = 'Uploading the source cvs...';
-    this.afControls.sourceCSV.setValue(file.name);
     this.http.uploadSourceCSV(formData).subscribe((result: any) => {
       this.isLoading = false;
+      this.afControls.sourcepath.setValue(result.sourcepath);
       const columns = (result && result.columns) ? result.columns : [];
       this.availableColumns = columns.map((column, index) => {
         return {
@@ -245,14 +266,34 @@ export class AnalysisComponent implements OnInit {
     this.loaderMsg = 'Fetching column rules...';
     const columns = [];
     const selectedColumns = this.columnsForm.value.columns;
-    selectedColumns.map(column => {
-      columns.push(column.title);
+    this.selectedColumns = [...selectedColumns];
+    // Remove the column from ruleset if the column are removed form the list
+    const updatedRulesList = [];
+    selectedColumns.map(col => {
+      this.rulesList.map(rule => {
+        if (col.title === rule.column) {
+          updatedRulesList.push(rule);
+        }
+      });
     });
+    this.rulesList = [...updatedRulesList];
+
+    selectedColumns.map(col => {
+      // Add only newly selected columns
+      const ruleColumn = this.rulesList.filter(rule => col.title === rule.column);
+      if (!ruleColumn.length) {
+        columns.push(col.title);
+      }
+    });
+    const payload = {
+      selectedColumns: columns,
+      sourcepath: this.afControls.sourcepath.value
+    };
     // Clear the columns array
     this.afControls.columnRules = this.fb.array([]);
-    this.http.getColumnsRules(columns).subscribe((result: any) => {
+    this.http.getColumnsRules(payload).subscribe((result: any) => {
       this.isLoading = false;
-      this.rulesList = result;
+      this.rulesList = this.rulesList.concat(result);
       if (this.rulesList.length) {
         this.selectedRuleColumn = this.rulesList[0].column;
       }
@@ -279,9 +320,37 @@ export class AnalysisComponent implements OnInit {
 
   saveAnalysis() {
     this.isLoading = true;
-    this.loaderMsg = 'Save analysis...';
-    this.http.saveAnalysis(this.afControls.columnRules.value).subscribe((result: any) => {
+    this.loaderMsg = 'Saving Source...';
+    const analysis = {
+      analysisId: this.analysisId ? this.analysisId : undefined,
+      sourceFilename: this.afControls.sourceFilename.value,
+      sourceName: this.afControls.name.value,
+      description: this.afControls.description.value,
+      sourcepath: this.afControls.sourcepath.value,
+      columns: this.availableColumns.map(col => col.title)
+    };
+    this.http.saveAnalysis(analysis, this.analysisId ? 'put' : 'post').subscribe((result: any) => {
+      this.createEditRuleset(result.analysisId);
       this.isLoading = false;
+    }, (error) => {
+      this.isLoading = false;
+    });
+  }
+
+  createEditRuleset(analysisId) {
+    this.isLoading = true;
+    this.loaderMsg = 'Saving Ruleset...';
+    const ruleset = {
+      rulesetId: this.rulesetId ? this.rulesetId : undefined,
+      sourcepath: this.afControls.sourcepath.value,
+      selectedColumns: this.selectedColumns.map(col => col.title),
+      rulesetName: this.afControls.rulesetName.value,
+      ruleset: this.afControls.columnRules.value,
+      analysisId
+    };
+    this.http.createEditRuleset(ruleset, this.rulesetId ? 'put' : 'post').subscribe((result: any) => {
+      this.isLoading = false;
+      this.router.navigate([`auth/dashboard`]);
     }, (error) => {
       this.isLoading = false;
     });

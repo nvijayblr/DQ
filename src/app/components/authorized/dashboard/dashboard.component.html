@@ -7,31 +7,56 @@
           <div class="shrare-post">
             <!-- RULE ANALYST -->
             <mat-card class="border no-rounded list shrare-post" *ngIf="!showAnalysis && role === 'RULE_ANALYST'">
-              <h1 class="share-post-title">Your<span class="red"> Dashboard</span></h1>
+              <div class="list flex-containers flex-start wrap no-margin dash-title">
+                <div class="list-item-2">
+                  <h1 class="share-post-title no-margin">Your<span class="red"> Dashboard</span></h1>
+                </div>
+                <div class="list-item-2 text-right">
+                  <button mat-stroked-button class="primary-btn-red" routerLink="/auth/analysis">New Source</button>
+                </div>
+              </div>
+
               <div class="analysis-preview">
                 <table class="table">
                   <thead>
                     <tr>
+                      <th>ID</th>
                       <th>Source Name</th>
+                      <th>File Name</th>
                       <th>Ruleset Name</th>
                       <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr *ngFor="let data of analysisList;">
-                      <td>{{data.name}}</td>
-                      <td>{{data.rulesetName}}</td>
+                      <td>{{data.analysisId}}</td>
+                      <td>{{data.sourceName}}</td>
+                      <td>{{data.sourceFilename}}</td>
                       <td>
-                        <button type="button" class="del-icon" mat-icon-button matTooltip="Create Ruleset">
+                        <div class="outline">
+                          <mat-form-field appearance="outline">
+                            <mat-select [(ngModel)]="data.rulesetId">
+                              <mat-option *ngFor="let rule of data.rules;" [value]="rule.rulesetId">
+                                {{rule.rulesetName}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </td>
+                      <td>
+                        <button type="button" mat-icon-button (click)="createEditRuleset(data)" matTooltip="Create Ruleset">
                           <mat-icon>add</mat-icon>
                         </button>
-                        <button type="button" mat-icon-button routerLink="/auth/analysis" matTooltip="Edit Ruleset">
+                        <button type="button" mat-icon-button (click)="createEditRuleset(data)" [disabled]="!data.rulesetId"  matTooltip="Edit Ruleset">
                           <mat-icon>edit</mat-icon>
                         </button>
-                        <button type="button" class="del-icon" mat-icon-button matTooltip="Delete Ruleset">
+                        <button type="button" class="del-icon" mat-icon-button [disabled]="!data.rulesetId" matTooltip="Delete Ruleset">
                           <mat-icon>delete</mat-icon>
                         </button>
-                        <button class="primary-btn-red del-icon" mat-stroked-button mat-icon-button (click)="launchAnalysis(data)" matTooltip="Launch Analysis">
+                        <button class="del-icon launch-icon" mat-icon-button 
+                          [disabled]="!data.rulesetId" 
+                          (click)="launchAnalysis(data)" 
+                          matTooltip="Launch Analysis">
                           <mat-icon>launch</mat-icon>
                         </button>
                       </td>
@@ -48,13 +73,17 @@
                 <table class="table">
                   <thead>
                     <tr>
-                      <th>Select Source</th>
+                      <th>ID</th>
+                      <th>Source Name</th>
+                      <th>Select File</th>
                       <th>Ruleset Name</th>
                       <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr *ngFor="let data of analysisList;">
+                      <td>{{data.analysisId}}</td>
+                      <td>{{data.sourceName}}</td>
                       <td style="max-width: 80px;">
                         <app-image-cropper 
                           [imageType]="'Source'"
@@ -63,14 +92,12 @@
                           (fileSelected)="onSourceCSVSelected($event)"
                         >
                         </app-image-cropper>
-                        <div class="success-msg" *ngIf="isSourceUploaded">Source CSV uploaded successfully.</div>                        
                       </td>
                       <td>
-                        <div class="outline" style="width: 310px;">
+                        <div class="outline">
                           <mat-form-field appearance="outline">
-                            <mat-label>Select Ruleset</mat-label>
-                            <mat-select [(ngModel)]="selectedRule">
-                              <mat-option *ngFor="let rule of analysisList;" [value]="data.rulesetName">
+                            <mat-select [(ngModel)]="data.rulesetId">
+                              <mat-option *ngFor="let rule of data.rules;" [value]="rule.rulesetId">
                                 {{rule.rulesetName}}
                               </mat-option>
                             </mat-select>
@@ -78,7 +105,7 @@
                         </div>
                       </td>
                       <td>
-                        <button mat-stroked-button class="primary-btn-red" (click)="launchAnalysis(data)" [disabled]="!selectedRule">Launch</button>
+                        <button mat-stroked-button class="primary-btn-red" (click)="launchAnalysis(data)" [disabled]="!data.rulesetId">Launch</button>
                       </td>
                     </tr>
                   </tbody>
@@ -93,17 +120,31 @@
                 <table class="table">
                   <thead>
                     <tr>
-                      <th>Select Source</th>
+                      <th>ID</th>
+                      <th>Source Name</th>
+                      <th>File</th>
                       <th>Ruleset Name</th>
                       <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr *ngFor="let data of analysisList;">
-                      <td>{{data.name}}</td>
-                      <td>{{data.rulesetName}}</td>
+                      <td>{{data.analysisId}}</td>
+                      <td>{{data.sourceName}}</td>
+                      <td>{{data.sourceFilename}}</td>
                       <td>
-                        <button mat-stroked-button class="primary-btn-red" (click)="launchAnalysis(data)" >Launch</button>
+                        <div class="outline">
+                          <mat-form-field appearance="outline">
+                            <mat-select [(ngModel)]="data.rulesetId">
+                              <mat-option *ngFor="let rule of data.rules;" [value]="rule.rulesetId">
+                                {{rule.rulesetName}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </td>
+                      <td>
+                        <button mat-stroked-button class="primary-btn-red" (click)="launchAnalysis(data)" [disabled]="!data.rulesetId">Launch</button>
                       </td>
                     </tr>
                   </tbody>

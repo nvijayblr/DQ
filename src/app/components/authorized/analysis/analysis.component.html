@@ -252,7 +252,7 @@
                     </div>
                     <div class="act-btn-wrapper">
                       <button mat-stroked-button class="primary-btn-gray white" (click)="gotoStepper(2);"><mat-icon>arrow_back</mat-icon> Back</button>
-                      <button mat-stroked-button class="primary-btn-red" (click)="saveAnalysis()">Finish</button>
+                      <button mat-stroked-button class="primary-btn-red" (click)="saveAnalysis()" [disabled]="isLoading">Complete</button>
                     </div>
                   </mat-card>
                 </mat-step>

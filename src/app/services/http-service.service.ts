@@ -53,7 +53,7 @@ export class HttpService  {
   }
 
   launchAnalysis(payload): Observable<any> {
-    return this.http.post<any>(`${this.rootUrl}/dev/Analyze`, payload).pipe(
+    return this.http.post<any>(`${this.rootUrl}/dev/LaunchAnalysis`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
@@ -62,8 +62,28 @@ export class HttpService  {
     );
   }
 
-  saveAnalysis(payload) {
-    return this.http.post<any>(`${this.rootUrl}/dev/CreateAnalysis`, payload).pipe(
+  saveAnalysis(payload, method) {
+    return this.http[method]<any>(`${this.rootUrl}/dev/CreateAnalysis`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  createEditRuleset(payload, method) {
+    return this.http[method]<any>(`${this.rootUrl}/dev/CreateRuleSet`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  getAllAnalysis() {
+    return this.http.get<any>(`${this.rootUrl}/dev/getAllAnalysis`).pipe(
       tap((res) => {
       }),
       catchError(err => {
