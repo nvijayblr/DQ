@@ -13,8 +13,14 @@ import { query } from '@angular/animations';
 export class DashboardComponent implements OnInit {
   analysisList = [];
   analyseData = [];
+  analyseChartData: any = {};
+  analyseKeyData = [];
+  selectedAnalysis: any = {};
+  selectedKey = '';
   showAnalysis = false;
+  showAnalysisByKey = false;
   isLoading = false;
+  isLoadingDetails = false;
   loaderMsg = '';
   role = '';
   isSourceUploaded = false;
@@ -48,6 +54,7 @@ export class DashboardComponent implements OnInit {
   launchAnalysis(analysis) {
     this.showAnalysis = true;
     this.isLoading = true;
+    this.selectedAnalysis = analysis;
     this.loaderMsg = 'Launching analysis...';
     const payload = {
       analysisId: analysis.analysisId,
@@ -57,9 +64,41 @@ export class DashboardComponent implements OnInit {
     this.http.launchAnalysis(payload).subscribe((result: any) => {
       this.isLoading = false;
       this.analyseData = result ? result : [];
+      const chartData = {
+        labels: [],
+        validity: [],
+        completeness: []
+      };
+
+      this.analyseData.map(data => {
+        chartData.labels.push(data.airline);
+        chartData.validity.push(data.Validity.value);
+        chartData.completeness.push(data.completness.value);
+      });
+      this.analyseChartData = chartData;
     }, (error) => {
       this.analyseData = [];
       this.isLoading = false;
+    });
+  }
+
+  launchAnalysisByKey(keyname) {
+    this.showAnalysisByKey = true;
+    this.isLoadingDetails = true;
+    this.selectedKey = keyname;
+    this.loaderMsg = 'Launching analysis...';
+    const payload = {
+      analysisId: this.selectedAnalysis.analysisId,
+      rulesetId: this.selectedAnalysis.rulesetId,
+      keyname
+    };
+    this.analyseKeyData = [];
+    this.http.launchAnalysisByKey(payload).subscribe((result: any) => {
+      this.isLoadingDetails = false;
+      this.analyseKeyData = result ? result : [];
+    }, (error) => {
+      this.analyseKeyData = [];
+      this.isLoadingDetails = false;
     });
   }
 
@@ -96,6 +135,7 @@ export class DashboardComponent implements OnInit {
 
   gotoList() {
     this.showAnalysis = false;
+    this.showAnalysisByKey = false;
   }
 
   onSourceCSVSelected(file) {

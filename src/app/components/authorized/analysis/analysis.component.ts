@@ -8,6 +8,7 @@ import { MessageService } from '../../../services/message.service';
 import { appConfig } from '../../../app.config';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
 import { OwlOptions } from 'ngx-owl-carousel-o';
+import { S } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-analysis',
@@ -62,6 +63,8 @@ export class AnalysisComponent implements OnInit {
   stepIndex = 0;
   availableColumns: any = [];
   selectedColumns: any = [];
+  availableReferenceColumns: any = [];
+  selectedReferenceColumns: any = [];
   analysisForm: FormGroup;
   columnsForm: FormGroup;
 
@@ -78,6 +81,9 @@ export class AnalysisComponent implements OnInit {
   }, {
     value: 'MaxLength',
     label: 'Max Length'
+  }, {
+    value: 'ReferenceCDE',
+    label: 'Reference CDE'
   }, {
     value: 'Custom',
     label: 'Custom'
@@ -133,6 +139,8 @@ export class AnalysisComponent implements OnInit {
 
     this.columnsForm = this.fb.group({
       columns: ['', [Validators.required]],
+      sourceColumns: [''],
+      refernceColumns: [[]]
     });
 
     // this.getAllPosts();
@@ -144,6 +152,8 @@ export class AnalysisComponent implements OnInit {
       sourcepath: [analysis.sourcepath || ''],
       rulesetName: [analysis.rulesetName || '', [Validators.required, Validators.maxLength(100)]],
       sourceCSV: [''],
+      startDate: [''],
+      endDate: [''],
       referenceCSV: this.fb.array([]),
       columnRules: this.fb.array([]),
     });
@@ -166,8 +176,8 @@ export class AnalysisComponent implements OnInit {
       id: 1,
       csv: ''
     }];
-    refCSVList.map(achivement => {
-      referenceCSV.push(this.intiFormArrays('referenceCSV', achivement));
+    refCSVList.map(refCSV => {
+      referenceCSV.push(this.intiFormArrays('referenceCSV', refCSV));
     });
   }
 
@@ -175,7 +185,8 @@ export class AnalysisComponent implements OnInit {
     if (field === 'referenceCSV') {
       return this.fb.group({
         id: [value.id],
-        csv: [value.csv],
+        referenceColumns: [[]],
+        referencePath: ''
       });
     }
     if (field === 'columnRules') {
@@ -192,9 +203,26 @@ export class AnalysisComponent implements OnInit {
     }
   }
 
+//   Analysis View
+// - By Column Selection (Single Column, Multiple Column)
+// - Chart View
+// - Chart Drill View
+// - Highliht settings
+
+// - Ruleset - start and end
+// - Reference CDE (REF1 - COL_NAME)
+
+
+
   get afControls(): any { return this.analysisForm.controls; }
 
   initRulesFormArray() {
+    // TODO: Start Needs to update the logic here.
+    const selectedSourceColumns = this.columnsForm.value.sourceColumns;
+    if (selectedSourceColumns.length) {
+
+    }
+    // TODO: End Needs to update the logic here.
     const selectedRuleColumns = this.afControls.columnRules as FormArray;
     this.rulesList.map(rule => {
       selectedRuleColumns.push(this.intiFormArrays('columnRules', rule));
@@ -230,7 +258,7 @@ export class AnalysisComponent implements OnInit {
     formControl.controls.path.setValue(e.path);
   }
 
-  onSourceCSVSelected(file) {
+  onSourceCSVUpload(file) {
     const formData: any = new FormData();
     formData.append('file[]', file);
     formData.append('data', JSON.stringify({
@@ -243,7 +271,7 @@ export class AnalysisComponent implements OnInit {
     this.afControls.rulesetName.setValue(filename);
     this.isLoading = true;
     this.isSourceUploaded = false;
-    this.loaderMsg = 'Uploading the source cvs...';
+    this.loaderMsg = 'Uploading the source csv...';
     this.http.uploadSourceCSV(formData).subscribe((result: any) => {
       this.isLoading = false;
       this.afControls.sourcepath.setValue(result.sourcepath);
@@ -255,6 +283,34 @@ export class AnalysisComponent implements OnInit {
         };
       });
       this.isSourceUploaded = true;
+    }, (error) => {
+      this.isLoading = false;
+      this.isSourceUploaded = false;
+    });
+  }
+
+  onReferenceCSVUpload(file, reference) {
+    const formData: any = new FormData();
+    formData.append('file[]', file);
+    this.isLoading = true;
+    this.isSourceUploaded = false;
+    this.loaderMsg = 'Uploading the reference csv...';
+
+    this.http.uploadReferenceCSV(formData).subscribe((result: any) => {
+      console.log(result);
+      if (result && result.length) {
+        const refData = result && result.length ? result[0] : {};
+        reference.controls.referenceColumns.setValue(refData.referenceColumns);
+        reference.controls.referencePath.setValue(refData.referencePath);
+        const refColumns = reference.value.referenceColumns.map((column, index) => {
+          return {
+              id: (index + 1),
+              title: column
+          };
+        });
+        this.availableReferenceColumns = refColumns;
+      }
+      this.isLoading = false;
     }, (error) => {
       this.isLoading = false;
       this.isSourceUploaded = false;
@@ -285,6 +341,7 @@ export class AnalysisComponent implements OnInit {
         columns.push(col.title);
       }
     });
+
     const payload = {
       selectedColumns: columns,
       sourcepath: this.afControls.sourcepath.value
@@ -321,13 +378,15 @@ export class AnalysisComponent implements OnInit {
   saveAnalysis() {
     this.isLoading = true;
     this.loaderMsg = 'Saving Source...';
+    console.log(this.afControls.referenceCSV);
     const analysis = {
       analysisId: this.analysisId ? this.analysisId : undefined,
       sourceFilename: this.afControls.sourceFilename.value,
       sourceName: this.afControls.name.value,
       description: this.afControls.description.value,
       sourcepath: this.afControls.sourcepath.value,
-      columns: this.availableColumns.map(col => col.title)
+      columns: this.availableColumns.map(col => col.title),
+      reference: this.afControls.referenceCSV.value
     };
     this.http.saveAnalysis(analysis, this.analysisId ? 'put' : 'post').subscribe((result: any) => {
       this.createEditRuleset(result.analysisId);
@@ -346,6 +405,9 @@ export class AnalysisComponent implements OnInit {
       selectedColumns: this.selectedColumns.map(col => col.title),
       rulesetName: this.afControls.rulesetName.value,
       ruleset: this.afControls.columnRules.value,
+      startDate: this.afControls.startDate.value,
+      endDate: this.afControls.endDate.value,
+      reference: this.afControls.referenceCSV.value,
       analysisId
     };
     this.http.createEditRuleset(ruleset, this.rulesetId ? 'put' : 'post').subscribe((result: any) => {

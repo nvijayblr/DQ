@@ -41,7 +41,7 @@
                               [imageType]="'Source'"
                               [fileTypes]="'.csv'"
                               [imagePath]="''"
-                              (fileSelected)="onSourceCSVSelected($event)"
+                              (fileSelected)="onSourceCSVUpload($event)"
                               (uploadCompleted)="onUploadCompleted($event, analysisForm)">
                             </app-image-cropper>
                             <div class="success-msg" *ngIf="isSourceUploaded">Source CSV uploaded successfully.</div>
@@ -60,7 +60,8 @@
                                   [imageType]="'Reference'"
                                   [fileTypes]="'.csv'"
                                   [imagePath]="''"
-                                  (uploadCompleted)="onUploadCompleted($event, analysisForm)">
+                                  (fileSelected)="onReferenceCSVUpload($event, reference)"
+                                  (uploadCompleted)="onUploadCompleted($event, reference)">
                                 </app-image-cropper>
                               </div>
                               <div class="list-item-5 add-remove-button">
@@ -98,6 +99,19 @@
                       >
                       </app-column-selector>
                     </div>
+                    <br/>
+                    <h1 class="share-post-title">Define<span class="red"> Reference Data Element</span></h1>
+                    <div class="col-selector-wrapper">
+                      <app-column-selector 
+                        [availableColumnsLabel]="'Available Reference Columns'"
+                        [selectedColumnsLabel]="'Selected Reference Columns'"
+                        [availableColumns]="availableReferenceColumns"
+                        [selectedColumns]="selectedReferenceColumns"
+                        [formControl]="columnsForm.controls.refernceColumns"
+                      >
+                      </app-column-selector>
+                    </div>
+
                     <div class="act-btn-wrapper">
                       <button mat-stroked-button class="primary-btn-gray white" (click)="gotoStepper(0)"><mat-icon>arrow_back</mat-icon> Back</button>
                       <button mat-stroked-button class="primary-btn-gray" 
@@ -110,17 +124,33 @@
                 <mat-step>
                   <ng-template matStepLabel>Define Rules</ng-template>
                   <mat-card class="border no-rounded list shrare-post">
-                    <div class="list flex-containers flex-start wrap">
-                      <div class="list-item-2 outline">
-                        <h1 class="share-post-title">Define<span class="red"> Rules</span></h1>
-                      </div>
-                      <div class="list-item-2 outline">
+                    <h1 class="share-post-title">Define<span class="red"> Rules</span></h1>
+                    <div class="list flex-containers flex-start wrap cde-fields-wrp">
+                      <div class="list-item-3 outline">
+                        <mat-label>Ruleset Name<span class="red">*</span></mat-label>
                         <mat-form-field appearance="outline">
-                          <input matInput placeholder="Ruleset Name*" formControlName="rulesetName" maxlength="250" autocomplete="off"/>
+                          <input matInput placeholder="Ruleset Name" formControlName="rulesetName" maxlength="50" autocomplete="off"/>
+                        </mat-form-field>
+                      </div>
+                      <div class="list-item-3 outline">
+                        <mat-label>Start Date<span class="red">*</span></mat-label>
+                        <mat-form-field appearance="outline">
+                          <mat-label>Start Date</mat-label>
+                          <input matInput [matDatepicker]="frompicker">
+                          <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
+                          <mat-datepicker #frompicker></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                      <div class="list-item-3 outline">
+                        <mat-label>End Date<span class="red">*</span></mat-label>
+                        <mat-form-field appearance="outline">
+                          <mat-label>End Date</mat-label>
+                          <input matInput [matDatepicker]="topicker">
+                          <mat-datepicker-toggle matSuffix [for]="topicker"></mat-datepicker-toggle>
+                          <mat-datepicker #topicker></mat-datepicker>
                         </mat-form-field>
                       </div>
                     </div>
-
                     <div class="category-list-wrapper clearfix" *ngIf="showCDECar && !isLoading">
                       <div class="left-arrow">
                         <button mat-stroked-button class="gv-secondary-btn primary-btn-gray prev-next-btn" (click)="owlCar.prev()">
@@ -176,8 +206,14 @@
                                     <mat-option *ngFor="let item of dataTypes" [value]="item.value">{{item.label}}</mat-option>
                                   </mat-select>
                                 </mat-form-field>
-                                <mat-form-field appearance="outline" *ngIf="rule.get('rule').value !== 'DataType'">
+
+                                <mat-form-field appearance="outline" *ngIf="rule.get('rule').value !== 'DataType' && rule.get('rule').value !== 'ReferenceCDE'">
                                   <input matInput placeholder="Value" formControlName="value" maxlength="10" autocomplete="off"/>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" *ngIf="rule.get('rule').value === 'ReferenceCDE'">
+                                  <mat-select formControlName="value">
+                                    <mat-option *ngFor="let item of columnsForm.controls.refernceColumns.value" [value]="item.title">{{item.title}}</mat-option>
+                                  </mat-select>
                                 </mat-form-field>
                               </div>
                               <div class="list-item-4 add-remove-button">

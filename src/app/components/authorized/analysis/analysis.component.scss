@@ -163,7 +163,7 @@
   }
 }
 .category-list-wrapper {
-  margin-bottom: 12px;
+  margin: 0 14px 12px 14px;
   .left-arrow {
     float: left;
     width: 50px;
@@ -199,4 +199,7 @@
 .rule-table {
   width: 480px;
   border-bottom: 1px solid #ccc;
+}
+.cde-fields-wrp {
+  margin-bottom: 24px !important;
 }

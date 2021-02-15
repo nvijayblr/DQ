@@ -18,6 +18,7 @@ import { MnCarouselComponent } from './mn-carousel/mn-carousel.component';
 import { AccountDetailsComponent } from './account-details/account-details.component';
 import { ColumnSelectorComponent } from './column-selector/column-selector.component';
 import { DragDropListComponent } from './column-selector/drag-drop-list/drag-drop-list.component';
+import { BarChartComponent } from './bar-chart/bar-chart.component';
 
 @NgModule({
   imports: [
@@ -43,6 +44,7 @@ import { DragDropListComponent } from './column-selector/drag-drop-list/drag-dro
     AccountDetailsComponent,
     ColumnSelectorComponent,
     DragDropListComponent,
+    BarChartComponent,
   ],
   exports: [
     FormsModule,
@@ -63,6 +65,7 @@ import { DragDropListComponent } from './column-selector/drag-drop-list/drag-dro
     OwlNativeDateTimeModule,
     ColumnSelectorComponent,
     DragDropListComponent,
+    BarChartComponent
   ],
   providers: [
     DatePipe

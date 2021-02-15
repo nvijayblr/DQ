@@ -165,6 +165,9 @@
                 </div>
               </div>
               <div class="analysis-preview">
+                
+                <app-bar-chart *ngIf="analyseData.length" [chartData]="analyseChartData"></app-bar-chart>
+
                 <table class="table">
                   <thead>
                     <tr>
@@ -175,7 +178,61 @@
                   </thead>
                   <tbody>
                     <tr *ngFor="let data of analyseData;">
-                      <td>{{data.airline}}</td>
+                      <td>
+                        <a href="javascript: void(0)" (click)="launchAnalysisByKey(data.airline)">{{data.airline}}</a>
+                      </td>
+                      <td>
+                        <span 
+                          *ngIf="data.completness?.details.length"
+                          #tooltip="matTooltip"
+                          [matTooltip]="data.completness?.details | json"
+                          [matTooltipPosition]="'above'"
+                          matTooltipHideDelay="10"
+                          class="red"
+                        >{{data.completness?.value}}%</span>
+                        <span *ngIf="!data.completness?.details.length">{{data.completness?.value}}%</span>
+                      </td>
+                      <td>
+                        <span 
+                          *ngIf="data.Validity?.details.length"
+                          #tooltip="matTooltip"
+                          [matTooltip]="data.Validity?.details | json"
+                          [matTooltipPosition]="'above'"
+                          matTooltipHideDelay="10"
+                          class="red"
+                        >{{data.Validity?.value}}%</span>
+                        <span *ngIf="!data.Validity?.details.length">{{data.Validity?.value}}%</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            
+            </mat-card>
+
+
+            <!-- Analysis by Key-->
+            <mat-card class="border no-rounded list shrare-post" *ngIf="showAnalysisByKey">
+              <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoadingDetails"></app-progress-bar>
+              <div class="list flex-containers analysis-wrp flex-start wrap">
+                <div class="list-item-2 outline">
+                  <h1 class="share-post-title">Analysis by<span class="red"> {{selectedKey}}</span></h1>
+                </div>
+              </div>
+              <div class="analysis-preview">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Column</th>
+                      <th>Completness</th>
+                      <th>Validity</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of analyseKeyData;">
+                      <td>
+                        <a href="javascript: void(0)" (click)="launchAnalysisByKey(data.ORIGIN_AIRPORT)">{{data.ORIGIN_AIRPORT}}</a>
+                      </td>
                       <td>
                         <span 
                           *ngIf="data.completness?.details.length"
@@ -203,11 +260,13 @@
                 </table>
 
               </div>
-            </mat-card>            
+            </mat-card>   
+
+
           </div>
 
         </div>
-      </div>
+      </div> 
     </div>
 
   </div>

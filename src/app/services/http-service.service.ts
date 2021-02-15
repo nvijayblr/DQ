@@ -29,11 +29,22 @@ export class HttpService  {
     private http: HttpClient,
     private authGuardService: AuthGuardService
   ) {
-    this.rootUrl = env.baseUrl;
+    // this.rootUrl = env.baseUrl;
+    this.rootUrl = 'https://l0zcwrxii1.execute-api.us-west-2.amazonaws.com';
   }
 
   uploadSourceCSV(payload): Observable<any> {
     return this.http.post<any>(`${this.rootUrl}/dev/upload`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  uploadReferenceCSV(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/dev/refupload`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
@@ -54,6 +65,16 @@ export class HttpService  {
 
   launchAnalysis(payload): Observable<any> {
     return this.http.post<any>(`${this.rootUrl}/dev/LaunchAnalysis`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  launchAnalysisByKey(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/dev/LaunchAnalysisbyKey`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
