@@ -169,8 +169,8 @@
                 <app-bar-chart 
                   *ngIf="analyseData.length" 
                   [chartData]="analyseChartData"
-                  (xLableClicked)="xLableClicked($event)"
                 ></app-bar-chart>
+                <!-- (xLableClicked)="xLableClicked($event)" -->
 
                 <table class="table" *ngIf="isShowAnalysisTable">
                   <thead>
@@ -216,12 +216,22 @@
 
 
             <!-- Analysis by Key-->
-            <mat-card class="border no-rounded list shrare-post" *ngIf="showAnalysisByKey">
+            <mat-card class="border no-rounded list shrare-post" *ngIf="showAnalysis">
               <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoadingDetails"></app-progress-bar>
               <div class="list flex-containers analysis-wrp flex-start wrap">
                 <div class="list-item-2 outline">
-                  <h1 class="share-post-title">Analysis by<span class="red"> {{selectedKey}}</span></h1>
+                  <h1 class="share-post-title">Analysis by<span class="red"> CDE</span></h1>
                 </div>
+                <div class="outline">
+                  <mat-form-field appearance="outline">
+                    <mat-select [(ngModel)]="selectedCDE" (ngModelChange)="launchAnalysisByKey($event)">
+                      <mat-option *ngFor="let col of selectedColumns;" [value]="col">
+                        {{col}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
               </div>
               <div class="analysis-preview">
                 <app-bar-chart 

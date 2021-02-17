@@ -28,6 +28,8 @@ export class DashboardComponent implements OnInit {
   selectedRule = '';
   isShowAnalysisTable = false;
   isShowAnalysisKeyTable = false;
+  selectedColumns: any = [];
+  selectedCDE: any = '';
 
   constructor(
     private http: HttpService,
@@ -63,6 +65,7 @@ export class DashboardComponent implements OnInit {
       analysisId: analysis.analysisId,
       rulesetId: analysis.rulesetId
     };
+    this.selectedColumns = this.selectedAnalysis.rules[0].selectedColumns;
     this.analyseData = [];
     this.http.launchAnalysis(payload).subscribe((result: any) => {
       this.isLoading = false;
@@ -105,7 +108,7 @@ export class DashboardComponent implements OnInit {
         completeness: []
       };
       this.analyseKeyData.map(data => {
-        chartData.labels.push(data.ORIGIN_AIRPORT);
+        chartData.labels.push(data[this.selectedKey]);
         chartData.validity.push(data.Validity.value);
         chartData.completeness.push(data.completness.value);
       });
