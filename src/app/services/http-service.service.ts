@@ -30,7 +30,7 @@ export class HttpService  {
     private authGuardService: AuthGuardService
   ) {
     // this.rootUrl = env.baseUrl;
-    this.rootUrl = 'https://l0zcwrxii1.execute-api.us-west-2.amazonaws.com';
+    this.rootUrl = 'https://zqmp1698p6.execute-api.us-east-1.amazonaws.com';
   }
 
   uploadSourceCSV(payload): Observable<any> {

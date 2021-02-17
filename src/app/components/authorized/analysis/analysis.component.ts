@@ -344,7 +344,8 @@ export class AnalysisComponent implements OnInit {
 
     const payload = {
       selectedColumns: columns,
-      sourcepath: this.afControls.sourcepath.value
+      refSelectedColumns: this.columnsForm.controls.refernceColumns.value.map(col => col.title),
+      sourcepath: this.afControls.sourcepath.value,
     };
     // Clear the columns array
     this.afControls.columnRules = this.fb.array([]);
@@ -385,9 +386,7 @@ export class AnalysisComponent implements OnInit {
       description: this.afControls.description.value,
       sourcepath: this.afControls.sourcepath.value,
       columns: this.availableColumns.map(col => col.title),
-      reference: this.afControls.referenceCSV.value,
-      selectedColumns: this.selectedColumns.map(col => col.title),
-      refSelectedColumns: this.columnsForm.controls.refernceColumns.value.map(col => col.title),
+      reference: this.afControls.referenceCSV.value
     };
     this.http.saveAnalysis(analysis, this.analysisId ? 'put' : 'post').subscribe((result: any) => {
       this.createEditRuleset(result.analysisId);
@@ -404,12 +403,11 @@ export class AnalysisComponent implements OnInit {
       rulesetId: this.rulesetId ? this.rulesetId : undefined,
       sourcepath: this.afControls.sourcepath.value,
       selectedColumns: this.selectedColumns.map(col => col.title),
+      refSelectedColumns: this.columnsForm.controls.refernceColumns.value.map(col => col.title),
       rulesetName: this.afControls.rulesetName.value,
       ruleset: this.afControls.columnRules.value,
       startDate: this.afControls.startDate.value,
       endDate: this.afControls.endDate.value,
-      reference: this.afControls.referenceCSV.value,
-      refSelectedColumns: this.columnsForm.controls.refernceColumns.value.map(col => col.title),
       analysisId
     };
     this.http.createEditRuleset(ruleset, this.rulesetId ? 'put' : 'post').subscribe((result: any) => {

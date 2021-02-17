@@ -136,7 +136,7 @@
                         <mat-label>Start Date<span class="red">*</span></mat-label>
                         <mat-form-field appearance="outline">
                           <mat-label>Start Date</mat-label>
-                          <input matInput [matDatepicker]="frompicker">
+                          <input matInput [matDatepicker]="frompicker" formControlName="startDate">
                           <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
                           <mat-datepicker #frompicker></mat-datepicker>
                         </mat-form-field>
@@ -145,7 +145,7 @@
                         <mat-label>End Date<span class="red">*</span></mat-label>
                         <mat-form-field appearance="outline">
                           <mat-label>End Date</mat-label>
-                          <input matInput [matDatepicker]="topicker">
+                          <input matInput [matDatepicker]="topicker" formControlName="endDate">
                           <mat-datepicker-toggle matSuffix [for]="topicker"></mat-datepicker-toggle>
                           <mat-datepicker #topicker></mat-datepicker>
                         </mat-form-field>
@@ -234,7 +234,7 @@
                     <div class="act-btn-wrapper">
                       <button mat-stroked-button class="primary-btn-gray white" (click)="gotoStepper(1);"><mat-icon>arrow_back</mat-icon> Back</button>
                       <button mat-stroked-button class="primary-btn-gray" 
-                        [disabled]="!afControls.rulesetName.value || !afControls.columnRules.value.length"
+                        [disabled]="!afControls.rulesetName.value || !afControls.columnRules.value.length || !afControls.startDate.value || !afControls.endDate.value"
                         (click)="generatePreview();">Next <mat-icon>arrow_forward</mat-icon></button>
                     </div>
                   </mat-card>
