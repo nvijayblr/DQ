@@ -378,7 +378,6 @@ export class AnalysisComponent implements OnInit {
   saveAnalysis() {
     this.isLoading = true;
     this.loaderMsg = 'Saving Source...';
-    console.log(this.afControls.referenceCSV);
     const analysis = {
       analysisId: this.analysisId ? this.analysisId : undefined,
       sourceFilename: this.afControls.sourceFilename.value,
@@ -386,7 +385,9 @@ export class AnalysisComponent implements OnInit {
       description: this.afControls.description.value,
       sourcepath: this.afControls.sourcepath.value,
       columns: this.availableColumns.map(col => col.title),
-      reference: this.afControls.referenceCSV.value
+      reference: this.afControls.referenceCSV.value,
+      selectedColumns: this.selectedColumns.map(col => col.title),
+      refSelectedColumns: this.columnsForm.controls.refernceColumns.value.map(col => col.title),
     };
     this.http.saveAnalysis(analysis, this.analysisId ? 'put' : 'post').subscribe((result: any) => {
       this.createEditRuleset(result.analysisId);
@@ -408,6 +409,7 @@ export class AnalysisComponent implements OnInit {
       startDate: this.afControls.startDate.value,
       endDate: this.afControls.endDate.value,
       reference: this.afControls.referenceCSV.value,
+      refSelectedColumns: this.columnsForm.controls.refernceColumns.value.map(col => col.title),
       analysisId
     };
     this.http.createEditRuleset(ruleset, this.rulesetId ? 'put' : 'post').subscribe((result: any) => {

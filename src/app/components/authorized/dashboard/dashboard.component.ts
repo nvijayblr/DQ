@@ -14,6 +14,7 @@ export class DashboardComponent implements OnInit {
   analysisList = [];
   analyseData = [];
   analyseChartData: any = {};
+  analyseKeyChartData: any = {};
   analyseKeyData = [];
   selectedAnalysis: any = {};
   selectedKey = '';
@@ -25,6 +26,8 @@ export class DashboardComponent implements OnInit {
   role = '';
   isSourceUploaded = false;
   selectedRule = '';
+  isShowAnalysisTable = false;
+  isShowAnalysisKeyTable = false;
 
   constructor(
     private http: HttpService,
@@ -96,10 +99,25 @@ export class DashboardComponent implements OnInit {
     this.http.launchAnalysisByKey(payload).subscribe((result: any) => {
       this.isLoadingDetails = false;
       this.analyseKeyData = result ? result : [];
+      const chartData = {
+        labels: [],
+        validity: [],
+        completeness: []
+      };
+      this.analyseKeyData.map(data => {
+        chartData.labels.push(data.ORIGIN_AIRPORT);
+        chartData.validity.push(data.Validity.value);
+        chartData.completeness.push(data.completness.value);
+      });
+      this.analyseKeyChartData = chartData;
     }, (error) => {
       this.analyseKeyData = [];
       this.isLoadingDetails = false;
     });
+  }
+
+  xLableClicked(event) {
+    this.launchAnalysisByKey(event.label);
   }
 
   createEditRuleset(data) {

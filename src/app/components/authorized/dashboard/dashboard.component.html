@@ -166,9 +166,13 @@
               </div>
               <div class="analysis-preview">
                 
-                <app-bar-chart *ngIf="analyseData.length" [chartData]="analyseChartData"></app-bar-chart>
+                <app-bar-chart 
+                  *ngIf="analyseData.length" 
+                  [chartData]="analyseChartData"
+                  (xLableClicked)="xLableClicked($event)"
+                ></app-bar-chart>
 
-                <table class="table">
+                <table class="table" *ngIf="isShowAnalysisTable">
                   <thead>
                     <tr>
                       <th>Column</th>
@@ -220,7 +224,13 @@
                 </div>
               </div>
               <div class="analysis-preview">
-                <table class="table">
+                <app-bar-chart 
+                  *ngIf="analyseKeyData.length" 
+                  [chartData]="analyseKeyChartData"
+                  [chartType]="'line'"
+                ></app-bar-chart>
+
+                <table class="table" *ngIf="isShowAnalysisKeyTable">
                   <thead>
                     <tr>
                       <th>Column</th>

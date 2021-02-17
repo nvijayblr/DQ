@@ -1,5 +1,6 @@
-import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
 import * as Highcharts from 'highcharts';
+import customEvents from 'highcharts-custom-events';
 
 declare var require: any;
 const Boost = require('highcharts/modules/boost');
@@ -10,16 +11,19 @@ Boost(Highcharts);
 noData(Highcharts);
 More(Highcharts);
 noData(Highcharts);
+customEvents(Highcharts);
 
 @Component({
   selector: 'app-bar-chart',
   templateUrl: './bar-chart.component.html',
-  styleUrls: ['./bar-chart.component.scss']
+  styleUrls: ['./bar-chart.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class BarChartComponent implements OnInit, AfterViewInit {
-  @ViewChild('charts', {static: false}) public chartEl: ElementRef;
+  @ViewChild('charts', {static: true}) public chartEl: ElementRef;
   @Input() chartData;
-
+  @Input() chartType;
+  @Output() xLableClicked = new EventEmitter<any>();
   highcharts;
   chartOptions = {
     chart: {
@@ -31,12 +35,7 @@ export class BarChartComponent implements OnInit, AfterViewInit {
     subtitle: {
         text: ''
     },
-    xAxis: {
-        categories: ['AA', 'AS', 'B6', 'DL', 'EV'],
-        title: {
-            text: null
-        }
-    },
+    xAxis: {},
     yAxis: {
         min: 0,
         title: {
@@ -54,7 +53,7 @@ export class BarChartComponent implements OnInit, AfterViewInit {
         bar: {
             dataLabels: {
                 enabled: true
-            }
+            },
         }
     },
     legend: {
@@ -74,11 +73,26 @@ export class BarChartComponent implements OnInit, AfterViewInit {
     },
     series: []
   };
-
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
-    this.chartOptions.xAxis.categories = this.chartData.labels;
+    const agThis = this;
+    console.log(this.chartData.labels);
+    this.chartOptions.xAxis = {
+        categories: this.chartData.labels,
+        title: {
+            text: null
+        },
+        labels: {
+            events: {
+                click(e) {
+                    agThis.xLableClicked.emit({label: this.value});
+                }
+            }
+        }
+    };
+    this.chartOptions.chart.type = this.chartType ? this.chartType : 'column';
     this.chartOptions.series = [{
         name: 'Completeness',
         data: this.chartData.completeness
