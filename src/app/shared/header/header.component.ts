@@ -37,15 +37,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   notificationsCount = 0;
   isShowSearch = false;
   searchOptions = [{
-    value: 'profession',
-    title: 'Professions'
-  }, {
-    value: 'zipcode',
-    title: 'Porfessional by Zipcode'
-  }, {
-    value: 'deals',
-    title: 'Deals'
-  }, {
     value: 'email',
     title: 'Email'
   }, {
@@ -85,7 +76,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.isShowSearch = false;
     }
   }
-  
+
   constructor(
     private fb: FormBuilder,
     public dialog: MatDialog,
@@ -176,7 +167,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   drawerOpen(event) {
     this.notifications = [];
-   if (event) {
+    if (event) {
     this.userId = this.user.user_id;
     this.getAllNotifications();
    }

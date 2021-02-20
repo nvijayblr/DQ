@@ -30,7 +30,6 @@ export class AuthGuardService implements CanActivate {
   }
 
   public getUserRole() {
-    console.log(this.session);
     return this.session && this.session ? this.session : {};
   }
 
@@ -41,7 +40,7 @@ export class AuthGuardService implements CanActivate {
 
   public isAdminUser() {
     const user = this.session ? this.session : {};
-    if (user.role === 'admin') {
+    if (user.role === 'RULE_ANALYST') {
       return true;
     }
     return false;

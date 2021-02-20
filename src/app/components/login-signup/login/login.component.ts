@@ -195,12 +195,7 @@ export class LoginComponent implements OnInit {
     };
     localStorage.setItem('dq_token', JSON.stringify(session));
     localStorage.setItem('isInitLoad', JSON.stringify({isInitLoad: true}));
-    const analysis = this.messageService.getAnalysis();
-    if (analysis) {
-      this.router.navigate([`auth/dashboard`]);
-    } else {
-      this.router.navigate([`auth/analysis`]);
-    }
+    this.router.navigate([`auth/dashboard`]);
   }
 
   signInWithGoogle(): void {
