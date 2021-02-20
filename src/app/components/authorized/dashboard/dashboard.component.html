@@ -153,7 +153,7 @@
             </mat-card>
 
             <!-- Analysis -->
-            <mat-card class="border no-rounded list shrare-post" *ngIf="showAnalysis">
+            <!-- <mat-card class="border no-rounded list shrare-post" *ngIf="showAnalysis">
               <div class="list flex-containers analysis-wrp flex-start wrap">
                 <div class="list-item-2 outline">
                   <h1 class="share-post-title">Your<span class="red"> Analysis</span></h1>
@@ -169,9 +169,8 @@
                 <app-bar-chart 
                   *ngIf="analyseData.length" 
                   [chartData]="analyseChartData"
+                  (xLableClicked)="xLableClicked($event)"
                 ></app-bar-chart>
-                <!-- (xLableClicked)="xLableClicked($event)" -->
-
                 <table class="table" *ngIf="isShowAnalysisTable">
                   <thead>
                     <tr>
@@ -212,17 +211,17 @@
                 </table>
               </div>
             
-            </mat-card>
+            </mat-card> -->
 
 
             <!-- Analysis by Key-->
             <mat-card class="border no-rounded list shrare-post" *ngIf="showAnalysis">
               <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoadingDetails"></app-progress-bar>
               <div class="list flex-containers analysis-wrp flex-start wrap">
-                <div class="list-item-2 outline">
+                <div class="list-item-3 outline">
                   <h1 class="share-post-title">Analysis by<span class="red"> CDE</span></h1>
                 </div>
-                <div class="outline">
+                <div class="list-item-3 outline">
                   <mat-form-field appearance="outline">
                     <mat-select [(ngModel)]="selectedCDE" (ngModelChange)="launchAnalysisByKey($event)">
                       <mat-option *ngFor="let col of selectedColumns;" [value]="col">
@@ -231,28 +230,30 @@
                     </mat-select>
                   </mat-form-field>
                 </div>
-
+                <div class="list-item-3 outline">
+                  <div class="act-btn-wrapper">
+                    <button mat-stroked-button class="primary-btn-gray white" (click)="gotoList();"><mat-icon>arrow_back</mat-icon> Back</button>
+                  </div>
+                </div>
               </div>
               <div class="analysis-preview">
                 <app-bar-chart 
                   *ngIf="analyseKeyData.length" 
                   [chartData]="analyseKeyChartData"
-                  [chartType]="'line'"
+                  [chartType]="'column'"
                 ></app-bar-chart>
 
-                <table class="table" *ngIf="isShowAnalysisKeyTable">
+                <table class="table">
                   <thead>
                     <tr>
-                      <th>Column</th>
+                      <th>{{selectedKey}}</th>
                       <th>Completness</th>
                       <th>Validity</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr *ngFor="let data of analyseKeyData;">
-                      <td>
-                        <a href="javascript: void(0)" (click)="launchAnalysisByKey(data.ORIGIN_AIRPORT)">{{data.ORIGIN_AIRPORT}}</a>
-                      </td>
+                      <td>{{data[selectedKey]}}</td>
                       <td>
                         <span 
                           *ngIf="data.completness?.details.length"

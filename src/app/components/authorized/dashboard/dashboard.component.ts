@@ -58,7 +58,7 @@ export class DashboardComponent implements OnInit {
 
   launchAnalysis(analysis) {
     this.showAnalysis = true;
-    this.isLoading = true;
+    // this.isLoading = true;
     this.selectedAnalysis = analysis;
     this.loaderMsg = 'Launching analysis...';
     const payload = {
@@ -66,27 +66,31 @@ export class DashboardComponent implements OnInit {
       rulesetId: analysis.rulesetId
     };
     this.selectedColumns = this.selectedAnalysis.rules[0].selectedColumns;
+    if (this.selectedColumns && this.selectedColumns.length) {
+      this.selectedCDE = this.selectedColumns[0];
+      this.launchAnalysisByKey(this.selectedCDE);
+    }
     this.analyseData = [];
     this.analyseKeyData = [];
-    this.http.launchAnalysis(payload).subscribe((result: any) => {
-      this.isLoading = false;
-      this.analyseData = result ? result : [];
-      const chartData = {
-        labels: [],
-        validity: [],
-        completeness: []
-      };
+    // this.http.launchAnalysis(payload).subscribe((result: any) => {
+    //   this.isLoading = false;
+    //   this.analyseData = result ? result : [];
+    //   const chartData = {
+    //     labels: [],
+    //     validity: [],
+    //     completeness: []
+    //   };
 
-      this.analyseData.map(data => {
-        chartData.labels.push(data.airline);
-        chartData.validity.push(data.Validity.value);
-        chartData.completeness.push(data.completness.value);
-      });
-      this.analyseChartData = chartData;
-    }, (error) => {
-      this.analyseData = [];
-      this.isLoading = false;
-    });
+    //   this.analyseData.map(data => {
+    //     chartData.labels.push(data.airline);
+    //     chartData.validity.push(data.Validity.value);
+    //     chartData.completeness.push(data.completness.value);
+    //   });
+    //   this.analyseChartData = chartData;
+    // }, (error) => {
+    //   this.analyseData = [];
+    //   this.isLoading = false;
+    // });
   }
 
   launchAnalysisByKey(keyname) {
