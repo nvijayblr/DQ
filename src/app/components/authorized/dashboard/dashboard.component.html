@@ -1,0 +1,300 @@
+<section class="page-body home-bodys">
+  <div class="container">
+    <div class="home-wrapper">
+      <div class="clearfix my-community-body">
+        <div class="home-panel">
+          <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
+          <div class="shrare-post">
+            <!-- RULE ANALYST -->
+            <mat-card class="border no-rounded list shrare-post" *ngIf="!showAnalysis && role === 'RULE_ANALYST'">
+              <div class="list flex-containers flex-start wrap no-margin dash-title">
+                <div class="list-item-2">
+                  <h1 class="share-post-title no-margin">Your<span class="red"> Dashboard</span></h1>
+                </div>
+                <div class="list-item-2 text-right">
+                  <button mat-stroked-button class="primary-btn-red" routerLink="/auth/analysis">New Source</button>
+                </div>
+              </div>
+
+              <div class="analysis-preview">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Source Name</th>
+                      <th>File Name</th>
+                      <th>Ruleset Name</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of analysisList;">
+                      <td>{{data.analysisId}}</td>
+                      <td>{{data.sourceName}}</td>
+                      <td>{{data.sourceFilename}}</td>
+                      <td>
+                        <div class="outline">
+                          <mat-form-field appearance="outline">
+                            <mat-select [(ngModel)]="data.rulesetId">
+                              <mat-option *ngFor="let rule of data.rules;" [value]="rule.rulesetId">
+                                {{rule.rulesetName}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </td>
+                      <td>
+                        <button type="button" mat-icon-button (click)="createEditRuleset(data)" matTooltip="Create Ruleset">
+                          <mat-icon>add</mat-icon>
+                        </button>
+                        <button type="button" mat-icon-button (click)="createEditRuleset(data)" [disabled]="!data.rulesetId"  matTooltip="Edit Ruleset">
+                          <mat-icon>edit</mat-icon>
+                        </button>
+                        <button type="button" class="del-icon" mat-icon-button [disabled]="!data.rulesetId" matTooltip="Delete Ruleset">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                        <button class="del-icon launch-icon" mat-icon-button 
+                          [disabled]="!data.rulesetId" 
+                          (click)="launchAnalysis(data)" 
+                          matTooltip="Launch Analysis">
+                          <mat-icon>launch</mat-icon>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </mat-card>
+
+            <!-- OPERATIONS -->
+            <mat-card class="border no-rounded list shrare-post" *ngIf="!showAnalysis && role === 'OPERATION_ANALYST'">
+              <h1 class="share-post-title">Your<span class="red"> Dashboard</span></h1>
+              <div class="analysis-preview">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Source Name</th>
+                      <th>Select File</th>
+                      <th>Ruleset Name</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of analysisList;">
+                      <td>{{data.analysisId}}</td>
+                      <td>{{data.sourceName}}</td>
+                      <td style="max-width: 80px;">
+                        <app-image-cropper 
+                          [imageType]="'Source'"
+                          [fileTypes]="'.csv'"
+                          [imagePath]="''"
+                          (fileSelected)="onSourceCSVSelected($event)"
+                        >
+                        </app-image-cropper>
+                      </td>
+                      <td>
+                        <div class="outline">
+                          <mat-form-field appearance="outline">
+                            <mat-select [(ngModel)]="data.rulesetId">
+                              <mat-option *ngFor="let rule of data.rules;" [value]="rule.rulesetId">
+                                {{rule.rulesetName}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </td>
+                      <td>
+                        <button mat-stroked-button class="primary-btn-red" (click)="launchAnalysis(data)" [disabled]="!data.rulesetId">Launch</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </mat-card>
+
+            <!-- VIEWERES -->
+            <mat-card class="border no-rounded list shrare-post" *ngIf="!showAnalysis && role === 'VIEWER'">
+              <h1 class="share-post-title">Your<span class="red"> Dashboard</span></h1>
+              <div class="analysis-preview">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Source Name</th>
+                      <th>File</th>
+                      <th>Ruleset Name</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of analysisList;">
+                      <td>{{data.analysisId}}</td>
+                      <td>{{data.sourceName}}</td>
+                      <td>{{data.sourceFilename}}</td>
+                      <td>
+                        <div class="outline">
+                          <mat-form-field appearance="outline">
+                            <mat-select [(ngModel)]="data.rulesetId">
+                              <mat-option *ngFor="let rule of data.rules;" [value]="rule.rulesetId">
+                                {{rule.rulesetName}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </td>
+                      <td>
+                        <button mat-stroked-button class="primary-btn-red" (click)="launchAnalysis(data)" [disabled]="!data.rulesetId">Launch</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </mat-card>
+
+            <!-- Analysis -->
+            <!-- <mat-card class="border no-rounded list shrare-post" *ngIf="showAnalysis">
+              <div class="list flex-containers analysis-wrp flex-start wrap">
+                <div class="list-item-2 outline">
+                  <h1 class="share-post-title">Your<span class="red"> Analysis</span></h1>
+                </div>
+                <div class="list-item-2 outline">
+                  <div class="act-btn-wrapper">
+                    <button mat-stroked-button class="primary-btn-gray white" (click)="gotoList();"><mat-icon>arrow_back</mat-icon> Back</button>
+                  </div>
+                </div>
+              </div>
+              <div class="analysis-preview">
+                
+                <app-bar-chart 
+                  *ngIf="analyseData.length" 
+                  [chartData]="analyseChartData"
+                  (xLableClicked)="xLableClicked($event)"
+                ></app-bar-chart>
+                <table class="table" *ngIf="isShowAnalysisTable">
+                  <thead>
+                    <tr>
+                      <th>Column</th>
+                      <th>Completness</th>
+                      <th>Validity</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of analyseData;">
+                      <td>
+                        <a href="javascript: void(0)" (click)="launchAnalysisByKey(data.airline)">{{data.airline}}</a>
+                      </td>
+                      <td>
+                        <span 
+                          *ngIf="data.completness?.details.length"
+                          #tooltip="matTooltip"
+                          [matTooltip]="data.completness?.details | json"
+                          [matTooltipPosition]="'above'"
+                          matTooltipHideDelay="10"
+                          class="red"
+                        >{{data.completness?.value}}%</span>
+                        <span *ngIf="!data.completness?.details.length">{{data.completness?.value}}%</span>
+                      </td>
+                      <td>
+                        <span 
+                          *ngIf="data.Validity?.details.length"
+                          #tooltip="matTooltip"
+                          [matTooltip]="data.Validity?.details | json"
+                          [matTooltipPosition]="'above'"
+                          matTooltipHideDelay="10"
+                          class="red"
+                        >{{data.Validity?.value}}%</span>
+                        <span *ngIf="!data.Validity?.details.length">{{data.Validity?.value}}%</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            
+            </mat-card> -->
+
+
+            <!-- Analysis by Key-->
+            <mat-card class="border no-rounded list shrare-post" *ngIf="showAnalysis">
+              <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoadingDetails"></app-progress-bar>
+              <div class="list flex-containers analysis-wrp flex-start wrap">
+                <div class="list-item-3 outline">
+                  <h1 class="share-post-title">Analysis by<span class="red"> CDE</span></h1>
+                </div>
+                <div class="list-item-3 outline">
+                  <mat-form-field appearance="outline">
+                    <mat-select [(ngModel)]="selectedCDE" (ngModelChange)="launchAnalysisByKey($event)">
+                      <mat-option *ngFor="let col of selectedColumns;" [value]="col">
+                        {{col}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="list-item-3 outline">
+                  <div class="act-btn-wrapper">
+                    <button mat-stroked-button class="primary-btn-gray white pad" (click)="gotoList();"><mat-icon class="mar-ico">arrow_back_ios_new</mat-icon> Back</button>
+                  </div>
+                </div>
+              </div>
+              <div class="analysis-preview">
+                 <!-- <app-bar-chart 
+                  *ngIf="analyseKeyData.length" 
+                  [chartData]="analyseKeyChartData"
+                  [chartType]="'column'"
+                ></app-bar-chart>  -->
+
+                 <app-cylinder-chart 
+                *ngIf="analyseKeyData.length" 
+                [chartData]="analyseKeyChartData"
+                [chartType]="'column'" >
+               </app-cylinder-chart> 
+
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>{{selectedKey}}</th>
+                      <th>Completness</th>
+                      <th>Validity</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of analyseKeyData;">
+                      <td>{{data[selectedKey]}}</td>
+                      <td>
+                        <span 
+                          *ngIf="data.completness?.details.length"
+                          #tooltip="matTooltip"
+                          [matTooltip]="data.completness?.details | json"
+                          [matTooltipPosition]="'above'"
+                          matTooltipHideDelay="10"
+                          class="red"
+                        >{{data.completness?.value}}%</span>
+                        <span *ngIf="!data.completness?.details.length">{{data.completness?.value}}%</span>
+                      </td>
+                      <td>
+                        <span 
+                          *ngIf="data.Validity?.details.length"
+                          #tooltip="matTooltip"
+                          [matTooltip]="data.Validity?.details | json"
+                          [matTooltipPosition]="'above'"
+                          matTooltipHideDelay="10"
+                          class="red"
+                        >{{data.Validity?.value}}%</span>
+                        <span *ngIf="!data.Validity?.details.length">{{data.Validity?.value}}%</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </div>
+            </mat-card>   
+
+
+          </div>
+
+        </div>
+      </div> 
+    </div>
+
+  </div>
+</section>

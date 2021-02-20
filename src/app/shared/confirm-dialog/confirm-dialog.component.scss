@@ -1,0 +1,19 @@
+.confirm-wrapper {
+
+  .footer {
+    text-align: right;
+    margin-top: 10px;
+    padding-top: 10px;
+    // border-top: 1px solid #e2e2e2;
+    .mat-stroked-button {
+      font-family: "Roboto" !important;
+      font-size: 13px;
+      font-weight: 400;
+      padding: 0 10px;
+      height: 30px;
+      line-height: 30px;
+      margin-left: 10px;
+      border-radius: 0;
+    }
+  }
+}

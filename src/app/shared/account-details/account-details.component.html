@@ -1,0 +1,75 @@
+<mat-card class="user-wrapper account-details no-padding">
+  <app-progress-bar [message]="loaderMsg" class="page component" *ngIf="isLoading"></app-progress-bar>
+  <div class="account-heading">
+    <div class="flex-item acc-bg"></div>
+
+    <div class="user-profile-img">
+      <div class="profile-pic-small img" *ngIf="user.path" [ngStyle]="{'background-image': 'url(' + appConfig.imgBaseUrl + user.path + ')'}"></div>
+      <h4 class="profile-pic-small" *ngIf="!user.path">
+        <mat-icon>account_circle</mat-icon>
+      </h4>
+      <div class="btn-main-right-wrapper" *ngIf="isCurrentUser">
+        <button mat-icon-button routerLink="/auth/personal/settings">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+
+    </div>
+  
+  </div>
+
+  <div class="account-personal-details">
+    <div class="list">
+      <h4>{{user.fullname}}</h4>
+
+      <h4>
+        <span class="word-wrap">{{user.email}} </span>
+        <span class="verified" *ngIf="user.emailVerified"><mat-icon>done</mat-icon></span>
+        <a class="verify-link" href="javascript: void()" *ngIf="!user.emailVerified" (click)="verifyEmail()">
+          Verify
+        </a>
+      </h4>
+
+      <h4>
+        {{user.phoneno}}
+        <span class="verified" *ngIf="user.phonenoVerified"><mat-icon>done</mat-icon></span>
+        <a class="verify-link" href="javascript: void()" *ngIf="!user.phonenoVerified" (click)="generateOtp()">
+          Verify
+        </a>
+      </h4>
+    </div>
+    <div class="pro-complete">
+      <p>Profile Completion <span class="percent">{{user.weight}}%</span></p>
+      <div class="comp-chart-outer">
+        <div class="comp-chart" [ngStyle]="{width: user.weight + '%'}"></div>
+      </div>
+    </div>
+    <div class="otp-wrpper" *ngIf="showVerifyOTP">
+      <form [formGroup]="otpForm" class="custom-login-wrapper outline" style="margin-top: 24px; font-size: 12px;">
+        <mat-form-field  appearance="outline">
+          <mat-label>One Time Password</mat-label>
+          <input matInput placeholder="One Time Password" cdkFocusInitial formControlName="otpnum" autocomplete="off">
+        </mat-form-field>
+        <div class="login-btn-wrpper">
+          <button mat-raised-button color="primary" class="login-primary-btn" (click)="validateOtp()" [disabled]="isLoading" [class.loading]="isLoading">
+            Verify
+          </button>
+        </div>
+      </form>
+    </div>
+    <div class="flex-containers space-between list stats">
+      <div class="text-center right-bd">
+        <label class="label">Likes</label>
+        <h4>{{user.likes}}</h4>
+      </div>
+      <div class="text-center right-bd ratting-container">
+        <label class="label" style="margin-bottom: 1px;">Rating</label>
+        <star-rating [value]="user.rating" totalstars="5" checkedcolor="#b00000" uncheckedcolor="#ccc" size="16px" readonly="true"></star-rating>
+      </div>
+      <div class="text-center">
+        <label class="label">Deals</label>
+        <h4>{{user.deals}}</h4>
+      </div>
+    </div>
+  </div>
+</mat-card>

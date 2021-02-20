@@ -1,0 +1,12 @@
+<div class="confirm-wrapper">
+  <h1 mat-dialog-title>{{data.title}}</h1>
+  <div mat-dialog-content>
+    <p>{{data.message}}</p>
+  </div>
+  <div class="footer">
+    <button mat-stroked-button class="primary-btn-gray white" 
+      *ngIf="data.cancelLable"
+      matDialogClose (click)="onCloseDialog('cancel')">{{data.cancelLable}}</button>
+    <button mat-stroked-button class="primary-btn-gray" matDialogClose (click)="onCloseDialog('ok'); " cdkFocusInitial>{{data.okLable}}</button>
+  </div>
+</div>

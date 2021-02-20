@@ -1,0 +1,54 @@
+<div class="image-crop-wrapper">
+  <mat-card class="image-crop-card border">
+    <mat-progress-bar mode="indeterminate" class="img-progress" *ngIf="isLoading"></mat-progress-bar>
+    <div class="file-form-group" [hidden]="croppedImage">
+      <input type="file" [accept]="fileTypes" class="gv-file-input" (change)="fileChangeEvent($event)" #fileInput>
+    </div>
+    <!-- <button mat-button class="primary-btn upload-btn" title="Upload" (click)="uploadImage()" *ngIf="selectedFile.name && !isUploadDone">
+      Upload
+    </button> -->
+    <button mat-icon-button class="done-btn" *ngIf="isUploadDone">
+      <mat-icon>done</mat-icon>
+    </button>
+    <div class="img-preview" *ngIf="imagePath && !isUploadDone && (imagePath | fileformat) === 'docs'">
+      <mat-icon>picture_as_pdf</mat-icon>
+    </div>
+    <div class="img-preview" *ngIf="imagePath && !isUploadDone && (imagePath | fileformat) === 'images'">
+      <div class="img" [ngStyle]="{'background-image': 'url(' + appConfig.imgBaseUrl + imagePath + ')'}"></div>
+    </div>
+    <div class="error-messages-wrapper">
+      <mat-error *ngIf="errorMessage">
+        {{errorMessage}}
+      </mat-error>
+    </div>
+<!-- <button mat-icon-button class="delete-btn" title="Delete" (click)="deleteImage()" *ngIf="selectedFile.name">
+      <mat-icon>delete</mat-icon>
+    </button> -->
+    <!-- <image-cropper
+      class="image-cropper"
+      [imageChangedEvent]="imageChangedEvent"
+      [maintainAspectRatio]="true"
+      [containWithinAspectRatio]="containWithinAspectRatio"
+      [aspectRatio]="aspectRatio"
+      [cropperMinWidth]="200"
+      [resizeToWidth]="resizedWidth"
+      [resizeToHeight]="resizedHeight"
+      [onlyScaleDown]="true"
+      [roundCropper]="false"
+      [canvasRotation]="canvasRotation"
+      [transform]="transform"
+      [alignImage]="'left'"
+      [style.display]="showCropper ? null : 'none'"
+      format="png"
+      (imageCropped)="imageCropped($event)"
+      (imageLoaded)="imageLoaded()"
+      (cropperReady)="cropperReady($event)"
+      (loadImageFailed)="loadImageFailed()"
+    ></image-cropper>
+    <div class="img-preview" *ngIf="preview && !croppedImage">
+      <p class="label">Preview</p>
+      <img  src="{{preview}}" />
+    </div> -->
+  </mat-card>
+  
+</div>

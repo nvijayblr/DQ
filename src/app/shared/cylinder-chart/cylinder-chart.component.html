@@ -1,0 +1,49 @@
+<figure class="highcharts-figure">
+      <div id="container" #charts></div>
+</figure>
+
+<div style="margin:auto;width:300px;">
+
+<label>Alpha Angle</label>
+<mat-slider 
+   min="1" 
+   max="100" 
+   step="1" 
+   value="25"
+    #matalpha
+    ngModel
+    (input)="alphaChange($event)">
+   </mat-slider>
+   {{matalpha.value}}
+
+   <br>
+
+   <label>Beta Angle</label>
+
+   <mat-slider 
+   min="-45" 
+   max="45" 
+   step="1" 
+   value="15"
+    #matbeta
+    ngModel
+    (input)="betaChange($event)">
+   </mat-slider>
+   {{matbeta.value}}
+
+   <br>
+
+   <label>Depth</label>
+
+   <mat-slider 
+   min="20" 
+   max="100" 
+   step="1" 
+   value="25"
+    #matdepth
+    ngModel
+    (input)="depthChange($event)">
+   </mat-slider>
+   {{matdepth.value}}
+
+</div>

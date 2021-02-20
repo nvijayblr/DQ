@@ -1,0 +1,189 @@
+.login-wrapper {
+   //background: url('./../../../../assets/images/joinnow-bg.svg') no-repeat top left;
+   background-size: cover;
+   height: 100%;
+   height: 100vh;
+   .login-top{
+      width: 100%;
+      height: 200px;
+      background:#01796d;
+      display: flex;
+      align-items: center;
+      position: relative;     
+      background: url('./../../../../assets/images/header-top.jpg') no-repeat top left;
+      h2{
+         font-family: 'open-sans-condensed-bold';
+         font-size: 50px;
+         color: #59bfff;
+         text-align:center;
+         text-transform: uppercase;
+         margin-left:0%;
+         //width: 350px;
+         span{
+            font-size: 30px;
+            color: #fff;
+            //margin-left: -14px;
+         }
+      }
+      .login-image {
+        //max-width: 600px;
+       //margin-top: 64px;
+        margin-left:22%;
+     }
+   }
+   .login-card {
+     //width: 580px;
+     opacity: 0.94;
+     backdrop-filter: blur(37px);
+     -webkit-backdrop-filter: blur(37px);
+     border-radius: 10px;
+     background: rgba(255, 255, 255, 0.68);
+     overflow: hidden;
+     margin-bottom: 0;
+     padding: 44px 55px 33px 55px;
+     //box-shadow: 0px 15px 10px -15px rgba(0, 0, 0, 0.1);;
+    //  box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+    //  -moz-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+    //  -webkit-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+    //  -o-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+    //  -ms-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: none !important;
+    border:none;
+     //position: absolute;
+     //top: 110px;
+   }
+   .login-container {
+     //height: 100%;
+   }
+   .title-wrp {
+     width: 640px;
+     margin-left: 150px;
+     text-align: center;
+     margin-top: 20px;
+     .page-title {
+       font-size: 52px;
+       text-align: left;
+       font-weight: 300;
+       margin-right: 44px;
+       color: #fff;
+       text-align: center;
+     }
+    
+   }
+   h3{
+    font-family: 'open-sans-condensed-bold';
+    font-size: 50px;
+    color: #D74F31;
+    text-align:center;
+    text-transform: uppercase;
+    margin-left:0%;
+    display: inline-block;
+    //width: 350px;
+    span{
+       font-size: 30px;
+       color: #59bfff;
+       //margin-left: -14px;
+    }
+ }
+ 
+   .title {
+     font-family: 'open-sans-condensed-light';
+     font-size: 30px;
+     text-align: center;
+     font-weight: 300;
+     margin-bottom: 10px;
+     font-weight: 100;
+     color: #D74F31;
+     .strong {
+       font-weight: 500;
+     }
+   }
+   .logo-wrapper {
+     text-align: center;
+     margin: 24px 0;
+     .logo {
+       width: 120px;
+     }
+   }
+   .mat-form-field {
+     font-size: 18px;
+     font-weight: 300;
+   }
+   .login-btn-wrpper {
+     margin-top: 24px;
+     text-align: center;
+   }
+   .account-btn-wrpper {
+     margin-top: 62px;
+     text-align: center;
+     p {
+       font-weight: 400;
+       margin-bottom: 14px;
+     }
+   }
+ }
+ .login-primary-btn  {
+    font-size:20px;
+    font-family: 'open-sans-condensed-bold'!important;
+    border-radius: 4px!important;
+ }
+ 
+ .otp-login-wrapper {
+   .mat-form-field-appearance-outline .mat-form-field-wrapper {
+     margin: 0;
+     padding: 0;
+   }
+   .login-btn-wrpper {
+     margin: 0 0 24px 0;
+   }
+ }
+ 
+ .mat-form-field-appearance-outline .mat-form-field-infix {
+    font-family: 'open-sans-condensed-bold';
+ }
+ .mat-error{
+    font-family: 'open-sans-condensed-light';
+ }
+ 
+ .fade_rule {
+    height: 1px;
+    //background-color: #D74F31;
+    opacity: 0.4;
+    backdrop-filter: blur(37px);
+    -webkit-backdrop-filter: blur(37px);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.68);
+    margin: 0 auto;
+    margin-bottom: 20px;
+    // background-image: linear-gradient(left , white 2%, #D74F31 50%, white 98%);
+    // background-image: -o-linear-gradient(left , white 2%, #D74F31 50%, white 98%);
+    // background-image: -moz-linear-gradient(left , white 2%,#D74F31 50%, white 98%);
+    // background-image: -webkit-linear-gradient(left , white 2%,#D74F31 50%, white 98%);
+    // background-image: -ms-linear-gradient(left , white 2%, #D74F31 50%, white 98%);
+    // background-image: -webkit-gradient( linear, left bottom, right bottom, color-stop(0.02, white), color-stop(0.5, #D74F31), color-stop(0.98, white) );
+    // opacity: 0.94;
+ }
+ 
+ .shadow {
+    //width: 100px;
+    margin: 0 auto;
+    //height: 100px;
+     background-color: #f5f5f5;
+    display: flex;
+     align-items: center;
+     justify-content: center;
+    //margin: 40px;
+    &.top {
+      box-shadow: 0px -15px 10px -15px #111;    
+    }
+    &.bottom {
+      box-shadow: 0px 15px 10px -15px #111;    
+    }
+    &.left {
+      box-shadow: -15px 0px 10px -15px #111;    
+    }
+    &.right {
+      box-shadow: 15px 0px 10px -15px #111;    
+    }
+  }
+ 

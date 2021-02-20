@@ -1,0 +1,59 @@
+.car-btn-wrapper {
+  margin-bottom: 16px;
+  margin-right: 12px;
+  .secondary-btn, .primary-btn  {
+    min-width: auto;
+    padding: 0px 6px;
+    margin-left: 5px;
+  }
+}
+.car-wrapper {
+  .img-preview {
+    margin: auto;
+    width: 120px;
+    height: 120px;
+    margin-bottom: 12px;
+  }
+}
+.car-wrapper {
+  position: relative;
+  .sub-title {
+    font-weight: 400;
+    position: absolute;
+    top: -10px;
+    &.block {
+      position: relative;
+      top: 0;
+    }
+  }
+  p.desc {
+    max-height: 35px;
+    overflow: hidden;
+    font-size: 11px;
+    font-weight: 300;
+    line-height: 12px;
+    text-overflow: ellipsis;
+  }
+  .more-icon-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    .more-icon {
+      font-size: 18px !important;
+      background: transparent !important;
+      color: #000 !important;
+    }
+  }
+}
+
+.share-menu-wrapper {
+  &.mat-menu-panel {
+    min-height: auto;
+  }
+  button {
+    font-size: 12px;
+    height: 30px;
+    line-height: 30px;
+    max-height: 30px;
+  }
+}

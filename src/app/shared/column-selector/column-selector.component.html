@@ -1,0 +1,60 @@
+<div cdkDropListGroup class="row awa-column-selector">
+  <div class="col-md-5">
+    <label class="column-title">{{availableColumnsLabel}}</label>
+    <app-drag-drop-list 
+      #availableComponent 
+      [items]="availableColumns"
+      [isDisabled]="isDisabled"
+      (selectionChanged)="availableSelectionChanged($event)" 
+      (itemsAdded)="droppedInToAvailableColumns()">
+      <ng-template let-item>{{item.title}}</ng-template>
+    </app-drag-drop-list>
+  </div>
+  <div class="col-md-2">
+    <div class="col-move-btns">
+      <button mat-stroked-button class="awa-icon-only-btn-40" (click)="moveItemsToSelected()"
+        [disabled]="!selectedAvailableItems.length || isDisabled">
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </button>
+      <button mat-stroked-button class="awa-icon-only-btn-40" (click)="moveItemsToAvailable()"
+        [disabled]="!selectedSelectedItems.length || isDisabled">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+      </button>
+      <button mat-stroked-button class="awa-icon-only-btn-40" (click)="moveAllItemsToSelected()"
+        [disabled]="!availableColumns.length || isDisabled">
+        <mat-icon>
+          <svg id="prism-move-all-right" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path id="chevron-right" d="M8.585,16.584,13.171,12,8.585,7.412,10,6l6,6-6,6Z"
+              transform="translate(-3.586 0.002)" />
+            <path id="chevron-right-2" data-name="chevron-right" d="M8.585,16.584,13.171,12,8.585,7.412,10,6l6,6-6,6Z"
+              transform="translate(2.414 0.002)" />
+          </svg>
+        </mat-icon>
+      </button>
+      <button mat-stroked-button class="awa-icon-only-btn-40" (click)="moveAllItemsToAvaiable()"
+        [disabled]="!selectedColumns.length || isDisabled">
+        <mat-icon>
+          <svg id="prism-move-all-left" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path id="chevron-left" d="M16,16.584,11.413,12,16,7.412,14.585,6l-6,6,6,6Z"
+              transform="translate(3.001 0.002)" />
+            <path id="chevron-left-2" data-name="chevron-left" d="M16,16.584,11.413,12,16,7.412,14.585,6l-6,6,6,6Z"
+              transform="translate(-2.999 0.002)" />
+          </svg>
+        </mat-icon>
+      </button>
+    </div>
+  </div>
+  <div class="col-md-5">
+    <label class="column-title">{{selectedColumnsLabel}}<span class="red">*</span></label>
+    <app-drag-drop-list 
+      #selectedComponent 
+      [items]="selectedColumns"
+      [isDisabled]="isDisabled"
+      (selectedItemIndexChange)="selectedItemIndexChanged($event)"
+      (selectionChanged)="selectedSelectionChanged($event)" 
+      (itemsUpdated)="selectedColumnOrderChanged($event)"
+      (itemsAdded)="droppedInToSelectedColumns()">
+      <ng-template let-item>{{item.title}}</ng-template>
+    </app-drag-drop-list>
+  </div>
+</div>

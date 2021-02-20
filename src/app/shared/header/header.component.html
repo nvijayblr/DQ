@@ -1,0 +1,118 @@
+<header class="header masthead sticky" [ngClass]="{'white-bg' : isSticky, 'menu-hidden' : isHidden}" #header>
+   <div class="header-top header-body">
+     <div class="container">
+       <div class="row">
+         <div class="col-xs-12 col-sm-4 col-md-3">
+           <a class="logo-wrapper" routerLink="/auth/home">
+             <!-- <img class="logo" src="./../assets/images/logo-vertical.svg" alt="Moneyism"> -->
+             <h4 class="logo-title">Know Your <span class="">Data</span></h4>
+           </a>
+         </div>
+         
+         <div class="col-xs-12 col-sm-4 col-md-9 text-right">
+           <div class="main-nav">
+             <button mat-button routerLink="/auth/dashboard">
+               <mat-icon matPrefix>bar_chart</mat-icon>
+               Dashboard
+             </button>
+ 
+             <button mat-button routerLink="/auth/analysis">
+               <mat-icon matPrefix>perm_data_setting</mat-icon>
+               Analysis
+             </button>
+ 
+             <span class="seperator">&nbsp;</span>
+ 
+             <!--  (click)="showCloseSerach()" -->
+             <button mat-icon-button class="notification-menu">
+               <mat-icon>search</mat-icon>
+             </button>
+             <button mat-icon-button class="notification-menu notification-btn" (click)="drawer.toggle()">
+               <mat-icon matBadge="{{notificationsCount}}" matBadgeColor="warn">notifications</mat-icon>
+             </button>
+ 
+             <button mat-icon-button [matMenuTriggerFor]="menu" [class.userimage]="user.path">
+               <div class="profile-pic-small pic-xs img" *ngIf="user.path" [ngStyle]="{'background-image': 'url(' + appConfig.imgBaseUrl + user.path + ')'}"></div>
+               <mat-icon *ngIf="!user.path">account_circle</mat-icon>
+             </button>
+             <mat-menu #menu="matMenu" xPosition="before">
+               <button class="nav-category-item" mat-menu-item routerLink="/auth/personal/settings">
+                 <mat-icon matPrefix>settings</mat-icon>Settings
+               </button>
+               <mat-divider></mat-divider>
+               <button class="nav-category-item" mat-menu-item (click)="doLogout()"><mat-icon>exit_to_app</mat-icon>Logout</button>
+             </mat-menu>
+ 
+           </div>
+         </div>
+       </div>
+     </div>
+   </div>
+ </header>
+ <div class="search-wrapper" [ngClass]="{'sticky' : isSticky}" [hidden]="!isShowSearch" #serachWrapper>
+   <div class="container">
+       <form [formGroup]="searchForm">
+         <div class="list flex-containers flex-start wrap search-container">
+           <div class="list-item-4 list-item outline">
+             <mat-form-field appearance="outline" class="type">
+               <mat-label>Option</mat-label>
+               <mat-select formControlName="option">
+                 <mat-option *ngFor="let option of searchOptions" [value]="option.value">{{option.title}}</mat-option>
+               </mat-select>
+             </mat-form-field>
+           </div>
+           <div class="list-item-3 list-item outline">
+             <mat-form-field appearance="outline" class="search">
+               <mat-label>Search</mat-label>
+               <input matInput placeholder="Search" formControlName="q" maxlength="100" autocomplete="off"/>
+             </mat-form-field>
+           </div>
+           <div class="list-item-3 list-item outline">
+             <mat-form-field appearance="outline" class="location">
+               <mat-label>Location</mat-label>
+               <input matInput placeholder="Location" formControlName="location" maxlength="100" autocomplete="off"/>
+             </mat-form-field>
+           </div>
+           <div class="list-item-7 list-item">
+             <button mat-stroked-button class="primary-btn-gray" (click)="initSearch()">Search</button>
+             <button mat-icon-button class="serach-close" (click)="showCloseSerach()"><mat-icon>close</mat-icon></button>
+           </div>
+         </div>
+       </form>
+   </div>
+ </div>
+ 
+ <mat-drawer-container class="notification-drawer-container" autosize end [ngClass]="{'full-height' : isHidden}">
+   <mat-drawer #drawer class="notification-drawer-sidenav" mode="side" [position]="'end'" (openedChange)="drawerOpen($event)">
+     <div class="not-page">
+       <div class="not-header">
+         <div class="close-icon" (click)="drawer.toggle()">
+           <mat-icon>close</mat-icon>
+         </div>
+         <h4>
+           <mat-icon>notifications</mat-icon>
+           NOTIFICATION
+         </h4>
+       </div>
+       <div class="not-body">
+         <app-progress-bar [message]="loaderMsg" class="component" *ngIf="isLoading"></app-progress-bar>
+         <div *ngFor="let notification of notifications; index as i">
+           <div class="not-item" [class.read]="notification.status" (click)="makeNotificationRead(notification)">
+             <div class="flex-containers space-between">
+               <div class="flex-item status">
+                 <mat-icon class="unread-icon">brightness_1</mat-icon>
+               </div>
+               <div class="flex-item label">{{notification.createdAt | date:'MMM dd, yyyy hh:mm a'}}</div>
+             </div>
+             <div class="message">
+               <h4>{{notification.subject}}</h4>
+               <p [innerHTML]="notification.description"></p>
+             </div>
+           </div>
+         </div>
+       </div>
+   
+     </div>
+   </mat-drawer>
+ </mat-drawer-container>
+ 

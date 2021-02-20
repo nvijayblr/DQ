@@ -1,0 +1,25 @@
+
+.footer {
+   border-top:  1px solid #ebe9e9;
+   background-color: #f5f7fa;
+   background-image: linear-gradient(315deg, #f5f7fa 0%, #f5f7fa 74%);
+   font-family: 'open-sans-condensed-light';
+   .footer-copyright {
+     padding: 20px 0;
+     color: #000000;    
+     a {
+       color: #656565;
+       &:hover {
+         color: #000;
+       }
+     }
+     .terms {
+       a {
+         display: inline-block;
+         margin-left: 30px;
+       }
+     }
+   }
+ }
+ 
+ 

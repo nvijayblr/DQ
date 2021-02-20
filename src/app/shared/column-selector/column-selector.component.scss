@@ -1,0 +1,28 @@
+.awa-column-selector {
+   .column-title {
+     font-size: 16px;
+     letter-spacing: 0.48px;
+     font-weight: 500;
+     display: block;
+     opacity: 0.6;
+     line-height: 21px;
+     font-family: 'open-sans-condensed-bold';
+   }
+ }
+ 
+ .col-move-btns {
+   margin-top: 100px;
+   button {
+     display: block;
+     margin: 16px auto;
+     border-radius: 0;
+     border-color: #59bfff;
+     .mat-icon {
+        color: #59bfff;
+       svg {
+         position: relative;
+         top: -7px;
+       }
+     }
+   }
+ }
