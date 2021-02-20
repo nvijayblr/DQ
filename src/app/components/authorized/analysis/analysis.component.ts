@@ -167,9 +167,9 @@ export class AnalysisComponent implements OnInit {
       referenceCSV: this.fb.array([]),
       columnRules: this.fb.array([]),
     });
-
+    console.log(analysis);
     if (analysis) {
-      this.rulesList = analysis.rules;
+      this.rulesList = analysis.rules.ruleset;
       this.selectedColumns = analysis.selectedColumns;
       this.availableColumns = analysis.columns.filter((column) => {
         const colFound = analysis.selectedColumns.filter((col) => {
@@ -177,6 +177,8 @@ export class AnalysisComponent implements OnInit {
         });
         return !colFound.length;
       });
+      this.analysisForm.controls.startDate.setValue(analysis.rules.startDate);
+      this.analysisForm.controls.endDate.setValue(analysis.rules.endDate);
       this.columnsForm.controls.columns.setValue(this.selectedColumns);
       this.initRulesFormArray();
     }
@@ -362,6 +364,7 @@ export class AnalysisComponent implements OnInit {
     this.http.getColumnsRules(payload).subscribe((result: any) => {
       this.isLoading = false;
       this.rulesList = this.rulesList.concat(result);
+      console.log(this.rulesList);
       if (this.rulesList.length) {
         const firstRule = this.rulesList[0];
         this.selectedRuleColumn = firstRule.column;
@@ -402,7 +405,6 @@ export class AnalysisComponent implements OnInit {
     };
     this.http.saveAnalysis(analysis, this.analysisId ? 'put' : 'post').subscribe((result: any) => {
       this.createEditRuleset(result.analysisId);
-      this.isLoading = false;
     }, (error) => {
       this.isLoading = false;
     });

@@ -131,7 +131,7 @@ export class DashboardComponent implements OnInit {
   createEditRuleset(data) {
     let rules = data.rules.filter((rule) => data.rulesetId === rule.rulesetId);
     rules = (rules && rules.length) ? rules[0] : {columns: [], selectedColumns: []};
-
+    console.log(rules);
     // If create ruleset take the columns list from default ruleset.
     if (!data.rulesetId) {
       rules.columns = data.rules && data.rules.length ? data.rules[0].columns : [];
@@ -150,7 +150,7 @@ export class DashboardComponent implements OnInit {
       columns,
       selectedColumns,
       rulesetName: rules.rulesetName,
-      rules: rules.ruleset ? rules.ruleset : []
+      rules
     };
     localStorage.setItem('analysis', JSON.stringify(analysis));
     this.router.navigate(
