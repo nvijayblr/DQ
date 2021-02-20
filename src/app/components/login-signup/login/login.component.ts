@@ -112,7 +112,7 @@ export class LoginComponent implements OnInit {
       this.generateOtp();
     }, (error) => {
       this.isLoading = false;
-      this.errorMessage = 'Entered mobile number is not regiester with Moneyism. Please sign up to Moneyism.';
+      this.errorMessage = 'Entered mobile number is not regiester with DQ. Please sign up to DQ.';
     });
   }
 
