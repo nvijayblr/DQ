@@ -82,6 +82,15 @@ export class AnalysisComponent implements OnInit {
     value: 'MaxLength',
     label: 'Max Length'
   }, {
+    value: 'LessThanOrEqualTo',
+    label: '<='
+  }, {
+    value: 'GreaterThanOrEqualTo',
+    label: '>='
+  }, {
+    value: 'EqualTo',
+    label: '=='
+  }, {
     value: 'ReferenceCDE',
     label: 'Reference CDE'
   }, {
@@ -106,6 +115,7 @@ export class AnalysisComponent implements OnInit {
   analyseData = [];
   analysisId = '';
   rulesetId = '';
+  cdeStatistics: any = {};
 
   constructor(
     private fb: FormBuilder,
@@ -353,7 +363,9 @@ export class AnalysisComponent implements OnInit {
       this.isLoading = false;
       this.rulesList = this.rulesList.concat(result);
       if (this.rulesList.length) {
-        this.selectedRuleColumn = this.rulesList[0].column;
+        const firstRule = this.rulesList[0];
+        this.selectedRuleColumn = firstRule.column;
+        this.cdeStatistics = (firstRule.statistics && firstRule.statistics.length) ? firstRule.statistics[0] : {};
       }
       this.initRulesFormArray();
     }, (error) => {
@@ -438,8 +450,9 @@ export class AnalysisComponent implements OnInit {
     }
   }
 
-  gotoRuleColumn(column) {
-    this.selectedRuleColumn = column;
+  gotoRuleColumn(rule) {
+    this.selectedRuleColumn = rule.column;
+    this.cdeStatistics = (rule.statistics && rule.statistics.length) ? rule.statistics[0] : {};
   }
 
   owlInitialized() {

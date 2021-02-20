@@ -67,6 +67,7 @@ export class DashboardComponent implements OnInit {
     };
     this.selectedColumns = this.selectedAnalysis.rules[0].selectedColumns;
     this.analyseData = [];
+    this.analyseKeyData = [];
     this.http.launchAnalysis(payload).subscribe((result: any) => {
       this.isLoading = false;
       this.analyseData = result ? result : [];
