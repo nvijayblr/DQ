@@ -30,6 +30,7 @@ export class AnalysisComponent implements OnInit {
   isSourceUploaded = false;
    analysis: any = {};
    fileTypeErr = false;
+   uniqueName = false;
 
   OwlCategoryOptions: OwlOptions = {
     loop: false,
@@ -114,7 +115,8 @@ export class AnalysisComponent implements OnInit {
   rulesList = [];
   showCDECar = false;
   analyseData = [];
-  analysisId = '';
+   analysisId = '';
+   mode;
   rulesetId = '';
   cdeStatistics: any = {};
 
@@ -129,13 +131,13 @@ export class AnalysisComponent implements OnInit {
     private messageService: MessageService) {
       this.appConfig = appConfig;
       this.route.queryParams.subscribe(params => {
-        this.analysisId = params.analysisId;
+         this.analysisId = params.analysisId;
+         this.mode = params.mode;
         this.rulesetId = params.rulesetId;
         if (!params.analysisId) {
           localStorage.removeItem('analysis');
         }
-      });
-
+      });         
     }
 
   ngOnInit() {
@@ -153,6 +155,8 @@ export class AnalysisComponent implements OnInit {
       sourceColumns: [''],
       refernceColumns: [[]]
     });
+     
+    
 
     // this.getAllPosts();
     const analysis = this.messageService.getAnalysis();
@@ -183,6 +187,9 @@ export class AnalysisComponent implements OnInit {
       this.columnsForm.controls.columns.setValue(this.selectedColumns);
       this.initRulesFormArray();
     }
+    if (this.mode === 'edit') {
+       this.analysisForm.get('name').disable();
+     }
 
     const referenceCSV = this.analysisForm.controls.referenceCSV as FormArray;
     const refCSVList = [{
@@ -444,7 +451,13 @@ export class AnalysisComponent implements OnInit {
     });
   }
 
-  gotoStepper(index, tab = '') {
+   gotoStepper(index, tab = '') {
+      if (this.mode === 'add') {
+         if (this.analysisForm.controls.name.value === this.analysisForm.controls.rulesetName.value) {
+            this.uniqueName = true;
+            return false;
+         }
+     }
     // if (tab === 'CSV') {
     //   console.log(this.afControls.sourceCSV);
     //   return;

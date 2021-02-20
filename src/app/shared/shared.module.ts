@@ -20,6 +20,7 @@ import { ColumnSelectorComponent } from './column-selector/column-selector.compo
 import { DragDropListComponent } from './column-selector/drag-drop-list/drag-drop-list.component';
 import { BarChartComponent } from './bar-chart/bar-chart.component';
 import { CylinderChartComponent } from './cylinder-chart/cylinder-chart.component';
+import { ColorDialogComponent } from './color-dialog/color-dialog.component';
 
 @NgModule({
   imports: [
@@ -46,7 +47,8 @@ import { CylinderChartComponent } from './cylinder-chart/cylinder-chart.componen
     ColumnSelectorComponent,
     DragDropListComponent,
      BarChartComponent,
-     CylinderChartComponent
+     CylinderChartComponent,
+     ColorDialogComponent
   ],
   exports: [
     FormsModule,
@@ -68,13 +70,15 @@ import { CylinderChartComponent } from './cylinder-chart/cylinder-chart.componen
     ColumnSelectorComponent,
     DragDropListComponent,
      BarChartComponent,
-     CylinderChartComponent
+     CylinderChartComponent,
+     ColorDialogComponent
   ],
   providers: [
     DatePipe
   ],
   entryComponents: [
-    ConfirmDialogComponent
+     ConfirmDialogComponent,
+     ColorDialogComponent
   ]
 })
 export class SharedModule {}

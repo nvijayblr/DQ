@@ -44,10 +44,11 @@
                         </div>
                       </td>
                       <td>
-                        <button type="button" mat-icon-button (click)="createEditRuleset(data)" matTooltip="Create Ruleset">
+                        <button type="button" mat-icon-button (click)="createEditRuleset(data,'add')" matTooltip="Create Ruleset">
                           <mat-icon>add</mat-icon>
                         </button>
-                        <button type="button" mat-icon-button (click)="createEditRuleset(data)" [disabled]="!data.rulesetId"  matTooltip="Edit Ruleset">
+                        <button type="button" mat-icon-button 
+                        (click)="createEditRuleset(data,'edit')" [disabled]="!data.rulesetId"  matTooltip="Edit Ruleset">
                           <mat-icon>edit</mat-icon>
                         </button>
                         <button type="button" class="del-icon" mat-icon-button [disabled]="!data.rulesetId" matTooltip="Delete Ruleset">
@@ -246,13 +247,19 @@
                 *ngIf="analyseKeyData.length" 
                 [chartData]="analyseKeyChartData"
                 [chartType]="'column'" >
-               </app-cylinder-chart> 
+               </app-cylinder-chart>
 
+                
                 <table class="table">
                   <thead>
                     <tr>
                       <th>{{selectedKey}}</th>
-                      <th>Completness</th>
+                      <th>Completness <mat-icon matTooltip="Fill Color" class="ma-cr" (click)="openDialog()">format_color_fill</mat-icon>
+                        <div *ngIf="minValue">
+
+                           You choose: <i *ngFor="let value of valArray">{{value.minValue}} | {{value.maxValue}} | {{value.colorValue}} </i>
+                        </div>
+                     </th>
                       <th>Validity</th>
                     </tr>
                   </thead>

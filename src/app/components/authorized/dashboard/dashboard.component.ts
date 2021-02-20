@@ -1,9 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from '../../../services/message.service';
 import { HttpService } from '../../../services/http-service.service';
 import { AuthGuardService } from 'src/app/services/auth-guard.service';
 import { query } from '@angular/animations';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ColorDialogComponent } from '../../../shared/color-dialog/color-dialog.component';
+
+export interface DialogData {
+   minValue: number;
+   maxValue: number;
+   colorValue: string;
+ }
 
 @Component({
   selector: 'app-dashboard',
@@ -29,9 +37,14 @@ export class DashboardComponent implements OnInit {
   isShowAnalysisTable = false;
   isShowAnalysisKeyTable = false;
   selectedColumns: any = [];
-  selectedCDE: any = '';
+   selectedCDE: any = '';
+   minValue: number;
+   maxValue: number;
+   colorValue: string;
+   
 
-  constructor(
+   constructor(
+   public dialog: MatDialog,
     private http: HttpService,
     private messageService: MessageService,
     private auth: AuthGuardService,
@@ -128,7 +141,7 @@ export class DashboardComponent implements OnInit {
     this.launchAnalysisByKey(event.label);
   }
 
-  createEditRuleset(data) {
+   createEditRuleset(data, mode) {
     let rules = data.rules.filter((rule) => data.rulesetId === rule.rulesetId);
     rules = (rules && rules.length) ? rules[0] : {columns: [], selectedColumns: []};
     console.log(rules);
@@ -146,7 +159,8 @@ export class DashboardComponent implements OnInit {
       selectedColumns.push({id: (index + 1), title: column});
     });
     const analysis = {
-      ...data,
+       ...data,
+       mode : mode,
       columns,
       selectedColumns,
       rulesetName: rules.rulesetName,
@@ -155,7 +169,7 @@ export class DashboardComponent implements OnInit {
     localStorage.setItem('analysis', JSON.stringify(analysis));
     this.router.navigate(
       [`auth/analysis`],
-      {queryParams: {analysisId: analysis.analysisId, rulesetId: analysis.rulesetId}}
+      {queryParams: {analysisId: analysis.analysisId, rulesetId: analysis.rulesetId, mode: analysis.mode}}
     );
   }
 
@@ -181,5 +195,19 @@ export class DashboardComponent implements OnInit {
       this.isSourceUploaded = false;
     });
   }
+   valArray = [];
+  openDialog(): void {
+   const dialogRef = this.dialog.open(ColorDialogComponent, {
+     width: '660px',
+     data: { minValue: this.minValue, maxValue: this.maxValue, colorValue: this.colorValue}
+   });
+
+     dialogRef.afterClosed().subscribe(result => {
+        this.valArray.push(result);
+      console.log(this.valArray);
+     console.log('The dialog was closed');
+     this.minValue = result;
+   });
+ }
 
 }
