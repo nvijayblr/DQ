@@ -133,11 +133,11 @@ export class AnalysisComponent implements OnInit {
       this.route.queryParams.subscribe(params => {
          this.analysisId = params.analysisId;
          this.mode = params.mode;
-        this.rulesetId = params.rulesetId;
-        if (!params.analysisId) {
+         this.rulesetId = params.rulesetId;
+         if (!params.analysisId) {
           localStorage.removeItem('analysis');
         }
-      });         
+      });
     }
 
   ngOnInit() {
@@ -155,8 +155,8 @@ export class AnalysisComponent implements OnInit {
       sourceColumns: [''],
       refernceColumns: [[]]
     });
-     
-    
+
+
 
     // this.getAllPosts();
     const analysis = this.messageService.getAnalysis();
@@ -284,9 +284,9 @@ export class AnalysisComponent implements OnInit {
       } else {
          this.fileTypeErr = true;
       }
-    const formData: any = new FormData();
-    formData.append('file[]', file);
-    formData.append('data', JSON.stringify({
+      const formData: any = new FormData();
+      formData.append('file[]', file);
+      formData.append('data', JSON.stringify({
         sourceFilename: file.name
       })
     );
@@ -297,13 +297,13 @@ export class AnalysisComponent implements OnInit {
       } else {
          this.fileTypeErr = true;
       }
-    this.afControls.sourceFilename.setValue(file.name);
-    this.afControls.name.setValue(filename);
-    this.afControls.rulesetName.setValue(filename);
-    this.isLoading = true;
-    this.isSourceUploaded = false;
-    this.loaderMsg = 'Uploading the source csv...';
-    this.http.uploadSourceCSV(formData).subscribe((result: any) => {
+      this.afControls.sourceFilename.setValue(file.name);
+      this.afControls.name.setValue(filename);
+      this.afControls.rulesetName.setValue(filename);
+      this.isLoading = true;
+      this.isSourceUploaded = false;
+      this.loaderMsg = 'Uploading the source csv...';
+      this.http.uploadSourceCSV(formData).subscribe((result: any) => {
       this.isLoading = false;
       this.afControls.sourcepath.setValue(result.sourcepath);
       const columns = (result && result.columns) ? result.columns : [];
@@ -462,7 +462,7 @@ export class AnalysisComponent implements OnInit {
     //   console.log(this.afControls.sourceCSV);
     //   return;
     // }
-    this.stepIndex = index;
+      this.stepIndex = index;
   }
 
   stepperSelectionChange(event) {
