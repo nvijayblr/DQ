@@ -71,7 +71,7 @@ export class DashboardComponent implements OnInit {
     this.loaderMsg = 'Saving Ruleset...';
     this.http.getAllAnalysis().subscribe((result: any) => {
       this.analysisList = result.Analysis ? result.Analysis : [];
-      console.log(this.analysisList);
+      //console.log(this.analysisList);
       this.isLoading = false;
     }, (error) => {
       this.isLoading = false;
