@@ -270,10 +270,11 @@
                         <span 
                           *ngIf="data.completness?.details.length"
                           #tooltip="matTooltip"
-                          [matTooltip]="data.completness?.details | json"
+                          matTooltip="{{finalCount}}"
                           [matTooltipPosition]="'above'"
                           matTooltipHideDelay="10"
                           class="red"
+                          (click)="openDialogColor()"
                         >{{data.completness?.value}}%</span>
                         <span *ngIf="!data.completness?.details.length">{{data.completness?.value}}%</span>
                       </td>
@@ -281,7 +282,7 @@
                         <span 
                           *ngIf="data.Validity?.details.length"
                           #tooltip="matTooltip"
-                          [matTooltip]="data.Validity?.details | json"
+                          [matTooltip]="originAirport"
                           [matTooltipPosition]="'above'"
                           matTooltipHideDelay="10"
                           class="red"

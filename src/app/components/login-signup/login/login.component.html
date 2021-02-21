@@ -40,17 +40,17 @@
          </div> -->
          <div class="col">
            <form [formGroup]="loginForm" class="custom-login-wrapper">
-             <mat-form-field class="full-width" appearance="outline">
+             <mat-form-field class="full-width" appearance="">
                <mat-icon matPrefix>account_circle</mat-icon>
-               <input matInput placeholder="Username" cdkFocusInitial formControlName="username" required autocomplete="no">
+               <input class="bdrInput" matInput placeholder="Username" cdkFocusInitial formControlName="username" required autocomplete="no">
                <mat-error>
                  Please provide a valid username.
                </mat-error>
              </mat-form-field>
 
-             <mat-form-field class="full-width" appearance="outline">
+             <mat-form-field class="full-width" appearance="">
                <mat-icon matPrefix>vpn_key</mat-icon>
-               <input matInput type="password" placeholder="Password" formControlName="password" required>
+               <input class="bdrInput" matInput type="password" placeholder="Password" formControlName="password" required>
                <mat-error>
                  Please provide a valid password
                </mat-error>

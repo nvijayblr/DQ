@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Incomplete CDEs</h1>
+<div mat-dialog-content>
+  <ul>
+    <li>
+      <span *ngIf="data.incompleteCDE.nullcount">&#10003; Flight Number = {{data.incompleteCDE.nullcount}}</span>
+    </li>
+    <li>
+      <span *ngIf="data.incompleteCDE.nullcount">&#10003; Origin Airport = {{data.incompleteCDE.nullcount}}</span>
+    </li>
+   
+  </ul>
+</div>
+<div mat-dialog-actions>
+   <button mat-raised-button  color="accent" (click)="onNoClick()">Close</button>
+ </div>

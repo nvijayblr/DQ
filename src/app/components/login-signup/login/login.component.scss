@@ -47,8 +47,8 @@
     //  -webkit-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
     //  -o-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
     //  -ms-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
-    box-shadow: none !important;
-    border:none;
+    //box-shadow: none !important;
+    //border:none;
      //position: absolute;
      //top: 110px;
    }
@@ -139,7 +139,12 @@
  }
  
  .mat-form-field-appearance-outline .mat-form-field-infix {
-    font-family: 'open-sans-condensed-bold';
+    font-family: 'open-sans-condensed-bold';   
+ }
+ .bdrInput{
+   //border: 1px solid #cbcbcb !important;
+   margin-left: 20px!important;
+   font-family: 'open-sans-condensed-bold'!important;
  }
  .mat-error{
     font-family: 'open-sans-condensed-light';

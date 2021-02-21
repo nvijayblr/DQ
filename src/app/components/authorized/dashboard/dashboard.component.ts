@@ -4,13 +4,16 @@ import { MessageService } from '../../../services/message.service';
 import { HttpService } from '../../../services/http-service.service';
 import { AuthGuardService } from 'src/app/services/auth-guard.service';
 import { query } from '@angular/animations';
+import {PageEvent} from '@angular/material/paginator';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ColorDialogComponent } from '../../../shared/color-dialog/color-dialog.component';
+import { CompletenessDialogComponent } from '../../../shared/completeness-dialog/completeness-dialog.component';
 
 export interface DialogData {
    minValue: number;
    maxValue: number;
    colorValue: string;
+   incompleteCDE;
  }
 
 @Component({
@@ -41,6 +44,10 @@ export class DashboardComponent implements OnInit {
    minValue: number;
    maxValue: number;
    colorValue: string;
+   tooltipDET: any = [];
+   nullCount;
+   finalCount;
+   originAirport;
    
 
    constructor(
@@ -50,7 +57,8 @@ export class DashboardComponent implements OnInit {
     private auth: AuthGuardService,
     private router: Router) {
     const role = this.auth.getUserRole().role;
-    this.role = role ? role : 'VIEWER';
+      this.role = role ? role : 'VIEWER';
+     
   }
 
   ngOnInit() {
@@ -105,7 +113,7 @@ export class DashboardComponent implements OnInit {
     //   this.isLoading = false;
     // });
   }
-
+  
   launchAnalysisByKey(keyname) {
     this.showAnalysisByKey = true;
     this.isLoadingDetails = true;
@@ -128,8 +136,18 @@ export class DashboardComponent implements OnInit {
       this.analyseKeyData.map(data => {
         chartData.labels.push(data[this.selectedKey]);
         chartData.validity.push(data.Validity.value);
-        chartData.completeness.push(data.completness.value);
+         chartData.completeness.push(data.completness.value);
+         this.tooltipDET.push(data.completness.details);         
       });
+       
+       this.tooltipDET.map((item, i) => {
+          if (item[i] !== undefined) {
+             this.nullCount = item[i];
+          }          
+       });
+
+       this.finalCount = `Flight number is missing for ${this.nullCount.nullcount} records`;
+       this.originAirport = `Origin Airport is missing for ${this.nullCount.nullcount} records`;
       this.analyseKeyChartData = chartData;
     }, (error) => {
       this.analyseKeyData = [];
@@ -203,11 +221,16 @@ export class DashboardComponent implements OnInit {
    });
 
      dialogRef.afterClosed().subscribe(result => {
-        this.valArray.push(result);
-      console.log(this.valArray);
-     console.log('The dialog was closed');
-     this.minValue = result;
+      this.valArray.push(result);
+      this.minValue = result;
    });
+  }
+   
+   openDialogColor() {     
+     this.dialog.open(CompletenessDialogComponent, {
+      width: '660px',
+     data: {incompleteCDE: this.nullCount }     
+     });
  }
 
 }
