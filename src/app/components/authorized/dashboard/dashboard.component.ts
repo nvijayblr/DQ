@@ -14,7 +14,8 @@ export interface DialogData {
    maxValue: number;
    colorValue: string;
    incompleteCDE;
- }
+}
+ 
 
 @Component({
   selector: 'app-dashboard',
