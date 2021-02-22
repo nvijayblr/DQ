@@ -1,24 +1,44 @@
 <h1 mat-dialog-title> Completeness Color</h1>
 <div mat-dialog-content>
   <!-- <p>Change your Completeness Color</p> -->
-  <mat-form-field>
-    <mat-label>Min %</mat-label>
-    <input type="number" (keypress)="numberOnly($event)" matInput [(ngModel)]="data.minValue">
-  </mat-form-field>
-  <mat-form-field>
-   <mat-label>Max %</mat-label>
-   <input type="number" (keypress)="numberOnly($event)" matInput [(ngModel)]="data.maxValue">
- </mat-form-field>
- <mat-form-field>
-   <mat-label>Choose Color</mat-label>
-   <mat-select matInput [(ngModel)]="data.colorValue">
-      <mat-option value="red">Red</mat-option>
-      <mat-option value="orange">Orange</mat-option>
-      <mat-option value="green">Green</mat-option>
-    </mat-select>
- </mat-form-field>
+  <form [formGroup]="settingsForm" (ngSubmit)="closeSettings()">
+    <div class="flex-containers space-between" 
+    formArrayName="bgSettings" *ngFor="let bgSetting of settingsForm.get('bgSettings')['controls']; index as i; last as isLast; first as isFirst">
+      <ng-container [formGroupName]="i">
+        <div class="list-item">
+          <mat-form-field>
+            <mat-label>Min %</mat-label>
+            <input type="text" (keypress)="numberOnly($event)" matInput formControlName="min" maxlength="3" autocomplete="off">
+          </mat-form-field>
+          <mat-form-field>
+  
+          <mat-label>Max %</mat-label>
+           <input type="text" (keypress)="numberOnly($event)" matInput formControlName="max" maxlength="3" autocomplete="off">
+         </mat-form-field>
+  
+         <mat-form-field>
+           <mat-label>Choose Color</mat-label>
+           <mat-select matInput formControlName="color">
+              <mat-option value="red">Red</mat-option>
+              <mat-option value="orange">Orange</mat-option>
+              <mat-option value="green">Green</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="list-item-5 add-remove-button">
+          <button type="button" mat-icon-button (click)="addFormItem('bgSettings')" *ngIf="isLast">
+            <mat-icon>add</mat-icon>
+          </button>
+          <button type="button" mat-icon-button class="del-icon" (click)="removeFormItem('bgSettings', i)" *ngIf="!isFirst || !isLast">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+
+      </ng-container>
+    </div>
+  </form>
 </div>
 <div mat-dialog-actions>
-  <button mat-raised-button  color="primary" (click)="onNoClick()">No Thanks</button>
-  <button mat-raised-button color="accent" [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+  <button mat-raised-button color="primary" (click)="onNoClick()">No Thanks</button>
+  <button mat-raised-button color="accent" (click)="closeSettings()" cdkFocusInitial class="ma-cr">Ok</button>
 </div>

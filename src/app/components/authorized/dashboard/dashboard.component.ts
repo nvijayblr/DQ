@@ -15,7 +15,7 @@ export interface DialogData {
    colorValue: string;
    incompleteCDE;
 }
- 
+
 
 @Component({
   selector: 'app-dashboard',
@@ -23,6 +23,18 @@ export interface DialogData {
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+
+
+   constructor(
+   public dialog: MatDialog,
+   private http: HttpService,
+   private messageService: MessageService,
+   private auth: AuthGuardService,
+   private router: Router) {
+    const role = this.auth.getUserRole().role;
+    this.role = role ? role : 'VIEWER';
+
+  }
   analysisList = [];
   analyseData = [];
   analyseChartData: any = {};
@@ -41,26 +53,26 @@ export class DashboardComponent implements OnInit {
   isShowAnalysisTable = false;
   isShowAnalysisKeyTable = false;
   selectedColumns: any = [];
-   selectedCDE: any = '';
-   minValue: number;
-   maxValue: number;
-   colorValue: string;
-   tooltipDET: any = [];
-   nullCount;
-   finalCount;
-   originAirport;
-   
-
-   constructor(
-   public dialog: MatDialog,
-    private http: HttpService,
-    private messageService: MessageService,
-    private auth: AuthGuardService,
-    private router: Router) {
-    const role = this.auth.getUserRole().role;
-      this.role = role ? role : 'VIEWER';
-     
-  }
+  selectedCDE: any = '';
+  minValue: number;
+  maxValue: number;
+  colorValue: string;
+  tooltipDET: any = [];
+  nullCount;
+  finalCount;
+  originAirport;
+  valArray = [];
+  settings: any = {
+    bgSettings: [{
+      min: '100',
+      max: '100',
+      color: 'green',
+    }, {
+      min: '90',
+      max: '100',
+      color: 'red',
+    }]
+  };
 
   ngOnInit() {
     this.getAllAnalysis();
@@ -71,7 +83,7 @@ export class DashboardComponent implements OnInit {
     this.loaderMsg = 'Saving Ruleset...';
     this.http.getAllAnalysis().subscribe((result: any) => {
       this.analysisList = result.Analysis ? result.Analysis : [];
-      //console.log(this.analysisList);
+      // console.log(this.analysisList);
       this.isLoading = false;
     }, (error) => {
       this.isLoading = false;
@@ -114,7 +126,7 @@ export class DashboardComponent implements OnInit {
     //   this.isLoading = false;
     // });
   }
-  
+
   launchAnalysisByKey(keyname) {
     this.showAnalysisByKey = true;
     this.isLoadingDetails = true;
@@ -137,18 +149,18 @@ export class DashboardComponent implements OnInit {
       this.analyseKeyData.map(data => {
         chartData.labels.push(data[this.selectedKey]);
         chartData.validity.push(data.Validity.value);
-         chartData.completeness.push(data.completness.value);
-         this.tooltipDET.push(data.completness.details);         
+        chartData.completeness.push(data.completness.value);
+        this.tooltipDET.push(data.completness.details);
       });
-       
-       this.tooltipDET.map((item, i) => {
+
+      this.tooltipDET.map((item, i) => {
           if (item[i] !== undefined) {
              this.nullCount = item[i];
-          }          
+          }
        });
 
-       this.finalCount = `Flight number is missing for ${this.nullCount.nullcount} records`;
-       this.originAirport = `Origin Airport is missing for ${this.nullCount.nullcount} records`;
+      this.finalCount = `Flight number is missing for ${this.nullCount.nullcount} records`;
+      this.originAirport = `Origin Airport is missing for ${this.nullCount.nullcount} records`;
       this.analyseKeyChartData = chartData;
     }, (error) => {
       this.analyseKeyData = [];
@@ -179,7 +191,7 @@ export class DashboardComponent implements OnInit {
     });
     const analysis = {
        ...data,
-       mode : mode,
+       mode,
       columns,
       selectedColumns,
       rulesetName: rules.rulesetName,
@@ -214,23 +226,21 @@ export class DashboardComponent implements OnInit {
       this.isSourceUploaded = false;
     });
   }
-   valArray = [];
-  openDialog(): void {
-   const dialogRef = this.dialog.open(ColorDialogComponent, {
-     width: '660px',
-     data: { minValue: this.minValue, maxValue: this.maxValue, colorValue: this.colorValue}
-   });
 
-     dialogRef.afterClosed().subscribe(result => {
-      this.valArray.push(result);
-      this.minValue = result;
-   });
+  openHighlightSettingsDialog(): void {
+    const dialogRef = this.dialog.open(ColorDialogComponent, {
+      width: '800px',
+      data: this.settings
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.settings = result;
+    });
   }
-   
-   openDialogColor() {     
+
+   openDialogColor() {
      this.dialog.open(CompletenessDialogComponent, {
       width: '660px',
-     data: {incompleteCDE: this.nullCount }     
+      data: {incompleteCDE: this.nullCount }
      });
  }
 

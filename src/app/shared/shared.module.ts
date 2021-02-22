@@ -14,6 +14,7 @@ import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { ImageCropperComponent } from './image-cropper/image-cropper.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { FileFormatPipe } from '../services/file-format-pipe';
+import { FormatCellsPipe } from '../services/format-cells-pipe';
 import { MnCarouselComponent } from './mn-carousel/mn-carousel.component';
 import { AccountDetailsComponent } from './account-details/account-details.component';
 import { ColumnSelectorComponent } from './column-selector/column-selector.component';
@@ -43,14 +44,15 @@ import { CompletenessDialogComponent } from './completeness-dialog/completeness-
     ImageCropperComponent,
     ConfirmDialogComponent,
     FileFormatPipe,
+    FormatCellsPipe,
     MnCarouselComponent,
     AccountDetailsComponent,
     ColumnSelectorComponent,
     DragDropListComponent,
-     BarChartComponent,
-     CylinderChartComponent,
-     ColorDialogComponent,
-     CompletenessDialogComponent
+    BarChartComponent,
+    CylinderChartComponent,
+    ColorDialogComponent,
+    CompletenessDialogComponent
   ],
   exports: [
     FormsModule,
@@ -66,15 +68,16 @@ import { CompletenessDialogComponent } from './completeness-dialog/completeness-
     AccountDetailsComponent,
     MnCarouselComponent,
     FileFormatPipe,
+    FormatCellsPipe,
     RatingModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     ColumnSelectorComponent,
     DragDropListComponent,
-     BarChartComponent,
-     CylinderChartComponent,
-     ColorDialogComponent,
-     CompletenessDialogComponent
+    BarChartComponent,
+    CylinderChartComponent,
+    ColorDialogComponent,
+    CompletenessDialogComponent
   ],
   providers: [
     DatePipe

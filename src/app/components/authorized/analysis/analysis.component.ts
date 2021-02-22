@@ -28,9 +28,9 @@ export class AnalysisComponent implements OnInit {
   isLoading = false;
   loaderMsg = '';
   isSourceUploaded = false;
-   analysis: any = {};
-   fileTypeErr = false;
-   uniqueName = false;
+  analysis: any = {};
+  fileTypeErr = false;
+  uniqueName = false;
 
   OwlCategoryOptions: OwlOptions = {
     loop: false,
@@ -115,8 +115,8 @@ export class AnalysisComponent implements OnInit {
   rulesList = [];
   showCDECar = false;
   analyseData = [];
-   analysisId = '';
-   mode;
+  analysisId = '';
+  mode;
   rulesetId = '';
   cdeStatistics: any = {};
 
@@ -172,7 +172,7 @@ export class AnalysisComponent implements OnInit {
       referenceCSV: this.fb.array([]),
       columnRules: this.fb.array([]),
     });
-    console.log(analysis);
+
     if (analysis) {
       this.rulesList = analysis.rules.ruleset;
       this.selectedColumns = analysis.selectedColumns;
@@ -328,7 +328,6 @@ export class AnalysisComponent implements OnInit {
     this.loaderMsg = 'Uploading the reference csv...';
 
     this.http.uploadReferenceCSV(formData).subscribe((result: any) => {
-      console.log(result);
       if (result && result.length) {
         const refData = result && result.length ? result[0] : {};
         reference.controls.referenceColumns.setValue(refData.referenceColumns);

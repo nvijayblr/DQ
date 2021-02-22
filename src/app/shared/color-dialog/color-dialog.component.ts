@@ -1,35 +1,69 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-
-export interface DialogData {
-   animal: string;
-   name: string;
-   minValue: number;
-   maxValue: number;
-   colorValue: string;
- }
+import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-color-dialog',
   templateUrl: './color-dialog.component.html',
   styleUrls: ['./color-dialog.component.scss']
 })
-export class ColorDialogComponent {
-   constructor(
-      public dialogRef: MatDialogRef<ColorDialogComponent>,
-      @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
-  
-    onNoClick(): void {
-      this.dialogRef.close();
+export class ColorDialogComponent implements OnInit {
+  settingsForm: FormGroup;
+
+  constructor(
+    private fb: FormBuilder,
+    public dialogRef: MatDialogRef<ColorDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data
+  ) {}
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+  ngOnInit(): void {
+    this.settingsForm = this.fb.group({
+      bgSettings: this.fb.array([])
+    });
+    const bgSettings = this.settingsForm.controls.bgSettings as FormArray;
+    const bgList = this.data.bgSettings || [];
+    bgList.map(bg => {
+      bgSettings.push(this.intiFormArrays('bgSettings', bg));
+    });
+  }
+
+  intiFormArrays(field, value: any = {}) {
+    if (field === 'bgSettings') {
+      return this.fb.group({
+        min: [value.min, [Validators.required]],
+        max: [value.max, [Validators.required]],
+        color: [value.color, [Validators.required]]
+      });
     }
-   
-   numberOnly(event): boolean {
-   const charCode = (event.which) ? event.which : event.keyCode;
-   if (charCode != 46 && charCode > 31
-      && (charCode < 48 || charCode > 57)) {
+  }
+
+  addFormItem(arrayName) {
+    const fbArray = this.settingsForm.get(arrayName) as FormArray;
+    fbArray.push(this.intiFormArrays(arrayName));
+  }
+
+  removeFormItem(arrayName, index) {
+    const fbArray = this.settingsForm.get(arrayName) as FormArray;
+    fbArray.removeAt(index);
+  }
+
+  closeSettings() {
+    this.settingsForm.markAllAsTouched();
+    if (!this.settingsForm.valid) {
+      return;
+    }
+    this.dialogRef.close(this.settingsForm.value);
+  }
+
+  numberOnly(event): boolean {
+    const charCode = (event.which) ? event.which : event.keyCode;
+    if (charCode !== 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
       return false;
-   }
-   return true;
-   }
- 
+    }
+    return true;
+  }
 }
