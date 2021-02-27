@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuardService as AuthGaurd } from 'src/app/services/auth-guard.service';
 import { AuthorizedComponent } from './authorized.component';
 import { DelayAnalysisComponent } from './delay-analysis/delay-analysis.component';
+import { CreateSourceComponent } from './create-source/create-source.component';
 
 const routes: Routes = [
   {
@@ -28,7 +29,8 @@ const routes: Routes = [
         path: 'notifications',
         loadChildren: () => import('./notifications/notifications.module').then(m => m.NotificationsModule),
         // canActivate: [AuthGaurd]
-      },
+       },
+       { path: 'create-source-data', component: CreateSourceComponent },
     ]
   },
 ];

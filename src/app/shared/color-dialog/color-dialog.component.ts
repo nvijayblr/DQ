@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, Validators, AbstractControl, FormControl } from '@angular/forms';
+import { ThemePalette } from '@angular/material/core';
 
 @Component({
   selector: 'app-color-dialog',
@@ -8,7 +9,10 @@ import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
   styleUrls: ['./color-dialog.component.scss']
 })
 export class ColorDialogComponent implements OnInit {
-  settingsForm: FormGroup;
+   settingsForm: FormGroup;
+   public color: ThemePalette = 'primary';
+   public touchUi = false;
+   colorCtr: AbstractControl = new FormControl(null);
 
   constructor(
     private fb: FormBuilder,
@@ -20,19 +24,20 @@ export class ColorDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  ngOnInit(): void {
+   ngOnInit(): void {
     this.settingsForm = this.fb.group({
       bgSettings: this.fb.array([])
     });
-    const bgSettings = this.settingsForm.controls.bgSettings as FormArray;
-    const bgList = this.data.bgSettings || [];
-    bgList.map(bg => {
+      const bgSettings = this.settingsForm.controls.bgSettings as FormArray;
+      const bgList = this.data.bgSettings || [];
+      console.log(bgList);
+     bgList.map(bg => {
       bgSettings.push(this.intiFormArrays('bgSettings', bg));
     });
   }
 
-  intiFormArrays(field, value: any = {}) {
-    if (field === 'bgSettings') {
+   intiFormArrays(field, value: any = {}) {
+     if (field === 'bgSettings') {
       return this.fb.group({
         min: [value.min, [Validators.required]],
         max: [value.max, [Validators.required]],
@@ -56,7 +61,8 @@ export class ColorDialogComponent implements OnInit {
     if (!this.settingsForm.valid) {
       return;
     }
-    this.dialogRef.close(this.settingsForm.value);
+     this.dialogRef.close(this.settingsForm.value);
+     console.log(this.colorCtr.value.hex);
   }
 
   numberOnly(event): boolean {

@@ -1,0 +1,121 @@
+<section class="page-body home-bodys">
+   <div class="container">
+      <div class="home-wrapper">
+         <div class="clearfix my-community-body">
+            <div class="home-panel">
+               <mat-horizontal-stepper>
+                  <mat-step>
+                     <ng-template matStepLabel>Source Data</ng-template>
+                     <mat-card class="border no-rounded list shrare-post">
+                        <h1 class="share-post-title">Create Your<span class="red"> Source</span></h1>
+                        <div class="form-continer">
+                           <div class="list flex-containers flex-start wrap">
+                           <div class="list-item-2 outline">
+                                 <mat-label>Upload the source data<span class="red">*</span></mat-label>
+                                 <app-image-cropper 
+                                   [imageType]="'Source'"
+                                   [fileTypes]="'.csv'"
+                                   [imagePath]="''"
+                                   >
+                                 </app-image-cropper>
+                                
+                            </div>
+                             <div class="list-item-2 outline">
+                               <mat-label>Source Data Name<span class="red">*</span></mat-label>
+                               <mat-form-field appearance="outline">
+                                 <input matInput placeholder="Source Data Name"  maxlength="50" autocomplete="off"/>
+                               </mat-form-field>
+                              
+                             
+                               <mat-label class="mtop">Source Data Description</mat-label>
+                               <mat-form-field appearance="outline">
+                                 <input matInput placeholder="Source Data Description"  maxlength="250" autocomplete="off"/>
+                               </mat-form-field>
+                             </div>
+                           </div>
+                         </div>
+                         <div class="bdr"></div>
+                         <div class="rule-selection-wrapper">
+                           <div class="list flex-containers flex-start wrap cde-fields-wrp">
+                             <div class="list-item-4 outline">
+                                <span class="sub-title">Multi Source</span>
+                               <app-rule-selector [ruleItems]="ruleTypeList" (selectionChange)="ruleType=$event.value"></app-rule-selector>
+                             </div>
+                             <div class="list-item-4 outline">
+                              <span class="sub-title">Frequency</span>
+                               <app-rule-selector [ruleItems]="ruleOperatorList[ruleType]" (selectionChange)="ruleOperator=$event.value"></app-rule-selector>
+                             </div>
+                             <div class="list-item-4 outline">
+                              <span class="sub-title">Time</span>
+                               <app-rule-selector [ruleItems]="ruleValueList[ruleType]" (selectionChange)="ruleValue=$event.value"></app-rule-selector>
+                             </div>
+                             <div class="list-item-4 outline">
+                              <span class="sub-title"> Department</span>
+                               <app-rule-selector [ruleItems]="ruleFormatList[ruleValue]" (selectionChange)="ruleFormat=$event.value"></app-rule-selector>
+                             </div>
+                             <!-- <div class="list-item-5 outline">
+                               <app-rule-selector [ruleItems]="ruleDimenstionList" (selectionChange)="ruleDimenstion=$event.value"></app-rule-selector>
+                             </div> -->
+                           </div>
+                         </div>
+                         <div class="act-btn-wrapper">
+                           <button mat-stroked-button class="primary-btn-gray"
+                           [disabled]="">Next <mat-icon>arrow_forward_ios</mat-icon></button>
+                       </div>
+                     </mat-card>
+                  </mat-step>
+                  <mat-step>
+                  <mat-card>
+                     <ng-template matStepLabel>Reference Data</ng-template>
+                     <div class="list">
+                        <div class="flex-containers space-between">
+                          <ng-container>
+                            <div class="list flex-containers flex-start">
+                              <div class="list-item-3 outline">
+                                <mat-label>Upload the reference data </mat-label>
+                                <app-image-cropper 
+                                  [imageType]="'Reference'"
+                                  [fileTypes]="'.csv'"
+                                  [imagePath]="''"
+                                  >
+                                </app-image-cropper>
+                              </div>
+                              <div class="list-item-5 add-remove-button">
+                                 <button type="button" mat-icon-button >
+                                   <mat-icon>add</mat-icon>
+                                 </button>
+                                 <button type="button" mat-icon-button class="del-icon">
+                                   <mat-icon>delete</mat-icon>
+                                 </button>
+                               </div>
+                              <div class="list-item-2 outline">
+                                 <mat-label>Reference Data Name<span class="red">*</span></mat-label>
+                                 <mat-form-field appearance="outline">
+                                   <input matInput placeholder="Reference Data Name"  maxlength="50" autocomplete="off"/>
+                                 </mat-form-field>
+                                
+                               
+                                 <mat-label class="mtop">Reference Data Description</mat-label>
+                                 <mat-form-field appearance="outline">
+                                   <input matInput placeholder="Reference Data Description"  maxlength="250" autocomplete="off"/>
+                                 </mat-form-field>
+                               </div>
+                              
+                            </div>
+                          </ng-container>
+                        </div>
+                      </div>
+                      <div class="act-btn-wrapper">
+                        <button mat-stroked-button class="primary-btn-gray white pad" ><mat-icon class="mar-ico">arrow_back_ios_new</mat-icon> Back</button>
+                        <button mat-stroked-button class="primary-btn-gray" 
+                          [disabled]=""
+                          >Next <mat-icon>arrow_forward_ios</mat-icon></button>
+                      </div>
+                     </mat-card>
+                  </mat-step>
+               </mat-horizontal-stepper>
+            </div>
+         </div>
+      </div>
+   </div>
+</section>

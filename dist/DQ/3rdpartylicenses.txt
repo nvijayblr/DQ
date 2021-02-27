@@ -252,6 +252,9 @@ THE SOFTWARE.
 highcharts
 https://www.highcharts.com/license
 
+highcharts-custom-events
+SEE LICENSE IN license.txt
+
 lodash
 MIT
 Copyright OpenJS Foundation and other contributors <https://openjsf.org/>

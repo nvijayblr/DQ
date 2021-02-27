@@ -23,7 +23,7 @@ export class RuleSelectorComponent implements OnInit {
     }
   }
 
-  addRuleItem() {
+  addRuleItem(selectedRule) {
     this.selectedRule = {
       label: this.ruleItem,
       value: this.ruleItem,

@@ -19,11 +19,12 @@ import { LoginComponent } from './components/login-signup/login/login.component'
 import { SignupComponent } from './components/login-signup/signup/signup.component';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    SignupComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,

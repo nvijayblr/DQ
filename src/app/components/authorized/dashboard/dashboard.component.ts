@@ -234,7 +234,7 @@ export class DashboardComponent implements OnInit {
       data: this.settings
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.settings = result;
+       this.settings = result;
     });
   }
 

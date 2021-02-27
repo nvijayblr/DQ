@@ -24,6 +24,7 @@ import { CylinderChartComponent } from './cylinder-chart/cylinder-chart.componen
 import { ColorDialogComponent } from './color-dialog/color-dialog.component';
 import { CompletenessDialogComponent } from './completeness-dialog/completeness-dialog.component';
 import { RuleSelectorComponent } from './rule-selector/rule-selector.component';
+import { MAT_COLOR_FORMATS, NgxMatColorPickerModule, NGX_MAT_COLOR_FORMATS } from '@angular-material-components/color-picker';
 
 @NgModule({
   imports: [
@@ -36,7 +37,8 @@ import { RuleSelectorComponent } from './rule-selector/rule-selector.component';
     ReactiveFormsModule,
     RatingModule,
     OwlDateTimeModule,
-    OwlNativeDateTimeModule
+      OwlNativeDateTimeModule,
+      NgxMatColorPickerModule
   ],
   declarations: [
     HeaderComponent,
@@ -83,7 +85,8 @@ import { RuleSelectorComponent } from './rule-selector/rule-selector.component';
     RuleSelectorComponent
   ],
   providers: [
-    DatePipe
+     DatePipe,
+     { provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS }
   ],
   entryComponents: [
      ConfirmDialogComponent,
