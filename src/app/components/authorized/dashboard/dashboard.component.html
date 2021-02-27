@@ -64,7 +64,7 @@
                           [disabled]="!data.rulesetId" 
                           (click)="launchDelayAnalysis(data)" 
                           matTooltip="Delay Analysis">
-                          <mat-icon>launch</mat-icon>
+                          <mat-icon>alarm</mat-icon>
                         </button>
                       </td>
                     </tr>
@@ -250,9 +250,9 @@
                   [chartType]="'column'"
                 ></app-bar-chart>  -->
                  <app-cylinder-chart 
-                  *ngIf="analyseKeyData.length" 
-                  [chartData]="analyseKeyChartData"
-                  [chartType]="'column'" >
+                    *ngIf="analyseKeyData.length" 
+                    [chartData]="analyseKeyChartData"
+                    [chartType]="'column'" >
                 </app-cylinder-chart>
 
                 <div class="actions-wrapper">
@@ -260,7 +260,7 @@
                     <mat-icon>format_color_fill</mat-icon>
                   </button>
                 </div>
-                <table class="table">
+                <table class="table brd-rt">
                   <thead>
                     <tr>
                       <th>{{selectedKey}}</th>
@@ -269,7 +269,9 @@
                            You choose: <i *ngFor="let value of valArray">{{value.minValue}} | {{value.maxValue}} | {{value.colorValue}} </i>
                         </div>
                      </th>
-                      <th>Validity</th>
+                     <th>Validity</th>
+                     <th>Integrity</th>
+                     <th>Uniqueness</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -295,6 +297,26 @@
                           matTooltipHideDelay="10"
                         >{{data.Validity?.value}}%</span>
                         <span *ngIf="!data.Validity?.details.length">{{data.Validity?.value}}%</span>
+                      </td>
+                      <td [style.background-color]="data.Integrity?.value | formatCell: settings">
+                        <span 
+                          *ngIf="data.Integrity?.details.length"
+                          #tooltip="matTooltip"
+                          [matTooltip]="data.Integrity.details | json"
+                          [matTooltipPosition]="'above'"
+                          matTooltipHideDelay="10"
+                        >{{data.Integrity?.value}}%</span>
+                        <span *ngIf="!data.Integrity?.details.length">{{data.Integrity?.value}}%</span>
+                      </td>
+                      <td [style.background-color]="data.Uniqueness?.value | formatCell: settings">
+                        <span 
+                          *ngIf="data.Uniqueness?.details.length"
+                          #tooltip="matTooltip"
+                          [matTooltip]="data.Uniqueness.details | json"
+                          [matTooltipPosition]="'above'"
+                          matTooltipHideDelay="10"
+                        >{{data.Uniqueness?.value}}%</span>
+                        <span *ngIf="!data.Uniqueness?.details.length">{{data.Uniqueness?.value}}%</span>
                       </td>
                     </tr>
                   </tbody>

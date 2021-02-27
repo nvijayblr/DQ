@@ -1203,7 +1203,10 @@ mat-paginator.mat-paginator {
 }
 .table tbody td {
   font-size: 16px;
-  font-weight: 400;  
+  font-weight: 400;
+}
+.table.brd-rt tbody td {
+  border-right: 1px solid #dee2e6;
 }
 
 .highcharts-data-table {

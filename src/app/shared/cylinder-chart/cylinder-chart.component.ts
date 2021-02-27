@@ -31,7 +31,7 @@ export class CylinderChartComponent implements OnInit {
    @Input() chartData;
    @Input() chartType;
    @Output() xLableClicked = new EventEmitter<any>();
-   
+
 
    public activity;
    public xData;
@@ -39,14 +39,14 @@ export class CylinderChartComponent implements OnInit {
    chartOptions: any;
    alpha: number;
    beta: number;
-   depth : number;
-    
- 
+   depth: number;
+
+
    highcharts;
    constructor() {
       this.alpha = 15;
       this.beta = 15;
-      this.depth = 50
+      this.depth = 50;
 
       this.chartOptions = {
          chart: {
@@ -103,7 +103,7 @@ export class CylinderChartComponent implements OnInit {
          },
          series: []
        };
- 
+
       // this.chartOptions = {
       //  chart: {
       //     type: 'cylinder',
@@ -163,17 +163,17 @@ export class CylinderChartComponent implements OnInit {
       //           Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
       //       shadow: true
       //   },
-      
+
       // series: [{
       //    data: [103, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
       //    colorByPoint: true,
       //     name: 'airline',
-      //    showInLegend: true,        
+      //    showInLegend: true,
       //    color: '#000000',
       // }]
       // }
  }
- 
+
  ngOnInit() {
    const agThis = this;
    console.log(this.chartData.labels);
@@ -195,20 +195,26 @@ export class CylinderChartComponent implements OnInit {
        name: 'Completeness',
        data: this.chartData.completeness
      }, {
-       name: 'Validity',
-       data: this.chartData.validity
-     }];
+        name: 'Validity',
+        data: this.chartData.validity
+      }, {
+        name: 'Integrity',
+        data: this.chartData.integrity
+      }, {
+        name: 'Uniqueness',
+        data: this.chartData.uniqueness
+      }];
    console.log(this.chartData);
  }
 
 
-    
+
    showValues() {
       this.chartOptions.chart.options3d.alpha;
  }
-    
-   
-    
+
+
+
  alphaChange(event: any) {
       this.alpha = event.value;
       this.chartOptions.chart.options3d.alpha = this.alpha;
@@ -229,7 +235,7 @@ export class CylinderChartComponent implements OnInit {
       this.highcharts = Highcharts;
       this.highcharts.chart(this.chartEl.nativeElement, this.chartOptions);
    }
-   
- 
+
+
  }
 

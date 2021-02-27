@@ -6,7 +6,7 @@ import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, ViewEnc
   styleUrls: ['./rule-selector.component.scss']
 })
 export class RuleSelectorComponent implements OnInit {
-  @Input() ruleItems: any;
+  @Input() ruleItems: any = [];
   // @Input() chartType;
   @Output() selectionChange = new EventEmitter<any>();
   ruleItem = '';

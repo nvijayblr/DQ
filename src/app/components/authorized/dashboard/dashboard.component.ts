@@ -16,7 +16,6 @@ import { CompletenessDialogComponent } from '../../../shared/completeness-dialog
 })
 export class DashboardComponent implements OnInit {
 
-  
   analysisList = [];
   analyseData = [];
   analyseChartData: any = {};
@@ -56,7 +55,7 @@ export class DashboardComponent implements OnInit {
     }]
   };
 
-  constructor (
+  constructor(
     public dialog: MatDialog,
     private http: HttpService,
     private messageService: MessageService,
@@ -136,12 +135,16 @@ export class DashboardComponent implements OnInit {
       const chartData = {
         labels: [],
         validity: [],
-        completeness: []
+        completeness: [],
+        integrity: [],
+        uniqueness: []
       };
       this.analyseKeyData.map(data => {
         chartData.labels.push(data[this.selectedKey]);
         chartData.validity.push(data.Validity.value);
         chartData.completeness.push(data.completness.value);
+        chartData.integrity.push(+data.Integrity.value);
+        chartData.uniqueness.push(+data.Uniqueness.value);
         this.tooltipDET.push(data.completness.details);
       });
 
@@ -163,7 +166,7 @@ export class DashboardComponent implements OnInit {
   launchDelayAnalysis(analysis) {
     this.selectedAnalysis = analysis;
     localStorage.setItem('delay-analysis', JSON.stringify(this.selectedAnalysis));
-    this.router.navigate(['auth/delay-analysis'])
+    this.router.navigate(['auth/delay-analysis']);
   }
 
   xLableClicked(event) {
