@@ -18,8 +18,9 @@ export class RuleSelectorComponent implements OnInit {
 
   modelChange(e) {
     this.selectedRule = this.ruleItems.filter(rule => rule.value === e)[0];
-    console.log(this.selectedRule, e);
     this.selectionChange.emit({value: e});
+    if (this.selectedRule) {
+    }
   }
 
   addRuleItem() {
@@ -29,5 +30,12 @@ export class RuleSelectorComponent implements OnInit {
       type: 'CUSTOM'
     };
     this.ruleItems.push(this.selectedRule);
+  }
+
+  deleteRuleItem(rule) {
+    const index = this.ruleItems.findIndex(item => item.value === rule.value);
+    this.ruleItems.splice(index, 1);
+    this.selectedRule = {};
+    this.ruleItem = '';
   }
 }

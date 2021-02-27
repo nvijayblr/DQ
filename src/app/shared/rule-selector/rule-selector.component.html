@@ -5,10 +5,10 @@
         <input matInput placeholder="" maxlength="50" autocomplete="off" [(ngModel)]="ruleItem" (keyup)="modelChange(ruleItem)"/>
       </mat-form-field>
     </div>
-    <button type="button" mat-icon-button (click)="addRuleItem()" [disabled]="selectedRule" >
+    <button type="button" mat-icon-button (click)="addRuleItem(selectedRule)" [disabled]="selectedRule" >
       <mat-icon>add</mat-icon>
     </button>
-    <button type="button" mat-icon-button class="del-icon" [disabled]="(selectedRule && !selectedRule.type) || !selectedRule">
+    <button type="button" mat-icon-button class="del-icon" (click)="deleteRuleItem(selectedRule)" [disabled]="(selectedRule && !selectedRule.type) || !selectedRule">
       <mat-icon>delete</mat-icon>
     </button>
   </div>
