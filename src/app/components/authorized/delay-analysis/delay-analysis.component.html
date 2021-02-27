@@ -1,0 +1,101 @@
+<section class="page-body home-bodys">
+  <div class="container">
+    <div class="home-wrapper">
+      <div class="clearfix my-community-body">
+        <div class="home-panel">
+          <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
+          <div class="shrare-post">
+            <!-- Analysis by Key-->
+            <mat-card class="border no-rounded list shrare-post">
+              <div class="list flex-containers analysis-wrp flex-start wrap">
+                <div class="list-item-3 outline">
+                  <h1 class="share-post-title">Delay Analysis by<span class="red"> CDE</span></h1>
+                </div>
+                <div class="list-item-3 outline">
+                  <mat-form-field appearance="outline">
+                    <mat-select [(ngModel)]="selectedCDE" (ngModelChange)="launchDelayAnalysisByKey($event)">
+                      <mat-option *ngFor="let col of selectedColumns;" [value]="col">
+                        {{col}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="list-item-3 outline">
+                  <div class="act-btn-wrapper">
+                    <button mat-stroked-button class="primary-btn-gray white pad" (click)="gotoDashboard();"><mat-icon class="mar-ico">arrow_back_ios_new</mat-icon> Back</button>
+                  </div>
+                </div>
+              </div>
+              <div class="analysis-chart-wrapper">
+                <app-progress-bar [message]="loaderMsg" class="component" *ngIf="isLoadingDetails"></app-progress-bar>
+                <div class="analysis-preview" *ngFor="let analysis of delayAnalysis">
+                  <app-bar-chart 
+                    [analysis]="analysis"
+                    [chartType]="'column'"
+                  ></app-bar-chart> 
+                </div>
+              </div>
+
+              <div class="analysis-chart-wrapper">
+                <app-progress-bar [message]="'Launching Delay Analysis by Airport...'" class="component" *ngIf="isLoadingDetailsAirport"></app-progress-bar>
+                <div class="analysis-preview" *ngFor="let analysis of delayAnalysisAirport">
+                  <app-bar-chart 
+                    [analysis]="analysis"
+                    [chartType]="'column'"
+                  ></app-bar-chart> 
+                </div>
+              </div>
+
+                <!-- <div class="actions-wrapper">
+                  <button type="button" class="ma-cr" mat-icon-button matTooltip="Highlight Settings"  (click)="openHighlightSettingsDialog()">
+                    <mat-icon>format_color_fill</mat-icon>
+                  </button>
+                </div>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>{{selectedKey}}</th>
+                      <th>Completness 
+                        <div *ngIf="minValue">
+                           You choose: <i *ngFor="let value of valArray">{{value.minValue}} | {{value.maxValue}} | {{value.colorValue}} </i>
+                        </div>
+                     </th>
+                      <th>Validity</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of analyseKeyData;">
+                      <td>{{data[selectedKey]}}</td>
+                      <td [style.background-color]="data.completness?.value | formatCell: settings">
+                        <span 
+                          *ngIf="data.completness?.details.length"
+                          #tooltip="matTooltip"
+                          matTooltip="{{finalCount}}"
+                          [matTooltipPosition]="'above'"
+                          matTooltipHideDelay="10"
+                          (click)="openDialogColor()"
+                        >{{data.completness?.value}}%</span>
+                        <span *ngIf="!data.completness?.details.length">{{data.completness?.value}}%</span>
+                      </td>
+                      <td [style.background-color]="data.completness?.value | formatCell: settings">
+                        <span 
+                          *ngIf="data.Validity?.details.length"
+                          #tooltip="matTooltip"
+                          [matTooltip]="originAirport"
+                          [matTooltipPosition]="'above'"
+                          matTooltipHideDelay="10"
+                        >{{data.Validity?.value}}%</span>
+                        <span *ngIf="!data.Validity?.details.length">{{data.Validity?.value}}%</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table> -->
+
+            </mat-card>   
+
+          </div>
+        </div>
+      </div> 
+    </div>
+  </div>
+</section>

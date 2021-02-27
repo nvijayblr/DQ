@@ -9,14 +9,6 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { ColorDialogComponent } from '../../../shared/color-dialog/color-dialog.component';
 import { CompletenessDialogComponent } from '../../../shared/completeness-dialog/completeness-dialog.component';
 
-export interface DialogData {
-   minValue: number;
-   maxValue: number;
-   colorValue: string;
-   incompleteCDE;
-}
-
-
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -24,17 +16,7 @@ export interface DialogData {
 })
 export class DashboardComponent implements OnInit {
 
-
-   constructor(
-   public dialog: MatDialog,
-   private http: HttpService,
-   private messageService: MessageService,
-   private auth: AuthGuardService,
-   private router: Router) {
-    const role = this.auth.getUserRole().role;
-    this.role = role ? role : 'VIEWER';
-
-  }
+  
   analysisList = [];
   analyseData = [];
   analyseChartData: any = {};
@@ -73,6 +55,16 @@ export class DashboardComponent implements OnInit {
       color: 'red',
     }]
   };
+
+  constructor (
+    public dialog: MatDialog,
+    private http: HttpService,
+    private messageService: MessageService,
+    private auth: AuthGuardService,
+    private router: Router) {
+      const role = this.auth.getUserRole().role;
+      this.role = role ? role : 'VIEWER';
+  }
 
   ngOnInit() {
     this.getAllAnalysis();
@@ -166,6 +158,12 @@ export class DashboardComponent implements OnInit {
       this.analyseKeyData = [];
       this.isLoadingDetails = false;
     });
+  }
+
+  launchDelayAnalysis(analysis) {
+    this.selectedAnalysis = analysis;
+    localStorage.setItem('delay-analysis', JSON.stringify(this.selectedAnalysis));
+    this.router.navigate(['auth/delay-analysis'])
   }
 
   xLableClicked(event) {

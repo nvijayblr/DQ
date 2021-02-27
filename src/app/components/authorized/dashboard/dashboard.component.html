@@ -51,13 +51,19 @@
                         (click)="createEditRuleset(data,'edit')" [disabled]="!data.rulesetId"  matTooltip="Edit Ruleset">
                           <mat-icon>edit</mat-icon>
                         </button>
-                        <button type="button" class="del-icon" mat-icon-button [disabled]="!data.rulesetId" matTooltip="Delete Ruleset">
+                        <!-- <button type="button" class="del-icon" mat-icon-button [disabled]="!data.rulesetId" matTooltip="Delete Ruleset">
                           <mat-icon>delete</mat-icon>
-                        </button>
+                        </button> -->
                         <button class="del-icon launch-icon" mat-icon-button 
                           [disabled]="!data.rulesetId" 
                           (click)="launchAnalysis(data)" 
                           matTooltip="Launch Analysis">
+                          <mat-icon>launch</mat-icon>
+                        </button>
+                        <button class="del-icon launch-icon" mat-icon-button 
+                          [disabled]="!data.rulesetId" 
+                          (click)="launchDelayAnalysis(data)" 
+                          matTooltip="Delay Analysis">
                           <mat-icon>launch</mat-icon>
                         </button>
                       </td>

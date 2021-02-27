@@ -111,7 +111,6 @@ export class AnalysisComponent implements OnInit {
     label: 'Alhpa Numberic'
   }];
 
-
   rulesList = [];
   showCDECar = false;
   analyseData = [];
@@ -119,6 +118,120 @@ export class AnalysisComponent implements OnInit {
   mode;
   rulesetId = '';
   cdeStatistics: any = {};
+
+  // Rule Dropdowns
+  ruleType = '';
+  ruleOperator = '';
+  ruleValue = '';
+  ruleFormat = '';
+  ruleDimenstion = '';
+
+  ruleTypeList = [{
+    label: 'Data Type',
+    value: 'DataType',
+  }, {
+    label: 'Length',
+    value: 'Length',
+  }, {
+    label: 'Value',
+    value: 'Value',
+  }];
+
+  ruleOperatorList = [{
+    label: 'Should be',
+    value: 'Shouldbe'
+  }, {
+    label: 'Should not include',
+    value: 'shouldnotinclude'
+  }, {
+    label: '=',
+    value: 'euqualto'
+  }, {
+    label: '>=',
+    value: 'greaterthanequalto'
+  }, {
+    label: '<=',
+    value: 'lessthanequalto'
+  }, {
+    label: '>',
+    value: 'greaterthan'
+  }, {
+    label: '<',
+    value: 'lessthan'
+  }, {
+    label: 'Same as',
+    value: 'sameas'
+  }, {
+    label: 'Should be in',
+    value: 'shouldbein'
+  }, {
+    label: 'Reference data',
+    value: 'referencedata'
+  }, {
+    label: 'Element',
+    value: 'element'
+  }];
+  
+  ruleValueList = [{
+    label: 'Alpha',
+    value: 'Alpha'
+  }, {
+    label: 'Alphanumeric',
+    value: 'Alphanumeric'
+  }, {
+    label: 'Integer',
+    value: 'Integer'
+  }, {
+    label: 'Numeric',
+    value: 'Numeric'
+  }, {
+    label: 'Date',
+    value: 'Date'
+  }, {
+    label: 'DateTime',
+    value: 'DateTime'
+  }, {
+    label: 'Special Characters',
+    value: 'SpecialCharacters'
+  }, {
+    label: 'Amount',
+    value: 'Amount'
+  }];
+  
+  ruleFormatList = [{
+    label: 'YYYYMMDD',
+    value: 'YYYYMMDD'
+  }, {
+    label: 'DD-MMM-YYYY',
+    value: 'DDMMMYYYY'
+  }, {
+    label: 'DD-MMM-YY',
+    value: 'DD-MMM-YY'
+  }, {
+    label: '2 Decimals',
+    value: '2 Decimals'
+  }, {
+    label: '3 Decimals',
+    value: '3 Decimals'
+  }];
+
+  ruleDimenstionList = [{
+    label: 'Accuracy',
+    value: 'Accuracy'
+  }, {
+    label: 'Consistency',
+    value: 'Consistency'
+  }, {
+    label: 'Integrity',
+    value: 'Integrity'
+  }, {
+    label: 'Uniqueness',
+    value: 'Uniqueness'
+  }, {
+    label: 'Validity',
+    value: 'Validity'
+  }];
+
 
   constructor(
     private fb: FormBuilder,

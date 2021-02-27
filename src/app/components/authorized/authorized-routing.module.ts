@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuardService as AuthGaurd } from 'src/app/services/auth-guard.service';
 import { AuthorizedComponent } from './authorized.component';
+import { DelayAnalysisComponent } from './delay-analysis/delay-analysis.component';
 
 const routes: Routes = [
   {
@@ -11,6 +12,11 @@ const routes: Routes = [
       {
         path: 'dashboard',
         loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
+        // canActivate: [AuthGaurd]
+      },
+      {
+        path: 'delay-analysis',
+        component: DelayAnalysisComponent,
         // canActivate: [AuthGaurd]
       },
       {

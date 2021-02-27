@@ -232,9 +232,48 @@
                             </ng-container>
                           </div>
                         </ng-container>
-  
                       </mat-expansion-panel>
-  
+
+                      <div class="rule-selection-wrapper">
+                        <div class="list flex-containers flex-start wrap cde-fields-wrp">
+                          <div class="list-item-5 outline">
+                              <mat-form-field appearance="outline">
+                                <mat-select [(ngModel)]="ruleType">
+                                  <mat-option *ngFor="let item of ruleTypeList" [value]="item.value">{{item.label}}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                          </div>
+                          <div class="list-item-5 outline">
+                            <mat-form-field appearance="outline">
+                              <mat-select [(ngModel)]="ruleOperator">
+                                <mat-option *ngFor="let item of ruleOperatorList" [value]="item.value">{{item.label}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <div class="list-item-5 outline">
+                            <mat-form-field appearance="outline">
+                              <mat-select [(ngModel)]="ruleValue">
+                                <mat-option *ngFor="let item of ruleValueList" [value]="item.value">{{item.label}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <div class="list-item-5 outline">
+                            <mat-form-field appearance="outline">
+                              <mat-select [(ngModel)]="ruleFormat">
+                                <mat-option *ngFor="let item of ruleFormatList" [value]="item.value">{{item.label}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <div class="list-item-5 outline">
+                            <mat-form-field appearance="outline">
+                              <mat-select [(ngModel)]="ruleDimenstion">
+                                <mat-option *ngFor="let item of ruleDimenstionList" [value]="item.value">{{item.label}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+
                       <div class="act-btn-wrapper">
                         <button mat-stroked-button class="primary-btn-gray white pad" (click)="gotoStepper(1);"><mat-icon class="mar-ico">arrow_back_ios_new</mat-icon> Back</button>
                         <button mat-stroked-button class="primary-btn-gray" 

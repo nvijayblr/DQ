@@ -72,9 +72,28 @@ export class HttpService  {
       }),
     );
   }
-
+  
   launchAnalysisByKey(payload): Observable<any> {
     return this.http.post<any>(`${this.rootUrl}/dev/LaunchAnalysisbyKey`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+  launchDelayAnalysisByKey(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/dev/DelayAnalysis`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  launchDelayAnalysisByAirport(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/dev/DelayAnalysisbyAirPortnew`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {

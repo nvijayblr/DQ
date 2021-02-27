@@ -24,21 +24,21 @@
              <span class="seperator">&nbsp;</span>
  
              <!--  (click)="showCloseSerach()" -->
-             <button mat-icon-button class="notification-menu">
+             <!-- <button mat-icon-button class="notification-menu">
                <mat-icon>search</mat-icon>
              </button>
              <button mat-icon-button class="notification-menu notification-btn" (click)="drawer.toggle()">
                <mat-icon matBadge="{{notificationsCount}}" matBadgeColor="warn">notifications</mat-icon>
-             </button>
+             </button> -->
  
              <button mat-icon-button [matMenuTriggerFor]="menu" [class.userimage]="user.path">
                <div class="profile-pic-small pic-xs img" *ngIf="user.path" [ngStyle]="{'background-image': 'url(' + appConfig.imgBaseUrl + user.path + ')'}"></div>
                <mat-icon *ngIf="!user.path">account_circle</mat-icon>
              </button>
              <mat-menu #menu="matMenu" xPosition="before">
-               <button class="nav-category-item" mat-menu-item routerLink="/auth/personal/settings">
+               <!-- <button class="nav-category-item" mat-menu-item routerLink="/auth/personal/settings">
                  <mat-icon matPrefix>settings</mat-icon>Settings
-               </button>
+               </button> -->
                <mat-divider></mat-divider>
                <button class="nav-category-item" mat-menu-item (click)="doLogout()"><mat-icon>exit_to_app</mat-icon>Logout</button>
              </mat-menu>
@@ -61,12 +61,12 @@
                </mat-select>
              </mat-form-field>
            </div>
-           <div class="list-item-3 list-item outline">
+           <!-- <div class="list-item-3 list-item outline">
              <mat-form-field appearance="outline" class="search">
                <mat-label>Search</mat-label>
                <input matInput placeholder="Search" formControlName="q" maxlength="100" autocomplete="off"/>
              </mat-form-field>
-           </div>
+           </div> -->
            <div class="list-item-3 list-item outline">
              <mat-form-field appearance="outline" class="location">
                <mat-label>Location</mat-label>
