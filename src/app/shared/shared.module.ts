@@ -23,6 +23,7 @@ import { BarChartComponent } from './bar-chart/bar-chart.component';
 import { CylinderChartComponent } from './cylinder-chart/cylinder-chart.component';
 import { ColorDialogComponent } from './color-dialog/color-dialog.component';
 import { CompletenessDialogComponent } from './completeness-dialog/completeness-dialog.component';
+import { RuleSelectorComponent } from './rule-selector/rule-selector.component';
 
 @NgModule({
   imports: [
@@ -52,7 +53,8 @@ import { CompletenessDialogComponent } from './completeness-dialog/completeness-
     BarChartComponent,
     CylinderChartComponent,
     ColorDialogComponent,
-    CompletenessDialogComponent
+    CompletenessDialogComponent,
+    RuleSelectorComponent
   ],
   exports: [
     FormsModule,
@@ -77,7 +79,8 @@ import { CompletenessDialogComponent } from './completeness-dialog/completeness-
     BarChartComponent,
     CylinderChartComponent,
     ColorDialogComponent,
-    CompletenessDialogComponent
+    CompletenessDialogComponent,
+    RuleSelectorComponent
   ],
   providers: [
     DatePipe

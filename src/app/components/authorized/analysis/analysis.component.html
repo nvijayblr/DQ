@@ -234,46 +234,6 @@
                         </ng-container>
                       </mat-expansion-panel>
 
-                      <div class="rule-selection-wrapper">
-                        <div class="list flex-containers flex-start wrap cde-fields-wrp">
-                          <div class="list-item-5 outline">
-                              <mat-form-field appearance="outline">
-                                <mat-select [(ngModel)]="ruleType">
-                                  <mat-option *ngFor="let item of ruleTypeList" [value]="item.value">{{item.label}}</mat-option>
-                                </mat-select>
-                              </mat-form-field>
-                          </div>
-                          <div class="list-item-5 outline">
-                            <mat-form-field appearance="outline">
-                              <mat-select [(ngModel)]="ruleOperator">
-                                <mat-option *ngFor="let item of ruleOperatorList" [value]="item.value">{{item.label}}</mat-option>
-                              </mat-select>
-                            </mat-form-field>
-                          </div>
-                          <div class="list-item-5 outline">
-                            <mat-form-field appearance="outline">
-                              <mat-select [(ngModel)]="ruleValue">
-                                <mat-option *ngFor="let item of ruleValueList" [value]="item.value">{{item.label}}</mat-option>
-                              </mat-select>
-                            </mat-form-field>
-                          </div>
-                          <div class="list-item-5 outline">
-                            <mat-form-field appearance="outline">
-                              <mat-select [(ngModel)]="ruleFormat">
-                                <mat-option *ngFor="let item of ruleFormatList" [value]="item.value">{{item.label}}</mat-option>
-                              </mat-select>
-                            </mat-form-field>
-                          </div>
-                          <div class="list-item-5 outline">
-                            <mat-form-field appearance="outline">
-                              <mat-select [(ngModel)]="ruleDimenstion">
-                                <mat-option *ngFor="let item of ruleDimenstionList" [value]="item.value">{{item.label}}</mat-option>
-                              </mat-select>
-                            </mat-form-field>
-                          </div>
-                        </div>
-                      </div>
-
                       <div class="act-btn-wrapper">
                         <button mat-stroked-button class="primary-btn-gray white pad" (click)="gotoStepper(1);"><mat-icon class="mar-ico">arrow_back_ios_new</mat-icon> Back</button>
                         <button mat-stroked-button class="primary-btn-gray" 
@@ -352,5 +312,29 @@
       </div>
     </div>
 
+
+    <div class="rule-selection-wrapper">
+      <div class="list flex-containers flex-start wrap cde-fields-wrp">
+        <div class="list-item-5 outline">
+          <app-rule-selector [ruleItems]="ruleTypeList" (selectionChange)="ruleType=$event.value"></app-rule-selector>
+        </div>
+        <div class="list-item-5 outline">
+          <app-rule-selector [ruleItems]="ruleOperatorList[ruleType]" (selectionChange)="ruleOperator=$event.value"></app-rule-selector>
+        </div>
+        <div class="list-item-5 outline">
+          <app-rule-selector [ruleItems]="ruleValueList[ruleType]" (selectionChange)="ruleValue=$event.value"></app-rule-selector>
+        </div>
+        <div class="list-item-5 outline">
+          <app-rule-selector [ruleItems]="ruleFormatList[ruleValue]" (selectionChange)="ruleFormat=$event.value"></app-rule-selector>
+        </div>
+        <div class="list-item-5 outline">
+          <app-rule-selector [ruleItems]="ruleDimenstionList" (selectionChange)="ruleDimenstion=$event.value"></app-rule-selector>
+        </div>
+      </div>
+    </div>
+    
+    
+    
   </div>
 </section>
+

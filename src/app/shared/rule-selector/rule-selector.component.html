@@ -1,0 +1,20 @@
+<div class="rule-selector">
+  <div class="list flex-containers flex-start wrap">
+    <div class="custom-value-input">
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="" maxlength="50" autocomplete="off" [(ngModel)]="ruleItem" (keyup)="modelChange(ruleItem)"/>
+      </mat-form-field>
+    </div>
+    <button type="button" mat-icon-button (click)="addRuleItem()" [disabled]="selectedRule" >
+      <mat-icon>add</mat-icon>
+    </button>
+    <button type="button" mat-icon-button class="del-icon" [disabled]="(selectedRule && !selectedRule.type) || !selectedRule">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+  <mat-form-field appearance="outline">
+    <mat-select [(ngModel)]="ruleItem" (ngModelChange)="modelChange($event)">
+      <mat-option *ngFor="let item of ruleItems" [value]="item.value">{{item.label}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>

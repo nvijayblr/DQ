@@ -120,7 +120,7 @@ export class AnalysisComponent implements OnInit {
   cdeStatistics: any = {};
 
   // Rule Dropdowns
-  ruleType = '';
+  ruleType = 'dataType';
   ruleOperator = '';
   ruleValue = '';
   ruleFormat = '';
@@ -128,92 +128,115 @@ export class AnalysisComponent implements OnInit {
 
   ruleTypeList = [{
     label: 'Data Type',
-    value: 'DataType',
+    value: 'dataType',
   }, {
     label: 'Length',
-    value: 'Length',
+    value: 'length',
   }, {
     label: 'Value',
-    value: 'Value',
+    value: 'value',
   }];
 
-  ruleOperatorList = [{
-    label: 'Should be',
-    value: 'Shouldbe'
-  }, {
-    label: 'Should not include',
-    value: 'shouldnotinclude'
-  }, {
-    label: '=',
-    value: 'euqualto'
-  }, {
-    label: '>=',
-    value: 'greaterthanequalto'
-  }, {
-    label: '<=',
-    value: 'lessthanequalto'
-  }, {
-    label: '>',
-    value: 'greaterthan'
-  }, {
-    label: '<',
-    value: 'lessthan'
-  }, {
-    label: 'Same as',
-    value: 'sameas'
-  }, {
-    label: 'Should be in',
-    value: 'shouldbein'
-  }, {
-    label: 'Reference data',
-    value: 'referencedata'
-  }, {
-    label: 'Element',
-    value: 'element'
-  }];
-  
-  ruleValueList = [{
-    label: 'Alpha',
-    value: 'Alpha'
-  }, {
-    label: 'Alphanumeric',
-    value: 'Alphanumeric'
-  }, {
-    label: 'Integer',
-    value: 'Integer'
-  }, {
-    label: 'Numeric',
-    value: 'Numeric'
-  }, {
-    label: 'Date',
-    value: 'Date'
-  }, {
-    label: 'DateTime',
-    value: 'DateTime'
-  }, {
-    label: 'Special Characters',
-    value: 'SpecialCharacters'
-  }, {
-    label: 'Amount',
-    value: 'Amount'
-  }];
-  
-  ruleFormatList = [{
-    label: 'YYYYMMDD',
-    value: 'YYYYMMDD'
-  }, {
-    label: 'DD-MMM-YYYY',
-    value: 'DDMMMYYYY'
-  }, {
-    label: 'DD-MMM-YY',
-    value: 'DD-MMM-YY'
-  }, {
-    label: '2 Decimals',
-    value: '2 Decimals'
-  }, {
-    label: '3 Decimals',
-    value: '3 Decimals'
-  }];
+  ruleOperatorList = {
+    dataType: [{
+        label: 'Should be',
+        value: 'Shouldbe'
+      }],
+    length: [{
+        label: '=',
+        value: 'euqualto'
+      }, {
+        label: '>=',
+        value: 'greaterthanequalto'
+      }, {
+        label: '<=',
+        value: 'lessthanequalto'
+      }, {
+        label: '>',
+        value: 'greaterthan'
+      }, {
+        label: '<',
+        value: 'lessthan'
+      }],
+    value: [{
+        label: 'Should be',
+        value: 'Shouldbe'
+      }, {
+        label: 'Should not include',
+        value: 'shouldnotinclude'
+      }, {
+        label: 'Same as',
+        value: 'sameas'
+      }, {
+        label: 'Should be in',
+        value: 'shouldbein'
+      }, {
+        label: 'Reference data',
+        value: 'referencedata'
+      }, {
+        label: 'Element',
+        value: 'element'
+      }]
+  };
+
+  ruleValueList = {
+    dataType: [{
+      label: 'Alpha',
+      value: 'alpha'
+    }, {
+      label: 'Alphanumeric',
+      value: 'alphanumeric'
+    }, {
+      label: 'Integer',
+      value: 'integer'
+    }, {
+      label: 'Numeric',
+      value: 'numeric'
+    }, {
+      label: 'Date',
+      value: 'date'
+    }, {
+      label: 'DateTime',
+      value: 'datetime'
+    }],
+  value: [{
+      label: 'Special Characters',
+      value: 'specialcharacters'
+    }, {
+      label: 'Amount',
+      value: 'amount'
+    }]
+  };
+
+  ruleFormatList = {
+    date: [{
+        label: 'YYYYMMDD',
+        value: 'YYYYMMDD'
+      }, {
+        label: 'DD-MMM-YYYY',
+        value: 'DDMMMYYYY'
+      }, {
+        label: 'DD-MMM-YY',
+        value: 'DD-MMM-YY'
+      }],
+    datetime: [{
+        label: 'YYYYMMDD HH:MM',
+        value: 'YYYYMMDD'
+      }, {
+        label: 'DD-MMM-YYYY HH:MM',
+        value: 'DDMMMYYYY'
+      }, {
+        label: 'DD-MMM-YY HH:MM',
+        value: 'DD-MMM-YY'
+      }],
+    amount: [{
+        label: '2 Decimals',
+        value: '2 Decimals'
+      }, {
+        label: '3 Decimals',
+        value: '3 Decimals'
+      }]
+  };
 
   ruleDimenstionList = [{
     label: 'Accuracy',
