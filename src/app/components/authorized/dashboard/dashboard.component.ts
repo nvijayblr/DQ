@@ -47,11 +47,11 @@ export class DashboardComponent implements OnInit {
     bgSettings: [{
       min: '100',
       max: '100',
-      color: 'green',
+      colorCtr: 'green',
     }, {
       min: '90',
       max: '100',
-      color: 'red',
+      colorCtr: 'red',
     }]
   };
 
@@ -228,13 +228,14 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  openHighlightSettingsDialog(): void {
+   openHighlightSettingsDialog(): void {
     const dialogRef = this.dialog.open(ColorDialogComponent, {
       width: '800px',
       data: this.settings
     });
-    dialogRef.afterClosed().subscribe(result => {
-       this.settings = result;
+     dialogRef.afterClosed().subscribe(result => {
+        console.log(result);
+        this.settings = result;
     });
   }
 

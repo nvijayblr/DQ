@@ -1,4 +1,5 @@
-<h1 mat-dialog-title  [style.background-color]="colorCtr.value?.rgba"> Completeness Color</h1>
+<h1 mat-dialog-title> Completeness Color</h1>
+      <!-- {{colorCtr.value | json}} -->
 <div mat-dialog-content>
   <!-- <p>Change your Completeness Color</p> -->
   <form [formGroup]="settingsForm" (ngSubmit)="closeSettings()">
@@ -15,20 +16,20 @@
           <mat-label>Max %</mat-label>
            <input type="text" (keypress)="numberOnly($event)" matInput formControlName="max" maxlength="3" autocomplete="off">
          </mat-form-field>        
-         <!-- <mat-form-field>
+          <!-- <mat-form-field>
            <mat-label>Choose Color</mat-label>
            <mat-select matInput formControlName="color">
               <mat-option value="red">Red</mat-option>
               <mat-option value="orange">Orange</mat-option>
               <mat-option value="green">Green</mat-option>
             </mat-select>
-          </mat-form-field> -->
-          <mat-form-field>
+          </mat-form-field>  -->
+           <mat-form-field>
             <mat-label>Choose Color</mat-label>
-            <input matInput [ngxMatColorPicker]="picker" [formControl]="colorCtr" formControlName="color">
+            <input matInput [ngxMatColorPicker]="picker" formControlName="colorCtr">
             <ngx-mat-color-toggle matSuffix [for]="picker"></ngx-mat-color-toggle>
             <ngx-mat-color-picker #picker [touchUi]="touchUi" [color]="color"></ngx-mat-color-picker>
-        </mat-form-field>
+        </mat-form-field> 
         </div>
         <div class="list-item-5 add-remove-button">
           <button type="button" mat-icon-button (click)="addFormItem('bgSettings')" *ngIf="isLast">
