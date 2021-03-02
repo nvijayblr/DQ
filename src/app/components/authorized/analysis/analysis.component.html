@@ -312,8 +312,8 @@
       </div>
     </div>
 
-
-    <div class="rule-selection-wrapper">
+    
+    <div class="rule-selection-wrapper" *ngIf="stepIndex===2">
       <div class="list flex-containers flex-start wrap cde-fields-wrp">
         <div class="list-item-5 outline">
           <app-rule-selector [ruleItems]="ruleTypeList" (selectionChange)="ruleType=$event.value"></app-rule-selector>

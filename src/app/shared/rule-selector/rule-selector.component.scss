@@ -7,3 +7,21 @@
    // height: 31px!important;
  }
 }
+.option-wrp {
+  display:flex; 
+  justify-content: space-between;
+}
+.mat-option .mat-icon.del-icon {
+  margin-right: 0;
+  top: 13px;
+  position: relative;
+  font-size: 20px;
+  cursor: pointer;
+  color: #676767;
+  &:hover {
+    color: #000;
+  }
+}
+.mat-option .add-btn {
+  width: 100%;
+}

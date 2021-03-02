@@ -6,9 +6,6 @@
           <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
           <div class="shrare-post">
             <!-- RULE ANALYST --> 
-            <button type="button" class="ma-cr" mat-icon-button matTooltip="Highlight Settings"  (click)="openHighlightSettingsDialog()">
-              <mat-icon>format_color_fill</mat-icon>
-            </button>
             <mat-card class="border no-rounded list shrare-post" *ngIf="!showAnalysis && role === 'RULE_ANALYST'">
               <div class="list flex-containers flex-start wrap no-margin dash-title">
                 <div class="list-item-2">

@@ -11,13 +11,18 @@ export class RuleSelectorComponent implements OnInit {
   @Output() selectionChange = new EventEmitter<any>();
   ruleItem = '';
   selectedRule: any = {};
+  showAdd = false;
   constructor() { }
 
   ngOnInit() {
   }
 
   modelChange(e) {
-    this.selectedRule = this.ruleItems.filter(rule => rule.value === e)[0];
+    if (!this.ruleItems) {
+      this.ruleItems = [];
+    }
+    const selectedRule = this.ruleItems.filter(rule => rule.value === e);
+    this.selectedRule = selectedRule ? selectedRule[0] : {};
     this.selectionChange.emit({value: e});
     if (this.selectedRule) {
     }
@@ -32,10 +37,16 @@ export class RuleSelectorComponent implements OnInit {
     this.ruleItems.push(this.selectedRule);
   }
 
-  deleteRuleItem(rule) {
+  deleteRuleItem(ev, rule) {
+    ev.stopPropagation();
+    ev.preventDefault();
     const index = this.ruleItems.findIndex(item => item.value === rule.value);
     this.ruleItems.splice(index, 1);
     this.selectedRule = {};
     this.ruleItem = '';
+  }
+
+  showHideAddInput(isShow) {
+    this.showAdd = isShow;
   }
 }
