@@ -47,11 +47,11 @@ export class DashboardComponent implements OnInit {
     bgSettings: [{
       min: '100',
       max: '100',
-      colorCtr: 'green',
+      color: '#000000'
     }, {
       min: '90',
       max: '100',
-      colorCtr: 'red',
+      color: '#cccccc'
     }]
   };
 
@@ -233,9 +233,9 @@ export class DashboardComponent implements OnInit {
       width: '800px',
       data: this.settings
     });
-     dialogRef.afterClosed().subscribe(result => {
-        console.log(result);
-        this.settings = result;
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      this.settings = result;
     });
   }
 

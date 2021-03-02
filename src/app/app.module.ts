@@ -49,12 +49,12 @@ import { SignupComponent } from './components/login-signup/signup/signup.compone
               '843617944994-lh919mbd5u8p0htc45bv1oucbrb5a9oq.apps.googleusercontent.com'
             ),
           },
-          
+
           {
             id: FacebookLoginProvider.PROVIDER_ID,
             provider: new FacebookLoginProvider('309241957147893'),
            },
-          
+
         ],
       } as SocialAuthServiceConfig,
     }

@@ -26,9 +26,9 @@
           </mat-form-field>  -->
            <mat-form-field>
             <mat-label>Choose Color</mat-label>
-            <input matInput [ngxMatColorPicker]="picker" formControlName="colorCtr">
+            <input matInput [ngxMatColorPicker]="picker" formControlName="color">
             <ngx-mat-color-toggle matSuffix [for]="picker"></ngx-mat-color-toggle>
-            <ngx-mat-color-picker #picker [touchUi]="touchUi" [color]="color"></ngx-mat-color-picker>
+            <ngx-mat-color-picker #picker [touchUi]="touchUi" [color]="colorTemplate"></ngx-mat-color-picker>
         </mat-form-field> 
         </div>
         <div class="list-item-5 add-remove-button">
