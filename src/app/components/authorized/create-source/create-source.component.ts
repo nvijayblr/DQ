@@ -115,10 +115,14 @@ export class CreateSourceComponent implements OnInit {
     this.user = this.authGuardService.getLoggedInUserDetails();
     this.userId = this.user.user_id;
 
-    const analysis = this.messageService.getSource();
-
+    let analysis = this.messageService.getSource();
+    if (!analysis.source) {
+      analysis = {
+        source:  {}
+      };
+    }
     this.analysisForm = this.fb.group({
-      sourceDataName: [analysis.source.sourceDataName || '', [Validators.required, Validators.maxLength(100)]],
+      sourceDataName: [analysis.source.sourceDataName, [Validators.required, Validators.maxLength(100)]],
       sourceDataDescription: [analysis.source.sourceDataDescription || ''],
       sourceFileName: [analysis.source.sourceFileName || ''],
       templateSourcePath: [analysis.source.templateSourcePath || ''],

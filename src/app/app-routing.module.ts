@@ -8,13 +8,13 @@ import { SignupComponent } from './components/login-signup/signup/signup.compone
 const routes: Routes = [
   // { path: '', component: LandingComponent },
    { path: '', component: LoginComponent },
-   
+
   // { path: 'signup', component: SignupComponent },
   {
     path: 'auth',
     loadChildren: () => import('./components/authorized/authorized.module').then(m => m.AuthorizedModule),
     canActivate: [AuthGaurd]
-   },{
+   }, {
   //   path: 'static',
   //   loadChildren: () => import('./components/static/static.module').then(m => m.StaticModule)
   // }, {
