@@ -9,7 +9,7 @@
             <mat-card class="border no-rounded list shrare-post" *ngIf="!showAnalysis && role === 'RULE_ANALYST'">
               <div class="list flex-containers flex-start wrap no-margin dash-title">
                 <div class="list-item-2">
-                  <h1 class="share-post-title no-margin">Your<span class="red"> Dashboard</span></h1>
+                  <h1 class="share-post-title no-margin">Source<span class="red"> List</span></h1>
                 </div>
                 <div class="list-item-2 text-right">
                   <button mat-stroked-button class="primary-btn-red" routerLink="/auth/analysis">New Rules</button>
@@ -17,7 +17,58 @@
                 </div>
               </div>
 
+              <!-- Source List -->
               <div class="analysis-preview">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Source Name</th>
+                      <th>File Name</th>
+                      <th>Reference Data</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of sourceList;">
+                      <td>{{data.sourceId}}</td>
+                      <td>{{data.source.sourceDataName}}</td>
+                      <td>{{data.source.sourceFileName}}</td>
+                      <td>
+                        <div *ngFor="let ref of data.reference;">
+                          {{ref.referenceId}} - {{ref.referenceDataName}} - {{ref.referenceFileName}}
+                        </div>
+                      </td>
+                      <td>
+                        <!-- <button type="button" mat-icon-button (click)="createEditRuleset(data,'add')" matTooltip="Create Ruleset">
+                          <mat-icon>add</mat-icon>
+                        </button> -->
+                        <button type="button" mat-icon-button (click)="editSourceData(data)" matTooltip="Edit Source">
+                          <mat-icon>edit</mat-icon>
+                        </button>
+                        <!-- <button type="button" class="del-icon" mat-icon-button [disabled]="!data.rulesetId" matTooltip="Delete Ruleset">
+                          <mat-icon>delete</mat-icon>
+                        </button> -->
+                        <!-- <button class="del-icon launch-icon" mat-icon-button 
+                          [disabled]="!data.rulesetId" 
+                          (click)="launchAnalysis(data)" 
+                          matTooltip="Launch Analysis">
+                          <mat-icon>launch</mat-icon>
+                        </button>
+                        <button class="del-icon launch-icon" mat-icon-button 
+                          [disabled]="!data.rulesetId" 
+                          (click)="launchDelayAnalysis(data)" 
+                          matTooltip="Delay Analysis">
+                          <mat-icon>alarm</mat-icon>
+                        </button> -->
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+
+              <!-- <div class="analysis-preview">
                 <table class="table">
                   <thead>
                     <tr>
@@ -52,9 +103,6 @@
                         (click)="createEditRuleset(data,'edit')" [disabled]="!data.rulesetId"  matTooltip="Edit Ruleset">
                           <mat-icon>edit</mat-icon>
                         </button>
-                        <!-- <button type="button" class="del-icon" mat-icon-button [disabled]="!data.rulesetId" matTooltip="Delete Ruleset">
-                          <mat-icon>delete</mat-icon>
-                        </button> -->
                         <button class="del-icon launch-icon" mat-icon-button 
                           [disabled]="!data.rulesetId" 
                           (click)="launchAnalysis(data)" 
@@ -71,7 +119,7 @@
                     </tr>
                   </tbody>
                 </table>
-              </div>
+              </div> -->
             </mat-card>
 
             <!-- OPERATIONS -->

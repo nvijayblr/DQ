@@ -30,4 +30,10 @@ export class MessageService {
         return analysis;
     }
 
+    getSource() {
+        const sourceObj = localStorage.getItem('dq-source-data');
+        const source = sourceObj ? JSON.parse(sourceObj) : '';
+        return source;
+    }
+
 }

@@ -7,7 +7,8 @@ import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, ViewEnc
 })
 export class RuleSelectorComponent implements OnInit {
   @Input() ruleItems: any = [];
-  // @Input() chartType;
+  @Input() showAddItem = true;
+
   @Output() selectionChange = new EventEmitter<any>();
   ruleItem = '';
   selectedRule: any = {};

@@ -292,9 +292,6 @@ export class AnalysisComponent implements OnInit {
       refernceColumns: [[]]
     });
 
-
-
-    // this.getAllPosts();
     const analysis = this.messageService.getAnalysis();
     this.analysisForm = this.fb.group({
       name: [analysis.sourceName || '', [Validators.required, Validators.maxLength(100)]],
@@ -415,31 +412,31 @@ export class AnalysisComponent implements OnInit {
   }
 
    onSourceCSVUpload(file) {
-      if (file.type === 'application/vnd.ms-excel') {
-         this.fileTypeErr = false;
-      } else {
-         this.fileTypeErr = true;
-      }
-      const formData: any = new FormData();
-      formData.append('file[]', file);
-      formData.append('data', JSON.stringify({
-        sourceFilename: file.name
-      })
-    );
-      const filename = file.name.split('.')[0];
-      const fileExt = file.name.split('.')[1];
-      if (fileExt === 'csv') {
-         this.fileTypeErr = false;
-      } else {
-         this.fileTypeErr = true;
-      }
-      this.afControls.sourceFilename.setValue(file.name);
-      this.afControls.name.setValue(filename);
-      this.afControls.rulesetName.setValue(filename);
-      this.isLoading = true;
-      this.isSourceUploaded = false;
-      this.loaderMsg = 'Uploading the source csv...';
-      this.http.uploadSourceCSV(formData).subscribe((result: any) => {
+    if (file.type === 'application/vnd.ms-excel') {
+        this.fileTypeErr = false;
+    } else {
+        this.fileTypeErr = true;
+    }
+    const formData: any = new FormData();
+    formData.append('file[]', file);
+    formData.append('data', JSON.stringify({
+      sourceFilename: file.name
+    })
+  );
+    const filename = file.name.split('.')[0];
+    const fileExt = file.name.split('.')[1];
+    if (fileExt === 'csv') {
+        this.fileTypeErr = false;
+    } else {
+        this.fileTypeErr = true;
+    }
+    this.afControls.sourceFilename.setValue(file.name);
+    this.afControls.name.setValue(filename);
+    this.afControls.rulesetName.setValue(filename);
+    this.isLoading = true;
+    this.isSourceUploaded = false;
+    this.loaderMsg = 'Uploading the source csv...';
+    this.http.uploadSourceCSV(formData).subscribe((result: any) => {
       this.isLoading = false;
       this.afControls.sourcepath.setValue(result.sourcepath);
       const columns = (result && result.columns) ? result.columns : [];

@@ -47,13 +47,15 @@ export class DashboardComponent implements OnInit {
     bgSettings: [{
       min: '100',
       max: '100',
-      color: '#000000'
+      color: '#14960b'
     }, {
       min: '90',
       max: '100',
-      color: '#cccccc'
+      color: '#ff2900'
     }]
   };
+
+  sourceList: any = [];
 
   constructor(
     public dialog: MatDialog,
@@ -66,12 +68,35 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getAllAnalysis();
+    this.getAllSources();
+    // this.getAllAnalysis();
   }
+
+  getAllSources() {
+    this.isLoading = true;
+    this.loaderMsg = 'Loading Sources...';
+    this.http.getSources().subscribe((result: any) => {
+      console.log(result);
+      this.sourceList = result ? result : [];
+      this.isLoading = false;
+    }, (error) => {
+      this.isLoading = false;
+    });
+  }
+
+  editSourceData(sourceData) {
+    localStorage.setItem('dq-source-data', JSON.stringify(sourceData));
+    this.router.navigate(
+      [`auth/create-source-data`],
+      {queryParams: {sourceId: sourceData.sourceId, mode: 'edit'}}
+    );
+  }
+
+
 
   getAllAnalysis() {
     this.isLoading = true;
-    this.loaderMsg = 'Saving Ruleset...';
+    this.loaderMsg = 'Loading Analysis...';
     this.http.getAllAnalysis().subscribe((result: any) => {
       this.analysisList = result.Analysis ? result.Analysis : [];
       // console.log(this.analysisList);

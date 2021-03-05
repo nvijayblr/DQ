@@ -30,7 +30,7 @@ export class HttpService  {
     private authGuardService: AuthGuardService
   ) {
     // this.rootUrl = env.baseUrl;
-    this.rootUrl = 'https://zqmp1698p6.execute-api.us-east-1.amazonaws.com';
+    this.rootUrl = 'https://tpp6h7t8bf.execute-api.us-west-2.amazonaws.com';
   }
 
   uploadSourceCSV(payload): Observable<any> {
@@ -72,7 +72,7 @@ export class HttpService  {
       }),
     );
   }
-  
+
   launchAnalysisByKey(payload): Observable<any> {
     return this.http.post<any>(`${this.rootUrl}/dev/LaunchAnalysisbyKey`, payload).pipe(
       tap((res) => {
@@ -131,6 +131,30 @@ export class HttpService  {
       }),
     );
   }
+
+  // New APIs
+
+  saveSource(payload, method): Observable<any> {
+    console.log(method);
+    return this.http[method]<any>(`${this.rootUrl}/dev/api/configureSource`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  getSources(): Observable<any> {
+    return this.http.get<any>(`${this.rootUrl}/dev/api/listSource`).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
 
 
 
