@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, FormArray, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
-import { Color } from '@angular-material-components/color-picker';
+// import { Color } from '@angular-material-components/color-picker';
 
 @Component({
   selector: 'app-color-dialog',
@@ -50,7 +50,8 @@ export class ColorDialogComponent implements OnInit {
       return this.fb.group({
         min: [value.min, [Validators.required]],
         max: [value.max, [Validators.required]],
-        color: [new Color(tColor.r, tColor.g, tColor.b), [Validators.required]]
+        // color: [new Color(tColor.r, tColor.g, tColor.b), [Validators.required]]
+        color: [tColor.r, tColor.g, tColor.b, [Validators.required]]
       });
     }
   }
