@@ -26,9 +26,6 @@
                                 (fileSelected)="onSourceFileSelected($event)"
                               >
                               </app-image-cropper>
-                              <mat-error *ngIf="fileTypeErr">
-                                 Please upload .CSV Format only
-                              </mat-error>
                          </div>
                           <div class="list-item-2 outline">
                             <mat-label>Source Name<span class="red">*</span></mat-label>
@@ -85,7 +82,7 @@
                       </div>                      
                     <div class="act-btn-wrapper">
                         <button mat-stroked-button class="primary-btn-gray"
-                        [disabled]="!afControls.sourceDataName.value || fileTypeErr"
+                        [disabled]="!afControls.sourceDataName.value"
                         (click)="gotoStepper(1, 'CSV')">Next <mat-icon>arrow_forward_ios</mat-icon></button>
                     </div>
                   </mat-card>
