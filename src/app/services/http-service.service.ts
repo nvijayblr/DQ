@@ -54,7 +54,7 @@ export class HttpService  {
   }
 
   getColumnsRules(payload): Observable<any> {
-    return this.http.post<any>(`${this.rootUrl}/dev/rules`, payload).pipe(
+    return this.http.post<any>(`${this.rootUrl}/dev/api/rules`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
@@ -74,7 +74,7 @@ export class HttpService  {
   }
 
   launchAnalysisByKey(payload): Observable<any> {
-    return this.http.post<any>(`${this.rootUrl}/dev/LaunchAnalysisbyKey`, payload).pipe(
+    return this.http.post<any>(`${this.rootUrl}/dev/api/LaunchAnalysisbyKey`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
@@ -83,7 +83,7 @@ export class HttpService  {
     );
   }
   launchDelayAnalysisByKey(payload): Observable<any> {
-    return this.http.post<any>(`${this.rootUrl}/dev/DelayAnalysis`, payload).pipe(
+    return this.http.post<any>(`${this.rootUrl}/dev/api/DelayAnalysis`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
@@ -93,7 +93,7 @@ export class HttpService  {
   }
 
   launchDelayAnalysisByAirport(payload): Observable<any> {
-    return this.http.post<any>(`${this.rootUrl}/dev/DelayAnalysisbyAirPortnew`, payload).pipe(
+    return this.http.post<any>(`${this.rootUrl}/dev/api/DelayAnalysisbyAirPortnew`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
@@ -113,7 +113,7 @@ export class HttpService  {
   }
 
   createEditRuleset(payload, method) {
-    return this.http[method]<any>(`${this.rootUrl}/dev/CreateRuleSet`, payload).pipe(
+    return this.http[method]<any>(`${this.rootUrl}/dev/api/CreateRuleSet`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {

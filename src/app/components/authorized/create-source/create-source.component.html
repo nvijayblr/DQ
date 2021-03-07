@@ -29,7 +29,6 @@
                               <mat-error *ngIf="fileTypeErr">
                                  Please upload .CSV Format only
                               </mat-error>
-                              <div class="success-msg" *ngIf="isSourceUploaded && !fileTypeErr">Source CSV uploaded successfully.</div>
                          </div>
                           <div class="list-item-2 outline">
                             <mat-label>Source Name<span class="red">*</span></mat-label>
@@ -49,20 +48,38 @@
                       <div class="rule-selection-wrapper">
                         <div class="list flex-containers flex-start wrap cde-fields-wrp">
                           <div class="list-item-4 outline">
-                             <span class="sub-title">Multi Source</span>
-                            <app-rule-selector [ruleItems]="multiSourceList"></app-rule-selector>
+                            <span class="sub-title">Multi Source</span>
+                            <app-rule-selector 
+                              multiple="true" 
+                              [ruleItems]="multiSourceList" 
+                              [initValue]="sourceSettings.multiSourceOptions"
+                              (selectionChange)="sourceSettings.multiSourceOptions=$event.value"
+                            ></app-rule-selector>
                           </div>
                           <div class="list-item-4 outline">
-                           <span class="sub-title">Frequency</span>
-                            <app-rule-selector [ruleItems]="frequencyList"></app-rule-selector>
+                            <span class="sub-title">Frequency</span>
+                            <app-rule-selector 
+                              [ruleItems]="frequencyList"
+                              [initValue]="sourceSettings.frequency" 
+                              (selectionChange)="sourceSettings.frequency=$event.value"
+                            ></app-rule-selector>
                           </div>
                           <div class="list-item-4 outline">
-                           <span class="sub-title">Time</span>
-                            <app-rule-selector [ruleItems]="timeList"></app-rule-selector>
+                            <span class="sub-title">Time</span>
+                            <app-rule-selector 
+                              [ruleItems]="timeList" 
+                              [initValue]="sourceSettings.uploadTime" 
+                              (selectionChange)="sourceSettings.uploadTime=$event.value"
+                            ></app-rule-selector>
                           </div>
                           <div class="list-item-4 outline">
-                           <span class="sub-title"> Department</span>
-                            <app-rule-selector [ruleItems]="departmentList"></app-rule-selector>
+                            <span class="sub-title"> Department</span>
+                            <app-rule-selector 
+                              multiple="true" 
+                              [ruleItems]="departmentList" 
+                              [initValue]="sourceSettings.department" 
+                              (selectionChange)="sourceSettings.department=$event.value"
+                            ></app-rule-selector>
                           </div>
                         </div>
                       </div>                      

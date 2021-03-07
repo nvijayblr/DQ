@@ -112,7 +112,7 @@ export class DashboardComponent implements OnInit {
     this.selectedAnalysis = analysis;
     this.loaderMsg = 'Launching analysis...';
     const payload = {
-      analysisId: analysis.analysisId,
+      sourceId: analysis.sourceId,
       rulesetId: analysis.rulesetId
     };
     this.selectedColumns = this.selectedAnalysis.rules[0].selectedColumns;
@@ -149,7 +149,7 @@ export class DashboardComponent implements OnInit {
     this.selectedKey = keyname;
     this.loaderMsg = 'Launching analysis...';
     const payload = {
-      analysisId: this.selectedAnalysis.analysisId,
+      sourceId: this.selectedAnalysis.sourceId,
       rulesetId: this.selectedAnalysis.rulesetId,
       keyname
     };
@@ -199,23 +199,24 @@ export class DashboardComponent implements OnInit {
   }
 
    createEditRuleset(data, mode) {
-    let rules = data.rules.filter((rule) => data.rulesetId === rule.rulesetId);
-    rules = (rules && rules.length) ? rules[0] : {columns: [], selectedColumns: []};
-    console.log(rules);
+     console.log(data);
+     let rules = data.rules.filter((rule) => data.rulesetId === rule.rulesetId);
+     rules = (rules && rules.length) ? rules[0] : {columns: [], selectedColumns: []};
+     console.log(rules);
     // If create ruleset take the columns list from default ruleset.
-    if (!data.rulesetId) {
+     if (!data.rulesetId) {
       rules.columns = data.rules && data.rules.length ? data.rules[0].columns : [];
     }
-    const columns = [];
-    rules.columns.map((column, index) => {
+     const columns = [];
+     data.source.availableColumns.map((column, index) => {
       columns.push({id: (index + 1), title: column});
     });
 
-    const selectedColumns = [];
-    rules.selectedColumns.map((column, index) => {
+     const selectedColumns = [];
+     rules.selectedColumns.map((column, index) => {
       selectedColumns.push({id: (index + 1), title: column});
     });
-    const analysis = {
+     const analysis = {
        ...data,
        mode,
       columns,
@@ -223,10 +224,10 @@ export class DashboardComponent implements OnInit {
       rulesetName: rules.rulesetName,
       rules
     };
-    localStorage.setItem('analysis', JSON.stringify(analysis));
-    this.router.navigate(
+     localStorage.setItem('analysis', JSON.stringify(analysis));
+     this.router.navigate(
       [`auth/analysis`],
-      {queryParams: {analysisId: analysis.analysisId, rulesetId: analysis.rulesetId, mode: analysis.mode}}
+      {queryParams: {sourceId: analysis.sourceId, rulesetId: analysis.rulesetId, mode: analysis.mode}}
     );
   }
 

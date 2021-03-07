@@ -3,30 +3,48 @@ import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, ViewEnc
 @Component({
   selector: 'app-rule-selector',
   templateUrl: './rule-selector.component.html',
-  styleUrls: ['./rule-selector.component.scss']
+  styleUrls: ['./rule-selector.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class RuleSelectorComponent implements OnInit {
   @Input() ruleItems: any = [];
   @Input() showAddItem = true;
+  @Input() initValue: any;
+  @Input() multiple = false;
 
   @Output() selectionChange = new EventEmitter<any>();
   ruleItem = '';
-  selectedRule: any = {};
+  selectedRule: any = [];
   showAdd = false;
   constructor() { }
 
   ngOnInit() {
+    if (this.initValue) {
+      if (this.multiple) {
+        this.selectedRule = this.initValue;
+      } else {
+        this.selectedRule = [this.initValue];
+      }
+    }
+    this.ruleItem = this.initValue;
   }
 
   modelChange(e) {
     if (!this.ruleItems) {
       this.ruleItems = [];
     }
-    const selectedRule = this.ruleItems.filter(rule => rule.value === e);
-    this.selectedRule = selectedRule ? selectedRule[0] : {};
-    this.selectionChange.emit({value: e});
-    if (this.selectedRule) {
+    let selectedRule = [];
+    this.selectedRule = [];
+    if (this.multiple) {
+      selectedRule = this.ruleItems.filter(rule => e.includes(rule.value));
+    } else {
+      selectedRule = this.ruleItems.filter(rule => rule.value === e);
     }
+    selectedRule.map(rule => {
+      this.selectedRule.push(rule.label);
+    });
+
+    this.selectionChange.emit({value: e});
   }
 
   addRuleItem(selectedRule) {

@@ -12,7 +12,7 @@
                   <h1 class="share-post-title no-margin">Source<span class="red"> List</span></h1>
                 </div>
                 <div class="list-item-2 text-right">
-                  <button mat-stroked-button class="primary-btn-red" routerLink="/auth/analysis">New Rules</button>
+                  <!-- <button mat-stroked-button class="primary-btn-red" routerLink="/auth/analysis">New Rules</button> -->
                   <button mat-stroked-button class="primary-btn-red blue" routerLink="/auth/create-source-data">New Source</button>
                 </div>
               </div>
@@ -25,7 +25,8 @@
                       <th>ID</th>
                       <th>Source Name</th>
                       <th>File Name</th>
-                      <th>Reference Data</th>
+                      <th>Referennce</th>
+                      <th>Ruleset Name</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -39,51 +40,6 @@
                           {{ref.referenceId}} - {{ref.referenceDataName}} - {{ref.referenceFileName}}
                         </div>
                       </td>
-                      <td>
-                        <!-- <button type="button" mat-icon-button (click)="createEditRuleset(data,'add')" matTooltip="Create Ruleset">
-                          <mat-icon>add</mat-icon>
-                        </button> -->
-                        <button type="button" mat-icon-button (click)="editSourceData(data)" matTooltip="Edit Source">
-                          <mat-icon>edit</mat-icon>
-                        </button>
-                        <!-- <button type="button" class="del-icon" mat-icon-button [disabled]="!data.rulesetId" matTooltip="Delete Ruleset">
-                          <mat-icon>delete</mat-icon>
-                        </button> -->
-                        <!-- <button class="del-icon launch-icon" mat-icon-button 
-                          [disabled]="!data.rulesetId" 
-                          (click)="launchAnalysis(data)" 
-                          matTooltip="Launch Analysis">
-                          <mat-icon>launch</mat-icon>
-                        </button>
-                        <button class="del-icon launch-icon" mat-icon-button 
-                          [disabled]="!data.rulesetId" 
-                          (click)="launchDelayAnalysis(data)" 
-                          matTooltip="Delay Analysis">
-                          <mat-icon>alarm</mat-icon>
-                        </button> -->
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-
-              <!-- <div class="analysis-preview">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Source Name</th>
-                      <th>File Name</th>
-                      <th>Ruleset Name</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let data of analysisList;">
-                      <td>{{data.analysisId}}</td>
-                      <td>{{data.sourceName}}</td>
-                      <td>{{data.sourceFilename}}</td>
                       <td>
                         <div class="outline">
                           <mat-form-field appearance="outline">
@@ -119,7 +75,7 @@
                     </tr>
                   </tbody>
                 </table>
-              </div> -->
+              </div>
             </mat-card>
 
             <!-- OPERATIONS -->

@@ -22,6 +22,11 @@
     color: #000;
   }
 }
-.mat-option .add-btn {
-  width: 100%;
+.mat-option.add-option {
+  .add-btn {
+    width: 100%;
+  }
+  .mat-pseudo-checkbox {
+    display: none;
+  }
 }

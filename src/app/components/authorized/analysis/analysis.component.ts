@@ -69,8 +69,8 @@ export class AnalysisComponent implements OnInit {
   selectedReferenceColumns: any = [];
   analysisForm: FormGroup;
   columnsForm: FormGroup;
-
   selectedRuleColumn = '';
+
   ruleTypes = [{
     value: 'DataType',
     label: 'Data Type'
@@ -111,10 +111,12 @@ export class AnalysisComponent implements OnInit {
     label: 'Alhpa Numberic'
   }];
 
+  sourceList = [];
+  selectedSource: any = {};
   rulesList = [];
   showCDECar = false;
   analyseData = [];
-  analysisId = '';
+  sourceId = '';
   mode;
   rulesetId = '';
   cdeStatistics: any = {};
@@ -267,10 +269,10 @@ export class AnalysisComponent implements OnInit {
     private messageService: MessageService) {
       this.appConfig = appConfig;
       this.route.queryParams.subscribe(params => {
-         this.analysisId = params.analysisId;
+         this.sourceId = params.sourceId;
          this.mode = params.mode;
          this.rulesetId = params.rulesetId;
-         if (!params.analysisId) {
+         if (!params.sourceId) {
           localStorage.removeItem('analysis');
         }
       });
@@ -281,6 +283,7 @@ export class AnalysisComponent implements OnInit {
     this.user = this.authGuardService.getLoggedInUserDetails();
     this.userId = this.user.user_id;
 
+    this.getAllSources();
     if (localStorage.getItem('isInitLoad') && !this.user.emailVerified && !this.user.phonenoVerified) {
       // this.showVerifyEmailPhoneDialog();
     }
@@ -293,11 +296,13 @@ export class AnalysisComponent implements OnInit {
     });
 
     const analysis = this.messageService.getAnalysis();
+
     this.analysisForm = this.fb.group({
-      name: [analysis.sourceName || '', [Validators.required, Validators.maxLength(100)]],
-      sourceFilename: [analysis.sourceFilename || ''],
-      description: [analysis.description || ''],
-      sourcepath: [analysis.sourcepath || ''],
+      sourceId: [{value: analysis.sourceId || '', disabled: true}],
+      name: [{value: analysis.source.sourceDataName || '', disabled: true}, [Validators.required, Validators.maxLength(100)]],
+      sourceFilename: [analysis.source.sourceFileName || ''],
+      description: [{value: analysis.source.sourceDataDescription, disabled: true} || ''],
+      sourcepath: [analysis.source.templateSourcePath || ''],
       rulesetName: [analysis.rulesetName || '', [Validators.required, Validators.maxLength(100)]],
       sourceCSV: [''],
       startDate: [''],
@@ -306,8 +311,13 @@ export class AnalysisComponent implements OnInit {
       columnRules: this.fb.array([]),
     });
 
+    console.log(analysis);
+
     if (analysis) {
-      this.rulesList = analysis.rules.ruleset;
+      this.selectedSource = analysis;
+      if (this.mode === 'edit') {
+        this.rulesList = analysis.rules.ruleset;
+      }
       this.selectedColumns = analysis.selectedColumns;
       this.availableColumns = analysis.columns.filter((column) => {
         const colFound = analysis.selectedColumns.filter((col) => {
@@ -320,26 +330,39 @@ export class AnalysisComponent implements OnInit {
       this.columnsForm.controls.columns.setValue(this.selectedColumns);
       this.initRulesFormArray();
     }
-    if (this.mode === 'edit') {
-       this.analysisForm.get('name').disable();
-     }
-
     const referenceCSV = this.analysisForm.controls.referenceCSV as FormArray;
-    const refCSVList = [{
-      id: 1,
-      csv: ''
-    }];
-    refCSVList.map(refCSV => {
-      referenceCSV.push(this.intiFormArrays('referenceCSV', refCSV));
+    const referenceData = analysis.reference ? analysis.reference : [];
+
+    if (this.mode === 'edit') {
+      const refSelectedColumns = analysis.rules.refSelectedColumns.map((column, index) => {
+        return {
+          id: (index + 1),
+          title: column
+        };
+      });
+      this.selectedReferenceColumns = refSelectedColumns;
+    }
+
+    referenceData.map(refData => {
+      referenceCSV.push(this.intiFormArrays('referenceData', refData));
     });
   }
 
   intiFormArrays(field, value: any = {}) {
-    if (field === 'referenceCSV') {
+    if (field === 'referenceData') {
+      const refAvailableColumns = value.availableRefColumns.map((column, index) => {
+        return {
+          id: (index + 1),
+          title: column
+        };
+      });
+      this.availableReferenceColumns = refAvailableColumns;
       return this.fb.group({
         id: [value.id],
-        referenceColumns: [[]],
-        referencePath: ''
+        referenceDataName: [{value: value.referenceDataName, disabled: true}],
+        referenceDataDescription: [{value: value.referenceDataDescription, disabled: true}],
+        referenceColumns: [refAvailableColumns],
+        referencePath: [{value: value.referenceFileName, disabled: true}]
       });
     }
     if (field === 'columnRules') {
@@ -407,77 +430,34 @@ export class AnalysisComponent implements OnInit {
     fbArray.removeAt(index);
   }
 
+  getAllSources() {
+    this.isLoading = true;
+    this.loaderMsg = 'Loading Sources...';
+    this.http.getSources().subscribe((result: any) => {
+      this.sourceList = result ? result : [];
+      this.isLoading = false;
+    }, (error) => {
+      this.isLoading = false;
+    });
+  }
+
+  onSourceChange(e) {
+    this.selectedSource = this.sourceList.filter(item => item.sourceId === e.value)[0];
+    this.availableColumns = this.selectedSource.source.availableColumns.map((column, index) => {
+      return {
+          id: (index + 1),
+          title: column
+      };
+    });
+
+    this.afControls.sourcepath.setValue(this.selectedSource.source.templateSourcePath);
+    this.afControls.sourceFilename.setValue(this.selectedSource.source.sourceFileName);
+    this.afControls.name.setValue(this.selectedSource.source.sourceDataName);
+    this.afControls.rulesetName.setValue(this.selectedSource.source.sourceDataName);
+  }
+
   onUploadCompleted(e, formControl) {
     formControl.controls.path.setValue(e.path);
-  }
-
-   onSourceCSVUpload(file) {
-    if (file.type === 'application/vnd.ms-excel') {
-        this.fileTypeErr = false;
-    } else {
-        this.fileTypeErr = true;
-    }
-    const formData: any = new FormData();
-    formData.append('file[]', file);
-    formData.append('data', JSON.stringify({
-      sourceFilename: file.name
-    })
-  );
-    const filename = file.name.split('.')[0];
-    const fileExt = file.name.split('.')[1];
-    if (fileExt === 'csv') {
-        this.fileTypeErr = false;
-    } else {
-        this.fileTypeErr = true;
-    }
-    this.afControls.sourceFilename.setValue(file.name);
-    this.afControls.name.setValue(filename);
-    this.afControls.rulesetName.setValue(filename);
-    this.isLoading = true;
-    this.isSourceUploaded = false;
-    this.loaderMsg = 'Uploading the source csv...';
-    this.http.uploadSourceCSV(formData).subscribe((result: any) => {
-      this.isLoading = false;
-      this.afControls.sourcepath.setValue(result.sourcepath);
-      const columns = (result && result.columns) ? result.columns : [];
-      this.availableColumns = columns.map((column, index) => {
-        return {
-            id: (index + 1),
-            title: column
-        };
-      });
-      this.isSourceUploaded = true;
-    }, (error) => {
-      this.isLoading = false;
-      this.isSourceUploaded = false;
-    });
-  }
-
-  onReferenceCSVUpload(file, reference) {
-    const formData: any = new FormData();
-    formData.append('file[]', file);
-    this.isLoading = true;
-    this.isSourceUploaded = false;
-    this.loaderMsg = 'Uploading the reference csv...';
-
-    this.http.uploadReferenceCSV(formData).subscribe((result: any) => {
-      if (result && result.length) {
-        const refData = result && result.length ? result[0] : {};
-        reference.controls.referenceColumns.setValue(refData.referenceColumns);
-        reference.controls.referencePath.setValue(refData.referencePath);
-        const refColumns = reference.value.referenceColumns.map((column, index) => {
-          return {
-              id: (index + 1),
-              title: column
-          };
-        });
-        this.availableReferenceColumns = refColumns;
-      }
-      this.isLoading = false;
-    }, (error) => {
-      this.isLoading = false;
-      this.isSourceUploaded = false;
-    });
   }
 
   getColumnRules() {
@@ -542,29 +522,11 @@ export class AnalysisComponent implements OnInit {
     this.gotoStepper(3);
   }
 
-  saveAnalysis() {
-    this.isLoading = true;
-    this.loaderMsg = 'Saving Source...';
-    const analysis = {
-      analysisId: this.analysisId ? this.analysisId : undefined,
-      sourceFilename: this.afControls.sourceFilename.value,
-      sourceName: this.afControls.name.value,
-      description: this.afControls.description.value,
-      sourcepath: this.afControls.sourcepath.value,
-      columns: this.availableColumns.map(col => col.title),
-      reference: this.afControls.referenceCSV.value
-    };
-    this.http.saveAnalysis(analysis, this.analysisId ? 'put' : 'post').subscribe((result: any) => {
-      this.createEditRuleset(result.analysisId);
-    }, (error) => {
-      this.isLoading = false;
-    });
-  }
-
-  createEditRuleset(analysisId) {
+  createEditRuleset() {
     this.isLoading = true;
     this.loaderMsg = 'Saving Ruleset...';
     const ruleset = {
+      sourceId: this.selectedSource.sourceId,
       rulesetId: this.rulesetId ? this.rulesetId : undefined,
       sourcepath: this.afControls.sourcepath.value,
       selectedColumns: this.selectedColumns.map(col => col.title),
@@ -573,7 +535,6 @@ export class AnalysisComponent implements OnInit {
       ruleset: this.afControls.columnRules.value,
       startDate: this.afControls.startDate.value,
       endDate: this.afControls.endDate.value,
-      analysisId
     };
     this.http.createEditRuleset(ruleset, this.rulesetId ? 'put' : 'post').subscribe((result: any) => {
       this.isLoading = false;
@@ -584,16 +545,6 @@ export class AnalysisComponent implements OnInit {
   }
 
    gotoStepper(index, tab = '') {
-      if (this.mode === 'add') {
-         if (this.analysisForm.controls.name.value === this.analysisForm.controls.rulesetName.value) {
-            this.uniqueName = true;
-            return false;
-         }
-     }
-    // if (tab === 'CSV') {
-    //   console.log(this.afControls.sourceCSV);
-    //   return;
-    // }
       this.stepIndex = index;
   }
 

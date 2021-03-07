@@ -73,6 +73,15 @@ export class CreateSourceComponent implements OnInit {
     value: 'Dept-3',
   }];
 
+  sourceSettings = {
+    isMuliSourceData: 'true',
+    multiSourceOptions: [],
+    frequency: '',
+    uploadDate: '',
+    uploadTime: '',
+    department: []
+  };
+
   user: any = {};
   userId: any = '';
   isUserLoggedIn = false;
@@ -80,9 +89,7 @@ export class CreateSourceComponent implements OnInit {
   appConfig: any = {};
   isLoading = false;
   loaderMsg = '';
-  isSourceUploaded = false;
   analysis: any = {};
-  fileTypeErr = false;
 
   stepIndex = 0;
   analysisForm: FormGroup;
@@ -103,7 +110,7 @@ export class CreateSourceComponent implements OnInit {
       this.appConfig = appConfig;
       this.route.queryParams.subscribe(params => {
          this.sourceId = params.sourceId;
-         this.mode = params.mode;
+         this.mode = params.mode ? params.mode : 'create';
          if (!params.sourceId) {
           localStorage.removeItem('dq-source-data');
         }
@@ -121,6 +128,10 @@ export class CreateSourceComponent implements OnInit {
         source:  {}
       };
     }
+    if (analysis.settings) {
+      this.sourceSettings = analysis.settings;
+    }
+
     this.analysisForm = this.fb.group({
       sourceDataName: [analysis.source.sourceDataName, [Validators.required, Validators.maxLength(100)]],
       sourceDataDescription: [analysis.source.sourceDataDescription || ''],
@@ -168,19 +179,44 @@ export class CreateSourceComponent implements OnInit {
   }
 
   saveSource() {
+    let isRefFileErr = false;
     const analysis = this.analysisForm.value;
     const formData: any = new FormData();
+    console.log(this.sourceFile, this.mode);
+    if (this.mode === 'create' && !this.sourceFile.name) {
+      alert('Please upload the source file.');
+      return;
+    }
+
+    if (this.mode === 'create' && !this.refFiles.length) {
+      alert('Please upload the reference file.');
+      return;
+    }
+
+
     if (this.sourceFile.name) {
       formData.append('file[]', this.sourceFile);
     }
 
-    this.refFiles.map(refFile => {
-      if (refFile.name) {
-        formData.append('reffile[]', refFile);
+    analysis.referenceData.map((refernce, index) => {
+      if (this.mode === 'create' && !this.refFiles[index]) {
+        isRefFileErr = true;
+        alert(`Please upload the reference file #${index + 1}.`);
+        return;
+      }
+      if (this.refFiles[index]) {
+        formData.append('reffile[]', this.refFiles[index]);
       }
     });
 
+    if (isRefFileErr) {
+      return;
+    }
+
     const refPayload = analysis.referenceData.map((ref, index) => {
+      if (this.mode === 'create') {
+        delete ref.referenceId;
+      }
       return {
         ...ref,
         referenceFileName: this.refFiles.length ? this.refFiles[index].name : ref.referenceFileName
@@ -194,27 +230,23 @@ export class CreateSourceComponent implements OnInit {
         sourceFileName: this.sourceFile.name ? this.sourceFile.name : analysis.sourceFileName
       },
       reference: refPayload,
-      settings: {
-        isMuliSourceData: 'true',
-        multiSourceOptions: [ 'AA', 'AS', 'DL', 'B6', 'EV', 'F9', 'HA', 'WN' ],
-        frequency: 'Monthly',
-        uploadDate: '2021-02-04',
-        uploadTime: '16:42',
-        department: [ 'A', 'B', 'C', 'D' ]
-      }
+      settings: this.sourceSettings
     };
+    console.log(payload);
+
     formData.append('data', JSON.stringify(payload));
 
     this.isLoading = true;
-    this.isSourceUploaded = false;
     this.loaderMsg = 'Saving Source and Reference data...';
     this.http.saveSource(formData, this.mode === 'edit' ? 'put' : 'post').subscribe((result: any) => {
       this.isLoading = false;
-      this.isSourceUploaded = true;
+      if (result.errorMsg) {
+        alert(result.errorMsg);
+        return;
+      }
       this.router.navigate(['auth/dashboard']);
     }, (error) => {
       this.isLoading = false;
-      this.isSourceUploaded = false;
     });
   }
 

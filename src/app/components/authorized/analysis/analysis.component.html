@@ -16,39 +16,31 @@
               (selectionChange)="stepperSelectionChange($event)"
               (animationDone)="stepperAnimationDone()">
               <mat-step>
-                  <ng-template matStepLabel>Add Source File</ng-template>
+                  <ng-template matStepLabel>Source & Refernce Data</ng-template>
                   <mat-card class="border no-rounded list shrare-post">
-                    <h1 class="share-post-title">Create Your<span class="red"> Source</span></h1>
+                    <h1 class="share-post-title">Source & Refernce<span class="red"> Data</span></h1>
                       <div class="form-continer">
                         <div class="list flex-containers flex-start wrap">
-                        <div class="list-item-2 outline">
-                              <mat-label>Source Data (csv)<span class="red">*</span></mat-label>
-                              <app-image-cropper 
-                                [imageType]="'Source'"
-                                [fileTypes]="'.csv'"
-                                [imagePath]="''"
-                                (fileSelected)="onSourceCSVUpload($event)"
-                                (uploadCompleted)="onUploadCompleted($event, analysisForm)">
-                              </app-image-cropper>
-                              <mat-error *ngIf="fileTypeErr">
-                                 Please upload .CSV Format only
-                              </mat-error>
-                              <div class="success-msg" *ngIf="isSourceUploaded && !fileTypeErr">Source CSV uploaded successfully.</div>
-                         </div>
-                          <div class="list-item-2 outline">
-                            <mat-label>Source Name<span class="red">*</span></mat-label>
+                          <div class="list-item-3 outline">
+                            <mat-label>Source Data<span class="red">*</span></mat-label>
                             <mat-form-field appearance="outline">
-                              <input matInput placeholder="Source Name" formControlName="name" maxlength="50" autocomplete="off"/>
-                            </mat-form-field>
-                            <mat-error *ngIf="uniqueName">
-                              Source name already exists
-                           </mat-error>
-                          
-                            <mat-label class="mtop">Source Description</mat-label>
-                            <mat-form-field appearance="outline">
-                              <input matInput placeholder="Source Description" formControlName="description" maxlength="250" autocomplete="off"/>
+                              <mat-select formControlName="sourceId" (selectionChange)="onSourceChange($event)">
+                                <mat-option *ngFor="let item of sourceList" [value]="item.sourceId">{{item.source.sourceFileName}}</mat-option>
+                              </mat-select>
                             </mat-form-field>
                           </div>
+                            <div class="list-item-2 outline">
+                              <mat-label>Source Name<span class="red">*</span></mat-label>
+                              <mat-form-field appearance="outline">
+                                <input matInput placeholder="Source Name" formControlName="name" maxlength="50" autocomplete="off"/>
+                              </mat-form-field>
+                            
+                              <mat-label class="mtop">Source Description</mat-label>
+                              <mat-form-field appearance="outline">
+                                <input matInput placeholder="Source Description" formControlName="description" maxlength="250" autocomplete="off"/>
+                              </mat-form-field>
+                            </div>
+                            <div class="list-item-5 add-remove-button"></div>
                         </div>
                       </div>
                       <div class="bdr"></div>
@@ -59,14 +51,22 @@
                             <div class="list flex-containers flex-start">
                               <div class="list-item-3 outline">
                                 <mat-label>Reference Data (csv) #{{i+1}}</mat-label>
-                                <app-image-cropper 
-                                  [imageType]="'Reference'"
-                                  [fileTypes]="'.csv'"
-                                  [imagePath]="''"
-                                  (fileSelected)="onReferenceCSVUpload($event, reference)"
-                                  (uploadCompleted)="onUploadCompleted($event, reference)">
-                                </app-image-cropper>
+                                <mat-form-field appearance="outline">
+                                  <input matInput placeholder="Reference File" formControlName="referencePath" maxlength="50" autocomplete="off"/>
+                                </mat-form-field>
                               </div>
+                              <div class="list-item-2 outline">
+                                <mat-label>Reference Name<span class="red">*</span></mat-label>
+                                <mat-form-field appearance="outline">
+                                  <input matInput placeholder="Reference Name" formControlName="referenceDataName" maxlength="50" autocomplete="off"/>
+                                </mat-form-field>
+                              
+                                <mat-label class="mtop">Source Description</mat-label>
+                                <mat-form-field appearance="outline">
+                                  <input matInput placeholder="Source Description" formControlName="referenceDataDescription" maxlength="250" autocomplete="off"/>
+                                </mat-form-field>
+                              </div>
+    
                               <div class="list-item-5 add-remove-button">
                                 <button type="button" mat-icon-button (click)="addFormItem('referenceCSV')" *ngIf="isLast">
                                   <mat-icon>add</mat-icon>
@@ -89,9 +89,9 @@
                 </mat-step>
 
                 <mat-step>
-                  <ng-template matStepLabel>Define CDE</ng-template>
+                  <ng-template matStepLabel>Critical Data Elements</ng-template>
                   <mat-card class="border no-rounded list shrare-post">
-                    <h1 class="share-post-title">Define<span class="red"> Critical Data Element</span></h1>
+                    <h1 class="share-post-title">Critical<span class="red"> Data Elements</span></h1>
                     <div class="col-selector-wrapper">
                       <app-column-selector 
                         [availableColumnsLabel]="'Available Columns'"
@@ -125,10 +125,10 @@
                 </mat-step>
                 
                 <mat-step>
-                  <ng-template matStepLabel>Define Rules</ng-template>
+                  <ng-template matStepLabel>Rule Definition</ng-template>
                   <div class="list flex-containers wrap">
                     <mat-card class="border no-rounded shrare-post" style="width: 1000px;">
-                      <h1 class="share-post-title">Define<span class="red"> Rules</span></h1>
+                      <h1 class="share-post-title">Rule<span class="red"> Definition</span></h1>
                       <div class="list flex-containers flex-start wrap cde-fields-wrp">
                         <div class="list-item-3 outline">
                           <mat-label>Ruleset Name<span class="red">*</span></mat-label>
@@ -254,9 +254,9 @@
                 </mat-step>
 
                 <mat-step>
-                  <ng-template matStepLabel>Preview</ng-template>
+                  <ng-template matStepLabel>Finalize ruleset</ng-template>
                   <mat-card class="border no-rounded list shrare-post">
-                    <h1 class="share-post-title">Analysis<span class="red"> Preview</span></h1>
+                    <h1 class="share-post-title">Finalize<span class="red"> ruleset</span></h1>
                     <div class="analysis-preview">
                       <table class="table">
 
@@ -300,7 +300,7 @@
                     </div>
                     <div class="act-btn-wrapper">
                       <button mat-stroked-button class="primary-btn-gray white pad" (click)="gotoStepper(2);"><mat-icon class="mar-ico">arrow_back_ios_new</mat-icon> Back</button>
-                      <button mat-stroked-button class="primary-btn-red" (click)="saveAnalysis()" [disabled]="isLoading">Complete</button>
+                      <button mat-stroked-button class="primary-btn-red" (click)="createEditRuleset()" [disabled]="isLoading">Complete</button>
                     </div>
                   </mat-card>
 
@@ -313,7 +313,7 @@
     </div>
 
     
-    <div class="rule-selection-wrapper" *ngIf="stepIndex===2">
+    <!-- <div class="rule-selection-wrapper" *ngIf="stepIndex===2">
       <div class="list flex-containers flex-start wrap cde-fields-wrp">
         <div class="list-item-5 outline">
           <app-rule-selector [ruleItems]="ruleTypeList" (selectionChange)="ruleType=$event.value"></app-rule-selector>
@@ -331,7 +331,7 @@
           <app-rule-selector [ruleItems]="ruleDimenstionList" (selectionChange)="ruleDimenstion=$event.value"></app-rule-selector>
         </div>
       </div>
-    </div>
+    </div> -->
     
     
     
