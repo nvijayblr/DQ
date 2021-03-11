@@ -10,7 +10,7 @@
         <div class="option-wrp">
           <span>{{item.label}}</span>
           <span></span>
-          <mat-icon mat-icon-button class="del-icon" (click)="deleteRuleItem($event, selectedRule)" *ngIf="showAddItem && item.type==='CUSTOM'">delete</mat-icon>
+          <mat-icon mat-icon-button class="del-icon" (click)="deleteRuleItem($event, item)" *ngIf="showAddItem && item.type==='CUSTOM'">delete</mat-icon>
         </div>
       </mat-option>
       <mat-option class="add-option" *ngIf="showAddItem">

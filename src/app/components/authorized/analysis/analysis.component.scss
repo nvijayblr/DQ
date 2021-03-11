@@ -151,6 +151,12 @@
  }
  .rule-list-wrp {
    margin: 0;
+   .cde-fields-wrp {
+     margin-top: 0 !important;
+   }
+   .rule-title {
+     margin: 14px 0 4px 0;
+   }
  }
  
  .category-list {

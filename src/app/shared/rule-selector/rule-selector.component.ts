@@ -33,7 +33,7 @@ export class RuleSelectorComponent implements OnInit {
           this.ruleItems.push(this.initValue);
         }
       }
-      if (!this.ruleItems || (this.ruleItem && !this.ruleItems.length)) {
+      if (!this.ruleItems || (this.ruleItems && !this.ruleItems.length)) {
         this.ruleItems = [];
         this.initValue = {
           value: this.initValue,
@@ -73,6 +73,8 @@ export class RuleSelectorComponent implements OnInit {
       // this.selectedRule.push(this.ruleItem);
     } else {
       this.selectedRule = [this.ruleItem];
+      this.ruleOptionItem = this.ruleItem;
+      this.selectionChange.emit({value: this.ruleItem});
     }
     const ruleItem = {
       label: this.ruleItem,
@@ -96,6 +98,7 @@ export class RuleSelectorComponent implements OnInit {
   }
 
   showHideAddInput(isShow) {
+    this.ruleItem = '';
     this.showAdd = isShow;
   }
 }

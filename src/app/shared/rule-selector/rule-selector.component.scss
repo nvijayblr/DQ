@@ -22,8 +22,10 @@
   }
 }
 .mat-option.add-option {
+  padding: 0;
   .add-btn {
     width: 100%;
+    height: 48px;
   }
   .mat-pseudo-checkbox {
     display: none;

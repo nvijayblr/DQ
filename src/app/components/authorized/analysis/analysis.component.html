@@ -190,9 +190,10 @@
                               {{columns['controls'].column.value}}
                             </mat-panel-title>
                           </mat-expansion-panel-header>
-                          <div class="flex-containers space-between rule-step-wrapper rule-list-wrp"
+                          <div class="rule-step-wrapper rule-list-wrp"
                             *ngFor="let rule of columns.get('rules')['controls']; index as j; last as isLast; first as isFirst" formArrayName="rules">
                             <ng-container [formGroupName]="j">
+                              <h5 class="rule-title">Rule #1</h5>
                               <div class="rule-selection-wrapper">
                                 <div class="list flex-containers flex-start wrap cde-fields-wrp">
                                   <div class="list-item-5 outline">
@@ -332,9 +333,12 @@
                                 <h4>{{col.column}}</h4>
                                 <table class="table rule-table">
                                   <tbody>
-                                    <tr *ngFor="let rule of col.rules">
+                                    <tr *ngFor="let rule of col.rules; index as i">
+                                      <td>Rule #{{i+1}}</td>
                                       <td><div class="label">{{rule.rule}}</div></td>
+                                      <td>{{rule.operator}}</td>
                                       <td>{{rule.value}}</td>
+                                      <td>{{rule.dimension}}</td>
                                     </tr>
                                   </tbody>
                                 </table>
