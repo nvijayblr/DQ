@@ -13,6 +13,7 @@ export class RuleSelectorComponent implements OnInit {
   @Input() multiple = false;
 
   @Output() selectionChange = new EventEmitter<any>();
+  ruleOptionItem = '';
   ruleItem = '';
   selectedRule: any = [];
   showAdd = false;
@@ -20,11 +21,32 @@ export class RuleSelectorComponent implements OnInit {
 
   ngOnInit() {
     if (this.initValue) {
-      if (this.multiple) {
-        this.selectedRule = this.initValue;
-      } else {
-        this.selectedRule = [this.initValue];
+      if (this.ruleItems && this.ruleItems.length) {
+        const isFound  = this.ruleItems.filter(item => item.value === this.initValue)[0];
+        if (isFound) {
+          this.initValue = isFound;
+        } else {
+          this.initValue = {
+            value: this.initValue,
+            label: this.initValue
+          };
+          this.ruleItems.push(this.initValue);
+        }
       }
+      if (!this.ruleItems || (this.ruleItem && !this.ruleItems.length)) {
+        this.ruleItems = [];
+        this.initValue = {
+          value: this.initValue,
+          label: this.initValue
+        };
+        this.ruleItems.push(this.initValue);
+      }
+      if (this.multiple) {
+        this.selectedRule = this.initValue.label;
+      } else {
+        this.selectedRule = [this.initValue.label];
+      }
+      this.ruleOptionItem = this.initValue.value;
     }
     this.ruleItem = this.initValue;
   }
@@ -43,17 +65,21 @@ export class RuleSelectorComponent implements OnInit {
     selectedRule.map(rule => {
       this.selectedRule.push(rule.label);
     });
-
     this.selectionChange.emit({value: e});
   }
 
   addRuleItem(selectedRule) {
-    this.selectedRule = {
+    if (this.multiple) {
+      // this.selectedRule.push(this.ruleItem);
+    } else {
+      this.selectedRule = [this.ruleItem];
+    }
+    const ruleItem = {
       label: this.ruleItem,
       value: this.ruleItem,
       type: 'CUSTOM'
     };
-    this.ruleItems.push(this.selectedRule);
+    this.ruleItems.push(ruleItem);
   }
 
   deleteRuleItem(ev, rule) {
@@ -61,7 +87,11 @@ export class RuleSelectorComponent implements OnInit {
     ev.preventDefault();
     const index = this.ruleItems.findIndex(item => item.value === rule.value);
     this.ruleItems.splice(index, 1);
-    this.selectedRule = {};
+    if (this.multiple) {
+      this.selectedRule.splice(index, 1);
+    } else {
+      this.selectedRule = [];
+    }
     this.ruleItem = '';
   }
 

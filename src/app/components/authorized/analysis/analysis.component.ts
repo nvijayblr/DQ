@@ -130,21 +130,21 @@ export class AnalysisComponent implements OnInit {
 
   ruleTypeList = [{
     label: 'Data Type',
-    value: 'dataType',
+    value: 'DataType',
   }, {
     label: 'Length',
-    value: 'length',
+    value: 'Length',
   }, {
     label: 'Value',
-    value: 'value',
+    value: 'Value',
   }];
 
   ruleOperatorList = {
-    dataType: [{
+    DataType: [{
         label: 'Should be',
         value: 'Shouldbe'
       }],
-    length: [{
+    Length: [{
         label: '=',
         value: 'euqualto'
       }, {
@@ -160,7 +160,22 @@ export class AnalysisComponent implements OnInit {
         label: '<',
         value: 'lessthan'
       }],
-    value: [{
+    Value: [{
+        label: '=',
+        value: 'euqualto'
+      }, {
+        label: '>=',
+        value: 'greaterthanequalto'
+      }, {
+        label: '<=',
+        value: 'lessthanequalto'
+      }, {
+        label: '>',
+        value: 'greaterthan'
+      }, {
+        label: '<',
+        value: 'lessthan'
+      }, {
         label: 'Should be',
         value: 'Shouldbe'
       }, {
@@ -182,31 +197,31 @@ export class AnalysisComponent implements OnInit {
   };
 
   ruleValueList = {
-    dataType: [{
+    DataType: [{
       label: 'Alpha',
       value: 'alpha'
     }, {
       label: 'Alphanumeric',
-      value: 'alphanumeric'
+      value: 'Alphanumeric'
     }, {
       label: 'Integer',
-      value: 'integer'
+      value: 'Integer'
     }, {
       label: 'Numeric',
-      value: 'numeric'
+      value: 'Numeric'
     }, {
       label: 'Date',
-      value: 'date'
+      value: 'Date'
     }, {
       label: 'DateTime',
-      value: 'datetime'
+      value: 'DateTime'
     }],
-  value: [{
+  Value: [{
       label: 'Special Characters',
-      value: 'specialcharacters'
+      value: 'SpecialCharacters'
     }, {
       label: 'Amount',
-      value: 'amount'
+      value: 'Amount'
     }]
   };
 
@@ -369,7 +384,10 @@ export class AnalysisComponent implements OnInit {
       const rulesGroup = value.rules.map((rule => {
         return this.fb.group({
           rule: [rule.rule],
+          operator: [rule.operator],
           value: [rule.value],
+          format: [rule.format],
+          dimension: [rule.dimension],
         });
       }));
       return this.fb.group({
@@ -410,7 +428,10 @@ export class AnalysisComponent implements OnInit {
     fbRules.push(
       this.fb.group({
         rule: [''],
+        operator: [''],
         value: [''],
+        format: [''],
+        dimension: [''],
       })
     );
   }
@@ -484,6 +505,7 @@ export class AnalysisComponent implements OnInit {
         columns.push(col.title);
       }
     });
+
 
     const payload = {
       selectedColumns: columns,

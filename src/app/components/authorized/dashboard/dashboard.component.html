@@ -52,6 +52,10 @@
                         </div>
                       </td>
                       <td>
+                        <button type="button" mat-icon-button class="launch-icon"
+                        (click)="editSourceData(data)" [disabled]="!data.sourceId"  matTooltip="Edit Source">
+                          <mat-icon>edit</mat-icon>
+                        </button>
                         <button type="button" mat-icon-button (click)="createEditRuleset(data,'add')" matTooltip="Create Ruleset">
                           <mat-icon>add</mat-icon>
                         </button>

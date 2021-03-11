@@ -166,11 +166,11 @@ export class DashboardComponent implements OnInit {
       };
       this.analyseKeyData.map(data => {
         chartData.labels.push(data[this.selectedKey]);
-        chartData.validity.push(data.Validity.value);
-        chartData.completeness.push(data.completness.value);
-        chartData.integrity.push(+data.Integrity.value);
-        chartData.uniqueness.push(+data.Uniqueness.value);
-        this.tooltipDET.push(data.completness.details);
+        chartData.validity.push(data.Validity ? data.Validity.value : 0);
+        chartData.completeness.push(data.completness ? data.completness.value : 0);
+        chartData.integrity.push(data.Integrity ? +data.Integrity.value : 0);
+        chartData.uniqueness.push(data.Uniqueness ? +data.Uniqueness.value : 0);
+        this.tooltipDET.push(data.completness ? data.completness.details : 0);
       });
 
       this.tooltipDET.map((item, i) => {
@@ -208,9 +208,11 @@ export class DashboardComponent implements OnInit {
       rules.columns = data.rules && data.rules.length ? data.rules[0].columns : [];
     }
      const columns = [];
-     data.source.availableColumns.map((column, index) => {
-      columns.push({id: (index + 1), title: column});
-    });
+     if (data.source.availableColumns) {
+      data.source.availableColumns.map((column, index) => {
+        columns.push({id: (index + 1), title: column});
+      });
+     }
 
      const selectedColumns = [];
      rules.selectedColumns.map((column, index) => {

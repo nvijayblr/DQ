@@ -123,6 +123,7 @@ export class CreateSourceComponent implements OnInit {
     this.userId = this.user.user_id;
 
     let analysis = this.messageService.getSource();
+    console.log(analysis);
     if (!analysis.source) {
       analysis = {
         source:  {}
@@ -130,6 +131,7 @@ export class CreateSourceComponent implements OnInit {
     }
     if (analysis.settings) {
       this.sourceSettings = analysis.settings;
+      console.log(this.sourceSettings);
     }
 
     this.analysisForm = this.fb.group({
@@ -137,6 +139,7 @@ export class CreateSourceComponent implements OnInit {
       sourceDataDescription: [analysis.source.sourceDataDescription || ''],
       sourceFileName: [analysis.source.sourceFileName || ''],
       templateSourcePath: [analysis.source.templateSourcePath || ''],
+      settingsDate : [''],
       referenceData: this.fb.array([]),
     });
 
@@ -158,7 +161,7 @@ export class CreateSourceComponent implements OnInit {
     if (field === 'referenceData') {
       return this.fb.group({
         referenceId: [reference.referenceId || undefined],
-        referenceDataName: [reference.referenceDataName || '', Validators.required],
+        referenceDataName: [reference.referenceDataName || ''],
         referenceDataDescription: reference.referenceDataDescription || '',
         referenceFileName: reference.referenceFileName || '',
         referencePath: reference.referencePath || ''
@@ -182,17 +185,16 @@ export class CreateSourceComponent implements OnInit {
     let isRefFileErr = false;
     const analysis = this.analysisForm.value;
     const formData: any = new FormData();
-    console.log(this.sourceFile, this.mode);
     if (this.mode === 'create' && !this.sourceFile.name) {
+      this.stepIndex = 0;
       alert('Please upload the source file.');
       return;
     }
 
-    if (this.mode === 'create' && !this.refFiles.length) {
-      alert('Please upload the reference file.');
-      return;
-    }
-
+    // if (this.mode === 'create' && !this.refFiles.length) {
+    //   alert('Please upload the reference file.');
+    //   return;
+    // }
 
     if (this.sourceFile.name) {
       formData.append('file[]', this.sourceFile);
@@ -232,7 +234,6 @@ export class CreateSourceComponent implements OnInit {
       reference: refPayload,
       settings: this.sourceSettings
     };
-    console.log(payload);
 
     formData.append('data', JSON.stringify(payload));
 
@@ -244,18 +245,41 @@ export class CreateSourceComponent implements OnInit {
         alert(result.errorMsg);
         return;
       }
-      this.router.navigate(['auth/dashboard']);
+      this.showSaveSuccess();
     }, (error) => {
       this.isLoading = false;
     });
   }
 
+  showSaveSuccess() {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: this.mode === 'edit' ? 'Source Updated' : 'Source Created',
+        message: this.mode === 'edit' ? `Source has been updated successfully.` : `Source has been added successfully.` ,
+        cancelLable: '',
+        okLable: 'OK'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(action => {
+      if (action === 'ok') {
+        this.router.navigate(['auth/dashboard']);
+      } else {
+      }
+    });
+  }
+
   onSourceFileSelected(file) {
     this.sourceFile = file;
+    const fName = file.name.split('.')[0];
+    this.afControls.sourceDataName.setValue(fName);
   }
 
   onReferenceFileSelected(file, reference, index) {
     this.refFiles[index] = file;
+    const fName = file.name.split('.')[0];
+    reference.controls.referenceDataName.setValue(fName);
   }
 
   gotoStepper(index, tab = '') {

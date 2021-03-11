@@ -54,6 +54,7 @@ export class DelayAnalysisComponent implements OnInit {
     const analysis = localStorage.getItem('delay-analysis');
     if (analysis) {
       this.selectedAnalysis = JSON.parse(analysis);
+      console.log(this.selectedAnalysis);
       this.selectedColumns = this.selectedAnalysis.rules[0].selectedColumns;
       if (this.selectedColumns && this.selectedColumns.length) {
         this.selectedCDE = this.selectedColumns[0];
@@ -68,7 +69,7 @@ export class DelayAnalysisComponent implements OnInit {
     this.selectedKey = keyname;
     this.loaderMsg = 'Launching Delay Analysis...';
     const payload = {
-      analysisId: this.selectedAnalysis.analysisId,
+      sourceId: this.selectedAnalysis.sourceId,
       rulesetId: this.selectedAnalysis.rulesetId,
       keyname
     };
@@ -86,7 +87,7 @@ export class DelayAnalysisComponent implements OnInit {
     this.isLoadingDetailsAirport = true;
     this.selectedKey = keyname;
     const payload = {
-      analysisId: this.selectedAnalysis.analysisId,
+      sourceId: this.selectedAnalysis.sourceId,
       rulesetId: this.selectedAnalysis.rulesetId,
       keyname
     };
@@ -106,7 +107,7 @@ export class DelayAnalysisComponent implements OnInit {
   // }
 
   gotoDashboard() {
-    this.router.navigate(['auth/dashboard'])
+    this.router.navigate(['auth/dashboard']);
   }
 
   openHighlightSettingsDialog(): void {

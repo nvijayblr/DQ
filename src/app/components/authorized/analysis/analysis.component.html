@@ -193,7 +193,51 @@
                           <div class="flex-containers space-between rule-step-wrapper rule-list-wrp"
                             *ngFor="let rule of columns.get('rules')['controls']; index as j; last as isLast; first as isFirst" formArrayName="rules">
                             <ng-container [formGroupName]="j">
-                              <div class="list flex-containers flex-start wrap">
+                              <div class="rule-selection-wrapper">
+                                <div class="list flex-containers flex-start wrap cde-fields-wrp">
+                                  <div class="list-item-5 outline">
+                                    <app-rule-selector 
+                                      [ruleItems]="ruleTypeList" 
+                                      [initValue]="rule.get('rule').value" 
+                                      (selectionChange)="rule.get('rule').setValue($event.value)"
+                                    ></app-rule-selector>
+                                  </div>
+                                  <div class="list-item-5 outline">
+                                    <app-rule-selector 
+                                      [ruleItems]="ruleOperatorList[rule.get('rule').value]" 
+                                      [initValue]="rule.get('operator').value" 
+                                      (selectionChange)="rule.get('operator').setValue($event.value)"
+                                    ></app-rule-selector>
+                                  </div>
+                                  <div class="list-item-5 outline">
+                                    <app-rule-selector 
+                                      [ruleItems]="ruleValueList[rule.get('rule').value]" 
+                                      [initValue]="rule.get('value').value" 
+                                      (selectionChange)="rule.get('value').setValue($event.value)"
+                                    ></app-rule-selector>
+                                  </div>
+                                  <!-- <div class="list-item-5 outline">
+                                    <app-rule-selector [ruleItems]="ruleFormatList[ruleValue]" (selectionChange)="ruleFormat=$event.value"></app-rule-selector>
+                                  </div> -->
+                                  <div class="list-item-5 outline">
+                                    <app-rule-selector 
+                                      [ruleItems]="ruleDimenstionList" 
+                                      [initValue]="rule.get('dimension').value" 
+                                      (selectionChange)="rule.get('dimension').setValue($event.value)"
+                                    ></app-rule-selector>
+                                  </div>
+                                  <div class="list-item-5 add-remove-button">
+                                    <button type="button" mat-icon-button (click)="addRules(columns, 'rules')" *ngIf="isLast">
+                                      <mat-icon>add</mat-icon>
+                                    </button>
+                                    <button type="button" mat-icon-button class="del-icon" (click)="removeRules(columns, 'rules', j)" *ngIf="!isFirst || !isLast">
+                                      <mat-icon>delete</mat-icon>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+        
+                              <!-- <div class="list flex-containers flex-start wrap">
                                 <div class="list-item-8 outline">
                                   <mat-label class="rule-label">Rule #{{j+1}}</mat-label>
                                 </div>
@@ -228,12 +272,14 @@
                                     <mat-icon>delete</mat-icon>
                                   </button>
                                 </div>
-                              </div>
+                              </div> -->
                             </ng-container>
                           </div>
                         </ng-container>
                       </mat-expansion-panel>
 
+                      
+                  
                       <div class="act-btn-wrapper">
                         <button mat-stroked-button class="primary-btn-gray white pad" (click)="gotoStepper(1);"><mat-icon class="mar-ico">arrow_back_ios_new</mat-icon> Back</button>
                         <button mat-stroked-button class="primary-btn-gray" 
@@ -241,7 +287,7 @@
                           (click)="generatePreview();">Next <mat-icon>arrow_forward_ios</mat-icon></button>
                       </div>
                     </mat-card>
-                    <mat-card class="border no-rounded list-item shrare-post font">
+                    <mat-card class="border no-rounded list-item shrare-post font" style="width: 298px;">
                       <h1 class="share-post-title"><span class="red">{{selectedRuleColumn}}</span></h1>
                       <table class="table">
                         <tr *ngFor="let statistics of cdeStatistics | keyvalue">
@@ -312,26 +358,6 @@
       </div>
     </div>
 
-    
-    <!-- <div class="rule-selection-wrapper" *ngIf="stepIndex===2">
-      <div class="list flex-containers flex-start wrap cde-fields-wrp">
-        <div class="list-item-5 outline">
-          <app-rule-selector [ruleItems]="ruleTypeList" (selectionChange)="ruleType=$event.value"></app-rule-selector>
-        </div>
-        <div class="list-item-5 outline">
-          <app-rule-selector [ruleItems]="ruleOperatorList[ruleType]" (selectionChange)="ruleOperator=$event.value"></app-rule-selector>
-        </div>
-        <div class="list-item-5 outline">
-          <app-rule-selector [ruleItems]="ruleValueList[ruleType]" (selectionChange)="ruleValue=$event.value"></app-rule-selector>
-        </div>
-        <div class="list-item-5 outline">
-          <app-rule-selector [ruleItems]="ruleFormatList[ruleValue]" (selectionChange)="ruleFormat=$event.value"></app-rule-selector>
-        </div>
-        <div class="list-item-5 outline">
-          <app-rule-selector [ruleItems]="ruleDimenstionList" (selectionChange)="ruleDimenstion=$event.value"></app-rule-selector>
-        </div>
-      </div>
-    </div> -->
     
     
     

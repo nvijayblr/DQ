@@ -44,7 +44,7 @@
                       <div class="bdr"></div>
                       <div class="rule-selection-wrapper">
                         <div class="list flex-containers flex-start wrap cde-fields-wrp">
-                          <div class="list-item-4 outline">
+                          <div class="list-item-5 outline">
                             <span class="sub-title">Multi Source</span>
                             <app-rule-selector 
                               multiple="true" 
@@ -53,7 +53,7 @@
                               (selectionChange)="sourceSettings.multiSourceOptions=$event.value"
                             ></app-rule-selector>
                           </div>
-                          <div class="list-item-4 outline">
+                          <div class="list-item-5 outline">
                             <span class="sub-title">Frequency</span>
                             <app-rule-selector 
                               [ruleItems]="frequencyList"
@@ -61,7 +61,18 @@
                               (selectionChange)="sourceSettings.frequency=$event.value"
                             ></app-rule-selector>
                           </div>
-                          <div class="list-item-4 outline">
+
+                          <div class="list-item-5 outline">
+                            <span class="sub-title">Start Date</span>
+                            <mat-form-field appearance="outline">
+                              <mat-label>Start Date</mat-label>
+                              <input matInput [matDatepicker]="frompicker" formControlName="settingsDate" [(ngModel)]="sourceSettings.uploadDate">
+                              <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
+                              <mat-datepicker #frompicker></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+  
+                          <div class="list-item-5 outline">
                             <span class="sub-title">Time</span>
                             <app-rule-selector 
                               [ruleItems]="timeList" 
@@ -69,7 +80,7 @@
                               (selectionChange)="sourceSettings.uploadTime=$event.value"
                             ></app-rule-selector>
                           </div>
-                          <div class="list-item-4 outline">
+                          <div class="list-item-5 outline">
                             <span class="sub-title"> Department</span>
                             <app-rule-selector 
                               multiple="true" 
@@ -94,12 +105,16 @@
                     <h1 class="share-post-title">Create Your<span class="red"> Reference Data</span></h1>
 
                     <div class="list">
+                      <button type="button" mat-stroked-button class="primary-btn-gray" (click)="addFormItem('referenceData')" *ngIf="!analysisForm.get('referenceData')['controls'].length">
+                        Add Reference Data <mat-icon>add</mat-icon> 
+                      </button>
+
                       <div class="flex-containers space-between ref-list-wrp" 
                         formArrayName="referenceData" *ngFor="let reference of analysisForm.get('referenceData')['controls']; index as i; last as isLast; first as isFirst">
                         <ng-container [formGroupName]="i">
                           <div class="list flex-containers flex-start">
                             <div class="list-item-3 outline">
-                              <mat-label>Reference Data #{{i+1}}</mat-label>
+                              <mat-label>Reference Data #{{i+1}} <span class="red">*</span></mat-label>
                               <app-image-cropper 
                                 [imageType]="'Reference'"
                                 [fileTypes]="'.csv'"
@@ -110,7 +125,7 @@
                             </div>
 
                             <div class="list-item-2 outline">
-                              <mat-label>Reference Data Name<span class="red">*</span></mat-label>
+                              <mat-label>Reference Data Name <span class="red">*</span></mat-label>
                               <mat-form-field appearance="outline">
                                 <input matInput placeholder="Reference Data Name" formControlName="referenceDataName" maxlength="50" autocomplete="off"/>
                               </mat-form-field>
@@ -125,7 +140,7 @@
                               <button type="button" mat-icon-button (click)="addFormItem('referenceData')" *ngIf="isLast">
                                 <mat-icon>add</mat-icon>
                               </button>
-                              <button type="button" mat-icon-button class="del-icon" (click)="removeFormItem('referenceData', i)" *ngIf="!isFirst || !isLast">
+                              <button type="button" mat-icon-button class="del-icon" (click)="removeFormItem('referenceData', i)">
                                 <mat-icon>delete</mat-icon>
                               </button>
                             </div>
