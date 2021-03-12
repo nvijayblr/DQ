@@ -334,6 +334,9 @@ THE SOFTWARE.
 ng-starrating
 MIT
 
+ngx-color-picker
+MIT
+
 ngx-image-cropper
 MIT
 MIT License
