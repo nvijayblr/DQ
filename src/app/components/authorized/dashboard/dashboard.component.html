@@ -91,15 +91,17 @@
                     <tr>
                       <th>ID</th>
                       <th>Source Name</th>
+                      <th>File Name</th>
                       <th>Select File</th>
                       <th>Ruleset Name</th>
                       <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let data of analysisList;">
-                      <td>{{data.analysisId}}</td>
-                      <td>{{data.sourceName}}</td>
+                    <tr *ngFor="let data of sourceList;">
+                      <td>{{data.sourceId}}</td>
+                      <td>{{data.source.sourceDataName}}</td>
+                      <td>{{data.source.sourceFileName}}</td>
                       <td style="max-width: 80px;">
                         <app-image-cropper 
                           [imageType]="'Source'"
@@ -144,10 +146,10 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let data of analysisList;">
-                      <td>{{data.analysisId}}</td>
-                      <td>{{data.sourceName}}</td>
-                      <td>{{data.sourceFilename}}</td>
+                    <tr *ngFor="let data of sourceList;">
+                      <td>{{data.sourceId}}</td>
+                      <td>{{data.source.sourceDataName}}</td>
+                      <td>{{data.source.sourceFileName}}</td>
                       <td>
                         <div class="outline">
                           <mat-form-field appearance="outline">
@@ -167,67 +169,6 @@
                 </table>
               </div>
             </mat-card>
-
-            <!-- Analysis -->
-            <!-- <mat-card class="border no-rounded list shrare-post" *ngIf="showAnalysis">
-              <div class="list flex-containers analysis-wrp flex-start wrap">
-                <div class="list-item-2 outline">
-                  <h1 class="share-post-title">Your<span class="red"> Analysis</span></h1>
-                </div>
-                <div class="list-item-2 outline">
-                  <div class="act-btn-wrapper">
-                    <button mat-stroked-button class="primary-btn-gray white" (click)="gotoList();"><mat-icon>arrow_back</mat-icon> Back</button>
-                  </div>
-                </div>
-              </div>
-              <div class="analysis-preview">
-                
-                <app-bar-chart 
-                  *ngIf="analyseData.length" 
-                  [chartData]="analyseChartData"
-                  (xLableClicked)="xLableClicked($event)"
-                ></app-bar-chart>
-                <table class="table" *ngIf="isShowAnalysisTable">
-                  <thead>
-                    <tr>
-                      <th>Column</th>
-                      <th>Completness</th>
-                      <th>Validity</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let data of analyseData;">
-                      <td>
-                        <a href="javascript: void(0)" (click)="launchAnalysisByKey(data.airline)">{{data.airline}}</a>
-                      </td>
-                      <td>
-                        <span 
-                          *ngIf="data.completness?.details.length"
-                          #tooltip="matTooltip"
-                          [matTooltip]="data.completness?.details | json"
-                          [matTooltipPosition]="'above'"
-                          matTooltipHideDelay="10"
-                          class="red"
-                        >{{data.completness?.value}}%</span>
-                        <span *ngIf="!data.completness?.details.length">{{data.completness?.value}}%</span>
-                      </td>
-                      <td>
-                        <span 
-                          *ngIf="data.Validity?.details.length"
-                          #tooltip="matTooltip"
-                          [matTooltip]="data.Validity?.details | json"
-                          [matTooltipPosition]="'above'"
-                          matTooltipHideDelay="10"
-                          class="red"
-                        >{{data.Validity?.value}}%</span>
-                        <span *ngIf="!data.Validity?.details.length">{{data.Validity?.value}}%</span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            
-            </mat-card> -->
 
 
             <!-- Analysis by Key-->

@@ -512,12 +512,22 @@ export class AnalysisComponent implements OnInit {
       refSelectedColumns: this.columnsForm.controls.refernceColumns.value.map(col => col.title),
       sourcepath: this.afControls.sourcepath.value,
     };
+
+    if (!payload.selectedColumns.length && !payload.refSelectedColumns.length) {
+      this.isLoading = false;
+      if (this.rulesList.length) {
+        const firstRule = this.rulesList[0];
+        this.selectedRuleColumn = firstRule.column;
+        this.cdeStatistics = (firstRule.statistics && firstRule.statistics.length) ? firstRule.statistics[0] : {};
+      }
+      return;
+    }
+
     // Clear the columns array
     this.afControls.columnRules = this.fb.array([]);
     this.http.getColumnsRules(payload).subscribe((result: any) => {
       this.isLoading = false;
       this.rulesList = this.rulesList.concat(result);
-      console.log(this.rulesList);
       if (this.rulesList.length) {
         const firstRule = this.rulesList[0];
         this.selectedRuleColumn = firstRule.column;
@@ -547,6 +557,13 @@ export class AnalysisComponent implements OnInit {
   createEditRuleset() {
     this.isLoading = true;
     this.loaderMsg = 'Saving Ruleset...';
+    // Update the rules list with the statistics
+    const ruleLists = this.rulesList.map((rule, index) => {
+      return {
+        ...rule,
+        ...this.afControls.columnRules.value[index]
+      };
+    });
     const ruleset = {
       sourceId: this.selectedSource.sourceId,
       rulesetId: this.rulesetId ? this.rulesetId : undefined,
@@ -554,7 +571,7 @@ export class AnalysisComponent implements OnInit {
       selectedColumns: this.selectedColumns.map(col => col.title),
       refSelectedColumns: this.columnsForm.controls.refernceColumns.value.map(col => col.title),
       rulesetName: this.afControls.rulesetName.value,
-      ruleset: this.afControls.columnRules.value,
+      ruleset: ruleLists,
       startDate: this.afControls.startDate.value,
       endDate: this.afControls.endDate.value,
     };
