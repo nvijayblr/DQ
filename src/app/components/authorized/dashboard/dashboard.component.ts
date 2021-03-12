@@ -161,14 +161,14 @@ export class DashboardComponent implements OnInit {
         labels: [],
         validity: [],
         completeness: [],
-        integrity: [],
+        // integrity: [],
         uniqueness: []
       };
       this.analyseKeyData.map(data => {
         chartData.labels.push(data[this.selectedKey]);
         chartData.validity.push(data.Validity ? data.Validity.value : 0);
         chartData.completeness.push(data.completness ? data.completness.value : 0);
-        chartData.integrity.push(data.Integrity ? +data.Integrity.value : 0);
+        // chartData.integrity.push(data.Integrity ? +data.Integrity.value : 0);
         chartData.uniqueness.push(data.Uniqueness ? +data.Uniqueness.value : 0);
         this.tooltipDET.push(data.completness ? data.completness.details : 0);
       });
@@ -262,8 +262,10 @@ export class DashboardComponent implements OnInit {
       data: this.settings
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
-      this.settings = result;
+      if (result) {
+        console.log(result)
+        this.settings = result;
+      }
     });
   }
 

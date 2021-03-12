@@ -2,7 +2,6 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, FormArray, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
-// import { Color } from '@angular-material-components/color-picker';
 
 @Component({
   selector: 'app-color-dialog',
@@ -33,25 +32,17 @@ export class ColorDialogComponent implements OnInit {
       });
       const bgSettings = this.settingsForm.controls.bgSettings as FormArray;
       const bgList = this.data.bgSettings || [];
-      console.log(bgList);
       bgList.map(bg => {
          bgSettings.push(this.intiFormArrays('bgSettings', bg));
       });
-      // Object.keys(this.settingsForm.controls).forEach((key: string) => {
-      //    this.formVal = this.settingsForm.controls[key].value;
-      //    console.log(this.formVal);
-      // });
-
    }
 
   intiFormArrays(field, value: any = {}) {
     if (field === 'bgSettings') {
-      const tColor = this.hexToRgb(value.color);
       return this.fb.group({
         min: [value.min, [Validators.required]],
         max: [value.max, [Validators.required]],
-        // color: [new Color(tColor.r, tColor.g, tColor.b), [Validators.required]]
-        color: [tColor.r, tColor.g, tColor.b, [Validators.required]]
+        color: [value.color, [Validators.required]]
       });
     }
   }
@@ -86,14 +77,7 @@ export class ColorDialogComponent implements OnInit {
     if (!this.settingsForm.valid) {
       return;
     }
-    const { bgSettings } = this.settingsForm.value;
-    const settings = bgSettings.map((setting) => {
-      return {
-        ...setting,
-        color: `#${setting.color.hex}`
-      };
-    });
-    this.dialogRef.close({bgSettings: settings});
+    this.dialogRef.close(this.settingsForm.value);
   }
 
   numberOnly(event): boolean {

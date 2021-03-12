@@ -19,7 +19,6 @@ import { LoginComponent } from './components/login-signup/login/login.component'
 import { SignupComponent } from './components/login-signup/signup/signup.component';
 
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,7 +31,7 @@ import { SignupComponent } from './components/login-signup/signup/signup.compone
     HttpClientModule,
     AppRoutingModule,
     SharedModule,
-     SocialLoginModule
+    SocialLoginModule,
   ],
   providers: [
     HttpService,

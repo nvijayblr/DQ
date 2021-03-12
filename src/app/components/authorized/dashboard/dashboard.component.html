@@ -220,7 +220,7 @@
                         </div>
                      </th>
                      <th>Validity</th>
-                     <th>Integrity</th>
+                     <!-- <th>Integrity</th> -->
                      <th>Uniqueness</th>
                     </tr>
                   </thead>
@@ -248,7 +248,7 @@
                         >{{data.Validity?.value}}%</span>
                         <span *ngIf="!data.Validity?.details.length">{{data.Validity?.value}}%</span>
                       </td>
-                      <td [style.background-color]="data.Integrity?.value | formatCell: settings">
+                      <!-- <td [style.background-color]="data.Integrity?.value | formatCell: settings">
                         <span 
                           *ngIf="data.Integrity?.details.length"
                           #tooltip="matTooltip"
@@ -257,7 +257,7 @@
                           matTooltipHideDelay="10"
                         >{{data.Integrity?.value}}%</span>
                         <span *ngIf="!data.Integrity?.details.length">{{data.Integrity?.value}}%</span>
-                      </td>
+                      </td> -->
                       <td [style.background-color]="data.Uniqueness?.value | formatCell: settings">
                         <span 
                           *ngIf="data.Uniqueness?.details.length"

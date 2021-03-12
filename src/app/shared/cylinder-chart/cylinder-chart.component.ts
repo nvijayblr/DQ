@@ -197,10 +197,12 @@ export class CylinderChartComponent implements OnInit {
      }, {
         name: 'Validity',
         data: this.chartData.validity
-      }, {
-        name: 'Integrity',
-        data: this.chartData.integrity
-      }, {
+      },
+    //   {
+    //     name: 'Integrity',
+    //     data: this.chartData.integrity
+    //   },
+      {
         name: 'Uniqueness',
         data: this.chartData.uniqueness
       }];
@@ -209,9 +211,9 @@ export class CylinderChartComponent implements OnInit {
 
 
 
-   showValues() {
-      this.chartOptions.chart.options3d.alpha;
- }
+showValues() {
+    this.chartOptions.chart.options3d.alpha;
+}
 
 
 

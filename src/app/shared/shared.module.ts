@@ -7,6 +7,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { RatingModule } from 'ng-starrating';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+import { ColorPickerModule } from 'ngx-color-picker';
 
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
@@ -24,7 +25,6 @@ import { CylinderChartComponent } from './cylinder-chart/cylinder-chart.componen
 import { ColorDialogComponent } from './color-dialog/color-dialog.component';
 import { CompletenessDialogComponent } from './completeness-dialog/completeness-dialog.component';
 import { RuleSelectorComponent } from './rule-selector/rule-selector.component';
-// import { MAT_COLOR_FORMATS, NgxMatColorPickerModule, NGX_MAT_COLOR_FORMATS } from '@angular-material-components/color-picker';
 
 @NgModule({
   imports: [
@@ -38,7 +38,7 @@ import { RuleSelectorComponent } from './rule-selector/rule-selector.component';
     RatingModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
-    // NgxMatColorPickerModule
+    ColorPickerModule
   ],
   declarations: [
     HeaderComponent,
@@ -56,7 +56,7 @@ import { RuleSelectorComponent } from './rule-selector/rule-selector.component';
     CylinderChartComponent,
     ColorDialogComponent,
     CompletenessDialogComponent,
-    RuleSelectorComponent
+    RuleSelectorComponent,
   ],
   exports: [
     FormsModule,
@@ -86,7 +86,6 @@ import { RuleSelectorComponent } from './rule-selector/rule-selector.component';
   ],
   providers: [
      DatePipe,
-    //  { provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS }
   ],
   entryComponents: [
      ConfirmDialogComponent,

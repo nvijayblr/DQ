@@ -137,13 +137,20 @@ export class AnalysisComponent implements OnInit {
   }, {
     label: 'Value',
     value: 'Value',
+  }, {
+    label: 'Reference CDE',
+    value: 'ReferenceCDE'
   }];
 
   ruleOperatorList = {
     DataType: [{
-        label: 'Should be',
-        value: 'Shouldbe'
-      }],
+      label: 'Should be',
+      value: 'Shouldbe'
+    }],
+    ReferenceCDE: [{
+      label: 'Should be',
+      value: 'Shouldbe'
+    }],
     Length: [{
         label: '=',
         value: 'euqualto'
@@ -198,31 +205,32 @@ export class AnalysisComponent implements OnInit {
 
   ruleValueList = {
     DataType: [{
-      label: 'Alpha',
-      value: 'alpha'
-    }, {
-      label: 'Alphanumeric',
-      value: 'Alphanumeric'
-    }, {
-      label: 'Integer',
-      value: 'Integer'
-    }, {
-      label: 'Numeric',
-      value: 'Numeric'
-    }, {
-      label: 'Date',
-      value: 'Date'
-    }, {
-      label: 'DateTime',
-      value: 'DateTime'
-    }],
-  Value: [{
-      label: 'Special Characters',
-      value: 'SpecialCharacters'
-    }, {
-      label: 'Amount',
-      value: 'Amount'
-    }]
+        label: 'Alpha',
+        value: 'alpha'
+      }, {
+        label: 'Alphanumeric',
+        value: 'Alphanumeric'
+      }, {
+        label: 'Integer',
+        value: 'Integer'
+      }, {
+        label: 'Numeric',
+        value: 'Numeric'
+      }, {
+        label: 'Date',
+        value: 'Date'
+      }, {
+        label: 'DateTime',
+        value: 'DateTime'
+      }],
+    Value: [{
+        label: 'Special Characters',
+        value: 'SpecialCharacters'
+      }, {
+        label: 'Amount',
+        value: 'Amount'
+      }],
+    ReferenceCDE: []
   };
 
   ruleFormatList = {
@@ -350,6 +358,10 @@ export class AnalysisComponent implements OnInit {
 
     if (this.mode === 'edit') {
       const refSelectedColumns = analysis.rules.refSelectedColumns.map((column, index) => {
+        this.ruleValueList.ReferenceCDE.push({
+          label: column,
+          value: column
+        });
         return {
           id: (index + 1),
           title: column
@@ -506,7 +518,6 @@ export class AnalysisComponent implements OnInit {
       }
     });
 
-
     const payload = {
       selectedColumns: columns,
       refSelectedColumns: this.columnsForm.controls.refernceColumns.value.map(col => col.title),
@@ -522,6 +533,17 @@ export class AnalysisComponent implements OnInit {
       }
       return;
     }
+
+    if (payload.refSelectedColumns && payload.refSelectedColumns.length) {
+      this.ruleValueList.ReferenceCDE = [];
+      payload.refSelectedColumns.map(column => {
+        this.ruleValueList.ReferenceCDE.push({
+          label: column,
+          value: column
+        });
+      });
+    }
+
 
     // Clear the columns array
     this.afControls.columnRules = this.fb.array([]);
