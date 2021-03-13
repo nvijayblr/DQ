@@ -27,7 +27,7 @@
         <input matInput placeholder="" maxlength="50" autocomplete="off" [(ngModel)]="ruleItem" />
       </mat-form-field>
     </div>
-    <button type="button" mat-icon-button (click)="addRuleItem(selectedRule); showHideAddInput(false)" [disabled]="!ruleItem" >
+    <button type="button" mat-icon-button (click)="addRuleItem(selectedRule);" [disabled]="!ruleItem" >
       <mat-icon>done</mat-icon>
     </button>
     <button type="button" mat-icon-button class="del-icon" (click)="showHideAddInput(false)">

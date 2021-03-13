@@ -20,7 +20,7 @@ export class RuleSelectorComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if (this.initValue) {
+    if (this.initValue && !this.multiple) {
       if (this.ruleItems && this.ruleItems.length) {
         const isFound  = this.ruleItems.filter(item => item.value === this.initValue)[0];
         if (isFound) {
@@ -41,13 +41,26 @@ export class RuleSelectorComponent implements OnInit {
         };
         this.ruleItems.push(this.initValue);
       }
-      if (this.multiple) {
-        this.selectedRule = this.initValue.label;
-      } else {
-        this.selectedRule = [this.initValue.label];
-      }
+      this.selectedRule = [this.initValue.label];
       this.ruleOptionItem = this.initValue.value;
     }
+    if (this.initValue && this.multiple) {
+      this.initValue.map(initItem => {
+        if (this.ruleItems && this.ruleItems.length) {
+          const isFound  = this.ruleItems.filter(item => item.value === initItem)[0];
+          if (!isFound) {
+            initItem = {
+              value: initItem,
+              label: initItem
+            };
+            this.ruleItems.push(initItem);
+          }
+        }
+      });
+      this.selectedRule = this.initValue;
+      this.ruleOptionItem = this.initValue;
+    }
+
     this.ruleItem = this.initValue;
   }
 
@@ -69,6 +82,13 @@ export class RuleSelectorComponent implements OnInit {
   }
 
   addRuleItem(selectedRule) {
+
+    const isItemFound = this.ruleItems.filter(item => item.value === this.ruleItem);
+    if (isItemFound.length) {
+      alert('The value already found in the list.');
+      return;
+    }
+
     if (this.multiple) {
       // this.selectedRule.push(this.ruleItem);
     } else {
@@ -82,6 +102,7 @@ export class RuleSelectorComponent implements OnInit {
       type: 'CUSTOM'
     };
     this.ruleItems.push(ruleItem);
+    this.showHideAddInput(false);
   }
 
   deleteRuleItem(ev, rule) {

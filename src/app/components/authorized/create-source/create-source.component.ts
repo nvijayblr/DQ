@@ -242,6 +242,7 @@ export class CreateSourceComponent implements OnInit {
     this.http.saveSource(formData, this.mode === 'edit' ? 'put' : 'post').subscribe((result: any) => {
       this.isLoading = false;
       if (result.errorMsg) {
+        this.stepIndex = 0;
         alert(result.errorMsg);
         return;
       }
