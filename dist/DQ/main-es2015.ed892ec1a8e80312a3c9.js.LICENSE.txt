@@ -5,6 +5,13 @@
  * Licensed under the MIT license */
 
 /**
+ * @ag-grid-community/core - Advanced Data Grid / Data Table supporting Javascript / React / AngularJS / Web Components
+ * @version v24.1.0
+ * @link http://www.ag-grid.com/
+ * @license MIT
+ */
+
+/**
  * @license
  * Copyright Google Inc. All Rights Reserved.
  *
@@ -55,9 +62,17 @@
  */
 
 /**
+ * ag-grid-community - Advanced Data Grid / Data Table supporting Javascript / React / AngularJS / Web Components * @version v24.1.0
+ * @link http://www.ag-grid.com/
+' * @license MIT
+ */
+
+/**
 * @license
 * Copyright Google Inc. All Rights Reserved.
 *
 * Use of this source code is governed by an MIT-style license that can be
 * found in the LICENSE file at https://angular.io/license
 */
+
+/*@cc_on!@*/
