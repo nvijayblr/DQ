@@ -1,0 +1,44 @@
+<div class="ag-grid-wrapper">
+  <ag-grid-angular
+    #agGrid
+    style="max-width: 100%; height: 100%"
+    class="ag-theme-alpine"
+    animateRows
+    autoSizeColumns
+    headerHeight="40"
+    floatingFiltersHeight="40"
+    rowHeight="30"
+    suppressCellSelection="true"
+    [floatingFilter]="floatingFilter"
+    [rowData]="isLoading ? [] : rowData"
+    [rowHeight]="rowHeight"
+    [rowSelection]="rowSelection"
+    [suppressRowClickSelection]="suppressRowClickSelection"
+    [defaultColDef]="defaultColDef"
+    [columnDefs]="columnDefs"
+    [pagination]="true"
+    [paginationPageSize]="pageSize"
+    (selectionChanged)="onRowSelectionChanged($event)"	
+    (gridReady)="gridReady($event)"
+    (paginationChanged)="paginationChanged($event)"
+    (firstDataRendered)="onFirstDataRendered($event)"
+    (gridSizeChanged)="onGridSizeChanged($event)"
+    (modelUpdated)="onGridModelUpdated($event)"
+    (cellFocused)="onCellFocused($event)"
+    [singleClickEdit]="true"
+    [colResizeDefault]='colResizeDefault'
+    (filterChanged)="onSortFilterChanged()"
+    (sortChanged)="onSortFilterChanged()"
+  >
+  </ag-grid-angular>
+
+  <!-- Loading overlay -->
+  <app-progress-bar [message]="'Please wait while your rows are loading'" class="page" *ngIf="isLoading"></app-progress-bar>
+
+  <!-- No rows to show overlay -->
+  <div class="ag-overlay" aria-hidden="true" ref="overlayWrapper" *ngIf="!isLoading && !rowData.length">
+    <div class="ag-overlay-panel">
+        <div class="ag-overlay-wrapper ag-layout-normal ag-overlay-no-rows-wrapper" ref="eOverlayWrapper"><span class="ag-overlay-no-rows-center">No Rows To Show</span></div>
+    </div>
+  </div>  
+</div>

@@ -72,12 +72,18 @@ export class DashboardComponent implements OnInit {
     // this.getAllAnalysis();
   }
 
+
   getAllSources() {
     this.isLoading = true;
     this.loaderMsg = 'Loading Sources...';
     this.http.getSources().subscribe((result: any) => {
-      console.log(result);
       this.sourceList = result ? result : [];
+      const sourceNames = [];
+      this.sourceList.map(item => {
+        sourceNames.push(item.source.sourceDataName);
+      });
+      localStorage.setItem('dq-source-names', JSON.stringify(sourceNames));
+
       this.isLoading = false;
     }, (error) => {
       this.isLoading = false;
@@ -170,17 +176,8 @@ export class DashboardComponent implements OnInit {
         chartData.completeness.push(data.completness ? data.completness.value : 0);
         // chartData.integrity.push(data.Integrity ? +data.Integrity.value : 0);
         chartData.uniqueness.push(data.Uniqueness ? +data.Uniqueness.value : 0);
-        this.tooltipDET.push(data.completness ? data.completness.details : 0);
       });
 
-      this.tooltipDET.map((item, i) => {
-          if (item[i] !== undefined) {
-             this.nullCount = item[i];
-          }
-       });
-
-      this.finalCount = `Flight number is missing for ${this.nullCount.nullcount} records`;
-      this.originAirport = `Origin Airport is missing for ${this.nullCount.nullcount} records`;
       this.analyseKeyChartData = chartData;
     }, (error) => {
       this.analyseKeyData = [];
@@ -263,17 +260,18 @@ export class DashboardComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log(result)
+        console.log(result);
         this.settings = result;
       }
     });
   }
 
-   openDialogColor() {
+   showDetails(details) {
      this.dialog.open(CompletenessDialogComponent, {
-      width: '660px',
-      data: {incompleteCDE: this.nullCount }
-     });
- }
+      width: '95%',
+      height: '95%',
+      data: details ? details : []
+    });
+  }
 
 }

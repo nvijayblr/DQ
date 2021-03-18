@@ -1,14 +1,26 @@
 <h1 mat-dialog-title>Incomplete CDEs</h1>
 <div mat-dialog-content>
-  <ul>
-    <li>
-      <span *ngIf="data.incompleteCDE.nullcount">&#10003; Flight Number = {{data.incompleteCDE.nullcount}}</span>
-    </li>
-    <li>
-      <span *ngIf="data.incompleteCDE.nullcount">&#10003; Origin Airport = {{data.incompleteCDE.nullcount}}</span>
-    </li>
-   
-  </ul>
+  <table class="table brd-rt">
+    <tbody style="border: 1px solid #dee2e6">
+      <tr *ngFor="let rowItem of data;" >
+        <td  *ngFor="let item of rowItem | keyvalue" [hidden]="item.key === 'Outlier'">
+          {{item.key}}: <span class="strong" (click)="launchAnalysisDetails(rowItem);">{{item.value}}</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <mat-card fxFlex class="stats process-blocks-table" style="height: 450px" *ngIf="showDetails">
+    <app-ag-grid
+      floatingFilter="true"
+      [isLoading]="isLoading"
+      [rowData]="rowData"
+      [columnDefs]="columnDefs"
+      [pageSize]="pageSize"
+      [rowSelection]="'multiple'"
+      [suppressRowClickSelection]="false"
+    ></app-ag-grid>
+  </mat-card>
+  <app-progress-bar [message]="'Please wait while your rows are loading'" class="page" *ngIf="isLoading"></app-progress-bar>
 </div>
 <div mat-dialog-actions>
    <button mat-raised-button  color="accent" (click)="onNoClick()">Close</button>

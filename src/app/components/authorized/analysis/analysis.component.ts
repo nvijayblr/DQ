@@ -609,6 +609,7 @@ export class AnalysisComponent implements OnInit {
       this.stepIndex = index;
   }
 
+
   stepperSelectionChange(event) {
     this.stepIndex = event.selectedIndex;
   }

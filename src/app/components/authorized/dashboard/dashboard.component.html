@@ -37,7 +37,7 @@
                       <td>{{data.source.sourceFileName}}</td>
                       <td style="max-width: 240px; overflow: hidden;">
                         <div *ngFor="let ref of data.reference;">
-                          {{ref.referenceId}} - {{ref.referenceDataName}} - {{ref.referenceFileName}}
+                          {{ref.referenceId}} - {{ref.referenceDataName}}
                         </div>
                       </td>
                       <td>
@@ -230,21 +230,14 @@
                       <td [style.background-color]="data.completness?.value | formatCell: settings">
                         <span 
                           *ngIf="data.completness?.details.length"
-                          #tooltip="matTooltip"
-                          matTooltip="{{finalCount}}"
-                          [matTooltipPosition]="'above'"
-                          matTooltipHideDelay="10"
-                          (click)="openDialogColor()"
+                          (click)="showDetails(data.completness?.details)"
                         >{{data.completness?.value}}%</span>
                         <span *ngIf="!data.completness?.details.length">{{data.completness?.value}}%</span>
                       </td>
-                      <td [style.background-color]="data.completness?.value | formatCell: settings">
+                      <td [style.background-color]="data.Validity?.value | formatCell: settings">
                         <span 
                           *ngIf="data.Validity?.details.length"
-                          #tooltip="matTooltip"
-                          [matTooltip]="originAirport"
-                          [matTooltipPosition]="'above'"
-                          matTooltipHideDelay="10"
+                          (click)="showDetails(data.Validity?.details)"
                         >{{data.Validity?.value}}%</span>
                         <span *ngIf="!data.Validity?.details.length">{{data.Validity?.value}}%</span>
                       </td>
@@ -261,10 +254,7 @@
                       <td [style.background-color]="data.Uniqueness?.value | formatCell: settings">
                         <span 
                           *ngIf="data.Uniqueness?.details.length"
-                          #tooltip="matTooltip"
-                          [matTooltip]="data.Uniqueness.details | json"
-                          [matTooltipPosition]="'above'"
-                          matTooltipHideDelay="10"
+                          (click)="showDetails(data.Uniqueness?.details)"
                         >{{data.Uniqueness?.value}}%</span>
                         <span *ngIf="!data.Uniqueness?.details.length">{{data.Uniqueness?.value}}%</span>
                       </td>
@@ -284,3 +274,10 @@
 
   </div>
 </section>
+<!-- <table class="table brd-rt">
+  <tbody style="border: 1px solid #dee2e6">
+    <tr *ngFor="let rowItem of rowData;" >
+      <td  *ngFor="let item of rowItem | keyvalue">{{item.key}}: {{item.value}}</td>
+    </tr>
+  </tbody>
+</table> -->

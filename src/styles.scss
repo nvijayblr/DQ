@@ -6,6 +6,14 @@
 @import "../node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css";
 @import "~ng-pick-datetime/assets/style/picker.min.css";
 
+// Import ag-grid styles.
+// @import "~ag-grid-community/dist/styles/ag-grid.css";
+// @import "~ag-grid-community/dist/styles/ag-theme-balham.css";
+// @import "~ag-grid-community/dist/styles/ag-theme-material.css";
+@import "../node_modules/ag-grid-community/dist/styles/ag-grid.css";
+@import "../node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css";
+
+
 ::-webkit-scrollbar {
   -webkit-appearance: none;
   width: 6px;

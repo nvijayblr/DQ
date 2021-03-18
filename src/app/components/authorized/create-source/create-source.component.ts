@@ -97,6 +97,8 @@ export class CreateSourceComponent implements OnInit {
   refFiles: any = [];
   mode = 'create';
   sourceId = '';
+  sourceNames = [];
+  summary: any = {};
 
   constructor(
     private fb: FormBuilder,
@@ -122,8 +124,10 @@ export class CreateSourceComponent implements OnInit {
     this.user = this.authGuardService.getLoggedInUserDetails();
     this.userId = this.user.user_id;
 
+    const sourceNames = localStorage.getItem('dq-source-names');
+    this.sourceNames = sourceNames ? JSON.parse(sourceNames) : [];
+
     let analysis = this.messageService.getSource();
-    console.log(analysis);
     if (!analysis.source) {
       analysis = {
         source:  {}
@@ -246,7 +250,10 @@ export class CreateSourceComponent implements OnInit {
         alert(result.errorMsg);
         return;
       }
-      this.showSaveSuccess();
+      this.summary = result;
+      console.log(this.summary);
+      this.gotoStepper(2);
+      // this.showSaveSuccess();
     }, (error) => {
       this.isLoading = false;
     });
@@ -285,6 +292,15 @@ export class CreateSourceComponent implements OnInit {
 
   gotoStepper(index, tab = '') {
     this.stepIndex = index;
+  }
+
+  validateSourceNameAndNext() {
+    const sourceName = this.afControls.sourceDataName.value;
+    if (this.sourceNames.includes(sourceName) && this.mode === 'create') {
+      alert('Source name is already found. Please enter the different source name.');
+      return;
+    }
+    this.gotoStepper(1, 'CSV');
   }
 
   stepperSelectionChange(event) {

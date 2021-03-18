@@ -8,6 +8,7 @@ import { CarouselModule } from 'ngx-owl-carousel-o';
 import { RatingModule } from 'ng-starrating';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { ColorPickerModule } from 'ngx-color-picker';
+import { AgGridModule } from 'ag-grid-angular';
 
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
@@ -25,6 +26,7 @@ import { CylinderChartComponent } from './cylinder-chart/cylinder-chart.componen
 import { ColorDialogComponent } from './color-dialog/color-dialog.component';
 import { CompletenessDialogComponent } from './completeness-dialog/completeness-dialog.component';
 import { RuleSelectorComponent } from './rule-selector/rule-selector.component';
+import { AgGridComponent } from './ag-grid/ag-grid.component';
 
 @NgModule({
   imports: [
@@ -38,7 +40,8 @@ import { RuleSelectorComponent } from './rule-selector/rule-selector.component';
     RatingModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
-    ColorPickerModule
+    ColorPickerModule,
+    AgGridModule.withComponents([]),
   ],
   declarations: [
     HeaderComponent,
@@ -57,6 +60,7 @@ import { RuleSelectorComponent } from './rule-selector/rule-selector.component';
     ColorDialogComponent,
     CompletenessDialogComponent,
     RuleSelectorComponent,
+    AgGridComponent,
   ],
   exports: [
     FormsModule,
@@ -76,13 +80,15 @@ import { RuleSelectorComponent } from './rule-selector/rule-selector.component';
     RatingModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
+    AgGridModule,
     ColumnSelectorComponent,
     DragDropListComponent,
     BarChartComponent,
     CylinderChartComponent,
     ColorDialogComponent,
     CompletenessDialogComponent,
-    RuleSelectorComponent
+    RuleSelectorComponent,
+    AgGridComponent
   ],
   providers: [
      DatePipe,

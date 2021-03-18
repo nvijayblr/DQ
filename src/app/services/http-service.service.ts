@@ -73,6 +73,17 @@ export class HttpService  {
     );
   }
 
+  launchAnalysisDetails(id): Observable<any> {
+    return this.http.get<any>(`${this.rootUrl}/dev/api/getLaunchResult?id=${id}`).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+
   launchAnalysisByKey(payload): Observable<any> {
     return this.http.post<any>(`${this.rootUrl}/dev/api/LaunchAnalysisbyKey`, payload).pipe(
       tap((res) => {

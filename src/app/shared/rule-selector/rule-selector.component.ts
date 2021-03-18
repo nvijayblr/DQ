@@ -7,6 +7,8 @@ import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, ViewEnc
   encapsulation: ViewEncapsulation.None
 })
 export class RuleSelectorComponent implements OnInit {
+  @ViewChild('ruleSelect', {static: true}) ruleSelect;
+
   @Input() ruleItems: any = [];
   @Input() showAddItem = true;
   @Input() initValue: any;
@@ -82,7 +84,6 @@ export class RuleSelectorComponent implements OnInit {
   }
 
   addRuleItem(selectedRule) {
-
     const isItemFound = this.ruleItems.filter(item => item.value === this.ruleItem);
     if (isItemFound.length) {
       alert('The value already found in the list.');
@@ -119,6 +120,7 @@ export class RuleSelectorComponent implements OnInit {
   }
 
   showHideAddInput(isShow) {
+    this.ruleSelect.close();
     this.ruleItem = '';
     this.showAdd = isShow;
   }

@@ -94,7 +94,7 @@
                     <div class="act-btn-wrapper">
                         <button mat-stroked-button class="primary-btn-gray"
                         [disabled]="!afControls.sourceDataName.value"
-                        (click)="gotoStepper(1, 'CSV')">Next <mat-icon>arrow_forward_ios</mat-icon></button>
+                        (click)="validateSourceNameAndNext()">Next <mat-icon>arrow_forward_ios</mat-icon></button>
                     </div>
                   </mat-card>
                 </mat-step>
@@ -150,10 +150,77 @@
                     </div>
                     <div class="act-btn-wrapper">
                       <button mat-stroked-button class="primary-btn-gray"
-                      (click)="saveSource()">Save</button>
+                      (click)="saveSource()">Save & Summary</button>
                     </div>
 
                   </mat-card>
+                </mat-step>
+
+                <mat-step>
+                  <ng-template matStepLabel>Summary</ng-template>
+                  <mat-card class="border no-rounded list shrare-post">
+                    <h1 class="share-post-title">Summary</h1>
+                    <div class="analysis-preview">
+                      <table class="table">
+                        <tbody>
+                          <tr>
+                            <td><div class="label">Source Name</div></td>
+                            <td>{{summary.source?.sourceDataName}}</td>
+                          </tr>
+                          <tr>
+                            <td><div class="label">Available CDE</div></td>
+                          <td>
+                            <span *ngFor="let column of summary.source?.availableColumns">
+                              {{column}},
+                            </span>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td><div class="label">Rerference Name</div></td>
+                            <td></td>
+                          </tr>
+                          <tr *ngFor="let ref of summary.reference">
+                            <td>{{ref.referenceDataName}}</td>
+                            <td>
+                              <span *ngFor="let column of ref?.availableRefColumns">
+                                {{column}},
+                              </span>
+                              </td>
+                            </tr>
+
+                            <tr>
+                              <td><div class="label">Settings</div></td>
+                              <td></td>
+                            </tr>
+                            <tr>
+                              <td><div class="label">Multi source name</div></td>
+                              <td>{{summary.settings?.multiSourceOptions}}</td>
+                            </tr>
+                            <tr>
+                              <td><div class="label">Frequency</div></td>
+                              <td>{{summary.settings?.frequency}}</td>
+                            </tr>
+                            <tr>
+                              <td><div class="label">Upload Date</div></td>
+                              <td>{{summary.settings?.uploadDate}}</td>
+                            </tr>
+                            <tr>
+                              <td><div class="label">Upload Time</div></td>
+                              <td>{{summary.settings?.uploadTime}}</td>
+                            </tr>
+                            <tr>
+                              <td><div class="label">Department</div></td>
+                              <td>{{summary.settings?.department}}</td>
+                            </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="act-btn-wrapper">
+                      <button mat-stroked-button class="primary-btn-gray white pad" (click)="gotoStepper(1);"><mat-icon class="mar-ico">arrow_back_ios_new</mat-icon> Back</button>
+                      <button mat-stroked-button class="primary-btn-red" (click)="showSaveSuccess()" [disabled]="isLoading">Complete</button>
+                    </div>
+                  </mat-card>
+
                 </mat-step>
             </mat-horizontal-stepper>
           </form>
