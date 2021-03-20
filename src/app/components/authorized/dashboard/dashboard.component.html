@@ -1,5 +1,5 @@
 <section class="page-body home-bodys">
-  <div class="container">
+  <div class="container" style="max-width: calc(100% - 50px);">
     <div class="home-wrapper">
       <div class="clearfix my-community-body">
         <div class="home-panel">
@@ -89,20 +89,36 @@
                 <table class="table">
                   <thead>
                     <tr>
+                      <th>Type</th>
                       <th>ID</th>
                       <th>Source Name</th>
-                      <th>File Name</th>
+                      <th>Source Name</th>
                       <th>Select File</th>
+                      <th>Date</th>
                       <th>Ruleset Name</th>
                       <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr *ngFor="let data of sourceList;">
+                      <td>
+                        <div class="source-type" *ngIf="data.settings?.multiSourceOptions && data.settings?.multiSourceOptions.length<=1">S</div>
+                        <div class="source-type" *ngIf="data.settings?.multiSourceOptions && data.settings?.multiSourceOptions.length >1">M</div>
+                      </td>
                       <td>{{data.sourceId}}</td>
                       <td>{{data.source.sourceDataName}}</td>
-                      <td>{{data.source.sourceFileName}}</td>
-                      <td style="max-width: 80px;">
+                      <td>
+                        <div class="outline">
+                          <mat-form-field appearance="outline">
+                            <mat-select  [(ngModel)]="data.multisource" [disabled]="data.settings?.multiSourceOptions && data.settings?.multiSourceOptions.length<=1">
+                              <mat-option *ngFor="let multisource of data.settings?.multiSourceOptions;" [value]="multisource">
+                                {{multisource}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </td>
+                      <td style="max-width: 106px;">
                         <app-image-cropper 
                           [imageType]="'Source'"
                           [fileTypes]="'.csv'"
@@ -110,6 +126,15 @@
                           (fileSelected)="onSourceCSVSelected($event)"
                         >
                         </app-image-cropper>
+                      </td>
+                      <td>
+                        <div class="outline">
+                          <mat-form-field appearance="outline">
+                            <input matInput [matDatepicker]="frompicker" formControlName="settingsDate" [(ngModel)]="data.uploadDate" autocomplete="off">
+                            <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
+                            <mat-datepicker #frompicker [dateClass]="dateClass"></mat-datepicker>
+                          </mat-form-field>
+                        </div>
                       </td>
                       <td>
                         <div class="outline">
@@ -122,7 +147,8 @@
                           </mat-form-field>
                         </div>
                       </td>
-                      <td>
+                      <td class="btn-wrappers">
+                        <button mat-stroked-button class="primary-btn-red" (click)="launchAnalysis(data)">Upload</button>
                         <button mat-stroked-button class="primary-btn-red" (click)="launchAnalysis(data)" [disabled]="!data.rulesetId">Launch</button>
                       </td>
                     </tr>

@@ -12,7 +12,7 @@ import { CompletenessDialogComponent } from '../../../shared/completeness-dialog
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
 
@@ -272,6 +272,12 @@ export class DashboardComponent implements OnInit {
       height: '95%',
       data: details ? details : []
     });
+  }
+
+  dateClass = (d: Date) => {
+    const date = d.getDay();
+    // Highlight saturday and sunday.
+    return (date === 4) ? 'highlight-dates' : undefined;
   }
 
 }
