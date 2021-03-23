@@ -164,24 +164,31 @@
                       <table class="table">
                         <tbody>
                           <tr>
-                            <td><div class="label">Source Name</div></td>
-                            <td>{{summary.source?.sourceDataName}}</td>
+                            <td><div class="label">Source Data</div></td>
+                            <td></td>
                           </tr>
                           <tr>
-                            <td><div class="label">Available CDE</div></td>
+                            <td>
+                              <div class="label">Name</div>
+                              {{summary.source?.sourceDataName}}
+                            </td>
                           <td>
+                            <div class="label">CDE</div>
                             <span *ngFor="let column of summary.source?.availableColumns">
                               {{column}},
                             </span>
                             </td>
                           </tr>
                           <tr>
-                            <td><div class="label">Rerference Name</div></td>
+                            <td><div class="label" style="width: 200px;">Rerference Data</div></td>
                             <td></td>
                           </tr>
-                          <tr *ngFor="let ref of summary.reference">
-                            <td>{{ref.referenceDataName}}</td>
+                          <tr *ngFor="let ref of summary.reference; index as i;">
                             <td>
+                              <div class="label">Name</div>
+                              #{{i+1}}. {{ref.referenceDataName}}</td>
+                            <td>
+                              <div class="label">Reference CDE</div>
                               <span *ngFor="let column of ref?.availableRefColumns">
                                 {{column}},
                               </span>

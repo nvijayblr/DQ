@@ -9,6 +9,7 @@ import { appConfig } from '../../../app.config';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { S } from '@angular/cdk/keycodes';
+import { _ } from 'ag-grid-community';
 
 @Component({
   selector: 'app-analysis',
@@ -373,6 +374,9 @@ export class AnalysisComponent implements OnInit {
     referenceData.map(refData => {
       referenceCSV.push(this.intiFormArrays('referenceData', refData));
     });
+    if (this.mode === 'edit') {
+      this.columnsForm.controls.refernceColumns.setValue(this.selectedReferenceColumns);
+    }
   }
 
   intiFormArrays(field, value: any = {}) {
@@ -384,6 +388,7 @@ export class AnalysisComponent implements OnInit {
         };
       });
       this.availableReferenceColumns = refAvailableColumns;
+      console.log(this.availableReferenceColumns);
       return this.fb.group({
         id: [value.id],
         referenceDataName: [{value: value.referenceDataName, disabled: true}],

@@ -148,9 +148,7 @@ export class CreateSourceComponent implements OnInit {
     });
 
     const referenceData = this.analysisForm.controls.referenceData as FormArray;
-    let referenceDataList = [{
-      referenceId: undefined,
-    }];
+    let referenceDataList = [];
     if (analysis.reference) {
       referenceDataList = analysis.reference;
     }
@@ -218,10 +216,14 @@ export class CreateSourceComponent implements OnInit {
     if (isRefFileErr) {
       return;
     }
-
+    let sourceRefNameEqual = false;
     const refPayload = analysis.referenceData.map((ref, index) => {
       if (this.mode === 'create') {
         delete ref.referenceId;
+      }
+      const sourceFileName = this.sourceFile.name ? this.sourceFile.name : analysis.sourceFileName;
+      if (this.refFiles[index] && this.refFiles[index].name === sourceFileName) {
+        sourceRefNameEqual = true;
       }
       return {
         ...ref,
@@ -238,6 +240,11 @@ export class CreateSourceComponent implements OnInit {
       reference: refPayload,
       settings: this.sourceSettings
     };
+
+    if (sourceRefNameEqual) {
+      alert('The source file and reference file should not be same.');
+      return;
+    }
 
     formData.append('data', JSON.stringify(payload));
 

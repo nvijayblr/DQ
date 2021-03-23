@@ -1,27 +1,34 @@
+<button class="close" mat-icon-button (click)="onNoClick()">
+  <mat-icon>close</mat-icon>
+</button>
 <h1 mat-dialog-title>Incomplete CDEs</h1>
 <div mat-dialog-content>
-  <table class="table brd-rt">
-    <tbody style="border: 1px solid #dee2e6">
-      <tr *ngFor="let rowItem of data;" >
-        <td  *ngFor="let item of rowItem | keyvalue" [hidden]="item.key === 'Outlier'">
-          {{item.key}}: <span class="strong" (click)="launchAnalysisDetails(rowItem);">{{item.value}}</span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <mat-card fxFlex class="stats process-blocks-table" style="height: 450px" *ngIf="showDetails">
-    <app-ag-grid
-      floatingFilter="true"
-      [isLoading]="isLoading"
-      [rowData]="rowData"
-      [columnDefs]="columnDefs"
-      [pageSize]="50"
-      [rowSelection]="'multiple'"
-      [suppressRowClickSelection]="false"
-    ></app-ag-grid>
-  </mat-card>
-  <app-progress-bar [message]="'Please wait while your rows are loading'" class="page" *ngIf="isLoading"></app-progress-bar>
-</div>
-<div mat-dialog-actions>
-   <button mat-raised-button  color="accent" (click)="onNoClick()">Close</button>
+  <div class="btn-wrapper clearfix" [hidden]="!showDetails">
+    <button mat-button class="primary-btn-gray white pad" (click)="showDetails = false">
+      <mat-icon>arrow_back_ios_new</mat-icon>Back
+    </button>
+  </div>
+  <div class="content-details">
+    <table class="table brd-rt" *ngIf="!showDetails">
+      <tbody style="border: 1px solid #dee2e6">
+        <tr *ngFor="let rowItem of data;" >
+          <td  *ngFor="let item of rowItem | keyvalue" [hidden]="item.key === 'Outlier'">
+            {{item.key}}: <span class="strong" (click)="launchAnalysisDetails(rowItem);">{{item.value}}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <mat-card fxFlex class="stats process-blocks-table" style="height: 100%" *ngIf="showDetails">
+      <app-ag-grid
+        floatingFilter="true"
+        [isLoading]="isLoading"
+        [rowData]="rowData"
+        [columnDefs]="columnDefs"
+        [pageSize]="50"
+        [rowSelection]="'multiple'"
+        [suppressRowClickSelection]="false"
+      ></app-ag-grid>
+    </mat-card>
+    <app-progress-bar [message]="'Details are loading...'" class="component" *ngIf="isLoading"></app-progress-bar>
+  </div>
 </div>

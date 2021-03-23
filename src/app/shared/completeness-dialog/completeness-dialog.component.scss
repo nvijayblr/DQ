@@ -10,7 +10,24 @@
 .mat-dialog-actions {
    text-align: right;
 }
+.mat-dialog-content {
+   max-height: auto;
+}
 .strong {
    font-weight: 600;
    cursor: pointer;
+}
+.btn-wrapper {
+   text-align: right;
+   margin-bottom: 20px;
+}
+.content-details {
+   height: calc(100vh - 210px);
+}
+.mat-dialog-content {
+   overflow: hidden;
+   max-height: initial;
+}
+.primary-btn-gray mat-icon {
+   margin-right: 10px;
 }

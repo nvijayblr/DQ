@@ -102,7 +102,7 @@ export class ColumnSelectorComponent implements ControlValueAccessor {
     getupdatedDestinationColumns(destinationColumns, selectedItemFromList, sortDestination = false) {
         if (sortDestination) {
             destinationColumns.push(...selectedItemFromList);
-            destinationColumns = destinationColumns.sort((a, b) => a.title.localeCompare(b.title));
+            // destinationColumns = destinationColumns.sort((a, b) => a.title.localeCompare(b.title));
         } else {
             destinationColumns.splice(this.lastSelectedItemIndex, 0, ...selectedItemFromList);
         }

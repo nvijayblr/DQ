@@ -336,4 +336,14 @@
  .table tbody td {
     padding-left:0px!important;
  }
- 
+ .table td.strong {
+   font-weight: bold;
+ }
+.rule-details-info {
+  width: calc(100% - 432px);
+  overflow: auto;
+}
+.correlation-info {
+  margin: 0 0 0 22px;
+  width: 410px;
+}

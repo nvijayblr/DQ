@@ -114,7 +114,7 @@
                       >
                       </app-column-selector>
                     </div>
-
+                    
                     <div class="act-btn-wrapper">
                       <button mat-stroked-button class="primary-btn-gray white pad" (click)="gotoStepper(0)"><mat-icon class="mar-ico">arrow_back_ios_new</mat-icon> Back</button>
                       <button mat-stroked-button class="primary-btn-gray" 
@@ -126,8 +126,8 @@
                 
                 <mat-step>
                   <ng-template matStepLabel>Rule Definition</ng-template>
-                  <div class="list flex-containers wrap">
-                    <mat-card class="border no-rounded shrare-post" style="width: 1000px;">
+                  <div class="list wrap">
+                    <mat-card class="border no-rounded shrare-post">
                       <h1 class="share-post-title">Rule<span class="red"> Definition</span></h1>
                       <div class="list flex-containers flex-start wrap cde-fields-wrp">
                         <div class="list-item-3 outline">
@@ -193,7 +193,7 @@
                           <div class="rule-step-wrapper rule-list-wrp"
                             *ngFor="let rule of columns.get('rules')['controls']; index as j; last as isLast; first as isFirst" formArrayName="rules">
                             <ng-container [formGroupName]="j">
-                              <h5 class="rule-title">Rule #1</h5>
+                              <h5 class="rule-title">Rule #{{j+1}}</h5>
                               <div class="rule-selection-wrapper">
                                 <div class="list flex-containers flex-start wrap cde-fields-wrp">
                                   <div class="list-item-5 outline">
@@ -212,14 +212,17 @@
                                   </div>
                                   <div class="list-item-5 outline">
                                     <app-rule-selector 
+                                      *ngIf="rule.get('rule').value !== 'ReferenceCDE'"
                                       [ruleItems]="ruleValueList[rule.get('rule').value]" 
                                       [initValue]="rule.get('value').value" 
                                       (selectionChange)="rule.get('value').setValue($event.value)"
                                     ></app-rule-selector>
+                                    <mat-form-field appearance="outline" *ngIf="rule.get('rule').value === 'ReferenceCDE'">
+                                      <mat-select formControlName="value" (change)="rule.get('value').setValue($event.value)">
+                                        <mat-option *ngFor="let item of columnsForm.controls.refernceColumns.value" [value]="item.title">{{item.title}}</mat-option>
+                                      </mat-select>
+                                    </mat-form-field>
                                   </div>
-                                  <!-- <div class="list-item-5 outline">
-                                    <app-rule-selector [ruleItems]="ruleFormatList[ruleValue]" (selectionChange)="ruleFormat=$event.value"></app-rule-selector>
-                                  </div> -->
                                   <div class="list-item-5 outline">
                                     <app-rule-selector 
                                       [ruleItems]="ruleDimenstionList" 
@@ -237,50 +240,11 @@
                                   </div>
                                 </div>
                               </div>
-        
-                              <!-- <div class="list flex-containers flex-start wrap">
-                                <div class="list-item-8 outline">
-                                  <mat-label class="rule-label">Rule #{{j+1}}</mat-label>
-                                </div>
-                                <div class="list-item-3 outline">
-                                  <mat-form-field appearance="outline">
-                                    <mat-select formControlName="rule">
-                                      <mat-option *ngFor="let item of ruleTypes" [value]="item.value">{{item.label}}</mat-option>
-                                    </mat-select>
-                                  </mat-form-field>
-                                </div>
-                                <div class="list-item-3 outline">
-                                  <mat-form-field appearance="outline" *ngIf="rule.get('rule').value === 'DataType'">
-                                    <mat-select formControlName="value">
-                                      <mat-option *ngFor="let item of dataTypes" [value]="item.value">{{item.label}}</mat-option>
-                                    </mat-select>
-                                  </mat-form-field>
-  
-                                  <mat-form-field appearance="outline" *ngIf="rule.get('rule').value !== 'DataType' && rule.get('rule').value !== 'ReferenceCDE'">
-                                    <input matInput placeholder="Value" formControlName="value" maxlength="10" autocomplete="off"/>
-                                  </mat-form-field>
-                                  <mat-form-field appearance="outline" *ngIf="rule.get('rule').value === 'ReferenceCDE'">
-                                    <mat-select formControlName="value">
-                                      <mat-option *ngFor="let item of columnsForm.controls.refernceColumns.value" [value]="item.title">{{item.title}}</mat-option>
-                                    </mat-select>
-                                  </mat-form-field>
-                                </div>
-                                <div class="list-item-6 add-remove-button">
-                                  <button type="button" mat-icon-button (click)="addRules(columns, 'rules')" *ngIf="isLast">
-                                    <mat-icon>add</mat-icon>
-                                  </button>
-                                  <button type="button" mat-icon-button class="del-icon" (click)="removeRules(columns, 'rules', j)" *ngIf="!isFirst || !isLast">
-                                    <mat-icon>delete</mat-icon>
-                                  </button>
-                                </div>
-                              </div> -->
                             </ng-container>
                           </div>
+                          
                         </ng-container>
                       </mat-expansion-panel>
-
-                      
-                  
                       <div class="act-btn-wrapper">
                         <button mat-stroked-button class="primary-btn-gray white pad" (click)="gotoStepper(1);"><mat-icon class="mar-ico">arrow_back_ios_new</mat-icon> Back</button>
                         <button mat-stroked-button class="primary-btn-gray" 
@@ -288,15 +252,22 @@
                           (click)="generatePreview();">Next <mat-icon>arrow_forward_ios</mat-icon></button>
                       </div>
                     </mat-card>
-                    <mat-card class="border no-rounded list-item shrare-post font" style="width: 298px;">
-                      <h1 class="share-post-title"><span class="red">{{selectedRuleColumn}}</span></h1>
-                      <table class="table">
-                        <tr *ngFor="let statistics of cdeStatistics | keyvalue">
-                          <td class="strong">{{statistics.key}}</td>
-                          <td>{{statistics.value}}</td>
-                        </tr>
-                      </table>
-                    </mat-card>
+                    <div class="list flex-containers wrap">
+                      <mat-card class="border no-rounded shrare-post font rule-details-info">
+                        <h1 class="share-post-title"><span class="red">{{selectedRuleColumn}}</span></h1>
+                        <table class="table">
+                          <tr>
+                            <td class="strong" *ngFor="let statistics of cdeStatistics | keyvalue">{{statistics.key}}</td>
+                          </tr>
+                          <tr>
+                            <td *ngFor="let statistics of cdeStatistics | keyvalue">{{statistics.value}}</td>
+                          </tr>
+                        </table>
+                      </mat-card>
+                      <mat-card class="border no-rounded shrare-post font correlation-info">
+                        <h1 class="share-post-title"><span class="red">Correlation Info</span></h1>
+                      </mat-card>
+                    </div>
                   </div>
                 </mat-step>
 
