@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { MessageService } from '../../../services/message.service';
 import { HttpService } from '../../../services/http-service.service';
 import { AuthGuardService } from 'src/app/services/auth-guard.service';
@@ -110,6 +111,53 @@ export class DashboardComponent implements OnInit {
     }, (error) => {
       this.isLoading = false;
     });
+  }
+
+  onSourceCSVSelected(file, analysis) {
+    analysis.file = file;
+  }
+
+
+  uploadSource(analysis) {
+    console.log(analysis);
+    let isMultiSource = false;
+    if (analysis.settings && analysis.settings.multiSourceOptions && analysis.settings.multiSourceOptions.length > 1) {
+      isMultiSource = true;
+    }
+    if (isMultiSource && !analysis.multisource) {
+      alert('Please select the source name.');
+      return;
+    }
+
+    if (!analysis.file) {
+      alert('Please select the source file to upload.');
+      return;
+    }
+    if (!analysis.uploadDate) {
+      alert('Please select the upload date.');
+      return;
+    }
+    const payload =  {
+      sourceId: analysis.sourceId,
+      rulesetId: analysis.rules.length ? analysis.rules[0].rulesetId : '',
+      isMultiSource: isMultiSource ? 'Yes' : 'No',
+      multiSourceKey: analysis.multisource ? analysis.multisource : '',
+      uploadDate: analysis.uploadDate,
+      uploadTime: '20:28',
+      sourceObj: analysis.source
+    };
+    const formData: any = new FormData();
+    formData.append('file[]', analysis.file);
+    formData.append('data', JSON.stringify(payload));
+    this.isLoading = true;
+    this.loaderMsg = 'Saving Source data...';
+    this.http.uploadSource(formData).subscribe((result: any) => {
+      this.isLoading = false;
+      alert('Source has been uploaded successfully.');
+    }, (error) => {
+      this.isLoading = false;
+    });
+
   }
 
   launchAnalysis(analysis) {
@@ -235,23 +283,23 @@ export class DashboardComponent implements OnInit {
     this.showAnalysisByKey = false;
   }
 
-  onSourceCSVSelected(file) {
-    const formData: any = new FormData();
-    formData.append('file[]', file);
-    formData.append('data', JSON.stringify({
-      sourceFilename: file.name
-    }));
-    this.isLoading = true;
-    this.isSourceUploaded = false;
-    this.loaderMsg = 'Uploading the source cvs...';
-    this.http.uploadSourceCSV(formData).subscribe((result: any) => {
-      this.isLoading = false;
-      this.isSourceUploaded = true;
-    }, (error) => {
-      this.isLoading = false;
-      this.isSourceUploaded = false;
-    });
-  }
+  // onSourceCSVSelected(file) {
+    // const formData: any = new FormData();
+    // formData.append('file[]', file);
+    // formData.append('data', JSON.stringify({
+    //   sourceFilename: file.name
+    // }));
+    // this.isLoading = true;
+    // this.isSourceUploaded = false;
+    // this.loaderMsg = 'Uploading the source cvs...';
+    // this.http.uploadSourceCSV(formData).subscribe((result: any) => {
+    //   this.isLoading = false;
+    //   this.isSourceUploaded = true;
+    // }, (error) => {
+    //   this.isLoading = false;
+    //   this.isSourceUploaded = false;
+    // });
+  // }
 
    openHighlightSettingsDialog(): void {
     const dialogRef = this.dialog.open(ColorDialogComponent, {

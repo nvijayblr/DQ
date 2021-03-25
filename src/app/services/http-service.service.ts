@@ -146,7 +146,6 @@ export class HttpService  {
   // New APIs
 
   saveSource(payload, method): Observable<any> {
-    console.log(method);
     return this.http[method]<any>(`${this.rootUrl}/dev/api/configureSource`, payload).pipe(
       tap((res) => {
       }),
@@ -155,6 +154,17 @@ export class HttpService  {
       }),
     );
   }
+
+  uploadSource(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/dev/api/uploadSource`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
 
   getSources(): Observable<any> {
     return this.http.get<any>(`${this.rootUrl}/dev/api/listSource`).pipe(
