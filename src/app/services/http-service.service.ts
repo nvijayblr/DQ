@@ -85,7 +85,7 @@ export class HttpService  {
 
 
   launchAnalysisByKey(payload): Observable<any> {
-    return this.http.post<any>(`${this.rootUrl}/dev/api/LaunchAnalysisbyKey`, payload).pipe(
+    return this.http.post<any>(`${this.rootUrl}/dev/api/LaunchAnalysisbyKeyfromDb`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
@@ -167,7 +167,7 @@ export class HttpService  {
 
 
   getSources(): Observable<any> {
-    return this.http.get<any>(`${this.rootUrl}/dev/api/listSource`).pipe(
+    return this.http.get<any>(`${this.rootUrl}/dev/api/getAllSources`).pipe(
       tap((res) => {
       }),
       catchError(err => {

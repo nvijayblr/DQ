@@ -9,6 +9,8 @@ import {PageEvent} from '@angular/material/paginator';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ColorDialogComponent } from '../../../shared/color-dialog/color-dialog.component';
 import { CompletenessDialogComponent } from '../../../shared/completeness-dialog/completeness-dialog.component';
+import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-dashboard',
@@ -57,6 +59,10 @@ export class DashboardComponent implements OnInit {
   };
 
   sourceList: any = [];
+  uploadsHistory: any = [];
+  highlightDates: any = [];
+  analysisKeys: any = [];
+  isLoadChart = false;
 
   constructor(
     public dialog: MatDialog,
@@ -78,7 +84,7 @@ export class DashboardComponent implements OnInit {
     this.isLoading = true;
     this.loaderMsg = 'Loading Sources...';
     this.http.getSources().subscribe((result: any) => {
-      this.sourceList = result ? result : [];
+      this.sourceList = result ? result.Analysis : [];
       const sourceNames = [];
       this.sourceList.map(item => {
         sourceNames.push(item.source.sourceDataName);
@@ -144,6 +150,7 @@ export class DashboardComponent implements OnInit {
       multiSourceKey: analysis.multisource ? analysis.multisource : '',
       uploadDate: analysis.uploadDate,
       uploadTime: '20:28',
+      settings: analysis.settings,
       sourceObj: analysis.source
     };
     const formData: any = new FormData();
@@ -153,18 +160,35 @@ export class DashboardComponent implements OnInit {
     this.loaderMsg = 'Saving Source data...';
     this.http.uploadSource(formData).subscribe((result: any) => {
       this.isLoading = false;
-      alert('Source has been uploaded successfully.');
+      if (result.errorMsg) {
+         this.showUploadError(result.errorMsg);
+      } else {
+        alert('Source has been uploaded successfully.');
+      }
     }, (error) => {
       this.isLoading = false;
     });
-
   }
 
+  showUploadError(msg) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Upload Error',
+        message: msg,
+        cancelLable: '',
+        okLable: 'OK'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(action => {
+    });
+  }
+
+
+
   launchAnalysis(analysis) {
-    this.showAnalysis = true;
-    // this.isLoading = true;
     this.selectedAnalysis = analysis;
-    this.loaderMsg = 'Launching analysis...';
     const payload = {
       sourceId: analysis.sourceId,
       rulesetId: analysis.rulesetId
@@ -176,57 +200,66 @@ export class DashboardComponent implements OnInit {
     }
     this.analyseData = [];
     this.analyseKeyData = [];
-    // this.http.launchAnalysis(payload).subscribe((result: any) => {
-    //   this.isLoading = false;
-    //   this.analyseData = result ? result : [];
-    //   const chartData = {
-    //     labels: [],
-    //     validity: [],
-    //     completeness: []
-    //   };
-
-    //   this.analyseData.map(data => {
-    //     chartData.labels.push(data.airline);
-    //     chartData.validity.push(data.Validity.value);
-    //     chartData.completeness.push(data.completness.value);
-    //   });
-    //   this.analyseChartData = chartData;
-    // }, (error) => {
-    //   this.analyseData = [];
-    //   this.isLoading = false;
-    // });
   }
 
   launchAnalysisByKey(keyname) {
+    const uploadDate = this.selectedAnalysis.uploadDate ? moment(this.selectedAnalysis.uploadDate).format('MM-DD-YYYY') : '';
+    if (!uploadDate) {
+      alert('Please select the upload date.');
+      return;
+    }
+
+    if (uploadDate && !this.selectedAnalysis.highlightDates.includes(uploadDate)) {
+      alert('There is no source for selected date.');
+      return;
+    }
+
+    const UploadsHistory = this.selectedAnalysis.UploadsHistory ? this.selectedAnalysis.UploadsHistory : [];
+    let uploadId = '';
+    UploadsHistory.map(history => {
+      if (moment(history.uploadDate).format('MM-DD-YYYY') === uploadDate) {
+        uploadId = history.uploadId;
+      }
+    });
+    keyname = 'AIRLINE';
     this.showAnalysisByKey = true;
     this.isLoadingDetails = true;
     this.selectedKey = keyname;
-    this.loaderMsg = 'Launching analysis...';
+
     const payload = {
       sourceId: this.selectedAnalysis.sourceId,
       rulesetId: this.selectedAnalysis.rulesetId,
+      uploadId,
       keyname
     };
+
+    this.showAnalysis = true;
+    this.loaderMsg = 'Launching analysis...';
     this.analyseKeyData = [];
+    this.isLoadChart = false;
     this.http.launchAnalysisByKey(payload).subscribe((result: any) => {
       this.isLoadingDetails = false;
       this.analyseKeyData = result ? result : [];
+      this.analysisKeys = [];
+      const analyseRowItem = (this.analyseKeyData && this.analyseKeyData.length) ? this.analyseKeyData[0] : [];
       const chartData = {
         labels: [],
-        validity: [],
-        completeness: [],
-        // integrity: [],
-        uniqueness: []
       };
-      this.analyseKeyData.map(data => {
-        chartData.labels.push(data[this.selectedKey]);
-        chartData.validity.push(data.Validity ? data.Validity.value : 0);
-        chartData.completeness.push(data.completness ? data.completness.value : 0);
-        // chartData.integrity.push(data.Integrity ? +data.Integrity.value : 0);
-        chartData.uniqueness.push(data.Uniqueness ? +data.Uniqueness.value : 0);
+      Object.keys(analyseRowItem).map(key => {
+        if (key !== this.selectedKey) {
+          this.analysisKeys.push(key);
+          chartData[key] = [];
+        }
       });
 
+      this.analyseKeyData.map(data => {
+        chartData.labels.push(data[this.selectedKey]);
+        this.analysisKeys.map(key => {
+          chartData[key].push(data[key] ? +data[key].value : 0);
+        });
+      });
       this.analyseKeyChartData = chartData;
+      this.isLoadChart = true;
     }, (error) => {
       this.analyseKeyData = [];
       this.isLoadingDetails = false;
@@ -243,7 +276,7 @@ export class DashboardComponent implements OnInit {
     this.launchAnalysisByKey(event.label);
   }
 
-   createEditRuleset(data, mode) {
+  createEditRuleset(data, mode) {
      console.log(data);
      let rules = data.rules.filter((rule) => data.rulesetId === rule.rulesetId);
      rules = (rules && rules.length) ? rules[0] : {columns: [], selectedColumns: []};
@@ -301,7 +334,7 @@ export class DashboardComponent implements OnInit {
     // });
   // }
 
-   openHighlightSettingsDialog(): void {
+  openHighlightSettingsDialog(): void {
     const dialogRef = this.dialog.open(ColorDialogComponent, {
       width: '800px',
       data: this.settings
@@ -322,10 +355,18 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  onOpenDatePicker(data: any) {
+    this.uploadsHistory = data.UploadsHistory ? data.UploadsHistory : [];
+    this.highlightDates = [];
+    this.uploadsHistory.map(history => {
+      this.highlightDates.push(moment(history.uploadDate).format('MM-DD-YYYY'));
+    });
+    data.highlightDates = this.highlightDates;
+  }
+
   dateClass = (d: Date) => {
-    const date = d.getDay();
-    // Highlight saturday and sunday.
-    return (date === 4) ? 'highlight-dates' : undefined;
+    const date = moment(d).format('MM-DD-YYYY');
+    return (this.highlightDates.includes(date)) ? 'highlight-dates' : undefined;
   }
 
 }

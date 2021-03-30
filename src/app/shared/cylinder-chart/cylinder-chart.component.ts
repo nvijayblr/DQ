@@ -30,6 +30,7 @@ export class CylinderChartComponent implements OnInit {
   @ViewChild('charts', {static: false}) public chartEl: ElementRef;
    @Input() chartData;
    @Input() chartType;
+   @Input() analysisKeys;
    @Output() xLableClicked = new EventEmitter<any>();
 
 
@@ -103,80 +104,10 @@ export class CylinderChartComponent implements OnInit {
          },
          series: []
        };
-
-      // this.chartOptions = {
-      //  chart: {
-      //     type: 'cylinder',
-      //     options3d: {
-      //         enabled: true,
-      //         alpha: this.alpha,
-      //         beta: this.beta,
-      //         depth: this.depth,
-      //         viewDistance: 25
-      //     }
-      // },
-      // title: {
-      //     text: ''
-      //    },
-      //    xAxis: {
-      //       title: {
-      //          text: 'airline',
-      //          rotation: 0
-      //      },
-      //       categories: ['AA', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'],
-      //       labels: {
-      //           rotation: 0
-      //       }
-      //    },
-      //    yAxis: {
-      //       //range: 30,
-      //       min: 0,
-      //       max: 100,
-      //       // minColor: '#ffece8',
-      //       // maxColor: '#8a1900',
-      //       title: {
-      //          text: 'No 0f delays',
-      //          rotation: -95
-      //       }
-      //   },
-      // plotOptions: {
-      //     series: {
-      //         depth: 25,
-      //       colorByPoint: true,
-      //       //color: '#59bfff'
-      //    },
-      //    bar: {
-      //       dataLabels: {
-      //           enabled: true
-      //       }
-      //   }
-      //    },
-      //    legend: {
-      //       layout: 'vertical',
-      //       align: 'right',
-      //       verticalAlign: 'top',
-      //       x: -40,
-      //       y: 80,
-      //       floating: true,
-      //       borderWidth: 1,
-      //       backgroundColor:
-      //           Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
-      //       shadow: true
-      //   },
-
-      // series: [{
-      //    data: [103, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
-      //    colorByPoint: true,
-      //     name: 'airline',
-      //    showInLegend: true,
-      //    color: '#000000',
-      // }]
-      // }
  }
 
  ngOnInit() {
    const agThis = this;
-   console.log(this.chartData.labels);
    this.chartOptions.xAxis = {
        categories: this.chartData.labels,
        title: {
@@ -190,23 +121,16 @@ export class CylinderChartComponent implements OnInit {
            }
        }
    };
+
    this.chartOptions.chart.type = this.chartType ? this.chartType : 'column';
-   this.chartOptions.series = [{
-       name: 'Completeness',
-       data: this.chartData.completeness
-     }, {
-        name: 'Validity',
-        data: this.chartData.validity
-      },
-    //   {
-    //     name: 'Integrity',
-    //     data: this.chartData.integrity
-    //   },
-      {
-        name: 'Uniqueness',
-        data: this.chartData.uniqueness
-      }];
-   console.log(this.chartData);
+   this.chartOptions.series = [];
+   this.analysisKeys.map(key => {
+       this.chartOptions.series.push({
+        name: key,
+        data: this.chartData[key]
+       });
+   });
+   console.log('this.chartData', this.chartData);
  }
 
 
