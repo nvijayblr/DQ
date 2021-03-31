@@ -84,7 +84,7 @@ export class DashboardComponent implements OnInit {
     this.isLoading = true;
     this.loaderMsg = 'Loading Sources...';
     this.http.getSources().subscribe((result: any) => {
-      this.sourceList = result ? result.Analysis : [];
+      this.sourceList = (result && result.Analysis) ? result.Analysis : [];
       const sourceNames = [];
       this.sourceList.map(item => {
         sourceNames.push(item.source.sourceDataName);
@@ -163,6 +163,7 @@ export class DashboardComponent implements OnInit {
       if (result.errorMsg) {
          this.showUploadError(result.errorMsg);
       } else {
+        this.getAllSources();
         alert('Source has been uploaded successfully.');
       }
     }, (error) => {
@@ -204,19 +205,21 @@ export class DashboardComponent implements OnInit {
 
   launchAnalysisByKey(keyname) {
     const uploadDate = this.selectedAnalysis.uploadDate ? moment(this.selectedAnalysis.uploadDate).format('MM-DD-YYYY') : '';
-    if (!uploadDate) {
+    console.log(this.selectedAnalysis);
+    const uploadsHistory = this.selectedAnalysis.UploadsHistory ? this.selectedAnalysis.UploadsHistory : [];
+
+    if (uploadsHistory.length && !uploadDate) {
       alert('Please select the upload date.');
       return;
     }
 
-    if (uploadDate && !this.selectedAnalysis.highlightDates.includes(uploadDate)) {
+    if (uploadsHistory.length && uploadDate && !this.selectedAnalysis.highlightDates.includes(uploadDate)) {
       alert('There is no source for selected date.');
       return;
     }
 
-    const UploadsHistory = this.selectedAnalysis.UploadsHistory ? this.selectedAnalysis.UploadsHistory : [];
     let uploadId = '';
-    UploadsHistory.map(history => {
+    uploadsHistory.map(history => {
       if (moment(history.uploadDate).format('MM-DD-YYYY') === uploadDate) {
         uploadId = history.uploadId;
       }

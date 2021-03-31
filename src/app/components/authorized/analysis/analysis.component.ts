@@ -472,7 +472,7 @@ export class AnalysisComponent implements OnInit {
     this.isLoading = true;
     this.loaderMsg = 'Loading Sources...';
     this.http.getSources().subscribe((result: any) => {
-      this.sourceList = result ? result : [];
+      this.sourceList = (result && result.Analysis) ? result.Analysis : [];
       this.isLoading = false;
     }, (error) => {
       this.isLoading = false;
