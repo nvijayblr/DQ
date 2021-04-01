@@ -124,8 +124,8 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  uploadSource(analysis) {
-    console.log(analysis);
+  uploadSource(analysis, reason = '') {
+    this.selectedAnalysis = analysis;
     let isMultiSource = false;
     if (analysis.settings && analysis.settings.multiSourceOptions && analysis.settings.multiSourceOptions.length > 1) {
       isMultiSource = true;
@@ -150,6 +150,7 @@ export class DashboardComponent implements OnInit {
       multiSourceKey: analysis.multisource ? analysis.multisource : '',
       uploadDate: analysis.uploadDate,
       uploadTime: '20:28',
+      uploadReason: reason ? reason : '',
       settings: analysis.settings,
       sourceObj: analysis.source
     };
@@ -177,12 +178,17 @@ export class DashboardComponent implements OnInit {
       data: {
         title: 'Upload Error',
         message: msg,
-        cancelLable: '',
+        showReason: true,
+        reasongMsg: 'Please provide the reason to upload again. ',
+        cancelLable: 'Cancel',
         okLable: 'OK'
       }
     });
 
-    dialogRef.afterClosed().subscribe(action => {
+    dialogRef.afterClosed().subscribe(data => {
+      if (data.action === 'ok' && data.reason) {
+        this.uploadSource(this.selectedAnalysis, data.reason);
+      }
     });
   }
 
@@ -194,7 +200,9 @@ export class DashboardComponent implements OnInit {
       sourceId: analysis.sourceId,
       rulesetId: analysis.rulesetId
     };
-    this.selectedColumns = this.selectedAnalysis.rules[0].selectedColumns;
+    console.log(this.selectedAnalysis);
+    // tslint:disable-next-line: max-line-length
+    this.selectedColumns = (this.selectedAnalysis.source && this.selectedAnalysis.source.categorialColumns) ? this.selectedAnalysis.source.categorialColumns : [];
     if (this.selectedColumns && this.selectedColumns.length) {
       this.selectedCDE = this.selectedColumns[0];
       this.launchAnalysisByKey(this.selectedCDE);
@@ -205,7 +213,6 @@ export class DashboardComponent implements OnInit {
 
   launchAnalysisByKey(keyname) {
     const uploadDate = this.selectedAnalysis.uploadDate ? moment(this.selectedAnalysis.uploadDate).format('MM-DD-YYYY') : '';
-    console.log(this.selectedAnalysis);
     const uploadsHistory = this.selectedAnalysis.UploadsHistory ? this.selectedAnalysis.UploadsHistory : [];
 
     if (uploadsHistory.length && !uploadDate) {
@@ -224,7 +231,6 @@ export class DashboardComponent implements OnInit {
         uploadId = history.uploadId;
       }
     });
-    keyname = 'AIRLINE';
     this.showAnalysisByKey = true;
     this.isLoadingDetails = true;
     this.selectedKey = keyname;

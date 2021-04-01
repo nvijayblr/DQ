@@ -12,7 +12,7 @@
     <table class="table brd-rt" *ngIf="!showDetails">
       <tbody style="border: 1px solid #dee2e6">
         <tr *ngFor="let rowItem of data;" >
-          <td  *ngFor="let item of rowItem | keyvalue" [hidden]="item.key === 'Outlier'">
+          <td  *ngFor="let item of rowItem | keyvalue" [hidden]="item.key === 'outlier'">
             {{item.key}}: <span class="strong" (click)="launchAnalysisDetails(rowItem);">{{item.value}}</span>
           </td>
         </tr>

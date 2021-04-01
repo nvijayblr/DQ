@@ -281,7 +281,6 @@ export class AnalysisComponent implements OnInit {
     value: 'Validity'
   }];
 
-
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
@@ -535,6 +534,7 @@ export class AnalysisComponent implements OnInit {
         const firstRule = this.rulesList[0];
         this.selectedRuleColumn = firstRule.column;
         this.cdeStatistics = (firstRule.statistics && firstRule.statistics.length) ? firstRule.statistics[0] : {};
+        this.initFormulaEditor(this.rulesList);
       }
       return;
     }
@@ -560,11 +560,14 @@ export class AnalysisComponent implements OnInit {
         this.selectedRuleColumn = firstRule.column;
         this.cdeStatistics = (firstRule.statistics && firstRule.statistics.length) ? firstRule.statistics[0] : {};
       }
+      this.initFormulaEditor(this.rulesList);
       this.initRulesFormArray();
     }, (error) => {
       this.isLoading = false;
     });
   }
+
+
 
   generatePreview() {
     this.analysis = {
@@ -633,6 +636,10 @@ export class AnalysisComponent implements OnInit {
   }
 
   owlInitialized() {
+  }
+
+  initFormulaEditor(ruleList) {
+    console.log(ruleList);
   }
 
 }

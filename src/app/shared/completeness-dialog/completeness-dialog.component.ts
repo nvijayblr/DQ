@@ -33,7 +33,7 @@ export class CompletenessDialogComponent implements OnInit {
     this.isLoading = true;
     this.columnDefs = [];
     this.rowData = [];
-    this.http.launchAnalysisDetails(rowItem.Outlier).subscribe((res: any) => {
+    this.http.launchAnalysisDetails(rowItem.outlier).subscribe((res: any) => {
       const details: any = res.result ? res.result : {};
       Object.keys(details).map((key, index) => {
         this.rowData.push({
@@ -42,7 +42,7 @@ export class CompletenessDialogComponent implements OnInit {
         });
       });
       if (this.rowData.length) {
-        Object.keys(this.rowData[1]).map((key, index) => {
+        Object.keys(this.rowData[0]).map((key, index) => {
           this.columnDefs.push({
             field: key,
             ...this.defaultColDefs

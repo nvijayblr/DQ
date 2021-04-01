@@ -100,6 +100,7 @@ export class CreateSourceComponent implements OnInit {
   sourceNames = [];
   summary: any = {};
 
+
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
@@ -277,8 +278,8 @@ export class CreateSourceComponent implements OnInit {
       }
     });
 
-    dialogRef.afterClosed().subscribe(action => {
-      if (action === 'ok') {
+    dialogRef.afterClosed().subscribe(data => {
+      if (data.action === 'ok') {
         this.router.navigate(['auth/dashboard']);
       } else {
       }
