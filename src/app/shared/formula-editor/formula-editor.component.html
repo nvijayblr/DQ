@@ -40,7 +40,7 @@
             <button type="button" mat-icon-button type="button" (click)="addFormItem('formula')" *ngIf="isLast">
               <mat-icon>add</mat-icon>
             </button>
-            <button type="button" mat-icon-button class="del-icon" (click)="removeFormItem('formula', 'formula', i)" *ngIf="formulaDetailsForm.get('formula')['controls'].length > 2">
+            <button type="button" mat-icon-button class="del-icon" (click)="removeFormItem('formula', i)" *ngIf="formulaDetailsForm.get('formula')['controls'].length > 2">
               <mat-icon>delete</mat-icon>
             </button>
           </div>
