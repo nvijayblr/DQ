@@ -210,7 +210,7 @@
                                       (selectionChange)="rule.get('operator').setValue($event.value)"
                                     ></app-rule-selector>
                                   </div>
-                                  <div class="list-item-5 outline">
+                                  <div class="list-item-5 outline" [hidden]="rule.get('rule').value === 'Formula'">
                                     <app-rule-selector 
                                       *ngIf="rule.get('rule').value !== 'ReferenceCDE'"
                                       [ruleItems]="ruleValueList[rule.get('rule').value]" 
@@ -222,6 +222,15 @@
                                         <mat-option *ngFor="let item of columnsForm.controls.refernceColumns.value" [value]="item.title">{{item.title}}</mat-option>
                                       </mat-select>
                                     </mat-form-field>
+                                  </div>
+                                  <div class="list-item-5 outline" *ngIf="rule.get('rule').value === 'Formula'">
+                                    <div class="formula-preview">
+                                      <span *ngFor="let formula of rule.get('value').value">
+                                        <span class="operator" *ngIf="formula.operator !== 'NULL'">{{formula.operator}}</span>
+                                        <span class="cde">{{formula.cde}}</span>
+                                      </span>
+                                    </div>
+                                    <div class="edit-link" (click)="showFormulaEditor(rule)">Formula Editor</div>
                                   </div>
                                   <div class="list-item-5 outline">
                                     <app-rule-selector 
@@ -307,7 +316,15 @@
                                       <td>Rule #{{i+1}}</td>
                                       <td><div class="label">{{rule.rule}}</div></td>
                                       <td>{{rule.operator}}</td>
-                                      <td>{{rule.value}}</td>
+                                      <td class="preview">
+                                        <div *ngIf="rule.rule !== 'Formula'">{{rule.value}}</div>
+                                        <div *ngIf="rule.rule === 'Formula'" class="formula-preview">
+                                          <span *ngFor="let formula of rule.value">
+                                            <span class="operator" *ngIf="formula.operator !== 'NULL'">{{formula.operator}}</span>
+                                            <span class="cde">{{formula.cde}}</span>
+                                          </span>
+                                        </div>
+                                      </td>
                                       <td>{{rule.dimension}}</td>
                                     </tr>
                                   </tbody>

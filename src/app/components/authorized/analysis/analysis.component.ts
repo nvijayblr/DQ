@@ -7,6 +7,7 @@ import { AuthGuardService } from '../../../services/auth-guard.service';
 import { MessageService } from '../../../services/message.service';
 import { appConfig } from '../../../app.config';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
+import { FormulaEditorComponent } from '../../../shared/formula-editor/formula-editor.component';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { S } from '@angular/cdk/keycodes';
 import { _ } from 'ag-grid-community';
@@ -72,46 +73,6 @@ export class AnalysisComponent implements OnInit {
   columnsForm: FormGroup;
   selectedRuleColumn = '';
 
-  ruleTypes = [{
-    value: 'DataType',
-    label: 'Data Type'
-  }, {
-    value: 'Length',
-    label: 'Length'
-  }, {
-    value: 'MinLength',
-    label: 'Min Length'
-  }, {
-    value: 'MaxLength',
-    label: 'Max Length'
-  }, {
-    value: 'LessThanOrEqualTo',
-    label: '<='
-  }, {
-    value: 'GreaterThanOrEqualTo',
-    label: '>='
-  }, {
-    value: 'EqualTo',
-    label: '=='
-  }, {
-    value: 'ReferenceCDE',
-    label: 'Reference CDE'
-  }, {
-    value: 'Custom',
-    label: 'Custom'
-  }];
-
-  dataTypes = [{
-    value: 'Numeric',
-    label: 'Numeric'
-  }, {
-    value: 'Text',
-    label: 'Text'
-  }, {
-    value: 'AlhpaNumberic',
-    label: 'Alhpa Numberic'
-  }];
-
   sourceList = [];
   selectedSource: any = {};
   rulesList = [];
@@ -141,6 +102,9 @@ export class AnalysisComponent implements OnInit {
   }, {
     label: 'Reference CDE',
     value: 'ReferenceCDE'
+  }, {
+    label: 'Formula',
+    value: 'Formula'
   }];
 
   ruleOperatorList = {
@@ -153,6 +117,25 @@ export class AnalysisComponent implements OnInit {
       value: 'Shouldbe'
     }],
     Length: [{
+        label: '=',
+        value: 'euqualto'
+      }, {
+        label: '>=',
+        value: 'greaterthanequalto'
+      }, {
+        label: '<=',
+        value: 'lessthanequalto'
+      }, {
+        label: '>',
+        value: 'greaterthan'
+      }, {
+        label: '<',
+        value: 'lessthan'
+      }],
+    Formula: [{
+        label: 'Should be',
+        value: 'Shouldbe'
+      }, {
         label: '=',
         value: 'euqualto'
       }, {
@@ -611,6 +594,26 @@ export class AnalysisComponent implements OnInit {
     }, (error) => {
       this.isLoading = false;
     });
+  }
+
+  showFormulaEditor(rule) {
+    const selectedColumns = [];
+    this.selectedColumns.map(column => {
+      selectedColumns.push(column.title);
+    });
+    const dialogRef = this.dialog.open(FormulaEditorComponent, {
+      width: '700px',
+      data: {
+        columns: selectedColumns
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(data => {
+      if (data.action === 'ok' && data.formula) {
+        rule.controls.value.setValue(data.formula);
+      }
+    });
+
   }
 
    gotoStepper(index, tab = '') {

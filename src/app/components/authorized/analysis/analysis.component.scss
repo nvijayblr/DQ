@@ -235,7 +235,7 @@
    }
  }
  .rule-table {
-   width: 480px;
+   width: 780px;
    border-bottom: 1px solid #ccc;
  }
  .outline mat-label {
@@ -346,4 +346,36 @@
 .correlation-info {
   margin: 0 0 0 22px;
   width: 410px;
+}
+.edit-link {
+  cursor: pointer;
+  text-align: right;
+  color: #59bfff;
+  display: inline;
+  float: right;
+}
+.formula-preview {
+  color: #000000;
+  padding: 12px 10px;
+  border: 1px solid #cbcbcb;
+  height: 46px;
+  background: #FFF;
+  position: relative;
+  top: 1px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  .operator {
+    font-weight: bold;
+    margin: 0 4px;
+  }
+  .cde {
+    font-weight: bold;
+  }
+}
+.preview .formula-preview {
+  max-width: 300px;
+  border: 0;
+  padding: 0;
+  height: auto;
 }

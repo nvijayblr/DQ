@@ -27,6 +27,7 @@ import { ColorDialogComponent } from './color-dialog/color-dialog.component';
 import { CompletenessDialogComponent } from './completeness-dialog/completeness-dialog.component';
 import { RuleSelectorComponent } from './rule-selector/rule-selector.component';
 import { AgGridComponent } from './ag-grid/ag-grid.component';
+import { FormulaEditorComponent } from './formula-editor/formula-editor.component';
 
 @NgModule({
   imports: [
@@ -61,6 +62,7 @@ import { AgGridComponent } from './ag-grid/ag-grid.component';
     CompletenessDialogComponent,
     RuleSelectorComponent,
     AgGridComponent,
+    FormulaEditorComponent,
   ],
   exports: [
     FormsModule,
@@ -88,7 +90,8 @@ import { AgGridComponent } from './ag-grid/ag-grid.component';
     ColorDialogComponent,
     CompletenessDialogComponent,
     RuleSelectorComponent,
-    AgGridComponent
+    AgGridComponent,
+    FormulaEditorComponent
   ],
   providers: [
      DatePipe,
@@ -96,7 +99,8 @@ import { AgGridComponent } from './ag-grid/ag-grid.component';
   entryComponents: [
      ConfirmDialogComponent,
      ColorDialogComponent,
-     CompletenessDialogComponent
+     CompletenessDialogComponent,
+     FormulaEditorComponent
   ]
 })
 export class SharedModule {}

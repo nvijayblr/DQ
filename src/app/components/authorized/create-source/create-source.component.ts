@@ -100,7 +100,6 @@ export class CreateSourceComponent implements OnInit {
   sourceNames = [];
   summary: any = {};
 
-
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
@@ -259,7 +258,6 @@ export class CreateSourceComponent implements OnInit {
         return;
       }
       this.summary = result;
-      console.log(this.summary);
       this.gotoStepper(2);
       // this.showSaveSuccess();
     }, (error) => {
@@ -284,6 +282,17 @@ export class CreateSourceComponent implements OnInit {
       } else {
       }
     });
+  }
+
+  prevoewBackClick() {
+    if (this. mode === 'create') {
+      localStorage.setItem('dq-source-data', JSON.stringify(this.summary));
+      this.router.navigate(
+        [`auth/create-source-data`],
+        {queryParams: {sourceId: this.summary.sourceId, mode: 'edit'}}
+      );
+    }
+    this.gotoStepper(1);
   }
 
   onSourceFileSelected(file) {

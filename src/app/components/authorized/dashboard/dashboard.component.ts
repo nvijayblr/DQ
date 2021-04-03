@@ -125,6 +125,11 @@ export class DashboardComponent implements OnInit {
 
 
   uploadSource(analysis, reason = '') {
+    if (!analysis.rules || (analysis.rules && !analysis.rules.length)) {
+      alert('Please create the ruleset to upload the source.');
+      return;
+    }
+
     this.selectedAnalysis = analysis;
     let isMultiSource = false;
     if (analysis.settings && analysis.settings.multiSourceOptions && analysis.settings.multiSourceOptions.length > 1) {
@@ -286,7 +291,6 @@ export class DashboardComponent implements OnInit {
   }
 
   createEditRuleset(data, mode) {
-     console.log(data);
      let rules = data.rules.filter((rule) => data.rulesetId === rule.rulesetId);
      rules = (rules && rules.length) ? rules[0] : {columns: [], selectedColumns: []};
      console.log(rules);

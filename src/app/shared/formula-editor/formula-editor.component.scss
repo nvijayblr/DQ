@@ -1,0 +1,61 @@
+.formula-editir {
+  .footer {
+    text-align: right;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #e2e2e2;
+    .mat-stroked-button {
+      font-family: "Roboto" !important;
+      font-size: 13px;
+      font-weight: 400;
+      padding: 0 10px;
+      height: 30px;
+      line-height: 30px;
+      margin-left: 10px;
+      border-radius: 0;
+    }
+  }
+}
+.reason-wrp {
+  margin-top: 24px;
+  p {
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+}
+.input-full-width {
+  width: 100%;
+}
+.outline mat-label {
+  display: block !important;
+}
+.list-item-3.operator {
+  width: 120px;
+  margin: 0 10px 0 0;
+  .mat-form-field {
+    width: 100%;
+  }
+}
+.add-remove-button {
+  margin-top: 0;
+}
+.list-item-4.cde {
+  width: 320px;
+  .mat-form-field {
+    width: 100%;
+  }
+}
+.formula-preview {
+  background: #000;
+  color: #59b5ef;
+  padding: 5px 10px;
+  overflow-x: auto;
+  white-space: nowrap;
+  .operator {
+    font-weight: bold;
+    margin: 0 4px;
+  }
+  .cde {
+    font-weight: bold;
+  }
+}
