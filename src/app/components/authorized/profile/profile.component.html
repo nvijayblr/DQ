@@ -1,0 +1,73 @@
+<section class="page-body home-bodys">
+   <div class="container">
+     <div class="profile-wrapper">
+            <mat-tab-group mat-align-tabs="start"  animationDuration="0ms" [selectedIndex]="">
+               <mat-tab label="Profiles"> 
+                  <ng-template mat-tab-label>
+                     <mat-icon class="mr">description</mat-icon>
+                     Profiles
+                   </ng-template>
+                  <div class="tabContent">                     
+                        <h1 class="share-post-title">Profiling</h1>
+                  </div>
+               </mat-tab>
+               <mat-tab label="Data Sources"> 
+                  <ng-template mat-tab-label>
+                     <mat-icon class="mr">perm_data_setting</mat-icon>
+                     Data Sources
+                   </ng-template>
+                  <div class="tabContent">                     
+                     <h1 class="share-post-title"> Add new source </h1>
+                     
+                     <section>
+                        <div class="flipbox">
+                          <div class="back">
+                           <div class="ol" routerLink="/auth/create-source-data">
+                              <img src="./../assets/images/oracle.png" />
+                              <p>Oracle</p>
+                           </div>
+                          </div>
+                          <div class="front">
+                           <img src="./../assets/images/oracle.png" />
+                           <p>Oracle</p>
+                          </div>
+                        </div>                                           
+                      </section>
+
+                      <section>
+                        <div class="flipbox">
+                          <div class="back pl10">
+                           <div class="ol" routerLink="/auth/create-source-data">
+                              <img src="./../assets/images/excel.png" />
+                              <p class="pl4">Excel</p>
+                           </div>
+                          </div>
+                          <div class="front pl10">
+                           <img src="./../assets/images/excel.png" />
+                           <p class="pl4">Excel</p>
+                          </div>
+                        </div>                                           
+                      </section>
+
+                      <section>
+                        <div class="flipbox">
+                          <div class="back pl10">
+                           <div class="ol" routerLink="/auth/create-source-data">
+                              <img src="./../assets/images/csv.png" />
+                              <p class="pl4">CSV</p>
+                           </div>
+                          </div>
+                          <div class="front pl10">
+                           <img src="./../assets/images/csv.png" />
+                           <p class="pl4">CSV</p>
+                          </div>
+                        </div>                                           
+                      </section>
+
+                      
+                  </div>
+               </mat-tab>
+            </mat-tab-group>
+       </div>     
+   </div>
+</section>
