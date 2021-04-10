@@ -2,7 +2,7 @@
    <div class="container">
      <div class="profile-wrapper">
             <mat-tab-group mat-align-tabs="start"  animationDuration="0ms" [selectedIndex]="">
-               <mat-tab label="Profiles"> 
+               <!-- <mat-tab label="Profiles"> 
                   <ng-template mat-tab-label>
                      <mat-icon class="mr">description</mat-icon>
                      Profiles
@@ -10,30 +10,14 @@
                   <div class="tabContent">                     
                         <h1 class="share-post-title">Profiling</h1>
                   </div>
-               </mat-tab>
+               </mat-tab> -->
                <mat-tab label="Data Sources"> 
                   <ng-template mat-tab-label>
                      <mat-icon class="mr">perm_data_setting</mat-icon>
                      Data Sources
                    </ng-template>
                   <div class="tabContent">                     
-                     <h1 class="share-post-title"> Add new source </h1>
-                     
-                     <section>
-                        <div class="flipbox">
-                          <div class="back">
-                           <div class="ol" routerLink="/auth/create-source-data">
-                              <img src="./../assets/images/oracle.png" />
-                              <p>Oracle</p>
-                           </div>
-                          </div>
-                          <div class="front">
-                           <img src="./../assets/images/oracle.png" />
-                           <p>Oracle</p>
-                          </div>
-                        </div>                                           
-                      </section>
-
+                     <h1 class="share-post-title"> File Upload </h1>
                       <section>
                         <div class="flipbox">
                           <div class="back pl10">
@@ -64,7 +48,142 @@
                         </div>                                           
                       </section>
 
-                      
+                      <section>
+                        <div class="flipbox">
+                          <div class="back pl10">
+                              <img src="./../assets/images/json.png" />
+                              <p class="pl4">JSON</p>
+                          </div>
+                          <div class="front pl10">
+                           <img src="./../assets/images/json.png" />
+                           <p class="pl4">JSON</p>
+                          </div>
+                        </div>                                           
+                      </section>
+
+                      <section>
+                        <div class="flipbox">
+                          <div class="back pl10">
+                              <img src="./../assets/images/xml.png" />
+                              <p class="pl4">XML</p>
+                          </div>
+                          <div class="front pl10">
+                           <img src="./../assets/images/xml.png" />
+                           <p class="pl4">XML</p>
+                          </div>
+                        </div>                                           
+                      </section>
+
+                      <div class="sep">
+                      <h1 class="share-post-title"> Database </h1>                     
+                     <section>
+                        <div class="flipbox">
+                          <div class="back">
+                           <!-- <div class="ol" routerLink="/auth/create-source-data"> -->
+                              <img src="./../assets/images/oracle.png" />
+                              <p>Oracle</p>
+                           <!-- </div> -->
+                          </div>
+                          <div class="front">
+                           <img src="./../assets/images/oracle.png" />
+                           <p>Oracle</p>
+                          </div>
+                        </div>                                           
+                      </section>
+
+                      <section>
+                        <div class="flipbox">
+                          <div class="back pl10">
+                              <img src="./../assets/images/sql.png" />
+                              <p class="pl4">MySQL</p>
+                          </div>
+                          <div class="front pl10">
+                           <img src="./../assets/images/sql.png" />
+                           <p class="pl4">MySQL</p>
+                          </div>
+                        </div>                                           
+                      </section>
+
+                      <section>
+                        <div class="flipbox">
+                          <div class="back pl10">
+                              <img src="./../assets/images/mango.png" />
+                              <p class="pl4">MongoDB</p>
+                          </div>
+                          <div class="front pl10">
+                           <img src="./../assets/images/mango.png" />
+                           <p class="pl4">MongoDB</p>
+                          </div>
+                        </div>                                           
+                      </section>
+
+                     </div>
+
+                     <div class="sep">
+                        <h1 class="share-post-title"> Big Data </h1>                     
+                       <section>
+                          <div class="flipbox">
+                            <div class="back pl10">
+                             <!-- <div class="ol" routerLink="/auth/create-source-data"> -->
+                                <img src="./../assets/images/kafka.png" />
+                                <p>Kafka</p>
+                             <!-- </div> -->
+                            </div>
+                            <div class="front pl10">
+                             <img src="./../assets/images/kafka.png" />
+                             <p>Kafka</p>
+                            </div>
+                          </div>                                           
+                        </section>
+
+                     </div>
+
+                     <div class="sep">
+                        <h1 class="share-post-title"> Others </h1>                     
+                       <section>
+                          <div class="flipbox">
+                            <div class="back pl10">
+                             <!-- <div class="ol" routerLink="/auth/create-source-data"> -->
+                                <img src="./../assets/images/sales-force.png" />
+                                <p>SalesForce</p>
+                             <!-- </div> -->
+                            </div>
+                            <div class="front pl10">
+                             <img src="./../assets/images/sales-force.png" />
+                             <p>SalesForce</p>
+                            </div>
+                          </div>                                           
+                        </section>
+
+                        <section>
+                           <div class="flipbox">
+                             <div class="back pl10">
+                                 <img src="./../assets/images/gdrive.png" />
+                                 <p>Google Drive</p>
+                             </div>
+                             <div class="front pl10">
+                              <img src="./../assets/images/gdrive.png" />
+                              <p>Google Drive</p>
+                             </div>
+                           </div>                                           
+                         </section>
+
+                         <section>
+                           <div class="flipbox">
+                             <div class="back pl10">
+                                 <img src="./../assets/images/power.png" />
+                                 <p>PowerBI</p>
+                             </div>
+                             <div class="front pl10">
+                              <img src="./../assets/images/power.png" />
+                              <p>PowerBI</p>
+                             </div>
+                           </div>                                           
+                         </section>
+
+                     </div>
+
+
                   </div>
                </mat-tab>
             </mat-tab-group>

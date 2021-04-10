@@ -254,6 +254,10 @@ padding:200px;
  .flipbox:hover .back {
    transform: rotateY(0deg);
  }
-
+.sep{
+   //float: left;
+   clear: both;
+   padding-top: 50px;
+}
 
  
