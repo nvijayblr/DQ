@@ -31,11 +31,9 @@ export class HttpService  {
   ) {
     // this.rootUrl = env.baseUrl;
     // Prod
-    // this.rootUrl = 'https://zzv4j5kpjh.execute-api.us-west-2.amazonaws.com';
+    this.rootUrl = 'https://zzv4j5kpjh.execute-api.us-west-2.amazonaws.com';
     // Dev
-    // this.rootUrl = 'https://wx8xf4atw8.execute-api.us-west-2.amazonaws.com';
-
-    this.rootUrl = 'https://hukipj3q2i.execute-api.us-west-2.amazonaws.com';
+    this.rootUrl = 'https://wx8xf4atw8.execute-api.us-west-2.amazonaws.com';
   }
 
   uploadSourceCSV(payload): Observable<any> {
@@ -173,16 +171,6 @@ export class HttpService  {
 
   getSources(): Observable<any> {
     return this.http.get<any>(`${this.rootUrl}/dev/api/getAllSources`).pipe(
-      tap((res) => {
-      }),
-      catchError(err => {
-        return throwError(err);
-      }),
-    );
-  }
-
-  getSourceTableData(sourceId): Observable<any> {
-    return this.http.get<any>(`${this.rootUrl}/dev/getSourcePreview?sourceId=${sourceId}`).pipe(
       tap((res) => {
       }),
       catchError(err => {

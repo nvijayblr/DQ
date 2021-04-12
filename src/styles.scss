@@ -129,7 +129,7 @@ button {
   font-size: 20px;
   padding: 0 20px !important;
   font-family: 'open-sans-condensed-bold'!important;
-  text-transform: uppercase;
+  //text-transform: uppercase;
   .mat-icon {
    background-repeat: no-repeat;
    display: inline-block;
@@ -216,7 +216,8 @@ button {
   // hyphens: auto;
 }
 .red {
-  color: #C73D2F;
+//   color: #C73D2F;
+color: #59bfff;
 }
 .act-btn-wrapper {
   text-align: right;
@@ -1015,7 +1016,7 @@ owl-date-time-container {
   }
   .mat-form-field-appearance-outline .mat-form-field-infix {
     padding: 0 0 10px 0;
-    font-size: 16px;
+    font-size: 13px;
     color: #484848;
   }
   .mat-form-field-appearance-outline .mat-form-field-subscript-wrapper {
@@ -1183,16 +1184,16 @@ mat-paginator.mat-paginator {
     background-color: #59bfff;
   }
   .mat-step-icon {
-    height: 36px;
-    width: 36px;
-    margin-right: 12px !important;
+    height: 30px;
+    width: 30px;
+    //margin-right: 12px !important;
     font-family: 'open-sans-condensed-bold'!important;
     background-color: #afafaf;
   }
   .mat-step-label {
-    font-size: 20px;
-    font-weight: 400;
-    font-family: 'open-sans-condensed-light';
+    font-size: 16px;
+    //font-weight: 400;
+    font-family: 'open-sans-condensed-bold';
   }
 }
 .rule-step-wrapper {
@@ -1309,8 +1310,4 @@ $font-path : '../src/assets/fonts/';
   .container, .container-sm, .container-md, .container-lg, .container-xl {
     max-width: 1580px;
   }
-}
-
-.ag-theme-alpine {
-  min-height: 400px !important;
 }

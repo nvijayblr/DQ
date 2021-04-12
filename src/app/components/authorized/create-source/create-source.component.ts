@@ -100,12 +100,6 @@ export class CreateSourceComponent implements OnInit {
   sourceNames = [];
   summary: any = {};
 
-  isLoadingSourceTable = false;
-  isLoadedSourceTable = false;
-  defaultColDefs = { sortable: true, filter: true, minWidth: 180, resizable: true };
-  columnDefs: any = [];
-  rowData: any = [];
-
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
@@ -265,8 +259,6 @@ export class CreateSourceComponent implements OnInit {
       }
       this.summary = result;
       this.gotoStepper(2);
-      console.log(result);
-      this.getSourceTableRowData(result.sourceId);
       // this.showSaveSuccess();
     }, (error) => {
       this.isLoading = false;
@@ -335,31 +327,4 @@ export class CreateSourceComponent implements OnInit {
   stepperAnimationDone() {
   }
 
-  getSourceTableRowData(sourceId) {
-    this.isLoadingSourceTable = true;
-    this.isLoadedSourceTable = false;
-    this.columnDefs = [];
-    this.rowData = [];
-    this.http.getSourceTableData(sourceId).subscribe((res: any) => {
-      const details: any = res.sourcePreview ? res.sourcePreview : {};
-      Object.keys(details).map((key, index) => {
-        this.rowData.push({
-          ROW_ID: key,
-          ...details[key]
-        });
-      });
-      if (this.rowData.length) {
-        Object.keys(this.rowData[0]).map((key, index) => {
-          this.columnDefs.push({
-            field: key,
-            ...this.defaultColDefs
-          });
-        });
-      }
-      this.isLoadedSourceTable = true;
-      this.isLoadingSourceTable = false;
-    }, (error) => {
-      this.isLoadingSourceTable = false;
-    });
-  }
 }

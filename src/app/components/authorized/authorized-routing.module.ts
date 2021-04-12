@@ -4,6 +4,7 @@ import { AuthGuardService as AuthGaurd } from 'src/app/services/auth-guard.servi
 import { AuthorizedComponent } from './authorized.component';
 import { DelayAnalysisComponent } from './delay-analysis/delay-analysis.component';
 import { CreateSourceComponent } from './create-source/create-source.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
   {
@@ -30,6 +31,7 @@ const routes: Routes = [
         loadChildren: () => import('./notifications/notifications.module').then(m => m.NotificationsModule),
         // canActivate: [AuthGaurd]
        },
+       { path: 'add-source-data', component: ProfileComponent },
        { path: 'create-source-data', component: CreateSourceComponent },
     ]
   },

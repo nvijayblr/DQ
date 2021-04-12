@@ -1,18 +1,20 @@
 <div class="login-wrapper">
-   <div class="login-top shadow bottom">
-      <!-- <img class="login-image" src="./../assets/images/logo.png" />  -->
+   <div class="logo-ai"> <img class="login-image" src="./../assets/images/logo-ai.png" /> </div>
+   <!-- <div class="login-top shadow bottom">
+     <img class="login-image" src="./../assets/images/logo.png" /> 
       <h2>Know Your Data</h2>
-  
- 
-
+</div> -->
+<div class="lft-cnt">
+   <h3>Artificial <br>  intelligence</h3>
+   <p>New technology may help scientists decode dolphin communication. Florida-based dolphin researcher Jack Kassewitz and British acoustic engineer John Stuart Reid are analyzing dolphin sounds with an instrument called a CymaScope. The scope has a thin membrane that vibrates as sound passes through it. Then it converts those vibrations into a high-definition image. Kassewitz hopes the unprecedented detail will solve some mysteries.</p>
 </div>
 
 <div class="flex-containers login-container top">
-    <div class="title-wrp">
-      <!-- <h1 class="page-title">Data Quality Analytics</h1> -->       
+    <!-- <div class="title-wrp">
+       <h1 class="page-title">Data Quality Analytics</h1>   
      <img class="login-image" src="./../assets/images/logo.png" />
      <h3>AI<span>DATADRIVEN</span></h3>
-   </div> 
+   </div>  -->
    <mat-card class="login-card ">
      <!-- <div class="logo-wrapper">
        <h1 class="page-title">DQ Logo</h1>
@@ -21,6 +23,7 @@
      <!-- <h1 class="title">A right <strong>destination for professionals</strong></h1> -->
      <!-- <h1 class="title">Know Your Data</h1> -->
      <div class="fade_rule"></div> 
+     <h2>Know Your Data <span>Login Here</span></h2>
 
      <div mat-dialog-content>
        <mat-error class="box-error-msg" *ngIf="errorMessage">
@@ -40,18 +43,18 @@
          </div> -->
          <div class="col">
            <form [formGroup]="loginForm" class="custom-login-wrapper">
-             <mat-form-field class="full-width" appearance="">
+             <mat-form-field class="full-width" appearance="outline">
                <mat-icon matPrefix>account_circle</mat-icon>
                <input class="bdrInput" matInput placeholder="Username" cdkFocusInitial formControlName="username" required autocomplete="no">
-               <mat-error>
+               <mat-error class="wt">
                  Please provide a valid username.
                </mat-error>
              </mat-form-field>
 
-             <mat-form-field class="full-width" appearance="">
+             <mat-form-field class="full-width" appearance="outline">
                <mat-icon matPrefix>vpn_key</mat-icon>
                <input class="bdrInput" matInput type="password" placeholder="Password" formControlName="password" required>
-               <mat-error>
+               <mat-error class="wt">
                  Please provide a valid password
                </mat-error>
              </mat-form-field>
@@ -118,5 +121,5 @@
      </div>
    </mat-card>
  </div>
-  
+  <div class="copyright">copyright@dq.com</div>
 </div>
