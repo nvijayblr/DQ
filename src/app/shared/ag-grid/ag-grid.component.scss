@@ -1,6 +1,7 @@
 .ag-grid-wrapper {
   height: 100%;
   width: 100%;
+  min-height: 400px;
   .ag-theme-material {
     .ag-header {
       .ag-header-cell {
@@ -162,4 +163,8 @@
       padding-left: 10px !important;
     }
   }
+}
+
+.ag-root-wrapper-body {
+  min-height: 400px !important;
 }

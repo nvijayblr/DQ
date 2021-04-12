@@ -228,7 +228,22 @@
                       <button mat-stroked-button class="primary-btn-red" (click)="showSaveSuccess()" [disabled]="isLoading">Complete</button>
                     </div>
                   </mat-card>
-
+                  <mat-card class="border no-rounded list shrare-post">
+                    <h1 class="share-post-title">Source Preview</h1>
+                    <app-progress-bar [message]="'Please wait while your rows are loading'" class="page" *ngIf="isLoadingSourceTable"></app-progress-bar>
+                    <div class="analysis-preview">
+                      <app-ag-grid
+                        *ngIf="isLoadedSourceTable"
+                        floatingFilter="true"
+                        [isLoading]="isLoadingSourceTable"
+                        [rowData]="rowData"
+                        [columnDefs]="columnDefs"
+                        [pageSize]="50"
+                        [rowSelection]="'multiple'"
+                        [suppressRowClickSelection]="false"
+                      ></app-ag-grid>
+                    </div>
+                  </mat-card>
                 </mat-step>
             </mat-horizontal-stepper>
           </form>
