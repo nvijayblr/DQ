@@ -1,5 +1,5 @@
 
-<section class="page-body home-bodys">
+<section class="page-body home-bodys pad-tp">
   <div class="container">
     <div class="home-wrapper">
       <!-- Community Pages -->
@@ -18,7 +18,7 @@
                     <h1 class="share-post-title">Create Your<span class="red"> Source</span></h1>
                       <div class="form-continer">
                         <div class="list flex-containers flex-start wrap">
-                        <div class="list-item-2 outline">
+                        <div class="list-item-2 outline wth">
                               <mat-label>Source Data<span class="red">*</span></mat-label>
                               <app-image-cropper 
                                 [imageType]="'Source'"
@@ -27,71 +27,77 @@
                                 (fileSelected)="onSourceFileSelected($event)"
                               >
                               </app-image-cropper>
+                              <mat-label>Source Name<span class="red">*</span></mat-label>
+                              <mat-form-field appearance="outline">
+                                <input matInput placeholder="Source Name" formControlName="sourceDataName" maxlength="50" autocomplete="off"/>
+                              </mat-form-field>
+                            
+                              <mat-label class="mtop">Source Description</mat-label>
+                              <mat-form-field appearance="outline">
+                                <input matInput placeholder="Source Description" formControlName="sourceDataDescription" maxlength="250" autocomplete="off"/>
+                              </mat-form-field>
                          </div>
-                          <div class="list-item-2 outline">
-                            <mat-label>Source Name<span class="red">*</span></mat-label>
-                            <mat-form-field appearance="outline">
-                              <input matInput placeholder="Source Name" formControlName="sourceDataName" maxlength="50" autocomplete="off"/>
-                            </mat-form-field>
-                          
-                            <mat-label class="mtop">Source Description</mat-label>
-                            <mat-form-field appearance="outline">
-                              <input matInput placeholder="Source Description" formControlName="sourceDataDescription" maxlength="250" autocomplete="off"/>
-                            </mat-form-field>
+
+                         <div class="or-spacer-vertical left">
+                           <div class="mask"></div>
+                         </div>
+
+                          <div class="list-item-3 outline">
+                           <div class="rule-selection-wrapper">
+                              <div class="list flex-containers flex-start wrap cde-fields-wrp">
+                                <div class="list-item-1 outline">
+                                  <span class="sub-title">Multi Source</span>
+                                  <app-rule-selector 
+                                    multiple="true" 
+                                    [ruleItems]="multiSourceList" 
+                                    [initValue]="sourceSettings.multiSourceOptions"
+                                    (selectionChange)="sourceSettings.multiSourceOptions=$event.value"
+                                  ></app-rule-selector>
+                                </div>
+                                <div class="list-item-2 outline">
+                                  <span class="sub-title">Frequency</span>
+                                  <app-rule-selector 
+                                    [ruleItems]="frequencyList"
+                                    [initValue]="sourceSettings.frequency" 
+                                    (selectionChange)="sourceSettings.frequency=$event.value"
+                                  ></app-rule-selector>
+                                </div>
+      
+                                <div class="list-item-2 outline">
+                                  <span class="sub-title">Start Date</span>
+                                  <mat-form-field appearance="outline">
+                                    <mat-label>Start Date</mat-label>
+                                    <input matInput [matDatepicker]="frompicker" formControlName="settingsDate" [(ngModel)]="sourceSettings.uploadDate" autocomplete="off">
+                                    <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
+                                    <mat-datepicker #frompicker></mat-datepicker>
+                                  </mat-form-field>
+                                </div>
+        
+                                <div class="list-item-2 outline">
+                                  <span class="sub-title">Time</span>
+                                  <app-rule-selector 
+                                    [ruleItems]="timeList" 
+                                    [initValue]="sourceSettings.uploadTime" 
+                                    (selectionChange)="sourceSettings.uploadTime=$event.value"
+                                  ></app-rule-selector>
+                                </div>
+                                <div class="list-item-2 outline">
+                                  <span class="sub-title"> Department</span>
+                                  <app-rule-selector 
+                                    multiple="true" 
+                                    [ruleItems]="departmentList" 
+                                    [initValue]="sourceSettings.department" 
+                                    (selectionChange)="sourceSettings.department=$event.value"
+                                  ></app-rule-selector>
+                                </div>
+                              </div>
+                            </div>  
                           </div>
                         </div>
                       </div>
                       
                       <div class="bdr"></div>
-                      <div class="rule-selection-wrapper">
-                        <div class="list flex-containers flex-start wrap cde-fields-wrp">
-                          <div class="list-item-5 outline">
-                            <span class="sub-title">Multi Source</span>
-                            <app-rule-selector 
-                              multiple="true" 
-                              [ruleItems]="multiSourceList" 
-                              [initValue]="sourceSettings.multiSourceOptions"
-                              (selectionChange)="sourceSettings.multiSourceOptions=$event.value"
-                            ></app-rule-selector>
-                          </div>
-                          <div class="list-item-5 outline">
-                            <span class="sub-title">Frequency</span>
-                            <app-rule-selector 
-                              [ruleItems]="frequencyList"
-                              [initValue]="sourceSettings.frequency" 
-                              (selectionChange)="sourceSettings.frequency=$event.value"
-                            ></app-rule-selector>
-                          </div>
-
-                          <div class="list-item-5 outline">
-                            <span class="sub-title">Start Date</span>
-                            <mat-form-field appearance="outline">
-                              <mat-label>Start Date</mat-label>
-                              <input matInput [matDatepicker]="frompicker" formControlName="settingsDate" [(ngModel)]="sourceSettings.uploadDate" autocomplete="off">
-                              <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
-                              <mat-datepicker #frompicker></mat-datepicker>
-                            </mat-form-field>
-                          </div>
-  
-                          <div class="list-item-5 outline">
-                            <span class="sub-title">Time</span>
-                            <app-rule-selector 
-                              [ruleItems]="timeList" 
-                              [initValue]="sourceSettings.uploadTime" 
-                              (selectionChange)="sourceSettings.uploadTime=$event.value"
-                            ></app-rule-selector>
-                          </div>
-                          <div class="list-item-5 outline">
-                            <span class="sub-title"> Department</span>
-                            <app-rule-selector 
-                              multiple="true" 
-                              [ruleItems]="departmentList" 
-                              [initValue]="sourceSettings.department" 
-                              (selectionChange)="sourceSettings.department=$event.value"
-                            ></app-rule-selector>
-                          </div>
-                        </div>
-                      </div>                      
+                                          
                     <div class="act-btn-wrapper">
                         <button mat-stroked-button class="primary-btn-gray"
                         [disabled]="!afControls.sourceDataName.value"
@@ -103,10 +109,10 @@
                 <mat-step>
                   <ng-template matStepLabel>Reference Data</ng-template>
                   <mat-card class="border no-rounded list shrare-post">
-                    <h1 class="share-post-title">Create Your<span class="red"> Reference Data</span></h1>
+                    <!-- <h1 class="share-post-title">Create Your<span class="red"> Reference Data</span></h1> -->
 
                     <div class="list">
-                      <button type="button" mat-stroked-button class="primary-btn-gray" (click)="addFormItem('referenceData')" *ngIf="!analysisForm.get('referenceData')['controls'].length">
+                      <button type="button" mat-stroked-button class="primary-btn-gray btnOver" (click)="addFormItem('referenceData')" *ngIf="!analysisForm.get('referenceData')['controls'].length">
                         Add Reference Data <mat-icon>add</mat-icon> 
                       </button>
 
@@ -114,7 +120,7 @@
                         formArrayName="referenceData" *ngFor="let reference of analysisForm.get('referenceData')['controls']; index as i; last as isLast; first as isFirst">
                         <ng-container [formGroupName]="i">
                           <div class="list flex-containers flex-start">
-                            <div class="list-item-3 outline">
+                            <div class="list-item-2 outline">
                               <mat-label>Reference Data #{{i+1}} <span class="red">*</span></mat-label>
                               <app-image-cropper 
                                 [imageType]="'Reference'"
@@ -160,7 +166,7 @@
                 <mat-step>
                   <ng-template matStepLabel>Summary</ng-template>
                   <mat-card class="border no-rounded list shrare-post">
-                    <h1 class="share-post-title">Summary</h1>
+                    <!-- <h1 class="share-post-title">Summary</h1> -->
                     <div class="analysis-preview">
                       <table class="table">
                         <tbody>
@@ -225,7 +231,7 @@
                     </div>
                     <div class="act-btn-wrapper">
                       <button mat-stroked-button class="primary-btn-gray white pad" (click)="prevoewBackClick()"><mat-icon class="mar-ico">arrow_back_ios_new</mat-icon> Back</button>
-                      <button mat-stroked-button class="primary-btn-red" (click)="showSaveSuccess()" [disabled]="isLoading">Complete</button>
+                      <button mat-stroked-button class="primary-btn-gray" (click)="showSaveSuccess()" [disabled]="isLoading">Complete</button>
                     </div>
                   </mat-card>
 
