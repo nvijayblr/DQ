@@ -8,10 +8,11 @@ import { AuthorizedRoutingModule } from './authorized-routing.module';
 import { AuthorizedComponent } from './authorized.component';
 import { DelayAnalysisComponent } from './delay-analysis/delay-analysis.component';
 import { CreateSourceComponent } from './create-source/create-source.component';
+import { ProfileComponent } from './profile/profile.component';
 
 
 @NgModule({
-  declarations: [AuthorizedComponent, DelayAnalysisComponent, CreateSourceComponent],
+  declarations: [AuthorizedComponent, DelayAnalysisComponent, CreateSourceComponent, ProfileComponent],
   imports: [
     CommonModule,
     AuthorizedRoutingModule,
