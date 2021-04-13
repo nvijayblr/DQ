@@ -265,6 +265,8 @@ color: #59bfff;
   &.border {
     box-shadow: none;
     border: 1px solid #eeeeee;
+    box-shadow: 0px 1px 4px #c6c6c6,
+              0px 2px 17px #d1d1d1;
   }
   &.no-border {
     box-shadow: none;
@@ -954,6 +956,8 @@ owl-date-time-container {
   background: #fff;
   border-radius: 4px;
   //box-shadow: 0px 3px 6px #00000029;
+  box-shadow: 0px 1px 4px #c6c6c6,
+              0px 2px 17px #d1d1d1;
   
 }
 .mat-form-field-appearance-outline .mat-form-field-infix {
