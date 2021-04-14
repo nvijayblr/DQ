@@ -27,16 +27,18 @@
                                 (fileSelected)="onSourceFileSelected($event)"
                               >
                               </app-image-cropper>
+                             
                               <mat-label>Source Name<span class="red">*</span></mat-label>
-                              <mat-form-field appearance="outline">
+                              <mat-form-field appearance="fill">
                                 <input matInput placeholder="Source Name" formControlName="sourceDataName" maxlength="50" autocomplete="off"/>
                               </mat-form-field>
-                              
-                            
                               <mat-label class="mtop">Source Description</mat-label>
-                              <mat-form-field appearance="outline">
+                          
+                              
+                              <mat-form-field appearance="fill">
                                 <input matInput placeholder="Source Description" formControlName="sourceDataDescription" maxlength="250" autocomplete="off"/>
                               </mat-form-field>
+                            
                          </div>
 
                          <div class="or-spacer-vertical left">
@@ -65,13 +67,15 @@
                                 </div>
       
                                 <div class="list-item-2 outline">
+                                   <div class="date-style">
                                   <span class="sub-title">Start Date</span>
-                                  <mat-form-field appearance="outline">
-                                    <mat-label>Start Date</mat-label>
+                                  <mat-form-field appearance="fill">
+                                    <mat-label></mat-label>
                                     <input matInput [matDatepicker]="frompicker" formControlName="settingsDate" [(ngModel)]="sourceSettings.uploadDate" autocomplete="off">
                                     <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
                                     <mat-datepicker #frompicker></mat-datepicker>
                                   </mat-form-field>
+                                 </div>
                                 </div>
         
                                 <div class="list-item-2 outline">

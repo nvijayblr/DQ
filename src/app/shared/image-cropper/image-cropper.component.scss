@@ -2,7 +2,7 @@
    .image-crop-card {
      border-radius: 0;
      font-size: 10px;
-     height: 45px;
+     //height: 45px;
      padding: 6px 10px 0 7px;
      position: relative;
      top: 2px;
@@ -52,9 +52,17 @@
      .gv-file-input {
        width: 100%;
      }
+     .mat-icon{
+      position: absolute;
+      top: 16px;
+      left: 17px;
+      color: white;
+     }
    }
    .image-crop-card {
      position: relative;
+     box-shadow: none;
+     border: none!important;
    }
    .upload-btn {
      font-size: 8px;
@@ -118,6 +126,9 @@
     font-size: 14px;
     cursor: pointer;
     outline: none;
+    padding-left: 38px;
+    padding-top: 10px;
+    padding-bottom:10px;
   }
   
   input[type=file]::file-selector-button {
@@ -126,6 +137,9 @@
     border-radius: .2em;
     background-color: #59bfff;
     transition: 1s;
+    padding-left: 38px;
+    padding-top: 10px;
+    padding-bottom:10px;
   }
   
   input[type=file]::-webkit-file-upload-button:hover {
