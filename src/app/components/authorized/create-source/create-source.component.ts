@@ -368,7 +368,6 @@ export class CreateSourceComponent implements OnInit {
   parseSourcePreview(details) {
     Object.keys(details).map((key, index) => {
       this.rowData.push({
-        ROW_ID: key,
         ...details[key]
       });
     });

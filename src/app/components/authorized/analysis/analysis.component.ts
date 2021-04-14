@@ -662,7 +662,6 @@ export class AnalysisComponent implements OnInit {
       const details: any = res.sourcePreview ? res.sourcePreview : {};
       Object.keys(details).map((key, index) => {
         this.rowData.push({
-          ROW_ID: key,
           ...details[key]
         });
       });
