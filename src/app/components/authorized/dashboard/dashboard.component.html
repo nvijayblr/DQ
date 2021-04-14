@@ -219,10 +219,10 @@
                             </mat-form-field>
                           </div>
                         </td>
-                        <td>
+                        <td class="hgt">
                           <div class="outline">
                             <mat-form-field appearance="outline">
-                              <input matInput [matDatepicker]="frompicker" [(ngModel)]="data.uploadDate" (click)="frompicker.open()" autocomplete="off">
+                              <input  matInput [matDatepicker]="frompicker" [(ngModel)]="data.uploadDate" (click)="frompicker.open()" autocomplete="off">
                               <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
                               <mat-datepicker #frompicker (opened)="onOpenDatePicker(data)" [dateClass]="dateClass"></mat-datepicker>
                             </mat-form-field>

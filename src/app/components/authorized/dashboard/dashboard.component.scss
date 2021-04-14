@@ -230,13 +230,15 @@
     font-family: 'open-sans-condensed-bold'!important;
  }
  .table tbody td{
-    font-family: 'open-sans-condensed-light';
+    font-family: 'open-sans-regular';
+    font-size: 13px;
+    border-top: 1px solid #efeff2;
  }
  ::ng-deep.mat-option {
-    font-family: 'open-sans-condensed-light'!important;
+    font-family: 'open-sans-regular'!important;
    }
  ::ng-deep.mat-select-value-text{
-    font-family: 'open-sans-condensed-light'!important;
+    font-family: 'open-sans-regular'!important;
    }
  .pad{
     padding:0 15px!important;
@@ -255,11 +257,12 @@
 }
 .source-type {
   font-family: "open-sans-condensed-bold" !important;
-  font-size: 16px;
-  background-color: #59bfff;
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
+  font-size: 13px;
+  color: #fff;
+  background-color: #0659d4;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
   text-align: center;
   font-weight: bold;
   border-radius: 50%;
@@ -277,4 +280,36 @@
 ::ng-deep .highlight-dates:hover .mat-calendar-body-cell-content {
   background: #8ccaf1 !important;
   font-weight: bold;
+}
+::ng-deep .mat-form-field-flex{
+   height:35px !important;
+}
+::ng-deep .mat-datepicker-toggle-default-icon{
+   position: relative;
+   top:-5px;
+   width: 1.3em!important;
+   height: 1.3em!important;
+}
+
+tr:nth-child(even) {background: #f5f6f8 }
+tr:nth-child(odd) {background: #ffffff}
+
+
+.mat-icon-button {
+   padding: 0;
+   min-width: 0;
+   width: 35px;
+   height: 35px;
+   flex-shrink: 0;
+   line-height: 35px;
+   border-radius: 50%;
+   margin-right: 6px;
+   background: rgba(0, 0, 0, 0.08);
+   transition: 300ms ease;
+}
+.mat-icon-button:hover{
+   background: rgba(0, 0, 0, 0.2);
+}
+.material-icons{
+   font-size: 18px;
 }
