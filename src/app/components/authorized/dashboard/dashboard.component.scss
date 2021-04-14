@@ -233,6 +233,7 @@
     font-family: 'open-sans-regular';
     font-size: 13px;
     border-top: 1px solid #efeff2;
+    height: 20px;
  }
  ::ng-deep.mat-option {
     font-family: 'open-sans-regular'!important;
@@ -281,9 +282,9 @@
   background: #8ccaf1 !important;
   font-weight: bold;
 }
-::ng-deep .mat-form-field-flex{
-   height:35px !important;
-}
+// ::ng-deep .mat-form-field-flex{
+//    height:35px !important;
+// }
 ::ng-deep .mat-datepicker-toggle-default-icon{
    position: relative;
    top:-5px;

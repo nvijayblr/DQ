@@ -2,6 +2,9 @@
   <mat-card class="image-crop-card border">
     <mat-progress-bar mode="indeterminate" class="img-progress" *ngIf="isLoading"></mat-progress-bar>
     <div class="file-form-group" [hidden]="croppedImage">
+      <label for='input-file'>
+         <mat-icon>cloud_upload</mat-icon>
+       </label>
       <input type="file" [accept]="fileTypes" class="gv-file-input" (change)="fileChangeEvent($event)" #fileInput>
     </div>
     <!-- <button mat-button class="primary-btn upload-btn" title="Upload" (click)="uploadImage()" *ngIf="selectedFile.name && !isUploadDone">

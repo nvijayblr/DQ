@@ -49,7 +49,7 @@
                       </td>
                       <td>
                         <div class="outline">
-                          <mat-form-field appearance="outline">
+                          <mat-form-field appearance="fill">
                             <mat-select [(ngModel)]="data.multisource" [disabled]="data.settings?.multiSourceOptions && data.settings?.multiSourceOptions.length<=1">
                               <mat-option *ngFor="let multisource of data.settings?.multiSourceOptions;" [value]="multisource">
                                 {{multisource}}
@@ -60,7 +60,7 @@
                       </td>
                       <td>
                         <div class="outline">
-                          <mat-form-field appearance="outline">
+                          <mat-form-field appearance="fill">
                             <input matInput [matDatepicker]="frompicker" [(ngModel)]="data.uploadDate" (click)="frompicker.open()" autocomplete="off">
                             <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
                             <mat-datepicker #frompicker (opened)="onOpenDatePicker(data)" [dateClass]="dateClass"></mat-datepicker>
@@ -69,7 +69,7 @@
                       </td>
                       <td>
                         <div class="outline">
-                          <mat-form-field appearance="outline">
+                          <mat-form-field appearance="fill">
                             <mat-select [(ngModel)]="data.rulesetId">
                               <mat-option *ngFor="let rule of data.rules;" [value]="rule.rulesetId">
                                 {{rule.rulesetName}}
