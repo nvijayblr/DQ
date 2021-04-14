@@ -100,6 +100,12 @@ export class CreateSourceComponent implements OnInit {
   sourceNames = [];
   summary: any = {};
 
+  isPreviewLoaded = false;
+  isPreviewLoading = false;
+  defaultColDefs = { sortable: true, filter: true, minWidth: 180, resizable: true };
+  rowData: any = [];
+  columnDefs: any = [];
+
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
@@ -327,4 +333,54 @@ export class CreateSourceComponent implements OnInit {
   stepperAnimationDone() {
   }
 
+  loadSourcePreview() {
+    if (this.mode === 'create' && !this.sourceFile.name) {
+      alert('Please upload the source file.');
+      return;
+    }
+    this.isPreviewLoaded = false;
+    this.isPreviewLoading = true;
+    this.columnDefs = [];
+    this.rowData = [];
+    if (this.mode === 'create') {
+      const formData: any = new FormData();
+      formData.append('file[]', this.sourceFile);
+      this.http.getPreview(formData).subscribe((res: any) => {
+        const details: any = res.sourcePreview ? res.sourcePreview : {};
+        this.parseSourcePreview(details);
+      }, (error) => {
+        this.isPreviewLoaded = false;
+        this.isPreviewLoading = false;
+      });
+    }
+    if (this.mode === 'edit') {
+      this.http.getSourcePreview(this.sourceId).subscribe((res: any) => {
+        const details: any = res.sourcePreview ? res.sourcePreview : {};
+        this.parseSourcePreview(details);
+      }, (error) => {
+        this.isPreviewLoaded = false;
+        this.isPreviewLoading = false;
+      });
+
+    }
+  }
+
+  parseSourcePreview(details) {
+    Object.keys(details).map((key, index) => {
+      this.rowData.push({
+        ROW_ID: key,
+        ...details[key]
+      });
+    });
+    if (this.rowData.length) {
+      Object.keys(this.rowData[0]).map((key, index) => {
+        this.columnDefs.push({
+          field: key,
+          ...this.defaultColDefs
+        });
+      });
+    }
+    this.isPreviewLoaded = true;
+    this.isPreviewLoading = false;
+  }
 }

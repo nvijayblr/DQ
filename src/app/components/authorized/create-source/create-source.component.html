@@ -240,6 +240,23 @@
             </mat-horizontal-stepper>
           </form>
 
+          <mat-card class="border no-rounded list shrare-post mat-card source-preview-card" [hidden]="stepIndex === 2">
+            <app-progress-bar [message]="'Loading source preview...'" class="component" *ngIf="isPreviewLoading"></app-progress-bar>
+            <div class="list flex-containers space-between">
+              <h1 class="share-post-title">Source Preview</h1>
+              <button mat-stroked-button class="primary-btn-gray white pad" (click)="loadSourcePreview();">Preview</button>
+            </div>
+            <app-ag-grid
+              floatingFilter="true"
+              *ngIf="isPreviewLoaded"
+              [rowData]="rowData"
+              [columnDefs]="columnDefs"
+              [pageSize]="50"
+              [rowSelection]="'multiple'"
+              [suppressRowClickSelection]="false"
+            ></app-ag-grid>
+          </mat-card>
+
         </div>
       </div>
     </div>

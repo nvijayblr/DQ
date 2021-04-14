@@ -1244,7 +1244,13 @@ mat-paginator.mat-paginator {
 .highcharts-table-caption {
    display: none;
 }
-
+.source-preview-card {
+  margin-right: 24px !important;
+  margin-left: 24px !important;
+  .ag-grid-wrapper {
+    height: 330px;
+  }
+}
 
 $font-path : '../src/assets/fonts/';
 

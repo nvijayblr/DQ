@@ -264,6 +264,12 @@ export class AnalysisComponent implements OnInit {
     value: 'Validity'
   }];
 
+  isPreviewLoaded = false;
+  isPreviewLoading = false;
+  defaultColDefs = { sortable: true, filter: true, minWidth: 180, resizable: true };
+  rowData: any = [];
+  columnDefs: any = [];
+
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
@@ -352,7 +358,6 @@ export class AnalysisComponent implements OnInit {
       });
       this.selectedReferenceColumns = refSelectedColumns;
     }
-
     referenceData.map(refData => {
       referenceCSV.push(this.intiFormArrays('referenceData', refData));
     });
@@ -363,13 +368,16 @@ export class AnalysisComponent implements OnInit {
 
   intiFormArrays(field, value: any = {}) {
     if (field === 'referenceData') {
+      if (!value.availableRefColumns) {
+        value.availableRefColumns = [];
+      }
       const refAvailableColumns = value.availableRefColumns.map((column, index) => {
         return {
           id: (index + 1),
           title: column
         };
       });
-      this.availableReferenceColumns = refAvailableColumns;
+      this.availableReferenceColumns = refAvailableColumns ? refAvailableColumns : [];
       console.log(this.availableReferenceColumns);
       return this.fb.group({
         id: [value.id],
@@ -643,6 +651,35 @@ export class AnalysisComponent implements OnInit {
 
   initFormulaEditor(ruleList) {
     console.log(ruleList);
+  }
+
+  loadSourcePreview() {
+    this.isPreviewLoaded = false;
+    this.isPreviewLoading = true;
+    this.columnDefs = [];
+    this.rowData = [];
+    this.http.getSourcePreview(this.selectedSource.sourceId).subscribe((res: any) => {
+      const details: any = res.sourcePreview ? res.sourcePreview : {};
+      Object.keys(details).map((key, index) => {
+        this.rowData.push({
+          ROW_ID: key,
+          ...details[key]
+        });
+      });
+      if (this.rowData.length) {
+        Object.keys(this.rowData[0]).map((key, index) => {
+          this.columnDefs.push({
+            field: key,
+            ...this.defaultColDefs
+          });
+        });
+      }
+      this.isPreviewLoaded = true;
+      this.isPreviewLoading = false;
+    }, (error) => {
+      this.isPreviewLoaded = false;
+      this.isPreviewLoading = false;
+    });
   }
 
 }

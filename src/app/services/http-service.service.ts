@@ -31,13 +31,13 @@ export class HttpService  {
   ) {
     // this.rootUrl = env.baseUrl;
     // Prod
-    this.rootUrl = 'https://zzv4j5kpjh.execute-api.us-west-2.amazonaws.com';
+    this.rootUrl = 'https://zzv4j5kpjh.execute-api.us-west-2.amazonaws.com/dev';
     // Dev
-    this.rootUrl = 'https://wx8xf4atw8.execute-api.us-west-2.amazonaws.com';
+    this.rootUrl = 'http://localhost';
   }
 
   uploadSourceCSV(payload): Observable<any> {
-    return this.http.post<any>(`${this.rootUrl}/dev/upload`, payload).pipe(
+    return this.http.post<any>(`${this.rootUrl}/upload`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
@@ -47,7 +47,7 @@ export class HttpService  {
   }
 
   uploadReferenceCSV(payload): Observable<any> {
-    return this.http.post<any>(`${this.rootUrl}/dev/refupload`, payload).pipe(
+    return this.http.post<any>(`${this.rootUrl}/refupload`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
@@ -57,7 +57,7 @@ export class HttpService  {
   }
 
   getColumnsRules(payload): Observable<any> {
-    return this.http.post<any>(`${this.rootUrl}/dev/api/rules`, payload).pipe(
+    return this.http.post<any>(`${this.rootUrl}/api/rules`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
@@ -67,7 +67,7 @@ export class HttpService  {
   }
 
   launchAnalysis(payload): Observable<any> {
-    return this.http.post<any>(`${this.rootUrl}/dev/LaunchAnalysis`, payload).pipe(
+    return this.http.post<any>(`${this.rootUrl}/LaunchAnalysis`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
@@ -77,7 +77,7 @@ export class HttpService  {
   }
 
   launchAnalysisDetails(id): Observable<any> {
-    return this.http.get<any>(`${this.rootUrl}/dev/api/getLaunchResult?id=${id}`).pipe(
+    return this.http.get<any>(`${this.rootUrl}/api/getLaunchResult?id=${id}`).pipe(
       tap((res) => {
       }),
       catchError(err => {
@@ -88,7 +88,7 @@ export class HttpService  {
 
 
   launchAnalysisByKey(payload): Observable<any> {
-    return this.http.post<any>(`${this.rootUrl}/dev/api/LaunchAnalysisbyKeyfromDb`, payload).pipe(
+    return this.http.post<any>(`${this.rootUrl}/api/LaunchAnalysisbyKeyfromDb`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
@@ -97,7 +97,7 @@ export class HttpService  {
     );
   }
   launchDelayAnalysisByKey(payload): Observable<any> {
-    return this.http.post<any>(`${this.rootUrl}/dev/api/DelayAnalysis`, payload).pipe(
+    return this.http.post<any>(`${this.rootUrl}/api/DelayAnalysis`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
@@ -107,7 +107,7 @@ export class HttpService  {
   }
 
   launchDelayAnalysisByAirport(payload): Observable<any> {
-    return this.http.post<any>(`${this.rootUrl}/dev/api/DelayAnalysisbyAirPortnew`, payload).pipe(
+    return this.http.post<any>(`${this.rootUrl}/api/DelayAnalysisbyAirPortnew`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
@@ -117,7 +117,7 @@ export class HttpService  {
   }
 
   saveAnalysis(payload, method) {
-    return this.http[method]<any>(`${this.rootUrl}/dev/CreateAnalysis`, payload).pipe(
+    return this.http[method]<any>(`${this.rootUrl}/CreateAnalysis`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
@@ -127,7 +127,7 @@ export class HttpService  {
   }
 
   createEditRuleset(payload, method) {
-    return this.http[method]<any>(`${this.rootUrl}/dev/api/CreateRuleSet`, payload).pipe(
+    return this.http[method]<any>(`${this.rootUrl}/api/CreateRuleSet`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
@@ -137,7 +137,7 @@ export class HttpService  {
   }
 
   getAllAnalysis() {
-    return this.http.get<any>(`${this.rootUrl}/dev/getAllAnalysis`).pipe(
+    return this.http.get<any>(`${this.rootUrl}/getAllAnalysis`).pipe(
       tap((res) => {
       }),
       catchError(err => {
@@ -149,7 +149,7 @@ export class HttpService  {
   // New APIs
 
   saveSource(payload, method): Observable<any> {
-    return this.http[method]<any>(`${this.rootUrl}/dev/api/configureSource`, payload).pipe(
+    return this.http[method]<any>(`${this.rootUrl}/api/configureSource`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
@@ -159,7 +159,7 @@ export class HttpService  {
   }
 
   uploadSource(payload): Observable<any> {
-    return this.http.post<any>(`${this.rootUrl}/dev/api/uploadSource`, payload).pipe(
+    return this.http.post<any>(`${this.rootUrl}/api/uploadSource`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
@@ -170,7 +170,27 @@ export class HttpService  {
 
 
   getSources(): Observable<any> {
-    return this.http.get<any>(`${this.rootUrl}/dev/api/getAllSources`).pipe(
+    return this.http.get<any>(`${this.rootUrl}/api/getAllSources`).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  getSourcePreview(sourceId): Observable<any> {
+    return this.http.get<any>(`${this.rootUrl}/getSourcePreview?sourceId=${sourceId}`).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  getPreview(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/getPreview`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
