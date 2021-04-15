@@ -14,7 +14,7 @@
               (animationDone)="stepperAnimationDone()">
               <mat-step>
                   <ng-template matStepLabel>Source Data</ng-template>
-                  <mat-card class="border no-rounded list shrare-post">
+                  <mat-card class="border no-rounded list shrare-post pbl">
                     <h1 class="share-post-title">Create Your<span class="red"> Source</span></h1>
                       <div class="form-continer">
                         <div class="list flex-containers flex-start wrap">
@@ -103,10 +103,10 @@
                       
                       <div class="bdr"></div>
                                           
-                    <div class="act-btn-wrapper">
-                        <button mat-stroked-button class="primary-btn-gray"
+                    <div class="act-btn-wrapper m1t">
+                        <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"
                         [disabled]="!afControls.sourceDataName.value"
-                        (click)="validateSourceNameAndNext()">Next <mat-icon>arrow_forward_ios</mat-icon></button>
+                        (click)="validateSourceNameAndNext()">Next <mat-icon>navigate_next</mat-icon></button>
                     </div>
                   </mat-card>
                 </mat-step>
@@ -117,15 +117,15 @@
                     <!-- <h1 class="share-post-title">Create Your<span class="red"> Reference Data</span></h1> -->
 
                     <div class="list">
-                      <button type="button" mat-stroked-button class="primary-btn-gray btnOver" (click)="addFormItem('referenceData')" *ngIf="!analysisForm.get('referenceData')['controls'].length">
-                        Add Reference Data <mat-icon>add</mat-icon> 
+                      <button type="button" mat-stroked-button class="button3d btnFade btnLightBlue addRef" (click)="addFormItem('referenceData')" *ngIf="!analysisForm.get('referenceData')['controls'].length">
+                        Add Reference Data <mat-icon>add_box</mat-icon> 
                       </button>
 
                       <div class="flex-containers space-between ref-list-wrp" 
                         formArrayName="referenceData" *ngFor="let reference of analysisForm.get('referenceData')['controls']; index as i; last as isLast; first as isFirst">
                         <ng-container [formGroupName]="i">
                           <div class="list flex-containers flex-start">
-                            <div class="list-item-2 outline">
+                            <div class="list-item-3 outline">
                               <mat-label>Reference Data #{{i+1}} <span class="red">*</span></mat-label>
                               <app-image-cropper 
                                 [imageType]="'Reference'"
@@ -136,24 +136,27 @@
                               </app-image-cropper>
                             </div>
 
-                            <div class="list-item-2 outline">
+                            <div class="list-item-3 outline">
                               <mat-label>Reference Data Name <span class="red">*</span></mat-label>
-                              <mat-form-field appearance="outline">
+                              <mat-form-field appearance="fill">
                                 <input matInput placeholder="Reference Data Name" formControlName="referenceDataName" maxlength="50" autocomplete="off"/>
                               </mat-form-field>
-                            
+                           </div>
+                           <div class="list-item-3 outline">
                               <mat-label class="mtop">Reference Data Description</mat-label>
-                              <mat-form-field appearance="outline">
+                              <mat-form-field appearance="fill">
                                 <input matInput placeholder="Reference Data Description" formControlName="referenceDataDescription" maxlength="250" autocomplete="off"/>
                               </mat-form-field>
                             </div>
     
-                            <div class="list-item-5 add-remove-button">
-                              <button type="button" mat-icon-button (click)="addFormItem('referenceData')" *ngIf="isLast">
+                            <div class="list-item-0 add-remove-button">
+                              <button type="button"  class="button3d btnPush btnBlueGreen addico" (click)="addFormItem('referenceData')" *ngIf="isLast">
                                 <mat-icon>add</mat-icon>
                               </button>
-                              <button type="button" mat-icon-button class="del-icon" (click)="removeFormItem('referenceData', i)">
-                                <mat-icon>delete</mat-icon>
+                           </div>
+                              <div class="list-item-0 add-remove-button">
+                              <button type="button" class="button3d btnPush btnOrange redico" (click)="removeFormItem('referenceData', i)">
+                                 <mat-icon>delete_outline</mat-icon>
                               </button>
                             </div>
                           </div>
@@ -161,8 +164,8 @@
                       </div>
                     </div>
                     <div class="act-btn-wrapper">
-                      <button mat-stroked-button class="primary-btn-gray"
-                      (click)="saveSource()">Save & Summary</button>
+                      <button mat-stroked-button class="button3d btnPush btnLightBlue svBtn"
+                      (click)="saveSource()">Save & Summary <mat-icon>save_alt</mat-icon></button>
                     </div>
 
                   </mat-card>
@@ -234,10 +237,16 @@
                         </tbody>
                       </table>
                     </div>
-                    <div class="act-btn-wrapper">
-                      <button mat-stroked-button class="primary-btn-gray white pad" (click)="prevoewBackClick()"><mat-icon class="mar-ico">arrow_back_ios_new</mat-icon> Back</button>
-                      <button mat-stroked-button class="primary-btn-gray" (click)="showSaveSuccess()" [disabled]="isLoading">Complete</button>
-                    </div>
+
+                    <div class="list flex-containers flex-start">
+                     <div class="list-item-2 outline">
+                        <button mat-stroked-button class="button3d btnPush btnPurple ebckBtn" (click)="prevoewBackClick()"><mat-icon>keyboard_arrow_left</mat-icon> Back</button>
+                     </div>
+                     <div class="list-item-2 outline act-btn-wrapper1">
+                        <button mat-stroked-button class="button3d btnPush btnLightBlue compBtn" (click)="showSaveSuccess()" [disabled]="isLoading">Complete <mat-icon>done_all</mat-icon></button>
+                     </div>
+                  </div>
+                   
                   </mat-card>
 
                 </mat-step>
@@ -248,7 +257,7 @@
             <app-progress-bar [message]="'Loading source preview...'" class="component" *ngIf="isPreviewLoading"></app-progress-bar>
             <div class="list flex-containers space-between">
               <h1 class="share-post-title">Source Preview</h1>
-              <button mat-stroked-button class="primary-btn-gray white pad" (click)="loadSourcePreview();">Preview</button>
+              <button mat-stroked-button class="button3d btnFade btnPurple preview" (click)="loadSourcePreview();"> <mat-icon>view_column</mat-icon> Preview </button>
             </div>
             <app-ag-grid
               floatingFilter="true"

@@ -14,23 +14,25 @@
         </div>
       </mat-option>
       <mat-option class="add-option" *ngIf="showAddItem">
-        <button type="button" class="add-btn" mat-button (click)="showHideAddInput(true);">
-          <mat-icon>add</mat-icon>Add
-        </button>
+         <div class="add-btn">
+            <button type="button" class="button3d btnPush btnBlueGreen addico" (click)="showHideAddInput(true);">
+               <mat-icon>add</mat-icon>Add
+            </button>
+      </div>
       </mat-option>
     </mat-select>
   </mat-form-field>
 
   <div class="list flex-containers flex-start wrap" *ngIf="showAdd">
     <div class="custom-value-input">
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="fill">
         <input matInput placeholder="" maxlength="50" autocomplete="off" [(ngModel)]="ruleItem" />
       </mat-form-field>
     </div>
-    <button type="button" mat-icon-button (click)="addRuleItem(selectedRule);" [disabled]="!ruleItem" >
+    <button type="button" class="button3d btnPush btnBlueGreen raddIco" (click)="addRuleItem(selectedRule);" [disabled]="!ruleItem" >
       <mat-icon>done</mat-icon>
     </button>
-    <button type="button" mat-icon-button class="del-icon" (click)="showHideAddInput(false)">
+    <button type="button" mat-icon-button class="button3d btnPush btnOrange rdelIco" (click)="showHideAddInput(false)">
       <mat-icon>close</mat-icon>
     </button>
   </div>
