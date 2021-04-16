@@ -4,11 +4,11 @@
    height: 320px;
    overflow-y: auto;
    .col-list-item {
-     font-size: 14px;
+     font-size: 12px;
      letter-spacing: 0.32px;
      opacity: 0.9;    
      cursor: grab;
-     padding: 10px 16px;
+     padding: 8px 16px;
      font-family: 'open-sans-condensed-bold';
      &.cdk-drag-disabled {
        opacity: 0.62;
@@ -46,16 +46,16 @@
    .col-list-item {
      color: #000;
      &:nth-child(odd) {
-       background-color: #f3f3f3;
+       background-color: #eee8f8;
      }
      &:nth-child(even) {
        background-color: #fff;
      }
      &:hover {
-       background-color: #e0e0e0;
+       background-color: #a494be;
      }
      &.selected {
-       background-color: #e0e0e0;
+       background-color: #a494be;
        font-weight: 400;
      }
    }

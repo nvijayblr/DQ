@@ -1,370 +1,382 @@
-<section class="page-body home-bodys">
-  <div class="container">
-    <div class="home-wrapper">
-      <!-- Community Pages -->
-      
-      <div class="clearfix my-community-body">
-        <!-- <div class="left-pannel">
-          <app-account-details></app-account-details>
-          <app-recent-deals></app-recent-deals>
-        </div> -->
-        <div class="home-panel">
-          <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
-          <form [formGroup]="analysisForm">
-            <mat-horizontal-stepper [linear]="false" #stepper 
-              [selectedIndex]="stepIndex" 
-              (selectionChange)="stepperSelectionChange($event)"
-              (animationDone)="stepperAnimationDone()">
-              <mat-step>
-                  <ng-template matStepLabel>Source & Refernce Data</ng-template>
-                  <mat-card class="border no-rounded list shrare-post">
-                    <h1 class="share-post-title">Source & Refernce<span class="red"> Data</span></h1>
-                      <div class="form-continer">
-                        <div class="list flex-containers flex-start wrap">
-                          <div class="list-item-3 outline">
-                            <mat-label>Source Data<span class="red">*</span></mat-label>
-                            <mat-form-field appearance="outline">
-                              <mat-select formControlName="sourceId" (selectionChange)="onSourceChange($event)">
-                                <mat-option *ngFor="let item of sourceList" [value]="item.sourceId">{{item.source.sourceFileName}}</mat-option>
-                              </mat-select>
-                            </mat-form-field>
-                          </div>
-                            <div class="list-item-2 outline">
-                              <mat-label>Source Name<span class="red">*</span></mat-label>
-                              <mat-form-field appearance="outline">
-                                <input matInput placeholder="Source Name" formControlName="name" maxlength="50" autocomplete="off"/>
-                              </mat-form-field>
-                            
-                              <mat-label class="mtop">Source Description</mat-label>
-                              <mat-form-field appearance="outline">
-                                <input matInput placeholder="Source Description" formControlName="description" maxlength="250" autocomplete="off"/>
-                              </mat-form-field>
-                            </div>
-                            <div class="list-item-5 add-remove-button"></div>
+<section class="page-body home-bodys pad-tp">
+   <div class="container">
+     <div class="home-wrapper">
+       <!-- Community Pages -->
+       
+       <div class="clearfix my-community-body">
+         <!-- <div class="left-pannel">
+           <app-account-details></app-account-details>
+           <app-recent-deals></app-recent-deals>
+         </div> -->
+         <div class="home-panel">
+           <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
+           <form [formGroup]="analysisForm">
+             <mat-horizontal-stepper [linear]="false" #stepper 
+               [selectedIndex]="stepIndex" 
+               (selectionChange)="stepperSelectionChange($event)"
+               (animationDone)="stepperAnimationDone()">
+               <mat-step>
+                   <ng-template matStepLabel>Source & Refernce Data</ng-template>
+                   <mat-card class="border no-rounded list shrare-post">
+                     <h1 class="share-post-title">Source & Refernce<span class="red"> Data</span></h1>
+                       <div class="form-continer">
+                         <div class="list flex-containers flex-start wrap">
+                           <div class="list-item-3 outline">
+                             <mat-label>Source Data<span class="red">*</span></mat-label>
+                             <mat-form-field appearance="fill">
+                               <mat-select formControlName="sourceId" (selectionChange)="onSourceChange($event)">
+                                 <mat-option *ngFor="let item of sourceList" [value]="item.sourceId">{{item.source.sourceFileName}}</mat-option>
+                               </mat-select>
+                             </mat-form-field>
+                           </div>
+                             <div class="list-item-4 outline">
+                               <mat-label>Source Name<span class="red">*</span></mat-label>
+                               <mat-form-field appearance="fill">
+                                 <input matInput placeholder="Source Name" formControlName="name" maxlength="50" autocomplete="off"/>
+                               </mat-form-field>
+                             </div>
+                             <div class="list-item-3 outline">
+                               <mat-label>Source Description</mat-label>
+                               <mat-form-field appearance="fill">
+                                 <input matInput placeholder="Source Description" formControlName="description" maxlength="250" autocomplete="off"/>
+                               </mat-form-field>
+                             </div>
+                             <div class="list-item-5 add-remove-button"></div>
+                         </div>
+                       </div>
+                       <div class="bdr"></div>
+                       <div class="list">
+                         <div class="flex-containers space-between" 
+                           formArrayName="referenceCSV" *ngFor="let reference of analysisForm.get('referenceCSV')['controls']; index as i; last as isLast; first as isFirst">
+                           <ng-container [formGroupName]="i">
+                             <div class="list flex-containers flex-start">
+                               <div class="list-item-2 outline">
+                                 <mat-label>Reference Data (csv) #{{i+1}}</mat-label>
+                                 <mat-form-field appearance="fill">
+                                   <input matInput placeholder="Reference File" formControlName="referencePath" maxlength="50" autocomplete="off"/>
+                                 </mat-form-field>
+                               </div>
+                               <div class="list-item-2 outline">
+                                 <mat-label>Reference Name<span class="red">*</span></mat-label>
+                                 <mat-form-field appearance="fill">
+                                   <input matInput placeholder="Reference Name" formControlName="referenceDataName" maxlength="50" autocomplete="off"/>
+                                 </mat-form-field>
+                               </div>
+                               <div class="list-item-1 outline">
+                                 <mat-label>Source Description</mat-label>
+                                 <mat-form-field appearance="fill">
+                                   <input matInput placeholder="Source Description" formControlName="referenceDataDescription" maxlength="250" autocomplete="off"/>
+                                 </mat-form-field>
+                               </div>
+     
+                               <div class="list-item-0 add-remove-button">
+                                 <button type="button" class="button3d btnPush btnBlueGreen addico" (click)="addFormItem('referenceCSV')" *ngIf="isLast">
+                                   <mat-icon>add</mat-icon>
+                                 </button>
+                                 </div>
+                                 <div class="list-item-0 add-remove-button">
+                                 <button type="button" class="button3d btnPush btnOrange redico" (click)="removeFormItem('referenceCSV', i)" *ngIf="!isFirst || !isLast">
+                                   <mat-icon>delete</mat-icon>
+                                 </button>
+                               </div>
+                             </div>
+                           </ng-container>
+                         </div>
+                       </div>
+ 
+                     <div class="act-btn-wrapper">
+                         <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"
+                         [disabled]="!afControls.name.value || fileTypeErr"
+                         (click)="gotoStepper(1, 'CSV')">Next <mat-icon>navigate_next</mat-icon></button>
+                     </div>
+                   </mat-card>
+                 </mat-step>
+ 
+                 <mat-step>
+                   <ng-template matStepLabel>Critical Data Elements</ng-template>
+                   <mat-card class="border no-rounded list shrare-post">
+                     <h1 class="share-post-title">Critical<span class="red"> Data Elements</span></h1>
+                     <div class="col-selector-wrapper">
+                       <app-column-selector 
+                         [availableColumnsLabel]="'Available Columns'"
+                         [selectedColumnsLabel]="'Selected Columns'"
+                         [availableColumns]="availableColumns"
+                         [selectedColumns]="selectedColumns"
+                         [formControl]="columnsForm.controls.columns"
+                       >
+                       </app-column-selector>
+                     </div>
+                     <br/>
+                     <h1 class="share-post-title">Define<span class="red"> Reference Data Element</span></h1>
+                     <div class="col-selector-wrapper">
+                       <app-column-selector 
+                         [availableColumnsLabel]="'Available Reference Columns'"
+                         [selectedColumnsLabel]="'Selected Reference Columns'"
+                         [availableColumns]="availableReferenceColumns"
+                         [selectedColumns]="selectedReferenceColumns"
+                         [formControl]="columnsForm.controls.refernceColumns"
+                       >
+                       </app-column-selector>
+                     </div>
+                     
+                     <div class="list flex-containers flex-start">
+                        <div class="list-item-2 outline">
+                           <button mat-stroked-button class="button3d btnPush btnPurple ebckBtn" (click)="gotoStepper(0)"><mat-icon>keyboard_arrow_left</mat-icon> Back</button>
+                           </div>
+                           <div class="list-item-2 outline act-btn-wrapper1">
+                              <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn" 
+                              [disabled]="columnsForm.controls.columns.value && !columnsForm.controls.columns.value.length"
+                              (click)="gotoStepper(2); getColumnRules();">Next  <mat-icon>navigate_next</mat-icon></button>
+                           </div>
                         </div>
-                      </div>
-                      <div class="bdr"></div>
-                      <div class="list">
-                        <div class="flex-containers space-between" 
-                          formArrayName="referenceCSV" *ngFor="let reference of analysisForm.get('referenceCSV')['controls']; index as i; last as isLast; first as isFirst">
-                          <ng-container [formGroupName]="i">
-                            <div class="list flex-containers flex-start">
-                              <div class="list-item-3 outline">
-                                <mat-label>Reference Data (csv) #{{i+1}}</mat-label>
-                                <mat-form-field appearance="outline">
-                                  <input matInput placeholder="Reference File" formControlName="referencePath" maxlength="50" autocomplete="off"/>
-                                </mat-form-field>
-                              </div>
-                              <div class="list-item-2 outline">
-                                <mat-label>Reference Name<span class="red">*</span></mat-label>
-                                <mat-form-field appearance="outline">
-                                  <input matInput placeholder="Reference Name" formControlName="referenceDataName" maxlength="50" autocomplete="off"/>
-                                </mat-form-field>
-                              
-                                <mat-label class="mtop">Source Description</mat-label>
-                                <mat-form-field appearance="outline">
-                                  <input matInput placeholder="Source Description" formControlName="referenceDataDescription" maxlength="250" autocomplete="off"/>
-                                </mat-form-field>
-                              </div>
-    
-                              <div class="list-item-5 add-remove-button">
-                                <button type="button" mat-icon-button (click)="addFormItem('referenceCSV')" *ngIf="isLast">
-                                  <mat-icon>add</mat-icon>
-                                </button>
-                                <button type="button" mat-icon-button class="del-icon" (click)="removeFormItem('referenceCSV', i)" *ngIf="!isFirst || !isLast">
-                                  <mat-icon>delete</mat-icon>
-                                </button>
-                              </div>
-                            </div>
-                          </ng-container>
-                        </div>
-                      </div>
-
-                    <div class="act-btn-wrapper">
-                        <button mat-stroked-button class="primary-btn-gray"
-                        [disabled]="!afControls.name.value || fileTypeErr"
-                        (click)="gotoStepper(1, 'CSV')">Next <mat-icon>arrow_forward_ios</mat-icon></button>
-                    </div>
-                  </mat-card>
-                </mat-step>
-
-                <mat-step>
-                  <ng-template matStepLabel>Critical Data Elements</ng-template>
-                  <mat-card class="border no-rounded list shrare-post">
-                    <h1 class="share-post-title">Critical<span class="red"> Data Elements</span></h1>
-                    <div class="col-selector-wrapper">
-                      <app-column-selector 
-                        [availableColumnsLabel]="'Available Columns'"
-                        [selectedColumnsLabel]="'Selected Columns'"
-                        [availableColumns]="availableColumns"
-                        [selectedColumns]="selectedColumns"
-                        [formControl]="columnsForm.controls.columns"
-                      >
-                      </app-column-selector>
-                    </div>
-                    <br/>
-                    <h1 class="share-post-title">Define<span class="red"> Reference Data Element</span></h1>
-                    <div class="col-selector-wrapper">
-                      <app-column-selector 
-                        [availableColumnsLabel]="'Available Reference Columns'"
-                        [selectedColumnsLabel]="'Selected Reference Columns'"
-                        [availableColumns]="availableReferenceColumns"
-                        [selectedColumns]="selectedReferenceColumns"
-                        [formControl]="columnsForm.controls.refernceColumns"
-                      >
-                      </app-column-selector>
-                    </div>
+                       
+                       
                     
-                    <div class="act-btn-wrapper">
-                      <button mat-stroked-button class="primary-btn-gray white pad" (click)="gotoStepper(0)"><mat-icon class="mar-ico">arrow_back_ios_new</mat-icon> Back</button>
-                      <button mat-stroked-button class="primary-btn-gray" 
-                        [disabled]="columnsForm.controls.columns.value && !columnsForm.controls.columns.value.length"
-                        (click)="gotoStepper(2); getColumnRules();">Next <mat-icon>arrow_forward_ios</mat-icon></button>
-                    </div>
-                  </mat-card>
-                </mat-step>
-                
-                <mat-step>
-                  <ng-template matStepLabel>Rule Definition</ng-template>
-                  <div class="list wrap">
-                    <mat-card class="border no-rounded shrare-post">
-                      <h1 class="share-post-title">Rule<span class="red"> Definition</span></h1>
-                      <div class="list flex-containers flex-start wrap cde-fields-wrp">
-                        <div class="list-item-3 outline">
-                          <mat-label>Ruleset Name<span class="red">*</span></mat-label>
-                          <mat-form-field appearance="outline">
-                            <input matInput placeholder="Ruleset Name" formControlName="rulesetName" maxlength="50" autocomplete="off"/>
-                          </mat-form-field>
-                        </div>
-                        <div class="list-item-3 outline">
-                          <mat-label>Start Date<span class="red">*</span></mat-label>
-                          <mat-form-field appearance="outline">
-                            <mat-label>Start Date</mat-label>
-                            <input matInput [matDatepicker]="frompicker" formControlName="startDate">
-                            <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
-                            <mat-datepicker #frompicker></mat-datepicker>
-                          </mat-form-field>
-                        </div>
-                        <div class="list-item-3 outline">
-                          <mat-label>End Date<span class="red">*</span></mat-label>
-                          <mat-form-field appearance="outline">
-                            <mat-label>End Date</mat-label>
-                            <input matInput [matDatepicker]="topicker" formControlName="endDate">
-                            <mat-datepicker-toggle matSuffix [for]="topicker"></mat-datepicker-toggle>
-                            <mat-datepicker #topicker></mat-datepicker>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="category-list-wrapper clearfix" *ngIf="showCDECar && !isLoading">
-                        <div class="left-arrow">
-                          <button mat-stroked-button class="gv-secondary-btn primary-btn-gray prev-next-btn" (click)="owlCar.prev()">
-                            <mat-icon class="pl">keyboard_arrow_left</mat-icon>
-                          </button>
-                        </div>
-                        <div class="category-list" #carouselHolder>
-                          <owl-carousel-o [options]="OwlCategoryOptions" #owlCar (initialized)="owlInitialized()">
-                            <!-- Carousel Items -->
-                            <ng-container *ngFor="let rule of rulesList">
-                              <ng-template carouselSlide [id]="rule.column">
-                                <div class="category-item" [class.selected]="rule.column === selectedRuleColumn" (tap)="gotoRuleColumn(rule)">
-                                  <h3 class="cat-title">{{rule.column ? rule.column : '-'}}</h3>
-                                </div>
-                              </ng-template>
-                            </ng-container>
-                          </owl-carousel-o>
-                        </div>
-                        <div class="right-arrow">
-                          <button mat-stroked-button class="gv-secondary-btn primary-btn-gray prev-next-btn" (click)="owlCar.next()">
-                            <mat-icon class="pl">keyboard_arrow_right</mat-icon>
-                          </button>
-                        </div>
-                      </div>
-                      
-                      <mat-expansion-panel expanded hideToggle disabled  
-                        *ngFor="let columns of afControls.columnRules.controls; index as i;" 
-                        formArrayName="columnRules"
-                        [hidden]="columns['controls'].column.value !== selectedRuleColumn">
-                        <ng-container [formGroupName]="i">
-                          <mat-expansion-panel-header>
-                            <mat-panel-title>
-                              {{columns['controls'].column.value}}
-                            </mat-panel-title>
-                          </mat-expansion-panel-header>
-                          <div class="rule-step-wrapper rule-list-wrp"
-                            *ngFor="let rule of columns.get('rules')['controls']; index as j; last as isLast; first as isFirst" formArrayName="rules">
-                            <ng-container [formGroupName]="j">
-                              <h5 class="rule-title">Rule #{{j+1}}</h5>
-                              <div class="rule-selection-wrapper">
-                                <div class="list flex-containers flex-start wrap cde-fields-wrp">
-                                  <div class="list-item-5 outline">
-                                    <app-rule-selector 
-                                      [ruleItems]="ruleTypeList" 
-                                      [initValue]="rule.get('rule').value" 
-                                      (selectionChange)="rule.get('rule').setValue($event.value)"
-                                    ></app-rule-selector>
-                                  </div>
-                                  <div class="list-item-5 outline">
-                                    <app-rule-selector 
-                                      [ruleItems]="ruleOperatorList[rule.get('rule').value]" 
-                                      [initValue]="rule.get('operator').value" 
-                                      (selectionChange)="rule.get('operator').setValue($event.value)"
-                                    ></app-rule-selector>
-                                  </div>
-                                  <div class="list-item-5 outline" [hidden]="rule.get('rule').value === 'Formula'">
-                                    <app-rule-selector 
-                                      *ngIf="rule.get('rule').value !== 'ReferenceCDE'"
-                                      [ruleItems]="ruleValueList[rule.get('rule').value]" 
-                                      [initValue]="rule.get('value').value" 
-                                      (selectionChange)="rule.get('value').setValue($event.value)"
-                                    ></app-rule-selector>
-                                    <mat-form-field appearance="outline" *ngIf="rule.get('rule').value === 'ReferenceCDE'">
-                                      <mat-select formControlName="value" (change)="rule.get('value').setValue($event.value)">
-                                        <mat-option *ngFor="let item of columnsForm.controls.refernceColumns.value" [value]="item.title">{{item.title}}</mat-option>
-                                      </mat-select>
-                                    </mat-form-field>
-                                  </div>
-                                  <div class="list-item-5 outline" *ngIf="rule.get('rule').value === 'Formula'">
-                                    <div class="formula-preview">
-                                      <span *ngFor="let formula of rule.get('value').value">
-                                        <span class="operator" *ngIf="formula.operator !== 'NULL'">{{formula.operator}}</span>
-                                        <span class="cde">{{formula.cde}}</span>
-                                      </span>
-                                    </div>
-                                    <div class="edit-link" (click)="showFormulaEditor(rule)">Formula Editor</div>
-                                  </div>
-                                  <div class="list-item-5 outline">
-                                    <app-rule-selector 
-                                      [ruleItems]="ruleDimenstionList" 
-                                      [initValue]="rule.get('dimension').value" 
-                                      (selectionChange)="rule.get('dimension').setValue($event.value)"
-                                    ></app-rule-selector>
-                                  </div>
-                                  <div class="list-item-5 add-remove-button">
-                                    <button type="button" mat-icon-button (click)="addRules(columns, 'rules')" *ngIf="isLast">
-                                      <mat-icon>add</mat-icon>
-                                    </button>
-                                    <button type="button" mat-icon-button class="del-icon" (click)="removeRules(columns, 'rules', j)" *ngIf="!isFirst || !isLast">
-                                      <mat-icon>delete</mat-icon>
-                                    </button>
-                                  </div>
-                                </div>
-                              </div>
-                            </ng-container>
-                          </div>
-                        </ng-container>
-                      </mat-expansion-panel>
-                      <div class="act-btn-wrapper">
-                        <button mat-stroked-button class="primary-btn-gray white pad" (click)="gotoStepper(1);"><mat-icon class="mar-ico">arrow_back_ios_new</mat-icon> Back</button>
-                        <button mat-stroked-button class="primary-btn-gray" 
-                          [disabled]="!afControls.rulesetName.value || !afControls.columnRules.value.length || !afControls.startDate.value || !afControls.endDate.value"
-                          (click)="generatePreview();">Next <mat-icon>arrow_forward_ios</mat-icon></button>
-                      </div>
-                    </mat-card>
-                    <div class="list flex-containers wrap">
-                      <mat-card class="border no-rounded shrare-post font rule-details-info">
-                        <h1 class="share-post-title"><span class="red">{{selectedRuleColumn}}</span></h1>
-                        <table class="table">
-                          <tr>
-                            <td class="strong" *ngFor="let statistics of cdeStatistics | keyvalue">{{statistics.key}}</td>
-                          </tr>
-                          <tr>
-                            <td *ngFor="let statistics of cdeStatistics | keyvalue">{{statistics.value}}</td>
-                          </tr>
-                        </table>
-                      </mat-card>
-                      <mat-card class="border no-rounded shrare-post font correlation-info">
-                        <h1 class="share-post-title"><span class="red">Correlation Info</span></h1>
-                      </mat-card>
-                    </div>
-                  </div>
-                </mat-step>
-
-                <mat-step>
-                  <ng-template matStepLabel>Finalize ruleset</ng-template>
-                  <mat-card class="border no-rounded list shrare-post">
-                    <h1 class="share-post-title">Finalize<span class="red"> ruleset</span></h1>
-                    <div class="analysis-preview">
-                      <table class="table">
-
-                        <tbody>
-                          <tr>
-                            <td><div class="label">Source Name</div></td>
-                            <td>{{analysis.sourceName}}</td>
-                          </tr>
-                          <tr>
-                            <td><div class="label">Selected CDE</div></td>
-                          <td>
-                            <span *ngFor="let column of analysis.selectedColumns">
-                              {{column.title}},
-                            </span>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td><div class="label">Ruleset Name</div></td>
-                            <td>{{analysis.rulesetName}}</td>
-                          </tr>
-                          <tr>
-                            <td colspan="2"><div class="label">Rules</div></td>
-                          </tr>
-                          <tr>
-                            <td colspan="2">
-                              <div *ngFor="let col of analysis.rules">
-                                <h4>{{col.column}}</h4>
-                                <table class="table rule-table">
-                                  <tbody>
-                                    <tr *ngFor="let rule of col.rules; index as i">
-                                      <td>Rule #{{i+1}}</td>
-                                      <td><div class="label">{{rule.rule}}</div></td>
-                                      <td>{{rule.operator}}</td>
-                                      <td class="preview">
-                                        <div *ngIf="rule.rule !== 'Formula'">{{rule.value}}</div>
-                                        <div *ngIf="rule.rule === 'Formula'" class="formula-preview">
-                                          <span *ngFor="let formula of rule.value">
-                                            <span class="operator" *ngIf="formula.operator !== 'NULL'">{{formula.operator}}</span>
-                                            <span class="cde">{{formula.cde}}</span>
-                                          </span>
-                                        </div>
-                                      </td>
-                                      <td>{{rule.dimension}}</td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </div>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <div class="act-btn-wrapper">
-                      <button mat-stroked-button class="primary-btn-gray white pad" (click)="gotoStepper(2);"><mat-icon class="mar-ico">arrow_back_ios_new</mat-icon> Back</button>
-                      <button mat-stroked-button class="primary-btn-red" (click)="createEditRuleset()" [disabled]="isLoading">Complete</button>
-                    </div>
-                  </mat-card>
-
-                </mat-step>
-            </mat-horizontal-stepper>
-          </form>
-
-          <mat-card class="border no-rounded list shrare-post mat-card source-preview-card" [hidden]="stepIndex === 3">
-            <app-progress-bar [message]="'Loading source preview...'" class="component" *ngIf="isPreviewLoading"></app-progress-bar>
-            <div class="list flex-containers space-between">
-              <h1 class="share-post-title">Source Preview</h1>
-              <button mat-stroked-button class="primary-btn-gray white pad" (click)="loadSourcePreview();">Preview</button>
-            </div>
-            <app-ag-grid
-              floatingFilter="true"
-              *ngIf="isPreviewLoaded"
-              [rowData]="rowData"
-              [columnDefs]="columnDefs"
-              [pageSize]="50"
-              [rowSelection]="'multiple'"
-              [suppressRowClickSelection]="false"
-            ></app-ag-grid>
-          </mat-card>
-    
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
+                   </mat-card>
+                 </mat-step>
+                 
+                 <mat-step>
+                   <ng-template matStepLabel>Rule Definition</ng-template>
+                   <div class="list wrap">
+                     <mat-card class="border no-rounded shrare-post">
+                       <h1 class="share-post-title">Rule<span class="red"> Definition</span></h1>
+                       <div class="list flex-containers flex-start wrap cde-fields-wrp">
+                         <div class="list-item-3 outline">
+                           <mat-label>Ruleset Name<span class="red">*</span></mat-label>
+                           <mat-form-field appearance="outline">
+                             <input matInput placeholder="Ruleset Name" formControlName="rulesetName" maxlength="50" autocomplete="off"/>
+                           </mat-form-field>
+                         </div>
+                         <div class="list-item-3 outline">
+                           <mat-label>Start Date<span class="red">*</span></mat-label>
+                           <mat-form-field appearance="outline">
+                             <mat-label>Start Date</mat-label>
+                             <input matInput [matDatepicker]="frompicker" formControlName="startDate">
+                             <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
+                             <mat-datepicker #frompicker></mat-datepicker>
+                           </mat-form-field>
+                         </div>
+                         <div class="list-item-3 outline">
+                           <mat-label>End Date<span class="red">*</span></mat-label>
+                           <mat-form-field appearance="outline">
+                             <mat-label>End Date</mat-label>
+                             <input matInput [matDatepicker]="topicker" formControlName="endDate">
+                             <mat-datepicker-toggle matSuffix [for]="topicker"></mat-datepicker-toggle>
+                             <mat-datepicker #topicker></mat-datepicker>
+                           </mat-form-field>
+                         </div>
+                       </div>
+                       <div class="category-list-wrapper clearfix" *ngIf="showCDECar && !isLoading">
+                         <div class="left-arrow">
+                           <button mat-stroked-button class="gv-secondary-btn primary-btn-gray prev-next-btn" (click)="owlCar.prev()">
+                             <mat-icon class="pl">keyboard_arrow_left</mat-icon>
+                           </button>
+                         </div>
+                         <div class="category-list" #carouselHolder>
+                           <owl-carousel-o [options]="OwlCategoryOptions" #owlCar (initialized)="owlInitialized()">
+                             <!-- Carousel Items -->
+                             <ng-container *ngFor="let rule of rulesList">
+                               <ng-template carouselSlide [id]="rule.column">
+                                 <div class="category-item" [class.selected]="rule.column === selectedRuleColumn" (tap)="gotoRuleColumn(rule)">
+                                   <h3 class="cat-title">{{rule.column ? rule.column : '-'}}</h3>
+                                 </div>
+                               </ng-template>
+                             </ng-container>
+                           </owl-carousel-o>
+                         </div>
+                         <div class="right-arrow">
+                           <button mat-stroked-button class="gv-secondary-btn primary-btn-gray prev-next-btn" (click)="owlCar.next()">
+                             <mat-icon class="pl">keyboard_arrow_right</mat-icon>
+                           </button>
+                         </div>
+                       </div>
+                       
+                       <mat-expansion-panel expanded hideToggle disabled  
+                         *ngFor="let columns of afControls.columnRules.controls; index as i;" 
+                         formArrayName="columnRules"
+                         [hidden]="columns['controls'].column.value !== selectedRuleColumn">
+                         <ng-container [formGroupName]="i">
+                           <mat-expansion-panel-header>
+                             <mat-panel-title>
+                               {{columns['controls'].column.value}}
+                             </mat-panel-title>
+                           </mat-expansion-panel-header>
+                           <div class="rule-step-wrapper rule-list-wrp"
+                             *ngFor="let rule of columns.get('rules')['controls']; index as j; last as isLast; first as isFirst" formArrayName="rules">
+                             <ng-container [formGroupName]="j">
+                               <h5 class="rule-title">Rule #{{j+1}}</h5>
+                               <div class="rule-selection-wrapper">
+                                 <div class="list flex-containers flex-start wrap cde-fields-wrp">
+                                   <div class="list-item-5 outline">
+                                     <app-rule-selector 
+                                       [ruleItems]="ruleTypeList" 
+                                       [initValue]="rule.get('rule').value" 
+                                       (selectionChange)="rule.get('rule').setValue($event.value)"
+                                     ></app-rule-selector>
+                                   </div>
+                                   <div class="list-item-5 outline">
+                                     <app-rule-selector 
+                                       [ruleItems]="ruleOperatorList[rule.get('rule').value]" 
+                                       [initValue]="rule.get('operator').value" 
+                                       (selectionChange)="rule.get('operator').setValue($event.value)"
+                                     ></app-rule-selector>
+                                   </div>
+                                   <div class="list-item-5 outline" [hidden]="rule.get('rule').value === 'Formula'">
+                                     <app-rule-selector 
+                                       *ngIf="rule.get('rule').value !== 'ReferenceCDE'"
+                                       [ruleItems]="ruleValueList[rule.get('rule').value]" 
+                                       [initValue]="rule.get('value').value" 
+                                       (selectionChange)="rule.get('value').setValue($event.value)"
+                                     ></app-rule-selector>
+                                     <mat-form-field appearance="outline" *ngIf="rule.get('rule').value === 'ReferenceCDE'">
+                                       <mat-select formControlName="value" (change)="rule.get('value').setValue($event.value)">
+                                         <mat-option *ngFor="let item of columnsForm.controls.refernceColumns.value" [value]="item.title">{{item.title}}</mat-option>
+                                       </mat-select>
+                                     </mat-form-field>
+                                   </div>
+                                   <div class="list-item-5 outline" *ngIf="rule.get('rule').value === 'Formula'">
+                                     <div class="formula-preview">
+                                       <span *ngFor="let formula of rule.get('value').value">
+                                         <span class="operator" *ngIf="formula.operator !== 'NULL'">{{formula.operator}}</span>
+                                         <span class="cde">{{formula.cde}}</span>
+                                       </span>
+                                     </div>
+                                     <div class="edit-link" (click)="showFormulaEditor(rule)">Formula Editor</div>
+                                   </div>
+                                   <div class="list-item-5 outline">
+                                     <app-rule-selector 
+                                       [ruleItems]="ruleDimenstionList" 
+                                       [initValue]="rule.get('dimension').value" 
+                                       (selectionChange)="rule.get('dimension').setValue($event.value)"
+                                     ></app-rule-selector>
+                                   </div>
+                                   <div class="list-item-5 add-remove-button">
+                                     <button type="button" mat-icon-button (click)="addRules(columns, 'rules')" *ngIf="isLast">
+                                       <mat-icon>add</mat-icon>
+                                     </button>
+                                     <button type="button" mat-icon-button class="del-icon" (click)="removeRules(columns, 'rules', j)" *ngIf="!isFirst || !isLast">
+                                       <mat-icon>delete</mat-icon>
+                                     </button>
+                                   </div>
+                                 </div>
+                               </div>
+                             </ng-container>
+                           </div>
+                         </ng-container>
+                       </mat-expansion-panel>
+                       <div class="act-btn-wrapper">
+                         <button mat-stroked-button class="primary-btn-gray white pad" (click)="gotoStepper(1);"><mat-icon class="mar-ico">arrow_back_ios_new</mat-icon> Back</button>
+                         <button mat-stroked-button class="primary-btn-gray" 
+                           [disabled]="!afControls.rulesetName.value || !afControls.columnRules.value.length || !afControls.startDate.value || !afControls.endDate.value"
+                           (click)="generatePreview();">Next <mat-icon>arrow_forward_ios</mat-icon></button>
+                       </div>
+                     </mat-card>
+                     <div class="list flex-containers wrap">
+                       <mat-card class="border no-rounded shrare-post font rule-details-info">
+                         <h1 class="share-post-title"><span class="red">{{selectedRuleColumn}}</span></h1>
+                         <table class="table">
+                           <tr>
+                             <td class="strong" *ngFor="let statistics of cdeStatistics | keyvalue">{{statistics.key}}</td>
+                           </tr>
+                           <tr>
+                             <td *ngFor="let statistics of cdeStatistics | keyvalue">{{statistics.value}}</td>
+                           </tr>
+                         </table>
+                       </mat-card>
+                       <mat-card class="border no-rounded shrare-post font correlation-info">
+                         <h1 class="share-post-title"><span class="red">Correlation Info</span></h1>
+                       </mat-card>
+                     </div>
+                   </div>
+                 </mat-step>
+ 
+                 <mat-step>
+                   <ng-template matStepLabel>Finalize ruleset</ng-template>
+                   <mat-card class="border no-rounded list shrare-post">
+                     <h1 class="share-post-title">Finalize<span class="red"> ruleset</span></h1>
+                     <div class="analysis-preview">
+                       <table class="table">
+ 
+                         <tbody>
+                           <tr>
+                             <td><div class="label">Source Name</div></td>
+                             <td>{{analysis.sourceName}}</td>
+                           </tr>
+                           <tr>
+                             <td><div class="label">Selected CDE</div></td>
+                           <td>
+                             <span *ngFor="let column of analysis.selectedColumns">
+                               {{column.title}},
+                             </span>
+                             </td>
+                           </tr>
+                           <tr>
+                             <td><div class="label">Ruleset Name</div></td>
+                             <td>{{analysis.rulesetName}}</td>
+                           </tr>
+                           <tr>
+                             <td colspan="2"><div class="label">Rules</div></td>
+                           </tr>
+                           <tr>
+                             <td colspan="2">
+                               <div *ngFor="let col of analysis.rules">
+                                 <h4>{{col.column}}</h4>
+                                 <table class="table rule-table">
+                                   <tbody>
+                                     <tr *ngFor="let rule of col.rules; index as i">
+                                       <td>Rule #{{i+1}}</td>
+                                       <td><div class="label">{{rule.rule}}</div></td>
+                                       <td>{{rule.operator}}</td>
+                                       <td class="preview">
+                                         <div *ngIf="rule.rule !== 'Formula'">{{rule.value}}</div>
+                                         <div *ngIf="rule.rule === 'Formula'" class="formula-preview">
+                                           <span *ngFor="let formula of rule.value">
+                                             <span class="operator" *ngIf="formula.operator !== 'NULL'">{{formula.operator}}</span>
+                                             <span class="cde">{{formula.cde}}</span>
+                                           </span>
+                                         </div>
+                                       </td>
+                                       <td>{{rule.dimension}}</td>
+                                     </tr>
+                                   </tbody>
+                                 </table>
+                               </div>
+                             </td>
+                           </tr>
+                         </tbody>
+                       </table>
+                     </div>
+                     <div class="act-btn-wrapper">
+                       <button mat-stroked-button class="primary-btn-gray white pad" (click)="gotoStepper(2);"><mat-icon class="mar-ico">arrow_back_ios_new</mat-icon> Back</button>
+                       <button mat-stroked-button class="primary-btn-red" (click)="createEditRuleset()" [disabled]="isLoading">Complete</button>
+                     </div>
+                   </mat-card>
+ 
+                 </mat-step>
+             </mat-horizontal-stepper>
+           </form>
+ 
+           <mat-card class="border no-rounded list shrare-post mat-card source-preview-card" [hidden]="stepIndex === 3">
+             <app-progress-bar [message]="'Loading source preview...'" class="component" *ngIf="isPreviewLoading"></app-progress-bar>
+             <div class="list flex-containers space-between">
+               <h1 class="share-post-title">Source Preview</h1>
+               <button mat-stroked-button class="button3d btnPush btnPurple preview" (click)="loadSourcePreview();"> <mat-icon>view_column</mat-icon> Preview</button>
+             </div>
+             <app-ag-grid
+               floatingFilter="true"
+               *ngIf="isPreviewLoaded"
+               [rowData]="rowData"
+               [columnDefs]="columnDefs"
+               [pageSize]="50"
+               [rowSelection]="'multiple'"
+               [suppressRowClickSelection]="false"
+             ></app-ag-grid>
+           </mat-card>
+     
+         </div>
+       </div>
+     </div>
+   </div>
+ </section>
+ 
+ 
