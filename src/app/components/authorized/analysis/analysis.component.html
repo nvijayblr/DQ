@@ -76,7 +76,7 @@
                                  </div>
                                  <div class="list-item-0 add-remove-button">
                                  <button type="button" class="button3d btnPush btnOrange redico" (click)="removeFormItem('referenceCSV', i)" *ngIf="!isFirst || !isLast">
-                                   <mat-icon>delete</mat-icon>
+                                   <mat-icon>delete_outline</mat-icon>
                                  </button>
                                </div>
                              </div>
@@ -143,14 +143,14 @@
                        <div class="list flex-containers flex-start wrap cde-fields-wrp">
                          <div class="list-item-3 outline">
                            <mat-label>Ruleset Name<span class="red">*</span></mat-label>
-                           <mat-form-field appearance="outline">
+                           <mat-form-field appearance="fill">
                              <input matInput placeholder="Ruleset Name" formControlName="rulesetName" maxlength="50" autocomplete="off"/>
                            </mat-form-field>
                          </div>
                          <div class="list-item-3 outline">
                            <mat-label>Start Date<span class="red">*</span></mat-label>
-                           <mat-form-field appearance="outline">
-                             <mat-label>Start Date</mat-label>
+                           <mat-form-field appearance="fill">
+                             <mat-label class="tplabel">Start Date</mat-label>
                              <input matInput [matDatepicker]="frompicker" formControlName="startDate">
                              <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
                              <mat-datepicker #frompicker></mat-datepicker>
@@ -158,8 +158,8 @@
                          </div>
                          <div class="list-item-3 outline">
                            <mat-label>End Date<span class="red">*</span></mat-label>
-                           <mat-form-field appearance="outline">
-                             <mat-label>End Date</mat-label>
+                           <mat-form-field appearance="fill">
+                             <mat-label class="tplabel">End Date</mat-label>
                              <input matInput [matDatepicker]="topicker" formControlName="endDate">
                              <mat-datepicker-toggle matSuffix [for]="topicker"></mat-datepicker-toggle>
                              <mat-datepicker #topicker></mat-datepicker>
@@ -250,12 +250,14 @@
                                        (selectionChange)="rule.get('dimension').setValue($event.value)"
                                      ></app-rule-selector>
                                    </div>
-                                   <div class="list-item-5 add-remove-button">
-                                     <button type="button" mat-icon-button (click)="addRules(columns, 'rules')" *ngIf="isLast">
+                                   <div class="list-item-0 add-remove-button">
+                                     <button type="button"  class="button3d btnPush btnBlueGreen addico" (click)="addRules(columns, 'rules')" *ngIf="isLast">
                                        <mat-icon>add</mat-icon>
                                      </button>
-                                     <button type="button" mat-icon-button class="del-icon" (click)="removeRules(columns, 'rules', j)" *ngIf="!isFirst || !isLast">
-                                       <mat-icon>delete</mat-icon>
+                                     </div>
+                                     <div class="list-item-0 add-remove-button">
+                                     <button type="button" class="button3d btnPush btnOrange redico" (click)="removeRules(columns, 'rules', j)" *ngIf="!isFirst || !isLast">
+                                       <mat-icon>delete_outline</mat-icon>
                                      </button>
                                    </div>
                                  </div>

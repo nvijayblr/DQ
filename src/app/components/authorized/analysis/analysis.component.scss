@@ -157,6 +157,9 @@
    .rule-title {
      margin: 14px 0 4px 0;
    }
+   h5{
+      font-family: "open-sans-condensed-bold";
+   }
  }
  
  .category-list {
@@ -226,7 +229,7 @@
  .table {
    .label {
      font-weight: 500;
-     font-family: 'open-sans-condensed-light';
+     font-family: 'open-sans-regular';
    }
    h4 {
      font-weight: 400;
@@ -234,6 +237,13 @@
      font-family: 'open-sans-condensed-bold';
    }
  }
+ .table th{
+   font-family: 'open-sans-regular';
+ }
+//  .table td{
+//    font-family: 'open-sans-regular';
+//    color: #000000;
+//  }
  .rule-table {
    width: 780px;
    border-bottom: 1px solid #ccc;
@@ -640,4 +650,7 @@
 }
 .mat-horizontal-stepper-header {
    height: 50px !important;
+}
+.tplabel{
+   margin-top: 16px !important;
 }
