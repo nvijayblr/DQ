@@ -32,6 +32,16 @@ export class LoginComponent implements OnInit {
     password: 'analyst',
     role: 'RULE_ANALYST'
   }, {
+    id: 1,
+    username: 'sourcemgr',
+    password: 'sourcemgr',
+    role: 'SOURCE_MANAGER'
+  }, {
+    id: 1,
+    username: 'rulemgr',
+    password: 'rulemgr',
+    role: 'RULE_MANAGER'
+  }, {
     id: 2,
     username: 'operation',
     password: 'operation',

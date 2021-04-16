@@ -205,7 +205,6 @@ export class DashboardComponent implements OnInit {
       sourceId: analysis.sourceId,
       rulesetId: analysis.rulesetId
     };
-    console.log(this.selectedAnalysis);
     // tslint:disable-next-line: max-line-length
     this.selectedColumns = (this.selectedAnalysis.source && this.selectedAnalysis.source.categorialColumns) ? this.selectedAnalysis.source.categorialColumns : [];
     if (this.selectedColumns && this.selectedColumns.length) {
@@ -346,6 +345,14 @@ export class DashboardComponent implements OnInit {
     //   this.isSourceUploaded = false;
     // });
   // }
+
+  launchProfileView(sourceData): void {
+    localStorage.setItem('dq-source-data', JSON.stringify(sourceData));
+    this.router.navigate(
+      [`auth/attribute-details-data`],
+      {queryParams: {sourceId: sourceData.sourceId}}
+    );
+  }
 
   openHighlightSettingsDialog(): void {
     const dialogRef = this.dialog.open(ColorDialogComponent, {

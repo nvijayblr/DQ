@@ -6,12 +6,12 @@
           <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
           <div class="shrare-post">
             <!-- RULE ANALYST --> 
-            <mat-card class="border no-rounded list shrare-post" *ngIf="!showAnalysis && role === 'RULE_ANALYST'">
+            <mat-card class="border no-rounded list shrare-post" *ngIf="!showAnalysis && (role === 'RULE_ANALYST' || role === 'SOURCE_MANAGER' || role === 'RULE_MANAGER')">
               <div class="list flex-containers flex-start wrap no-margin dash-title">
                 <div class="list-item-2">
                   <h1 class="share-post-title no-margin">Source<span class="red"> List</span></h1>
                 </div>
-                <div class="list-item-2 text-right">
+                <div class="list-item-2 text-right" *ngIf="role === 'RULE_ANALYST' || role === 'SOURCE_MANAGER'">
                   <!-- <button mat-stroked-button class="primary-btn-red" routerLink="/auth/analysis">New Rules</button> -->
                   <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn" routerLink="/auth/add-source-data">  New Source <mat-icon>open_in_new</mat-icon></button>
                 </div>
@@ -79,14 +79,15 @@
                         </div>
                       </td>
                       <td>
-                        <button type="button" mat-icon-button class="launch-icon"
-                        (click)="editSourceData(data)" [disabled]="!data.sourceId"  matTooltip="Edit Source">
+                        <button type="button" mat-icon-button class="launch-icon" *ngIf="role === 'RULE_ANALYST' || role === 'SOURCE_MANAGER'"
+                        (click)="editSourceData(data)" [disabled]="!data.sourceId" matTooltip="Edit Source">
                           <mat-icon>edit</mat-icon>
                         </button>
-                        <button type="button" mat-icon-button (click)="createEditRuleset(data,'add')" matTooltip="Create Ruleset">
+                        <button type="button" mat-icon-button *ngIf="role === 'RULE_ANALYST' || role === 'RULE_MANAGER'"
+                          (click)="createEditRuleset(data,'add')" matTooltip="Create Ruleset">
                           <mat-icon>add</mat-icon>
                         </button>
-                        <button type="button" mat-icon-button 
+                        <button type="button" mat-icon-button  *ngIf="role === 'RULE_ANALYST' || role === 'RULE_MANAGER'"
                         (click)="createEditRuleset(data,'edit')" [disabled]="!data.rulesetId"  matTooltip="Edit Ruleset">
                           <mat-icon>edit</mat-icon>
                         </button>
@@ -95,6 +96,11 @@
                           (click)="launchAnalysis(data)" 
                           matTooltip="Launch Analysis">
                           <mat-icon>launch</mat-icon>
+                        </button>
+                        <button class="del-icon launch-icon" mat-icon-button 
+                          (click)="launchProfileView(data)" 
+                          matTooltip="Profile">
+                          <mat-icon>link</mat-icon>
                         </button>
                         <button class="del-icon launch-icon" mat-icon-button 
                           [disabled]="!data.rulesetId" 

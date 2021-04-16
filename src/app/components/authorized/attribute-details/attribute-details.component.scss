@@ -380,3 +380,15 @@ table{
    }
  }
  
+.attribute-list {
+  width: 300px;
+}
+.attribute-details {
+  width: calc(100% - 320px);
+}
+.mat-list-item {
+  cursor: pointer;
+  &.active {
+    font-weight: 500;
+  }
+}

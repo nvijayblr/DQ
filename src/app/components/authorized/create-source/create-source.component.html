@@ -2,7 +2,6 @@
 <section class="page-body home-bodys pad-tp">
   <div class="container">
     <div class="home-wrapper">
-      <!-- Community Pages -->
       
       <div class="clearfix my-community-body">
         <div class="home-panel">
@@ -58,7 +57,7 @@
                                   ></app-rule-selector>
                                 </div>
                                 <div class="list-item-2 outline">
-                                  <span class="sub-title">Frequency</span>
+                                  <span class="sub-title">Frequency<span class="red">*</span></span>
                                   <app-rule-selector 
                                     [ruleItems]="frequencyList"
                                     [initValue]="sourceSettings.frequency" 
@@ -68,7 +67,7 @@
       
                                 <div class="list-item-2 outline">
                                    <div class="date-style">
-                                  <span class="sub-title">Start Date</span>
+                                  <span class="sub-title">Start Date<span class="red">*</span></span>
                                   <mat-form-field appearance="fill">
                                     <mat-label></mat-label>
                                     <input matInput [matDatepicker]="frompicker" formControlName="settingsDate" [(ngModel)]="sourceSettings.uploadDate" autocomplete="off">
@@ -105,7 +104,7 @@
                                           
                     <div class="act-btn-wrapper m1t">
                         <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"
-                        [disabled]="!afControls.sourceDataName.value"
+                        [disabled]="!afControls.sourceDataName.value || !sourceSettings.frequency || !sourceSettings.uploadDate"
                         (click)="validateSourceNameAndNext()">Next <mat-icon>navigate_next</mat-icon></button>
                     </div>
                   </mat-card>
@@ -253,7 +252,7 @@
             </mat-horizontal-stepper>
           </form>
 
-          <mat-card class="border no-rounded list shrare-post mat-card source-preview-card" [hidden]="stepIndex === 2">
+          <mat-card class="border no-rounded list shrare-post mat-card source-preview-card" [hidden]="stepIndex === 1 || stepIndex === 2">
             <app-progress-bar [message]="'Loading source preview...'" class="component" *ngIf="isPreviewLoading"></app-progress-bar>
             <div class="list flex-containers space-between">
               <h1 class="share-post-title">Source Preview</h1>
@@ -269,7 +268,7 @@
               [suppressRowClickSelection]="false"
             ></app-ag-grid>
 
-            <table class="agContainer">
+            <!-- <table class="agContainer">
                <thead>
                  <tr>
                    <th><h1>Sites</h1></th>
@@ -316,7 +315,7 @@
                    <td>00:31:52</td>
                  </tr>
                </tbody>
-             </table>
+             </table> -->
 
           </mat-card>
 
