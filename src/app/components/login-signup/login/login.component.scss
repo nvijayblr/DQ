@@ -38,7 +38,7 @@
    //   -webkit-backdrop-filter: blur(37px);
    //   border-radius: 10px;
    //   background: rgba(255, 255, 255, 0.68);
-   background: url('./../../../../assets/images/form-bg.png') no-repeat; 
+   background: url('./../../../../assets/images/form-bg1.png') no-repeat; 
      overflow: hidden;
      margin-bottom: 0;
      padding: 44px 0px 33px 50px;
@@ -135,7 +135,7 @@
      font-weight: 300;
    }
    .login-btn-wrpper {
-     margin-top: 24px;
+     margin-top: 0px;
      //text-align: center;
    }
    .account-btn-wrpper {
@@ -151,8 +151,9 @@
     font-size:20px;
     font-family: 'open-sans-condensed-bold'!important;
     border-radius: 4px!important;
-    background-color:#002bbd!important;
+    background-color:#5c4f9e!important;
     text-transform:uppercase!important;
+   
  }
  
  .otp-login-wrapper {
@@ -225,7 +226,7 @@
 
 
   body { 
-   background: url('./../../../../assets/images/landing-bg.jpg') no-repeat center center fixed; 
+   background: url('./../../../../assets/images/landing-bg1.jpg') no-repeat center center fixed; 
    -webkit-background-size: cover;
    -moz-background-size: cover;
    -o-background-size: cover;
@@ -272,5 +273,116 @@
     position: absolute;
     bottom:10px;
     right:25%
+ }
+
+ .button3d {
+   //display: block;
+   //position: relative;
+   //float: left;
+   width: 200px;
+   padding: 0;
+   margin: 10px 20px 10px 0;
+   font-weight: 600;
+   text-align: center;
+   line-height: 50px;
+   color: #FFF;
+   border-radius: 5px;
+   transition: all 0.2s ;
+   font-family: "open-sans-condensed-bold"!important;
+   cursor: pointer;
+ }
+ 
+ .btnBlueGreen {
+   background: #00AE68;
+   &.addico{
+      width: 26px;
+      height: 26px;
+      line-height: 25px;
+      outline: none;
+      border: none;
+      padding-top: 3px;
+      border-radius: 2px;
+      margin-right: 5px;
+      .mat-icon{
+         font-size: 20px;
+      }
+   }
+ }
+ 
+ .btnLightBlue {
+   background: #5c4f9e;
+   &.addRef{
+      height: 30px;
+      width: 160px;
+      line-height: 30px;
+      border-radius: 2px;
+      .material-icons{
+         font-size: 20px;
+      }
+   }
+   &.tdBtn{
+      font-size: 20px;
+      color: #ffffff;
+      width: 100px;
+      height: 40px;
+      line-height: 40px;
+      padding-left: 16px;
+      text-transform: uppercase;
+      i{
+         font-size: 25px;
+         position: relative;
+         top: -2.5px;
+         right: -5px;
+      }
+      &:disabled{
+         background: gray;
+         box-shadow: 0px 5px 0px 0px #484848;
+      }
+   }
+   
+   
+ }
+ 
+
+ 
+ /* FADE */
+
+ 
+ /* 3D */
+ .btnBlueGreen.btnPush {
+   box-shadow: 0px 5px 0px 0px #007144;
+ }
+ 
+ .btnLightBlue.btnPush {
+   box-shadow: 0px 5px 0px 0px #382e68;
+ }
+ 
+ .btnOrange.btnPush {
+   box-shadow: 0px 5px 0px 0px #8c1808;
+ }
+ 
+ .btnPurple.btnPush {
+   box-shadow: 0px 5px 0px 0px #6D184B;
+ }
+ 
+ .btnPush:hover {
+   margin-top: 15px;
+   margin-bottom: 5px;
+ }
+ 
+ .btnBlueGreen.btnPush:hover {
+   box-shadow: 0px 0px 0px 0px #007144;
+ }
+ 
+ .btnLightBlue.btnPush:hover {
+   box-shadow: 0px 0px 0px 0px #1E8185;
+ }
+ 
+ .btnOrange.btnPush:hover {
+   box-shadow: 0px 0px 0px 0px #A66615;
+ }
+ 
+ .btnPurple.btnPush:hover {
+   box-shadow: 0px 0px 0px 0px #6D184B;
  }
  
