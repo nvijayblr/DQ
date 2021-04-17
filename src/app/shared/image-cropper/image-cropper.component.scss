@@ -117,10 +117,10 @@
  }
  
  input[type=file]::-webkit-file-upload-button {
-    border: 2px solid #59bfff;
+    border: 2px solid #7d6ecc;
     padding: .2em .9em;
     border-radius: .2em;
-    background-color: #59bfff;
+    background-color: #7d6ecc;
     transition: 1s;
     color: #fff;
     font-size: 14px;
@@ -132,10 +132,10 @@
   }
   
   input[type=file]::file-selector-button {
-    border: 2px solid #59bfff;
+    border: 2px solid #7d6ecc;
     padding: .2em .9em;
     border-radius: .2em;
-    background-color: #59bfff;
+    background-color: #7d6ecc;
     transition: 1s;
     padding-left: 38px;
     padding-top: 10px;
@@ -143,13 +143,13 @@
   }
   
   input[type=file]::-webkit-file-upload-button:hover {
-    background-color: #2587c4;
-    border: 2px solid #2587c4;
+    background-color: #322a54;
+    border: 2px solid #322a54;
   }
   
   input[type=file]::file-selector-button:hover {
-    background-color: #2587c4;
-    border: 2px solid #2587c4;
+    background-color: #322a54;
+    border: 2px solid #322a54;
   }
  
   input:focus,
