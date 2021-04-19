@@ -33,6 +33,7 @@ import {
   MatStepperModule,
 } from '@angular/material';
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 
 @NgModule({
   imports: [
@@ -67,7 +68,8 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     MatBadgeModule,
     MatButtonToggleModule,
     MatStepperModule,
-    DragDropModule
+    DragDropModule,
+    NgxMaterialTimepickerModule
   ],
   exports: [
     MatButtonModule,
@@ -101,7 +103,8 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     MatBadgeModule,
     MatButtonToggleModule,
     MatStepperModule,
-    DragDropModule
+    DragDropModule,
+    NgxMaterialTimepickerModule
   ],
   declarations: []
 })

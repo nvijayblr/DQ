@@ -150,6 +150,7 @@ export class CreateSourceComponent implements OnInit {
       sourceFileName: [analysis.source.sourceFileName || ''],
       templateSourcePath: [analysis.source.templateSourcePath || ''],
       settingsDate : [''],
+      uploadTime : [''],
       referenceData: this.fb.array([]),
     });
 
