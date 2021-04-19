@@ -9,7 +9,7 @@
             <mat-card class="border no-rounded list shrare-post" *ngIf="!showAnalysis && (role === 'RULE_ANALYST' || role === 'SOURCE_MANAGER' || role === 'RULE_MANAGER')">
               <div class="list flex-containers flex-start wrap no-margin dash-title">
                 <div class="list-item-2">
-                  <h1 class="share-post-title no-margin">Source<span class="red"> List</span></h1>
+                  <h1 class="share-post-title no-margin">Source<span class="yellow"> List</span></h1>
                 </div>
                 <div class="list-item-2 text-right" *ngIf="role === 'RULE_ANALYST' || role === 'SOURCE_MANAGER'">
                   <!-- <button mat-stroked-button class="primary-btn-red" routerLink="/auth/analysis">New Rules</button> -->
@@ -19,99 +19,141 @@
 
               <!-- Source List -->
               <div class="analysis-preview">
-                <table class="table">
+               <table class="table">
                   <thead>
                     <tr>
-                      <th>Type</th>
-                      <th>ID</th>
-                      <th>Source Name</th>
-                      <th>File Name</th>
-                      <th>Referennce</th>
-                      <th>Multi Source List</th>
+                      <th style="width: 10%;">Type</th>
+                      <th style="width: 10%;">ID</th>
+                      <th style="width: 20%;">Source Name</th>
+                      <th style="width: 20%;">File Name</th>
+                     <th style="width: 20%;">Referennce</th>
+                      <!--<th>Multi Source List</th>
                       <th>Date</th>
-                      <th>Ruleset Name</th>
-                      <th style="width: 272px;">Action</th>
+                      <th>Ruleset Name</th> -->
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let data of sourceList;">
-                      <td>
-                        <div class="source-type" *ngIf="data.settings?.multiSourceOptions && data.settings?.multiSourceOptions.length<=1">S</div>
-                        <div class="source-type" *ngIf="data.settings?.multiSourceOptions && data.settings?.multiSourceOptions.length >1">M</div>
-                      </td>
-                      <td>{{data.sourceId}}</td>
-                      <td>{{data.source.sourceDataName}}</td>
-                      <td>{{data.source.sourceFileName}}</td>
-                      <td style="max-width: 240px; overflow: hidden;">
-                        <div *ngFor="let ref of data.reference;">
-                          {{ref.referenceId}} - {{ref.referenceDataName}}
-                        </div>
-                      </td>
-                      <td>
-                        <div class="outline">
-                          <mat-form-field appearance="fill">
-                            <mat-select [(ngModel)]="data.multisource" [disabled]="data.settings?.multiSourceOptions && data.settings?.multiSourceOptions.length<=1">
-                              <mat-option *ngFor="let multisource of data.settings?.multiSourceOptions;" [value]="multisource">
-                                {{multisource}}
-                              </mat-option>
-                            </mat-select>
-                          </mat-form-field>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="outline">
-                          <mat-form-field appearance="fill">
-                            <input matInput [matDatepicker]="frompicker" [(ngModel)]="data.uploadDate" (click)="frompicker.open()" autocomplete="off">
-                            <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
-                            <mat-datepicker #frompicker (opened)="onOpenDatePicker(data)" [dateClass]="dateClass"></mat-datepicker>
-                          </mat-form-field>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="outline">
-                          <mat-form-field appearance="fill">
-                            <mat-select [(ngModel)]="data.rulesetId">
-                              <mat-option *ngFor="let rule of data.rules;" [value]="rule.rulesetId">
-                                {{rule.rulesetName}}
-                              </mat-option>
-                            </mat-select>
-                          </mat-form-field>
-                        </div>
-                      </td>
-                      <td>
-                        <button type="button" mat-icon-button class="launch-icon" *ngIf="role === 'RULE_ANALYST' || role === 'SOURCE_MANAGER'"
-                        (click)="editSourceData(data)" [disabled]="!data.sourceId" matTooltip="Edit Source">
-                          <mat-icon>edit</mat-icon>
-                        </button>
-                        <button type="button" mat-icon-button *ngIf="role === 'RULE_ANALYST' || role === 'RULE_MANAGER'"
-                          (click)="createEditRuleset(data,'add')" matTooltip="Create Ruleset">
-                          <mat-icon>add</mat-icon>
-                        </button>
-                        <button type="button" mat-icon-button  *ngIf="role === 'RULE_ANALYST' || role === 'RULE_MANAGER'"
-                        (click)="createEditRuleset(data,'edit')" [disabled]="!data.rulesetId"  matTooltip="Edit Ruleset">
-                          <mat-icon>edit</mat-icon>
-                        </button>
-                        <button class="del-icon launch-icon" mat-icon-button 
-                          [disabled]="!data.rulesetId" 
-                          (click)="launchAnalysis(data)" 
-                          matTooltip="Launch Analysis">
-                          <mat-icon>launch</mat-icon>
-                        </button>
-                        <button class="del-icon launch-icon" mat-icon-button 
-                          (click)="launchProfileView(data)" 
-                          matTooltip="Profile">
-                          <mat-icon>link</mat-icon>
-                        </button>
-                        <button class="del-icon launch-icon" mat-icon-button 
-                          [disabled]="!data.rulesetId" 
-                          (click)="launchDelayAnalysis(data)" 
-                          matTooltip="Delay Analysis">
-                          <mat-icon>alarm</mat-icon>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                     <tr *ngFor="let data of sourceList; let i= index;" class="tableinner">
+                        <td colspan="6" style="padding: 0px;">
+                           <table style="width: 100%;" >
+                              <tr>
+                                 <td style="width: 10%;">
+                                    <div class="source-type" *ngIf="data.settings?.multiSourceOptions && data.settings?.multiSourceOptions.length<=1">S</div>
+                                    <div class="source-type" *ngIf="data.settings?.multiSourceOptions && data.settings?.multiSourceOptions.length >1">M</div>
+                                  </td>
+                                  <td style="width: 10%;">{{data.sourceId}}</td>
+                                  <td style="width: 20%;">{{data.source.sourceDataName}}</td>
+                                  <td style="width: 20%;">{{data.source.sourceFileName}}</td>
+                                  <td style="width: 20%;">
+                                    <div *ngFor="let ref of data.reference;">
+                                      {{ref.referenceId}} - {{ref.referenceDataName}}
+                                    </div>
+                                  </td>
+                                  <td (click)="showEditDetails(i);" style="cursor: pointer;">Edit Details</td>
+                              </tr>
+                              <tr class="subtab" *ngIf="visibleIndex === i">
+                                 <td colspan="6" style="padding: 0px;width: 100%;">
+                                    <table style="width: 100%;">
+                                       <tr>
+                                          <td>
+                                             <div class="outline">
+                                                <mat-form-field appearance="fill">
+                                                   <mat-label class="lbl">Multi Source List</mat-label>
+                                                <mat-select [(ngModel)]="data.multisource" [disabled]="data.settings?.multiSourceOptions && data.settings?.multiSourceOptions.length<=1">
+                                                   <mat-option *ngFor="let multisource of data.settings?.multiSourceOptions;" [value]="multisource">
+                                                      {{multisource}}
+                                                   </mat-option>
+                                                </mat-select>
+                                                </mat-form-field>
+                                             </div>
+                                          </td>
+                                          <td>
+                                             <div class="outline">
+                                                <mat-form-field appearance="fill">
+                                                   <mat-label class="lbl">Date</mat-label>
+                                                <input matInput [matDatepicker]="frompicker" [(ngModel)]="data.uploadDate" (click)="frompicker.open()" autocomplete="off">
+                                                <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
+                                                <mat-datepicker #frompicker (opened)="onOpenDatePicker(data)" [dateClass]="dateClass"></mat-datepicker>
+                                                </mat-form-field>
+                                             </div>
+                                          </td>
+                                          <td>
+                                             <div class="outline">
+                                                <mat-form-field appearance="fill">
+                                                   <mat-label class="lbl">Ruleset Name</mat-label>
+                                                <mat-select [(ngModel)]="data.rulesetId">
+                                                   <mat-option *ngFor="let rule of data.rules;" [value]="rule.rulesetId">
+                                                      {{rule.rulesetName}}
+                                                   </mat-option>
+                                                </mat-select>
+                                                </mat-form-field>
+                                             </div>
+                                          </td> 
+                                          <td style="padding-top:0px;">
+                                       <div class="list flex-containers ml3" style="width:300px;">
+                                          <div class="list-item-0 inlb">
+                                             <button type="button" class="button3d btnPush btnOrange addico" *ngIf="role === 'RULE_ANALYST' || role === 'SOURCE_MANAGER'"
+                                             (click)="editSourceData(data)" [disabled]="!data.sourceId" matTooltip="Edit Source">                                           
+                                             <mat-icon>edit</mat-icon>  Edit Source
+                                             </button>
+                                          </div>
+                                          <div class=" list-item-0  inlb">
+                                             <button type="button" class="button3d btnPush btnBlueGreen addico" *ngIf="role === 'RULE_ANALYST' || role === 'RULE_MANAGER'"
+                                             (click)="createEditRuleset(data,'add')" matTooltip="Create Ruleset">
+                                             <mat-icon>add</mat-icon>
+                                             Create Ruleset
+                                             </button>
+                                          </div>
+                                         
+                                          <div class=" list-item-0  inlb">
+                                             <button type="button" class="button3d btnPush btnOrange addico"  *ngIf="role === 'RULE_ANALYST' || role === 'RULE_MANAGER'"
+                                             (click)="createEditRuleset(data,'edit')" [disabled]="!data.rulesetId"  matTooltip="Edit Ruleset">
+                                             <mat-icon>edit</mat-icon> Edit Ruleset
+                                             </button>
+                                          </div>
+                                       </div>
+                                       <div class="list flex-containers ml3" style="width:300px;">
+                                          <div class=" list-item-0  inlb">
+                                             <button class="button3d btnPush btnLightBlue addico" 
+                                             [disabled]="!data.rulesetId" 
+                                             (click)="launchAnalysis(data)" 
+                                             matTooltip="Launch Analysis">
+                                             <mat-icon>launch</mat-icon>
+                                             Launch Analysis
+                                             </button>
+                                             </div>
+                                          
+                                             
+                                             <div class=" list-item-0  inlb">
+                                             <button class="button3d btnPush btnPurple addico" 
+                                             (click)="launchProfileView(data)" 
+                                             matTooltip="Profile">
+                                             <mat-icon>link</mat-icon>
+                                             Profile
+                                             </button>
+                                             </div>
+                                             <div class="list-item-0  inlb">
+                                             <button class="button3d btnPush btnOrange addico nclr" 
+                                             [disabled]="!data.rulesetId" 
+                                             (click)="launchDelayAnalysis(data)" 
+                                             matTooltip="Delay Analysis">
+                                             <mat-icon>alarm</mat-icon>
+                                             Delay Analysis
+                                             </button>
+                                             </div>
+                                       </div>
+                                          </td>
+                                       </tr>
+                                    </table>
+                                 </td>
+                              </tr>
+                           </table>
+                        </td>
+                     </tr>
+                  
+                   </tbody>
+               </table>
               </div>
             </mat-card>
 

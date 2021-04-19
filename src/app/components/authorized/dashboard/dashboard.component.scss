@@ -105,7 +105,7 @@
           bottom: -12px;
           height: 5px;
           width: 55px;
-          background-color: #59bfff;
+          background-color: #efa800;
         }
         &:after {
           content: "";
@@ -115,7 +115,7 @@
           height: 1px;
           width: 95%;
           max-width: 181px;
-          background-color: #59bfff;
+          background-color: #efa800;
         }
      }
      .share-btn {
@@ -258,15 +258,14 @@
 }
 .source-type {
   font-family: "open-sans-condensed-bold" !important;
-  font-size: 13px;
+  font-size: 11px;
   color: #fff;
-  background-color: #0659d4;
-  width: 30px;
-  height: 30px;
-  line-height: 30px;
+  background-color: #efa800;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
   text-align: center;
-  font-weight: bold;
-  border-radius: 50%;
+  //border-radius: 50%;
 }
 .btn-wrappers button {
   margin: 0 4px;
@@ -292,8 +291,27 @@
    height: 1.3em!important;
 }
 
-tr:nth-child(even) {background: #f5f6f8 }
-tr:nth-child(odd) {background: #ffffff}
+// .tableinner tr:nth-child(even) {background: #ffffff }
+// .tableinner tr:nth-child(odd) {background: #dddddd}
+thead {background: #f0f7f7;}
+
+.tableinner:nth-of-type(odd) {
+   background-color:#ffffff ;
+}
+       
+.tableinner:nth-of-type(even) {
+   background-color:#f0f7f7 ;
+}
+
+.subtab{background: #fff}
+
+// .subtab:nth-of-type(odd) {
+//    background-color:#f0f7f7 ;
+// }
+       
+// .subtab:nth-of-type(even) {
+//    background-color:#ffffff ;
+// }
 
 
 .mat-icon-button {
@@ -332,12 +350,20 @@ tr:nth-child(odd) {background: #ffffff}
    transition: all 0.2s ;
    font-family: "open-sans-condensed-bold"!important;
    cursor: pointer;
+   &:disabled{
+      background: gray;
+      box-shadow: 0px 5px 0px 0px #484848;
+   }
  }
  
  .btnBlueGreen {
    background: #00AE68;
+   &:disabled{
+      background: gray;
+      box-shadow: 0px 5px 0px 0px #484848;
+   }
    &.addico{
-      width: 26px;
+      width: 105px;
       height: 26px;
       line-height: 25px;
       outline: none;
@@ -346,13 +372,21 @@ tr:nth-child(odd) {background: #ffffff}
       border-radius: 2px;
       margin-right: 5px;
       .mat-icon{
-         font-size: 20px;
+         font-size: 14px;
+         width: 14px;
+         height: 14px;
+         position: relative;
+         top: 3px;
       }
    }
  }
  
  .btnLightBlue {
-   background: #59bfff;
+   &:disabled{
+      background: gray;
+      box-shadow: 0px 5px 0px 0px #484848;
+   }
+   background: #7d6ecc;
    &.addRef{
       height: 30px;
       width: 160px;
@@ -405,11 +439,63 @@ tr:nth-child(odd) {background: #ffffff}
          font-size: 20px;
       }
    }
+
+   &.addico{
+      width: 112px;
+      height: 26px;
+      line-height: 25px;
+      outline: none;
+      border: none;
+      padding-top: 3px;
+      border-radius: 2px;
+      margin-right: 5px;
+      &:disabled {
+         background: gray;
+         box-shadow: 0px 5px 0px 0px #585858;
+      }
+      .mat-icon{
+         font-size: 14px;
+         width: 14px;
+         height: 14px;
+         position: relative;
+         top: 3px;
+      }
+   }
    
  }
  
  .btnOrange {
    background: #e91b00;
+   &:disabled{
+      background: gray;
+      box-shadow: 0px 5px 0px 0px #484848;
+   }
+   &.addico{
+      width: 90px;
+      height: 26px;
+      line-height: 25px;
+      outline: none;
+      border: none;
+      padding-top: 3px;
+      border-radius: 2px;
+      margin-right: 5px;
+      &.nclr{
+         width:105px;
+         background: #efa800;
+         box-shadow: 0px 5px 0px 0px #9a6f0a;
+      }
+      &:disabled {
+         background: gray;
+         box-shadow: 0px 5px 0px 0px #585858;
+      }
+      .mat-icon{
+         font-size: 14px;
+         width: 14px;
+         height: 14px;
+         position: relative;
+         top: 3px;
+      }
+   }
    &.redico{
       width: 26px;
       height: 26px;
@@ -427,6 +513,10 @@ tr:nth-child(odd) {background: #ffffff}
  
  .btnPurple {
    background: #A74982;
+   &:disabled{
+      background: gray;
+      box-shadow: 0px 5px 0px 0px #484848;
+   }
    &.preview{
       width: 100px;
       height: 30px;
@@ -455,6 +545,27 @@ tr:nth-child(odd) {background: #ffffff}
          font-size: 20px;
       }
    }
+   &.addico{
+      width: 75px;
+      height: 26px;
+      line-height: 25px;
+      outline: none;
+      border: none;
+      padding-top: 3px;
+      border-radius: 2px;
+      margin-right: 5px;
+      &:disabled {
+         background: gray;
+         box-shadow: 0px 5px 0px 0px #585858;
+      }
+      .mat-icon{
+         font-size: 14px;
+         width: 14px;
+         height: 14px;
+         position: relative;
+         top: 3px;
+      }
+   }
  }
  
  /* FADE */
@@ -480,7 +591,7 @@ tr:nth-child(odd) {background: #ffffff}
  }
  
  .btnLightBlue.btnPush {
-   box-shadow: 0px 5px 0px 0px #0659d4;
+   box-shadow: 0px 5px 0px 0px #322a54;
  }
  
  .btnOrange.btnPush {
@@ -510,4 +621,15 @@ tr:nth-child(odd) {background: #ffffff}
  
  .btnPurple.btnPush:hover {
    box-shadow: 0px 0px 0px 0px #6D184B;
+ }
+ .yellow{ color :#efa800}
+ .lbl{
+   font-size: 13px;
+   font-family: 'open-sans-condensed-bold';
+ }
+ .inlb{
+    display: inline-block;
+ }
+ .ml3{
+   margin-top: 0px!important;
  }

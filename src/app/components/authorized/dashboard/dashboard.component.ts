@@ -44,7 +44,8 @@ export class DashboardComponent implements OnInit {
   tooltipDET: any = [];
   nullCount;
   finalCount;
-  originAirport;
+   originAirport;
+   showTd : boolean = false;
   valArray = [];
   settings: any = {
     bgSettings: [{
@@ -387,6 +388,14 @@ export class DashboardComponent implements OnInit {
   dateClass = (d: Date) => {
     const date = moment(d).format('MM-DD-YYYY');
     return (this.highlightDates.includes(date)) ? 'highlight-dates' : undefined;
-  }
+   }
+   visibleIndex = -1;
+   showEditDetails(ind) {
+      if (this.visibleIndex === ind) {
+         this.visibleIndex = -1;
+       } else {
+         this.visibleIndex = ind;
+       }      
+   }
 
 }
