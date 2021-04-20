@@ -18,7 +18,7 @@
                <mat-step>
                    <ng-template matStepLabel>Source & Refernce Data</ng-template>
                    <mat-card class="border no-rounded list shrare-post">
-                     <h1 class="share-post-title">Source & Refernce<span class="red"> Data</span></h1>
+                     <h1 class="share-post-title">Source & Refernce<span class="yellow"> Data</span></h1>
                        <div class="form-continer">
                          <div class="list flex-containers flex-start wrap">
                            <div class="list-item-3 outline">
@@ -95,29 +95,37 @@
                  <mat-step>
                    <ng-template matStepLabel>Critical Data Elements</ng-template>
                    <mat-card class="border no-rounded list shrare-post">
-                     <h1 class="share-post-title">Critical<span class="red"> Data Elements</span></h1>
-                     <div class="col-selector-wrapper">
-                       <app-column-selector 
-                         [availableColumnsLabel]="'Available Columns'"
-                         [selectedColumnsLabel]="'Selected Columns'"
-                         [availableColumns]="availableColumns"
-                         [selectedColumns]="selectedColumns"
-                         [formControl]="columnsForm.controls.columns"
-                       >
-                       </app-column-selector>
-                     </div>
-                     <br/>
-                     <h1 class="share-post-title">Define<span class="red"> Reference Data Element</span></h1>
-                     <div class="col-selector-wrapper">
-                       <app-column-selector 
-                         [availableColumnsLabel]="'Available Reference Columns'"
-                         [selectedColumnsLabel]="'Selected Reference Columns'"
-                         [availableColumns]="availableReferenceColumns"
-                         [selectedColumns]="selectedReferenceColumns"
-                         [formControl]="columnsForm.controls.refernceColumns"
-                       >
-                       </app-column-selector>
-                     </div>
+                     <!-- <h1 class="share-post-title">Critical<span class="yellow"> Data Elements</span></h1> -->
+                     <mat-tab-group mat-align-tabs="start"  animationDuration="0ms">
+                        <mat-tab label="Critical Source Elements">
+                           <div class="col-selector-wrapper">
+                              <app-column-selector 
+                                [availableColumnsLabel]="'Available Columns'"
+                                [selectedColumnsLabel]="'Selected Columns'"
+                                [availableColumns]="availableColumns"
+                                [selectedColumns]="selectedColumns"
+                                [formControl]="columnsForm.controls.columns"
+                              >
+                              </app-column-selector>
+                           </div>
+                        </mat-tab>
+                        <mat-tab label="Reference Source Element">
+                           <div class="col-selector-wrapper">
+                              <app-column-selector 
+                                [availableColumnsLabel]="'Available Reference Columns'"
+                                [selectedColumnsLabel]="'Selected Reference Columns'"
+                                [availableColumns]="availableReferenceColumns"
+                                [selectedColumns]="selectedReferenceColumns"
+                                [formControl]="columnsForm.controls.refernceColumns"
+                              >
+                              </app-column-selector>
+                            </div>
+                        </mat-tab>
+                     </mat-tab-group>
+                     
+                     <!-- <br/>
+                     <h1 class="share-post-title">Define<span class="yellow"> Reference Data Element</span></h1> -->
+                     
                      
                      <div class="list flex-containers flex-start">
                         <div class="list-item-2 outline">
@@ -139,10 +147,10 @@
                    <ng-template matStepLabel>Rule Definition</ng-template>
                    <div class="list wrap">
                      <mat-card class="border no-rounded shrare-post">
-                       <h1 class="share-post-title">Rule<span class="red"> Definition</span></h1>
+                       <h1 class="share-post-title">Rule<span class="yellow"> Definition</span></h1>
                        <div class="list flex-containers flex-start wrap cde-fields-wrp">
                          <div class="list-item-3 outline">
-                           <mat-label>Ruleset Name<span class="red">*</span></mat-label>
+                           <mat-label>Ruleset Name<span class="yellow">*</span></mat-label>
                            <mat-form-field appearance="fill">
                              <input matInput placeholder="Ruleset Name" formControlName="rulesetName" maxlength="50" autocomplete="off"/>
                            </mat-form-field>
@@ -266,27 +274,37 @@
                            </div>
                          </ng-container>
                        </mat-expansion-panel>
-                       <div class="act-btn-wrapper">
+                       <div class="list flex-containers flex-start">
+                        <div class="list-item-2 outline">
+                           <button mat-stroked-button class="button3d btnPush btnPurple ebckBtn" (click)="gotoStepper(1);"><mat-icon>keyboard_arrow_left</mat-icon> Back</button>
+                        </div>
+                        <div class="list-item-2 outline act-btn-wrapper1">
+                           <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn" 
+                           [disabled]="!afControls.rulesetName.value || !afControls.columnRules.value.length || !afControls.startDate.value || !afControls.endDate.value"
+                           (click)="generatePreview();">Next <mat-icon>navigate_next</mat-icon></button>
+                        </div>
+                        </div>
+                       <!-- <div class="act-btn-wrapper">
                          <button mat-stroked-button class="primary-btn-gray white pad" (click)="gotoStepper(1);"><mat-icon class="mar-ico">arrow_back_ios_new</mat-icon> Back</button>
                          <button mat-stroked-button class="primary-btn-gray" 
                            [disabled]="!afControls.rulesetName.value || !afControls.columnRules.value.length || !afControls.startDate.value || !afControls.endDate.value"
                            (click)="generatePreview();">Next <mat-icon>arrow_forward_ios</mat-icon></button>
-                       </div>
+                       </div> -->
                      </mat-card>
                      <div class="list flex-containers wrap">
-                       <mat-card class="border no-rounded shrare-post font rule-details-info">
-                         <h1 class="share-post-title"><span class="red">{{selectedRuleColumn}}</span></h1>
+                       <mat-card class="border no-rounded shrare-post rule-details-info">
+                         <h1 class="share-post-title"><span class="lgb">{{selectedRuleColumn}}</span></h1>
                          <table class="table">
-                           <tr>
+                           <tr class="cpt">
                              <td class="strong" *ngFor="let statistics of cdeStatistics | keyvalue">{{statistics.key}}</td>
                            </tr>
-                           <tr>
+                           <tr class="cpt1">
                              <td *ngFor="let statistics of cdeStatistics | keyvalue">{{statistics.value}}</td>
                            </tr>
                          </table>
                        </mat-card>
-                       <mat-card class="border no-rounded shrare-post font correlation-info">
-                         <h1 class="share-post-title"><span class="red">Correlation Info</span></h1>
+                       <mat-card class="border no-rounded shrare-post correlation-info">
+                         <h1 class="share-post-title"><span class="lgb">Correlation Info</span></h1>
                        </mat-card>
                      </div>
                    </div>
@@ -301,7 +319,7 @@
  
                          <tbody>
                            <tr>
-                             <td><div class="label">Source Name</div></td>
+                             <td style="width:15%"><div class="label">Source Name</div></td>
                              <td>{{analysis.sourceName}}</td>
                            </tr>
                            <tr>
@@ -348,10 +366,15 @@
                          </tbody>
                        </table>
                      </div>
-                     <div class="act-btn-wrapper">
-                       <button mat-stroked-button class="primary-btn-gray white pad" (click)="gotoStepper(2);"><mat-icon class="mar-ico">arrow_back_ios_new</mat-icon> Back</button>
-                       <button mat-stroked-button class="primary-btn-red" (click)="createEditRuleset()" [disabled]="isLoading">Complete</button>
-                     </div>
+
+                     <div class="list flex-containers flex-start">
+                        <div class="list-item-2 outline">
+                           <button mat-stroked-button class="button3d btnPush btnPurple ebckBtn" (click)="gotoStepper(2);"><mat-icon>keyboard_arrow_left</mat-icon> Back</button>
+                        </div>
+                        <div class="list-item-2 outline act-btn-wrapper1">
+                           <button mat-stroked-button class="button3d btnPush btnLightBlue compBtn" (click)="createEditRuleset()" [disabled]="isLoading">Complete <mat-icon>done_all</mat-icon></button>
+                        </div>
+                     </div>                    
                    </mat-card>
  
                  </mat-step>
@@ -362,7 +385,7 @@
              <app-progress-bar [message]="'Loading source preview...'" class="component" *ngIf="isPreviewLoading"></app-progress-bar>
              <div class="list flex-containers space-between">
                <h1 class="share-post-title">Source Preview</h1>
-               <button mat-stroked-button class="button3d btnPush btnPurple preview" (click)="loadSourcePreview();"> <mat-icon>view_column</mat-icon> Preview</button>
+               <button class="horizontal" (click)="loadSourcePreview();"> <span class="text"><mat-icon>view_column</mat-icon> Preview </span></button>
              </div>
              <app-ag-grid
                floatingFilter="true"
