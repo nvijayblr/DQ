@@ -339,9 +339,20 @@
                            </tr>
                            <tr>
                              <td colspan="2">
-                               <div *ngFor="let col of analysis.rules">
-                                 <h4>{{col.column}}</h4>
-                                 <table class="table rule-table">
+                               <div *ngFor="let col of analysis.rules; let i= index;">
+                                    <div class="list flex-containers flex-start wtBg">
+                                       <div class="list-item-2 outline">
+                                          <h4>{{col.column}} </h4>
+                                       </div>
+                                       <div class="list-item-2 outline act-btn-wrapper1">
+                                          <button type="button" class="button3d btnPush btnBlueGreen addico" (click)="showEditDetails(i);">
+                                             <mat-icon>add</mat-icon>
+                                             </button>
+                                       </div>
+                                    </div>
+
+
+                                 <table class="table rule-table" *ngIf="visibleIndex === i">
                                    <tbody>
                                      <tr *ngFor="let rule of col.rules; index as i">
                                        <td>Rule #{{i+1}}</td>

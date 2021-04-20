@@ -233,9 +233,19 @@
      font-family: 'open-sans-regular';
    }
    h4 {
-     font-weight: 400;
-     margin-top: 24px;
-     font-family: 'open-sans-condensed-bold';
+      font-weight: 400;
+      margin-top: 17px;
+      background: white;
+      font-size: 16px;
+      /* padding-bottom: 10px; */
+      /* padding-left: 10px; */
+      /* padding-top: 5px; */
+      color: #569494;
+      font-family: "open-sans-condensed-bold";
+      .mat-icon{
+         position: relative;
+         top: 6px;
+      }
    }
  }
  .table th{
@@ -858,4 +868,8 @@ tr:nth-child(odd) {background: #f0f7f7}
    font-size: 13px!important;
    font-family: 'open-sans-regular'!important;
    padding-left: 10px!important;
+}
+.wtBg{
+   background: white;
+   margin: 0px;
 }

@@ -679,6 +679,15 @@ export class AnalysisComponent implements OnInit {
       this.isPreviewLoaded = false;
       this.isPreviewLoading = false;
     });
-  }
+   }
+   
+   visibleIndex = -1;
+   showEditDetails(ind) {
+      if (this.visibleIndex === ind) {
+         this.visibleIndex = -1;
+       } else {
+         this.visibleIndex = ind;
+       }      
+   }
 
 }
