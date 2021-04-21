@@ -50,7 +50,8 @@
                                       {{ref.referenceId}} - {{ref.referenceDataName}}
                                     </div>
                                   </td>
-                                  <td (click)="showEditDetails(i);" style="cursor: pointer;">Edit Details</td>
+                                  <td>
+                                     <div class="editDetails" (click)="showEditDetails(i);">Edit Details</div></td>
                               </tr>
                               <tr class="subtab" *ngIf="visibleIndex === i">
                                  <td colspan="6" style="padding: 0px;width: 100%;">

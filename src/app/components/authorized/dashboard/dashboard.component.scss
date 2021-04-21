@@ -725,3 +725,22 @@ thead {background: #f0f7f7;}
 .tableChart th {
    background-color:#f0f7f7 ;
 }
+
+.editDetails {
+	color: #000;
+	text-decoration: none;
+	border-bottom: 3px solid #3a9595;
+	transition: 0.4s all ease-out; 
+   cursor: pointer;
+   font-weight: bold;
+   width: 94px;
+   padding: 5px 10px;
+   box-shadow: inset 0 -2.8rem 0 #97c4c4;
+  
+	
+	&:hover {
+		box-shadow: inset 0 -2.8rem 0 #3a9595;
+      color: #fff;
+     
+	}
+}
