@@ -39,7 +39,7 @@
                             <mat-label>Source Data (csv)<span class="red">*</span></mat-label>
                             <app-image-cropper 
                               [imageType]="'Source'"
-                              [fileTypes]="'.csv'"
+                              [fileTypes]="'.csv, .xls, .xlsx'"
                               [imagePath]="''"
                               (fileSelected)="onSourceCSVSelected($event)"
                               (uploadCompleted)="onUploadCompleted($event, analysisForm)">
@@ -58,7 +58,7 @@
                                 <mat-label>Reference Data (csv) #{{i+1}}</mat-label>
                                 <app-image-cropper 
                                   [imageType]="'Reference'"
-                                  [fileTypes]="'.csv'"
+                                  [fileTypes]="'.csv, .xls, .xlsx'"
                                   [imagePath]="''"
                                   (uploadCompleted)="onUploadCompleted($event, analysisForm)">
                                 </app-image-cropper>

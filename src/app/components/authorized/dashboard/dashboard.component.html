@@ -197,7 +197,7 @@
                         <td>
                           <app-image-cropper 
                             [imageType]="'Source'"
-                            [fileTypes]="'.csv'"
+                            [fileTypes]="'.csv, .xls, .xlsx'"
                             [imagePath]="''"
                             (fileSelected)="onSourceCSVSelected($event, data)"
                           >

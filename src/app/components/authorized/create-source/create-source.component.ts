@@ -106,6 +106,11 @@ export class CreateSourceComponent implements OnInit {
   rowData: any = [];
   columnDefs: any = [];
 
+  isRefPreviewLoaded = false;
+  isRefPreviewLoading = false;
+  refrowData: any = [];
+  refcolumnDefs: any = [];
+
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
@@ -306,12 +311,14 @@ export class CreateSourceComponent implements OnInit {
     this.sourceFile = file;
     const fName = file.name.split('.')[0];
     this.afControls.sourceDataName.setValue(fName);
+    this.loadSourcePreview();
   }
 
   onReferenceFileSelected(file, reference, index) {
     this.refFiles[index] = file;
     const fName = file.name.split('.')[0];
     reference.controls.referenceDataName.setValue(fName);
+    this.loadReferencePreview();
   }
 
   gotoStepper(index, tab = '') {
@@ -382,5 +389,55 @@ export class CreateSourceComponent implements OnInit {
     }
     this.isPreviewLoaded = true;
     this.isPreviewLoading = false;
+  }
+
+  loadReferencePreview() {
+    if (this.mode === 'create' && !this.sourceFile.name) {
+      alert('Please upload the source file.');
+      return;
+    }
+    this.isRefPreviewLoaded = false;
+    this.isRefPreviewLoading = true;
+    this.refcolumnDefs = [];
+    this.refrowData = [];
+    if (this.mode === 'create') {
+      const formData: any = new FormData();
+      formData.append('file[]', this.refFiles[0]);
+      this.http.getPreview(formData).subscribe((res: any) => {
+        const details: any = res.sourcePreview ? res.sourcePreview : {};
+        this.parseReferencePreview(details);
+      }, (error) => {
+        this.isRefPreviewLoaded = false;
+        this.isRefPreviewLoading = false;
+      });
+    }
+    if (this.mode === 'edit') {
+      this.http.getSourcePreview(this.sourceId).subscribe((res: any) => {
+        const details: any = res.sourcePreview ? res.sourcePreview : {};
+        this.parseReferencePreview(details);
+      }, (error) => {
+        this.isRefPreviewLoaded = false;
+        this.isRefPreviewLoading = false;
+      });
+
+    }
+  }
+
+  parseReferencePreview(details) {
+    Object.keys(details).map((key, index) => {
+      this.refrowData.push({
+        ...details[key]
+      });
+    });
+    if (this.refrowData.length) {
+      Object.keys(this.refrowData[0]).map((key, index) => {
+        this.refcolumnDefs.push({
+          field: key,
+          ...this.defaultColDefs
+        });
+      });
+    }
+    this.isRefPreviewLoaded = true;
+    this.isRefPreviewLoading = false;
   }
 }

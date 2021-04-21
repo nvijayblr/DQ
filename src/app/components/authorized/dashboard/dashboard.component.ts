@@ -253,6 +253,11 @@ export class DashboardComponent implements OnInit {
       this.isLoadChart = false;
       this.http.launchAnalysisByKey(payload).subscribe((result: any) => {
          this.isLoadingDetails = false;
+         if (result.errorCode && result.errorMsg) {
+            this.showAnalysis = false;
+            alert(result.errorMsg);
+            return;
+         }
          this.analyseKeyData = result ? result : [];
          this.analysisKeys = [];
          const analyseRowItem = (this.analyseKeyData && this.analyseKeyData.length) ? this.analyseKeyData[0] : [];
