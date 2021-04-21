@@ -291,8 +291,7 @@
    height: 1.3em!important;
 }
 
-// .tableinner tr:nth-child(even) {background: #ffffff }
-// .tableinner tr:nth-child(odd) {background: #dddddd}
+
 thead {background: #f0f7f7;}
 
 .tableinner:nth-of-type(odd) {
@@ -377,6 +376,25 @@ thead {background: #f0f7f7;}
          height: 14px;
          position: relative;
          top: 3px;
+      }
+   }
+   &.addico1{
+      width: 105px;
+      height: 40px;
+    font-size: 16px;
+      line-height: 25px;
+      outline: none;
+      border: none;
+      padding-top: 3px;
+      border-radius: 2px;
+      margin-right: 5px;
+      .mat-icon{
+         font-size: 20px;
+         width: 14px;
+         height: 14px;
+         position: relative;
+         top: -5px;
+         left: 2px;
       }
    }
  }
@@ -566,6 +584,29 @@ thead {background: #f0f7f7;}
          top: 3px;
       }
    }
+   &.addico1{
+      width: 105px;
+      height: 40px;
+    font-size: 16px;
+      line-height: 25px;
+      outline: none;
+      border: none;
+      padding-top: 3px;
+      border-radius: 2px;
+      margin-right: 5px;
+      &:disabled {
+         background: gray;
+         box-shadow: 0px 5px 0px 0px #585858;
+      }
+      .mat-icon{
+         font-size: 20px;
+         width: 14px;
+         height: 14px;
+         position: relative;
+         top: -5px;
+         left: 2px;
+      }
+   }
  }
  
  /* FADE */
@@ -633,3 +674,53 @@ thead {background: #f0f7f7;}
  .ml3{
    margin-top: 0px!important;
  }
+
+ ::ng-deep .highcharts-title{
+   font-family: 'open-sans-condensed-bold';
+   color: #efa800 !important;
+   fill: #efa800!important;
+ }
+
+ ::ng-deep .highcharts-axis-title{
+   font-family: 'open-sans-condensed-bold';
+   color: #3a9595!important;
+   fill: #3a9595!important;
+ }
+ ::ng-deep .highcharts-legend-box  {
+   font-family: 'open-sans-condensed-bold'!important;
+   color: #ebe8fb!important;
+   fill: #ebe8fb!important;
+ }
+
+ ::ng-deep .highcharts-legend-item {
+   font-family: 'open-sans-condensed-bold';
+   color: #3a9595!important;
+   fill: #3a9595!important;
+ }
+
+ ::ng-deep .highcharts-axis-labels {
+   font-family: 'open-sans-condensed-bold';
+   color: #3a9595!important;
+   fill: #3a9595!important;
+ }
+
+ ::ng-deep .highcharts-menu-item{
+   font-family: 'open-sans-condensed-bold';
+ }
+ ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+   background: #eee8f8;
+}
+.cur{
+   cursor: pointer;
+}
+
+.tableChart tr:nth-of-type(odd) {
+   background-color:#ffffff ;
+}
+       
+.tableChart tr:nth-of-type(even) {
+   background-color:#f0f7f7 ;
+}
+.tableChart th {
+   background-color:#f0f7f7 ;
+}

@@ -9,10 +9,10 @@
             <mat-card class="border no-rounded list shrare-post">
               <div class="list flex-containers analysis-wrp flex-start wrap">
                 <div class="list-item-3 outline">
-                  <h1 class="share-post-title">Delay Analysis by<span class="red"> CDE</span></h1>
+                  <h1 class="share-post-title">Delay Analysis by<span class="yellow"> CDE</span></h1>
                 </div>
                 <div class="list-item-3 outline">
-                  <mat-form-field appearance="outline">
+                  <mat-form-field appearance="fill">
                     <mat-select [(ngModel)]="selectedCDE" (ngModelChange)="launchDelayAnalysisByKey($event)">
                       <mat-option *ngFor="let col of selectedColumns;" [value]="col">
                         {{col}}
@@ -22,7 +22,7 @@
                 </div>
                 <div class="list-item-3 outline">
                   <div class="act-btn-wrapper">
-                    <button mat-stroked-button class="primary-btn-gray white pad" (click)="gotoDashboard();"><mat-icon class="mar-ico">arrow_back_ios_new</mat-icon> Back</button>
+                    <button mat-stroked-button class="button3d btnPush btnPurple ebckBtn" (click)="gotoDashboard();"><mat-icon>keyboard_arrow_left</mat-icon> Back</button>
                   </div>
                 </div>
               </div>
