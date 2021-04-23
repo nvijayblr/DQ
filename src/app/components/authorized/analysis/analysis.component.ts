@@ -682,7 +682,7 @@ export class AnalysisComponent implements OnInit {
    }
    
    visibleIndex = -1;
-   showEditDetails(ind) {
+   showEditDetails(ind) {     
       if (this.visibleIndex === ind) {
          this.visibleIndex = -1;
        } else {

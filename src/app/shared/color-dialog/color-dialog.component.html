@@ -7,11 +7,11 @@
     formArrayName="bgSettings" *ngFor="let bgSetting of settingsForm.get('bgSettings')['controls']; index as i; last as isLast; first as isFirst">
       <ng-container [formGroupName]="i">
         <div class="list-item">
-          <mat-form-field>
+          <mat-form-field appearance="fill">
             <mat-label>Min %</mat-label>
             <input type="text" (keypress)="numberOnly($event)" matInput formControlName="min" maxlength="3" autocomplete="off">
           </mat-form-field>
-          <mat-form-field>
+          <mat-form-field appearance="fill">
   
           <mat-label>Max %</mat-label>
            <input type="text" (keypress)="numberOnly($event)" matInput formControlName="max" maxlength="3" autocomplete="off">
@@ -24,22 +24,26 @@
               <mat-option value="green">Green</mat-option>
             </mat-select>
           </mat-form-field>  -->
+          <span class="clrSettings">
            <mat-form-field>
-            <mat-label>Choose Color</mat-label>
-            <input
+            <mat-label class="pdt">Choose Color</mat-label>
+            <input class="pd1"
               matInput 
               [(colorPicker)]="bgSetting.get('color').value"
               (colorPickerChange)="bgSetting.get('color').setValue($event)"
               [style.background]="bgSetting.get('color').value"
             />
           </mat-form-field> 
+         </span>
         </div>
-        <div class="list-item-5 add-remove-button">
-          <button type="button" mat-icon-button (click)="addFormItem('bgSettings')" *ngIf="isLast">
+        <div class="add-remove-button">
+          <button type="button" class="button3d btnPush btnBlueGreen addico" (click)="addFormItem('bgSettings')" *ngIf="isLast">
             <mat-icon>add</mat-icon>
           </button>
-          <button type="button" mat-icon-button class="del-icon" (click)="removeFormItem('bgSettings', i)" *ngIf="!isFirst || !isLast">
-            <mat-icon>delete</mat-icon>
+          </div>
+          <div class="add-remove-button">
+          <button type="button" class="button3d btnPush btnOrange redico" (click)="removeFormItem('bgSettings', i)" *ngIf="!isFirst || !isLast">
+            <mat-icon>delete_outline</mat-icon>
           </button>
         </div>
 

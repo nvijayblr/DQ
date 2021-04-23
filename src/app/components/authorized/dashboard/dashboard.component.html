@@ -328,9 +328,14 @@
                 </app-cylinder-chart>
 
                 <div class="actions-wrapper">
-                  <button type="button" class="ma-cr" mat-icon-button matTooltip="Highlight Settings"  (click)="openHighlightSettingsDialog()">
-                    <mat-icon>format_color_fill</mat-icon>
+                  <button  class="horizontal" (click)="openHighlightSettingsDialog()"> 
+                     <span class="text">
+                        <mat-icon>format_color_fill</mat-icon> Highlight Color </span>
                   </button>
+
+                  <!-- <button type="button" class="ma-cr" mat-icon-button matTooltip="Highlight Settings"  (click)="openHighlightSettingsDialog()">
+                    <mat-icon>format_color_fill</mat-icon>
+                  </button> -->
                 </div>
                 <table class="table brd-rt tableChart">
                   <thead>
@@ -354,11 +359,11 @@
                 </table>
 
                 <!-- Pagination -->
-                <mat-paginator [length]="length"
+                <!-- <mat-paginator [length]="length"
                 [pageSize]="pageSize"
                 [pageSizeOptions]="pageSizeOptions"
                 (page)="pageEvent = $event">
-               </mat-paginator>
+               </mat-paginator> -->
 
               </div>
             </mat-card>   
