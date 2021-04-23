@@ -66,10 +66,12 @@ export class AgGridComponent implements OnInit, OnChanges {
   onGridModelUpdated(e) {
   }
 
-  gridReady(params) {
+   gridReady(params) {
+     alert('Grid')
     this.gridApi = params.api;
     this.gridOptions = params.api.gridOptionsWrapper.gridOptions;
-    this.gridApi.hideOverlay();
+     this.gridApi.hideOverlay();
+     this.gridApi.ensureColumnVisible('id');
   }
 
   paginationChanged(params) {

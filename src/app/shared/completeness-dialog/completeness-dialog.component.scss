@@ -4,6 +4,33 @@
 .mat-dialog-title {
    font-family: 'open-sans-condensed-bold';
 }
+.mat-dialog-title {
+   font-size: 24px;
+   color: #322a54;
+   font-weight: 400;
+   margin: 0px 10px 20px 10px;
+   font-family: 'open-sans-condensed-bold';
+   position: relative;
+   &:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -12px;
+      height: 5px;
+      width: 55px;
+      background-color: #efa800;
+    }
+    &:after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -10px;
+      height: 1px;
+      width: 95%;
+      max-width: 181px;
+      background-color: #efa800;
+    }
+ }
 .mat-dialog-actions {
    display: block;
 }
@@ -32,3 +59,6 @@
 .primary-btn-gray mat-icon {
    margin-right: 10px;
 }
+
+tr:nth-child(even) {background: #f0f7f7 }
+tr:nth-child(odd) {background: #ffffff}
