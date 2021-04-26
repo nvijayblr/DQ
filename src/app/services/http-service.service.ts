@@ -211,21 +211,19 @@ export class HttpService  {
     );
   }
 
-  createUser(payload): Observable<any> {
-    return this.http.post<any>(`${this.rootUrl}/api/signup`, payload).pipe(
+  createEditUser(payload, mode): Observable<any> {
+    return this.http[mode === 'create' ? 'post' : 'put'](`${this.rootUrl}/api/createuser`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
         return throwError(err);
       }),
-    );
+    ) as any;
   }
-
-
 
 
   loginRequest(payload): Observable<any> {
-    return this.http.post<any>(`${this.rootUrl}user/login`, payload).pipe(
+    return this.http.post<any>(`${this.rootUrl}/api/signin`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
@@ -233,6 +231,11 @@ export class HttpService  {
       }),
     );
   }
+
+
+
+
+
 
   signupRequest(payload): Observable<any> {
     return this.http.post<any>(`${this.rootUrl}users/registration`, payload).pipe(

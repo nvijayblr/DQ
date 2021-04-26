@@ -43,17 +43,14 @@ export class UsersListComponent implements OnInit {
     });
   }
 
-  createNewUser() {
+  createEditUser(user, mode) {
     this.isLoading = true;
-    this.loaderMsg = 'Create new user...';
-    const payload = {
-      userName: 'analyst',
-      password: 'analyst'
-    };
-    this.http.createUser(payload).subscribe((result: any) => {
-        this.isLoading = false;
+    this.loaderMsg = 'Saving user details...';
+    this.http.createEditUser(user, mode).subscribe((result: any) => {
+      this.isLoading = false;
+      this.getUsersList();
     }, (error) => {
-        this.isLoading = false;
+      this.isLoading = false;
     });
   }
 
@@ -63,7 +60,9 @@ export class UsersListComponent implements OnInit {
          data: {user: user ? user : {}, mode}
       });
       dialogRef.afterClosed().subscribe(result => {
+        console.log(result);
         if (result) {
+          this.createEditUser(result.user, result.mode);
         }
      });
    }

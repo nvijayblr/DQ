@@ -13,6 +13,7 @@ export class RuleSelectorComponent implements OnInit {
   @Input() showAddItem = true;
   @Input() initValue: any;
   @Input() multiple = false;
+  @Input() label = '';
 
   @Output() selectionChange = new EventEmitter<any>();
   ruleOptionItem = '';

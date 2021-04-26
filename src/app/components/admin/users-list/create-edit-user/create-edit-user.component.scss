@@ -8,3 +8,6 @@
   text-align: right;
   margin-right: 6px;
 }
+::ng-deep .mat-form-field {
+  width: 100%;
+}

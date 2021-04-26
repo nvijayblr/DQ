@@ -19,6 +19,16 @@ import * as moment from 'moment';
 })
 export class DashboardComponent implements OnInit {
 
+   constructor(
+      public dialog: MatDialog,
+      private http: HttpService,
+      private messageService: MessageService,
+      private auth: AuthGuardService,
+      private router: Router) {
+      const role = this.auth.getUserRole().role;
+      this.role = role ? role : 'VIEWER';
+   }
+
    analysisList = [];
    analyseData = [];
    analyseChartData: any = {};
@@ -45,7 +55,7 @@ export class DashboardComponent implements OnInit {
    nullCount;
    finalCount;
    originAirport;
-   showTd: boolean = false;
+   showTd = false;
    valArray = [];
    settings: any = {
       bgSettings: [{
@@ -64,16 +74,14 @@ export class DashboardComponent implements OnInit {
    highlightDates: any = [];
    analysisKeys: any = [];
    isLoadChart = false;
+   visibleIndex = -1;
 
-   constructor(
-      public dialog: MatDialog,
-      private http: HttpService,
-      private messageService: MessageService,
-      private auth: AuthGuardService,
-      private router: Router) {
-      const role = this.auth.getUserRole().role;
-      this.role = role ? role : 'VIEWER';
-   }
+   length = 10;
+   pageSize = 10;
+   pageSizeOptions: number[] = [5, 10, 25, 100];
+
+   // MatPaginator Output
+   pageEvent: PageEvent;
 
    ngOnInit() {
       this.getAllSources();
@@ -394,7 +402,6 @@ export class DashboardComponent implements OnInit {
       const date = moment(d).format('MM-DD-YYYY');
       return (this.highlightDates.includes(date)) ? 'highlight-dates' : undefined;
    }
-   visibleIndex = -1;
    showEditDetails(ind) {
       if (this.visibleIndex === ind) {
          this.visibleIndex = -1;
@@ -403,11 +410,4 @@ export class DashboardComponent implements OnInit {
       }
    }
 
-   length = 10;
-   pageSize = 10;
-   pageSizeOptions: number[] = [5, 10, 25, 100];
- 
-   // MatPaginator Output
-   pageEvent: PageEvent;
- 
 }

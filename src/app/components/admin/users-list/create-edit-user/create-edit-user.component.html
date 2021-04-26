@@ -27,16 +27,24 @@
         </mat-form-field>
       </div>
       <div class="list">
-        <mat-form-field appearance="fill">
-          <mat-label>Role</mat-label>
-          <input type="text" matInput formControlName="role" autocomplete="off">
-        </mat-form-field>
+        <app-rule-selector 
+          multiple="true" 
+          [label]="'Role'"
+          [showAddItem]="false"
+          [ruleItems]="roleList" 
+          [initValue]="userForm.controls.role.value"
+          (selectionChange)="userForm.controls.role.setValue($event.value)"
+        ></app-rule-selector>
       </div>
       <div class="list">
-        <mat-form-field appearance="fill">
-          <mat-label>Department</mat-label>
-          <input type="text" matInput formControlName="department" autocomplete="off">
-        </mat-form-field>
+        <app-rule-selector 
+          multiple="true" 
+          [label]="'Department'"
+          [showAddItem]="false"
+          [ruleItems]="deptList" 
+          [initValue]="userForm.controls.department.value"
+          (selectionChange)="userForm.controls.department.setValue($event.value)"
+        ></app-rule-selector>
       </div>
 
     </div>
@@ -44,5 +52,5 @@
 </div>
 <div mat-dialog-actions>
   <button mat-raised-button color="primary" (click)="onNoClick()">Cancel</button>
-  <button mat-raised-button color="accent" (click)="closeSettings()" cdkFocusInitial class="ma-cr">Ok</button>
+  <button mat-raised-button color="accent" (click)="saveUser()" cdkFocusInitial class="ma-cr">Ok</button>
 </div>

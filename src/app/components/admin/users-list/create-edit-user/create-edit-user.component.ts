@@ -14,6 +14,37 @@ export class CreateEditUserComponent implements OnInit {
   formVal: any = [];
   user: any = {};
   mode = '';
+  roleList = [{
+    value: 'ADMIN',
+    label: 'Admin'
+  }, {
+    value: 'RULE_ANALYST',
+    label: 'Rule Analyst'
+  }, {
+    value: 'SOURCE_MANAGER',
+    label: 'Source Manager'
+  }, {
+    value: 'RULE_MANAGER',
+    label: 'Rule Manager'
+  }, {
+    value: 'OPERATION_ANALYST',
+    label: 'Operation Analyst'
+  }, {
+    value: 'VIEWER',
+    label: 'Viewer'
+  }];
+
+  deptList = [{
+    value: 'DEPT-1',
+    label: 'Department 1'
+  }, {
+    value: 'DEPT-2',
+    label: 'Department 2'
+  }, {
+    value: 'DEPT-3',
+    label: 'Department 3'
+  }];
+
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<CreateEditUserComponent>,
@@ -31,15 +62,20 @@ export class CreateEditUserComponent implements OnInit {
       userName: [this.user.userName, [Validators.required]],
       password: [this.user.password, [Validators.required]],
       role: [this.user.role, [Validators.required]],
-      department: [this.user.department, [Validators.required]],
-      status: [this.user.status, [Validators.required]],
+      department: [this.user.department],
     });
-    console.log(this.userForm.value);
+  }
+
+  saveUser() {
+    this.userForm.markAllAsTouched();
+    console.log(this.userForm, this.userForm.valid);
+    if (!this.userForm.valid) {
+      return;
+    }
+    this.dialogRef.close({user: this.userForm.value, mode: this.mode});
   }
 
   onNoClick(): void {
     this.dialogRef.close();
   }
-
-
 }

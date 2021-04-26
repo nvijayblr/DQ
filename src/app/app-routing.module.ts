@@ -17,11 +17,8 @@ const routes: Routes = [
    }, {
       path: 'admin',
       loadChildren: () => import('./components/admin/admin.module').then(m => m.AdminModule),
-      canActivate: [AuthGaurd]
+      // canActivate: [AuthGaurd]
      }, {
-    //   path: 'static',
-  //   loadChildren: () => import('./components/static/static.module').then(m => m.StaticModule)
-  // }, {
     path: '', redirectTo: '', pathMatch: 'full'
   }, {
     path: '**', redirectTo: '', pathMatch: 'full'

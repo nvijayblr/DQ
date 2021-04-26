@@ -71,7 +71,7 @@ export class LoginComponent implements OnInit {
     });
 
     this.loginForm = this.fb.group({
-      username: ['', Validators.required],
+      userName: ['', Validators.required],
       password: ['', Validators.required]
     });
 
@@ -88,20 +88,26 @@ export class LoginComponent implements OnInit {
       return;
     }
     const user = this.loginForm.value;
-    const loggedUser = this.users.filter((data) => {
-      return (data.username === user.username && data.password === user.password);
-    });
-    if (loggedUser.length) {
-      this.setLoginSessionAndRouting(loggedUser[0]);
-    }
-    // this.isLoading = true;
-    // this.http.loginRequest(this.loginForm.value).subscribe((result: any) => {
-    //   this.isLoading = false;
-    //   this.setLoginSessionAndRouting(result);
-    // }, (error) => {
-    //   this.isLoading = false;
-    //   this.errorMessage = error.error.message ? error.error.message : 'Invalid username or passowrd.';
+    // const loggedUser = this.users.filter((data) => {
+    //   return (data.username === user.username && data.password === user.password);
     // });
+    // if (loggedUser.length) {
+    //   this.setLoginSessionAndRouting(loggedUser[0]);
+    // }
+    this.isLoading = true;
+    this.http.loginRequest(this.loginForm.value).subscribe((result: any) => {
+      this.isLoading = false;
+      if (result.errorMsg) {
+        alert(result.errorMsg);
+        return;
+      }
+      const loggedUser = result.userdetail;
+      loggedUser.role = loggedUser.role[0];
+      this.setLoginSessionAndRouting(loggedUser);
+    }, (error) => {
+      this.isLoading = false;
+      this.errorMessage = error.error.message ? error.error.message : 'Invalid username or passowrd.';
+    });
   }
 
   showHideOTPScreen(option) {
@@ -200,6 +206,7 @@ export class LoginComponent implements OnInit {
   setLoginSessionAndRouting(result, isSocial?) {
     const session = {
       ...result,
+      id: result.userName,
       isLoggedIn: true,
       isSocial
     };
