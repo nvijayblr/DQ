@@ -227,6 +227,19 @@
      font-size: 13px;
      color: #373737;
    }
+   .label2 {
+      font-family: "open-sans-condensed-bold";
+      font-size: 14px;
+      color: #373737;
+      color: rgba(0,0,0,.87);
+    }
+   .label1 {
+      font-family: "open-sans-condensed-bold";
+      font-size: 18px;
+      color: #efa800;
+      width: 400px;
+      display: inline-block;
+    }
    h4 {
      font-weight: 400;
      margin-top: 24px;
@@ -332,7 +345,7 @@
  }
  .table tbody td{
    font-family: 'open-sans-regular'!important;
-   font-size: 13px;
+   font-size: 14px;
     color: #000000;
     &.ft{
      font-family: 'open-sans-regular'!important;
