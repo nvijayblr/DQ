@@ -1,0 +1,27 @@
+<header class="header masthead sticky" #header>
+  <div class="header-top header-body">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-3">
+          <a class="logo-wrapper" routerLink="/auth/home">
+           <img class="logo" src="./../assets/images/ai-logo.png" alt="AI">
+           <span>User Management</span>
+          </a>
+        </div>
+        
+        <div class="col-xs-12 col-sm-4 col-md-9 text-right">
+          <div class="main-nav">
+            <span class="seperator">&nbsp;</span>
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+              <mat-icon>account_circle</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="before">
+              <mat-divider></mat-divider>
+              <button class="nav-category-item" mat-menu-item (click)="doLogout()"><mat-icon>exit_to_app</mat-icon>Logout</button>
+            </mat-menu>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

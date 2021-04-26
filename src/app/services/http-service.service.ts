@@ -199,6 +199,28 @@ export class HttpService  {
     );
   }
 
+  // Users Management
+
+  getUsersList(): Observable<any> {
+    return this.http.get<any>(`${this.rootUrl}/api/getUsers`).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  createUser(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/signup`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
 
 
 

@@ -1,0 +1,64 @@
+<app-admin-header></app-admin-header>
+
+<section class="page-body home-bodys">
+  <div class="container">
+    <div class="home-wrapper">
+      <div class="clearfix my-community-body">
+        <div class="home-panel">
+          <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
+          <div class="shrare-post">
+            <!-- Users List --> 
+            <mat-card class="border no-rounded list shrare-post">
+              <div class="list flex-containers flex-start wrap no-margin dash-title">
+                <div class="list-item-2">
+                  <h1 class="share-post-title no-margin">Users<span class="yellow"> List</span></h1>
+                </div>
+                <div class="list-item-2 text-right">
+                  <button mat-stroked-button class="primary-btn-red" (click)="showAddEditUser({}, 'create');">New User</button>
+                </div>
+              </div>
+
+              <!-- Users List -->
+              <div class="analysis-preview">
+               <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Username</th>
+                      <th>Role</th>
+                      <th>Department</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                     <tr *ngFor="let user of usersList; let i= index;" class="tableinner">
+                        <td>{{user.name}}</td>
+                        <td>{{user.email}}</td>
+                        <td>{{user.userName}}</td>
+                        <td>{{user.role}}</td>
+                        <td>{{user.department}}</td>
+                        <td>{{user.status}}</td>
+                        <td>
+                          <button mat-icon-button color="primary" class="icon-primary-btn" matTooltip="Edit User" (click)="showAddEditUser(user, 'edit');">
+                            <mat-icon>edit</mat-icon>
+                          </button>
+                          <!-- <button mat-stroked-button class="primary-btn-red btn-small" matTooltip="Edit User">
+                            In Active
+                          </button> -->
+                        </td>
+                     </tr>
+                   </tbody>
+               </table>
+              </div>
+            </mat-card>
+
+          </div>
+
+        </div>
+      </div> 
+    </div>
+
+  </div>
+</section>

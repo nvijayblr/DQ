@@ -1,0 +1,48 @@
+<h1 mat-dialog-title>User Account</h1>
+<div mat-dialog-content class="user-account">
+  <form [formGroup]="userForm" (ngSubmit)="closeSettings()">
+    <div class="user-wrap">
+      <div class="list">
+        <mat-form-field appearance="fill">
+          <mat-label>Name</mat-label>
+          <input type="text" matInput formControlName="name" autocomplete="off">
+        </mat-form-field>
+      </div>
+      <div class="list">
+        <mat-form-field appearance="fill">
+          <mat-label>Email</mat-label>
+          <input type="text" matInput formControlName="email" autocomplete="off">
+        </mat-form-field>
+      </div>
+      <div class="list">
+        <mat-form-field appearance="fill">
+          <mat-label>Username</mat-label>
+          <input type="text" matInput formControlName="userName" autocomplete="off">
+        </mat-form-field>
+      </div>
+      <div class="list">
+        <mat-form-field appearance="fill">
+          <mat-label>Password</mat-label>
+          <input type="text" matInput formControlName="password" autocomplete="off">
+        </mat-form-field>
+      </div>
+      <div class="list">
+        <mat-form-field appearance="fill">
+          <mat-label>Role</mat-label>
+          <input type="text" matInput formControlName="role" autocomplete="off">
+        </mat-form-field>
+      </div>
+      <div class="list">
+        <mat-form-field appearance="fill">
+          <mat-label>Department</mat-label>
+          <input type="text" matInput formControlName="department" autocomplete="off">
+        </mat-form-field>
+      </div>
+
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="onNoClick()">Cancel</button>
+  <button mat-raised-button color="accent" (click)="closeSettings()" cdkFocusInitial class="ma-cr">Ok</button>
+</div>

@@ -15,7 +15,11 @@ const routes: Routes = [
     loadChildren: () => import('./components/authorized/authorized.module').then(m => m.AuthorizedModule),
     canActivate: [AuthGaurd]
    }, {
-  //   path: 'static',
+      path: 'admin',
+      loadChildren: () => import('./components/admin/admin.module').then(m => m.AdminModule),
+      canActivate: [AuthGaurd]
+     }, {
+    //   path: 'static',
   //   loadChildren: () => import('./components/static/static.module').then(m => m.StaticModule)
   // }, {
     path: '', redirectTo: '', pathMatch: 'full'

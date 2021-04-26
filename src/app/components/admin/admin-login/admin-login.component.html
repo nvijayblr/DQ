@@ -1,0 +1,47 @@
+<div class="login-wrapper">
+  <div class="logo-ai"> <img class="login-image" src="./../assets/images/logo-ai.png" /> </div>
+<div class="lft-cnt">
+  <!-- <h3>Artificial <br>  intelligence</h3>
+  <p>New technology may help scientists decode dolphin communication. Florida-based dolphin researcher Jack Kassewitz and British acoustic engineer John Stuart Reid are analyzing dolphin sounds with an instrument called a CymaScope. The scope has a thin membrane that vibrates as sound passes through it. Then it converts those vibrations into a high-definition image. Kassewitz hopes the unprecedented detail will solve some mysteries.</p> -->
+</div>
+
+<div class="flex-containers login-container top">
+  <mat-card class="login-card ">
+    <div class="fade_rule"></div> 
+    <h2>User Management</h2>
+
+    <div mat-dialog-content>
+      <mat-error class="box-error-msg" *ngIf="errorMessage">
+        {{errorMessage}}
+      </mat-error>
+      <div class="row" *ngIf="!isOtpScreen">
+        <div class="col">
+          <form [formGroup]="loginForm" class="custom-login-wrapper">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-icon matPrefix>account_circle</mat-icon>
+              <input class="bdrInput" matInput placeholder="Username" cdkFocusInitial formControlName="username" required autocomplete="no">
+              <mat-error class="wt">
+                Please provide a valid username.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-icon matPrefix>vpn_key</mat-icon>
+              <input class="bdrInput" matInput type="password" placeholder="Password" formControlName="password" required>
+              <mat-error class="wt">
+                Please provide a valid password
+              </mat-error>
+            </mat-form-field>
+            <div class="login-btn-wrpper">
+              <button mat-stroked-button class="button3d btnPush btnLightBlue full-width tdBtn"  (click)="doLogin()"  [disabled]="isLoading" [class.loading]="isLoading">
+                Sign in <i class="fa fa-sign-in" aria-hidden="true"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>
+ <div class="copyright">copyright@dq.com</div>
+</div>
