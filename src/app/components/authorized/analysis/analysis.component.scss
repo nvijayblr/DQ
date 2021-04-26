@@ -236,16 +236,22 @@
       font-family: "open-sans-condensed-bold";
       font-size: 18px;
       color: #efa800;
+      width: 400px;
+      display: inline-block;
+    }
+    .expBtn {
+       width:185px;
+       float: right;
     }
    h4 {
       font-weight: 400;
-      margin-top: 17px;
+      //margin-top: 17px;
       background: white;
       font-size: 16px;
       /* padding-bottom: 10px; */
       /* padding-left: 10px; */
       /* padding-top: 5px; */
-      color: #569494;
+      color: #322a54;
       font-family: "open-sans-condensed-bold";
       .mat-icon{
          position: relative;
@@ -262,7 +268,9 @@
 //  }
  .rule-table {
    //width: 780px;
-   border-bottom: 1px solid #ccc;
+   border-bottom: 0px solid #ccc;
+   margin-bottom:0px!important;
+  
  }
  .outline mat-label {
     font-family: 'open-sans-condensed-bold';
@@ -731,6 +739,9 @@
      -webkit-background-clip: text;
      background-clip: text;
      transition: background-position 300ms;
+     &.pst{
+      top: -6px;
+     }
      .mat-icon{
       position: relative;
       top: 7px;
@@ -767,6 +778,11 @@
        transform: scale3d(1, 1, 1);
      }
      
+   }
+   &.align{
+      display: inline-block;
+      float: left;
+      margin-right: 15px;
    }
  }
 
@@ -870,11 +886,24 @@
 tr:nth-child(even) {background: #ffffff }
 tr:nth-child(odd) {background: #f0f7f7}
 .analysis-preview .table tbody td{
-   font-size: 13px!important;
+   font-size: 14px!important;
    font-family: 'open-sans-regular'!important;
    padding-left: 10px!important;
 }
 .wtBg{
    background: white;
    margin: 0px;
+}
+::ng-deep .mat-expansion-indicator{
+   position: relative;
+   left: -20px;
+   top: -7px;
+}
+.mm{
+   margin-top: 5px!important;
+}
+.mat-expansion-panel .mat-expansion-panel-header.cdk-keyboard-focused:not([aria-disabled=true]), .mat-expansion-panel .mat-expansion-panel-header.cdk-program-focused:not([aria-disabled=true]), .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:hover:not([aria-disabled=true]){background : white !important}
+
+::ng-deep .mat-expansion-panel-body {
+   padding: 0 0px 0px 0px!important;
 }

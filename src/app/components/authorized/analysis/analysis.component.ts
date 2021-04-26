@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation, ViewChild, QueryList, ViewChildren } from '@angular/core';
+import {MatAccordion} from '@angular/material/expansion';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
@@ -12,13 +13,18 @@ import { OwlOptions } from 'ngx-owl-carousel-o';
 import { S } from '@angular/cdk/keycodes';
 import { _ } from 'ag-grid-community';
 
+/**
+ * @title Basic expansion panel
+ */
+
 @Component({
   selector: 'app-analysis',
   templateUrl: './analysis.component.html',
   styleUrls: ['./analysis.component.scss']
 })
 export class AnalysisComponent implements OnInit {
-  @ViewChild('owlCar', {static: false}) owlCar;
+   @ViewChild('owlCar', { static: false }) owlCar;
+   @ViewChild(MatAccordion , { static: true }) accordion: MatAccordion;
 
   user: any = {};
   professional: any = {};
@@ -62,7 +68,6 @@ export class AnalysisComponent implements OnInit {
       }
     },
   };
-
 
   stepIndex = 0;
   availableColumns: any = [];
