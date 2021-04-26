@@ -60,7 +60,6 @@ export class UsersListComponent implements OnInit {
          data: {user: user ? user : {}, mode}
       });
       dialogRef.afterClosed().subscribe(result => {
-        console.log(result);
         if (result) {
           this.createEditUser(result.user, result.mode);
         }

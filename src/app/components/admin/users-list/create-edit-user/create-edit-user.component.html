@@ -46,7 +46,15 @@
           (selectionChange)="userForm.controls.department.setValue($event.value)"
         ></app-rule-selector>
       </div>
-
+      <div class="list">
+        <mat-form-field appearance="fill">
+          <mat-label class="lbl">Status</mat-label>
+          <mat-select formControlName="status">
+            <mat-option value="Active">Active</mat-option>
+            <mat-option value="Inactive">Inactive</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
   </form>
 </div>

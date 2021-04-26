@@ -63,12 +63,12 @@ export class CreateEditUserComponent implements OnInit {
       password: [this.user.password, [Validators.required]],
       role: [this.user.role, [Validators.required]],
       department: [this.user.department],
+      status: [this.user.status, [Validators.required]],
     });
   }
 
   saveUser() {
     this.userForm.markAllAsTouched();
-    console.log(this.userForm, this.userForm.valid);
     if (!this.userForm.valid) {
       return;
     }

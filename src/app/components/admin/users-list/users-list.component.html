@@ -39,7 +39,7 @@
                         <td>{{user.userName}}</td>
                         <td>{{user.role.join(', ')}}</td>
                         <td>{{user.department.join(', ')}}</td>
-                        <td>{{user.status}}</td>
+                        <td class="{{user.status}}">{{user.status}}</td>
                         <td>
                           <button mat-icon-button color="primary" class="icon-primary-btn" matTooltip="Edit User" (click)="showAddEditUser(user, 'edit');">
                             <mat-icon>edit</mat-icon>
