@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
+import { HighchartsChartModule } from 'highcharts-angular';
 import { Routes, RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MaterialModule } from './modules/material.module';
@@ -28,9 +29,11 @@ import { CompletenessDialogComponent } from './completeness-dialog/completeness-
 import { RuleSelectorComponent } from './rule-selector/rule-selector.component';
 import { AgGridComponent } from './ag-grid/ag-grid.component';
 import { FormulaEditorComponent } from './formula-editor/formula-editor.component';
+import { HeatMapComponent } from './heat-map/heat-map.component';
 
 @NgModule({
-  imports: [
+   imports: [
+      HighchartsChartModule,
     CommonModule,
     MaterialModule,
     ImageCropperModule,
@@ -41,7 +44,8 @@ import { FormulaEditorComponent } from './formula-editor/formula-editor.componen
     RatingModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
-    ColorPickerModule,
+      ColorPickerModule,
+     
     AgGridModule.withComponents([]),
   ],
   declarations: [
@@ -63,6 +67,7 @@ import { FormulaEditorComponent } from './formula-editor/formula-editor.componen
     RuleSelectorComponent,
     AgGridComponent,
     FormulaEditorComponent,
+    HeatMapComponent,
   ],
   exports: [
     FormsModule,
@@ -91,7 +96,8 @@ import { FormulaEditorComponent } from './formula-editor/formula-editor.componen
     CompletenessDialogComponent,
     RuleSelectorComponent,
     AgGridComponent,
-    FormulaEditorComponent
+     FormulaEditorComponent,
+     HeatMapComponent
   ],
   providers: [
      DatePipe,
@@ -100,7 +106,8 @@ import { FormulaEditorComponent } from './formula-editor/formula-editor.componen
      ConfirmDialogComponent,
      ColorDialogComponent,
      CompletenessDialogComponent,
-     FormulaEditorComponent
+     FormulaEditorComponent,
+     
   ]
 })
 export class SharedModule {}

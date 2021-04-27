@@ -857,12 +857,13 @@
 
 ::ng-deep .mat-tab-label{
    border-radius: 4px 4px 0 0;
-   background: aliceblue!important;
+   background: #6bc1c1!important;
+   margin-right: 5px;
 }
 ::ng-deep .mat-tab-label-active {
-   background: rgba(0,139,110,.22)!important;
-   color: #000;
-   opacity: 1;
+   background: #2d7777!important;
+   color: #fff;
+   //opacity: 1;
    border-bottom: 2px solid #2d7777;
 }
 ::ng-deep .mat-tab-labels {
@@ -910,6 +911,13 @@ tr:nth-child(odd) {background: #f0f7f7}
 }
 .mat-expansion-panel .mat-expansion-panel-header.cdk-keyboard-focused:not([aria-disabled=true]), .mat-expansion-panel .mat-expansion-panel-header.cdk-program-focused:not([aria-disabled=true]), .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:hover:not([aria-disabled=true]){background : white !important}
 
-::ng-deep .mat-expansion-panel-body {
-   padding: 0 0px 0px 0px!important;
+// ::ng-deep .mat-expansion-panel-body {
+//    padding: 0 0px 0px 0px!important;
+// }
+
+.mt2{
+   margin-top: 0px !important;
+}
+.mm{
+   margin-top: 30px !important;
 }

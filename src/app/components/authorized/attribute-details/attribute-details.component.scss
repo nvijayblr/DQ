@@ -477,3 +477,6 @@ table{
     background: #3f3670;
     color: #fff;
  }
+ ::ng-deep .highcharts-container {
+   left: -5px!important;
+ }

@@ -86,7 +86,8 @@ export class AnalysisComponent implements OnInit {
   sourceId = '';
   mode;
   rulesetId = '';
-  cdeStatistics: any = {};
+   cdeStatistics: any = {};
+   sourceNameText;
 
   // Rule Dropdowns
   ruleType = 'dataType';
@@ -328,7 +329,9 @@ export class AnalysisComponent implements OnInit {
       columnRules: this.fb.array([]),
     });
 
-    console.log(analysis);
+     console.log(analysis);
+     this.sourceNameText = analysis.source.sourceDataName;
+     //console.log(this.sourceNameText);
 
     if (analysis) {
       this.selectedSource = analysis;
@@ -655,7 +658,7 @@ export class AnalysisComponent implements OnInit {
   }
 
   initFormulaEditor(ruleList) {
-    console.log(ruleList);
+     console.log(ruleList);     
   }
 
   loadSourcePreview() {

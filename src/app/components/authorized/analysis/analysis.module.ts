@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../../shared/shared.module';
+import { AuthorizedModule } from '../authorized.module';
 
 import { AnalysisRoutingModule } from './analysis-routing.module';
 import { AnalysisComponent } from './analysis.component';
+
 
 
 @NgModule({
@@ -11,7 +13,9 @@ import { AnalysisComponent } from './analysis.component';
   imports: [
     CommonModule,
     AnalysisRoutingModule,
-    SharedModule
+     SharedModule,
+     AuthorizedModule
+    
   ]
 })
 export class AnalysisModule { }

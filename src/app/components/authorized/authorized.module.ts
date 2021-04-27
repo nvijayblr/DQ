@@ -21,8 +21,9 @@ import { AttributeDetailsComponent } from './attribute-details/attribute-details
       NgxSliderModule,
     CommonModule,
     AuthorizedRoutingModule,
-     SharedModule
-     
-  ]
+     SharedModule     
+   ],
+   exports: [AttributeDetailsComponent]
+  
 })
 export class AuthorizedModule { }
