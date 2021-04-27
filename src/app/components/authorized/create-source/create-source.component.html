@@ -173,10 +173,21 @@
                         </ng-container>
                       </div>
                     </div>
-                    <div class="act-btn-wrapper">
+
+                    <div class="list flex-containers flex-start">
+                     <div class="list-item-2 outline">
+                        <button mat-stroked-button class="button3d btnPush btnPurple ebckBtn" (click)="prevoewBackClickFirst()"><mat-icon>keyboard_arrow_left</mat-icon> Back</button>
+                     </div>
+                     <div class="list-item-2 outline act-btn-wrapper1">
+                        <button mat-stroked-button class="button3d btnPush btnLightBlue svBtn"
+                        (click)="saveSource()">Save & Summary <mat-icon>save_alt</mat-icon></button>
+                     </div>
+                  </div>
+
+                    <!-- <div class="act-btn-wrapper">
                       <button mat-stroked-button class="button3d btnPush btnLightBlue svBtn"
                       (click)="saveSource()">Save & Summary <mat-icon>save_alt</mat-icon></button>
-                    </div>
+                    </div> -->
 
                   </mat-card>
                 </mat-step>

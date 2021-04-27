@@ -294,7 +294,11 @@ export class CreateSourceComponent implements OnInit {
       } else {
       }
     });
-  }
+   }
+   
+   prevoewBackClickFirst() {     
+      this.gotoStepper(0);
+    }
 
   prevoewBackClick() {
     if (this. mode === 'create') {

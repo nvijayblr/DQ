@@ -12,6 +12,7 @@ import { FormulaEditorComponent } from '../../../shared/formula-editor/formula-e
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { S } from '@angular/cdk/keycodes';
 import { _ } from 'ag-grid-community';
+import * as moment from 'moment';
 
 /**
  * @title Basic expansion panel
@@ -25,7 +26,7 @@ import { _ } from 'ag-grid-community';
 export class AnalysisComponent implements OnInit {
    @ViewChild('owlCar', { static: false }) owlCar;
    @ViewChild(MatAccordion , { static: true }) accordion: MatAccordion;
-
+   isLinear = true;
   user: any = {};
   professional: any = {};
   userId: any = '';
@@ -38,7 +39,9 @@ export class AnalysisComponent implements OnInit {
   isSourceUploaded = false;
   analysis: any = {};
   fileTypeErr = false;
-  uniqueName = false;
+   uniqueName = false;
+   startDateAdd: any;
+   endDateAdd:any;
 
   OwlCategoryOptions: OwlOptions = {
     loop: false,
@@ -274,7 +277,10 @@ export class AnalysisComponent implements OnInit {
   isPreviewLoading = false;
   defaultColDefs = { sortable: true, filter: true, minWidth: 180, resizable: true };
   rowData: any = [];
-  columnDefs: any = [];
+   columnDefs: any = [];
+   
+   minDate = moment().format('YYYY-MM-DD');
+   maxDate = moment(moment().add(6, 'months')).format('YYYY-MM-DD');
 
   constructor(
     private fb: FormBuilder,
@@ -314,8 +320,13 @@ export class AnalysisComponent implements OnInit {
     });
 
     const analysis = this.messageService.getAnalysis();
-
-    this.analysisForm = this.fb.group({
+    //const targetDate = moment(moment().add(60, 'days')).format('YYYY-MM-DD');
+     this.startDateAdd = this.minDate;
+     this.endDateAdd = this.maxDate;
+   //   console.log(this.startDateAdd);
+   //   console.log(this.endDateAdd);
+     this.analysisForm = this.fb.group({
+       
       sourceId: [{value: analysis.sourceId || '', disabled: true}],
       name: [{value: analysis.source.sourceDataName || '', disabled: true}, [Validators.required, Validators.maxLength(100)]],
       sourceFilename: [analysis.source.sourceFileName || ''],
@@ -371,10 +382,15 @@ export class AnalysisComponent implements OnInit {
     });
     if (this.mode === 'edit') {
       this.columnsForm.controls.refernceColumns.setValue(this.selectedReferenceColumns);
-    }
+     }
+     
+     this.minDate = moment().format('YYYY-MM-DD');
+    this.maxDate = moment(moment().add(6, 'months')).format('YYYY-MM-DD');
+     this.startDateAdd = this.minDate;
+     this.endDateAdd = moment(moment(this.startDateAdd).add(6, 'months')).format('YYYY-MM-DD');
   }
 
-  intiFormArrays(field, value: any = {}) {
+   intiFormArrays(field, value: any = {}) {      
     if (field === 'referenceData') {
       if (!value.availableRefColumns) {
         value.availableRefColumns = [];
@@ -699,3 +715,4 @@ export class AnalysisComponent implements OnInit {
    }
 
 }
+

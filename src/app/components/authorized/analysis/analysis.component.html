@@ -11,7 +11,7 @@
          <div class="home-panel">
            <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
            <form [formGroup]="analysisForm">
-             <mat-horizontal-stepper [linear]="false" #stepper 
+             <mat-horizontal-stepper [linear]="isLinear" #stepper 
                [selectedIndex]="stepIndex" 
                (selectionChange)="stepperSelectionChange($event)"
                (animationDone)="stepperAnimationDone()">
@@ -161,7 +161,7 @@
                                  <mat-label>Start Date<span class="red">*</span></mat-label>
                                  <mat-form-field appearance="fill">
                                  <mat-label class="tplabel">Start Date</mat-label>
-                                 <input matInput [matDatepicker]="frompicker" formControlName="startDate">
+                                 <input matInput [matDatepicker]="frompicker" [value]="startDateAdd" formControlName="startDate" autocomplete="off">
                                  <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
                                  <mat-datepicker #frompicker></mat-datepicker>
                                  </mat-form-field>
@@ -170,7 +170,7 @@
                                  <mat-label>End Date<span class="red">*</span></mat-label>
                                  <mat-form-field appearance="fill">
                                  <mat-label class="tplabel">End Date</mat-label>
-                                 <input matInput [matDatepicker]="topicker" formControlName="endDate">
+                                 <input matInput [matDatepicker]="topicker" [value]="endDateAdd" formControlName="endDate" autocomplete="off">
                                  <mat-datepicker-toggle matSuffix [for]="topicker"></mat-datepicker-toggle>
                                  <mat-datepicker #topicker></mat-datepicker>
                                  </mat-form-field>

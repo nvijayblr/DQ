@@ -1,0 +1,13 @@
+::ng-deep .highcharts-credits{
+   display: none !important;;
+}
+
+::ng-deep .highcharts-text-outline{
+   fill : none !important;
+   stroke : none !important;
+   font-family: "open-sans-condensed-bold"!important;
+}
+
+::ng-deep .highcharts-label{
+   font-family: "open-sans-condensed-bold"!important;
+}
