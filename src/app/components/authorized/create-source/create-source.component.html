@@ -27,11 +27,11 @@
                               >
                               </app-image-cropper>
                              
-                              <mat-label>Source Name<span class="red">*</span></mat-label>
+                              <mat-label class="sub-title">Source Name<span class="red">*</span></mat-label>
                               <mat-form-field appearance="fill">
                                 <input matInput placeholder="Source Name" formControlName="sourceDataName" maxlength="50" autocomplete="off"/>
                               </mat-form-field>
-                              <mat-label class="mtop">Source Description</mat-label>
+                              <mat-label class="mtop sub-title">Source Description</mat-label>
                           
                               
                               <mat-form-field appearance="fill">
@@ -69,7 +69,7 @@
                                    <div class="date-style">
                                   <span class="sub-title">Start Date<span class="red">*</span></span>
                                   <mat-form-field appearance="fill">
-                                    <mat-label></mat-label>
+                                    <mat-label>Start Date</mat-label>
                                     <input matInput [matDatepicker]="frompicker" formControlName="settingsDate" [(ngModel)]="sourceSettings.uploadDate" autocomplete="off">
                                     <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
                                     <mat-datepicker #frompicker></mat-datepicker>
@@ -80,7 +80,7 @@
                                 <div class="list-item-2 outline">
                                   <span class="sub-title">Time</span>
                                   <mat-form-field appearance="fill">
-                                    <mat-label></mat-label>
+                                    <mat-label>Select a time</mat-label>
                                     <input matInput [ngxTimepicker]="timepicker" formControlName="uploadTime" [(ngModel)]="sourceSettings.uploadTime" autocomplete="off">
                                     <ngx-material-timepicker #timepicker></ngx-material-timepicker>
                                   </mat-form-field>
@@ -200,7 +200,7 @@
                           <td>
                             <div class="label2">CDE</div>
                             <span *ngFor="let column of summary.source?.availableColumns">
-                              {{column}},
+                               {{column}}, 
                             </span>
                             </td>
                           </tr>
@@ -226,7 +226,7 @@
                             </tr>
                             <tr>
                               <td><div class="label2">Multi source name</div></td>
-                              <td>{{summary.settings?.multiSourceOptions}}</td>
+                              <td>{{summary.settings?.multiSourceOptions}} </td>
                             </tr>
                             <tr>
                               <td><div class="label2">Frequency</div></td>

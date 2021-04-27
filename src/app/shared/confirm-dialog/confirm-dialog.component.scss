@@ -6,14 +6,20 @@
     padding-top: 10px;
     // border-top: 1px solid #e2e2e2;
     .mat-stroked-button {
-      font-family: "Roboto" !important;
       font-size: 13px;
       font-weight: 400;
       padding: 0 10px;
       height: 30px;
       line-height: 30px;
       margin-left: 10px;
-      border-radius: 0;
+      border-radius: 4px;
+      font-family: 'open-sans-condensed-bold'!important;
+      background-color: #7d6ecc!important;
+      color: #fff!important;
+      margin-right: 5px;
+      &:hover{
+         background-color: #433683!important;
+      }
     }
   }
 }
@@ -26,4 +32,10 @@
 }
 .input-full-width {
   width: 100%;
+}
+
+::ng-deep .mat-dialog-title{
+   font-family: 'open-sans-condensed-bold'!important;
+   border-bottom: 2px solid #f0f7f7;
+   color: #efa800;
 }

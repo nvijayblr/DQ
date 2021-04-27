@@ -268,3 +268,9 @@
 .mat-option:focus:not(.mat-option-disabled), .mat-option:hover:not(.mat-option-disabled) {
    background:#eee8f8;
 }
+
+::ng-deep .outline mat-label{
+   font-size: 13px!important;
+   font-family: 'open-sans-condensed-bold';
+   color: #7D7D7D;
+ }
