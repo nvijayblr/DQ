@@ -26,7 +26,7 @@
                                 (fileSelected)="onSourceFileSelected($event)"
                               >
                               </app-image-cropper>
-                             
+                              <mat-error class="nerr" *ngIf="!flError">Please Select a Correct File Type</mat-error>
                               <mat-label class="sub-title">Source Name<span class="red">*</span></mat-label>
                               <mat-form-field appearance="fill">
                                 <input matInput placeholder="Source Name" formControlName="sourceDataName" maxlength="50" autocomplete="off"/>
@@ -54,7 +54,7 @@
                                     [ruleItems]="multiSourceList" 
                                     [initValue]="sourceSettings.multiSourceOptions"
                                     (selectionChange)="sourceSettings.multiSourceOptions=$event.value"
-                                  ></app-rule-selector>
+                                  ></app-rule-selector>                                  
                                 </div>
                                 <div class="list-item-2 outline">
                                   <span class="sub-title">Frequency<span class="red">*</span></span>
@@ -115,7 +115,7 @@
                                           
                     <div class="act-btn-wrapper m1t">
                         <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"
-                        [disabled]="!afControls.sourceDataName.value || !sourceSettings.frequency || !sourceSettings.uploadDate"
+                        [disabled]="!afControls.sourceDataName.value || !sourceSettings.frequency || !sourceSettings.uploadDate || !flError"
                         (click)="validateSourceNameAndNext()">Next <mat-icon>navigate_next</mat-icon></button>
                     </div>
                   </mat-card>

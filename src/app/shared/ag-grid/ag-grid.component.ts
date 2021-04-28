@@ -67,7 +67,7 @@ export class AgGridComponent implements OnInit, OnChanges {
   }
 
    gridReady(params) {
-     alert('Grid')
+     //alert('Grid')
     this.gridApi = params.api;
     this.gridOptions = params.api.gridOptionsWrapper.gridOptions;
      this.gridApi.hideOverlay();

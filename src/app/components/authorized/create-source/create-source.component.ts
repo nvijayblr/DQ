@@ -109,7 +109,8 @@ export class CreateSourceComponent implements OnInit {
   isRefPreviewLoaded = false;
   isRefPreviewLoading = false;
   refrowData: any = [];
-  refcolumnDefs: any = [];
+   refcolumnDefs: any = [];
+   selectedType;
 
   constructor(
     private fb: FormBuilder,
@@ -168,7 +169,10 @@ export class CreateSourceComponent implements OnInit {
     referenceDataList.map(refCSV => {
       referenceData.push(this.intiFormArrays('referenceData', refCSV));
     });
-
+     
+     const firstParam: string = this.route.snapshot.queryParamMap.get('type');    
+    this.selectedType = firstParam;
+    //console.log(this.selectedType);
   }
 
   intiFormArrays(field, reference: any = {}) {
@@ -311,9 +315,30 @@ export class CreateSourceComponent implements OnInit {
     this.gotoStepper(1);
   }
 
+   flError:boolean = true;
   onSourceFileSelected(file) {
     this.sourceFile = file;
-    const fName = file.name.split('.')[0];
+     const fName = file.name.split('.')[0];
+     const fExt = file.name.split('.')[1];
+     console.log(fExt.includes('xls'));
+     if (this.selectedType !== fExt) {
+        //alert('Please Select a correct file type');
+        this.flError = false;
+     } else {
+      this.flError = true;
+     }
+
+     if (this.selectedType === 'xlsx') {
+        if (fExt.includes('xls')) {
+         this.flError = true;
+        } else {
+         this.flError = false;
+        }
+     }
+   //   console.log(this.flError);
+   //   this.selectedType;
+   //   console.log(fName);
+   //   console.log(fExt);
     this.afControls.sourceDataName.setValue(fName);
     this.loadSourcePreview();
   }

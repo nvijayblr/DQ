@@ -21,7 +21,7 @@
                       <section>
                         <div class="flipbox">
                           <div class="back pl10">
-                           <div class="ol" routerLink="/auth/create-source-data">
+                           <div class="ol" routerLink="/auth/create-source-data" [queryParams]="{ type: 'xlsx'}">
                               <img src="./../assets/images/excel.png" />
                               <p class="pl4">Excel</p>
                            </div>
@@ -36,7 +36,7 @@
                       <section>
                         <div class="flipbox">
                           <div class="back pl10">
-                           <div class="ol" routerLink="/auth/create-source-data">
+                           <div class="ol" routerLink="/auth/create-source-data" [queryParams]="{ type: 'csv'}">
                               <img src="./../assets/images/csv.png" />
                               <p class="pl4">CSV</p>
                            </div>
