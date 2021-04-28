@@ -11,6 +11,8 @@
    margin: 0px 10px 20px 10px;
    font-family: 'open-sans-condensed-bold';
    position: relative;
+   width: 650px;
+   display: inline-block;
    &:before {
       content: "";
       position: absolute;
@@ -30,6 +32,7 @@
       max-width: 181px;
       background-color: #efa800;
     }
+    
  }
 .mat-dialog-actions {
    display: block;
@@ -41,9 +44,9 @@
    max-height: auto;
 }
 .strong {
-   font-weight: 600;
+   //font-weight: 600;
    cursor: pointer;
-   color: #59bfff;
+   color: #367575;
 }
 .btn-wrapper {
    text-align: right;
@@ -51,6 +54,7 @@
 }
 .content-details {
    height: calc(100vh - 210px);
+   height:auto;
 }
 .mat-dialog-content {
    overflow: hidden;
@@ -59,6 +63,10 @@
 .primary-btn-gray mat-icon {
    margin-right: 10px;
 }
+.table.brd-rt tbody td{
+   font-family: 'open-sans-condensed-bold';
+   font-size: 13px;
+}
 
-tr:nth-child(even) {background: #f0f7f7 }
-tr:nth-child(odd) {background: #ffffff}
+tr:nth-child(odd) {background: #f0f7f7 }
+tr:nth-child(even) {background: #ffffff}

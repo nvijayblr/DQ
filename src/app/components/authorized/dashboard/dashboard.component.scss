@@ -274,11 +274,11 @@
   opacity: 0.32;
 }
 ::ng-deep .highlight-dates .mat-calendar-body-cell-content {
-  background: #59bfff !important;
-  font-weight: bold;
+   background: #433683!important;
+   color: #fff;
 }
 ::ng-deep .highlight-dates:hover .mat-calendar-body-cell-content {
-  background: #8ccaf1 !important;
+  background: #221a49 !important;
   font-weight: bold;
 }
 // ::ng-deep .mat-form-field-flex{
@@ -785,6 +785,9 @@ thead {background: #f0f7f7;}
       position: relative;
       top: 7px;
       color: #efa800;
+      &.bt{
+         top: 3px;
+      }
      }
    }
    

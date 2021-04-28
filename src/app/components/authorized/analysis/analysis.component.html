@@ -154,14 +154,14 @@
                               <div class="list-item-3 outline">
                                  <mat-label>Ruleset Name<span class="yellow">*</span></mat-label>
                                  <mat-form-field appearance="fill">
-                                 <input matInput placeholder="Ruleset Name" formControlName="rulesetName" maxlength="50" autocomplete="off" [value]="sourceNameText +'-ruleset1'"/>
+                                 <input matInput placeholder="Ruleset Name" formControlName="rulesetName" maxlength="50" autocomplete="off" />
                                  </mat-form-field>
                               </div>
                               <div class="list-item-3 outline">
                                  <mat-label>Start Date<span class="red">*</span></mat-label>
                                  <mat-form-field appearance="fill">
                                  <mat-label class="tplabel">Start Date</mat-label>
-                                 <input matInput [matDatepicker]="frompicker" [value]="startDateAdd" formControlName="startDate" autocomplete="off">
+                                 <input matInput [matDatepicker]="frompicker"  formControlName="startDate" autocomplete="off">
                                  <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
                                  <mat-datepicker #frompicker></mat-datepicker>
                                  </mat-form-field>
@@ -170,7 +170,7 @@
                                  <mat-label>End Date<span class="red">*</span></mat-label>
                                  <mat-form-field appearance="fill">
                                  <mat-label class="tplabel">End Date</mat-label>
-                                 <input matInput [matDatepicker]="topicker" [value]="endDateAdd" formControlName="endDate" autocomplete="off">
+                                 <input matInput [matDatepicker]="topicker"  formControlName="endDate" autocomplete="off">
                                  <mat-datepicker-toggle matSuffix [for]="topicker"></mat-datepicker-toggle>
                                  <mat-datepicker #topicker></mat-datepicker>
                                  </mat-form-field>
@@ -337,8 +337,8 @@
                            <tr>
                              <td><div class="label">Selected CDE</div></td>
                            <td>
-                             <span *ngFor="let column of analysis.selectedColumns">
-                               {{column.title}} 
+                             <span class="spec" *ngFor="let column of analysis.selectedColumns">
+                               {{column.title}}
                              </span>
                              </td>
                            </tr>
