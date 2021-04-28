@@ -15,23 +15,23 @@ export class CreateEditUserComponent implements OnInit {
   user: any = {};
   mode = '';
   roleList = [{
-    value: 'ADMIN',
-    label: 'Admin'
+    label: 'Admin',
+    value: 'DQ_ADMIN',
   }, {
-    value: 'RULE_ANALYST',
-    label: 'Rule Analyst'
+    label: 'Rule Analyst',
+    value: 'DQ_MANAGER',
   }, {
-    value: 'SOURCE_MANAGER',
-    label: 'Source Manager'
+    label: 'Source Manager',
+    value: 'DQ_SOURCE_MANAGER',
   }, {
-    value: 'RULE_MANAGER',
-    label: 'Rule Manager'
+    label: 'Rule Manager',
+    value: 'DQ_RULE_MANAGER',
   }, {
-    value: 'OPERATION_ANALYST',
-    label: 'Operation Analyst'
+    label: 'Operation Analyst',
+    value: 'DQ_OPERATION',
   }, {
-    value: 'VIEWER',
-    label: 'Viewer'
+    label: 'Viewer',
+    value: 'DQ_VIEWER',
   }];
 
   deptList = [{
