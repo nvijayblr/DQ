@@ -111,6 +111,8 @@ export class CreateSourceComponent implements OnInit {
   refrowData: any = [];
    refcolumnDefs: any = [];
    selectedType;
+   flError: boolean = true;
+   edMode;
 
   constructor(
     private fb: FormBuilder,
@@ -173,6 +175,9 @@ export class CreateSourceComponent implements OnInit {
      const firstParam: string = this.route.snapshot.queryParamMap.get('type');    
     this.selectedType = firstParam;
     //console.log(this.selectedType);
+     const mode: string = this.route.snapshot.queryParamMap.get('mode');
+     this.edMode = mode;
+     //console.log(mode);
   }
 
   intiFormArrays(field, reference: any = {}) {
@@ -315,15 +320,18 @@ export class CreateSourceComponent implements OnInit {
     this.gotoStepper(1);
   }
 
-   flError:boolean = true;
+ 
   onSourceFileSelected(file) {
     this.sourceFile = file;
      const fName = file.name.split('.')[0];
      const fExt = file.name.split('.')[1];
-     console.log(fExt.includes('xls'));
+     //console.log(fExt.includes('xls'));
+     if (this.edMode === 'edit') {
+      this.flError = false;
+     }
      if (this.selectedType !== fExt) {
         //alert('Please Select a correct file type');
-        this.flError = false;
+        this.flError = true;
      } else {
       this.flError = true;
      }

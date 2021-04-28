@@ -911,13 +911,24 @@ tr:nth-child(odd) {background: #f0f7f7}
 }
 .mat-expansion-panel .mat-expansion-panel-header.cdk-keyboard-focused:not([aria-disabled=true]), .mat-expansion-panel .mat-expansion-panel-header.cdk-program-focused:not([aria-disabled=true]), .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:hover:not([aria-disabled=true]){background : white !important}
 
-// ::ng-deep .mat-expansion-panel-body {
-//    padding: 0 0px 0px 0px!important;
-// }
+.accordions{
+   ::ng-deep .mat-expansion-panel-body {
+          padding: 0 0px 0px 0px!important;
+      }
+}
+
 
 .mt2{
    margin-top: 0px !important;
 }
-.mm{
+.mm2{
    margin-top: 30px !important;
 }
+
+.corMap {
+   ::ng-deep .highcharts-root{
+      width: 1460px!important;
+   }
+}
+
+

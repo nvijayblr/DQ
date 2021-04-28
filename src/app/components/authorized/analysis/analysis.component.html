@@ -145,7 +145,7 @@
                  
                  <mat-step>
                    <ng-template matStepLabel>Rule Definition</ng-template>
-                   <mat-tab-group mat-align-tabs="start"  animationDuration="0ms" class="mm">
+                   <mat-tab-group mat-align-tabs="start"  animationDuration="0ms" class="mm2">
                      <mat-tab label="Rule Definition">
                         <div class="list wrap mt2">
                            <mat-card class="border no-rounded shrare-post">
@@ -315,7 +315,9 @@
                         <app-attribute-details> </app-attribute-details>
                      </mat-tab>
                      <mat-tab label="Correlation Detail">
+                     <div class="corMap">
                         <app-heat-map></app-heat-map>
+                     </div>
                      </mat-tab>
                   </mat-tab-group>
                  </mat-step>
@@ -355,7 +357,7 @@
                            </tr>
                            <tr>
                              <td colspan="2">
-                               <div>
+                               <div class="accordions">
                                  <mat-accordion multi>
                                     <mat-expansion-panel *ngFor="let col of analysis.rules; first as isFirst" [expanded]="isFirst">
                                        <mat-expansion-panel-header>
