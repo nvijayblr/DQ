@@ -30,27 +30,27 @@ export class LoginComponent implements OnInit {
     id: 1,
     username: 'analyst',
     password: 'analyst',
-    role: 'RULE_ANALYST'
+    role: 'DQ_MANAGER'
   }, {
     id: 1,
     username: 'sourcemgr',
     password: 'sourcemgr',
-    role: 'SOURCE_MANAGER'
+    role: 'DQ_SOURCE_MANAGER'
   }, {
     id: 1,
     username: 'rulemgr',
     password: 'rulemgr',
-    role: 'RULE_MANAGER'
+    role: 'DQ_RULE_MANAGER'
   }, {
     id: 2,
     username: 'operation',
     password: 'operation',
-    role: 'OPERATION_ANALYST'
+    role: 'DQ_OPERATION'
   }, {
     id: 3,
     username: 'viewer',
     password: 'viewer',
-    role: 'VIEWER'
+    role: 'DQ_VIEWER'
   }];
   constructor(
     private fb: FormBuilder,
