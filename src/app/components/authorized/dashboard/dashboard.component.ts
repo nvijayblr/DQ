@@ -171,8 +171,8 @@ export class DashboardComponent implements OnInit {
       const formData: any = new FormData();
       formData.append('file[]', analysis.file);
       formData.append('data', JSON.stringify(payload));
-      this.isLoading = true;
-      this.loaderMsg = 'Saving Source data...';
+      //this.isLoading = true;
+      //this.loaderMsg = 'Saving Source data...';
       this.http.uploadSource(formData).subscribe((result: any) => {
          this.isLoading = false;
          if (result.errorMsg) {
