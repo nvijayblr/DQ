@@ -174,7 +174,7 @@ export class CreateSourceComponent implements OnInit {
      
      const firstParam: string = this.route.snapshot.queryParamMap.get('type');    
     this.selectedType = firstParam;
-    //console.log(this.selectedType);
+    console.log(this.selectedType);
      const mode: string = this.route.snapshot.queryParamMap.get('mode');
      this.edMode = mode;
      //console.log(mode);
@@ -325,13 +325,13 @@ export class CreateSourceComponent implements OnInit {
     this.sourceFile = file;
      const fName = file.name.split('.')[0];
      const fExt = file.name.split('.')[1];
-     //console.log(fExt.includes('xls'));
+     console.log(fExt);
      if (this.edMode === 'edit') {
       this.flError = false;
      }
      if (this.selectedType !== fExt) {
         //alert('Please Select a correct file type');
-        this.flError = true;
+        this.flError = false;
      } else {
       this.flError = true;
      }
