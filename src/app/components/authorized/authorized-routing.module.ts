@@ -18,6 +18,11 @@ const routes: Routes = [
         // canActivate: [AuthGaurd]
       },
       {
+        path: 'admin',
+        loadChildren: () => import('../admin/admin.module').then(m => m.AdminModule),
+        // canActivate: [AuthGaurd]
+      },
+      {
         path: 'delay-analysis',
         component: DelayAnalysisComponent,
         // canActivate: [AuthGaurd]

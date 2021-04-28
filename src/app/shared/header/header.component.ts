@@ -95,12 +95,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.isUserLoggedIn = this.authGuardService.isUserLoggedIn();
     this.isAdmin = this.authGuardService.isAdmin();
     this.user = this.authGuardService.getLoggedInUserDetails();
+    console.log(this.user);
     this.router.events.subscribe(params => {
       // console.log(this.router.routerState.root);
       // this.categoryName = params.categoryId;
     });
     this.subscription = this.messageService.getLoginMessage().subscribe(user => {
       this.user = user;
+      console.log(this.user);
     });
     this.commonSub = this.messageService.getCommonMessage().subscribe(message => {
       if (message.topic === 'logout') {

@@ -15,10 +15,6 @@ const routes: Routes = [
     loadChildren: () => import('./components/authorized/authorized.module').then(m => m.AuthorizedModule),
     canActivate: [AuthGaurd]
    }, {
-      path: 'admin',
-      loadChildren: () => import('./components/admin/admin.module').then(m => m.AdminModule),
-      // canActivate: [AuthGaurd]
-     }, {
     path: '', redirectTo: '', pathMatch: 'full'
   }, {
     path: '**', redirectTo: '', pathMatch: 'full'

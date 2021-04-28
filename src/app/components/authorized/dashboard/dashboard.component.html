@@ -6,12 +6,12 @@
           <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
           <div class="shrare-post">
             <!-- RULE ANALYST --> 
-            <mat-card class="border no-rounded list shrare-post" *ngIf="!showAnalysis && (role === 'DQ_MANAGER' || role === 'DQ_SOURCE_MANAGER' || role === 'DQ_RULE_MANAGER')">
+            <mat-card class="border no-rounded list shrare-post" *ngIf="!showAnalysis && (role === 'DQ_ADMIN' || role === 'DQ_MANAGER' || role === 'DQ_SOURCE_MANAGER' || role === 'DQ_RULE_MANAGER')">
               <div class="list flex-containers flex-start wrap no-margin dash-title">
                 <div class="list-item-2">
                   <h1 class="share-post-title no-margin">Source<span class="yellow"> List</span></h1>
                 </div>
-                <div class="list-item-2 text-right" *ngIf="role === 'DQ_MANAGER' || role === 'DQ_SOURCE_MANAGER'">
+                <div class="list-item-2 text-right" *ngIf="role === 'DQ_ADMIN' || role === 'DQ_MANAGER' || role === 'DQ_SOURCE_MANAGER'">
                   <!-- <button mat-stroked-button class="primary-btn-red" routerLink="/auth/analysis">New Rules</button> -->
                   <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn" routerLink="/auth/add-source-data">  New Source <mat-icon>open_in_new</mat-icon></button>
                 </div>
@@ -94,13 +94,13 @@
                                           <td style="padding-top:0px;">
                                        <div class="list flex-containers ml3" style="width:300px;">
                                           <div class="list-item-0 inlb">
-                                             <button type="button" class="button3d btnPush btnOrange addico" *ngIf="role === 'DQ_MANAGER' || role === 'DQ_SOURCE_MANAGER'"
+                                             <button type="button" class="button3d btnPush btnOrange addico" *ngIf="role === 'DQ_ADMIN' || role === 'DQ_MANAGER' || role === 'DQ_SOURCE_MANAGER'"
                                              (click)="editSourceData(data)" [disabled]="!data.sourceId" matTooltip="Edit Source">                                           
                                              <mat-icon>edit</mat-icon>  Edit Source
                                              </button>
                                           </div>
                                           <div class=" list-item-0  inlb">
-                                             <button type="button" class="button3d btnPush btnBlueGreen addico" *ngIf="role === 'DQ_MANAGER' || role === 'DQ_RULE_MANAGER'"
+                                             <button type="button" class="button3d btnPush btnBlueGreen addico" *ngIf="role === 'DQ_ADMIN' || role === 'DQ_MANAGER' || role === 'DQ_RULE_MANAGER'"
                                              (click)="createEditRuleset(data,'add')" matTooltip="Create Ruleset">
                                              <mat-icon>add</mat-icon>
                                              Create Ruleset
@@ -108,7 +108,7 @@
                                           </div>
                                          
                                           <div class=" list-item-0  inlb">
-                                             <button type="button" class="button3d btnPush btnOrange addico"  *ngIf="role === 'DQ_MANAGER' || role === 'DQ_RULE_MANAGER'"
+                                             <button type="button" class="button3d btnPush btnOrange addico"  *ngIf="role === 'DQ_ADMIN' || role === 'DQ_MANAGER' || role === 'DQ_RULE_MANAGER'"
                                              (click)="createEditRuleset(data,'edit')" [disabled]="!data.rulesetId"  matTooltip="Edit Ruleset">
                                              <mat-icon>edit</mat-icon> Edit Ruleset
                                              </button>

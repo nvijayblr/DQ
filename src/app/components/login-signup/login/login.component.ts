@@ -28,29 +28,9 @@ export class LoginComponent implements OnInit {
   isOtpGenerated = false;
   users = [{
     id: 1,
-    username: 'analyst',
-    password: 'analyst',
-    role: 'DQ_MANAGER'
-  }, {
-    id: 1,
-    username: 'sourcemgr',
-    password: 'sourcemgr',
-    role: 'DQ_SOURCE_MANAGER'
-  }, {
-    id: 1,
-    username: 'rulemgr',
-    password: 'rulemgr',
-    role: 'DQ_RULE_MANAGER'
-  }, {
-    id: 2,
-    username: 'operation',
-    password: 'operation',
-    role: 'DQ_OPERATION'
-  }, {
-    id: 3,
-    username: 'viewer',
-    password: 'viewer',
-    role: 'DQ_VIEWER'
+    userName: 'admin',
+    password: 'admin',
+    role: 'DQ_ADMIN'
   }];
   constructor(
     private fb: FormBuilder,
@@ -88,12 +68,14 @@ export class LoginComponent implements OnInit {
       return;
     }
     const user = this.loginForm.value;
-    // const loggedUser = this.users.filter((data) => {
-    //   return (data.username === user.username && data.password === user.password);
-    // });
-    // if (loggedUser.length) {
-    //   this.setLoginSessionAndRouting(loggedUser[0]);
-    // }
+    const loggedUser = this.users.filter((data) => {
+      return (data.userName === user.userName && data.password === user.password);
+    });
+    console.log(loggedUser);
+    if (loggedUser.length) {
+      this.setLoginSessionAndRouting(loggedUser[0]);
+      return;
+    }
     this.isLoading = true;
     this.http.loginRequest(this.loginForm.value).subscribe((result: any) => {
       this.isLoading = false;
@@ -101,9 +83,9 @@ export class LoginComponent implements OnInit {
         alert(result.errorMsg);
         return;
       }
-      const loggedUser = result.userdetail;
-      loggedUser.role = loggedUser.role[0];
-      this.setLoginSessionAndRouting(loggedUser);
+      const loggedUserDet = result.userdetail;
+      loggedUserDet.role = loggedUserDet.role[0];
+      this.setLoginSessionAndRouting(loggedUserDet);
     }, (error) => {
       this.isLoading = false;
       this.errorMessage = error.error.message ? error.error.message : 'Invalid username or passowrd.';
