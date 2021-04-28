@@ -384,18 +384,22 @@
   width: 410px;
 }
 .edit-link {
-  cursor: pointer;
-  text-align: right;
-  color: #59bfff;
-  display: inline;
-  float: right;
+   cursor: pointer;
+   text-align: right;
+   background: #433683;
+   display: inline;
+   float: right;
+   font-family: 'open-sans-condensed-bold';
+   color: #fff;
+   padding: 0 12px;
+   font-size: 12px;
 }
 .formula-preview {
   color: #000000;
-  padding: 12px 10px;
-  border: 1px solid #cbcbcb;
-  height: 46px;
-  background: #FFF;
+  padding: 8px 10px;
+  border-bottom: 1px solid #cbcbcb;
+  height: 48px;
+  background: #eee8f8;
   position: relative;
   top: 1px;
   overflow-x: auto;
@@ -404,9 +408,17 @@
   .operator {
     font-weight: bold;
     margin: 0 4px;
+    font-family: 'open-sans-condensed-bold';
+    position: relative;
+    top: 10px;
+    font-size: 12px;
   }
   .cde {
     font-weight: bold;
+    font-family: 'open-sans-condensed-bold';
+    position: relative;
+    top: 10px;
+    font-size: 12px;
   }
 }
 .preview .formula-preview {
