@@ -1,0 +1,24 @@
+.icon-primary-btn {
+  font-size: 12px;
+  height: 28px;
+  width: 28px;
+  line-height: 28px;
+  .mat-icon {
+    font-size: 16px;
+  }
+}
+.primary-btn-red {
+  &.btn-small {
+    font-size: 12px;
+    line-height: 27px;
+    padding: 0 10px !important;
+    height: 28px;
+    margin: 0 10px;
+  }
+}
+td.Active {
+  color: green;
+}
+td.Inactive {
+  color: red;
+}

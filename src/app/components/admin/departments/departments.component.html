@@ -1,1 +1,52 @@
-<p>departments works!</p>
+<section class="page-body home-bodys">
+  <div class="container">
+    <div class="home-wrapper">
+      <div class="clearfix my-community-body">
+        <div class="home-panel">
+          <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
+          <div class="shrare-post">
+            <mat-card class="border no-rounded list shrare-post">
+              <div class="list flex-containers flex-start wrap no-margin dash-title">
+                <div class="list-item-2">
+                  <h1 class="share-post-title no-margin">Departments<span class="yellow"> List</span></h1>
+                </div>
+                <div class="list-item-2 text-right">
+                  <button mat-stroked-button class="primary-btn-red" (click)="showAddEditDept({}, 'create');">New Department</button>
+                </div>
+              </div>
+
+              <!-- Dept List -->
+              <div class="analysis-preview">
+               <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Display Text</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                     <tr *ngFor="let dept of departmentsList; let i= index;" class="tableinner">
+                        <td>{{dept.Name}}</td>
+                        <td>{{dept.Display}}</td>
+                        <td class="{{dept.status}}">{{dept.status}}</td>
+                        <td>
+                          <button mat-icon-button color="primary" class="icon-primary-btn" matTooltip="Edit Department" (click)="showAddEditDept(dept, 'edit');">
+                            <mat-icon>edit</mat-icon>
+                          </button>
+                        </td>
+                     </tr>
+                   </tbody>
+               </table>
+              </div>
+            </mat-card>
+
+          </div>
+
+        </div>
+      </div> 
+    </div>
+
+  </div>
+</section>

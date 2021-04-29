@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
     id: 1,
     userName: 'admin',
     password: 'admin',
-    role: 'DQ_ADMIN'
+    role: 'ADMIN'
   }];
   constructor(
     private fb: FormBuilder,
@@ -68,14 +68,13 @@ export class LoginComponent implements OnInit {
       return;
     }
     const user = this.loginForm.value;
-    const loggedUser = this.users.filter((data) => {
-      return (data.userName === user.userName && data.password === user.password);
-    });
-    console.log(loggedUser);
-    if (loggedUser.length) {
-      this.setLoginSessionAndRouting(loggedUser[0]);
-      return;
-    }
+    // const loggedUser = this.users.filter((data) => {
+    //   return (data.userName === user.userName && data.password === user.password);
+    // });
+    // if (loggedUser.length) {
+    //   this.setLoginSessionAndRouting(loggedUser[0]);
+    //   return;
+    // }
     this.isLoading = true;
     this.http.loginRequest(this.loginForm.value).subscribe((result: any) => {
       this.isLoading = false;

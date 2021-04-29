@@ -16,7 +16,7 @@ export class CreateEditUserComponent implements OnInit {
   mode = '';
   roleList = [{
     label: 'Admin',
-    value: 'DQ_ADMIN',
+    value: 'ADMIN',
   }, {
     label: 'Rule Analyst',
     value: 'DQ_MANAGER',

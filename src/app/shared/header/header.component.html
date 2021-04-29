@@ -13,6 +13,7 @@
          
          <div class="col-xs-12 col-sm-4 col-md-9 text-right">
            <div class="main-nav">
+            
              <button mat-button routerLink="/auth/dashboard">
                <mat-icon matPrefix>bar_chart</mat-icon>
                Dashboard
@@ -38,16 +39,21 @@
                <mat-icon *ngIf="!user.path">account_circle</mat-icon>
              </button>
              <mat-menu #menu="matMenu" xPosition="before">
-              <button class="nav-category-item" mat-menu-item routerLink="/auth/admin/roles" *ngIf="user.role === 'DQ_ADMIN'">
+              <button class="nav-category-item" mat-menu-item routerLink="/auth/admin/roles" *ngIf="user.role === 'ADMIN'">
                 <mat-icon matPrefix>settings</mat-icon>Manage Roles
               </button>
-              <button class="nav-category-item" mat-menu-item routerLink="/auth/admin/departments" *ngIf="user.role === 'DQ_ADMIN'">
+              <button class="nav-category-item" mat-menu-item routerLink="/auth/admin/departments" *ngIf="user.role === 'ADMIN'">
                 <mat-icon matPrefix>settings</mat-icon>Manage Departments
               </button>
-              <button class="nav-category-item" mat-menu-item routerLink="/auth/admin/users" *ngIf="user.role === 'DQ_ADMIN'">
+              <button class="nav-category-item" mat-menu-item routerLink="/auth/admin/users" *ngIf="user.role === 'ADMIN'">
                 <mat-icon matPrefix>settings</mat-icon>Users List
               </button>
                <mat-divider></mat-divider>
+               <button class="nav-category-item" mat-menu-item style="height: auto;">
+                  <mat-icon>account_circle</mat-icon>
+                  {{user.name}} ({{user.role}}) <br>{{user.email}}
+                  
+               </button>               
                <button class="nav-category-item" mat-menu-item (click)="doLogout()"><mat-icon>exit_to_app</mat-icon>Logout</button>
              </mat-menu>
  

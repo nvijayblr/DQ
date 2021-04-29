@@ -14,16 +14,6 @@ export class HttpService  {
 
 
   private cancelGetPersonalDetailsReq$ = new Subject<void>();
-  private cancelGetAccountDetailsReq$ = new Subject<void>();
-  private cancelGetProfessionalDetails$ = new Subject<void>();
-  private cancelGetContactsList$ = new Subject<void>();
-  private cancelGetUserDealsList$ = new Subject<void>();
-  private cancelGetAssignedDealsList$ = new Subject<void>();
-  private cancelGetUsernameTypeahead$ = new Subject<void>();
-  private cancelGetDealsSearch$ = new Subject<void>();
-  private cancelGetProfessionsSearch$ = new Subject<void>();
-  private cancelGetServicesDetails$ = new Subject<void>();
-  private cancelGetUserTasksList$ = new Subject<void>();
 
   constructor(
     private http: HttpClient,
@@ -200,6 +190,16 @@ export class HttpService  {
   }
 
   // Users Management
+  loginRequest(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/signin`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
 
   getUsersList(): Observable<any> {
     return this.http.get<any>(`${this.rootUrl}/api/getUsers`).pipe(
@@ -222,8 +222,8 @@ export class HttpService  {
   }
 
 
-  loginRequest(payload): Observable<any> {
-    return this.http.post<any>(`${this.rootUrl}/api/signin`, payload).pipe(
+  getDepartmentsList(): Observable<any> {
+    return this.http.get<any>(`${this.rootUrl}/api/getDept`).pipe(
       tap((res) => {
       }),
       catchError(err => {
@@ -231,6 +231,37 @@ export class HttpService  {
       }),
     );
   }
+
+  createEditDepartment(payload, mode): Observable<any> {
+    return this.http[mode === 'create' ? 'post' : 'put'](`${this.rootUrl}/api/createDept`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    ) as any;
+  }
+
+  getRolesList(): Observable<any> {
+    return this.http.get<any>(`${this.rootUrl}/api/getRoles`).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  createEditRole(payload, mode): Observable<any> {
+    return this.http[mode === 'create' ? 'post' : 'put'](`${this.rootUrl}/api/createRole`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    ) as any;
+  }
+
 
 
 
