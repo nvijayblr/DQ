@@ -405,6 +405,9 @@
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
+  &.nob{
+   background:none !important;
+  }
   .operator {
     font-weight: bold;
     margin: 0 4px;
@@ -412,6 +415,14 @@
     position: relative;
     top: 10px;
     font-size: 12px;
+    &.alcap1{
+      font-weight: normal;
+      margin: 0 4px;
+      font-family: "open-sans-regular";
+      position: relative;
+      top: 0px;
+      font-size: 12px;
+    }
   }
   .cde {
     font-weight: bold;
@@ -419,6 +430,13 @@
     position: relative;
     top: 10px;
     font-size: 12px;
+    &.alcap{
+      font-weight: normal;
+      font-family:"open-sans-regular";
+      position: relative;
+      top: 0;
+      font-size: 12px;
+    }
   }
 }
 .preview .formula-preview {
