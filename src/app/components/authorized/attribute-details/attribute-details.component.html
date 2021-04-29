@@ -1,11 +1,13 @@
 <section class="page-body home-bodys">
    <div class="container">
+   <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
+
      <div class="profile-wrapper">
         <div class="flex-containers">
            <div class="list attribute-list">
             <mat-list role="list">
-               <mat-list-item role="listitem" *ngFor="let rule of rules;" (click)="loadStatistics(rule)" [class.active]="attrubute === rule.column">
-                  {{rule.column}}
+               <mat-list-item role="listitem" *ngFor="let profile of profiles;" (click)="changeProfile(profile)" [class.active]="attrubute === profile.column">
+                  {{profile.column}}
                </mat-list-item>
              </mat-list>
            </div>
@@ -16,16 +18,16 @@
                <h4 class="attr-tite">Attribute Summary <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
                <div class="records">
                   <span>records</span>
-                  {{statistics.Count}}
+                  {{profile.attributeSummary?.records}}
                </div>
                <div class="dotDiv"></div>
                <div class="records">
                   <span>Data type</span>
-                  {{statistics['Data Type']}}
+                  {{profile.attributeSummary?.dataType}}
                </div>
                </mat-card>
          
-               <mat-card>
+               <mat-card *ngIf="profile.frequncyAnalysis">
                   <h4 class="attr-tite">Frequency Groups <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
                   <table>
                      <tr>
@@ -33,73 +35,37 @@
                         <th>Count</th>
                         <th style="width:20%">&nbsp;</th>
                      </tr>
-                     <tr>
-                        <td>6</td>
-                        <td>5</td>
-                        <td><mat-progress-bar mode="determinate" value="5"></mat-progress-bar></td>
+                     <tr *ngFor="let frequency of profile.frequncyAnalysis">
+                        <td>{{frequency.unique_values}}</td>
+                        <td>{{frequency.counts}}</td>
+                        <td><mat-progress-bar mode="determinate" value="{{frequency.counts}}"></mat-progress-bar></td>
                      </tr>
-                     <tr>
-                        <td>2</td>
-                        <td>5</td>
-                        <td><mat-progress-bar mode="determinate" value="32"></mat-progress-bar></td>
-                     </tr>
-                     <tr>
-                        <td>1</td>
-                        <td>4</td>
-                        <td><mat-progress-bar mode="determinate" value="21"></mat-progress-bar></td>
-                     </tr>
-                     <tr>
-                        <td>11</td>
-                        <td>3</td>
-                        <td><mat-progress-bar mode="determinate" value="18"></mat-progress-bar></td>
-                     </tr>
-                     <tr>
-                        <td>345</td>
-                        <td>2</td>
-                        <td><mat-progress-bar mode="determinate" value="9"></mat-progress-bar></td>
-                     </tr>
-                     
                   </table>
                
                   
                </mat-card>
          
-               <mat-card>
+               <mat-card *ngIf="profile.LengthStatistics">
                   <h4 class="attr-tite">Length Statistics
                      <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
          
                      <div class="custom-slider">
-                        <ngx-slider [(value)]="minValue" [(highValue)]="maxValue" [options]="options"></ngx-slider>
+                        <ngx-slider [(value)]="profile.LengthStatistics.min" [(highValue)]="profile.LengthStatistics.max" [options]="options"></ngx-slider>
                      </div>
                </mat-card>
          
-               <mat-card>
-                  <h4 class="attr-tite">Frequency Analysis <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
+               <mat-card *ngIf="profile.patternAnalysis && profile.patternAnalysis.length">
+                  <h4 class="attr-tite">Pattern Analysis <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
                   <table>
                      <tr>
                         <th>Value</th>
                         <th>Count</th>
                         <th style="width:20%">&nbsp;</th>
                      </tr>
-                     <tr>
-                        <td>United States</td>
-                        <td>24,084</td>
-                        <td><mat-progress-bar mode="determinate" value="40"></mat-progress-bar></td>
-                     </tr>
-                     <tr>
-                        <td>United Kingdom</td>
-                        <td>14,129</td>
-                        <td><mat-progress-bar mode="determinate" value="10"></mat-progress-bar></td>
-                     </tr>
-                     <tr>
-                        <td>Switzerland</td>
-                        <td>482</td>
-                        <td><mat-progress-bar mode="determinate" value="30"></mat-progress-bar></td>
-                     </tr>
-                     <tr>
-                        <td>Sweden</td>
-                        <td>806</td>
-                        <td><mat-progress-bar mode="determinate" value="20"></mat-progress-bar></td>
+                     <tr *ngFor="let pattern of profile.patternAnalysis">
+                        <td>{{pattern.unique_values}}</td>
+                        <td>{{pattern.counts}}</td>
+                        <td><mat-progress-bar mode="determinate" value="{{pattern.counts}}"></mat-progress-bar></td>
                      </tr>
                   </table>
                </mat-card>
@@ -118,7 +84,7 @@
                   </div>                          
                </mat-card>
          
-               <mat-card class="wt3">
+               <mat-card class="wt3" *ngIf="profile.maskAnalysis && profile.maskAnalysis.length">
                   <h4 class="attr-tite">Mask Analysis <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
                   <table>
                      <tr>
@@ -127,37 +93,26 @@
                         <th style="width:20%">&nbsp;</th>
                      </tr>
          
-                     <tr>
-                        <td>LLLLLL LLLLLL</td>
-                        <td>24,084</td>
-                        <td><mat-progress-bar mode="determinate" value="30"></mat-progress-bar></td>
+                     <tr *ngFor="let mask of profile.maskAnalysis">
+                        <td>{{mask.unique_values}}</td>
+                        <td>{{mask.counts}}</td>
+                        <td><mat-progress-bar mode="determinate" value="{{mask.counts}}"></mat-progress-bar></td>
                      </tr>
-         
-                     <tr>
-                        <td>LLLLLL</td>
-                        <td>6,361</td>
-                        <td><mat-progress-bar mode="determinate" value="12"></mat-progress-bar></td>
-                     </tr>
-         
-                     <tr>
-                        <td>LLLLLLLLL</td>
-                        <td>24,084</td>
-                        <td><mat-progress-bar mode="determinate" value="21"></mat-progress-bar></td>
-                     </tr>
-         
-                     <tr>
-                        <td>LLL LLLLLLL</td>
-                        <td>1,158</td>
-                        <td><mat-progress-bar mode="determinate" value="5"></mat-progress-bar></td>
-                     </tr>
-         
-                     <tr>
-                        <td>LLLLLL LLLLLL</td>
-                        <td>472</td>
-                        <td><mat-progress-bar mode="determinate" value="8"></mat-progress-bar></td>
-                     </tr>
-                     </table>
+                  </table>
                </mat-card>
+
+               <mat-card class="wt3" *ngIf="profile.staticalAnalysis">
+                  <h4 class="attr-tite">Statistics <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
+                  <table class="table">
+                     <tr class="cpt">
+                     <td class="strong" *ngFor="let stats of profile.staticalAnalysis | keyvalue">{{stats.key}}</td>
+                     </tr>
+                     <tr class="cpt1">
+                     <td *ngFor="let stats of profile.staticalAnalysis | keyvalue">{{stats.value}}</td>
+                     </tr>
+                  </table>
+               </mat-card>
+
             </div>                      
          </div>
         </div>

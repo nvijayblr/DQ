@@ -16,11 +16,13 @@ export class AttributeDetailsComponent implements OnInit {
    isLoading = false;
    loaderMsg = '';
    source: any = {};
+   profiles: any = [];
+   profile: any = {};
 
    constructor(private messageService: MessageService, private http: HttpService, ) {
       const analysis = this.messageService.getSource();
       this.source = analysis.source ? analysis.source : {};
-      this.loadStatistics(this.source);
+      this.loadProfile(this.source);
    }
   highcharts = Highcharts;
   chartOptions = {
@@ -100,14 +102,23 @@ export class AttributeDetailsComponent implements OnInit {
   ngOnInit() {
   }
 
-  loadStatistics(source) {
-     console.log(source);
+  changeProfile(profile) {
+     this.profile = profile;
+     this.attrubute = profile.column;
+     console.log(this.profile);
+  }
+
+  loadProfile(source) {
      this.isLoading = true;
-     this.loaderMsg = 'Loading Sources...';
+     this.loaderMsg = 'Loading Profile...';
      const payload = {
       sourcepath: source.templateSourcePath
    };
      this.http.getProfiles(payload).subscribe((result: any) => {
+      this.profiles = result.profile ? result.profile : [];
+      if (this.profiles.length) {
+         this.changeProfile(this.profiles[0]);
+      }
       this.isLoading = false;
    }, (error) => {
       this.isLoading = false;
