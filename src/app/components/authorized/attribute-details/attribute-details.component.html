@@ -38,7 +38,7 @@
                      <tr *ngFor="let frequency of profile.frequncyAnalysis">
                         <td>{{frequency.unique_values}}</td>
                         <td>{{frequency.counts}}</td>
-                        <td><mat-progress-bar mode="determinate" value="{{frequency.counts}}"></mat-progress-bar></td>
+                        <td><mat-progress-bar mode="determinate" value="{{frequency.counts + 100}}"></mat-progress-bar></td>
                      </tr>
                   </table>
                
@@ -72,7 +72,7 @@
          
             </div>
             <div class="rgt-attr">
-               <mat-card class="wt2">
+               <!-- <mat-card class="wt2">
                   <h4 class="attr-tite">Count <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
                   <div class="records">
                      <highcharts-chart
@@ -82,7 +82,7 @@
                      </highcharts-chart>
          
                   </div>                          
-               </mat-card>
+               </mat-card> -->
          
                <mat-card class="wt3" *ngIf="profile.maskAnalysis && profile.maskAnalysis.length">
                   <h4 class="attr-tite">Mask Analysis <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
@@ -101,7 +101,7 @@
                   </table>
                </mat-card>
 
-               <mat-card class="wt3" *ngIf="profile.staticalAnalysis">
+               <mat-card class="wt3 os" *ngIf="profile.staticalAnalysis">
                   <h4 class="attr-tite">Statistics <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
                   <table class="table">
                      <tr class="cpt">
