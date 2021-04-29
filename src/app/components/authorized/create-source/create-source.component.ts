@@ -111,6 +111,8 @@ export class CreateSourceComponent implements OnInit {
   refrowData: any = [];
    refcolumnDefs: any = [];
    selectedType;
+   flError: boolean = true;
+   edMode;
 
   constructor(
     private fb: FormBuilder,
@@ -172,7 +174,10 @@ export class CreateSourceComponent implements OnInit {
      
      const firstParam: string = this.route.snapshot.queryParamMap.get('type');    
     this.selectedType = firstParam;
-    //console.log(this.selectedType);
+    console.log(this.selectedType);
+     const mode: string = this.route.snapshot.queryParamMap.get('mode');
+     this.edMode = mode;
+     //console.log(mode);
   }
 
   intiFormArrays(field, reference: any = {}) {
@@ -315,26 +320,34 @@ export class CreateSourceComponent implements OnInit {
     this.gotoStepper(1);
   }
 
-   flError:boolean = true;
+ showGrid:boolean = true;
   onSourceFileSelected(file) {
     this.sourceFile = file;
      const fName = file.name.split('.')[0];
      const fExt = file.name.split('.')[1];
-     console.log(fExt.includes('xls'));
+     console.log(fExt);
+     if (this.edMode === 'edit') {
+      this.flError = false;
+     }
      if (this.selectedType !== fExt) {
         //alert('Please Select a correct file type');
         this.flError = false;
+        this.showGrid = false;
      } else {
-      this.flError = true;
+        this.flError = true;
+        this.showGrid = true;
      }
 
      if (this.selectedType === 'xlsx') {
         if (fExt.includes('xls')) {
-         this.flError = true;
+           this.flError = true;
+           this.showGrid = false;
         } else {
-         this.flError = false;
+           this.flError = false;
+           this.showGrid = false;
         }
      }
+     console.log(this.showGrid);
    //   console.log(this.flError);
    //   this.selectedType;
    //   console.log(fName);

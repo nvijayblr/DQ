@@ -384,29 +384,59 @@
   width: 410px;
 }
 .edit-link {
-  cursor: pointer;
-  text-align: right;
-  color: #59bfff;
-  display: inline;
-  float: right;
+   cursor: pointer;
+   text-align: right;
+   background: #433683;
+   display: inline;
+   float: right;
+   font-family: 'open-sans-condensed-bold';
+   color: #fff;
+   padding: 0 12px;
+   font-size: 12px;
 }
 .formula-preview {
   color: #000000;
-  padding: 12px 10px;
-  border: 1px solid #cbcbcb;
-  height: 46px;
-  background: #FFF;
+  padding: 8px 10px;
+  border-bottom: 1px solid #cbcbcb;
+  height: 48px;
+  background: #eee8f8;
   position: relative;
   top: 1px;
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
+  &.nob{
+   background:none !important;
+  }
   .operator {
     font-weight: bold;
     margin: 0 4px;
+    font-family: 'open-sans-condensed-bold';
+    position: relative;
+    top: 10px;
+    font-size: 12px;
+    &.alcap1{
+      font-weight: normal;
+      margin: 0 4px;
+      font-family: "open-sans-regular";
+      position: relative;
+      top: 0px;
+      font-size: 12px;
+    }
   }
   .cde {
     font-weight: bold;
+    font-family: 'open-sans-condensed-bold';
+    position: relative;
+    top: 10px;
+    font-size: 12px;
+    &.alcap{
+      font-weight: normal;
+      font-family:"open-sans-regular";
+      position: relative;
+      top: 0;
+      font-size: 12px;
+    }
   }
 }
 .preview .formula-preview {
@@ -433,6 +463,12 @@
    transition: all 0.2s ;
    font-family: "open-sans-condensed-bold"!important;
    cursor: pointer;
+   &:disabled{
+      background: gray;
+      box-shadow: 0px 5px 0px 0px #484848;
+      opacity: 0.5;
+      cursor: not-allowed;
+   }
  }
  
  .btnBlueGreen {
@@ -479,6 +515,8 @@
       &:disabled{
          background: gray;
          box-shadow: 0px 5px 0px 0px #484848;
+         opacity: 0.5;
+         cursor: not-allowed;
       }
    }
    &.compBtn{
@@ -911,13 +949,34 @@ tr:nth-child(odd) {background: #f0f7f7}
 }
 .mat-expansion-panel .mat-expansion-panel-header.cdk-keyboard-focused:not([aria-disabled=true]), .mat-expansion-panel .mat-expansion-panel-header.cdk-program-focused:not([aria-disabled=true]), .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:hover:not([aria-disabled=true]){background : white !important}
 
-// ::ng-deep .mat-expansion-panel-body {
-//    padding: 0 0px 0px 0px!important;
-// }
+.accordions{
+   ::ng-deep .mat-expansion-panel-body {
+          padding: 0 0px 0px 0px!important;
+      }
+}
+
 
 .mt2{
    margin-top: 0px !important;
 }
-.mm{
+.mm2{
    margin-top: 30px !important;
 }
+
+.corMap {
+   ::ng-deep .highcharts-root{
+      width: 1460px!important;
+   }
+}
+
+.spec{
+   display: inline-block;
+   margin-right: 2px;
+   background: #433683;
+   margin-bottom: 4px;
+   padding: 0 7px;
+   font-size: 12px;
+   color: #fff;
+}
+
+

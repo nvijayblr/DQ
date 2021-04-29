@@ -39,7 +39,8 @@ export class HeatMapComponent implements OnInit {
      colorAxis : {
         min: 0,
         minColor: '#FFFFFF',
-        maxColor: Highcharts.getOptions().colors[0]
+        maxColor: '#433683'
+        //maxColor: Highcharts.getOptions().colors[0]
      },
      legend : {
         align: 'right',
