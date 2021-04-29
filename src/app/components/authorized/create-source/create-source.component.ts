@@ -320,7 +320,7 @@ export class CreateSourceComponent implements OnInit {
     this.gotoStepper(1);
   }
 
- 
+ showGrid:boolean = true;
   onSourceFileSelected(file) {
     this.sourceFile = file;
      const fName = file.name.split('.')[0];
@@ -332,17 +332,22 @@ export class CreateSourceComponent implements OnInit {
      if (this.selectedType !== fExt) {
         //alert('Please Select a correct file type');
         this.flError = false;
+        this.showGrid = false;
      } else {
-      this.flError = true;
+        this.flError = true;
+        this.showGrid = true;
      }
 
      if (this.selectedType === 'xlsx') {
         if (fExt.includes('xls')) {
-         this.flError = true;
+           this.flError = true;
+           this.showGrid = false;
         } else {
-         this.flError = false;
+           this.flError = false;
+           this.showGrid = false;
         }
      }
+     console.log(this.showGrid);
    //   console.log(this.flError);
    //   this.selectedType;
    //   console.log(fName);
