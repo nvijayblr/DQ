@@ -24,6 +24,39 @@ import * as moment from 'moment';
   styleUrls: ['./analysis.component.scss']
 })
 export class AnalysisComponent implements OnInit {
+
+  constructor(
+    private fb: FormBuilder,
+    private dialog: MatDialog,
+    private route: ActivatedRoute,
+    private http: HttpService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private authGuardService: AuthGuardService,
+    private messageService: MessageService) {
+      this.appConfig = appConfig;
+      this.route.queryParams.subscribe(params => {
+         this.sourceId = params.sourceId;
+         this.mode = params.mode;
+         this.rulesetId = params.rulesetId;
+         if (!params.sourceId) {
+          localStorage.removeItem('analysis');
+        }
+      });
+    }
+
+//   Analysis View
+// - By Column Selection (Single Column, Multiple Column)
+// - Chart View
+// - Chart Drill View
+// - Highliht settings
+
+// - Ruleset - start and end
+// - Reference CDE (REF1 - COL_NAME)
+
+
+
+  get afControls(): any { return this.analysisForm.controls; }
    @ViewChild('owlCar', { static: false }) owlCar;
    @ViewChild(MatAccordion , { static: true }) accordion: MatAccordion;
    isLinear = true;
@@ -41,7 +74,7 @@ export class AnalysisComponent implements OnInit {
   fileTypeErr = false;
    uniqueName = false;
    startDateAdd: any;
-   endDateAdd:any;
+   endDateAdd: any;
 
   OwlCategoryOptions: OwlOptions = {
     loop: false,
@@ -277,30 +310,12 @@ export class AnalysisComponent implements OnInit {
   isPreviewLoading = false;
   defaultColDefs = { sortable: true, filter: true, minWidth: 180, resizable: true };
   rowData: any = [];
-   columnDefs: any = [];
-   
+  columnDefs: any = [];
+
    minDate = moment().format('YYYY-MM-DD');
    maxDate = moment(moment().add(6, 'months')).format('YYYY-MM-DD');
 
-  constructor(
-    private fb: FormBuilder,
-    private dialog: MatDialog,
-    private route: ActivatedRoute,
-    private http: HttpService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private authGuardService: AuthGuardService,
-    private messageService: MessageService) {
-      this.appConfig = appConfig;
-      this.route.queryParams.subscribe(params => {
-         this.sourceId = params.sourceId;
-         this.mode = params.mode;
-         this.rulesetId = params.rulesetId;
-         if (!params.sourceId) {
-          localStorage.removeItem('analysis');
-        }
-      });
-    }
+   visibleIndex = -1;
 
   ngOnInit() {
     this.isUserLoggedIn = this.authGuardService.isUserLoggedIn();
@@ -320,13 +335,13 @@ export class AnalysisComponent implements OnInit {
     });
 
     const analysis = this.messageService.getAnalysis();
-    //const targetDate = moment(moment().add(60, 'days')).format('YYYY-MM-DD');
-     this.startDateAdd = this.minDate;
-     this.endDateAdd = this.maxDate;
+    // const targetDate = moment(moment().add(60, 'days')).format('YYYY-MM-DD');
+    this.startDateAdd = this.minDate;
+    this.endDateAdd = this.maxDate;
    //   console.log(this.startDateAdd);
    //   console.log(this.endDateAdd);
-     this.analysisForm = this.fb.group({
-       
+    this.analysisForm = this.fb.group({
+
       sourceId: [{value: analysis.sourceId || '', disabled: true}],
       name: [{value: analysis.source.sourceDataName || '', disabled: true}, [Validators.required, Validators.maxLength(100)]],
       sourceFilename: [analysis.source.sourceFileName || ''],
@@ -340,9 +355,9 @@ export class AnalysisComponent implements OnInit {
       columnRules: this.fb.array([]),
     });
 
-     console.log(analysis);
-     this.sourceNameText = analysis.source.sourceDataName;
-     //console.log(this.sourceNameText);
+    console.log(analysis);
+    this.sourceNameText = analysis.source.sourceDataName;
+     // console.log(this.sourceNameText);
 
     if (analysis) {
       this.selectedSource = analysis;
@@ -383,14 +398,14 @@ export class AnalysisComponent implements OnInit {
     if (this.mode === 'edit') {
       this.columnsForm.controls.refernceColumns.setValue(this.selectedReferenceColumns);
      }
-     
-     this.minDate = moment().format('YYYY-MM-DD');
+
+    this.minDate = moment().format('YYYY-MM-DD');
     this.maxDate = moment(moment().add(6, 'months')).format('YYYY-MM-DD');
-     this.startDateAdd = this.minDate;
-     this.endDateAdd = moment(moment(this.startDateAdd).add(6, 'months')).format('YYYY-MM-DD');
+    this.startDateAdd = this.minDate;
+    this.endDateAdd = moment(moment(this.startDateAdd).add(6, 'months')).format('YYYY-MM-DD');
   }
 
-   intiFormArrays(field, value: any = {}) {      
+   intiFormArrays(field, value: any = {}) {
     if (field === 'referenceData') {
       if (!value.availableRefColumns) {
         value.availableRefColumns = [];
@@ -427,19 +442,6 @@ export class AnalysisComponent implements OnInit {
       });
     }
   }
-
-//   Analysis View
-// - By Column Selection (Single Column, Multiple Column)
-// - Chart View
-// - Chart Drill View
-// - Highliht settings
-
-// - Ruleset - start and end
-// - Reference CDE (REF1 - COL_NAME)
-
-
-
-  get afControls(): any { return this.analysisForm.controls; }
 
   initRulesFormArray() {
     // TODO: Start Needs to update the logic here.
@@ -674,7 +676,7 @@ export class AnalysisComponent implements OnInit {
   }
 
   initFormulaEditor(ruleList) {
-     console.log(ruleList);     
+     console.log(ruleList);
   }
 
   loadSourcePreview() {
@@ -704,14 +706,12 @@ export class AnalysisComponent implements OnInit {
       this.isPreviewLoading = false;
     });
    }
-   
-   visibleIndex = -1;
-   showEditDetails(ind) {     
+   showEditDetails(ind) {
       if (this.visibleIndex === ind) {
          this.visibleIndex = -1;
        } else {
          this.visibleIndex = ind;
-       }      
+       }
    }
 
 }

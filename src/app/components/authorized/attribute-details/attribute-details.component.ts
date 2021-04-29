@@ -20,9 +20,6 @@ export class AttributeDetailsComponent implements OnInit {
    profile: any = {};
 
    constructor(private messageService: MessageService, private http: HttpService, ) {
-      const analysis = this.messageService.getSource();
-      this.source = analysis.source ? analysis.source : {};
-      this.loadProfile(this.source);
    }
   highcharts = Highcharts;
   chartOptions = {
@@ -100,6 +97,14 @@ export class AttributeDetailsComponent implements OnInit {
   };
 
   ngOnInit() {
+   this.isLoading = true;
+   setTimeout(() => {
+      const analysis = this.messageService.getSource();
+      this.source = analysis.source ? analysis.source : {};
+      if (this.source) {
+         this.loadProfile(this.source);
+      }
+   }, 100);
   }
 
   changeProfile(profile) {
