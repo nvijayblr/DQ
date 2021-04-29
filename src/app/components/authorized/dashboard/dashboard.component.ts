@@ -171,8 +171,8 @@ export class DashboardComponent implements OnInit {
       const formData: any = new FormData();
       formData.append('file[]', analysis.file);
       formData.append('data', JSON.stringify(payload));
-      //this.isLoading = true;
-      //this.loaderMsg = 'Saving Source data...';
+      // this.isLoading = true;
+      // this.loaderMsg = 'Saving Source data...';
       this.http.uploadSource(formData).subscribe((result: any) => {
          this.isLoading = false;
          if (result.errorMsg) {
@@ -361,6 +361,7 @@ export class DashboardComponent implements OnInit {
    // }
 
    launchProfileView(sourceData): void {
+      console.log(sourceData)
       localStorage.setItem('dq-source-data', JSON.stringify(sourceData));
       this.router.navigate(
          [`auth/attribute-details-data`],
@@ -375,7 +376,6 @@ export class DashboardComponent implements OnInit {
       });
       dialogRef.afterClosed().subscribe(result => {
          if (result) {
-            console.log(result);
             this.settings = result;
          }
       });

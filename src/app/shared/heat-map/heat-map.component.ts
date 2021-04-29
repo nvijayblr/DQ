@@ -15,32 +15,28 @@ export class HeatMapComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
-  }
-   
   highcharts = Highcharts;
-  chartOptions = {   
+  chartOptions = {
      chart : {
         type: 'heatmap',
         marginTop: 40,
         marginBottom: 80
      },
      title : {
-        text: 'Sales per employee per weekday'   
+        text: 'Sales per employee per weekday'
      },
      xAxis : {
-        categories: ['Alexander', 'Marie', 'Maximilian', 'Sophia', 'Lukas',
-           'Maria', 'Leon', 'Anna', 'Tim', 'Laura']
+        categories: ['Alexander', 'Marie', 'Maximilian', 'Sophia', 'Lukas', 'Maria', 'Leon', 'Anna', 'Tim', 'Laura']
      },
      yAxis : {
-        categories: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        categories: [],
            title: null
      },
      colorAxis : {
         min: 0,
         minColor: '#FFFFFF',
         maxColor: '#433683'
-        //maxColor: Highcharts.getOptions().colors[0]
+        // maxColor: Highcharts.getOptions().colors[0]
      },
      legend : {
         align: 'right',
@@ -51,7 +47,7 @@ export class HeatMapComponent implements OnInit {
         symbolHeight: 280
      },
      tooltip : {
-        formatter: function () {
+        formatter() {
            return '<b>' + this.series.xAxis.categories[this.point.x] +
               '</b> sold <br><b>' +
               this.point.value +
@@ -72,13 +68,16 @@ export class HeatMapComponent implements OnInit {
         [7, 0, 31], [7, 1, 1], [7, 2, 82], [7, 3, 32], [7, 4, 30],
         [8, 0, 85], [8, 1, 97], [8, 2, 123], [8, 3, 64], [8, 4, 84],
         [9, 0, 47], [9, 1, 114], [9, 2, 31], [9, 3, 48], [9, 4, 91]],
-        
+
         dataLabels: {
            enabled: true,
            color: '#000000'
         }
      }]
-    
+
   };
+
+  ngOnInit() {
+  }
 
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { Options } from '@angular-slider/ngx-slider';
 import { MessageService } from 'src/app/services/message.service';
+import { HttpService } from 'src/app/services/http-service.service';
 
 @Component({
   selector: 'app-attribute-details',
@@ -12,13 +13,14 @@ export class AttributeDetailsComponent implements OnInit {
    rules: any = [];
    statistics: any = {};
    attrubute: any = '';
+   isLoading = false;
+   loaderMsg = '';
+   source: any = {};
 
-   constructor(private messageService: MessageService) {
+   constructor(private messageService: MessageService, private http: HttpService, ) {
       const analysis = this.messageService.getSource();
-      this.rules = (analysis.rules && analysis.rules.length) ? analysis.rules[0].ruleset : [];
-      if (this.rules.length) {
-         this.loadStatistics(this.rules[0]);
-      }
+      this.source = analysis.source ? analysis.source : {};
+      this.loadStatistics(this.source);
    }
   highcharts = Highcharts;
   chartOptions = {
@@ -98,10 +100,18 @@ export class AttributeDetailsComponent implements OnInit {
   ngOnInit() {
   }
 
-  loadStatistics(data) {
-   this.attrubute = data.column;
-   this.statistics = (data.statistics && data.statistics.length) ? data.statistics[0] : {};
-   console.log(this.statistics);
+  loadStatistics(source) {
+     console.log(source);
+     this.isLoading = true;
+     this.loaderMsg = 'Loading Sources...';
+     const payload = {
+      sourcepath: source.templateSourcePath
+   };
+     this.http.getProfiles(payload).subscribe((result: any) => {
+      this.isLoading = false;
+   }, (error) => {
+      this.isLoading = false;
+   });
   }
 
 }

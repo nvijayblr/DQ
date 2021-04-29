@@ -189,6 +189,16 @@ export class HttpService  {
     );
   }
 
+  getProfiles(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/profile`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
   // Users Management
   loginRequest(payload): Observable<any> {
     return this.http.post<any>(`${this.rootUrl}/api/signin`, payload).pipe(
