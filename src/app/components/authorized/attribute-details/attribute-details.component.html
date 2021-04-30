@@ -27,7 +27,7 @@
                </div>
                </mat-card>
          
-               <mat-card *ngIf="profile.frequncyAnalysis">
+               <mat-card *ngIf="profile.frequncyAnalysis && profile.frequncyAnalysis.length">
                   <h4 class="attr-tite">Frequency Groups <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
                   <table>
                      <tr>
@@ -38,7 +38,7 @@
                      <tr *ngFor="let frequency of profile.frequncyAnalysis">
                         <td>{{frequency.unique_values}}</td>
                         <td>{{frequency.counts}}</td>
-                        <td><mat-progress-bar mode="determinate" value="{{frequency.counts + 100}}"></mat-progress-bar></td>
+                        <td><mat-progress-bar mode="determinate" [value]="(frequency.counts / profile.frequncyAnalysis[0].counts) * 100"></mat-progress-bar></td>
                      </tr>
                   </table>
                
@@ -50,6 +50,7 @@
                      <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
          
                      <div class="custom-slider">
+                        {{profile.LengthStatistics.min}}
                         <ngx-slider [(value)]="profile.LengthStatistics.min" [(highValue)]="profile.LengthStatistics.max" [options]="options"></ngx-slider>
                      </div>
                </mat-card>
@@ -65,7 +66,7 @@
                      <tr *ngFor="let pattern of profile.patternAnalysis">
                         <td>{{pattern.unique_values}}</td>
                         <td>{{pattern.counts}}</td>
-                        <td><mat-progress-bar mode="determinate" value="{{pattern.counts}}"></mat-progress-bar></td>
+                        <td><mat-progress-bar mode="determinate" [value]="(pattern.counts / profile.patternAnalysis[0].counts) * 100"></mat-progress-bar></td>
                      </tr>
                   </table>
                </mat-card>
@@ -96,7 +97,7 @@
                      <tr *ngFor="let mask of profile.maskAnalysis">
                         <td>{{mask.unique_values}}</td>
                         <td>{{mask.counts}}</td>
-                        <td><mat-progress-bar mode="determinate" value="{{mask.counts}}"></mat-progress-bar></td>
+                        <td><mat-progress-bar mode="determinate" [value]="(mask.counts / profile.maskAnalysis[0].counts) * 100"></mat-progress-bar></td>
                      </tr>
                   </table>
                </mat-card>

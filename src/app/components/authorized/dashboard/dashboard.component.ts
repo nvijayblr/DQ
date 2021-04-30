@@ -331,6 +331,7 @@ export class DashboardComponent implements OnInit {
          rules
       };
       localStorage.setItem('analysis', JSON.stringify(analysis));
+      localStorage.setItem('dq-source-data', JSON.stringify(analysis));
       this.router.navigate(
          [`auth/analysis`],
          { queryParams: { sourceId: analysis.sourceId, rulesetId: analysis.rulesetId, mode: analysis.mode } }
@@ -361,7 +362,7 @@ export class DashboardComponent implements OnInit {
    // }
 
    launchProfileView(sourceData): void {
-      console.log(sourceData)
+      console.log(sourceData);
       localStorage.setItem('dq-source-data', JSON.stringify(sourceData));
       this.router.navigate(
          [`auth/attribute-details-data`],

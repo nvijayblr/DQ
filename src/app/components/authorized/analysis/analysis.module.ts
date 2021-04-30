@@ -13,9 +13,8 @@ import { AnalysisComponent } from './analysis.component';
   imports: [
     CommonModule,
     AnalysisRoutingModule,
-     SharedModule,
-     AuthorizedModule
-    
+    SharedModule,
+    AuthorizedModule
   ]
 })
 export class AnalysisModule { }

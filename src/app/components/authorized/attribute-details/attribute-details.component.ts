@@ -104,7 +104,7 @@ export class AttributeDetailsComponent implements OnInit {
       if (this.source) {
          this.loadProfile(this.source);
       }
-   }, 100);
+   }, 10);
   }
 
   changeProfile(profile) {

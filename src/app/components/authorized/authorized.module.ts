@@ -12,10 +12,18 @@ import { DelayAnalysisComponent } from './delay-analysis/delay-analysis.componen
 import { CreateSourceComponent } from './create-source/create-source.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AttributeDetailsComponent } from './attribute-details/attribute-details.component';
+import { CorrelationDetailsComponent } from './correlation-details/correlation-details.component';
 
 
 @NgModule({
-  declarations: [AuthorizedComponent, DelayAnalysisComponent, CreateSourceComponent, ProfileComponent, AttributeDetailsComponent],
+  declarations: [
+    AuthorizedComponent,
+    DelayAnalysisComponent,
+    CreateSourceComponent,
+    ProfileComponent,
+    AttributeDetailsComponent,
+    CorrelationDetailsComponent
+  ],
    imports: [
       HighchartsChartModule,
       NgxSliderModule,
@@ -23,7 +31,7 @@ import { AttributeDetailsComponent } from './attribute-details/attribute-details
     AuthorizedRoutingModule,
      SharedModule
    ],
-   exports: [AttributeDetailsComponent]
+   exports: [AttributeDetailsComponent, CorrelationDetailsComponent]
 
 })
 export class AuthorizedModule { }
