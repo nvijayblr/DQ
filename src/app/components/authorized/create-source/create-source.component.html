@@ -70,7 +70,7 @@
                                   <span class="sub-title">Start Date<span class="red">*</span></span>
                                   <mat-form-field appearance="fill">
                                     <mat-label>Start Date</mat-label>
-                                    <input matInput [matDatepicker]="frompicker" formControlName="settingsDate" [(ngModel)]="sourceSettings.uploadDate" autocomplete="off">
+                                    <input matInput [matDatepicker]="frompicker" formControlName="settingsDate" [(ngModel)]="sourceSettings.uploadDate" autocomplete="off" (click)="frompicker.open()">
                                     <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
                                     <mat-datepicker #frompicker></mat-datepicker>
                                   </mat-form-field>

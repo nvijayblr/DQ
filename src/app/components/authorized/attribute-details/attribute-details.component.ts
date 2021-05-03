@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { Options } from '@angular-slider/ngx-slider';
 import { MessageService } from 'src/app/services/message.service';
@@ -10,6 +10,7 @@ import { HttpService } from 'src/app/services/http-service.service';
   styleUrls: ['./attribute-details.component.scss']
 })
 export class AttributeDetailsComponent implements OnInit {
+   @ViewChild('stickyMenu', {static: false}) menuElement: ElementRef;
    rules: any = [];
    statistics: any = {};
    attrubute: any = '';
@@ -18,6 +19,11 @@ export class AttributeDetailsComponent implements OnInit {
    source: any = {};
    profiles: any = [];
    profile: any = {};
+
+   
+
+   sticky: boolean = false;
+   elementPosition: any;
 
    constructor(private messageService: MessageService, private http: HttpService, ) {
    }
@@ -128,6 +134,20 @@ export class AttributeDetailsComponent implements OnInit {
    }, (error) => {
       this.isLoading = false;
    });
-  }
+   }
+   
+   // ngAfterViewInit(){
+   //    this.elementPosition = this.menuElement.nativeElement.offsetTop;
+   // }
+   
+   // @HostListener('window:scroll', ['$event'])
+   //  handleScroll(){
+   //    const windowScroll = window.pageYOffset;
+   //    if(windowScroll >= this.elementPosition){
+   //      this.sticky = true;
+   //    } else {
+   //      this.sticky = false;
+   //    }
+   //  }
 
 }

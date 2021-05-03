@@ -483,3 +483,17 @@ table{
  .os{
     overflow: scroll !important;
  }
+
+ .sticky{
+   position: fixed;
+   top: 0;
+   overflow: hidden;
+   z-index: 10;
+   width: 80%;
+   left: 250px;
+   min-height:800px;
+ }
+ 
+ .content{
+   height: 200vh;
+ }

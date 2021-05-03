@@ -9,6 +9,7 @@ import { appConfig } from '../../../app.config';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { S } from '@angular/cdk/keycodes';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-create-source',
@@ -16,7 +17,7 @@ import { S } from '@angular/cdk/keycodes';
   styleUrls: ['./create-source.component.scss']
 })
 export class CreateSourceComponent implements OnInit {
-
+  minDate = moment().format('YYYY-MM-DD');
   multiSourceList = [{
     label: 'AA',
     value: 'AA',
@@ -76,8 +77,8 @@ export class CreateSourceComponent implements OnInit {
   sourceSettings = {
     isMuliSourceData: 'true',
     multiSourceOptions: [],
-    frequency: '',
-    uploadDate: '',
+    frequency: 'Monthly',
+    uploadDate: this.minDate,
     uploadTime: '',
     department: []
   };
@@ -131,6 +132,7 @@ export class CreateSourceComponent implements OnInit {
           localStorage.removeItem('dq-source-data');
         }
       });
+     
     }
 
   ngOnInit() {
@@ -178,6 +180,7 @@ export class CreateSourceComponent implements OnInit {
      const mode: string = this.route.snapshot.queryParamMap.get('mode');
      this.edMode = mode;
      //console.log(mode);
+     this.minDate = moment().format('YYYY-MM-DD');
   }
 
   intiFormArrays(field, reference: any = {}) {

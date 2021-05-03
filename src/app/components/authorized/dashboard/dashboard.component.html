@@ -319,13 +319,30 @@
                   </div>
                 </div>
               </div>
-              <div class="analysis-preview">
-                 <app-cylinder-chart 
+              <mat-tab-group mat-align-tabs="start"  animationDuration="0ms">
+               <mat-tab label="2D Map">
+                  <app-cylinder-chart 
                     *ngIf="analyseKeyData.length && isLoadChart"
                     [analysisKeys]="analysisKeys"
                     [chartData]="analyseKeyChartData"
-                    [chartType]="'column'" >
+                    [chartType]="'column'" 
+                    [options3d]= false>
                 </app-cylinder-chart>
+               </mat-tab>
+               <mat-tab label="3D Map">
+                  <app-cylinder-chart 
+                  *ngIf="analyseKeyData.length && isLoadChart"
+                  [analysisKeys]="analysisKeys"
+                  [chartData]="analyseKeyChartData"
+                  [chartType]="'column'" 
+                  [options3d]= true>
+                  </app-cylinder-chart>
+               </mat-tab>
+              </mat-tab-group>
+              <div class="analysis-preview">
+                 
+
+               
 
                 <div class="actions-wrapper">
                   <button  class="horizontal" (click)="openHighlightSettingsDialog()"> 

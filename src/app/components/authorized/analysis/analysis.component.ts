@@ -399,10 +399,18 @@ export class AnalysisComponent implements OnInit {
       this.columnsForm.controls.refernceColumns.setValue(this.selectedReferenceColumns);
      }
 
-    this.minDate = moment().format('YYYY-MM-DD');
-    this.maxDate = moment(moment().add(6, 'months')).format('YYYY-MM-DD');
-    this.startDateAdd = this.minDate;
-    this.endDateAdd = moment(moment(this.startDateAdd).add(6, 'months')).format('YYYY-MM-DD');
+      this.minDate = moment().format('YYYY-MM-DD');
+      this.maxDate = moment(moment().add(6, 'months')).format('YYYY-MM-DD');
+      this.startDateAdd = this.minDate;
+      this.endDateAdd = moment(moment(this.startDateAdd).add(6, 'months')).format('YYYY-MM-DD');
+
+     if (this.mode === 'add') {
+        this.analysisForm.controls.rulesetName.setValue(this.sourceNameText + '-ruleset');
+        this.analysisForm.controls.startDate.setValue(this.minDate);
+        this.analysisForm.controls.endDate.setValue(this.maxDate);
+     }
+
+    
   }
 
    intiFormArrays(field, value: any = {}) {

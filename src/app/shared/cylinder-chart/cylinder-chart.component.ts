@@ -30,6 +30,7 @@ export class CylinderChartComponent implements OnInit {
   @ViewChild('charts', {static: false}) public chartEl: ElementRef;
    @Input() chartData;
    @Input() chartType;
+   @Input() options3d;
    @Input() analysisKeys;
    @Output() xLableClicked = new EventEmitter<any>();
 
@@ -53,7 +54,7 @@ export class CylinderChartComponent implements OnInit {
          chart: {
             type: 'column',
             options3d: {
-                enabled: true,
+                enabled: this.options3d,
                 alpha: this.alpha,
                 beta: this.beta,
                 depth: this.depth,
@@ -68,7 +69,8 @@ export class CylinderChartComponent implements OnInit {
          },
          xAxis: {},
          yAxis: {
-             min: 0,
+            min: 0,
+            max:100,
              title: {
                  text: '',
                  align: 'high'
@@ -122,7 +124,8 @@ export class CylinderChartComponent implements OnInit {
        }
    };
 
-   this.chartOptions.chart.type = this.chartType ? this.chartType : 'column';
+    this.chartOptions.chart.type = this.chartType ? this.chartType : 'column';
+    this.chartOptions.chart.options3d.enabled = this.options3d ? this.options3d : false;
    this.chartOptions.series = [];
    this.analysisKeys.map(key => {
        this.chartOptions.series.push({
