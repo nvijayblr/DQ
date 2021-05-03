@@ -905,7 +905,8 @@
    border-bottom: 2px solid #2d7777;
 }
 ::ng-deep .mat-tab-labels {
-   border-bottom: 1px solid #2d7777;
+   border-bottom: 2px solid #2d7777;
+   margin-bottom: 0px !important;
 }
 ::ng-deep .mat-tab-label .mat-tab-label-content{
    font-family: "open-sans-condensed-bold";
