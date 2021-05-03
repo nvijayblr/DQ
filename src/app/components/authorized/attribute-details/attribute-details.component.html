@@ -4,14 +4,15 @@
 
      <div class="profile-wrapper">
         <div class="flex-containers">
-           <div class="list attribute-list">
+           <!-- <div class="list attribute-list">
+            
+           </div> -->
+           <div class="attribute-details"> 
             <mat-list role="list">
                <mat-list-item role="listitem" *ngFor="let profile of profiles;" (click)="changeProfile(profile)" [class.active]="attrubute === profile.column">
                   {{profile.column}}
                </mat-list-item>
-             </mat-list>
-           </div>
-           <div class="attribute-details">                     
+             </mat-list>                    
             <h1 class="share-post-title"> {{attrubute}} </h1>
             <div class="lft-attr">
                <mat-card>
@@ -85,7 +86,7 @@
                   </div>                          
                </mat-card> -->
          
-               <mat-card class="wt3" *ngIf="profile.maskAnalysis && profile.maskAnalysis.length">
+               <mat-card *ngIf="profile.maskAnalysis && profile.maskAnalysis.length">
                   <h4 class="attr-tite">Mask Analysis <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
                   <table>
                      <tr>
@@ -102,7 +103,7 @@
                   </table>
                </mat-card>
 
-               <mat-card class="wt3 os" *ngIf="profile.staticalAnalysis">
+               <mat-card class="os" *ngIf="profile.staticalAnalysis">
                   <h4 class="attr-tite">Statistics <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
                   <table class="table">
                      <tr class="cpt">

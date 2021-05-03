@@ -22,7 +22,9 @@ export class HeatMapComponent implements OnInit {
       chart : {
          type: 'heatmap',
          marginTop: 40,
-         marginBottom: 80
+         marginBottom: 80,
+         paddingBottom:100,
+         height: 600
       },
       title : {
          text: ''
@@ -31,22 +33,22 @@ export class HeatMapComponent implements OnInit {
          categories: this.columns
       },
       yAxis : {
-         categories: [],
+         categories: this.columns,
          title: null
       },
       colorAxis : {
          min: 0,
          minColor: '#FFFFFF',
-         maxColor: '#433683'
+         maxColor: '#efa800'
          // maxColor: Highcharts.getOptions().colors[0]
       },
       legend : {
          align: 'right',
          layout: 'vertical',
-         margin: 0,
+         margint:0,
          verticalAlign: 'top',
          y: 25,
-         symbolHeight: 280
+         symbolHeight: 500
       },
       tooltip : {
          formatter() {
@@ -56,6 +58,7 @@ export class HeatMapComponent implements OnInit {
       series : [{
          name: '',
          borderWidth: 1,
+         borderColor: '#ebe8fb',
          data: this.data,
          dataLabels: {
             enabled: false,
@@ -73,6 +76,7 @@ export class HeatMapComponent implements OnInit {
 
    initChart() {
       this.chartOptions.xAxis.categories = this.columns;
+      this.chartOptions.yAxis.categories = this.columns;
       this.chartOptions.series[0].data = this.data;
       this.highcharts = Highcharts;
       this.highcharts.chart(this.chartEl.nativeElement, this.chartOptions);
