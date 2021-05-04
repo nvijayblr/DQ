@@ -1,0 +1,109 @@
+<section class="page-body home-bodys">
+  <div class="container">
+    <div class="home-wrapper">
+      <div class="clearfix my-community-body">
+        <div class="home-panel">
+          <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
+          <div class="shrare-post">
+            <!-- Analysis by CDE-->
+            <mat-card class="border no-rounded list shrare-post">
+              <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoadingDetails"></app-progress-bar>
+              <div class="list flex-containers analysis-wrp flex-start wrap">
+                <div class="list-item-3 outline">
+                  <h1 class="share-post-title">Analysis by<span class="yellow"> CDE</span></h1>
+                </div>
+                <div class="list-item-3 outline">
+                  <mat-form-field appearance="fill">
+                    <mat-select [(ngModel)]="selectedCDE" (ngModelChange)="launchAnalysisByKey($event)">
+                      <mat-option *ngFor="let col of selectedColumns;" [value]="col">
+                        {{col}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="list-item-3 outline">
+                  <div class="act-btn-wrapper">
+                    <button mat-stroked-button class="button3d btnPush btnPurple ebckBtn" (click)="gotoDashboard();"><mat-icon>keyboard_arrow_left</mat-icon> Back</button>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="analysis-info flex-containers analysis-wrp flex-start wrap">
+                <h1 class="analysis-title">{{selectedAnalysis.source.sourceDataName}}</h1>
+                <div class="outline">
+                  <mat-form-field appearance="fill">
+                     <mat-label class="lbl">Date</mat-label>
+                  <input matInput [matDatepicker]="frompickerAnalysis" [(ngModel)]="selectedAnalysis.uploadDate" (click)="frompickerAnalysis.open()" autocomplete="off">
+                  <mat-datepicker-toggle matSuffix [for]="frompickerAnalysis"></mat-datepicker-toggle>
+                  <mat-datepicker #frompickerAnalysis (opened)="onOpenDatePicker(selectedAnalysis)" [dateClass]="dateClass"></mat-datepicker>
+                  </mat-form-field>
+               </div>
+                <div class="outline">
+                    <mat-form-field appearance="fill">
+                      <mat-label class="lbl">Ruleset Name</mat-label>
+                        <mat-select [(ngModel)]="selectedAnalysis.rulesetId">
+                          <mat-option *ngFor="let rule of selectedAnalysis.rules;" [value]="rule.rulesetId">
+                              {{rule.rulesetName}}
+                          </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+              </div> -->
+              <mat-tab-group mat-align-tabs="start"  animationDuration="0ms">
+               <mat-tab label="2D Map">
+                  <app-cylinder-chart 
+                    *ngIf="analyseKeyData.length && isLoadChart"
+                    [analysisKeys]="analysisKeys"
+                    [chartData]="analyseKeyChartData"
+                    [chartType]="'column'" 
+                    [options3d]= false>
+                </app-cylinder-chart>
+               </mat-tab>
+               <mat-tab label="3D Map">
+                  <app-cylinder-chart 
+                  *ngIf="analyseKeyData.length && isLoadChart"
+                  [analysisKeys]="analysisKeys"
+                  [chartData]="analyseKeyChartData"
+                  [chartType]="'column'" 
+                  [options3d]= true>
+                  </app-cylinder-chart>
+               </mat-tab>
+              </mat-tab-group>
+              <div class="analysis-preview">
+                <div class="actions-wrapper">
+                  <button  class="horizontal" (click)="openHighlightSettingsDialog()"> 
+                     <span class="text">
+                        <mat-icon class="bt">format_color_fill</mat-icon> Highlight Color </span>
+                  </button>
+
+                  <!-- <button type="button" class="ma-cr" mat-icon-button matTooltip="Highlight Settings"  (click)="openHighlightSettingsDialog()">
+                    <mat-icon>format_color_fill</mat-icon>
+                  </button> -->
+                </div>
+                <table class="table brd-rt tableChart">
+                  <thead>
+                    <tr>
+                      <th>{{selectedKey}}</th>
+                      <th *ngFor="let key of analysisKeys">{{key}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of analyseKeyData;">
+                      <td>{{data[selectedKey]}}</td>
+                      <td *ngFor="let key of analysisKeys" [style.background-color]="data[key]?.value | formatCell: settings">
+                        <span class="cur" 
+                          *ngIf="data[key]?.details && data[key]?.details.length"
+                          (click)="showDetails(data[key]?.details)"
+                        >{{data[key]?.value}}%</span>
+                        <span *ngIf="!data[key]?.details.length">{{data[key]?.value}}%</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </mat-card>   
+          </div>
+        </div>
+      </div> 
+    </div>
+  </div>
+</section>

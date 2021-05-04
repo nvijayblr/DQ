@@ -51,7 +51,7 @@ export class DelayAnalysisComponent implements OnInit {
 
 
   ngOnInit() {
-    const analysis = localStorage.getItem('delay-analysis');
+    const analysis = localStorage.getItem('selected-analysis');
     if (analysis) {
       this.selectedAnalysis = JSON.parse(analysis);
       console.log(this.selectedAnalysis);

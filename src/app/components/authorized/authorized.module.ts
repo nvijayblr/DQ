@@ -13,6 +13,7 @@ import { CreateSourceComponent } from './create-source/create-source.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AttributeDetailsComponent } from './attribute-details/attribute-details.component';
 import { CorrelationDetailsComponent } from './correlation-details/correlation-details.component';
+import { AnalysisComponent } from './analysis/analysis.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { CorrelationDetailsComponent } from './correlation-details/correlation-d
     CreateSourceComponent,
     ProfileComponent,
     AttributeDetailsComponent,
-    CorrelationDetailsComponent
+    CorrelationDetailsComponent,
+    AnalysisComponent
   ],
    imports: [
       HighchartsChartModule,

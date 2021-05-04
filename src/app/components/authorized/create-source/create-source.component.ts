@@ -17,6 +17,28 @@ import * as moment from 'moment';
   styleUrls: ['./create-source.component.scss']
 })
 export class CreateSourceComponent implements OnInit {
+
+  constructor(
+    private fb: FormBuilder,
+    private dialog: MatDialog,
+    private route: ActivatedRoute,
+    private http: HttpService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private authGuardService: AuthGuardService,
+    private messageService: MessageService) {
+      this.appConfig = appConfig;
+      this.route.queryParams.subscribe(params => {
+         this.sourceId = params.sourceId;
+         this.mode = params.mode ? params.mode : 'create';
+         if (!params.sourceId) {
+          localStorage.removeItem('dq-source-data');
+        }
+      });
+
+    }
+
+  get afControls(): any { return this.analysisForm.controls; }
   minDate = moment().format('YYYY-MM-DD');
   multiSourceList = [{
     label: 'AA',
@@ -112,28 +134,10 @@ export class CreateSourceComponent implements OnInit {
   refrowData: any = [];
    refcolumnDefs: any = [];
    selectedType;
-   flError: boolean = true;
+   flError = true;
    edMode;
 
-  constructor(
-    private fb: FormBuilder,
-    private dialog: MatDialog,
-    private route: ActivatedRoute,
-    private http: HttpService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private authGuardService: AuthGuardService,
-    private messageService: MessageService) {
-      this.appConfig = appConfig;
-      this.route.queryParams.subscribe(params => {
-         this.sourceId = params.sourceId;
-         this.mode = params.mode ? params.mode : 'create';
-         if (!params.sourceId) {
-          localStorage.removeItem('dq-source-data');
-        }
-      });
-     
-    }
+ showGrid = true;
 
   ngOnInit() {
     this.isUserLoggedIn = this.authGuardService.isUserLoggedIn();
@@ -173,14 +177,14 @@ export class CreateSourceComponent implements OnInit {
     referenceDataList.map(refCSV => {
       referenceData.push(this.intiFormArrays('referenceData', refCSV));
     });
-     
-     const firstParam: string = this.route.snapshot.queryParamMap.get('type');    
+
+    const firstParam: string = this.route.snapshot.queryParamMap.get('type');
     this.selectedType = firstParam;
     console.log(this.selectedType);
-     const mode: string = this.route.snapshot.queryParamMap.get('mode');
-     this.edMode = mode;
-     //console.log(mode);
-     this.minDate = moment().format('YYYY-MM-DD');
+    const mode: string = this.route.snapshot.queryParamMap.get('mode');
+    this.edMode = mode;
+     // console.log(mode);
+    this.minDate = moment().format('YYYY-MM-DD');
   }
 
   intiFormArrays(field, reference: any = {}) {
@@ -194,8 +198,6 @@ export class CreateSourceComponent implements OnInit {
       });
     }
   }
-
-  get afControls(): any { return this.analysisForm.controls; }
 
   addFormItem(arrayName) {
     const fbArray = this.analysisForm.get(arrayName) as FormArray;
@@ -307,8 +309,8 @@ export class CreateSourceComponent implements OnInit {
       }
     });
    }
-   
-   prevoewBackClickFirst() {     
+
+   prevoewBackClickFirst() {
       this.gotoStepper(0);
     }
 
@@ -322,18 +324,16 @@ export class CreateSourceComponent implements OnInit {
     }
     this.gotoStepper(1);
   }
-
- showGrid:boolean = true;
   onSourceFileSelected(file) {
     this.sourceFile = file;
-     const fName = file.name.split('.')[0];
-     const fExt = file.name.split('.')[1];
-     console.log(fExt);
-     if (this.edMode === 'edit') {
+    const fName = file.name.split('.')[0];
+    const fExt = file.name.split('.')[1];
+    console.log(fExt);
+    if (this.edMode === 'edit') {
       this.flError = false;
      }
-     if (this.selectedType !== fExt) {
-        //alert('Please Select a correct file type');
+    if (this.selectedType !== fExt) {
+        // alert('Please Select a correct file type');
         this.flError = false;
         this.showGrid = false;
      } else {
@@ -341,7 +341,7 @@ export class CreateSourceComponent implements OnInit {
         this.showGrid = true;
      }
 
-     if (this.selectedType === 'xlsx') {
+    if (this.selectedType === 'xlsx') {
         if (fExt.includes('xls')) {
            this.flError = true;
            this.showGrid = false;
@@ -350,7 +350,7 @@ export class CreateSourceComponent implements OnInit {
            this.showGrid = false;
         }
      }
-     console.log(this.showGrid);
+    console.log(this.showGrid);
    //   console.log(this.flError);
    //   this.selectedType;
    //   console.log(fName);

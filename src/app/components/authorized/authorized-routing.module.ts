@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuardService as AuthGaurd } from 'src/app/services/auth-guard.service';
 import { AuthorizedComponent } from './authorized.component';
+import { AnalysisComponent } from './analysis/analysis.component';
 import { DelayAnalysisComponent } from './delay-analysis/delay-analysis.component';
 import { CreateSourceComponent } from './create-source/create-source.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -20,6 +21,11 @@ const routes: Routes = [
       {
         path: 'admin',
         loadChildren: () => import('../admin/admin.module').then(m => m.AdminModule),
+        // canActivate: [AuthGaurd]
+      },
+      {
+        path: 'analysis',
+        component: AnalysisComponent,
         // canActivate: [AuthGaurd]
       },
       {
