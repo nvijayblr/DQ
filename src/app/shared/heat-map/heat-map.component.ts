@@ -23,7 +23,7 @@ export class HeatMapComponent implements OnInit {
          type: 'heatmap',
          marginTop: 40,
          marginBottom: 80,
-         paddingBottom:100,
+         paddingBottom: 100,
          height: 600
       },
       title : {
@@ -45,7 +45,7 @@ export class HeatMapComponent implements OnInit {
       legend : {
          align: 'right',
          layout: 'vertical',
-         margint:0,
+         margint: 0,
          verticalAlign: 'top',
          y: 25,
          symbolHeight: 500

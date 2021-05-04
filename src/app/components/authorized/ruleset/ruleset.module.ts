@@ -3,18 +3,18 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../../shared/shared.module';
 import { AuthorizedModule } from '../authorized.module';
 
-import { AnalysisRoutingModule } from './analysis-routing.module';
-import { AnalysisComponent } from './analysis.component';
+import { RulesetRoutingModule } from './ruleset-routing.module';
+import { RulesetComponent } from './ruleset.component';
 
 
 
 @NgModule({
-  declarations: [AnalysisComponent],
+  declarations: [RulesetComponent],
   imports: [
     CommonModule,
-    AnalysisRoutingModule,
+    RulesetRoutingModule,
     SharedModule,
     AuthorizedModule
   ]
 })
-export class AnalysisModule { }
+export class RulesetModule { }

@@ -28,8 +28,8 @@ const routes: Routes = [
         // canActivate: [AuthGaurd]
       },
       {
-        path: 'analysis',
-        loadChildren: () => import('./analysis/analysis.module').then(m => m.AnalysisModule),
+        path: 'ruleset',
+        loadChildren: () => import('./ruleset/ruleset.module').then(m => m.RulesetModule),
         // canActivate: [AuthGaurd]
       },
       {

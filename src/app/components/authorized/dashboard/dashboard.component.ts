@@ -210,6 +210,7 @@ export class DashboardComponent implements OnInit {
 
    launchAnalysis(analysis) {
       this.selectedAnalysis = analysis;
+      console.log(this.selectedAnalysis);
       const payload = {
          sourceId: analysis.sourceId,
          rulesetId: analysis.rulesetId
@@ -333,7 +334,7 @@ export class DashboardComponent implements OnInit {
       localStorage.setItem('analysis', JSON.stringify(analysis));
       localStorage.setItem('dq-source-data', JSON.stringify(analysis));
       this.router.navigate(
-         [`auth/analysis`],
+         [`auth/ruleset`],
          { queryParams: { sourceId: analysis.sourceId, rulesetId: analysis.rulesetId, mode: analysis.mode } }
       );
    }
