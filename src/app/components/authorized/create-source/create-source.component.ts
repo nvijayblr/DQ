@@ -328,7 +328,7 @@ export class CreateSourceComponent implements OnInit {
     this.sourceFile = file;
     const fName = file.name.split('.')[0];
     const fExt = file.name.split('.')[1];
-    console.log(fExt);
+    //console.log(fExt);
     if (this.edMode === 'edit') {
       this.flError = false;
      }
@@ -350,7 +350,7 @@ export class CreateSourceComponent implements OnInit {
            this.showGrid = false;
         }
      }
-    console.log(this.showGrid);
+    //console.log(this.showGrid);
    //   console.log(this.flError);
    //   this.selectedType;
    //   console.log(fName);

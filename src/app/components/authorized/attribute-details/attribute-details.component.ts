@@ -19,6 +19,10 @@ export class AttributeDetailsComponent implements OnInit {
    source: any = {};
    profiles: any = [];
    profile: any = {};
+   show = false;
+   frequencyShow = false;
+   patternShow = false;
+   maskShow = false;
 
    
 
