@@ -406,8 +406,8 @@ export class RulesetComponent implements OnInit {
 
     if (this.mode === 'add') {
         this.analysisForm.controls.rulesetName.setValue(this.sourceNameText + '-ruleset');
-        this.analysisForm.controls.startDate.setValue(this.minDate);
-        this.analysisForm.controls.endDate.setValue(this.maxDate);
+        // this.analysisForm.controls.startDate.setValue(this.minDate);
+        // this.analysisForm.controls.endDate.setValue(this.maxDate);
      }
 
 
