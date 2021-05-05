@@ -153,13 +153,13 @@
   .category-item {
     margin: 10px 0 10px 0;
     text-align: center;
-    border-bottom: 4px solid #585858;
+    border-bottom: 4px solid #8f8a8a;
     padding: 4px;
     font-family: 'open-sans-condensed-bold';
     background-color: rgba(240, 240, 240, 0.12);
     border-radius: 0px;
-    box-shadow: 0 -5px 5px -5px #433683, 
-              0 5px 5px -5px #433683;
+    box-shadow: 0 -5px 5px -5px #8f8a8a, 
+              0 5px 5px -5px #8f8a8a;
     .cat-icon {
       font-size: 32px;
       color: #525252;
@@ -173,20 +173,20 @@
       font-family: 'open-sans-condensed-bold';
     }
     &:hover {     
-      background-color: #ffffff;
-      cursor: pointer;
-      border-bottom: 4px solid #433683;
+      border-bottom: 4px solid #9cabff;
+      //border-top: 4px solid #433683;
+      background-color: #433683;
       box-shadow: 0 -5px 5px -5px #433683, 
-              0 5px 5px -5px #433683;
+      0 5px 5px -5px #433683;
     }
     &.selected {
-      border-bottom: 4px solid #433683;
+      border-bottom: 4px solid #9cabff;
       //border-top: 4px solid #433683;
-      background-color: #ffffff;
+      background-color: #433683;
       box-shadow: 0 -5px 5px -5px #433683, 
       0 5px 5px -5px #433683;
       .cat-icon, .cat-title {
-        color: #433683;
+        color: #fff;
         font-weight: 500 !important;
       }
     }
