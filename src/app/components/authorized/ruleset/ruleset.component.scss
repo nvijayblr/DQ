@@ -93,7 +93,7 @@
        padding-bottom: 0;
      }
      .share-post-title {
-      font-size: 24px;
+      font-size: 20px;
       color: #322a54;
       font-weight: 400;
       margin: 0px 10px 20px 10px;
@@ -978,6 +978,42 @@ tr:nth-child(odd) {background: #f0f7f7}
    padding: 0 7px;
    font-size: 12px;
    color: #fff;
+}
+
+.tabBtn{
+  position: relative;
+  text-align: right;
+  top: -38px;
+  font-family: 'open-sans-condensed-bold';
+  font-size: 11px;
+  background: darksalmon;
+  width: 125px;
+  float: right;
+  padding: 5px 10px;
+  text-transform: uppercase;
+  color: #fff;
+  cursor: pointer;
+  &:hover{
+    background: rgb(194, 102, 72);
+  }
+}
+
+.tabBtn2{
+  position: relative;
+  text-align: right;
+  top: -43px;
+  font-family: 'open-sans-condensed-bold';
+  font-size: 10px;
+  background: palevioletred;
+  width: 140px;
+  float: right;
+  padding: 5px 10px;
+  text-transform: uppercase;
+  color: #fff;
+  cursor: pointer;
+  &:hover{
+    background: rgb(180, 86, 117);
+  }
 }
 
 

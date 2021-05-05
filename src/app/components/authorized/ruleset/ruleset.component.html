@@ -123,6 +123,7 @@
                         </mat-tab>
                      </mat-tab-group>
                      
+                     
                      <!-- <br/>
                      <h1 class="share-post-title">Define<span class="yellow"> Reference Data Element</span></h1> -->
                      
@@ -145,7 +146,7 @@
                  
                  <mat-step>
                    <ng-template matStepLabel>Rule Definition</ng-template>
-                   <mat-tab-group mat-align-tabs="start"  animationDuration="0ms" class="mm2">
+                   <mat-tab-group mat-align-tabs="start"  animationDuration="0ms" class="mm2" #tabGroup>
                      <mat-tab label="Rule Definition">
                         <div class="list wrap mt2">
                            <mat-card class="border no-rounded shrare-post">
@@ -271,7 +272,7 @@
                                           </button>
                                        </div>
                                        </div>
-                                    </div>
+                                    </div>                                   
                                  </ng-container>
                                  </div>
                               </ng-container>
@@ -296,6 +297,7 @@
                            <div class="list flex-containers wrap">
                            <mat-card class="border no-rounded shrare-post rule-details-info">
                               <h1 class="share-post-title"><span class="lgb">{{selectedRuleColumn}}</span></h1>
+                              <div class="tabBtn" (click)="tabGroup.selectedIndex=1">View Profile Details</div>
                               <table class="table">
                                  <tr class="cpt">
                                  <td class="strong" *ngFor="let statistics of cdeStatistics | keyvalue">{{statistics.key}}</td>
@@ -307,6 +309,7 @@
                            </mat-card>
                            <mat-card class="border no-rounded shrare-post correlation-info">
                               <h1 class="share-post-title"><span class="lgb">Correlation Summary</span></h1>
+                              <div class="tabBtn2" (click)="tabGroup.selectedIndex=2">View Correlation Details</div>
                            </mat-card>
                            </div>
                         </div>
