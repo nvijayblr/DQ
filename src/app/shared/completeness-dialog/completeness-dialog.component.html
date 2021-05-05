@@ -3,7 +3,7 @@
 </button>
 <h1 mat-dialog-title class="space">
   {{data.key}} - {{data.selectedKey}} - {{data.selectedValue}}
-  <span *ngIf="selectedColumn"> - {{selectedColumn.column}}</span>
+  <span *ngIf="selectedColumn.column"> - {{selectedColumn.column}}</span>
 </h1>
 <div mat-dialog-content>
   <div class="btn-wrapper clearfix" [hidden]="!showDetails">
