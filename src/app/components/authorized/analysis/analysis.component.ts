@@ -144,6 +144,7 @@ export class AnalysisComponent implements OnInit {
    }
 
    launchAnalysisByKeyDate(keyname, uploadId) {
+      this.selectedKey = keyname;
       const payload = {
          sourceId: this.selectedAnalysis.sourceId,
          rulesetId: this.selectedAnalysis.rulesetId,
@@ -151,12 +152,13 @@ export class AnalysisComponent implements OnInit {
          keyname
       };
       this.loaderMsg = 'Launching analysis...';
-      this.analyseKeyData = [];
+      this.isLoading = true;
       this.isLoadChart = false;
       this.http.launchAnalysisByKey(payload).subscribe((result: any) => {
          this.isLoadingDetails = false;
          if (result.errorCode && result.errorMsg) {
             alert(result.errorMsg);
+            this.gotoDashboard();
             return;
          }
          this.analyseKeyData = result ? result : [];
@@ -180,7 +182,9 @@ export class AnalysisComponent implements OnInit {
          });
          this.analyseKeyChartData = chartData;
          this.isLoadChart = true;
+         this.isLoading = false;
       }, (error) => {
+         this.isLoading = false;
          this.analyseKeyData = [];
          this.isLoadingDetails = false;
       });
