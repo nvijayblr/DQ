@@ -178,6 +178,11 @@
       background-color: #433683;
       box-shadow: 0 -5px 5px -5px #433683, 
       0 5px 5px -5px #433683;
+      cursor: pointer;
+      .cat-icon, .cat-title {
+        color: #fff;
+        font-weight: 500 !important;
+      }
     }
     &.selected {
       border-bottom: 4px solid #9cabff;
