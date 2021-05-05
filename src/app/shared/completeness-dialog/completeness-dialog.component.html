@@ -16,7 +16,7 @@
         <mat-card *ngFor="let rowItem of data.details;" (click)="launchAnalysisDetails(rowItem);">
           <div  *ngFor="let item of rowItem | keyvalue" [hidden]="item.key === 'outlier'">
             <span *ngIf="item.key !== 'column'" class="field-label">{{item.key}}: </span> 
-            <span class="strong" (click)="launchAnalysisDetails(rowItem);">{{item.value}}</span>
+            <span class="strong compClr" (click)="launchAnalysisDetails(rowItem);">{{item.value}}</span>
           </div>
         </mat-card>
     </div>

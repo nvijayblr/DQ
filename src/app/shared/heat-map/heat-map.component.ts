@@ -25,10 +25,10 @@ export class HeatMapComponent implements OnInit {
          marginBottom: 80,
          plotBorderWidth: 0,
          paddingBottom: 100,
-         height: 600
+         height: 700
       },
       title : {
-         text: ''
+         text: 'Heat Map for Correlation Detail'
       },
       xAxis : {
          categories: this.columns
@@ -37,17 +37,27 @@ export class HeatMapComponent implements OnInit {
          categories: this.columns,
          title: null
       },
-      colorAxis: {
-         
+      colorAxis: {         
          stops: [
-            [-1, '#FFFFFF'],
-            [0.599999999999, '#3060cf'],
-            [0.6, '#c4463a'],
+            [0, '#ffffff'],
+            [0.01, '#ffffff'],
+            [0.02, '#ffffff'],
+            [0.03, '#ffffff'],
+            [0.04, '#ffffff'],
+            [0.05, '#ffffff'],
+            [0.06, '#ffffff'],
+            [0.1, '#efa800'],
+            [0.2, '#efa800'],
+            [0.3, '#efa800'],
+            [0.4, '#efa800'],
+            [0.5, '#efa800'],
+            [0.6, '#efa800'],
+            [0.7, '#efa800'],
             [1, '#efa800']
           ],
          min: 0,
-         minColor: '#FFFFFF',
-         maxColor: '#efa800'
+         minColor: '#ffaca6',
+         maxColor: '#28a745'
          //maxColor: Highcharts.getOptions().colors[0]
 
       },
@@ -57,11 +67,11 @@ export class HeatMapComponent implements OnInit {
          margint: 0,
          verticalAlign: 'top',
          y: 25,
-         symbolHeight: 500
+         symbolHeight: 565
       },
       plotOptions: {
          heatmap: {
-           pointPadding: 5
+          pointPadding: 0
          },
          series: {
            stickyTracking: false
@@ -75,7 +85,7 @@ export class HeatMapComponent implements OnInit {
       series : [{
          name: '',
          borderWidth: 1,
-         borderColor: '#ffffff',
+         borderColor: '#ffebbb',
          data: this.data,
          dataLabels: {
             enabled: false,

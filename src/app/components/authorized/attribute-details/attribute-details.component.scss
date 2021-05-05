@@ -533,7 +533,7 @@ table{
    background-color:#fff6fd
 }
 .bg-blue {
-	background-color: #00a0d2;
+	//background-color: #00a0d2;
    background-color:#dbf6ff;
 }
 .bg-green {
@@ -601,7 +601,7 @@ table{
  .frequencyBtn{
    background: #dda6d1;
    border-color: #dda6d1;
-   width: 20%;
+   width: 21%;
    position: relative;
    top: 17px;
    left: 180px;
@@ -611,20 +611,19 @@ table{
    height: 20px;
    color: #373737;
    font-family: "open-sans-condensed-bold" !important;
-   padding-left: 13px;
+   padding-left: 10px;
     .mat-icon{
       position: relative;
-      top: -8px;
+      top: 6px;
       font-size: 20px;
       line-height: 6px;
-      left: 54px;
    }
  }
 
  .patternBtn{
    background: #63bbd9;
    border-color: #63bbd9;
-   width: 20%;
+   width: 21%;
    position: relative;
    top: 17px;
    left: 180px;
@@ -634,13 +633,12 @@ table{
    height: 20px;
    color: #373737;
    font-family: "open-sans-condensed-bold" !important;
-   padding-left: 13px;
+   padding-left: 10px;
     .mat-icon{
       position: relative;
-      top: -8px;
+      top: 6px;
       font-size: 20px;
       line-height: 6px;
-      left: 54px;
    }
  }
  .maskShowBtn{

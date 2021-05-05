@@ -8,7 +8,7 @@
             <!-- Analysis by CDE-->
             <mat-card class="border no-rounded list shrare-post">
               <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoadingDetails"></app-progress-bar>
-              <div class="list flex-containers analysis-wrp flex-start wrap">
+              <div class="list flex-containers analysis-wrp tpBg2 flex-start wrap ">
                 <div class="list-item-4 outline">
                   <h1 class="share-post-title">
                     Source: <span class="yellow"> {{selectedAnalysis.source?.sourceDataName}}</span>
@@ -44,7 +44,7 @@
               <div class="analysis-info">
                 <div class="category-list-wrapper clearfix">
                   <div class="left-arrow">
-                     <button mat-stroked-button class="gv-secondary-btn primary-btn-gray prev-next-btn" (click)="owlCar.prev()">
+                     <button mat-stroked-button class="gv-secondary-btn primary-btn-gray prev-next-btn clr" (click)="owlCar.prev()">
                      <mat-icon class="pl">keyboard_arrow_left</mat-icon>
                      </button>
                   </div>

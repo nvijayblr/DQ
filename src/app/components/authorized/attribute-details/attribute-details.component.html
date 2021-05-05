@@ -48,17 +48,7 @@
                <button *ngIf="profile.frequncyAnalysis.length > 3" class="frequencyBtn" (click)="frequencyShow = !frequencyShow">{{ frequencyShow ? 'Show less'  : 'Show More'  }}
                   <mat-icon *ngIf="!frequencyShow">expand_more</mat-icon> <mat-icon *ngIf="frequencyShow">expand_less</mat-icon> </button>  
                </mat-card>
-         
-               <mat-card class="honeydew" *ngIf="profile.LengthStatistics">
-                  <h4 class="attr-tite">Length Statistics
-                     <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
-         
-                     <div class="custom-slider">
-                        {{profile.LengthStatistics.min}}
-                        <ngx-slider [(value)]="profile.LengthStatistics.min" [(highValue)]="profile.LengthStatistics.max" [options]="options"></ngx-slider>
-                     </div>
-               </mat-card>
-         
+                 
                <mat-card class="bg-blue" *ngIf="profile.patternAnalysis && profile.patternAnalysis.length">
                   <h4 class="attr-tite">Pattern Analysis <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
                   <div class="frequencyContainer" [class.patternShow]="patternShow">
@@ -92,7 +82,15 @@
          
                   </div>                          
                </mat-card> -->
-         
+               <mat-card class="honeydew" *ngIf="profile.LengthStatistics">
+                <h4 class="attr-tite">Length Statistics
+                   <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
+       
+                   <div class="custom-slider">
+                      {{profile.LengthStatistics.min}}
+                      <ngx-slider [(value)]="profile.LengthStatistics.min" [(highValue)]="profile.LengthStatistics.max" [options]="options"></ngx-slider>
+                   </div>
+              </mat-card>
                <mat-card class="bg-green" *ngIf="profile.maskAnalysis && profile.maskAnalysis.length">
                   <h4 class="attr-tite">Mask Analysis <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
                   <div class="frequencyContainer" [class.maskShow]="maskShow">
