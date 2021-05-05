@@ -23,6 +23,7 @@ export class HeatMapComponent implements OnInit {
          type: 'heatmap',
          marginTop: 40,
          marginBottom: 80,
+         plotBorderWidth: 0,
          paddingBottom: 100,
          height: 600
       },
@@ -36,11 +37,19 @@ export class HeatMapComponent implements OnInit {
          categories: this.columns,
          title: null
       },
-      colorAxis : {
+      colorAxis: {
+         
+         stops: [
+            [-1, '#FFFFFF'],
+            [0.599999999999, '#3060cf'],
+            [0.6, '#c4463a'],
+            [1, '#efa800']
+          ],
          min: 0,
          minColor: '#FFFFFF',
          maxColor: '#efa800'
-         // maxColor: Highcharts.getOptions().colors[0]
+         //maxColor: Highcharts.getOptions().colors[0]
+
       },
       legend : {
          align: 'right',
@@ -50,6 +59,14 @@ export class HeatMapComponent implements OnInit {
          y: 25,
          symbolHeight: 500
       },
+      plotOptions: {
+         heatmap: {
+           pointPadding: 5
+         },
+         series: {
+           stickyTracking: false
+         }
+       },
       tooltip : {
          formatter() {
             return '<b>' + this.series.xAxis.categories[this.point.x] + '</b>: ' + this.point.value;
@@ -58,7 +75,7 @@ export class HeatMapComponent implements OnInit {
       series : [{
          name: '',
          borderWidth: 1,
-         borderColor: '#ebe8fb',
+         borderColor: '#ffffff',
          data: this.data,
          dataLabels: {
             enabled: false,
