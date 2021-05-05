@@ -20,12 +20,13 @@ export class HeatMapComponent implements OnInit {
 
    chartOptions = {
       chart : {
-         type: 'heatmap',
+         type: 'bubble',   // bubble
          marginTop: 40,
          marginBottom: 80,
          plotBorderWidth: 0,
          paddingBottom: 100,
-         height: 700
+         height: 900,
+         pointSize: 1
       },
       title : {
          text: 'Heat Map for Correlation Detail'
@@ -37,28 +38,29 @@ export class HeatMapComponent implements OnInit {
          categories: this.columns,
          title: null
       },
-      colorAxis: {         
-         stops: [
-            [0, '#ffffff'],
-            [0.01, '#ffffff'],
-            [0.02, '#ffffff'],
-            [0.03, '#ffffff'],
-            [0.04, '#ffffff'],
-            [0.05, '#ffffff'],
-            [0.06, '#ffffff'],
-            [0.1, '#efa800'],
-            [0.2, '#efa800'],
-            [0.3, '#efa800'],
-            [0.4, '#efa800'],
-            [0.5, '#efa800'],
-            [0.6, '#efa800'],
-            [0.7, '#efa800'],
-            [1, '#efa800']
-          ],
-         min: 0,
-         minColor: '#ffaca6',
-         maxColor: '#28a745'
-         //maxColor: Highcharts.getOptions().colors[0]
+      colorAxis: {
+         // stops: [
+         //    [0, '#ff0000'],
+         //    [0.01, '#ff0000'],
+         //    [0.02, '#ff0000'],
+         //    [0.03, '#ff0000'],
+         //    [0.04, '#ff0000'],
+         //    [0.05, '#ff0000'],
+         //    [0.06, '#ff0000'],
+         //    [0.1, '#efa800'],
+         //    [0.2, '#efa800'],
+         //    [0.3, '#efa800'],
+         //    [0.4, '#efa800'],
+         //    [0.5, '#efa800'],
+         //    [0.6, '#efa800'],
+         //    [0.7, '#efa800'],
+         //    [1, '#efa800']
+         //  ],
+         min: -1,
+         max: 1,
+         minColor: '#ff0000',
+         maxColor: '#00b307'
+         // maxColor: Highcharts.getOptions().colors[0]
 
       },
       legend : {
@@ -67,11 +69,15 @@ export class HeatMapComponent implements OnInit {
          margint: 0,
          verticalAlign: 'top',
          y: 25,
-         symbolHeight: 565
+         symbolHeight: 765
       },
       plotOptions: {
          heatmap: {
-          pointPadding: 0
+          pointPadding: 1.5
+         },
+         bubble: {
+            minSize: 1,
+            maxSize: 30
          },
          series: {
            stickyTracking: false
@@ -84,7 +90,7 @@ export class HeatMapComponent implements OnInit {
       },
       series : [{
          name: '',
-         borderWidth: 1,
+         borderWidth: 0,
          borderColor: '#ffebbb',
          data: this.data,
          dataLabels: {
