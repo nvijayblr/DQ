@@ -160,7 +160,10 @@ export class DashboardComponent implements OnInit {
       this.selectedAnalysis = analysis;
       const uploadDate = this.selectedAnalysis.uploadDate ? moment(this.selectedAnalysis.uploadDate).format('MM-DD-YYYY') : '';
       const uploadsHistory = this.selectedAnalysis.UploadsHistory ? this.selectedAnalysis.UploadsHistory : [];
-
+      if (!uploadsHistory.length) {
+         alert('Please upload the source to launch the analysis.');
+         return;
+      }
       if (uploadsHistory.length && !uploadDate) {
          alert('Please select the upload date.');
          return;
