@@ -1,23 +1,25 @@
 <button class="close" mat-icon-button (click)="onNoClick()">
   <mat-icon>close</mat-icon>
 </button>
-<h1 mat-dialog-title class="space">Incomplete CDEs</h1>
+<h1 mat-dialog-title class="space">
+  {{data.key}} - {{data.selectedKey}} - {{data.selectedValue}}
+  <span *ngIf="selectedColumn"> - {{selectedColumn.column}}</span>
+</h1>
 <div mat-dialog-content>
   <div class="btn-wrapper clearfix" [hidden]="!showDetails">
-    <button mat-stroked-button class="button3d btnPush btnPurple ebckBtn" (click)="showDetails = false">
+    <button mat-stroked-button class="button3d btnPush btnPurple ebckBtn" (click)="selectedColumn = {}; showDetails = false">
       <mat-icon>keyboard_arrow_left</mat-icon> Back
     </button>
   </div>
   <div class="content-details">
-    <table class="table brd-rt" *ngIf="!showDetails">
-      <tbody style="border: 1px solid #dee2e6">
-        <tr *ngFor="let rowItem of data;" >
-          <td  *ngFor="let item of rowItem | keyvalue" [hidden]="item.key === 'outlier'">
-            {{item.key}}: <span class="strong" (click)="launchAnalysisDetails(rowItem);">{{item.value}}</span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table brd-rt flex-containers wrap" *ngIf="!showDetails">
+        <mat-card *ngFor="let rowItem of data.details;" (click)="launchAnalysisDetails(rowItem);">
+          <div  *ngFor="let item of rowItem | keyvalue" [hidden]="item.key === 'outlier'">
+            <span *ngIf="item.key !== 'column'" class="field-label">{{item.key}}: </span> 
+            <span class="strong" (click)="launchAnalysisDetails(rowItem);">{{item.value}}</span>
+          </div>
+        </mat-card>
+    </div>
     <mat-card fxFlex class="stats process-blocks-table" style="height: 100%" *ngIf="showDetails">
       <app-ag-grid
         floatingFilter="true"

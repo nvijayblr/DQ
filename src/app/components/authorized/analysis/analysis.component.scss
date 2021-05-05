@@ -216,6 +216,9 @@
   }
   .act-btn-wrapper {
     margin: 0 0 10px 0;
+    .btnPurple.btnPush {
+      margin: 0;
+    }
   }
 }
 .launch-icon {
@@ -864,3 +867,31 @@ thead {background: #f0f7f7;}
 ::ng-deep .mat-tab-header, .mat-tab-nav-bar{
   border-bottom: 0px;
 } 
+
+.category-list-wrapper {
+  margin-bottom: 12px;
+  margin-top: 20px;
+  .left-arrow {
+    float: left;
+    width: 50px;
+  }  
+  .category-list {
+    width: calc(100% - 100px);
+    float: left;
+    font-family: 'open-sans-condensed-bold';
+  }
+  .right-arrow {
+    float: left;
+    width: 50px;
+    padding-left: 16px;
+  }
+  button {
+    &.prev-next-btn {
+      border-radius: 0;
+      padding: 0;
+      width: 34px;
+      min-width: auto;
+      padding: 0 !important;
+    }
+  }
+}

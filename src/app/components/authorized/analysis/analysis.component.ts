@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { MessageService } from '../../../services/message.service';
@@ -10,6 +10,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { ColorDialogComponent } from '../../../shared/color-dialog/color-dialog.component';
 import { CompletenessDialogComponent } from '../../../shared/completeness-dialog/completeness-dialog.component';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
+import { OwlOptions } from 'ngx-owl-carousel-o';
 import * as moment from 'moment';
 
 @Component({
@@ -18,11 +19,13 @@ import * as moment from 'moment';
   styleUrls: ['./analysis.component.scss']
 })
 export class AnalysisComponent implements OnInit {
+   @ViewChild('owlCar', { static: false }) owlCar;
 
    analyseKeyChartData: any = {};
    analyseKeyData = [];
    selectedAnalysis: any = {};
    selectedKey = '';
+   uploadId = '';
    showAnalysisByKey = false;
    isLoading = false;
    isLoadingDetails = false;
@@ -46,6 +49,35 @@ export class AnalysisComponent implements OnInit {
    analysisKeys: any = [];
    isLoadChart = false;
 
+   OwlCategoryOptions: OwlOptions = {
+      loop: false,
+      autoplay: false,
+      autoplayTimeout: 6000,
+      autoplaySpeed: 700,
+      mouseDrag: true,
+      touchDrag: true,
+      pullDrag: true,
+      dots: false,
+      margin: 5,
+      navSpeed: 700,
+      navText: [ '<i class="fa-chevron-left"></i>', '<i class="fa-chevron-right></i>"' ],
+      autoWidth: true,
+      nav: false,
+      items: 6,
+      responsive: {
+        0: {
+          items: 3,
+          center: true,
+          loop: true,
+        },
+        740: {
+          items: 5,
+          center: false,
+          loop: false,
+        }
+      },
+   };
+
    constructor(
       public dialog: MatDialog,
       private http: HttpService,
@@ -57,12 +89,14 @@ export class AnalysisComponent implements OnInit {
    ngOnInit() {
       const analysis = localStorage.getItem('selected-analysis');
       if (analysis) {
-         this.launchAnalysis(JSON.parse(analysis));
+         this.initAnalysis(JSON.parse(analysis));
       }
    }
 
-   launchAnalysis(analysis) {
+   initAnalysis(analysis) {
+      console.log(analysis);
       this.selectedAnalysis = analysis;
+      this.uploadsHistory = analysis.UploadsHistory ? analysis.UploadsHistory : [];
       const payload = {
          sourceId: analysis.sourceId,
          rulesetId: analysis.rulesetId
@@ -71,12 +105,12 @@ export class AnalysisComponent implements OnInit {
       this.selectedColumns = (this.selectedAnalysis.source && this.selectedAnalysis.source.categorialColumns) ? this.selectedAnalysis.source.categorialColumns : [];
       if (this.selectedColumns && this.selectedColumns.length) {
          this.selectedCDE = this.selectedColumns[0];
-         this.launchAnalysisByKey(this.selectedCDE);
+         this.validateAnalysis(this.selectedCDE);
       }
       this.analyseKeyData = [];
    }
 
-   launchAnalysisByKey(keyname) {
+   validateAnalysis(keyname) {
       const uploadDate = this.selectedAnalysis.uploadDate ? moment(this.selectedAnalysis.uploadDate).format('MM-DD-YYYY') : '';
       const uploadsHistory = this.selectedAnalysis.UploadsHistory ? this.selectedAnalysis.UploadsHistory : [];
 
@@ -92,23 +126,24 @@ export class AnalysisComponent implements OnInit {
          return;
       }
 
-      let uploadId = '';
       uploadsHistory.map(history => {
          if (moment(history.uploadDate).format('MM-DD-YYYY') === uploadDate) {
-            uploadId = history.uploadId;
+            this.uploadId = history.uploadId;
          }
       });
       this.showAnalysisByKey = true;
       this.isLoadingDetails = true;
       this.selectedKey = keyname;
+      this.launchAnalysisByKeyDate(this.selectedKey, this.uploadId);
+   }
 
+   launchAnalysisByKeyDate(keyname, uploadId) {
       const payload = {
          sourceId: this.selectedAnalysis.sourceId,
          rulesetId: this.selectedAnalysis.rulesetId,
          uploadId,
          keyname
       };
-
       this.loaderMsg = 'Launching analysis...';
       this.analyseKeyData = [];
       this.isLoadChart = false;
@@ -145,6 +180,16 @@ export class AnalysisComponent implements OnInit {
       });
    }
 
+   onRulesetChange(rulesetId) {
+      this.selectedAnalysis.rulesetId = rulesetId;
+      this.launchAnalysisByKeyDate(this.selectedKey, this.uploadId);
+   }
+
+   tapDateCarouselItem(history) {
+      this.uploadId = history.uploadId;
+      this.launchAnalysisByKeyDate(this.selectedKey, this.uploadId);
+   }
+
    gotoDashboard() {
       this.router.navigate([`auth/dashboard`]);
    }
@@ -161,12 +206,16 @@ export class AnalysisComponent implements OnInit {
       });
    }
 
-   showDetails(details) {
+   showDetails(details, key, selectedKey, selectedValue) {
       this.dialog.open(CompletenessDialogComponent, {
          width: '95%',
          height: '95%',
-         data: details ? details : []
+         data: {details : details ? details : [], key, selectedKey, selectedValue, selectedAnalysis: this.selectedAnalysis }
       });
+   }
+
+   formatDate(date) {
+      return moment(date).format('MMM, DD YYYY');
    }
 
    onOpenDatePicker(data: any) {

@@ -17,6 +17,7 @@ export class CompletenessDialogComponent implements OnInit {
   columnDefs: any = [];
   rowData: any = [];
   showDetails = false;
+  selectedColumn = {};
   constructor(
     public dialogRef: MatDialogRef<CompletenessDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -29,6 +30,8 @@ export class CompletenessDialogComponent implements OnInit {
   }
 
   launchAnalysisDetails(rowItem) {
+    console.log(rowItem);
+    this.selectedColumn = rowItem;
     this.showDetails = false;
     this.isLoading = true;
     this.columnDefs = [];

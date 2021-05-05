@@ -47,6 +47,11 @@
    //font-weight: 600;
    cursor: pointer;
    color: #367575;
+   font-weight: 500;
+}
+.table .mat-card { 
+   margin: 12px;
+   cursor: pointer;
 }
 .btn-wrapper {
    text-align: right;
@@ -69,7 +74,9 @@
 ::ng-deep .mat-dialog-container{
    background: #ebe8fb;
 }
-
+.field-label {
+   text-transform: uppercase;
+}
 // buttons
 
 .button3d {

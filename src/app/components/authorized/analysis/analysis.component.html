@@ -9,12 +9,24 @@
             <mat-card class="border no-rounded list shrare-post">
               <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoadingDetails"></app-progress-bar>
               <div class="list flex-containers analysis-wrp flex-start wrap">
-                <div class="list-item-3 outline">
-                  <h1 class="share-post-title">Analysis by<span class="yellow"> CDE</span></h1>
+                <div class="list-item-4 outline">
+                  <h1 class="share-post-title">
+                    Source: <span class="yellow"> {{selectedAnalysis.source?.sourceDataName}}</span>
+                  </h1>
                 </div>
-                <div class="list-item-3 outline">
+                <div class="list-item-5 outline">
                   <mat-form-field appearance="fill">
-                    <mat-select [(ngModel)]="selectedCDE" (ngModelChange)="launchAnalysisByKey($event)">
+                    <mat-label class="lbl">Ruleset Name</mat-label>
+                      <mat-select [(ngModel)]="selectedAnalysis.rulesetId"  (ngModelChange)="onRulesetChange(selectedAnalysis.rulesetId)">
+                        <mat-option *ngFor="let rule of selectedAnalysis.rules;" [value]="rule.rulesetId">
+                            {{rule.rulesetName}}
+                        </mat-option>
+                      </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="list-item-5 outline">
+                  <mat-form-field appearance="fill">
+                    <mat-select [(ngModel)]="selectedCDE" (ngModelChange)="launchAnalysisByKeyDate($event, uploadId)">
                       <mat-option *ngFor="let col of selectedColumns;" [value]="col">
                         {{col}}
                       </mat-option>
@@ -27,27 +39,34 @@
                   </div>
                 </div>
               </div>
-              <!-- <div class="analysis-info flex-containers analysis-wrp flex-start wrap">
-                <h1 class="analysis-title">{{selectedAnalysis.source.sourceDataName}}</h1>
-                <div class="outline">
-                  <mat-form-field appearance="fill">
-                     <mat-label class="lbl">Date</mat-label>
-                  <input matInput [matDatepicker]="frompickerAnalysis" [(ngModel)]="selectedAnalysis.uploadDate" (click)="frompickerAnalysis.open()" autocomplete="off">
-                  <mat-datepicker-toggle matSuffix [for]="frompickerAnalysis"></mat-datepicker-toggle>
-                  <mat-datepicker #frompickerAnalysis (opened)="onOpenDatePicker(selectedAnalysis)" [dateClass]="dateClass"></mat-datepicker>
-                  </mat-form-field>
+
+              <!-- Date Carousel -->
+              <div class="analysis-info">
+                <div class="category-list-wrapper clearfix">
+                  <div class="left-arrow">
+                     <button mat-stroked-button class="gv-secondary-btn primary-btn-gray prev-next-btn" (click)="owlCar.prev()">
+                     <mat-icon class="pl">keyboard_arrow_left</mat-icon>
+                     </button>
+                  </div>
+                  <div class="category-list" #carouselHolder>
+                     <owl-carousel-o [options]="OwlCategoryOptions" #owlCar>
+                     <!-- Carousel Items -->
+                     <ng-container *ngFor="let history of uploadsHistory">
+                        <ng-template carouselSlide [id]="history.uploadId">
+                           <div class="category-item" [class.selected]="history.uploadId === uploadId" (tap)="tapDateCarouselItem(history)">
+                           <h3 class="cat-title">{{formatDate(history.uploadDate)}}</h3>
+                           </div>
+                        </ng-template>
+                     </ng-container>
+                     </owl-carousel-o>
+                  </div>
+                  <div class="right-arrow">
+                     <button mat-stroked-button class="gv-secondary-btn primary-btn-gray prev-next-btn" (click)="owlCar.next()">
+                     <mat-icon class="pl">keyboard_arrow_right</mat-icon>
+                     </button>
+                  </div>
                </div>
-                <div class="outline">
-                    <mat-form-field appearance="fill">
-                      <mat-label class="lbl">Ruleset Name</mat-label>
-                        <mat-select [(ngModel)]="selectedAnalysis.rulesetId">
-                          <mat-option *ngFor="let rule of selectedAnalysis.rules;" [value]="rule.rulesetId">
-                              {{rule.rulesetName}}
-                          </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-              </div> -->
+              </div>
               <mat-tab-group mat-align-tabs="start"  animationDuration="0ms">
                <mat-tab label="2D Map">
                   <app-cylinder-chart 
@@ -56,8 +75,8 @@
                     [chartData]="analyseKeyChartData"
                     [chartType]="'column'" 
                     [options3d]= false>
-                </app-cylinder-chart>
-               </mat-tab>
+                  </app-cylinder-chart>
+                </mat-tab>
                <mat-tab label="3D Map">
                   <app-cylinder-chart 
                   *ngIf="analyseKeyData.length && isLoadChart"
@@ -92,7 +111,7 @@
                       <td *ngFor="let key of analysisKeys" [style.background-color]="data[key]?.value | formatCell: settings">
                         <span class="cur" 
                           *ngIf="data[key]?.details && data[key]?.details.length"
-                          (click)="showDetails(data[key]?.details)"
+                          (click)="showDetails(data[key]?.details, key, selectedKey, data[selectedKey])"
                         >{{data[key]?.value}}%</span>
                         <span *ngIf="!data[key]?.details.length">{{data[key]?.value}}%</span>
                       </td>

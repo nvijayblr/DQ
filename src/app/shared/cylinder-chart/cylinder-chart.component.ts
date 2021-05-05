@@ -70,7 +70,7 @@ export class CylinderChartComponent implements OnInit {
          xAxis: {},
          yAxis: {
             min: 0,
-            max:100,
+            max: 100,
              title: {
                  text: '',
                  align: 'high'
@@ -124,8 +124,8 @@ export class CylinderChartComponent implements OnInit {
        }
    };
 
-    this.chartOptions.chart.type = this.chartType ? this.chartType : 'column';
-    this.chartOptions.chart.options3d.enabled = this.options3d ? this.options3d : false;
+   this.chartOptions.chart.type = this.chartType ? this.chartType : 'column';
+   this.chartOptions.chart.options3d.enabled = this.options3d ? this.options3d : false;
    this.chartOptions.series = [];
    this.analysisKeys.map(key => {
        this.chartOptions.series.push({
@@ -133,7 +133,6 @@ export class CylinderChartComponent implements OnInit {
         data: this.chartData[key]
        });
    });
-   console.log('this.chartData', this.chartData);
  }
 
 

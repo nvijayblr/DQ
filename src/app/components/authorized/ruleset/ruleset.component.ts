@@ -57,9 +57,9 @@ export class RulesetComponent implements OnInit {
 
 
   get afControls(): any { return this.analysisForm.controls; }
-   @ViewChild('owlCar', { static: false }) owlCar;
-   @ViewChild(MatAccordion , { static: true }) accordion: MatAccordion;
-   isLinear = true;
+  @ViewChild('owlCar', { static: false }) owlCar;
+  @ViewChild(MatAccordion , { static: true }) accordion: MatAccordion;
+  isLinear = true;
   user: any = {};
   professional: any = {};
   userId: any = '';

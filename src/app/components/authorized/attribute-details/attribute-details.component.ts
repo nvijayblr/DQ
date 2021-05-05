@@ -20,9 +20,9 @@ export class AttributeDetailsComponent implements OnInit {
    profiles: any = [];
    profile: any = {};
 
-   
 
-   sticky: boolean = false;
+
+   sticky = false;
    elementPosition: any;
 
    constructor(private messageService: MessageService, private http: HttpService, ) {
@@ -135,11 +135,11 @@ export class AttributeDetailsComponent implements OnInit {
       this.isLoading = false;
    });
    }
-   
+
    // ngAfterViewInit(){
    //    this.elementPosition = this.menuElement.nativeElement.offsetTop;
    // }
-   
+
    // @HostListener('window:scroll', ['$event'])
    //  handleScroll(){
    //    const windowScroll = window.pageYOffset;
