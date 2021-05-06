@@ -674,5 +674,24 @@ table{
       left: -2px;
    }
  }
+
+ .wts{
+   background: #ffffff;
+ }
+
+ .attTitle{
+  font-size: 18px;
+  color: #fff;
+  margin: 0px 10px 20px 10px;
+  font-family: 'open-sans-condensed-bold';
+  position: relative;
+  width: 98%;
+  display: inline-block;
+  //background: #433683;
+  background: linear-gradient(
+   45deg
+   , lightcoral, transparent);
+   padding: 5px 20px;
+ }
  
 
