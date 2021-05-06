@@ -21,10 +21,10 @@ export class HeatMapComponent implements OnInit {
    chartOptions = {
       chart : {
          type: 'bubble',   // bubble
-         marginTop: 40,
-         marginBottom: 80,
-         plotBorderWidth: 0,
-         paddingBottom: 100,
+         //marginTop: 40,
+         //marginBottom: 80,
+         plotBorderWidth: 1,
+         //paddingBottom: 100,
          height: 900,
          pointSize: 1
       },
@@ -36,7 +36,9 @@ export class HeatMapComponent implements OnInit {
       },
       yAxis : {
          categories: this.columns,
-         title: null
+        title: null,
+        startOnTick: false,
+        endOnTick: false
       },
       colorAxis: {
          // stops: [
@@ -63,34 +65,36 @@ export class HeatMapComponent implements OnInit {
          // maxColor: Highcharts.getOptions().colors[0]
 
       },
-      legend : {
+     legend: {
+      enabled: false,
          align: 'right',
          layout: 'vertical',
-         margint: 0,
+         margin: 0,
          verticalAlign: 'top',
          y: 25,
          symbolHeight: 765
       },
       plotOptions: {
          heatmap: {
-          pointPadding: 1.5
+          pointPadding: 0
          },
          bubble: {
             minSize: 1,
-            maxSize: 30
+           maxSize: 22,
          },
          series: {
            stickyTracking: false
          }
        },
-      tooltip : {
+     tooltip: {
+      followPointer: true,
          formatter() {
             return '<b>' + this.series.xAxis.categories[this.point.x] + '</b>: ' + this.point.value;
          }
       },
       series : [{
          name: '',
-         borderWidth: 0,
+         borderWidth: 1,
          borderColor: '#ffebbb',
          data: this.data,
          dataLabels: {

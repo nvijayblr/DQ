@@ -11,6 +11,28 @@
 ::ng-deep .highcharts-label{
    font-family: "open-sans-condensed-bold"!important;
 }
+::ng-deep .highcharts-a11y-proxy-button{
+  border-width: 0px;
+    background-color: #fff!important;
+    background: url('../../../assets/images/menu.png') no-repeat;
+    cursor: pointer;
+    outline: none;
+   opacity: 1 !important;;
+    z-index: 999;
+    overflow: hidden;
+    padding: 0px;
+    margin: 0px;
+    display: block;
+    position: absolute;
+    width: 22.8423px;
+    height: 20.9387px;
+    left: 1423.12px;
+    top: 38.9374px;
+}
+
+::ng-deep .highcharts-contextmenu{
+  right: 50px!important;
+}
 
 
 // ::ng-deep .highcharts-point{
