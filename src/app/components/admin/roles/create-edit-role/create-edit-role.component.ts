@@ -27,10 +27,13 @@ export class CreateEditRoleComponent implements OnInit {
   ngOnInit() {
     this.role = this.data.role;
     this.rightsList = this.data.rights;
+
     const rights = [];
-    this.role.rights.map(right => {
-      rights.push(right.Value);
-    });
+    if (this.role.rights) {
+      this.role.rights.map(right => {
+        rights.push(right.Value);
+      });
+    }
     console.log(rights);
     this.mode = this.data.mode;
     this.roleForm = this.fb.group({
