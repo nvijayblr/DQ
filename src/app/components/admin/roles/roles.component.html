@@ -11,7 +11,7 @@
                   <h1 class="share-post-title no-margin">Roles<span class="yellow"> List</span></h1>
                 </div>
                 <div class="list-item-2 text-right">
-                  <button mat-stroked-button class="primary-btn-red" (click)="showAddEditRole({}, 'create');">New Role</button>
+                  <button  mat-stroked-button class="button3d btnPush btnLightBlue tdBtn" (click)="showAddEditRole({}, 'create');">New Role <mat-icon>person_add</mat-icon></button>
                 </div>
               </div>
 
@@ -32,9 +32,15 @@
                         <td>{{role.roleText}}</td>
                         <td class="{{role.status}}">{{role.status}}</td>
                         <td>
-                          <button mat-icon-button color="primary" class="icon-primary-btn" matTooltip="Edit Role" (click)="showAddEditRole(role, 'edit');">
-                            <mat-icon>edit</mat-icon>
+
+                          <button type="button" class="button3d btnPush btnOrange addico"
+                          (click)="showAddEditRole(role, 'edit');"  matTooltip="Edit Role">
+                          <mat-icon>edit</mat-icon> Edit
                           </button>
+
+                          <!-- <button mat-icon-button color="primary" class="icon-primary-btn" matTooltip="Edit Role" (click)="showAddEditRole(role, 'edit');">
+                            <mat-icon>edit</mat-icon>
+                          </button> -->
                         </td>
                      </tr>
                    </tbody>

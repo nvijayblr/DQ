@@ -12,7 +12,7 @@
                   <h1 class="share-post-title no-margin">Users<span class="yellow"> List</span></h1>
                 </div>
                 <div class="list-item-2 text-right">
-                  <button mat-stroked-button class="primary-btn-red" (click)="showAddEditUser({}, 'create');">New User</button>
+                  <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn" (click)="showAddEditUser({}, 'create');">New User <mat-icon>person_add</mat-icon></button>
                 </div>
               </div>
 
@@ -39,9 +39,15 @@
                         <td>{{user.department.join(', ')}}</td>
                         <td class="{{user.status}}">{{user.status}}</td>
                         <td>
-                          <button mat-icon-button color="primary" class="icon-primary-btn" matTooltip="Edit User" (click)="showAddEditUser(user, 'edit');">
-                            <mat-icon>edit</mat-icon>
+
+                          <button type="button" class="button3d btnPush btnOrange addico"
+                          (click)="showAddEditUser(user, 'edit');"  matTooltip="Edit User">
+                          <mat-icon>edit</mat-icon> Edit
                           </button>
+
+                          <!-- <button mat-icon-button color="primary" class="icon-primary-btn" matTooltip="Edit User" (click)="showAddEditUser(user, 'edit');">
+                            <mat-icon>edit</mat-icon>
+                          </button> -->
                           <!-- <button mat-stroked-button class="primary-btn-red btn-small" matTooltip="Edit User">
                             In Active
                           </button> -->

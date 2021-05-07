@@ -11,7 +11,7 @@
                   <h1 class="share-post-title no-margin">Departments<span class="yellow"> List</span></h1>
                 </div>
                 <div class="list-item-2 text-right">
-                  <button mat-stroked-button class="primary-btn-red" (click)="showAddEditDept({}, 'create');">New Department</button>
+                  <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn" (click)="showAddEditDept({}, 'create');">New Department <mat-icon> layers</mat-icon></button>
                 </div>
               </div>
 
@@ -32,9 +32,15 @@
                         <td>{{dept.Display}}</td>
                         <td class="{{dept.status}}">{{dept.status}}</td>
                         <td>
-                          <button mat-icon-button color="primary" class="icon-primary-btn" matTooltip="Edit Department" (click)="showAddEditDept(dept, 'edit');">
-                            <mat-icon>edit</mat-icon>
+
+                          <button type="button" class="button3d btnPush btnOrange addico"
+                          (click)="showAddEditDept(dept, 'edit');"  matTooltip="Edit Department">
+                          <mat-icon>edit</mat-icon> Edit
                           </button>
+
+                          <!-- <button mat-icon-button color="primary" class="icon-primary-btn" matTooltip="Edit Department" (click)="showAddEditDept(dept, 'edit');">
+                            <mat-icon>edit</mat-icon>
+                          </button> -->
                         </td>
                      </tr>
                    </tbody>
