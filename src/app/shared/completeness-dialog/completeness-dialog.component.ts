@@ -2,10 +2,6 @@ import { Component, OnInit, Inject } from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { HttpService } from 'src/app/services/http-service.service';
 
-export interface DialogData {
-   incompleteCDE;
-}
-
 @Component({
   selector: 'app-completeness-dialog',
   templateUrl: './completeness-dialog.component.html',
@@ -17,10 +13,10 @@ export class CompletenessDialogComponent implements OnInit {
   columnDefs: any = [];
   rowData: any = [];
   showDetails = false;
-  selectedColumn = {};
+  selectedColumn: any = {};
   constructor(
     public dialogRef: MatDialogRef<CompletenessDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private http: HttpService,
   ) {
   }
@@ -30,7 +26,6 @@ export class CompletenessDialogComponent implements OnInit {
   }
 
   launchAnalysisDetails(rowItem) {
-    console.log(rowItem);
     this.selectedColumn = rowItem;
     this.showDetails = false;
     this.isLoading = true;
