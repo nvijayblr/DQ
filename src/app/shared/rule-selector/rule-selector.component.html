@@ -1,6 +1,5 @@
 <div class="rule-selector">
   <mat-form-field appearance="fill">
-   <mat-label>Select an option</mat-label>
     <mat-label *ngIf="label">{{label}}</mat-label>
     <mat-select #ruleSelect [(ngModel)]="ruleOptionItem" (ngModelChange)="modelChange($event)" [multiple]="multiple">     
       <mat-select-trigger>

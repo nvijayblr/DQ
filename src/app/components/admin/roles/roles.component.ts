@@ -18,6 +18,7 @@ export class RolesComponent implements OnInit {
   isLoading = false;
   loaderMsg = '';
   rolesList: any = [];
+  rightsList: any = [];
 
    constructor(
       public dialog: MatDialog,
@@ -28,11 +29,26 @@ export class RolesComponent implements OnInit {
    }
 
    ngOnInit() {
-     this.getRolesList();
+      this.getRightsList();
+      this.getRolesList();
    }
 
 
-   getRolesList() {
+   getRightsList() {
+    this.http.getRightsList().subscribe((result: any) => {
+      const rightsList = result.rights ? result.rights : [];
+      this.rightsList = rightsList.map(rights => {
+        return {
+          value: rights.Value,
+          label: rights.Text,
+        };
+      });
+    }, (error) => {
+      this.rightsList = [];
+    });
+  }
+
+  getRolesList() {
     this.isLoading = true;
     this.loaderMsg = 'Loading role...';
     this.http.getRolesList().subscribe((result: any) => {
@@ -57,7 +73,7 @@ export class RolesComponent implements OnInit {
   showAddEditRole(role, mode) {
     const dialogRef = this.dialog.open(CreateEditRoleComponent, {
         width: '450px',
-        data: {role: role ? role : {}, mode}
+        data: {role: role ? role : {}, mode, rights: this.rightsList}
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {

@@ -23,6 +23,17 @@
           </mat-select>
         </mat-form-field>
       </div>
+      <div class="list">
+          <span class="sub-title">Roles</span>
+          <!-- [initValue]="sourceSettings.multiSourceOptions"
+          (selectionChange)="sourceSettings.multiSourceOptions=$event.value" -->
+          <app-rule-selector 
+            multiple="true" 
+            [showAddItem]="false"
+            [ruleItems]="rightsList"
+            [initValue]="roleForm.controls.rights.value"
+          ></app-rule-selector>                                  
+      </div>
     </div>
   </form>
 </div>

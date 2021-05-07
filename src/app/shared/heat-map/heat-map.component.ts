@@ -20,11 +20,11 @@ export class HeatMapComponent implements OnInit {
 
    chartOptions = {
       chart : {
-         type: 'bubble',   // bubble
-         //marginTop: 40,
-         //marginBottom: 80,
+         type: 'bubble',   // bubble, heatmap
+         // marginTop: 40,
+         // marginBottom: 80,
          plotBorderWidth: 1,
-         //paddingBottom: 100,
+         // paddingBottom: 100,
          height: 900,
          pointSize: 1
       },
@@ -89,7 +89,8 @@ export class HeatMapComponent implements OnInit {
      tooltip: {
       followPointer: true,
          formatter() {
-            return '<b>' + this.series.xAxis.categories[this.point.x] + '</b>: ' + this.point.value;
+            console.log(this.point);
+            return '<b>' + this.point.category + '</b>: ' + this.point.options.z;
          }
       },
       series : [{

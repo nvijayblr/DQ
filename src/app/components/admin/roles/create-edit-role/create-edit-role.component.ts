@@ -13,6 +13,7 @@ export class CreateEditRoleComponent implements OnInit {
   colorCtr: FormGroup;
   formVal: any = [];
   role: any = {};
+  rightsList: any = [];
   mode = '';
 
   constructor(
@@ -25,12 +26,18 @@ export class CreateEditRoleComponent implements OnInit {
 
   ngOnInit() {
     this.role = this.data.role;
+    this.rightsList = this.data.rights;
+    const rights = [];
+    this.role.rights.map(right => {
+      rights.push(right.Value);
+    });
+    console.log(rights);
     this.mode = this.data.mode;
     this.roleForm = this.fb.group({
-      roleName: [this.role.Name, [Validators.required]],
-      roleText: [this.role.Display, [Validators.required]],
+      roleName: [this.role.roleName, [Validators.required]],
+      roleText: [this.role.roleText, [Validators.required]],
       status: [this.role.status, [Validators.required]],
-      rights: [this.role.rights, [Validators.required]]
+      rights: [rights, [Validators.required]]
     });
   }
 

@@ -282,6 +282,17 @@ export class HttpService  {
     ) as any;
   }
 
+  getRightsList(): Observable<any> {
+    return this.http.get<any>(`${this.rootUrl}/api/getAllRights`).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+
 
 
 
