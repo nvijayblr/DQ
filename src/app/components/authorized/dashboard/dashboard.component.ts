@@ -20,6 +20,7 @@ export class DashboardComponent implements OnInit {
    isLoading = false;
    loaderMsg = '';
    role = '';
+   rights = '';
    sourceList: any = [];
    highlightDates: any = [];
    visibleIndex = -1;
@@ -30,6 +31,10 @@ export class DashboardComponent implements OnInit {
       private messageService: MessageService,
       private auth: AuthGuardService,
       private router: Router) {
+      const rights = this.auth.getUserRole().rights;
+      this.rights = rights ? rights : [];
+      console.log(this.rights);
+
       const role = this.auth.getUserRole().role;
       this.role = role ? role : 'VIEWER';
    }

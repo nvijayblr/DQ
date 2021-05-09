@@ -34,12 +34,12 @@ export class CreateEditRoleComponent implements OnInit {
         rights.push(right.Value);
       });
     }
-    console.log(rights);
+
     this.mode = this.data.mode;
     this.roleForm = this.fb.group({
       roleName: [this.role.roleName, [Validators.required]],
       roleText: [this.role.roleText, [Validators.required]],
-      status: [this.role.status, [Validators.required]],
+      // status: [this.role.status, [Validators.required]],
       rights: [rights, [Validators.required]]
     });
   }

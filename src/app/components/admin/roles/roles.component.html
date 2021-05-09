@@ -22,7 +22,7 @@
                     <tr>
                       <th>Name</th>
                       <th>Display Text</th>
-                      <th>Status</th>
+                      <!-- <th>Status</th> -->
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -30,7 +30,7 @@
                      <tr *ngFor="let role of rolesList; let i= index;" class="tableinner">
                         <td>{{role.roleName}}</td>
                         <td>{{role.roleText}}</td>
-                        <td class="{{role.status}}">{{role.status}}</td>
+                        <!-- <td class="{{role.status}}">{{role.status}}</td> -->
                         <td>
                           <button type="button" class="button3d btnPush btnOrange addico"
                             (click)="showAddEditRole(role, 'edit');"  matTooltip="Edit Role">

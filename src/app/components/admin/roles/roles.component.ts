@@ -19,6 +19,7 @@ export class RolesComponent implements OnInit {
   loaderMsg = '';
   rolesList: any = [];
   rightsList: any = [];
+  rightsListAll: any = [];
 
    constructor(
       public dialog: MatDialog,
@@ -37,6 +38,7 @@ export class RolesComponent implements OnInit {
    getRightsList() {
     this.http.getRightsList().subscribe((result: any) => {
       const rightsList = result.rights ? result.rights : [];
+      this.rightsListAll = result.rights ? result.rights : [];
       this.rightsList = rightsList.map(rights => {
         return {
           value: rights.Value,
@@ -77,6 +79,13 @@ export class RolesComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        const rights = result.role.rights;
+        const selectedRights = [];
+        console.log(rights);
+        rights.map(right => {
+          selectedRights.push(this.rightsListAll.filter(rlist => rlist.Value === right)[0]);
+        });
+        result.role.rights = selectedRights;
         this.createEditRole(result.role, result.mode);
       }
      });

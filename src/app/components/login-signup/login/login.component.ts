@@ -84,6 +84,7 @@ export class LoginComponent implements OnInit {
       }
       const loggedUserDet = result.userdetail;
       loggedUserDet.role = loggedUserDet.role[0];
+      loggedUserDet.rights = result.roleRights;
       this.setLoginSessionAndRouting(loggedUserDet);
     }, (error) => {
       this.isLoading = false;
@@ -185,6 +186,7 @@ export class LoginComponent implements OnInit {
   }
 
   setLoginSessionAndRouting(result, isSocial?) {
+    console.log(result);
     const session = {
       ...result,
       id: result.userName,
@@ -192,6 +194,7 @@ export class LoginComponent implements OnInit {
       isSocial
     };
     localStorage.setItem('dq_token', JSON.stringify(session));
+    localStorage.setItem('dq_rights', JSON.stringify(session));
     localStorage.setItem('isInitLoad', JSON.stringify({isInitLoad: true}));
     this.router.navigate([`auth/dashboard`]);
   }
