@@ -20,13 +20,17 @@
           </div>
         </mat-card>
     </div>
-    <mat-card fxFlex class="stats process-blocks-table" style="height: 100%" *ngIf="showDetails">
+
+    <div *ngIf="showDetails">
       <mat-card *ngFor="let rowItem of data.details;">
         <div  *ngFor="let item of rowItem | keyvalue" [hidden]="item.key === 'outlier'">
           <span *ngIf="item.key !== 'column'" class="field-label">{{item.key}}: </span> 
           <span class="strong compClr">{{item.value}}</span>
         </div>
       </mat-card>
+  </div>
+    <mat-card fxFlex class="stats process-blocks-table" style="height: 100%" *ngIf="showDetails">
+      
       <app-ag-grid
         floatingFilter="true"
         [isLoading]="isLoading"

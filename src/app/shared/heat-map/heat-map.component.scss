@@ -11,6 +11,8 @@
 ::ng-deep .highcharts-label{
    font-family: "open-sans-condensed-bold"!important;
 }
+#heat-map-chart{
+
 ::ng-deep .highcharts-a11y-proxy-button{
   border-width: 0px;
     background-color: #fff!important;
@@ -32,6 +34,7 @@
 
 ::ng-deep .highcharts-contextmenu{
   right: 50px!important;
+}
 }
 
 

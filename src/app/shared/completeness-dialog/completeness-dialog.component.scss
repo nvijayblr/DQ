@@ -62,10 +62,12 @@
    margin-bottom: 20px;
 }
 .content-details {
-   height: calc(100vh - 230px);
+   //height: calc(100vh - 230px);
+   height:500px;
+   overflow:overlay;
 }
 .mat-dialog-content {
-   overflow: hidden;
+  //overflow:scroll;
    max-height: initial;
 }
 .primary-btn-gray mat-icon {

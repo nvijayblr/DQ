@@ -219,7 +219,7 @@ export class AnalysisComponent implements OnInit {
    showDetails(details, key, selectedKey, selectedValue) {
       this.dialog.open(CompletenessDialogComponent, {
          width: '95%',
-         height: '95%',
+         //height: '95%',
          data: {details : details ? details : [], key, selectedKey, selectedValue, selectedAnalysis: this.selectedAnalysis }
       });
    }

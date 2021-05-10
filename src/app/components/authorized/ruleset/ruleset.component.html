@@ -162,7 +162,7 @@
                                  <mat-label>Start Date<span class="red">*</span></mat-label>
                                  <mat-form-field appearance="fill">
                                  <mat-label class="tplabel">Start Date</mat-label>
-                                 <input matInput [matDatepicker]="frompicker"  formControlName="startDate" autocomplete="off">
+                                 <input matInput [matDatepicker]="frompicker"  formControlName="startDate" autocomplete="off" (click)="frompicker.open()">
                                  <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
                                  <mat-datepicker #frompicker></mat-datepicker>
                                  </mat-form-field>
@@ -171,7 +171,7 @@
                                  <mat-label>End Date<span class="red">*</span></mat-label>
                                  <mat-form-field appearance="fill">
                                  <mat-label class="tplabel">End Date</mat-label>
-                                 <input matInput [matDatepicker]="topicker"  formControlName="endDate" autocomplete="off">
+                                 <input matInput [matDatepicker]="topicker"  formControlName="endDate" autocomplete="off" (click)="topicker.open()">
                                  <mat-datepicker-toggle matSuffix [for]="topicker"></mat-datepicker-toggle>
                                  <mat-datepicker #topicker></mat-datepicker>
                                  </mat-form-field>

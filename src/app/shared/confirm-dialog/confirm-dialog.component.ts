@@ -19,7 +19,7 @@ export class ConfirmDialogComponent implements OnInit {
   ngOnInit() {
   }
 
-  onCloseDialog(action) {
+  onCloseDialog(action) {    
     this.ngZone.run(() => {
       this.dialog.close({action, reason: this.reason});
     });
