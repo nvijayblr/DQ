@@ -18,6 +18,8 @@ export class UsersListComponent implements OnInit {
   isLoading = false;
   loaderMsg = '';
   usersList: any = [];
+  rolesList: any = [];
+  departmentsList: any = [];
 
    constructor(
       public dialog: MatDialog,
@@ -28,8 +30,29 @@ export class UsersListComponent implements OnInit {
    }
 
    ngOnInit() {
-     this.getUsersList();
-   }
+    this.getRolesList();
+    this.getDepartmentsList();
+    this.isLoading = true;
+    this.loaderMsg = 'Loading users...';
+    setTimeout(() => {
+      this.getUsersList();
+    }, 1000);
+  }
+
+   getRolesList() {
+    this.http.getRolesList().subscribe((result: any) => {
+      this.rolesList = result.roles ? result.roles : [];
+    }, (error) => {
+    });
+  }
+
+  getDepartmentsList() {
+    this.http.getDepartmentsList().subscribe((result: any) => {
+      this.departmentsList = result.department ? result.department : [];
+    }, (error) => {
+    });
+  }
+
 
 
    getUsersList() {
@@ -54,16 +77,16 @@ export class UsersListComponent implements OnInit {
     });
   }
 
-   showAddEditUser(user, mode) {
-      const dialogRef = this.dialog.open(CreateEditUserComponent, {
-         width: '450px',
-         data: {user: user ? user : {}, mode}
-      });
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.createEditUser(result.user, result.mode);
-        }
-     });
-   }
+  showAddEditUser(user, mode) {
+    const dialogRef = this.dialog.open(CreateEditUserComponent, {
+        width: '450px',
+        data: {user: user ? user : {}, mode, rolesList: this.rolesList, departmentsList: this.departmentsList}
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.createEditUser(result.user, result.mode);
+      }
+    });
+  }
 
 }

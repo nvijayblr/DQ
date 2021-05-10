@@ -14,36 +14,8 @@ export class CreateEditUserComponent implements OnInit {
   formVal: any = [];
   user: any = {};
   mode = '';
-  roleList = [{
-    label: 'Admin',
-    value: 'ADMIN',
-  }, {
-    label: 'Rule Analyst',
-    value: 'DQ_MANAGER',
-  }, {
-    label: 'Source Manager',
-    value: 'DQ_SOURCE_MANAGER',
-  }, {
-    label: 'Rule Manager',
-    value: 'DQ_RULE_MANAGER',
-  }, {
-    label: 'Operation Analyst',
-    value: 'DQ_OPERATION',
-  }, {
-    label: 'Viewer',
-    value: 'DQ_VIEWER',
-  }];
-
-  deptList = [{
-    value: 'DEPT-1',
-    label: 'Department 1'
-  }, {
-    value: 'DEPT-2',
-    label: 'Department 2'
-  }, {
-    value: 'DEPT-3',
-    label: 'Department 3'
-  }];
+  roleList: any = [];
+  deptList: any = [];
 
   constructor(
     private fb: FormBuilder,
@@ -56,6 +28,20 @@ export class CreateEditUserComponent implements OnInit {
   ngOnInit() {
     this.user = this.data.user;
     this.mode = this.data.mode;
+    const roleList = this.data.rolesList;
+    const deptList = this.data.departmentsList;
+    roleList.map(role => {
+      this.roleList.push({
+        label: role.roleText,
+        value: role.roleName,
+      });
+    });
+    deptList.map(dept => {
+      this.deptList.push({
+        label: dept.Display,
+        value: dept.Name,
+      });
+    });
     this.userForm = this.fb.group({
       name: [this.user.name, [Validators.required]],
       email: [this.user.email, [Validators.required, Validators.email]],
