@@ -127,7 +127,7 @@
                                             </div>
                                         </div>
                                         <div class="list flex-containers ml3" style="width:300px;">
-                                            <div class=" list-item-0  inlb" *ngIf="rights.includes('PROCESS_ANALYSIS')">
+                                            <div class=" list-item-0  inlb" *ngIf="rights.includes('VIEW_RESULTS')">
                                                 <button class="button3d btnPush btnLightBlue addico" 
                                                   [disabled]="!data.rulesetId" 
                                                   (click)="launchAnalysis(data)" 
@@ -136,7 +136,7 @@
                                                   View Analysis
                                                 </button>
                                               </div>
-                                              <div class=" list-item-0  inlb" *ngIf="rights.includes('PROCESS_ANALYSIS')">
+                                              <div class=" list-item-0  inlb" *ngIf="rights.includes('VIEW_RESULTS')">
                                                 <button class="button3d btnPush btnPurple addico" 
                                                   (click)="launchProfileView(data)" 
                                                   matTooltip="Profile">
