@@ -99,7 +99,7 @@ export class CreateSourceComponent implements OnInit {
   sourceSettings = {
     isMuliSourceData: 'true',
     multiSourceOptions: [],
-    frequency: 'Monthly',
+    frequency: 'Daily',
     uploadDate: this.minDate,
     uploadTime: '',
     department: []
@@ -132,12 +132,10 @@ export class CreateSourceComponent implements OnInit {
   isRefPreviewLoaded = false;
   isRefPreviewLoading = false;
   refrowData: any = [];
-   refcolumnDefs: any = [];
-   selectedType;
-   flError = true;
-   edMode;
-
- showGrid = true;
+  refcolumnDefs: any = [];
+  selectedType;
+  flError = true;
+  showPreview = false;
 
   ngOnInit() {
     this.isUserLoggedIn = this.authGuardService.isUserLoggedIn();
@@ -155,7 +153,6 @@ export class CreateSourceComponent implements OnInit {
     }
     if (analysis.settings) {
       this.sourceSettings = analysis.settings;
-      console.log(this.sourceSettings);
     }
 
     this.analysisForm = this.fb.group({
@@ -178,11 +175,15 @@ export class CreateSourceComponent implements OnInit {
       referenceData.push(this.intiFormArrays('referenceData', refCSV));
     });
 
-    const firstParam: string = this.route.snapshot.queryParamMap.get('type');
-    this.selectedType = firstParam;
-    console.log(this.selectedType);
+    const fileType: string = this.route.snapshot.queryParamMap.get('type');
+    this.selectedType = fileType;
+
     const mode: string = this.route.snapshot.queryParamMap.get('mode');
-    this.edMode = mode;
+    if (mode === 'edit') {
+      this.isEditMode = true;
+      this.mode = 'edit';
+      this.showPreview = true;
+    }
      // console.log(mode);
     this.minDate = moment().format('YYYY-MM-DD');
   }
@@ -325,36 +326,25 @@ export class CreateSourceComponent implements OnInit {
     this.gotoStepper(1);
   }
   onSourceFileSelected(file) {
+    this.showPreview = true;
     this.sourceFile = file;
+    this.flError = true;
     const fName = file.name.split('.')[0];
     const fExt = file.name.split('.')[1];
-    //console.log(fExt);
-    if (this.edMode === 'edit') {
+    if (this.mode === 'edit') {
       this.flError = false;
-     }
+    }
     if (this.selectedType !== fExt) {
-        // alert('Please Select a correct file type');
-        this.flError = false;
-        this.showGrid = false;
-     } else {
-        this.flError = true;
-        this.showGrid = true;
-     }
+      this.flError = false;
+      this.showPreview = false;
+    }
 
     if (this.selectedType === 'xlsx') {
         if (fExt.includes('xls')) {
            this.flError = true;
-           this.showGrid = false;
-        } else {
-           this.flError = false;
-           this.showGrid = false;
+           this.showPreview = true;
         }
      }
-    //console.log(this.showGrid);
-   //   console.log(this.flError);
-   //   this.selectedType;
-   //   console.log(fName);
-   //   console.log(fExt);
     this.afControls.sourceDataName.setValue(fName);
     this.loadSourcePreview();
   }

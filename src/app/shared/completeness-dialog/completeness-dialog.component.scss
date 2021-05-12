@@ -304,3 +304,10 @@ tr:nth-child(even) {background: #ffffff}
   margin-bottom: 5px;
   vertical-align: top;
 }
+.btn-back-wrapper {
+   .btnPurple.btnPush {
+      margin: 0;
+      position: relative;
+      top: -3px;
+   }
+}

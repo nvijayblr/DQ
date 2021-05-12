@@ -27,6 +27,7 @@ export class ImageCropperComponent implements OnInit {
   @Input() name = '';
   @Input() imageType = '';
   @Input() imagePath = '';
+  @Input() disabled = false;
   @Input() fileTypes = 'image/*';
   @Output() imageCroppedCompleted = new EventEmitter<any>();
   @Output() fileSelected = new EventEmitter<any>();

@@ -20,6 +20,7 @@ export class AgGridComponent implements OnInit, OnChanges {
   @Input() isCheckboxSelection = false;
   @Input() singleClickEdit = false;
   @Input() sizeColumnsToFit = true;
+  @Input() moveToColumn = '';
   @Input() colResizeDefault = 'shift';
   @Output() rowSelectionChange = new EventEmitter<string>();
   @Output() sortFilterApplied = new EventEmitter<string>();
@@ -67,11 +68,11 @@ export class AgGridComponent implements OnInit, OnChanges {
   }
 
    gridReady(params) {
-     //alert('Grid')
+     // alert('Grid')
     this.gridApi = params.api;
     this.gridOptions = params.api.gridOptionsWrapper.gridOptions;
-     this.gridApi.hideOverlay();
-     this.gridApi.ensureColumnVisible('id');
+    this.gridApi.hideOverlay();
+    this.gridApi.ensureColumnVisible('id');
   }
 
   paginationChanged(params) {
@@ -86,6 +87,8 @@ export class AgGridComponent implements OnInit, OnChanges {
     if (this.sizeColumnsToFit) {
       this.gridApi.sizeColumnsToFit();
     }
+    this.gridApi.ensureColumnVisible(this.moveToColumn);
+
     if (this.firstRowSelected && this.rowData.length) {
       this.gridApi.getDisplayedRowAtIndex(0).setSelected(true);
     }

@@ -5,7 +5,7 @@
       <label for='input-file'>
          <mat-icon>attach_file</mat-icon>
        </label>
-      <input type="file" [accept]="fileTypes" class="gv-file-input" (change)="fileChangeEvent($event)" #fileInput>
+      <input type="file" [accept]="fileTypes" class="gv-file-input" [disabled]="disabled" (change)="fileChangeEvent($event)" #fileInput>
     </div>
     <!-- <button mat-button class="primary-btn upload-btn" title="Upload" (click)="uploadImage()" *ngIf="selectedFile.name && !isUploadDone">
       Upload

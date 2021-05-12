@@ -114,6 +114,10 @@
     font-family: 'open-sans-condensed-bold';
     // color: #747474;
     // font-size: 14px;
+    &[disabled] {
+      opacity: 0.32;
+      cursor: text;
+    }
  }
  
  input[type=file]::-webkit-file-upload-button {

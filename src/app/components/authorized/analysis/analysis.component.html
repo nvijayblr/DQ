@@ -7,7 +7,7 @@
           <div class="shrare-post">
             <!-- Analysis by CDE-->
             <mat-card class="border no-rounded list shrare-post">
-              <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoadingDetails"></app-progress-bar>
+              <!-- <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoadingDetails"></app-progress-bar> -->
               <div class="list flex-containers analysis-wrp tpBg2 flex-start wrap ">
                 <div class="list-item-4 outline">
                   <h1 class="share-post-title">
@@ -74,7 +74,9 @@
                     [analysisKeys]="analysisKeys"
                     [chartData]="analyseKeyChartData"
                     [chartType]="'column'" 
-                    [options3d]= false>
+                    [options3d]= false
+                    (barClicked)="onBarClicked($event)"
+                    >
                   </app-cylinder-chart>
                 </mat-tab>
                <mat-tab label="3D Map">
@@ -83,7 +85,9 @@
                   [analysisKeys]="analysisKeys"
                   [chartData]="analyseKeyChartData"
                   [chartType]="'column'" 
-                  [options3d]= true>
+                  [options3d]= true
+                  (barClicked)="onBarClicked($event)"
+                  >
                   </app-cylinder-chart>
                </mat-tab>
               </mat-tab-group>

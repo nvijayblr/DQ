@@ -18,11 +18,12 @@
                       <div class="form-continer">
                         <div class="list flex-containers flex-start wrap">
                         <div class="list-item-2 outline wth">                          
-                              <mat-label>Source Data<span class="red">*</span></mat-label>
+                              <mat-label>Source Data<span class="red">*</span>&nbsp;<span *ngIf="selectedType">({{selectedType}})</span></mat-label>
                               <app-image-cropper 
                                 [imageType]="'Source'"
                                 [fileTypes]="'.csv, .xls, .xlsx'"
                                 [imagePath]="''"
+                                [disabled]="isEditMode"
                                 (fileSelected)="onSourceFileSelected($event)"
                               >
                               </app-image-cropper>
@@ -273,40 +274,40 @@
                 </mat-step>
             </mat-horizontal-stepper>
           </form>
-          <div class="agShowDetails" *ngIf="showGrid">
-          <mat-card class="border no-rounded list shrare-post mat-card source-preview-card" [hidden]="stepIndex === 1 || stepIndex === 2">
-            <app-progress-bar [message]="'Loading source preview...'" class="component" *ngIf="isPreviewLoading"></app-progress-bar>
-            <div class="list flex-containers space-between">
-              <h1 class="share-post-title">Source Preview</h1>
-              <button  class="horizontal" (click)="loadSourcePreview();"> <span class="text"><mat-icon>view_column</mat-icon> Preview </span></button>
-            </div>
-            <app-ag-grid
-              floatingFilter="true"
-              *ngIf="isPreviewLoaded"
-              [rowData]="rowData"
-              [columnDefs]="columnDefs"
-              [pageSize]="50"
-              [rowSelection]="'multiple'"
-              [suppressRowClickSelection]="false"
-            ></app-ag-grid>
-          </mat-card>
-         </div>
-          <mat-card class="border no-rounded list shrare-post mat-card source-preview-card" [hidden]="stepIndex === 0 || stepIndex === 2">
-            <app-progress-bar [message]="'Loading source preview...'" class="component" *ngIf="isRefPreviewLoading"></app-progress-bar>
-            <div class="list flex-containers space-between">
-              <h1 class="share-post-title">Reference Preview</h1>
-              <button  class="horizontal" (click)="loadReferencePreview();"> <span class="text"><mat-icon>view_column</mat-icon> Preview </span></button>
-            </div>
-            <app-ag-grid 
-              floatingFilter="true"
-              *ngIf="isRefPreviewLoaded"
-              [rowData]="refrowData"
-              [columnDefs]="refcolumnDefs"
-              [pageSize]="50"
-              [rowSelection]="'multiple'"
-              [suppressRowClickSelection]="false"
-            ></app-ag-grid>
-          </mat-card>
+          <div class="agShowDetails" *ngIf="flError && showPreview">
+            <mat-card class="border no-rounded list shrare-post mat-card source-preview-card" [hidden]="stepIndex === 1 || stepIndex === 2">
+              <app-progress-bar [message]="'Loading source preview...'" class="component" *ngIf="isPreviewLoading"></app-progress-bar>
+              <div class="list flex-containers space-between">
+                <h1 class="share-post-title">Source Preview</h1>
+                <button  class="horizontal" (click)="loadSourcePreview();"> <span class="text"><mat-icon>view_column</mat-icon> Preview </span></button>
+              </div>
+              <app-ag-grid
+                floatingFilter="true"
+                *ngIf="isPreviewLoaded"
+                [rowData]="rowData"
+                [columnDefs]="columnDefs"
+                [pageSize]="50"
+                [rowSelection]="'multiple'"
+                [suppressRowClickSelection]="false"
+              ></app-ag-grid>
+            </mat-card>
+          </div>
+            <mat-card class="border no-rounded list shrare-post mat-card source-preview-card" [hidden]="stepIndex === 0 || stepIndex === 2">
+              <app-progress-bar [message]="'Loading source preview...'" class="component" *ngIf="isRefPreviewLoading"></app-progress-bar>
+              <div class="list flex-containers space-between">
+                <h1 class="share-post-title">Reference Preview</h1>
+                <button  class="horizontal" (click)="loadReferencePreview();"> <span class="text"><mat-icon>view_column</mat-icon> Preview </span></button>
+              </div>
+              <app-ag-grid 
+                floatingFilter="true"
+                *ngIf="isRefPreviewLoaded"
+                [rowData]="refrowData"
+                [columnDefs]="refcolumnDefs"
+                [pageSize]="50"
+                [rowSelection]="'multiple'"
+                [suppressRowClickSelection]="false"
+              ></app-ag-grid>
+            </mat-card>
          
         </div>
       </div>

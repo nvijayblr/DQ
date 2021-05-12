@@ -173,11 +173,10 @@ export class AnalysisComponent implements OnInit {
                chartData[key] = [];
             }
          });
-
          this.analyseKeyData.map(data => {
             chartData.labels.push(data[this.selectedKey]);
             this.analysisKeys.map(key => {
-               chartData[key].push(data[key] ? +data[key].value : 0);
+               chartData[key].push(data[key]);
             });
          });
          this.analyseKeyChartData = chartData;
@@ -216,10 +215,14 @@ export class AnalysisComponent implements OnInit {
       });
    }
 
+   onBarClicked(event) {
+      this.showDetails(event.details, event.key, this.selectedKey, event.selectedValue);
+   }
+
    showDetails(details, key, selectedKey, selectedValue) {
       this.dialog.open(CompletenessDialogComponent, {
          width: '95%',
-         //height: '95%',
+         // height: '95%',
          data: {details : details ? details : [], key, selectedKey, selectedValue, selectedAnalysis: this.selectedAnalysis }
       });
    }

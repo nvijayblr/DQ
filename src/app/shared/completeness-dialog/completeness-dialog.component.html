@@ -1,16 +1,21 @@
 <button class="close" mat-icon-button (click)="onNoClick()">
   <mat-icon>close</mat-icon>
 </button>
-<h1 mat-dialog-title class="space">
-  {{data.key}} - {{data.selectedKey}} - {{data.selectedValue}}
-  <span *ngIf="selectedColumn.column"> - {{selectedColumn.column}}</span>
-</h1>
-<div mat-dialog-content>
-  <div class="btn-wrapper clearfix" [hidden]="!showDetails">
-    <button mat-stroked-button class="button3d btnPush btnPurple ebckBtn" (click)="selectedColumn = {}; showDetails = false">
-      <mat-icon>keyboard_arrow_left</mat-icon> Back
-    </button>
+<div mat-dialog-title class="space">
+  <div class="flex-containers space-between">
+    <div>
+      {{data.key}} - {{data.selectedKey}} - {{data.selectedValue}}
+      <span *ngIf="selectedColumn.column"> - {{selectedColumn.column}}</span>
+    </div>
+    <div class="btn-back-wrapper clearfix" [hidden]="!showDetails">
+      <button mat-stroked-button class="button3d btnPush btnPurple ebckBtn" (click)="selectedColumn = {}; showDetails = false">
+        <mat-icon>keyboard_arrow_left</mat-icon> Back
+      </button>
+    </div>
   </div>
+</div>
+
+<div mat-dialog-content>
   <div class="content-details">
     <div class="table brd-rt flex-containers wrap" *ngIf="!showDetails">
         <mat-card *ngFor="let rowItem of data.details;" (click)="launchAnalysisDetails(rowItem);">
@@ -22,25 +27,25 @@
     </div>
 
     <div *ngIf="showDetails">
-      <mat-card *ngFor="let rowItem of data.details;">
-        <div  *ngFor="let item of rowItem | keyvalue" [hidden]="item.key === 'outlier'">
+      <mat-card>
+        <div  *ngFor="let item of selectedColumn | keyvalue" [hidden]="item.key === 'outlier'">
           <span *ngIf="item.key !== 'column'" class="field-label">{{item.key}}: </span> 
           <span class="strong compClr">{{item.value}}</span>
         </div>
       </mat-card>
-  </div>
-    <mat-card fxFlex class="stats process-blocks-table" style="height: 100%" *ngIf="showDetails">
-      
-      <app-ag-grid
-        floatingFilter="true"
-        [isLoading]="isLoading"
-        [rowData]="rowData"
-        [columnDefs]="columnDefs"
-        [pageSize]="50"
-        [rowSelection]="'multiple'"
-        [suppressRowClickSelection]="false"
-      ></app-ag-grid>
-    </mat-card>
+      <mat-card fxFlex class="stats process-blocks-table" style="height: 380px">
+        <app-ag-grid
+          floatingFilter="true"
+          [isLoading]="isLoading"
+          [rowData]="rowData"
+          [columnDefs]="columnDefs"
+          [pageSize]="50"
+          [rowSelection]="'multiple'"
+          [moveToColumn]="selectedColumn.column"
+          [suppressRowClickSelection]="false"
+        ></app-ag-grid>
+      </mat-card>
+    </div>
     <app-progress-bar [message]="'Details are loading...'" class="component" *ngIf="isLoading"></app-progress-bar>
   </div>
 </div>

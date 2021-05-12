@@ -33,6 +33,7 @@ export class CylinderChartComponent implements OnInit {
    @Input() options3d;
    @Input() analysisKeys;
    @Output() xLableClicked = new EventEmitter<any>();
+   @Output() barClicked = new EventEmitter<any>();
 
 
    public activity;
@@ -87,7 +88,7 @@ export class CylinderChartComponent implements OnInit {
                  dataLabels: {
                      enabled: true
                  },
-             }
+             },
          },
          legend: {
              layout: 'vertical',
@@ -128,11 +129,36 @@ export class CylinderChartComponent implements OnInit {
    this.chartOptions.chart.options3d.enabled = this.options3d ? this.options3d : false;
    this.chartOptions.series = [];
    this.analysisKeys.map(key => {
+       const data = [];
+       this.chartData[key].map(d => {
+           data.push({
+               y: d.value ? +d.value : 0,
+               ...d
+           });
+       });
        this.chartOptions.series.push({
-        name: key,
-        data: this.chartData[key]
+            custom: {details: this.chartData[key].details ? this.chartData[key].details : []},
+            name: key,
+            data
        });
    });
+   this.chartOptions.plotOptions = {
+        bar: {
+            dataLabels: {
+                enabled: true
+            },
+        },
+        series: {
+            cursor: 'pointer',
+            point: {
+                events: {
+                    click() {
+                        agThis.barClicked.emit({details: this.details, key: this.series.name, selectedValue: this.category});
+                    }
+                }
+            }
+        }
+    };
  }
 
 
