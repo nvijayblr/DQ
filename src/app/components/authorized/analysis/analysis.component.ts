@@ -12,6 +12,9 @@ import { CompletenessDialogComponent } from '../../../shared/completeness-dialog
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import * as moment from 'moment';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-analysis',
@@ -20,9 +23,11 @@ import * as moment from 'moment';
 })
 export class AnalysisComponent implements OnInit {
    @ViewChild('owlCar', { static: false }) owlCar;
+   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
    analyseKeyChartData: any = {};
-   analyseKeyData = [];
+   analyseKeyData: any = [];
    selectedAnalysis: any = {};
    selectedKey = '';
    uploadId = '';
@@ -48,6 +53,8 @@ export class AnalysisComponent implements OnInit {
    highlightDates: any = [];
    analysisKeys: any = [];
    isLoadChart = false;
+
+   displayedColumns = [];
 
    OwlCategoryOptions: OwlOptions = {
       loop: false,
@@ -168,6 +175,7 @@ export class AnalysisComponent implements OnInit {
             labels: [],
          };
          Object.keys(analyseRowItem).map(key => {
+            this.displayedColumns.push(key);
             if (key !== this.selectedKey) {
                this.analysisKeys.push(key);
                chartData[key] = [];

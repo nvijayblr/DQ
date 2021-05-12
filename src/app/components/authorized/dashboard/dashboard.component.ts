@@ -33,7 +33,6 @@ export class DashboardComponent implements OnInit {
       private router: Router) {
       const rights = this.auth.getUserRole().rights;
       this.rights = rights ? rights : [];
-      console.log(this.rights);
 
       const role = this.auth.getUserRole().role;
       this.role = role ? role : 'VIEWER';

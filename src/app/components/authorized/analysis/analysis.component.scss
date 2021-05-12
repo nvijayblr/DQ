@@ -923,3 +923,30 @@ thead {background: #f0f7f7;}
   background: ghostwhite;
     padding-top: 20px;
 }
+
+table.mat-table {
+  width: 100%;
+  td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type, th.mat-header-cell:first-of-type {
+    padding-left: 24px;
+  }
+  td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type, th.mat-header-cell:last-of-type {
+    padding-right: 24px;
+  }
+  td.mat-cell {
+    line-height: 47px;
+    padding-right: 1px;
+    .cell-wrp {
+      padding-left: 24px;
+    }
+  }
+  th.mat-header-cell {
+    padding-left: 24px;
+    padding-right: 1px;
+  }
+}
+::ng-deep .mat-sort-header-button {
+  font-weight: bold !important;
+  text-transform: uppercase;
+  font-size: 14px !important;
+}
+

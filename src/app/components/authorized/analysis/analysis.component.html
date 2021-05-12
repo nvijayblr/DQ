@@ -102,6 +102,30 @@
                     <mat-icon>format_color_fill</mat-icon>
                   </button> -->
                 </div>
+
+                <!-- <table mat-table [dataSource]="analyseKeyData" matSort class="mat-elevation-z8">
+                  <div *ngFor="let column of displayedColumns">
+                    <ng-container [matColumnDef]="column">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{column}}</th>
+                      <td mat-cell *matCellDef="let element">
+                        <div *ngIf="!element[column].value">{{element[column]}}</div>
+                        <div class="cell-wrp" [style.background-color]="element[column].value | formatCell: settings">
+                          <div class="cur" 
+                            *ngIf="element[column].value && element[column].details && element[column].details.length"
+                            (click)="showDetails(element[column].details, column, selectedKey, element[column])"
+                          >{{element[column].value}}%</div>
+                          <div class="cur" 
+                            *ngIf="element[column].value && (!element[column].details || (element[column].details && !element[column].details.length))"
+                            (click)="showDetails(element[column].details, column, selectedKey, element[column])"
+                          >{{element[column].value}}%</div>
+                        </div>
+                      </td>
+                    </ng-container>
+                  </div>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table> -->
+                        
                 <table class="table brd-rt tableChart">
                   <thead>
                     <tr>
