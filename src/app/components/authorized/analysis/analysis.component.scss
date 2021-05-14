@@ -273,6 +273,8 @@
 }
 .actions-wrapper {
  text-align: right;
+ float: right;
+    width: 100%;
 }
 .source-type {
  font-family: "open-sans-condensed-bold" !important;
@@ -948,5 +950,11 @@ table.mat-table {
   font-weight: bold !important;
   text-transform: uppercase;
   font-size: 14px !important;
+}
+
+::ng-deep .ng-data-table-container{
+  border: 0px !important;
+  padding-top: 50px;
+    margin-bottom: 30px;
 }
 

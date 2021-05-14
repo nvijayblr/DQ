@@ -12,6 +12,13 @@
 // @import "~ag-grid-community/dist/styles/ag-theme-material.css";
 @import "../node_modules/ag-grid-community/dist/styles/ag-grid.css";
 @import "../node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css";
+@import "node_modules/ornamentum/themes/base.theme.scss";
+@import "node_modules/ornamentum/themes/addon.base.theme.scss";
+// @import "node_modules/ornamentum/themes/dark.theme.scss";
+// @import "node_modules/ornamentum/themes/addon.dark.theme.scss";
+
+// @import "node_modules/ornamentum/themes/aegean.theme.scss";
+// @import "node_modules/ornamentum/themes/addon.aegean.theme.scss";
 
 
 ::-webkit-scrollbar {

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DataTableModule } from 'ornamentum';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { Routes, RouterModule, CanActivate } from '@angular/router';
@@ -31,7 +32,8 @@ import { AnalysisComponent } from './analysis/analysis.component';
       NgxSliderModule,
     CommonModule,
     AuthorizedRoutingModule,
-     SharedModule
+     SharedModule,
+     DataTableModule.forRoot()
    ],
    exports: [AttributeDetailsComponent, CorrelationDetailsComponent]
 
