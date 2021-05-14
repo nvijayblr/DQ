@@ -30,6 +30,7 @@ import { RuleSelectorComponent } from './rule-selector/rule-selector.component';
 import { AgGridComponent } from './ag-grid/ag-grid.component';
 import { FormulaEditorComponent } from './formula-editor/formula-editor.component';
 import { HeatMapComponent } from './heat-map/heat-map.component';
+import { AnalysisChartComponent } from './analysis-chart/analysis-chart.component';
 
 @NgModule({
    imports: [
@@ -68,6 +69,7 @@ import { HeatMapComponent } from './heat-map/heat-map.component';
     AgGridComponent,
     FormulaEditorComponent,
     HeatMapComponent,
+    AnalysisChartComponent,
   ],
   exports: [
     FormsModule,
@@ -97,7 +99,8 @@ import { HeatMapComponent } from './heat-map/heat-map.component';
     RuleSelectorComponent,
     AgGridComponent,
      FormulaEditorComponent,
-     HeatMapComponent
+    HeatMapComponent,
+    AnalysisChartComponent
   ],
   providers: [
      DatePipe,

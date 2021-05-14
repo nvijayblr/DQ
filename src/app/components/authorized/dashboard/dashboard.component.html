@@ -100,9 +100,28 @@
                                           </div>
                                         </td> 
                                         <td style="padding-top:0px;">
-                                          <div class="list flex-containers ml3" style="width:300px;" *ngIf="rights.includes('ADD_SOURCEFILE')">
+                                          <div class="list flex-containers ml3" style="width:300px;" >
+                                            <div class=" list-item-0  inlb" *ngIf="rights.includes('ADD_SOURCEFILE')">
                                             <button mat-stroked-button class="button3d btnPush btnBlueGreen addico1" (click)="uploadSource(data)">Upload <mat-icon>cloud_upload</mat-icon></button>
+                                            </div>                                         
+                                          <div class=" list-item-0  inlb" *ngIf="rights.includes('VIEW_RESULTS')">
+                                            <button class="button3d btnPush btnLightBlue addico v-a" 
+                                              [disabled]="!data.rulesetId" 
+                                              (click)="launchAnalysis(data)" 
+                                              matTooltip="View Analysis">
+                                              <mat-icon>launch</mat-icon>
+                                              View Analysis
+                                            </button>
                                           </div>
+                                          <div class=" list-item-0  inlb" *ngIf="rights.includes('VIEW_RESULTS')">
+                                            <button class="button3d btnPush btnPurple addico v-p" 
+                                              (click)="launchProfileView(data)" 
+                                              matTooltip="Profile">
+                                              <mat-icon>link</mat-icon>
+                                              Profile
+                                            </button>
+                                          </div>
+                                        </div>
                 
                                           <div class="list flex-containers ml3" style="width:300px;">
                                             <div class="list-item-0 inlb" *ngIf="rights.includes('EDIT_SOURCE')">
@@ -127,7 +146,7 @@
                                             </div>
                                         </div>
                                         <div class="list flex-containers ml3" style="width:300px;">
-                                            <div class=" list-item-0  inlb" *ngIf="rights.includes('VIEW_RESULTS')">
+                                            <!-- <div class=" list-item-0  inlb" *ngIf="rights.includes('VIEW_RESULTS')">
                                                 <button class="button3d btnPush btnLightBlue addico" 
                                                   [disabled]="!data.rulesetId" 
                                                   (click)="launchAnalysis(data)" 
@@ -135,15 +154,15 @@
                                                   <mat-icon>launch</mat-icon>
                                                   View Analysis
                                                 </button>
-                                              </div>
-                                              <div class=" list-item-0  inlb" *ngIf="rights.includes('VIEW_RESULTS')">
+                                              </div> -->
+                                              <!-- <div class=" list-item-0  inlb" *ngIf="rights.includes('VIEW_RESULTS')">
                                                 <button class="button3d btnPush btnPurple addico" 
                                                   (click)="launchProfileView(data)" 
                                                   matTooltip="Profile">
                                                   <mat-icon>link</mat-icon>
                                                   Profile
                                                 </button>
-                                              </div>
+                                              </div> -->
                                           </div>
                                         </td>
                                     </tr>

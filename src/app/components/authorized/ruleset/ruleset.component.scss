@@ -323,8 +323,18 @@
   .mat-error {
     display: block;
     margin-top: 4px;
-    font-family: 'open-sans-condensed-light';
+    font-family: 'open-sans-condensed-bold';
     font-size: 13px;
+    &.ns{
+      background: #FFBABA;
+      color: #D8000C;
+      padding: 3px 9px;
+      width: 150px;
+      font-size: 12px;
+      position: relative;
+      top: -4px;
+      left: -9px;
+    }
  }
  .mar-ico {
     margin-right: 10px;

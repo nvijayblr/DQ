@@ -74,7 +74,7 @@ export class RulesetComponent implements OnInit {
   fileTypeErr = false;
    uniqueName = false;
    startDateAdd: any;
-   endDateAdd: any;
+  endDateAdd: any;
 
   OwlCategoryOptions: OwlOptions = {
     loop: false,
@@ -349,8 +349,8 @@ export class RulesetComponent implements OnInit {
       sourcepath: [analysis.source.templateSourcePath || ''],
       rulesetName: [analysis.rulesetName || '', [Validators.required, Validators.maxLength(100)]],
       sourceCSV: [''],
-      startDate: [''],
-      endDate: [''],
+      startDate: ['', [Validators.required]],
+      endDate: ['', [Validators.required]],
       referenceCSV: this.fb.array([]),
       columnRules: this.fb.array([]),
     });
@@ -408,6 +408,7 @@ export class RulesetComponent implements OnInit {
         this.analysisForm.controls.rulesetName.setValue(this.sourceNameText + '-ruleset');
         // this.analysisForm.controls.startDate.setValue(this.minDate);
         // this.analysisForm.controls.endDate.setValue(this.maxDate);
+      
      }
 
 

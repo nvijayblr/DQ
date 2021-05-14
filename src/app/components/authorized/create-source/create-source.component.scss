@@ -327,6 +327,16 @@
     margin-top: 4px;
     font-family: 'open-sans-condensed-light';
     font-size: 13px;
+    &.errSty{
+      font-family: 'open-sans-condensed-bold';
+      background: #FFBABA;
+      color: #D8000C;
+      padding: 3px 9px;
+      width: 150px;
+      font-size: 12px;
+      position: relative;
+      top: -18px;
+    }
  }
  .mar-ico {
     margin-right: 10px;
@@ -1080,6 +1090,11 @@ tr:nth-child(odd) {background: #ffffff}
    top: -16px;
    left: 8px;
    font-family: 'open-sans-condensed-bold';
+   background: #FFBABA;
+   color: #D8000C;
+   padding: 3px 9px;
+   width: 180px;
+   font-size: 12px;
  }
 
  .spec{
