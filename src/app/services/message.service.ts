@@ -7,6 +7,7 @@ export class MessageService {
 
     private login = new Subject<any>();
     private message = new Subject<any>();
+    private prefrences: any = {};
 
     sendLoginMessage(message: any) {
         this.login.next(message);
@@ -35,5 +36,14 @@ export class MessageService {
         const source = sourceObj ? JSON.parse(sourceObj) : '';
         return source;
     }
+
+    setPrefrences(key, object) {
+        this.prefrences[key] = object;
+    }
+
+    getPrefrences(key) {
+        return this.prefrences[key];
+    }
+
 
 }

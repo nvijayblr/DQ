@@ -101,6 +101,7 @@
                                     multiple="true" 
                                     [ruleItems]="departmentList" 
                                     [initValue]="sourceSettings.department" 
+                                    [showAddItem]="false"
                                     (selectionChange)="sourceSettings.department=$event.value"
                                   ></app-rule-selector>
                                 </div>
@@ -276,11 +277,11 @@
           </form>
           <div class="agShowDetails" *ngIf="flError && showPreview">
             <mat-card class="border no-rounded list shrare-post mat-card source-preview-card" [hidden]="stepIndex === 1 || stepIndex === 2">
-              <app-progress-bar [message]="'Loading source preview...'" class="component" *ngIf="isPreviewLoading"></app-progress-bar>
               <div class="list flex-containers space-between">
                 <h1 class="share-post-title">Source Preview</h1>
                 <button  class="horizontal" (click)="loadSourcePreview();"> <span class="text"><mat-icon>view_column</mat-icon> Preview </span></button>
               </div>
+              <app-progress-bar [message]="'Loading source preview...'" class="component" *ngIf="isPreviewLoading"></app-progress-bar>
               <app-ag-grid
                 floatingFilter="true"
                 *ngIf="isPreviewLoaded"
@@ -293,11 +294,11 @@
             </mat-card>
           </div>
             <mat-card class="border no-rounded list shrare-post mat-card source-preview-card" [hidden]="stepIndex === 0 || stepIndex === 2">
-              <app-progress-bar [message]="'Loading source preview...'" class="component" *ngIf="isRefPreviewLoading"></app-progress-bar>
               <div class="list flex-containers space-between">
                 <h1 class="share-post-title">Reference Preview</h1>
                 <button  class="horizontal" (click)="loadReferencePreview();"> <span class="text"><mat-icon>view_column</mat-icon> Preview </span></button>
               </div>
+              <app-progress-bar [message]="'Loading source preview...'" class="component" *ngIf="isRefPreviewLoading"></app-progress-bar>
               <app-ag-grid 
                 floatingFilter="true"
                 *ngIf="isRefPreviewLoaded"

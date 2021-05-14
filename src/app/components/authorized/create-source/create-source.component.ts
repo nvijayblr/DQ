@@ -85,16 +85,7 @@ export class CreateSourceComponent implements OnInit {
     value: '02:00',
   }];
 
-  departmentList = [{
-    label: 'Dept-1',
-    value: 'Dept-1',
-  }, {
-    label: 'Dept-2',
-    value: 'Dept-2',
-  }, {
-    label: 'Dept-3',
-    value: 'Dept-3',
-  }];
+  departmentList = this.messageService.getPrefrences('departments');
 
   sourceSettings = {
     isMuliSourceData: 'true',
