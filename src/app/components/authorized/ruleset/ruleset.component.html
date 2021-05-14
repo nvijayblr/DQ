@@ -165,6 +165,7 @@
                                  <input matInput [matDatepicker]="frompicker"  formControlName="startDate" autocomplete="off" (click)="frompicker.open()">
                                  <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
                                  <mat-datepicker #frompicker></mat-datepicker>
+                                 <mat-error class="ns" *ngIf="!afControls.startDate.value">Please select a Start Date</mat-error>
                                  </mat-form-field>
                               </div>
                               <div class="list-item-3 outline">
@@ -174,6 +175,7 @@
                                  <input matInput [matDatepicker]="topicker"  formControlName="endDate" autocomplete="off" (click)="topicker.open()">
                                  <mat-datepicker-toggle matSuffix [for]="topicker"></mat-datepicker-toggle>
                                  <mat-datepicker #topicker></mat-datepicker>
+                                 <mat-error class="ns" *ngIf="!afControls.endDate.value">Please select a End Date</mat-error>
                                  </mat-form-field>
                               </div>
                            </div>

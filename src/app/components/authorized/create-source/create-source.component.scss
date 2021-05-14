@@ -329,6 +329,11 @@
     font-size: 13px;
     &.errSty{
       font-family: 'open-sans-condensed-bold';
+      background: #FFBABA;
+      color: #D8000C;
+      padding: 3px 9px;
+      width: 150px;
+      font-size: 12px;
       position: relative;
       top: -18px;
     }
