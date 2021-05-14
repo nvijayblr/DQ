@@ -21,7 +21,7 @@
                               <mat-label>Source Data<span class="red">*</span>&nbsp;<span *ngIf="selectedType">({{selectedType}})</span></mat-label>
                               <app-image-cropper 
                                 [imageType]="'Source'"
-                                [fileTypes]="'.csv, .xls, .xlsx'"
+                                [fileTypes]="'.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'"
                                 [imagePath]="''"
                                 [disabled]="isEditMode"
                                 (fileSelected)="onSourceFileSelected($event)"
@@ -32,6 +32,7 @@
                               <mat-form-field appearance="fill">
                                 <input matInput placeholder="Source Name" formControlName="sourceDataName" maxlength="50" autocomplete="off"/>
                               </mat-form-field>
+                              <mat-error class="errSty" *ngIf="!afControls.sourceDataName.value">Please Enter Source Name</mat-error>
                               <mat-label class="mtop sub-title">Source Description</mat-label>
                           
                               
@@ -140,7 +141,7 @@
                               <mat-label>Reference Data #{{i+1}} <span class="red">*</span></mat-label>
                               <app-image-cropper 
                                 [imageType]="'Reference'"
-                                [fileTypes]="'.csv, .xls, .xlsx'"
+                                [fileTypes]="'.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'"
                                 [imagePath]="''"
                                 (fileSelected)="onReferenceFileSelected($event, reference, i)"
                               >

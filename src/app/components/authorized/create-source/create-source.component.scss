@@ -327,6 +327,11 @@
     margin-top: 4px;
     font-family: 'open-sans-condensed-light';
     font-size: 13px;
+    &.errSty{
+      font-family: 'open-sans-condensed-bold';
+      position: relative;
+      top: -18px;
+    }
  }
  .mar-ico {
     margin-right: 10px;
