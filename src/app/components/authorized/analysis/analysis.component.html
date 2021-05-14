@@ -107,51 +107,28 @@
                   </button> -->
                 </div>
 
-                <!--<table mat-table [dataSource]="analyseKeyData" matSort class="mat-elevation-z8">
-                  <div *ngFor="let column of displayedColumns">
-                    <ng-container [matColumnDef]="column">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{column}}</th>
-                      <td mat-cell *matCellDef="let element">
-                        <div *ngIf="!element[column].value">{{element[column]}}</div>
-                        <div class="cell-wrp" [style.background-color]="element[column].value | formatCell: settings">
-                          <div class="cur" 
-                            *ngIf="element[column].value && element[column].details && element[column].details.length"
-                            (click)="showDetails(element[column].details, column, selectedKey, element[column])"
-                          >{{element[column].value}}%</div>
-                          <div class="cur" 
-                            *ngIf="element[column].value && (!element[column].details || (element[column].details && !element[column].details.length))"
-                            (click)="showDetails(element[column].details, column, selectedKey, element[column])"
-                          >{{element[column].value}}%</div>
-                        </div>
-                      </td>
-                    </ng-container>
-                  </div>
-                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                </table> -->
-            
                 <ng-data-table
-                  [id]="'sales_products_detail_summery'"
-                  [title]="'Sales Products'"
-                  [items]="dataTable"
+                  [id]="'analysis_detail_summery'"
+                  [title]="'Analysis'"
+                  [items]="analyseKeyData"
                   [minContentHeight]="200"
                   [minContentWidth]="900"
                   [showHeader]="true"
                   [pageable]="true"
-                  [showRefreshButton]="true"
-                  [showRowSelectCheckbox]="true"
-                  [rowSelectable]="true"
+                  [showRefreshButton]="false"
+                  [showRowSelectCheckbox]="false"
+                  [rowSelectable]="false"
                   [selectOnRowClick]="true"
                   [showSubstituteRows]="true"
                   [persistTableState]="true"
                   [showColumnSelector]="true"
-                  [expandableRows]="true"
+                  [expandableRows]="false"
                   [showLoadingSpinner]="true"
                   [selectMode]="'multi'"
                   [showRowSelectAllCheckbox]="true">
                     <ng-data-table-column
-                      [field]="'id'"
-                      [title]="'ID'"
+                      [field]="selectedKey"
+                      [title]="selectedKey"
                       [showInColumnSelector]="false"
                       [sortable]="true"
                       [filterable]="true"
@@ -159,85 +136,39 @@
                       [width]="80">
                       <ng-template #ngDataTableCell let-row="row">
                         <td>
-                          <span><i class="zmdi zmdi-account"></i></span>
-                          <span>{{ row.item.id }}</span>
+                          <span>{{row.item[selectedKey]}}</span>
                         </td>
                       </ng-template>
                     </ng-data-table-column>
                     <ng-data-table-column
-                      [field]="'orderMethodType'"
-                      [title]="'Order Method Type'"
-                      [sortable]="true"
-                      [filterable]="true"
-                      [showDropdownFilter]="true"
-                      [dropdownFilterShowClearSelectionButton]="true"
-                      [dropdownFilterSearchable]="true"
-                      [dropDownFilterShowOptionSelectCheckbox]="true"
-                      [filterPlaceholder]="'Search'"
-                      [width]="130">
-                    </ng-data-table-column>
-                    <ng-data-table-column
-                      [field]="'retailerType'"
-                      [title]="'Retailer Type'"
-                      [sortable]="true"
-                      [filterable]="true"
-                      [showDropdownFilter]="true"
-                      [dropdownFilterShowClearSelectionButton]="true"
-                      [dropdownFilterSearchable]="true"
-                      [dropDownFilterShowOptionSelectCheckbox]="true"
-                      [filterPlaceholder]="'Search'">
-                    </ng-data-table-column>
-                    <ng-data-table-column
-                      [field]="'productLine'"
-                      [title]="'Product Line'"
-                      [sortable]="true"
-                      [filterable]="true"
-                      [visible]="false"
-                      [filterPlaceholder]="'Search'">
-                    </ng-data-table-column>
-                    <ng-data-table-column
-                      [field]="'productType'"
-                      [title]="'Product Type'"
-                      [sortable]="true"
-                      [filterable]="true"
-                      [showDropdownFilter]="true"
-                      [dropdownFilterShowClearSelectionButton]="true"
-                      [dropdownFilterSearchable]="true"
-                      [dropDownFilterShowOptionSelectCheckbox]="true">
-                      <ng-template #ngDataTableCell let-row="row">
-                        <td>
-                          <span>{{ row.item.productType.toUpperCase() }}</span>
-                        </td>
-                      </ng-template>
-                    </ng-data-table-column>
-                    <ng-data-table-column
-                      [field]="'revenue'"
-                      [title]="'Revenue'"
-                      [sortable]="true"
-                      [filterable]="true"
-                      [filterPlaceholder]="'Search'"
-                      [width]="90">
-                    </ng-data-table-column>
-                    <ng-data-table-column
-                      [field]="'quantity'"
-                      [title]="'Quantity'"
+                      *ngFor="let key of analysisKeys"
+                      [field]="key"
+                      [title]="key"
+                      [showInColumnSelector]="false"
                       [sortable]="true"
                       [filterable]="true"
                       [filterPlaceholder]="'Search'"
                       [width]="80">
+                      <ng-template #ngDataTableCell let-row="row">
+                        
+                        <td [style.background-color]="row.item[key]?.value | formatCell: settings"
+                          *ngIf="row.item[key]?.details && row.item[key]?.details.length"
+                          (click)="showDetails(row.item[key]?.details, key, selectedKey, row.item[selectedKey])"
+                        >
+                          <span><i class="zmdi zmdi-account"></i></span>
+                          <span>{{row.item[key].value}}</span>
+                        </td>
+
+                        <!-- <td [style.background-color]="row.item[key]?.value | formatCell: settings"
+                          *ngIf="!data[key]?.details.length">
+                          <span><i class="zmdi zmdi-account"></i></span>
+                          <span>{{row.item[key].value}}</span>
+                        </td> -->
+                      </ng-template>
                     </ng-data-table-column>
-                    <ng-data-table-column
-                      [field]="'grossMargin'"
-                      [title]="'Gross Margin'"
-                      [sortable]="true"
-                      [filterable]="true"
-                      [filterPlaceholder]="'Search'"
-                      [width]="95">
-                    </ng-data-table-column>
-               
-              </ng-data-table>
+                </ng-data-table>
                 
-                <table class="table brd-rt tableChart">
+                <!-- <table class="table brd-rt tableChart">
                   <thead>
                     <tr>
                       <th>{{selectedKey}}</th>
@@ -256,7 +187,7 @@
                       </td>
                     </tr>
                   </tbody>
-                </table> -->
+                </table>  -->
               </div>
             </mat-card>   
           </div>

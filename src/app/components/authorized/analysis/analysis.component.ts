@@ -23,10 +23,10 @@ import { DataTableRow } from 'ornamentum';
   styleUrls: ['./analysis.component.scss']
 })
 export class AnalysisComponent implements OnInit {
-   @ViewChild('owlCar', { static: false }) owlCar;
-   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild('owlCar', { static: false }) owlCar;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  
+
   public dataTable: any[];
   public row: DataTableRow<any>;
 
@@ -96,7 +96,7 @@ export class AnalysisComponent implements OnInit {
       private http: HttpService,
       private messageService: MessageService,
       private auth: AuthGuardService,
-     private router: Router) {
+      private router: Router) {
       this.dataTable = [
         {
           availability: true,
@@ -522,9 +522,9 @@ export class AnalysisComponent implements OnInit {
           grossMargin: 0.40396584,
           id: 105
         }
-     ]
-     
-     console.log(this.analyseKeyData);
+     ];
+
+      console.log(this.analyseKeyData);
    }
 
    ngOnInit() {
