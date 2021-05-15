@@ -383,12 +383,11 @@ table{
 .attribute-list {
    width: 300px;
     margin-right: 0px;
-    margin-top: -19px;
-    margin-left: -5px;
+    margin-top: 4px;
 }
 
 .attribute-details {
-  //width: calc(100% - 320px);
+  width: calc(100% - 320px);
   margin-left: 30px;
 }
 .mat-list-item {
@@ -684,7 +683,7 @@ table{
  .attTitle{
   font-size: 18px;
   color: #fff;
-  margin: 0px 10px 20px 10px;
+  margin: 0px 10px 20px 0;
   font-family: 'open-sans-condensed-bold';
   position: relative;
   width: 98%;
@@ -693,7 +692,7 @@ table{
   background: linear-gradient(
    45deg
    , lightcoral, transparent);
-   padding: 5px 20px;
+   padding: 10px 20px;
  }
  
 

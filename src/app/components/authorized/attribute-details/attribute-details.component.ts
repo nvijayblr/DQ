@@ -23,17 +23,14 @@ export class AttributeDetailsComponent implements OnInit {
    frequencyShow = false;
    patternShow = false;
    maskShow = false;
-
-
-
    sticky = false;
    elementPosition: any;
 
    constructor(private messageService: MessageService, private http: HttpService, ) {
    }
-  highcharts = Highcharts;
-  chartOptions = {
-     chart: {
+   highcharts = Highcharts;
+   chartOptions = {
+      chart: {
         type: 'bar'
      },
      title: {
@@ -102,7 +99,7 @@ export class AttributeDetailsComponent implements OnInit {
   options: Options = {
     floor: 0,
     ceil: 100,
-    step: 10,
+    step: 1,
     showTicks: true
   };
 
@@ -118,10 +115,14 @@ export class AttributeDetailsComponent implements OnInit {
   }
 
   changeProfile(profile) {
-     this.profile = profile;
-     this.attrubute = profile.column;
-     console.log(this.profile);
-  }
+      this.profile = profile;
+      if (this.profile.LengthStatistics) {
+         this.options.floor = profile.LengthStatistics.Min ? profile.LengthStatistics.Min : 0;
+         this.options.ceil = profile.LengthStatistics.Max ? profile.LengthStatistics.Max : 0;
+      }
+      this.attrubute = profile.column;
+      console.log(this.profile);
+   }
 
   loadProfile(source) {
      this.isLoading = true;
