@@ -28,11 +28,12 @@
                               >
                               </app-image-cropper>
                               <mat-error class="nerr" *ngIf="!flError">Please Select a Correct File Type</mat-error>
+                              <mat-error class="nerr ftw" *ngIf="selFileNameErr && flError">Please Select a File</mat-error>
                               <mat-label class="sub-title">Source Name<span class="red">*</span></mat-label>
                               <mat-form-field appearance="fill">
                                 <input matInput placeholder="Source Name" formControlName="sourceDataName" maxlength="50" autocomplete="off"/>
                               </mat-form-field>
-                              <mat-error class="errSty" *ngIf="!afControls.sourceDataName.value">Please Enter Source Name</mat-error>
+                              <mat-error class="errSty" *ngIf="!afControls.sourceDataName.value && afControls.sourceDataName.touched">Please Enter Source Name</mat-error>
                               <mat-label class="mtop sub-title">Source Description</mat-label>
                           
                               
@@ -118,8 +119,12 @@
                                           
                     <div class="act-btn-wrapper m1t">
                         <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"
-                        [disabled]="!afControls.sourceDataName.value || !sourceSettings.frequency || !sourceSettings.uploadDate || !flError"
+                       
                         (click)="validateSourceNameAndNext()">Next <mat-icon>navigate_next</mat-icon></button>
+
+                        <!-- <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"
+                        [disabled]="!afControls.sourceDataName.value || !sourceSettings.frequency || !sourceSettings.uploadDate || !flError"
+                        (click)="validateSourceNameAndNext()">Next <mat-icon>navigate_next</mat-icon></button> -->
                     </div>
                   </mat-card>
                 </mat-step>

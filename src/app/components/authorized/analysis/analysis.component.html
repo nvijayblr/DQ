@@ -107,68 +107,14 @@
                   </button> -->
                 </div>
 
-                <ng-data-table
-                  [id]="'analysis_detail_summery'"
-                  [title]="'Analysis'"
-                  [items]="analyseKeyData"
-                  [minContentHeight]="200"
-                  [minContentWidth]="900"
-                  [showHeader]="true"
-                  [pageable]="true"
-                  [showRefreshButton]="false"
-                  [showRowSelectCheckbox]="false"
-                  [rowSelectable]="false"
-                  [selectOnRowClick]="true"
-                  [showSubstituteRows]="true"
-                  [persistTableState]="true"
-                  [showColumnSelector]="true"
-                  [expandableRows]="false"
-                  [showLoadingSpinner]="true"
-                  [selectMode]="'multi'"
-                  [showRowSelectAllCheckbox]="true">
-                    <ng-data-table-column
-                      [field]="selectedKey"
-                      [title]="selectedKey"
-                      [showInColumnSelector]="false"
-                      [sortable]="true"
-                      [filterable]="true"
-                      [filterPlaceholder]="'Search'"
-                      [width]="80">
-                      <ng-template #ngDataTableCell let-row="row">
-                        <td>
-                          <span>{{row.item[selectedKey]}}</span>
-                        </td>
-                      </ng-template>
-                    </ng-data-table-column>
-                    <ng-data-table-column
-                      *ngFor="let key of analysisKeys"
-                      [field]="key"
-                      [title]="key"
-                      [showInColumnSelector]="false"
-                      [sortable]="true"
-                      [filterable]="true"
-                      [filterPlaceholder]="'Search'"
-                      [width]="80">
-                      <ng-template #ngDataTableCell let-row="row">
-                        
-                        <td [style.background-color]="row.item[key]?.value | formatCell: settings"
-                          *ngIf="row.item[key]?.details && row.item[key]?.details.length"
-                          (click)="showDetails(row.item[key]?.details, key, selectedKey, row.item[selectedKey])"
-                        >
-                          <span><i class="zmdi zmdi-account"></i></span>
-                          <span>{{row.item[key].value}}</span>
-                        </td>
-
-                        <!-- <td [style.background-color]="row.item[key]?.value | formatCell: settings"
-                          *ngIf="!data[key]?.details.length">
-                          <span><i class="zmdi zmdi-account"></i></span>
-                          <span>{{row.item[key].value}}</span>
-                        </td> -->
-                      </ng-template>
-                    </ng-data-table-column>
-                </ng-data-table>
-                
-                <!-- <table class="table brd-rt tableChart">
+                <!-- <ag-grid-angular 
+                  style="width:100%; height: 500px; margin-bottom:100px;" 
+                  class="ag-theme-alpine-dark"
+                  [rowData]="rowData" 
+                  [pagination]="true"
+                  [columnDefs]="columnDefs">
+              </ag-grid-angular> -->
+              <table class="table brd-rt tableChart">
                   <thead>
                     <tr>
                       <th>{{selectedKey}}</th>
@@ -187,7 +133,7 @@
                       </td>
                     </tr>
                   </tbody>
-                </table>  -->
+                </table> 
               </div>
             </mat-card>   
           </div>

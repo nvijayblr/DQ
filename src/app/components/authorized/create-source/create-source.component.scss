@@ -1095,6 +1095,9 @@ tr:nth-child(odd) {background: #ffffff}
    padding: 3px 9px;
    width: 180px;
    font-size: 12px;
+   &.ftw{
+    width: 120px;
+   }
  }
 
  .spec{

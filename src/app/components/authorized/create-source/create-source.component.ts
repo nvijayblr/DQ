@@ -126,7 +126,10 @@ export class CreateSourceComponent implements OnInit {
   refcolumnDefs: any = [];
   selectedType;
   flError = true;
+  sourceNameErr:boolean = false;
   showPreview = false;
+  selFileName;
+  selFileNameErr:boolean = false;
 
   ngOnInit() {
     this.isUserLoggedIn = this.authGuardService.isUserLoggedIn();
@@ -320,6 +323,10 @@ export class CreateSourceComponent implements OnInit {
     this.showPreview = true;
     this.sourceFile = file;
     this.flError = true;
+    this.selFileName = file.name;
+    if (this.selFileName) {
+      this.selFileNameErr = false;
+    }
     const fName = file.name.split('.')[0];
     const fExt = file.name.split('.')[1];
     if (this.mode === 'edit') {
@@ -352,7 +359,17 @@ export class CreateSourceComponent implements OnInit {
   }
 
   validateSourceNameAndNext() {
+    console.log(this.selFileName, this.selFileNameErr);
+    
     const sourceName = this.afControls.sourceDataName.value;
+    if (this.selFileName === undefined) {
+      this.selFileNameErr = true;
+      return;
+    }
+    if (!sourceName) {
+      this.sourceNameErr = true;
+      return;
+    } 
     if (this.sourceNames.includes(sourceName) && this.mode === 'create') {
       alert('Source name is already found. Please enter the different source name.');
       return;

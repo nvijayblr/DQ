@@ -17,6 +17,11 @@
     45deg
     , #433683, transparent);
     padding: 5px 20px;
+    &.bg2{
+      background: linear-gradient(
+    45deg
+    , plum, transparent);
+    }
   //  &:before {
   //     content: "";
   //     position: absolute;
@@ -310,4 +315,75 @@ tr:nth-child(even) {background: #ffffff}
       position: relative;
       top: -3px;
    }
+}
+.comp-tab{
+  ::ng-deep .mat-tab-body-content{
+    overflow: hidden!important;
+  }
+  ::ng-deep .mat-tab-labels{
+    margin-top:0px;
+    height: 26px;
+    border-bottom : 0px;
+    box-shadow: none !important;
+  }
+  ::ng-deep .mat-tab-label{
+    margin-top:0px;
+    height: 26px;
+    padding: 0 9px;
+    border-radius: 2px 2px 0 0;
+    margin-right: 5px;   
+    background: #433683!important;
+    color: #fff;
+    .mat-tab-label-content {
+      font-size: 13px;
+    }
+  }
+  ::ng-deep .mat-tab-label-active {
+    background: #433683 !important;
+    color: #fff!important;
+    border-bottom: 4px solid #846bff;
+}
+::ng-deep .mat-tab-list{
+  margin-left: 10px;
+}
+}
+
+.category-list-Owl {
+  margin-bottom: 12px;
+  .left-arrow {
+    float: left;
+    width: 50px;
+    position: relative;
+    top: 30px;
+  }  
+  .category-list {
+    width: calc(100% - 100px);
+    float: left;
+  }
+  .right-arrow {
+    float: left;
+    width: 50px;
+    padding-left: 16px;
+    position: relative;
+    top: 30px;
+  }
+  button {
+    &.prev-next-btn {
+      border-radius: 0;
+      padding: 0;
+      width: 34px;
+      min-width: auto;
+      padding: 0 !important;
+    }
+    &.clr2{
+      background: steelblue !important;
+      border: 1px solid rgb(44, 94, 134) !important;
+    }
+  }
+  ::ng-deep .owl-stage{
+    width: 100%!important;
+  }
+  ::ng-deep .owl-item{
+    width: 300px!important;
+  }
 }
