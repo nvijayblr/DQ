@@ -1261,6 +1261,22 @@ mat-paginator.mat-paginator {
    padding: 16px 20px 16px 20px!important;
     width: 630px!important;
 }
+.rule-selector-error {
+  position: relative;
+  top: -16px;
+  font-size: 11px;
+  display: none;
+}
+.table.no-border {
+  background-color: transparent;
+  border: 0;
+  tr {
+    background: transparent !important;
+  }
+  td, th {
+    border: 0 !important;
+  }
+}
 
 $font-path : '../src/assets/fonts/';
 

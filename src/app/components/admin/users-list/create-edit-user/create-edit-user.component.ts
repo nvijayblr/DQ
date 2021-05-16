@@ -16,6 +16,16 @@ export class CreateEditUserComponent implements OnInit {
   mode = '';
   roleList: any = [];
   deptList: any = [];
+  userTypes: any = [{
+    label: 'DATA_OWNER',
+    value: 'DATA_OWNER'
+  }, {
+    label: 'DATA_USER',
+    value: 'DATA_USER'
+  }, {
+    label: 'DATA_STEWARD',
+    value: 'DATA_STEWARD'
+  }];
 
   constructor(
     private fb: FormBuilder,
@@ -48,13 +58,19 @@ export class CreateEditUserComponent implements OnInit {
       userName: [this.user.userName, [Validators.required]],
       password: [this.user.password, [Validators.required]],
       role: [this.user.role, [Validators.required]],
+      type: [this.user.type, [Validators.required]],
       department: [this.user.department],
       status: [this.user.status, [Validators.required]],
     });
   }
 
+  get fc() {
+    return this.userForm.controls;
+  }
+
   saveUser() {
     this.userForm.markAllAsTouched();
+    console.log(this.userForm.controls.type.errors.required);
     if (!this.userForm.valid) {
       return;
     }

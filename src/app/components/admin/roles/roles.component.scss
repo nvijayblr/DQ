@@ -248,3 +248,16 @@ td.Inactive {
 .btnOrange.btnPush:hover {
   box-shadow: 0px 0px 0px 0px #A66615;
 }
+.mat-chip.mat-standard-chip {
+   &:hover {
+      cursor: pointer;
+   }
+}
+.mat-chip.mat-standard-chip.mat-chip-selected,
+.mat-chip.mat-standard-chip.selected {
+   background-color: #ff4081;
+   color: #ffffff;
+}
+.btn-wrapper.right {
+   text-align: right;
+}

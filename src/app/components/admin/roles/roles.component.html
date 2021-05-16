@@ -20,27 +20,48 @@
                <table class="table">
                   <thead>
                     <tr>
-                      <th>Name</th>
-                      <th>Display Text</th>
+                      <th style="width: 33%;">Name</th>
+                      <th style="width: 33%;">Display Text</th>
                       <!-- <th>Status</th> -->
-                      <th>Action</th>
+                      <th style="width: 33%;">Action</th>
                     </tr>
                   </thead>
                   <tbody>
                      <tr *ngFor="let role of rolesList; let i= index;" class="tableinner">
-                        <td>{{role.roleName}}</td>
-                        <td>{{role.roleText}}</td>
-                        <!-- <td class="{{role.status}}">{{role.status}}</td> -->
-                        <td>
-                          <button type="button" class="button3d btnPush btnOrange addico"
-                            (click)="showAddEditRole(role, 'edit');"  matTooltip="Edit Role">
-                            <mat-icon>edit</mat-icon> Edit
-                          </button>
-
-                          <!-- <button mat-icon-button color="primary" class="icon-primary-btn" matTooltip="Edit Role" (click)="showAddEditRole(role, 'edit');">
-                            <mat-icon>edit</mat-icon>
-                          </button> -->
-                        </td>
+                       <td colspan="3">
+                         <table class="table no-border">
+                           <tr>
+                            <td style="width: 33%;">{{role.roleName}}</td>
+                            <td style="width: 33%;">{{role.roleText}}</td>
+                            <!-- <td class="{{role.status}}">{{role.status}}</td> -->
+                            <td style="width: 33%;">
+                              <button type="button" class="button3d btnPush btnOrange addico"
+                                (click)="showAddEditRole(role, 'edit');"  matTooltip="Edit Role">
+                                <mat-icon>edit</mat-icon> Edit
+                              </button>
+                              <button type="button" class="button3d btnPush btnOrange addico" *ngIf="!role.isShowRights"
+                                (click)="showHideAssignRights(role, true);"  matTooltip="Assign Rights">
+                                Rights
+                              </button>
+                            </td>
+                           </tr>
+                         </table>
+                          <div class="assign-role-wrapper" *ngIf="role.isShowRights">
+                            <mat-chip-list aria-label="Rights selection">
+                              <mat-chip *ngFor="let right of role.rightsList" [class.selected]="right.selected" (click)="onRightClick(right)">{{right.label}}</mat-chip>
+                            </mat-chip-list>
+                            <div class="btn-wrapper right">
+                              <button type="button" class="button3d btnPush btnOrange addico"
+                              (click)="showHideAssignRights(role, false);">
+                                Cancel
+                              </button>
+                              <button type="button" class="button3d btnPush btnOrange addico"
+                              (click)="saveRights(role);">
+                                Save
+                              </button>
+                            </div>
+                          </div>
+                       </td>
                      </tr>
                    </tbody>
                </table>

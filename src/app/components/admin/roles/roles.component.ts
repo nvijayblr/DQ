@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from '../../../services/message.service';
 import { HttpService } from '../../../services/http-service.service';
@@ -26,12 +26,12 @@ export class RolesComponent implements OnInit {
       private http: HttpService,
       private messageService: MessageService,
       private auth: AuthGuardService,
-      private router: Router) {
+      private router: Router,
+      private cd: ChangeDetectorRef) {
    }
 
    ngOnInit() {
       this.getRightsList();
-      this.getRolesList();
    }
 
 
@@ -45,8 +45,10 @@ export class RolesComponent implements OnInit {
           label: rights.Text,
         };
       });
+      this.getRolesList();
     }, (error) => {
       this.rightsList = [];
+      this.getRolesList();
     });
   }
 
@@ -81,7 +83,6 @@ export class RolesComponent implements OnInit {
       if (result) {
         const rights = result.role.rights;
         const selectedRights = [];
-        console.log(rights);
         rights.map(right => {
           selectedRights.push(this.rightsListAll.filter(rlist => rlist.Value === right)[0]);
         });
@@ -89,6 +90,47 @@ export class RolesComponent implements OnInit {
         this.createEditRole(result.role, result.mode);
       }
      });
+   }
+
+   showHideAssignRights(role, isShow) {
+    this.rolesList.map(r => {
+      r.isShowRights = false;
+    });
+    this.rightsList.map(r => {
+      r.selected = false;
+    });
+    role.isShowRights = isShow;
+    role.rightsList = [...this.rightsList];
+    if (isShow) {
+      if (role.rights && role.rights.length) {
+        role.rightsList.map(rlist => {
+          const rights = role.rights.filter(right => rlist.value === right.Value);
+          if (rights.length) {
+            rlist.selected = true;
+          }
+        });
+        // this.cd.detectChanges();
+      }
+    }
+   }
+
+   onRightClick(right) {
+     right.selected = !right.selected;
+   }
+
+   saveRights(role) {
+    role.isShowRights = false;
+    const selectedRights = [];
+    role.rightsList.map(right => {
+      if (right.selected) {
+        selectedRights.push({
+          Value: right.value,
+          Text: right.label
+        });
+      }
+    });
+    role.rights = selectedRights;
+    this.createEditRole(role, 'edit');
    }
 
 }

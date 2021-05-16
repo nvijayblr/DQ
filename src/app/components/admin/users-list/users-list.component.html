@@ -25,6 +25,7 @@
                       <th>Email</th>
                       <th>Username</th>
                       <th>Role</th>
+                      <th>Type</th>
                       <th>Department</th>
                       <th>Status</th>
                       <th>Action</th>
@@ -36,6 +37,7 @@
                         <td>{{user.email}}</td>
                         <td>{{user.userName}}</td>
                         <td><span *ngIf="user.role && user.role.length">{{user.role.join(', ')}}</span></td>
+                        <td><span *ngIf="user.type && user.type.length">{{user.type.join(', ')}}</span></td>
                         <td><span *ngIf="user.department && user.department.length">{{user.department.join(', ')}}</span></td>
                         <td class="{{user.status}}">{{user.status}}</td>
                         <td>

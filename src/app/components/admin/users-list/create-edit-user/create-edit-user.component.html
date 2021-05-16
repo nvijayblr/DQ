@@ -35,6 +35,18 @@
           [initValue]="userForm.controls.role.value"
           (selectionChange)="userForm.controls.role.setValue($event.value)"
         ></app-rule-selector>
+        <mat-error class="rule-selector-error" *ngIf="fc.role.errors?.required">Role type is required.</mat-error>
+      </div>
+      <div class="list">
+        <app-rule-selector 
+          multiple="true" 
+          [label]="'Type'"
+          [showAddItem]="false"
+          [ruleItems]="userTypes" 
+          [initValue]="userForm.controls.type.value"
+          (selectionChange)="userForm.controls.type.setValue($event.value)"
+        ></app-rule-selector>
+        <mat-error class="rule-selector-error" *ngIf="fc.type.errors?.required">User type is required.</mat-error>
       </div>
       <div class="list">
         <app-rule-selector 
@@ -45,6 +57,7 @@
           [initValue]="userForm.controls.department.value"
           (selectionChange)="userForm.controls.department.setValue($event.value)"
         ></app-rule-selector>
+        <mat-error class="rule-selector-error" *ngIf="fc.department.errors?.required">Department type is required.</mat-error>
       </div>
       <div class="list">
         <mat-form-field appearance="fill">
