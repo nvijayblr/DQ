@@ -16,6 +16,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { _ } from 'ag-grid-community';
+import { ColDef } from 'ag-grid-community';
 
 @Component({
   selector: 'app-analysis',
@@ -58,8 +59,16 @@ export class AnalysisComponent implements OnInit {
    isLoadChart = false;
 
   displayedColumns = [];
-  columnDefs;
-  rowData;
+
+  private gridApi;
+  private gridColumnApi;
+  defaultColDef = {
+   sortable: true,
+   resizable: true,
+   filter: true,
+ };
+  columnDefs: ColDef[];
+  rowData = [];
 
    OwlCategoryOptions: OwlOptions = {
       loop: false,
@@ -98,17 +107,11 @@ export class AnalysisComponent implements OnInit {
       private router: Router) {
 
      console.log(this.analyseKeyData);
-     this.columnDefs = [{ field: 'make', sortable: true, filter: true, },
-     { field: 'model', sortable: true,  filter: 'agNumberColumnFilter',
-     suppressMenu: true, },
-     { field: 'price', sortable: true, filter: true }];
+   //   { field: 'make', sortable: true, filter: true, },
+   //   { field: 'model', sortable: true,  filter: 'agNumberColumnFilter',
+   //   suppressMenu: true, },
+   //   { field: 'price', sortable: true, filter: true }
 
-     this.rowData = [
-       { make: "Toyota", model: "Celica", price: 35000 },
-       { make: "Ford", model: "Mondeo", price: 32000 },
-       { make: "Porsche", model: "Boxter", price: 72000 }
-     ];
-   
    }
 
    ngOnInit() {
@@ -208,11 +211,43 @@ export class AnalysisComponent implements OnInit {
          this.analyseKeyChartData = chartData;
          this.isLoadChart = true;
          this.isLoading = false;
+         this.genrateColDefs();
       }, (error) => {
          this.isLoading = false;
          this.analyseKeyData = [];
          this.isLoadingDetails = false;
       });
+   }
+
+   onGridReady(params) {
+      this.gridApi = params.api;
+      this.gridColumnApi = params.columnApi;
+   }
+
+   genrateColDefs() {
+      const columnDefs = [];
+      this.displayedColumns.map(col => {
+         columnDefs.push({
+            field: col,
+            cellRenderer: (params) => {
+               if (params.value && params.value.value) {
+                  return params.value.value;
+               }
+               return params.value;
+            },
+            cellStyle: params => {
+               const { value } = params.value;
+               const { bgSettings } = this.settings || [];
+               const bg = bgSettings.filter(setting => (+value >= +setting.min && +value <= +setting.max));
+               if (bg && bg.length) {
+                 return {color: '#fff', backgroundColor: bg[0].color};
+               }
+               return 'transparent';
+            }
+         });
+      });
+      this.columnDefs = columnDefs;
+      this.rowData = this.analyseKeyData;
    }
 
    onRulesetChange(rulesetId) {
@@ -237,6 +272,11 @@ export class AnalysisComponent implements OnInit {
       dialogRef.afterClosed().subscribe(result => {
          if (result) {
             this.settings = result;
+            this.columnDefs = null;
+            setTimeout(() => {
+               this.genrateColDefs();
+               // this.gridApi.setColumnDefs(this.columnDefs);
+            }, 100);
          }
       });
    }

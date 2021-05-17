@@ -107,13 +107,19 @@
                   </button> -->
                 </div>
 
-                <!-- <ag-grid-angular 
-                  style="width:100%; height: 500px; margin-bottom:100px;" 
+                <ag-grid-angular 
+                  #agGrid
+                  style="width:100%; height: 500px;" 
                   class="ag-theme-alpine-dark"
+                  autoSizeColumns
+                  [defaultColDef]="defaultColDef"
+                  [columnDefs]="columnDefs"
                   [rowData]="rowData" 
                   [pagination]="true"
-                  [columnDefs]="columnDefs">
-              </ag-grid-angular> -->
+                  [floatingFilter]="true"
+                  (gridReady)="onGridReady($event)"
+                >
+              </ag-grid-angular>
               <table class="table brd-rt tableChart">
                   <thead>
                     <tr>
