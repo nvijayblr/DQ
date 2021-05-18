@@ -3,11 +3,11 @@
 }
 .mat-dialog-title {
    font-family: 'open-sans-condensed-bold';
+   margin-bottom: 10px;
 }
 .mat-dialog-title {
    font-size: 18px;
    color: #fff;
-   margin: 0px 10px 20px 10px;
    font-family: 'open-sans-condensed-bold';
    position: relative;
    width: 98%;
@@ -385,5 +385,22 @@ tr:nth-child(even) {background: #ffffff}
   }
   ::ng-deep .owl-item{
     width: 300px!important;
+  }
+}
+
+.category-list .mat-card {
+  opacity: 0.42;
+  cursor: pointer;
+  &.selected {
+    opacity: 1;
+  }
+}
+::ng-deep .mat-dialog-container {
+  position: relative;
+  .close {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    z-index: 100000;
   }
 }

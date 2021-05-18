@@ -286,7 +286,6 @@ export class AnalysisComponent implements OnInit {
    }
 
    showDetails(details, key, selectedKey, selectedValue, analysisItem?) {
-      console.log(details, key, selectedKey, selectedValue, analysisItem, this.analysisKeys);
       this.dialog.open(CompletenessDialogComponent, {
          width: '95%',
          // height: '95%',

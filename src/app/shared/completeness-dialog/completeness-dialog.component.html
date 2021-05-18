@@ -1,116 +1,55 @@
 <button class="close" mat-icon-button (click)="onNoClick()">
   <mat-icon>close</mat-icon>
 </button>
-<div class="space">
-  <div class="flex-containers space-between">
-    <!-- <div>
-      {{data.key}} - {{data.selectedKey}} - {{data.selectedValue}}
-      <span *ngIf="selectedColumn.column"> - {{selectedColumn.column}}</span>
-    </div> -->
-    <!-- <div class="btn-back-wrapper clearfix">
-      <button mat-stroked-button class="button3d btnPush btnPurple ebckBtn" (click)="selectedColumn = {}; showDetails = false">
-        <mat-icon>keyboard_arrow_left</mat-icon> Back
-      </button>
-    </div> -->
-  </div>
-</div>
+
 <div class="comp-tab">
-  <mat-tab-group mat-align-tabs="start"  animationDuration="0ms">
-    <mat-tab label="Completness">
+  <mat-tab-group mat-align-tabs="start" animationDuration="0ms" [selectedIndex]="selectedTabIndex" (selectedTabChange)="selectedTabChange($event)">
+    <mat-tab *ngFor="let tab of analysisKeys" label="{{tab}}">
       <div mat-dialog-title class="space bg2">
         <div class="flex-containers space-between">
           <div>
-            {{data.key}} - {{data.selectedKey}} - {{data.selectedValue}}
+            {{key}} - {{selectedKey}} - {{selectedValue}}
             <span *ngIf="selectedColumn.column"> - {{selectedColumn.column}}</span>
-          </div>
-        </div>
-      </div>
-      <!-- Date Carousel -->
-      <div class="analysis-info">
-        <div class="category-list-Owl clearfix">
-          <div class="left-arrow">
-             <button mat-stroked-button class="gv-secondary-btn primary-btn-gray prev-next-btn clr2" (click)="owlCar.prev()">
-             <mat-icon class="pl">keyboard_arrow_left</mat-icon>
-             </button>
-          </div>      
-          <div class="category-list" #carouselHolder>
-            <owl-carousel-o [options]="OwlCategoryOptions" #owlCar>
-                <ng-template carouselSlide>
-                  <mat-card *ngFor="let rowItem of data.details;" (click)="launchAnalysisDetails(rowItem);">
-                    <div  *ngFor="let item of rowItem | keyvalue" [hidden]="item.key === 'outlier'">
-                      <span *ngIf="item.key !== 'column'" class="field-label">{{item.key}}: </span> 
-                      <span class="strong compClr" (click)="launchAnalysisDetails(rowItem);">{{item.value}}</span>
-                    </div>
-                  </mat-card>
-                </ng-template>
-              <ng-template carouselSlide>
-                <mat-card *ngFor="let rowItem of data.details;" (click)="launchAnalysisDetails(rowItem);">
-                  <div  *ngFor="let item of rowItem | keyvalue" [hidden]="item.key === 'outlier'">
-                    <span *ngIf="item.key !== 'column'" class="field-label">{{item.key}}: </span> 
-                    <span class="strong compClr" (click)="launchAnalysisDetails(rowItem);">{{item.value}}</span>
-                  </div>
-                </mat-card>
-              </ng-template>  
-              <ng-template carouselSlide>
-                <mat-card *ngFor="let rowItem of data.details;" (click)="launchAnalysisDetails(rowItem);">
-                  <div  *ngFor="let item of rowItem | keyvalue" [hidden]="item.key === 'outlier'">
-                    <span *ngIf="item.key !== 'column'" class="field-label">{{item.key}}: </span> 
-                    <span class="strong compClr" (click)="launchAnalysisDetails(rowItem);">{{item.value}}</span>
-                  </div>
-                </mat-card>
-              </ng-template> 
-              
-            </owl-carousel-o>
-          </div>
-          <div class="right-arrow">
-             <button mat-stroked-button class="gv-secondary-btn primary-btn-gray prev-next-btn clr2" (click)="owlCar.next()">
-             <mat-icon class="pl">keyboard_arrow_right</mat-icon>
-             </button>
-          </div>
-       </div>
-      </div>
-    </mat-tab>
-    <mat-tab label="Uniqueness">
-      <div mat-dialog-title class="space bg2">
-        <div class="flex-containers space-between">
-          <div>
-            Uniqueness - {{data.selectedKey}} - {{data.selectedValue}}
-            <span *ngIf="selectedColumn.column"> - {{selectedColumn.column}}</span>
-          </div>
-        </div>
-      </div>
-    </mat-tab>
-    <mat-tab label="Validity">
-      <div mat-dialog-title class="space bg2">
-        <div class="flex-containers space-between">
-          <div>
-            Validity - {{data.selectedKey}} - {{data.selectedValue}}
-            <span *ngIf="selectedColumn.column"> - {{selectedColumn.column}}</span>
+            - {{analysisItem[key].value}}%
           </div>
         </div>
       </div>
     </mat-tab>
   </mat-tab-group>
 </div>
-<div mat-dialog-content>
-  <div class="content-details">
-    <div class="table brd-rt flex-containers wrap" *ngIf="!showDetails">
-        <mat-card *ngFor="let rowItem of data.details;" (click)="launchAnalysisDetails(rowItem);">
-          <div  *ngFor="let item of rowItem | keyvalue" [hidden]="item.key === 'outlier'">
-            <span *ngIf="item.key !== 'column'" class="field-label">{{item.key}}: </span> 
-            <span class="strong compClr" (click)="launchAnalysisDetails(rowItem);">{{item.value}}</span>
-          </div>
-        </mat-card>
-    </div>
 
+<div mat-dialog-content>
+  <!-- Date Carousel -->
+  <div class="analysis-info">
+    <div class="category-list-Owl clearfix">
+      <div class="left-arrow">
+          <button mat-stroked-button class="gv-secondary-btn primary-btn-gray prev-next-btn clr2" (click)="owlCar.prev()">
+          <mat-icon class="pl">keyboard_arrow_left</mat-icon>
+          </button>
+      </div>      
+      <div class="category-list" #carouselHolder>
+        <owl-carousel-o [options]="OwlCategoryOptions" #owlCar>
+            <ng-template *ngFor="let rowItem of analysisItem[key].details;" carouselSlide>
+              <mat-card (click)="launchAnalysisDetails(rowItem);" [class.selected]="rowItem.column === selectedColumn.column">
+                <div *ngFor="let item of rowItem | keyvalue" [hidden]="item.key === 'outlier'">
+                  <span *ngIf="item.key !== 'column'" class="field-label">{{item.key}}: </span> 
+                  <span class="strong compClr" (click)="launchAnalysisDetails(rowItem);">{{item.value}}</span>
+                </div>
+              </mat-card>
+            </ng-template>
+        </owl-carousel-o>
+      </div>
+      <div class="right-arrow">
+          <button mat-stroked-button class="gv-secondary-btn primary-btn-gray prev-next-btn clr2" (click)="owlCar.next()">
+          <mat-icon class="pl">keyboard_arrow_right</mat-icon>
+          </button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="content-details">
     <div *ngIf="showDetails">
-      <mat-card>
-        <div  *ngFor="let item of selectedColumn | keyvalue" [hidden]="item.key === 'outlier'">
-          <span *ngIf="item.key !== 'column'" class="field-label">{{item.key}}: </span> 
-          <span class="strong compClr">{{item.value}}</span>
-        </div>
-      </mat-card>
-      <mat-card fxFlex class="stats process-blocks-table" style="height: 380px">
+      <mat-card fxFlex class="stats process-blocks-table" style="height: 480px;">
         <app-ag-grid
           floatingFilter="true"
           [isLoading]="isLoading"

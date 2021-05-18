@@ -18,6 +18,10 @@ export class CompletenessDialogComponent implements OnInit {
   selectedColumn: any = {};
   analysisItem: any = {};
   analysisKeys: any = {};
+  key = '';
+  selectedKey = '';
+  selectedValue = '';
+  selectedTabIndex = 0;
   OwlCategoryOptions: OwlOptions = {
     loop: false,
     autoplay: false,
@@ -51,12 +55,25 @@ export class CompletenessDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private http: HttpService,
   ) {
+    this.key = data.key;
+    this.selectedKey = data.selectedKey;
+    this.selectedValue = data.selectedValue;
     this.analysisItem = data.analysisItem;
     this.analysisKeys = data.analysisKeys;
+    const index = this.analysisKeys.indexOf(this.key);
+    this.selectedTabIndex = index;
   }
 
-
   ngOnInit() {
+    this.loadFirstItem();
+  }
+
+  loadFirstItem() {
+    const details = this.analysisItem[this.key].details;
+    if (details && details.length) {
+      this.launchAnalysisDetails(details[0]);
+    }
+
   }
 
   launchAnalysisDetails(rowItem) {
@@ -86,6 +103,13 @@ export class CompletenessDialogComponent implements OnInit {
     }, (error) => {
       this.isLoading = false;
     });
+  }
+
+  selectedTabChange(tab) {
+    this.selectedColumn = {};
+    this.selectedTabIndex = tab.index;
+    this.key = this.analysisKeys[tab.index];
+    this.loadFirstItem();
   }
 
   onNoClick(): void {
