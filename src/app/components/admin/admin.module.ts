@@ -10,6 +10,10 @@ import { RolesComponent } from './roles/roles.component';
 import { DepartmentsComponent } from './departments/departments.component';
 import { CreateEditDeptComponent } from './departments/create-edit-dept/create-edit-dept.component';
 import { CreateEditRoleComponent } from './roles/create-edit-role/create-edit-role.component';
+import { FrequencyComponent } from './frequency/frequency.component';
+import { MultiSourceComponent } from './multi-source/multi-source.component';
+import { CreateEditFrequencyComponent } from './frequency/create-edit-frequency/create-edit-frequency.component';
+import { CreateEditMultiSourceComponent } from './multi-source/create-edit-multi-source/create-edit-multi-source.component';
 
 
 @NgModule({
@@ -20,12 +24,22 @@ import { CreateEditRoleComponent } from './roles/create-edit-role/create-edit-ro
     RolesComponent,
     DepartmentsComponent,
     CreateEditDeptComponent,
-    CreateEditRoleComponent],
+    CreateEditRoleComponent,
+    FrequencyComponent,
+    MultiSourceComponent,
+    CreateEditFrequencyComponent,
+    CreateEditMultiSourceComponent],
   imports: [
     CommonModule,
     AdminRoutingModule,
     SharedModule,
   ],
-  entryComponents: [CreateEditUserComponent, CreateEditDeptComponent, CreateEditRoleComponent]
+  entryComponents: [
+    CreateEditUserComponent,
+    CreateEditDeptComponent,
+    CreateEditRoleComponent,
+    CreateEditFrequencyComponent,
+    CreateEditMultiSourceComponent
+  ]
 })
 export class AdminModule { }

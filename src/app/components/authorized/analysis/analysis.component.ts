@@ -285,11 +285,20 @@ export class AnalysisComponent implements OnInit {
       this.showDetails(event.details, event.key, this.selectedKey, event.selectedValue);
    }
 
-   showDetails(details, key, selectedKey, selectedValue) {
+   showDetails(details, key, selectedKey, selectedValue, analysisItem?) {
+      console.log(details, key, selectedKey, selectedValue, analysisItem, this.analysisKeys);
       this.dialog.open(CompletenessDialogComponent, {
          width: '95%',
          // height: '95%',
-         data: {details : details ? details : [], key, selectedKey, selectedValue, selectedAnalysis: this.selectedAnalysis }
+         data: {
+            details : details ? details : [],
+            key,
+            selectedKey,
+            selectedValue,
+            selectedAnalysis: this.selectedAnalysis,
+            analysisItem,
+            analysisKeys: this.analysisKeys
+         }
       });
    }
 

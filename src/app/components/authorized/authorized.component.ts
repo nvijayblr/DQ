@@ -20,7 +20,8 @@ export class AuthorizedComponent implements OnInit {
   initAppData() {
     const apiCalls = [];
     apiCalls.push(this.http.getDepartmentsList());
-    apiCalls.push(this.http.getRolesList());
+    apiCalls.push(this.http.getMultisourceList());
+    apiCalls.push(this.http.getFrequencyList());
     forkJoin(apiCalls).subscribe((result: any) => {
       const departments = result[0].department ? result[0].department : [];
       const deptList = [];
@@ -31,7 +32,8 @@ export class AuthorizedComponent implements OnInit {
         });
       });
       this.msg.setPrefrences('departments', deptList);
-      this.msg.setPrefrences('roles', result[1].roles ? result[1].roles : []);
+      this.msg.setPrefrences('multisource', result[1].multiSourceList ? result[1].multiSourceList : []);
+      this.msg.setPrefrences('frequency', result[2].frequencyList ? result[2].frequencyList : []);
       this.isLoading = false;
     }, (error) => {
       this.isLoading = false;

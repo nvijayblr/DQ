@@ -40,51 +40,9 @@ export class CreateSourceComponent implements OnInit {
 
   get afControls(): any { return this.analysisForm.controls; }
   minDate = moment().format('YYYY-MM-DD');
-  multiSourceList = [{
-    label: 'AA',
-    value: 'AA',
-  }, {
-    label: 'NK',
-    value: 'NK',
-  }, {
-    label: 'DL',
-    value: 'DL',
-  }];
 
-  frequencyList = [{
-    label: 'Yearly',
-    value: 'Yearly',
-  }, {
-    label: 'Quarterly',
-    value: 'Quarterly',
-  }, {
-    label: 'Monthly',
-    value: 'Monthly',
-  }, {
-    label: 'Weekly',
-    value: 'Weekly',
-  }, {
-    label: 'Daily',
-    value: 'Daily',
-  }, {
-    label: 'Intraday',
-    value: 'Intraday',
-  }, {
-    label: 'Realtime',
-    value: 'Realtime',
-  }];
-
-  timeList = [{
-    label: '00:00',
-    value: '00:00',
-  }, {
-    label: '01:00',
-    value: '01:00',
-  }, {
-    label: '02:00',
-    value: '02:00',
-  }];
-
+  multiSourceList = this.messageService.getPrefrences('multisource');
+  frequencyList = this.messageService.getPrefrences('frequency');
   departmentList = this.messageService.getPrefrences('departments');
 
   sourceSettings = {
@@ -126,10 +84,10 @@ export class CreateSourceComponent implements OnInit {
   refcolumnDefs: any = [];
   selectedType;
   flError = true;
-  sourceNameErr:boolean = false;
+  sourceNameErr = false;
   showPreview = false;
   selFileName;
-  selFileNameErr:boolean = false;
+  selFileNameErr = false;
 
   ngOnInit() {
     this.isUserLoggedIn = this.authGuardService.isUserLoggedIn();
@@ -180,6 +138,8 @@ export class CreateSourceComponent implements OnInit {
     }
      // console.log(mode);
     this.minDate = moment().format('YYYY-MM-DD');
+    this.analysis = analysis;
+    console.log(this.analysis.source.sourceFileName);
   }
 
   intiFormArrays(field, reference: any = {}) {
@@ -360,7 +320,7 @@ export class CreateSourceComponent implements OnInit {
 
   validateSourceNameAndNext() {
     console.log(this.selFileName, this.selFileNameErr);
-    
+
     const sourceName = this.afControls.sourceDataName.value;
     if (this.selFileName === undefined) {
       this.selFileNameErr = true;
@@ -369,7 +329,7 @@ export class CreateSourceComponent implements OnInit {
     if (!sourceName) {
       this.sourceNameErr = true;
       return;
-    } 
+    }
     if (this.sourceNames.includes(sourceName) && this.mode === 'create') {
       alert('Source name is already found. Please enter the different source name.');
       return;

@@ -1,0 +1,32 @@
+<h1 mat-dialog-title>Department</h1>
+<div mat-dialog-content class="user-account">
+  <form [formGroup]="freqForm" (ngSubmit)="saveFreq()">
+    <div class="user-wrap">
+      <div class="list">
+        <mat-form-field appearance="fill">
+          <mat-label>Name</mat-label>
+          <input type="text" matInput formControlName="value" autocomplete="off" (keydown.space)="$event.preventDefault();">
+        </mat-form-field>
+      </div>
+      <div class="list">
+        <mat-form-field appearance="fill">
+          <mat-label>Dispaly Text</mat-label>
+          <input type="text" matInput formControlName="label" autocomplete="off">
+        </mat-form-field>
+      </div>
+      <div class="list">
+        <mat-form-field appearance="fill">
+          <mat-label class="lbl">Status</mat-label>
+          <mat-select formControlName="status">
+            <mat-option value="Active">Active</mat-option>
+            <mat-option value="Inactive">Inactive</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="onNoClick()">Cancel</button>
+  <button mat-raised-button color="accent" (click)="saveFreq()" cdkFocusInitial class="ma-cr">Ok</button>
+</div>

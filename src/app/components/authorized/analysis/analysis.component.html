@@ -133,7 +133,7 @@
                       <td *ngFor="let key of analysisKeys" [style.background-color]="data[key]?.value | formatCell: settings">
                         <span class="cur" 
                           *ngIf="data[key]?.details && data[key]?.details.length"
-                          (click)="showDetails(data[key]?.details, key, selectedKey, data[selectedKey])"
+                          (click)="showDetails(data[key]?.details, key, selectedKey, data[selectedKey], data)"
                         >{{data[key]?.value}}%</span>
                         <span *ngIf="!data[key]?.details.length">{{data[key]?.value}}%</span>
                       </td>

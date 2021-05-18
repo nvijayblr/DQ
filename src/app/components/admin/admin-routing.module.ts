@@ -4,6 +4,8 @@ import { AuthGuardService as AuthGaurd } from 'src/app/services/auth-guard.servi
 import { UsersListComponent } from './users-list/users-list.component';
 import { RolesComponent } from './roles/roles.component';
 import { DepartmentsComponent } from './departments/departments.component';
+import { FrequencyComponent } from './frequency/frequency.component';
+import { MultiSourceComponent } from './multi-source/multi-source.component';
 
 const routes: Routes = [
   {
@@ -15,6 +17,12 @@ const routes: Routes = [
   }, {
     path: 'departments',
     component: DepartmentsComponent,
+  }, {
+    path: 'frequency',
+    component: FrequencyComponent,
+  }, {
+    path: 'multi-source',
+    component: MultiSourceComponent,
   }
 ];
 

@@ -293,6 +293,47 @@ export class HttpService  {
   }
 
 
+  getFrequencyList(): Observable<any> {
+    return this.http.get<any>(`${this.rootUrl}/api/getfrequency`).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  createEditFrequency(payload, mode): Observable<any> {
+    return this.http[mode === 'create' ? 'post' : 'put'](`${this.rootUrl}/api/createfrequency`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    ) as any;
+  }
+
+
+  getMultisourceList(): Observable<any> {
+    return this.http.get<any>(`${this.rootUrl}/api/getmultisource`).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  createEditMultisource(payload, mode): Observable<any> {
+    return this.http[mode === 'create' ? 'post' : 'put'](`${this.rootUrl}/api/createmultisource`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    ) as any;
+  }
+
 
 
 

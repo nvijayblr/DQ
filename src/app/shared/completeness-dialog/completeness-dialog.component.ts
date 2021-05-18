@@ -16,6 +16,8 @@ export class CompletenessDialogComponent implements OnInit {
   rowData: any = [];
   showDetails = false;
   selectedColumn: any = {};
+  analysisItem: any = {};
+  analysisKeys: any = {};
   OwlCategoryOptions: OwlOptions = {
     loop: false,
     autoplay: false,
@@ -49,6 +51,8 @@ export class CompletenessDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private http: HttpService,
   ) {
+    this.analysisItem = data.analysisItem;
+    this.analysisKeys = data.analysisKeys;
   }
 
 

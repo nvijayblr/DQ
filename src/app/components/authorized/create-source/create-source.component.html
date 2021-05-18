@@ -20,6 +20,7 @@
                         <div class="list-item-2 outline wth">                          
                               <mat-label>Source Data<span class="red">*</span>&nbsp;<span *ngIf="selectedType">({{selectedType}})</span></mat-label>
                               <app-image-cropper 
+                                *ngIf="!isEditMode"
                                 [imageType]="'Source'"
                                 [fileTypes]="'.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'"
                                 [imagePath]="''"
@@ -27,6 +28,9 @@
                                 (fileSelected)="onSourceFileSelected($event)"
                               >
                               </app-image-cropper>
+                              <h4 *ngIf="isEditMode">
+                                {{analysis.source.sourceFileName}}
+                              </h4>
                               <mat-error class="nerr" *ngIf="!flError">Please Select a Correct File Type</mat-error>
                               <mat-error class="nerr ftw" *ngIf="selFileNameErr && flError">Please Select a File</mat-error>
                               <mat-label class="sub-title">Source Name<span class="red">*</span></mat-label>
@@ -56,6 +60,7 @@
                                     multiple="true" 
                                     [ruleItems]="multiSourceList" 
                                     [initValue]="sourceSettings.multiSourceOptions"
+                                    [showAddItem]="false"
                                     (selectionChange)="sourceSettings.multiSourceOptions=$event.value"
                                   ></app-rule-selector>                                  
                                 </div>
@@ -64,6 +69,7 @@
                                   <app-rule-selector 
                                     [ruleItems]="frequencyList"
                                     [initValue]="sourceSettings.frequency" 
+                                    [showAddItem]="false"
                                     (selectionChange)="sourceSettings.frequency=$event.value"
                                   ></app-rule-selector>
                                 </div>
@@ -90,12 +96,6 @@
 
                                   <!-- <input [ngxTimepicker]="picker">
                                   <ngx-material-timepicker #picker></ngx-material-timepicker> -->
-                                  
-                                  <!-- <app-rule-selector 
-                                    [ruleItems]="timeList" 
-                                    [initValue]="sourceSettings.uploadTime" 
-                                    (selectionChange)="sourceSettings.uploadTime=$event.value"
-                                  ></app-rule-selector> -->
                                 </div>
                                 <div class="list-item-2 outline">
                                   <span class="sub-title"> Department</span>
