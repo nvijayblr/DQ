@@ -322,13 +322,14 @@ tr:nth-child(even) {background: #ffffff}
   }
   ::ng-deep .mat-tab-labels{
     margin-top:0px;
-    height: 26px;
+    height: 46px;
     border-bottom : 0px;
     box-shadow: none !important;
+    margin-bottom: 2px;
   }
   ::ng-deep .mat-tab-label{
     margin-top:0px;
-    height: 26px;
+    height: 46px;
     padding: 0 9px;
     border-radius: 2px 2px 0 0;
     margin-right: 5px;   
@@ -344,7 +345,8 @@ tr:nth-child(even) {background: #ffffff}
     border-bottom: 4px solid #846bff;
 }
 ::ng-deep .mat-tab-list{
-  margin-left: 10px;
+  margin-left: 0;
+  margin-bottom: 2px;
 }
 }
 

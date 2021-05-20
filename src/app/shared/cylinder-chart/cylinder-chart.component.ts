@@ -128,9 +128,9 @@ export class CylinderChartComponent implements OnInit {
    this.chartOptions.chart.type = this.chartType ? this.chartType : 'column';
    this.chartOptions.chart.options3d.enabled = this.options3d ? this.options3d : false;
    this.chartOptions.series = [];
-   this.analysisKeys.map(key => {
+   this.analysisKeys.map((key, index) => {
        const data = [];
-       this.chartData[key].map(d => {
+       this.chartData[key].map((d) => {
            data.push({
                y: d.value ? +d.value : 0,
                ...d
@@ -153,7 +153,8 @@ export class CylinderChartComponent implements OnInit {
             point: {
                 events: {
                     click() {
-                        agThis.barClicked.emit({details: this.details, key: this.series.name, selectedValue: this.category});
+                        // tslint:disable-next-line: max-line-length
+                        agThis.barClicked.emit({details: this.details, key: this.series.name, selectedValue: this.category, rowIndex: this.index});
                     }
                 }
             }

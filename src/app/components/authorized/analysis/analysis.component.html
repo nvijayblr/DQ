@@ -82,12 +82,12 @@
                 </mat-tab>
                <mat-tab label="3D Map">
                   <app-cylinder-chart 
-                  *ngIf="analyseKeyData.length && isLoadChart"
-                  [analysisKeys]="analysisKeys"
-                  [chartData]="analyseKeyChartData"
-                  [chartType]="'column'" 
-                  [options3d]= true
-                  (barClicked)="onBarClicked($event)"
+                    *ngIf="analyseKeyData.length && isLoadChart"
+                    [analysisKeys]="analysisKeys"
+                    [chartData]="analyseKeyChartData"
+                    [chartType]="'column'" 
+                    [options3d]= true
+                    (barClicked)="onBarClicked($event)"
                   >
                   </app-cylinder-chart>
                </mat-tab>
@@ -101,13 +101,9 @@
                      <span class="text">
                         <mat-icon class="bt">format_color_fill</mat-icon> Highlight Color </span>
                   </button>
-
-                  <!-- <button type="button" class="ma-cr" mat-icon-button matTooltip="Highlight Settings"  (click)="openHighlightSettingsDialog()">
-                    <mat-icon>format_color_fill</mat-icon>
-                  </button> -->
                 </div>
 
-                <!-- <ag-grid-angular 
+                <ag-grid-angular 
                   #agGrid
                   style="width:100%; height: 500px;" 
                   class="ag-theme-alpine-dark"
@@ -118,9 +114,10 @@
                   [pagination]="true"
                   [floatingFilter]="true"
                   (gridReady)="onGridReady($event)"
+                  (cellClicked)="onCellClicked($event)"
                 >
-              </ag-grid-angular> -->
-              <table class="table brd-rt tableChart">
+              </ag-grid-angular>
+              <!-- <table class="table brd-rt tableChart">
                   <thead>
                     <tr>
                       <th>{{selectedKey}}</th>
@@ -139,7 +136,7 @@
                       </td>
                     </tr>
                   </tbody>
-                </table> 
+                </table>  -->
               </div>
             </mat-card>   
           </div>

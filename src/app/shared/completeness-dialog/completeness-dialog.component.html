@@ -21,7 +21,7 @@
 <div mat-dialog-content>
   <!-- Date Carousel -->
   <div class="analysis-info">
-    <div class="category-list-Owl clearfix">
+    <div class="category-list-Owl clearfix" *ngIf="analysisItem[key].details && analysisItem[key].details.length">
       <div class="left-arrow">
           <button mat-stroked-button class="gv-secondary-btn primary-btn-gray prev-next-btn clr2" (click)="owlCar.prev()">
           <mat-icon class="pl">keyboard_arrow_left</mat-icon>

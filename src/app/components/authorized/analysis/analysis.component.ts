@@ -105,13 +105,6 @@ export class AnalysisComponent implements OnInit {
       private messageService: MessageService,
       private auth: AuthGuardService,
       private router: Router) {
-
-     console.log(this.analyseKeyData);
-   //   { field: 'make', sortable: true, filter: true, },
-   //   { field: 'model', sortable: true,  filter: 'agNumberColumnFilter',
-   //   suppressMenu: true, },
-   //   { field: 'price', sortable: true, filter: true }
-
    }
 
    ngOnInit() {
@@ -226,15 +219,31 @@ export class AnalysisComponent implements OnInit {
 
    genrateColDefs() {
       const columnDefs = [];
-      this.displayedColumns.map(col => {
+      columnDefs.push({
+         field: this.selectedKey
+      });
+      this.analysisKeys.map(col => {
          columnDefs.push({
             field: col,
+            filter: false, // 'agNumberColumnFilter'
             cellRenderer: (params) => {
                if (params.value && params.value.value) {
                   return params.value.value;
                }
                return params.value;
             },
+            comparator: (valueA, valueB) => {
+               return (+valueA.value === +valueB.value) ? 0 : (+valueA.value > +valueB.value) ? 1 : -1;
+            },
+            filterParams: {
+               comparator: (a, b) => {
+                  console.log(a, b);
+                  const valA = parseFloat(a);
+                  const valB = parseFloat(b);
+                  if (valA === valB) { return 0; }
+                  return valA > valB ? 1 : -1;
+               }
+           },
             cellStyle: params => {
                const { value } = params.value;
                const { bgSettings } = this.settings || [];
@@ -248,6 +257,14 @@ export class AnalysisComponent implements OnInit {
       });
       this.columnDefs = columnDefs;
       this.rowData = this.analyseKeyData;
+   }
+
+   onCellClicked(e) {
+      const analysisItem = e.data;
+      const key = e.colDef.field;
+      const details = analysisItem[key].details ? analysisItem[key].details : [];
+      const selectedValue = analysisItem[this.selectedKey];
+      this.showDetails(details, key, this.selectedKey, selectedValue, analysisItem);
    }
 
    onRulesetChange(rulesetId) {
@@ -282,7 +299,7 @@ export class AnalysisComponent implements OnInit {
    }
 
    onBarClicked(event) {
-      this.showDetails(event.details, event.key, this.selectedKey, event.selectedValue);
+      this.showDetails(event.details, event.key, this.selectedKey, event.selectedValue, this.analyseKeyData[event.rowIndex]);
    }
 
    showDetails(details, key, selectedKey, selectedValue, analysisItem?) {
