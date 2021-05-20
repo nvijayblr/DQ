@@ -83,6 +83,7 @@ export class CreateSourceComponent implements OnInit {
   refrowData: any = [];
   refcolumnDefs: any = [];
   selectedType;
+  chooseOptions:string;
   flError = true;
   sourceNameErr = false;
   showPreview = false;
@@ -112,7 +113,7 @@ export class CreateSourceComponent implements OnInit {
       sourceDataDescription: [analysis.source.sourceDataDescription || ''],
       sourceFileName: [analysis.source.sourceFileName || ''],
       templateSourcePath: [analysis.source.templateSourcePath || ''],
-      settingsDate : [''],
+      settingsDate : ['', [Validators.required]],
       uploadTime : [''],
       referenceData: this.fb.array([]),
     });
@@ -135,6 +136,13 @@ export class CreateSourceComponent implements OnInit {
       this.isEditMode = true;
       this.mode = 'edit';
       this.showPreview = true;
+    }
+    if (this.selectedType === 'csv') {
+      this.chooseOptions = '.csv'
+    }
+
+    if (this.selectedType === 'xlsx') {
+          this.chooseOptions = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'
     }
      // console.log(mode);
     this.minDate = moment().format('YYYY-MM-DD');
@@ -297,10 +305,15 @@ export class CreateSourceComponent implements OnInit {
       this.showPreview = false;
     }
 
+    if (this.selectedType === 'csv') {
+      this.chooseOptions = '.csv'
+    }
+
     if (this.selectedType === 'xlsx') {
         if (fExt.includes('xls')) {
            this.flError = true;
-           this.showPreview = true;
+          this.showPreview = true;
+          this.chooseOptions = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'
         }
      }
     this.afControls.sourceDataName.setValue(fName);

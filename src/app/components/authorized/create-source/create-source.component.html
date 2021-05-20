@@ -22,7 +22,7 @@
                               <app-image-cropper 
                                 *ngIf="!isEditMode"
                                 [imageType]="'Source'"
-                                [fileTypes]="'.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'"
+                                [fileTypes]="chooseOptions"
                                 [imagePath]="''"
                                 [disabled]="isEditMode"
                                 (fileSelected)="onSourceFileSelected($event)"
@@ -82,6 +82,7 @@
                                     <input matInput [matDatepicker]="frompicker" formControlName="settingsDate" [(ngModel)]="sourceSettings.uploadDate" autocomplete="off" (click)="frompicker.open()">
                                     <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
                                     <mat-datepicker #frompicker></mat-datepicker>
+                                    <mat-error class="errSty ps">Please Select a Start Date</mat-error>
                                   </mat-form-field>
                                  </div>
                                 </div>
