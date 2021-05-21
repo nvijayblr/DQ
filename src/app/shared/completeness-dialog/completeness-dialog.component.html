@@ -13,13 +13,17 @@
             - {{analysisItem[key].value}}%
           </div>
         </div>
+        <button type="button" class="button3d btnPush btnOrange addico"
+          (click)="launchDataCleaning(data,'edit')" matTooltip="Data Cleaning">
+          Data Cleaning
+        </button>
       </div>
     </mat-tab>
   </mat-tab-group>
 </div>
 
 <div mat-dialog-content>
-  <!-- Date Carousel -->
+  <!-- category Carousel -->
   <div class="analysis-info">
     <div class="category-list-Owl clearfix" *ngIf="analysisItem[key].details && analysisItem[key].details.length">
       <div class="left-arrow">
@@ -28,8 +32,9 @@
           </button>
       </div>      
       <div class="category-list" #carouselHolder>
-        <owl-carousel-o [options]="OwlCategoryOptions" #owlCar>
-            <ng-template *ngFor="let rowItem of analysisItem[key].details;" carouselSlide>
+        <owl-carousel-o [options]="OwlCategoryOptions" #owlCatCar>
+          <ng-container *ngFor="let rowItem of analysisItem[key].details; let i = index">
+            <ng-template carouselSlide [id]="i">
               <mat-card (click)="launchAnalysisDetails(rowItem);" [class.selected]="rowItem.column === selectedColumn.column">
                 <div *ngFor="let item of rowItem | keyvalue" [hidden]="item.key === 'outlier'">
                   <span *ngIf="item.key !== 'column'" class="field-label">{{item.key}}: </span> 
@@ -37,6 +42,7 @@
                 </div>
               </mat-card>
             </ng-template>
+          </ng-container>
         </owl-carousel-o>
       </div>
       <div class="right-arrow">

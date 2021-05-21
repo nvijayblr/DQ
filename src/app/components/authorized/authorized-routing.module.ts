@@ -7,6 +7,7 @@ import { DelayAnalysisComponent } from './delay-analysis/delay-analysis.componen
 import { CreateSourceComponent } from './create-source/create-source.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AttributeDetailsComponent } from './attribute-details/attribute-details.component';
+import { DataCleaningComponent } from './data-cleaning/data-cleaning.component';
 
 const routes: Routes = [
   {
@@ -46,6 +47,7 @@ const routes: Routes = [
        { path: 'add-source-data', component: ProfileComponent },
        { path: 'create-source-data', component: CreateSourceComponent },
        { path: 'attribute-details-data', component: AttributeDetailsComponent },
+       { path: 'data-cleaning', component: DataCleaningComponent },
     ]
   },
 ];

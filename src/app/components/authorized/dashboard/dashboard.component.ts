@@ -192,7 +192,6 @@ export class DashboardComponent implements OnInit {
    createEditRuleset(data, mode) {
       let rules = data.rules.filter((rule) => data.rulesetId === rule.rulesetId);
       rules = (rules && rules.length) ? rules[0] : { columns: [], selectedColumns: [] };
-      console.log(rules);
       // If create ruleset take the columns list from default ruleset.
       if (!data.rulesetId) {
          rules.columns = data.rules && data.rules.length ? data.rules[0].columns : [];
@@ -203,18 +202,24 @@ export class DashboardComponent implements OnInit {
             columns.push({ id: (index + 1), title: column });
          });
       }
-
       const selectedColumns = [];
       rules.selectedColumns.map((column, index) => {
          selectedColumns.push({ id: (index + 1), title: column });
       });
+
+      const rulesetNames = [];
+      data.rules.map((rule) => {
+         rulesetNames.push(rule.rulesetName);
+      });
+
       const analysis = {
          ...data,
          mode,
          columns,
          selectedColumns,
          rulesetName: rules.rulesetName,
-         rules
+         rules,
+         rulesetNames
       };
       localStorage.setItem('analysis', JSON.stringify(analysis));
       localStorage.setItem('dq-source-data', JSON.stringify(analysis));
@@ -230,6 +235,15 @@ export class DashboardComponent implements OnInit {
       localStorage.setItem('dq-source-data', JSON.stringify(sourceData));
       this.router.navigate(
          [`auth/attribute-details-data`],
+         { queryParams: { sourceId: sourceData.sourceId } }
+      );
+   }
+
+   launchDataCleaning(sourceData): void {
+      console.log(sourceData);
+      localStorage.setItem('dq-source-data', JSON.stringify(sourceData));
+      this.router.navigate(
+         [`auth/data-cleaning`],
          { queryParams: { sourceId: sourceData.sourceId } }
       );
    }

@@ -1,0 +1,133 @@
+<section class="page-body home-bodys wts">
+  <div class="container">
+     <h1 class="attTitle">Data Cleaning</h1>
+     <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
+
+    <div class="profile-wrapper">
+       <div class="flex-containers">
+          <div class="list attribute-list">
+           <mat-list role="list" class="hideContainer" [class.show]="show">
+              <mat-list-item role="listitem" *ngFor="let profile of profiles;" (click)="changeProfile(profile)" [class.active]="attrubute === profile.column">
+                 {{profile.column}}
+              </mat-list-item>
+            </mat-list>
+            <button class="moreBtn" (click)="show = !show">{{ show ? 'Show less'  : 'Show More'  }}
+                <mat-icon *ngIf="!show">expand_more</mat-icon> <mat-icon *ngIf="show">expand_less</mat-icon> </button>
+          </div>
+          <div class="attribute-details">                     
+           <h1 class="share-post-title"> {{attrubute}} </h1>
+           <div class="lft-attr">
+              <mat-card class="bg-violet">
+              <h4 class="attr-tite">Attribute Summary <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
+              <div class="records">
+                 <span>records</span>
+                 {{profile.attributeSummary?.records}}
+              </div>
+              <div class="dotDiv"></div>
+              <div class="records">
+                 <span>Data type</span>
+                 {{profile.attributeSummary?.dataType}}
+              </div>
+              </mat-card>
+        
+              <mat-card class="bg-magenta" *ngIf="profile.frequncyAnalysis && profile.frequncyAnalysis.length">
+                 <h4 class="attr-tite">Frequency Groups <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
+                 <div class="frequencyContainer" [class.frequencyShow]="frequencyShow">
+                 <table>
+                    <tr>
+                       <th>Frequency</th>
+                       <th>Count</th>
+                       <th style="width:20%">&nbsp;</th>
+                    </tr>
+                    <tr *ngFor="let frequency of profile.frequncyAnalysis">
+                       <td>{{frequency.unique_values}}</td>
+                       <td>{{frequency.counts}}</td>
+                       <td><mat-progress-bar mode="determinate" [value]="(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %" ></mat-progress-bar></td>
+                    </tr>
+                 </table>
+              </div>
+              <button *ngIf="profile.frequncyAnalysis.length > 3" class="frequencyBtn" (click)="frequencyShow = !frequencyShow">
+                 <mat-icon *ngIf="!frequencyShow">expand_more</mat-icon> <mat-icon *ngIf="frequencyShow">expand_less</mat-icon> </button>  
+              </mat-card>
+                
+              <mat-card class="bg-blue" *ngIf="profile.patternAnalysis && profile.patternAnalysis.length">
+                 <h4 class="attr-tite">Pattern Analysis <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
+                 <div class="frequencyContainer" [class.patternShow]="patternShow">
+                 <table>
+                    <tr>
+                       <th>Value</th>
+                       <th>Count</th>
+                       <th style="width:20%">&nbsp;</th>
+                    </tr>
+                    <tr *ngFor="let pattern of profile.patternAnalysis">
+                       <td>{{pattern.unique_values}}</td>
+                       <td>{{pattern.counts}}</td>
+                       <td><mat-progress-bar mode="determinate" [value]="(pattern.counts * 100) / profile.attributeSummary?.records | number:'1.0-2' " matTooltip="{{(pattern.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %"></mat-progress-bar></td>
+                    </tr>
+                 </table>
+              </div>
+              <button *ngIf="profile.patternAnalysis.length > 3" class="patternBtn" (click)="patternShow = !patternShow"><!--  {{ patternShow ? 'Show less'  : 'Show More'  }} -->
+                 <mat-icon *ngIf="!patternShow">expand_more</mat-icon> <mat-icon *ngIf="patternShow">expand_less</mat-icon> </button> 
+              </mat-card>
+        
+           </div>
+           <div class="rgt-attr">
+              <!-- <mat-card class="wt2">
+                 <h4 class="attr-tite">Count <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
+                 <div class="records">
+                    <highcharts-chart
+                       [Highcharts] = "highcharts" 
+                       [options] = "chartOptions" 
+                       style = "width: 100%; height: 400px; display: block;">
+                    </highcharts-chart>
+        
+                 </div>                          
+              </mat-card> -->
+              <mat-card class="honeydew" *ngIf="profile.LengthStatistics">
+               <h4 class="attr-tite">Length Statistics
+                  <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
+      
+                  <div class="custom-slider">
+                     <ngx-slider [(value)]="profile.LengthStatistics.Min" [(highValue)]="profile.LengthStatistics.Max" [options]="options"></ngx-slider>
+                  </div>
+             </mat-card>
+              <mat-card class="bg-green" *ngIf="profile.maskAnalysis && profile.maskAnalysis.length">
+                 <h4 class="attr-tite">Mask Analysis <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
+                 <div class="frequencyContainer" [class.maskShow]="maskShow">
+                 <table>
+                    <tr>
+                       <th>Value</th>
+                       <th>Count</th>
+                       <th style="width:20%">&nbsp;</th>
+                    </tr>
+        
+                    <tr *ngFor="let mask of profile.maskAnalysis">
+                       <td>{{mask.unique_values}}</td>
+                       <td>{{mask.counts}}</td>
+                       <td><mat-progress-bar mode="determinate" [value]="(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'}} %"></mat-progress-bar></td>
+                    </tr>
+                 </table>
+              </div>
+             <button *ngIf=" profile.maskAnalysis.length > 3" class="maskShowBtn" (click)="maskShow = !maskShow">  <!-- {{ maskShow ? 'Show less'  : 'Show More'  }} -->
+                 <mat-icon *ngIf="!maskShow">expand_more</mat-icon> <mat-icon *ngIf="maskShow">expand_less</mat-icon> </button> 
+              </mat-card>
+
+              <!-- <mat-card class="os aliceblue" *ngIf="profile.staticalAnalysis">
+                 <h4 class="attr-tite">Statistics <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
+                 <table class="table">
+                    <tr class="cpt">
+                    <td class="strong" *ngFor="let stats of profile.staticalAnalysis | keyvalue">{{stats.key}}</td>
+                    </tr>
+                    <tr class="cpt1">
+                    <td *ngFor="let stats of profile.staticalAnalysis | keyvalue">{{stats.value}}</td>
+                    </tr>
+                 </table>
+              </mat-card> -->
+
+           </div>                      
+        </div>
+       </div>
+        
+      </div>     
+  </div>
+</section>

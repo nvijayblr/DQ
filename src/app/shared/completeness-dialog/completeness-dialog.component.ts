@@ -9,7 +9,7 @@ import { OwlOptions } from 'ngx-owl-carousel-o';
   styleUrls: ['./completeness-dialog.component.scss']
 })
 export class CompletenessDialogComponent implements OnInit {
-  @ViewChild('owlCar', { static: false }) owlCar;
+  @ViewChild('owlCatCar', { static: false }) owlCatCar;
   isLoading = false;
   defaultColDefs = { sortable: true, filter: true, minWidth: 180, resizable: true };
   columnDefs: any = [];
@@ -36,19 +36,6 @@ export class CompletenessDialogComponent implements OnInit {
     navText: [ '<i class="fa-chevron-left"></i>', '<i class="fa-chevron-right></i>"' ],
     autoWidth: true,
     nav: false,
-    items: 6,
-    responsive: {
-      0: {
-        items: 3,
-        center: true,
-        loop: true,
-      },
-      740: {
-        items: 5,
-        center: false,
-        loop: false,
-      }
-    },
  };
   constructor(
     public dialogRef: MatDialogRef<CompletenessDialogComponent>,
@@ -108,6 +95,7 @@ export class CompletenessDialogComponent implements OnInit {
   selectedTabChange(tab) {
     this.selectedColumn = {};
     this.selectedTabIndex = tab.index;
+    this.showDetails = false;
     this.key = this.analysisKeys[tab.index];
     this.loadFirstItem();
   }

@@ -72,9 +72,7 @@ export class RulesetComponent implements OnInit {
   isSourceUploaded = false;
   analysis: any = {};
   fileTypeErr = false;
-   uniqueName = false;
-   startDateAdd: any;
-  endDateAdd: any;
+  uniqueName = false;
 
   OwlCategoryOptions: OwlOptions = {
     loop: false,
@@ -312,10 +310,12 @@ export class RulesetComponent implements OnInit {
   rowData: any = [];
   columnDefs: any = [];
 
-   minDate = moment().format('YYYY-MM-DD');
-   maxDate = moment(moment().add(6, 'months')).format('YYYY-MM-DD');
+  minDate = moment().format('YYYY-MM-DD');
+  maxDate = moment(moment().add(6, 'months')).format('YYYY-MM-DD');
+  uploadedDate: any;
+  rulesetNames: any = [];
 
-   visibleIndex = -1;
+  visibleIndex = -1;
 
   ngOnInit() {
     this.isUserLoggedIn = this.authGuardService.isUserLoggedIn();
@@ -336,10 +336,6 @@ export class RulesetComponent implements OnInit {
 
     const analysis = this.messageService.getAnalysis();
     // const targetDate = moment(moment().add(60, 'days')).format('YYYY-MM-DD');
-    this.startDateAdd = this.minDate;
-    this.endDateAdd = this.maxDate;
-   //   console.log(this.startDateAdd);
-   //   console.log(this.endDateAdd);
     this.analysisForm = this.fb.group({
 
       sourceId: [{value: analysis.sourceId || '', disabled: true}],
@@ -355,7 +351,6 @@ export class RulesetComponent implements OnInit {
       columnRules: this.fb.array([]),
     });
 
-    console.log(analysis);
     this.sourceNameText = analysis.source.sourceDataName;
      // console.log(this.sourceNameText);
 
@@ -399,19 +394,18 @@ export class RulesetComponent implements OnInit {
       this.columnsForm.controls.refernceColumns.setValue(this.selectedReferenceColumns);
      }
 
-    this.minDate = moment().format('YYYY-MM-DD');
-    this.maxDate = moment(moment().add(6, 'months')).format('YYYY-MM-DD');
-    this.startDateAdd = this.minDate;
-    this.endDateAdd = moment(moment(this.startDateAdd).add(6, 'months')).format('YYYY-MM-DD');
-
+    this.minDate = moment().format('YYYY-MM-DDT[18:30:00.000Z]');
+    this.maxDate = moment(moment().add(6, 'months')).format('YYYY-MM-DDT[18:30:00.000Z]');
+    this.uploadedDate = analysis.settings.uploadDate;
+    this.rulesetNames = analysis.rulesetNames ? analysis.rulesetNames : [];
     if (this.mode === 'add') {
-        this.analysisForm.controls.rulesetName.setValue(this.sourceNameText + '-ruleset');
-        // this.analysisForm.controls.startDate.setValue(this.minDate);
-        // this.analysisForm.controls.endDate.setValue(this.maxDate);
-      
+      const ruleId = this.rulesetNames.length ? '-' + analysis.rulesetNames.length : '';
+      this.analysisForm.controls.rulesetName.setValue(this.sourceNameText + '-ruleset' + ruleId);
+      this.analysisForm.controls.startDate.setValue(this.minDate);
+      this.analysisForm.controls.endDate.setValue(this.maxDate);
      }
 
-
+    this.loadSourcePreview();
   }
 
    intiFormArrays(field, value: any = {}) {
@@ -604,7 +598,21 @@ export class RulesetComponent implements OnInit {
       selectedColumns: this.selectedColumns,
       rules: this.afControls.columnRules.value,
     };
+    const startDate = this.afControls.startDate.value;
+    const endDate = this.afControls.endDate.value;
+    if (!startDate || !endDate) {
+      alert('Please choose the ruleset start and end date.');
+      return;
+    }
     if (!this.analysis.sourceName || !this.analysis.rulesetName) {
+      return;
+    }
+    if (this.rulesetNames.includes(this.analysis.rulesetName) && this.mode !== 'edit') {
+      alert('The ruleset name already found.');
+      return;
+    }
+    if (moment(startDate).diff(moment(endDate), 'days') >= 0) {
+      alert('Ruleset end date should be less than start date.');
       return;
     }
     this.gotoStepper(3);

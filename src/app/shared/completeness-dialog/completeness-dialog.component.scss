@@ -382,12 +382,12 @@ tr:nth-child(even) {background: #ffffff}
       border: 1px solid rgb(44, 94, 134) !important;
     }
   }
-  ::ng-deep .owl-stage{
-    width: 100%!important;
-  }
-  ::ng-deep .owl-item{
-    width: 300px!important;
-  }
+  // ::ng-deep .owl-stage{
+  //   width: 100%!important;
+  // }
+  // ::ng-deep .owl-item{
+  //   width: 300px!important;
+  // }
 }
 
 .category-list .mat-card {

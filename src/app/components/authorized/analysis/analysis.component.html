@@ -50,14 +50,14 @@
                   </div>
                   <div class="category-list" #carouselHolder>
                      <owl-carousel-o [options]="OwlCategoryOptions" #owlCar>
-                     <!-- Carousel Items -->
-                     <ng-container *ngFor="let history of uploadsHistory">
-                        <ng-template carouselSlide [id]="history.uploadId">
-                           <div class="category-item" [class.selected]="history.uploadId === uploadId" (tap)="tapDateCarouselItem(history)">
-                           <h3 class="cat-title">{{formatDate(history.uploadDate)}}</h3>
-                           </div>
-                        </ng-template>
-                     </ng-container>
+                      <!-- Carousel Items -->
+                      <ng-container *ngFor="let history of uploadsHistory">
+                          <ng-template carouselSlide [id]="history.uploadId">
+                            <div class="category-item" [class.selected]="history.uploadId === uploadId" (tap)="tapDateCarouselItem(history)">
+                            <h3 class="cat-title">{{formatDate(history.uploadDate)}}</h3>
+                            </div>
+                          </ng-template>
+                      </ng-container>
                      </owl-carousel-o>
                   </div>
                   <div class="right-arrow">

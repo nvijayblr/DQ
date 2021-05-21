@@ -39,7 +39,7 @@ export class CreateSourceComponent implements OnInit {
     }
 
   get afControls(): any { return this.analysisForm.controls; }
-  minDate = moment().format('YYYY-MM-DD');
+  minDate = moment().format();
 
   multiSourceList = this.messageService.getPrefrences('multisource');
   frequencyList = this.messageService.getPrefrences('frequency');
@@ -83,7 +83,7 @@ export class CreateSourceComponent implements OnInit {
   refrowData: any = [];
   refcolumnDefs: any = [];
   selectedType;
-  chooseOptions:string;
+  chooseOptions: string;
   flError = true;
   sourceNameErr = false;
   showPreview = false;
@@ -136,13 +136,14 @@ export class CreateSourceComponent implements OnInit {
       this.isEditMode = true;
       this.mode = 'edit';
       this.showPreview = true;
+      this.loadSourcePreview();
     }
     if (this.selectedType === 'csv') {
-      this.chooseOptions = '.csv'
+      this.chooseOptions = '.csv';
     }
 
     if (this.selectedType === 'xlsx') {
-          this.chooseOptions = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'
+          this.chooseOptions = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel';
     }
      // console.log(mode);
     this.minDate = moment().format('YYYY-MM-DD');
@@ -306,14 +307,14 @@ export class CreateSourceComponent implements OnInit {
     }
 
     if (this.selectedType === 'csv') {
-      this.chooseOptions = '.csv'
+      this.chooseOptions = '.csv';
     }
 
     if (this.selectedType === 'xlsx') {
         if (fExt.includes('xls')) {
            this.flError = true;
-          this.showPreview = true;
-          this.chooseOptions = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'
+           this.showPreview = true;
+           this.chooseOptions = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel';
         }
      }
     this.afControls.sourceDataName.setValue(fName);
@@ -332,10 +333,8 @@ export class CreateSourceComponent implements OnInit {
   }
 
   validateSourceNameAndNext() {
-    console.log(this.selFileName, this.selFileNameErr);
-
     const sourceName = this.afControls.sourceDataName.value;
-    if (this.selFileName === undefined) {
+    if (this.selFileName === undefined && this.mode === 'create') {
       this.selFileNameErr = true;
       return;
     }
