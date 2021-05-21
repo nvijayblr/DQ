@@ -111,7 +111,7 @@ export class AnalysisComponent implements OnInit {
       const analysis = localStorage.getItem('selected-analysis');
       if (analysis) {
          this.initAnalysis(JSON.parse(analysis));
-     }
+      }
    }
 
    initAnalysis(analysis) {

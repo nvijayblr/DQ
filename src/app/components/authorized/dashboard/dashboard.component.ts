@@ -231,7 +231,6 @@ export class DashboardComponent implements OnInit {
 
 
    launchProfileView(sourceData): void {
-      console.log(sourceData);
       localStorage.setItem('dq-source-data', JSON.stringify(sourceData));
       this.router.navigate(
          [`auth/attribute-details-data`],
@@ -240,7 +239,6 @@ export class DashboardComponent implements OnInit {
    }
 
    launchDataCleaning(sourceData): void {
-      console.log(sourceData);
       localStorage.setItem('dq-source-data', JSON.stringify(sourceData));
       this.router.navigate(
          [`auth/data-cleaning`],

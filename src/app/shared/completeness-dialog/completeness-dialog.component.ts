@@ -2,6 +2,7 @@ import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { HttpService } from 'src/app/services/http-service.service';
 import { OwlOptions } from 'ngx-owl-carousel-o';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-completeness-dialog',
@@ -41,6 +42,7 @@ export class CompletenessDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<CompletenessDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private http: HttpService,
+    private router: Router
   ) {
     this.key = data.key;
     this.selectedKey = data.selectedKey;
@@ -99,6 +101,18 @@ export class CompletenessDialogComponent implements OnInit {
     this.key = this.analysisKeys[tab.index];
     this.loadFirstItem();
   }
+
+  launchDataCleaning(sourceData): void {
+    const analysis = localStorage.getItem('selected-analysis');
+    if (analysis) {
+      localStorage.setItem('dq-source-data', analysis);
+      this.router.navigate(
+         [`auth/data-cleaning`],
+         { queryParams: { sourceId: sourceData.sourceId } }
+      );
+      this.dialogRef.close();
+    }
+ }
 
   onNoClick(): void {
     this.dialogRef.close();
