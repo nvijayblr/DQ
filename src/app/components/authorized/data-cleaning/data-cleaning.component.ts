@@ -24,7 +24,21 @@ export class DataCleaningComponent implements OnInit {
    patternShow = false;
    maskShow = false;
    sticky = false;
-   elementPosition: any;
+  elementPosition: any;
+  defaultSelected = true;
+  drop: boolean = true;
+  impute: boolean = false;
+  dataTypeNum: boolean = false;
+  dataTypeAlpha: boolean = false;
+  nullType:boolean=true;
+  value: number = 10;
+  highValue: number = 67;
+  options: Options = {
+    floor: 0,
+    ceil: 100,
+    step: 10,
+    showTicks: true
+  };
 
    constructor(private messageService: MessageService, private http: HttpService, ) {
    }
@@ -94,14 +108,7 @@ export class DataCleaningComponent implements OnInit {
   };
 
 
-  minValue = 0;
-  maxValue = 90;
-  options: Options = {
-    floor: 0,
-    ceil: 100,
-    step: 1,
-    showTicks: true
-  };
+
 
   ngOnInit() {
    this.isLoading = true;
@@ -139,7 +146,37 @@ export class DataCleaningComponent implements OnInit {
    }, (error) => {
       this.isLoading = false;
    });
-   }
+  }
+  
+  changeComboo(event) {
+    console.log(event && event.value);
+    if (event && event.value === 'drop') {
+      this.drop = true;
+      this.impute = false;
+    } else {
+      this.drop = false;
+      this.impute = true;
+    }
+  }
+  changeDataType(event) {
+    console.log(event && event.value); 
+    if (event && event.value === 'Numeric') {
+      this.dataTypeNum = true;
+      this.dataTypeAlpha = false;
+    } else {
+      this.dataTypeNum = false;
+      this.dataTypeAlpha = true;
+    }
+  }
+
+  enableCustom(event) {
+    console.log(event && event.value); 
+    if (event && event.value === 'custom') {
+      this.nullType = false;
+    } else {
+      this.nullType = true;
+    }
+ }
 
    // ngAfterViewInit(){
    //    this.elementPosition = this.menuElement.nativeElement.offsetTop;

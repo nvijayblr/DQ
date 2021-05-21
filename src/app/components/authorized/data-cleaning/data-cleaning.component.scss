@@ -334,6 +334,15 @@ table{
 }
 
 // We need to use ::ng-deep to overcome view encapsulation
+.custom-slider {
+  font-family: 'open-sans-condensed-bold';
+  &.b-g{
+    padding: 15px 10px;
+    background: lavender;
+    margin-top: 10px;
+  }
+}
+
 ::ng-deep {
   .custom-slider .ngx-slider .ngx-slider-bar {
     background: #ffe4d1;
@@ -543,6 +552,37 @@ table{
   background-color:#dbf6ff;
   border: 1px solid #9ae0f7 !important;
 }
+.bg-azure{
+  background-color:azure;
+  border: 1px solid #9ae0f7 !important;
+}
+.share-sub-title {
+  font-size: 20px;
+  color: #0C0C0C;
+  font-weight: 400;
+  margin: 0px 10px 40px 0px;
+  font-family: 'open-sans-condensed-bold';
+  position: relative;
+  &:before {
+     content: "";
+     position: absolute;
+     left: 0;
+     bottom: -12px;
+     height: 5px;
+     width: 55px;
+     background-color: lightcoral;
+   }
+   &:after {
+     content: "";
+     position: absolute;
+     left: 0;
+     bottom: -10px;
+     height: 1px;
+     width: 95%;
+     max-width: 181px;
+     background-color: lightcoral;
+   }
+}
 .bg-green {
  background-color: #edfffa;
  border: 1px solid #98ffe2 !important;
@@ -556,6 +596,7 @@ table{
   background: cornsilk;   
   border: 1px solid #f5ce35 !important;
  }
+
 
 .hideContainer {
   font-size: 16px;
@@ -703,5 +744,214 @@ table{
   , lightcoral, transparent);
   padding: 10px 20px;
 }
+
+::ng-deep .mat-radio-label{
+  margin-right: 20px;
+  font-family: 'open-sans-condensed-bold'; 
+}
+.cst{
+  width: 30px;
+}
+.divLft{
+  display: inline-block;
+  width:500px;
+  vertical-align: top;
+  margin-top: 10px;
+}
+.moccasin2{
+  background: #dcffff;
+  border: 1px solid #adfafa !important;
+  padding-right: 30px;
+  width: 650px;
+  padding-left: 30px;
+}
+.moccasin{
+  background: #dcffff;
+  border: 1px solid #adfafa !important;
+  padding-right: 30px;
+  width: 450px;
+  padding-left: 30px;
+
+  ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: lavender!important;   
+}
+::ng-deep .mat-select-value-text{
+  font-family: 'open-sans-condensed-bold'!important;
+}
+
+ }
+.sub_title{
+  font-size: 15px;
+    font-family: 'open-sans-condensed-bold';
+    color: coral;
+    margin-right: 40px;
+    display: inline-block;
+    margin-top: 20px;
+    width: 95px;
+    &.mt{
+      margin-bottom: 10px;
+      margin-top: 0px;
+      display: inline-block;
+    }
+}
+.mft{
+  width: 252px;
+  display: inline-block;
+}
+.mft2{
+  width: 150px;
+  display: inline-block;
+}
+.mft3{
+  width: 250px;
+  display: inline-block;
+}
+
+// buttons
+
+.button3d {
+  //display: block;
+  //position: relative;
+  //float: left;
+  width: 200px;
+  padding: 0;
+  margin: 10px 20px 10px 0;
+  font-weight: 600;
+  text-align: center;
+  line-height: 50px;
+  color: #FFF;
+  border-radius: 5px;
+  transition: all 0.2s ;
+  font-family: "open-sans-condensed-bold"!important;
+  cursor: pointer;
+  &:disabled{
+     background: gray;
+     box-shadow: 0px 5px 0px 0px #484848;
+     opacity: 0.5;
+     cursor: not-allowed;
+  }
+}
+
+.btnPurple {
+  background: #A74982;
+  &:disabled{
+     background: gray;
+     box-shadow: 0px 5px 0px 0px #484848;
+  }
+  
+  &.addico{
+     width: 75px;
+     height: 26px;
+     line-height: 25px;
+     outline: none;
+     border: none;
+     padding-top: 3px;
+     border-radius: 2px;
+     margin-right: 5px;
+   
+     &.w-t{
+       width: 100px;
+       margin-left: 287px;
+     }
+     &:disabled {
+        background: gray;
+        box-shadow: 0px 5px 0px 0px #585858;
+     }
+     .mat-icon{
+        font-size: 14px;
+        width: 14px;
+        height: 14px;
+        position: relative;
+        top: 3px;
+     }
+  }
+  &.addico1{
+     width: 105px;
+     height: 40px;
+   font-size: 16px;
+     line-height: 25px;
+     outline: none;
+     border: none;
+     padding-top: 3px;
+     border-radius: 2px;
+     margin-right: 5px;
+     &:disabled {
+        background: gray;
+        box-shadow: 0px 5px 0px 0px #585858;
+     }
+     .mat-icon{
+        font-size: 20px;
+        width: 14px;
+        height: 14px;
+        position: relative;
+        top: -5px;
+        left: 2px;
+     }
+  }
+}
+
+
+/* 3D */
+
+.btnPurple.btnPush {
+  box-shadow: 0px 5px 0px 0px #6D184B;
+}
+
+.btnPush:hover {
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+.btnPurple.btnPush:hover {
+  box-shadow: 0px 0px 0px 0px #6D184B;
+}
+
+// We need to use ::ng-deep to overcome view encapsulation
+::ng-deep {
+  .custom-slider .ngx-slider .ngx-slider-bar {
+    background: #ffe4d1;
+    height: 2px;
+  }
+  .custom-slider .ngx-slider .ngx-slider-selection {
+    background: orange;
+  }
+
+  .custom-slider .ngx-slider .ngx-slider-pointer {
+    width: 8px;
+    height: 16px;
+    top: auto; /* to remove the default positioning */
+    bottom: 0;
+    background-color: #333;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+  }
+
+  .custom-slider .ngx-slider .ngx-slider-pointer:after {
+    display: none;
+  }
+
+  .custom-slider .ngx-slider .ngx-slider-bubble {
+    bottom: 14px;
+  }
+
+  .custom-slider .ngx-slider .ngx-slider-limit {
+    font-weight: bold;
+    color: orange;
+  }
+
+  .custom-slider .ngx-slider .ngx-slider-tick {
+    width: 1px;
+    height: 10px;
+    margin-left: 4px;
+    border-radius: 0;
+    background: #ffe4d1;
+    top: -1px;
+  }
+
+  .custom-slider .ngx-slider .ngx-slider-tick.ngx-slider-selected {
+    background: orange;
+  }
+}
+
+
 
 

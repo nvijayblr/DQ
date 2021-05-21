@@ -2,7 +2,6 @@
   <div class="container">
      <h1 class="attTitle">Data Cleaning</h1>
      <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
-
     <div class="profile-wrapper">
        <div class="flex-containers">
           <div class="list attribute-list">
@@ -14,8 +13,130 @@
             <button class="moreBtn" (click)="show = !show">{{ show ? 'Show less'  : 'Show More'  }}
                 <mat-icon *ngIf="!show">expand_more</mat-icon> <mat-icon *ngIf="show">expand_less</mat-icon> </button>
           </div>
-          <div class="attribute-details">                     
-           <h1 class="share-post-title"> {{attrubute}} </h1>
+          <div class="attribute-details">
+              
+            <mat-card class="bg-azure">
+              <h2 class="share-sub-title">Action</h2>
+              <div class="form-row">
+              <mat-radio-group aria-label="Select an option" (change)="changeComboo($event)">
+                <mat-radio-button checked="defaultSelected" value="drop">Drop</mat-radio-button>
+                <mat-radio-button value="impute">Impute</mat-radio-button>
+              </mat-radio-group>
+            </div>
+              <div class="divLft">
+              <mat-card class="moccasin" *ngIf="drop">
+              <div class="form-row">
+                  <span class="sub_title mt">Category : </span>
+                  <mat-radio-group aria-label="Select an option">
+                    <mat-radio-button [checked]="true" value="column">Column</mat-radio-button>
+                    <mat-radio-button value="row">Row</mat-radio-button>
+                  </mat-radio-group>
+              </div>
+              <div class="form-row">
+                  <span class="sub_title">Columns : </span>
+                  <mat-form-field appearance="fill" class="mft">
+                    <mat-select placeholder="Select Columns">
+                      <mat-option *ngFor="let frequency of profile.frequncyAnalysis" [value]="frequency.unique_values">
+                        {{frequency.unique_values}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+              </div>
+              <div class="form-row">
+                  <span class="sub_title mt">Value : </span>
+                  <mat-radio-group aria-label="Select an option" (change)="enableCustom($event)">
+                    <mat-radio-button [checked]="true" value="null">Null</mat-radio-button>
+                    <mat-radio-button class="cst" value="custom" ></mat-radio-button>
+                    <mat-form-field appearance="fill" class="mft2">
+                      <mat-label>Custom Value</mat-label>
+                      <input matInput placeholder="" value="" [disabled]="nullType">
+                    </mat-form-field>
+                  </mat-radio-group>
+              </div>
+                <div class="form-row">
+                  <span class="sub_title">MaskAnalysis : </span>
+                  <mat-form-field appearance="fill" class="mft">
+                    <mat-select placeholder="Select Columns">
+                      <mat-option *ngFor="let mask of profile.maskAnalysis" [value]="mask.unique_values">
+                        {{mask.unique_values}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div class="form-rows">
+                  <span class="sub_title">Threshold : </span>
+                  <div class="custom-slider b-g">
+                    <ngx-slider [(value)]="value" [(highValue)]="highValue" [options]="options"></ngx-slider>
+                  </div>
+                </div>
+
+
+                <div class="form-row">
+                  <button type="button" class="button3d btnPush btnPurple addico w-t"matTooltip="Drop Data">DROP <mat-icon> layers_clear</mat-icon></button>
+                </div>
+              </mat-card>
+            
+              <mat-card class="moccasin" *ngIf="impute">               
+                <div class="form-row">
+                    <span class="sub_title">Columns : </span>
+                    <mat-form-field appearance="fill" class="mft">
+                      <mat-select placeholder="Select Columns">
+                        <mat-option *ngFor="let frequency of profile.frequncyAnalysis" [value]="frequency.unique_values">
+                          {{frequency.unique_values}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="form-row">
+                  <span class="sub_title">Data Type : </span>
+                  <mat-form-field appearance="fill" class="mft">
+                    <mat-select placeholder="Select Columns" (selectionChange)="changeDataType($event)">
+                      <mat-option [value]="profile.attributeSummary?.dataType">
+                        {{profile.attributeSummary?.dataType}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+               </div>              
+                  <div class="form-row" *ngIf="dataTypeNum">
+                    <span class="sub_title">Value  : </span>
+                     <mat-form-field appearance="fill" class="mft">
+                      <mat-select placeholder="Select Columns">
+                        <mat-option value="mean">Mean</mat-option>
+                        <mat-option value="median">Median</mat-option>
+                        <mat-option value="mode">Mode</mat-option>
+                        <mat-option value="min">Min</mat-option>
+                        <mat-option value="max">Max</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="form-row" *ngIf="dataTypeAlpha">
+                    <span class="sub_title"> </span>
+                    <mat-form-field appearance="fill" class="mft3">
+                      <mat-label>Custom Value</mat-label>
+                      <input matInput placeholder="" value="">
+                    </mat-form-field>
+                  </div>
+                  <div class="form-row">
+                    <button type="button" class="button3d btnPush btnPurple addico w-t"matTooltip="Drop Data">IMPUTE <mat-icon> layers_clear</mat-icon></button>
+                  </div>
+              </mat-card>
+            </div>
+            <div class="divLft">
+              <mat-card class="moccasin2">
+                <h4 class="attr-tite">Count <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
+                    <div class="records">
+                      <highcharts-chart
+                          [Highcharts] = "highcharts" 
+                          [options] = "chartOptions" 
+                          style = "width: 100%; height: 400px; display: block;">
+                      </highcharts-chart>        
+                    </div>                     
+              </mat-card>
+            </div>
+            </mat-card> 
+           
+           <!-- <h1 class="share-post-title"> {{attrubute}} </h1> -->
            <div class="lft-attr">
               <mat-card class="bg-violet">
               <h4 class="attr-tite">Attribute Summary <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
