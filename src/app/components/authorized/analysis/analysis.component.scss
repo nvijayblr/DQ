@@ -957,4 +957,13 @@ table.mat-table {
   padding-top: 50px;
     margin-bottom: 30px;
 }
+::ng-deep .ag-theme-balham .ag-root-wrapper{
+  height: 460px!important;
+}
+::ng-deep .ag-theme-balham{
+  font-family: 'open-sans-condensed-bold'!important;
+}
+::ng-deep .ag-header-container{
+  font-size: 14px!important;
+}
 

@@ -1,7 +1,12 @@
 <button class="close" mat-icon-button (click)="onNoClick()">
   <mat-icon>close</mat-icon>
 </button>
-
+<button type="button"
+  *ngIf="analysisItem[key].details && analysisItem[key].details.length"
+  class="button3d btnPush btnPurple addico w-t"
+  (click)="launchDataCleaning(analysisItem,'edit')" matTooltip="Data Cleaning">
+  Data Cleaning
+</button>
 <div class="comp-tab">
   <mat-tab-group mat-align-tabs="start" animationDuration="0ms" [selectedIndex]="selectedTabIndex" (selectedTabChange)="selectedTabChange($event)">
     <mat-tab *ngFor="let tab of analysisKeys" label="{{tab}}">
@@ -13,12 +18,7 @@
             - {{analysisItem[key].value}}%
           </div>
         </div>
-        <button type="button"
-          *ngIf="analysisItem[key].details && analysisItem[key].details.length"
-          class="button3d btnPush btnOrange addico"
-          (click)="launchDataCleaning(analysisItem,'edit')" matTooltip="Data Cleaning">
-          Data Cleaning
-        </button>
+       
       </div>
     </mat-tab>
   </mat-tab-group>

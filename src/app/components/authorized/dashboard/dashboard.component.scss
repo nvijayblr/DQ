@@ -580,6 +580,9 @@ thead {background: #f0f7f7;}
       &.v-p{
         height:40px;
       }
+      &.w-t{
+        width: 100px;
+      }
       &:disabled {
          background: gray;
          box-shadow: 0px 5px 0px 0px #585858;
