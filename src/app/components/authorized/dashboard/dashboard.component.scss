@@ -873,3 +873,15 @@ thead {background: #f0f7f7;}
 ::ng-deep .mat-tab-header, .mat-tab-nav-bar{
    border-bottom: 0px;
 } 
+
+.custom-forumula-eidot {
+  .mat-chip.mat-standard-chip {
+    background-color: transparent;
+    padding: 7px 2px;
+  }
+}
+::ng-deep .cdk-overlay-container {
+  .mat-autocomplete-panel {
+    max-width: 200px;
+  }
+}

@@ -7,6 +7,14 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
 import * as moment from 'moment';
 
+import {ElementRef, ViewChild} from '@angular/core';
+import {COMMA, ENTER, SPACE} from '@angular/cdk/keycodes';
+import {FormControl} from '@angular/forms';
+import {MatAutocompleteSelectedEvent, MatAutocomplete} from '@angular/material/autocomplete';
+import {MatChipInputEvent} from '@angular/material/chips';
+import {Observable} from 'rxjs';
+import {map, startWith} from 'rxjs/operators';
+
 @Component({
    selector: 'app-dashboard',
    templateUrl: './dashboard.component.html',
@@ -25,6 +33,20 @@ export class DashboardComponent implements OnInit {
    highlightDates: any = [];
    visibleIndex = -1;
 
+   visible = true;
+   selectable = true;
+   removable = true;
+   addOnBlur = true;
+   separatorKeysCodes: number[] = [ENTER, COMMA, SPACE];
+   fruitCtrl = new FormControl();
+   filteredFruits: Observable<string[]>;
+   fruits: string[] = [];
+   allFruits: string[] = ['(', ')', '+', '-', 'AIRLINE', 'AIRPORT', 'COUNTRY', 'STATE', 'ARRIVAL_TIME', 'DEPATURE_TIME'];
+
+   @ViewChild('fruitInput', {static: false}) fruitInput: ElementRef<HTMLInputElement>;
+   @ViewChild('auto', {static: false}) matAutocomplete: MatAutocomplete;
+
+
    constructor(
       public dialog: MatDialog,
       private http: HttpService,
@@ -36,6 +58,11 @@ export class DashboardComponent implements OnInit {
 
       const role = this.auth.getUserRole().role;
       this.role = role ? role : 'VIEWER';
+
+      this.filteredFruits = this.fruitCtrl.valueChanges.pipe(
+         startWith(null),
+         map((fruit: string | null) => fruit ? this._filter(fruit) : this.allFruits.slice()));
+
    }
 
    ngOnInit() {
@@ -43,6 +70,48 @@ export class DashboardComponent implements OnInit {
       this.getAllSources();
       // this.getAllAnalysis();
    }
+
+
+   add(event: MatChipInputEvent): void {
+      // Add fruit only when MatAutocomplete is not open
+      // To make sure this does not conflict with OptionSelected Event
+      if (!this.matAutocomplete.isOpen) {
+        const input = event.input;
+        const value = event.value;
+
+        // Add our fruit
+        if ((value || '').trim()) {
+          this.fruits.push(value.trim());
+        }
+
+        // Reset the input value
+        if (input) {
+          input.value = '';
+        }
+
+        this.fruitCtrl.setValue(null);
+      }
+    }
+
+    remove(fruit: string): void {
+      const index = this.fruits.indexOf(fruit);
+
+      if (index >= 0) {
+        this.fruits.splice(index, 1);
+      }
+    }
+
+    selected(event: MatAutocompleteSelectedEvent): void {
+      this.fruits.push(event.option.viewValue);
+      this.fruitInput.nativeElement.value = '';
+      this.fruitCtrl.setValue(null);
+    }
+
+    private _filter(value: string): string[] {
+      const filterValue = value.toLowerCase();
+
+      return this.allFruits.filter(fruit => fruit.toLowerCase().indexOf(filterValue) === 0);
+    }
 
 
    getAllSources() {
