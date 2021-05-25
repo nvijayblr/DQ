@@ -1,0 +1,17 @@
+
+<table class="table" *ngIf="summary.positiveSummary">
+  <tr><th colspan="2">Positive Correlation</th></tr>
+  <tr *ngFor="let positive of summary.positiveSummary | keyvalue">
+     <td>{{positive.key}}</td>
+     <td>{{positive.value}}</td>
+  </tr>
+</table>
+
+<table class="table" *ngIf="summary.negativeSummary">
+  <tr><th colspan="2">Negative Correlation</th></tr>
+  <tr *ngFor="let negative of summary.negativeSummary | keyvalue">
+     <td>{{negative.key}}</td>
+     <td>{{negative.value}}</td>
+  </tr>
+</table>
+

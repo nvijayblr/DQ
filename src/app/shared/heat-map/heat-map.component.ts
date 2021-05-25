@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, ViewChild, ElementRef } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import highchartsHeatmap from 'highcharts/modules/heatmap';
 
@@ -11,7 +11,7 @@ highchartsHeatmap(Highcharts);
   templateUrl: './heat-map.component.html',
   styleUrls: ['./heat-map.component.scss']
 })
-export class HeatMapComponent implements OnInit {
+export class HeatMapComponent implements OnInit, OnChanges {
    @Input() columns: any = [];
    @Input() data: any = [];
    @ViewChild('charts', {static: true}) public chartEl: ElementRef;
@@ -106,7 +106,9 @@ export class HeatMapComponent implements OnInit {
    };
    constructor() { }
 
-
+   ngOnChanges() {
+      this.initChart();
+   }
 
    ngOnInit() {
       this.initChart();

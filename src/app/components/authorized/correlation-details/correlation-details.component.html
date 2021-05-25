@@ -1,1 +1,31 @@
-<app-heat-map [columns]="coMatrix.columns" [data]="coMatrix.matrix" *ngIf="!isLoading"></app-heat-map>
+<mat-card class="border no-rounded shrare-post correlation-info">
+  <app-progress-bar [message]="'Loading'" class="page" *ngIf="isLoading"></app-progress-bar>
+  <h1 class="share-post-title"><span class="lgb">Correlation Summary</span></h1>
+  <div class="flex-containers">
+    <div class="list-item-4">
+      <mat-form-field appearance="fill">
+        <mat-label class="lbl">Data Type</mat-label>
+        <mat-select [(ngModel)]="datatype" (ngModelChange)="changeType($event)">
+          <mat-option value="mixed">Mixed</mat-option>
+          <mat-option value="numeric">Numeric</mat-option>
+          <mat-option value="categorical">Categorical</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="list-item-4">
+      <mat-form-field appearance="fill">
+        <mat-label class="lbl">Method</mat-label>
+        <mat-select [(ngModel)]="method" (ngModelChange)="loadCorrelation(source, datatype, $event)">
+          <mat-option *ngIf="datatype === 'numeric'" value="pearson">Pearson</mat-option>
+          <mat-option *ngIf="datatype === 'numeric'" value="kendall">Kendall</mat-option>
+          <mat-option *ngIf="datatype === 'numeric'" value="spearman">Spearman</mat-option>
+          <mat-option *ngIf="datatype === 'categorical'" value="theils_u">Theils_U</mat-option>
+          <mat-option *ngIf="datatype === 'categorical'" value="cramers_v">Cramers_V</mat-option>
+          <mat-option *ngIf="datatype === 'mixed'" value="">Correlation Ratio</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+</mat-card>
+
+<app-heat-map [columns]="coMatrix.columns" [data]="coMatrix.matrix"></app-heat-map>

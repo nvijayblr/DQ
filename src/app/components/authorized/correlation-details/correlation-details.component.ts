@@ -14,6 +14,8 @@ export class CorrelationDetailsComponent implements OnInit {
    loaderMsg = '';
    source: any = {};
    coMatrix: any = {};
+   datatype = 'mixed';
+   method = '';
 
    constructor(private messageService: MessageService, private http: HttpService, ) {
    }
@@ -24,22 +26,38 @@ export class CorrelationDetailsComponent implements OnInit {
       const analysis = this.messageService.getSource();
       this.source = analysis.source ? analysis.source : {};
       if (this.source) {
-         this.loadCorrelation(this.source);
+         this.loadCorrelation(this.source, this.datatype, this.method);
       }
    }, 10);
   }
 
-  loadCorrelation(source) {
+  changeType(type) {
+     if (type === 'numeric') {
+         this.method = 'pearson';
+      }
+     if (type === 'categorical') {
+         this.method = 'theils_u';
+      }
+     if (type === 'mixed') {
+         this.method = '';
+      }
+     this.loadCorrelation(this.source, this.datatype, this.method);
+   }
+
+  loadCorrelation(source, type, method) {
      this.isLoading = true;
      this.loaderMsg = 'Loading Correlation...';
      const payload = {
-      sourcepath: source.templateSourcePath
+      sourcepath: source.templateSourcePath,
+      cols_data_type: type,
+      method
    };
      this.http.getCorrMatrix(payload).subscribe((result: any) => {
       this.coMatrix = result ? result : {};
       this.isLoading = false;
    }, (error) => {
       this.isLoading = false;
+      this.coMatrix = {};
    });
   }
 

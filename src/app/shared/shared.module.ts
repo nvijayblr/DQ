@@ -31,6 +31,7 @@ import { AgGridComponent } from './ag-grid/ag-grid.component';
 import { FormulaEditorComponent } from './formula-editor/formula-editor.component';
 import { HeatMapComponent } from './heat-map/heat-map.component';
 import { AnalysisChartComponent } from './analysis-chart/analysis-chart.component';
+import { CorelationSummaryComponent } from './corelation-summary/corelation-summary.component';
 
 @NgModule({
    imports: [
@@ -45,8 +46,7 @@ import { AnalysisChartComponent } from './analysis-chart/analysis-chart.componen
     RatingModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
-      ColorPickerModule,
-     
+    ColorPickerModule,
     AgGridModule.withComponents([]),
   ],
   declarations: [
@@ -70,6 +70,7 @@ import { AnalysisChartComponent } from './analysis-chart/analysis-chart.componen
     FormulaEditorComponent,
     HeatMapComponent,
     AnalysisChartComponent,
+    CorelationSummaryComponent,
   ],
   exports: [
     FormsModule,
@@ -100,7 +101,8 @@ import { AnalysisChartComponent } from './analysis-chart/analysis-chart.componen
     AgGridComponent,
      FormulaEditorComponent,
     HeatMapComponent,
-    AnalysisChartComponent
+    AnalysisChartComponent,
+    CorelationSummaryComponent
   ],
   providers: [
      DatePipe,
@@ -110,7 +112,7 @@ import { AnalysisChartComponent } from './analysis-chart/analysis-chart.componen
      ColorDialogComponent,
      CompletenessDialogComponent,
      FormulaEditorComponent,
-     
+
   ]
 })
 export class SharedModule {}

@@ -1,0 +1,28 @@
+
+.share-post-title {
+  font-size: 24px;
+  color: #0C0C0C;
+  font-weight: 400;
+  margin-bottom: 40px!important;
+  font-family: 'open-sans-condensed-bold';
+  position: relative;
+  &:before {
+     content: "";
+     position: absolute;
+     left: 0;
+     bottom: -12px;
+     height: 5px;
+     width: 55px;
+     background-color: #efa800;
+   }
+   &:after {
+     content: "";
+     position: absolute;
+     left: 0;
+     bottom: -10px;
+     height: 1px;
+     width: 95%;
+     max-width: 181px;
+     background-color: #efa800;
+   }
+}

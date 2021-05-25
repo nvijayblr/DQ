@@ -312,17 +312,22 @@
                            <mat-card class="border no-rounded shrare-post correlation-info">
                               <h1 class="share-post-title"><span class="lgb">Correlation Summary</span></h1>
                               <div class="tabBtn2" (click)="tabGroup.selectedIndex=2">View Correlation Details</div>
+                              <app-corelation-summary [summary]="correlationSummary ? correlationSummary : {}"></app-corelation-summary>
                            </mat-card>
                            </div>
                         </div>
                      </mat-tab>
+
+                     <!-- Tab 2 -->
                      <mat-tab label="Profile Details">
                         <app-attribute-details style="background:#fff;"> </app-attribute-details>
                      </mat-tab>
+                     
+                     <!-- Tab 3 -->
                      <mat-tab label="Correlation Detail">
-                     <div class="corMap">
-                        <app-correlation-details></app-correlation-details>
-                     </div>
+                        <div class="corMap">
+                            <app-correlation-details></app-correlation-details>
+                        </div>
                      </mat-tab>
                   </mat-tab-group>
                  </mat-step>

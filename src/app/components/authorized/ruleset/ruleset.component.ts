@@ -120,8 +120,9 @@ export class RulesetComponent implements OnInit {
   sourceId = '';
   mode;
   rulesetId = '';
-   cdeStatistics: any = {};
-   sourceNameText;
+  cdeStatistics: any = {};
+  correlationSummary: any = {};
+  sourceNameText;
 
   // Rule Dropdowns
   ruleType = 'dataType';
@@ -554,6 +555,7 @@ export class RulesetComponent implements OnInit {
         const firstRule = this.rulesList[0];
         this.selectedRuleColumn = firstRule.column;
         this.cdeStatistics = (firstRule.statistics && firstRule.statistics.length) ? firstRule.statistics[0] : {};
+        this.correlationSummary = firstRule.correlationSummary ? firstRule.correlationSummary : {};
         this.initFormulaEditor(this.rulesList);
       }
       return;
@@ -579,6 +581,7 @@ export class RulesetComponent implements OnInit {
         const firstRule = this.rulesList[0];
         this.selectedRuleColumn = firstRule.column;
         this.cdeStatistics = (firstRule.statistics && firstRule.statistics.length) ? firstRule.statistics[0] : {};
+        this.correlationSummary = firstRule.correlationSummary ? firstRule.correlationSummary : {};
       }
       this.initFormulaEditor(this.rulesList);
       this.initRulesFormArray();
@@ -687,6 +690,7 @@ export class RulesetComponent implements OnInit {
   gotoRuleColumn(rule) {
     this.selectedRuleColumn = rule.column;
     this.cdeStatistics = (rule.statistics && rule.statistics.length) ? rule.statistics[0] : {};
+    this.correlationSummary = rule.correlationSummary ? rule.correlationSummary : {};
   }
 
   owlInitialized() {
