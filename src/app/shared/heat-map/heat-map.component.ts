@@ -40,6 +40,36 @@ export class HeatMapComponent implements OnInit, OnChanges {
         startOnTick: false,
         endOnTick: false
       },
+      legend: {
+         enabled: true,
+         align: 'right',
+         layout: 'vertical',
+         marginTop: '30px',
+         verticalAlign: 'top',
+         itemMarginTop: 10,
+         bubbleLegend: {
+           enabled: true,
+           sizeBy: 'width',
+           ranges: [{
+             value: 1,
+             color: 'rgba(144, 237, 125, 0.5)',
+             borderColor: 'rgb(144, 237, 125)',
+             connectorColor: 'rgb(144, 237, 125)'
+           }, {
+             value: 0,
+             color: 'rgba(67, 67, 72, 0.5)',
+             borderColor: 'rgb(67, 67, 72)',
+             connectorColor: 'rgb(67, 67, 72)'
+           }, {
+             value: -1,
+             color: 'rgba(255, 0, 0, 0.5)',
+             borderColor: 'rgb(255, 0, 0)',
+             connectorColor: 'rgb(255, 0, 0)'
+           }],
+           connectorDistance: 40,
+           maxSize: 70
+         }
+       },
       colorAxis: {
          // stops: [
          //    [0, '#ff0000'],
@@ -65,15 +95,15 @@ export class HeatMapComponent implements OnInit, OnChanges {
          // maxColor: Highcharts.getOptions().colors[0]
 
       },
-     legend: {
-      enabled: false,
-         align: 'right',
-         layout: 'vertical',
-         margin: 0,
-         verticalAlign: 'top',
-         y: 25,
-         symbolHeight: 765
-      },
+   //   legend: {
+   //    enabled: true,
+   //       align: 'right',
+   //       layout: 'vertical',
+   //       margin: 0,
+   //       verticalAlign: 'top',
+   //       y: 25,
+   //       symbolHeight: 765
+   //    },
       plotOptions: {
          heatmap: {
           pointPadding: 0

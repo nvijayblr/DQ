@@ -33,20 +33,6 @@ export class DashboardComponent implements OnInit {
    highlightDates: any = [];
    visibleIndex = -1;
 
-   visible = true;
-   selectable = true;
-   removable = true;
-   addOnBlur = true;
-   separatorKeysCodes: number[] = [ENTER, COMMA, SPACE];
-   fruitCtrl = new FormControl();
-   filteredFruits: Observable<string[]>;
-   fruits: string[] = [];
-   allFruits: string[] = ['(', ')', '+', '-', 'AIRLINE', 'AIRPORT', 'COUNTRY', 'STATE', 'ARRIVAL_TIME', 'DEPATURE_TIME'];
-
-   @ViewChild('fruitInput', {static: false}) fruitInput: ElementRef<HTMLInputElement>;
-   @ViewChild('auto', {static: false}) matAutocomplete: MatAutocomplete;
-
-
    constructor(
       public dialog: MatDialog,
       private http: HttpService,
@@ -58,11 +44,6 @@ export class DashboardComponent implements OnInit {
 
       const role = this.auth.getUserRole().role;
       this.role = role ? role : 'VIEWER';
-
-      this.filteredFruits = this.fruitCtrl.valueChanges.pipe(
-         startWith(null),
-         map((fruit: string | null) => fruit ? this._filter(fruit) : this.allFruits.slice()));
-
    }
 
    ngOnInit() {
@@ -70,49 +51,6 @@ export class DashboardComponent implements OnInit {
       this.getAllSources();
       // this.getAllAnalysis();
    }
-
-
-   add(event: MatChipInputEvent): void {
-      // Add fruit only when MatAutocomplete is not open
-      // To make sure this does not conflict with OptionSelected Event
-      if (!this.matAutocomplete.isOpen) {
-        const input = event.input;
-        const value = event.value;
-
-        // Add our fruit
-        if ((value || '').trim()) {
-          this.fruits.push(value.trim());
-        }
-
-        // Reset the input value
-        if (input) {
-          input.value = '';
-        }
-
-        this.fruitCtrl.setValue(null);
-      }
-    }
-
-    remove(fruit: string): void {
-      const index = this.fruits.indexOf(fruit);
-
-      if (index >= 0) {
-        this.fruits.splice(index, 1);
-      }
-    }
-
-    selected(event: MatAutocompleteSelectedEvent): void {
-      this.fruits.push(event.option.viewValue);
-      this.fruitInput.nativeElement.value = '';
-      this.fruitCtrl.setValue(null);
-    }
-
-    private _filter(value: string): string[] {
-      const filterValue = value.toLowerCase();
-
-      return this.allFruits.filter(fruit => fruit.toLowerCase().indexOf(filterValue) === 0);
-    }
-
 
    getAllSources() {
       this.isLoading = true;
@@ -329,11 +267,23 @@ export class DashboardComponent implements OnInit {
       return (this.highlightDates.includes(date)) ? 'highlight-dates' : undefined;
    }
 
-   showEditDetails(ind) {
-      if (this.visibleIndex === ind) {
+   showEditDetails(index, data) {
+      const uploadsHistory = data.UploadsHistory;
+      if (uploadsHistory && uploadsHistory.length) {
+         const upload = uploadsHistory[uploadsHistory.length - 1];
+         this.onOpenDatePicker(data);
+         data.uploadDate = upload.uploadDate;
+      }
+      const rules = data.rules;
+      if (rules && rules.length) {
+         const ruleset = rules[rules.length - 1];
+         data.rulesetId = ruleset.rulesetId;
+      }
+
+      if (this.visibleIndex === index) {
          this.visibleIndex = -1;
       } else {
-         this.visibleIndex = ind;
+         this.visibleIndex = index;
       }
    }
 }

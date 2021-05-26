@@ -27,5 +27,7 @@
     </div>
   </div>
 </mat-card>
-
-<app-heat-map [columns]="coMatrix.columns" [data]="coMatrix.matrix"></app-heat-map>
+<app-heat-map [columns]="coMatrix.columns" *ngIf="coMatrix.matrix" [data]="coMatrix.matrix"></app-heat-map>
+<mat-card class="no-data-msg" *ngIf="!coMatrix.matrix">
+  <h3>No correlations.</h3>
+</mat-card>
