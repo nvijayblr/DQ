@@ -141,7 +141,7 @@ export class CylinderChartComponent implements OnInit {
             name: key,
             data
        });
-   });
+    });
    this.chartOptions.plotOptions = {
         bar: {
             dataLabels: {
@@ -164,9 +164,9 @@ export class CylinderChartComponent implements OnInit {
 
 
 
-showValues() {
-    this.chartOptions.chart.options3d.alpha;
-}
+    showValues() {
+        this.chartOptions.chart.options3d.alpha;
+    }
 
 
 

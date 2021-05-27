@@ -99,6 +99,8 @@ export class AnalysisComponent implements OnInit {
       },
    };
 
+   analysisByTimeData: any = [];
+
    constructor(
       public dialog: MatDialog,
       private http: HttpService,
@@ -172,6 +174,7 @@ export class AnalysisComponent implements OnInit {
          uploadId,
          keyname
       };
+      this.viewAnalysisByTime(keyname, uploadId);
       this.loaderMsg = 'Launching analysis...';
       this.isLoading = true;
       this.isLoadChart = false;
@@ -209,6 +212,20 @@ export class AnalysisComponent implements OnInit {
          this.isLoading = false;
          this.analyseKeyData = [];
          this.isLoadingDetails = false;
+      });
+   }
+
+   viewAnalysisByTime(keyname, uploadId) {
+      this.selectedKey = keyname;
+      const payload = {
+         sourceId: this.selectedAnalysis.sourceId,
+         rulesetId: this.selectedAnalysis.rulesetId,
+         uploadId,
+         keyname
+      };
+      this.http.getAnalysisByTime(payload).subscribe((result: any) => {
+         this.analysisByTimeData = result ? result : [];
+      }, (error) => {
       });
    }
 

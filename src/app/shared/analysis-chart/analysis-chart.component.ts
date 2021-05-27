@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, ViewChild, ElementRef } from '@angular/core';
 import * as Highcharts from 'highcharts';
+import * as moment from 'moment';
 declare var require: any;
 const More = require('highcharts/highcharts-more');
 More(Highcharts);
@@ -9,40 +10,69 @@ More(Highcharts);
   templateUrl: './analysis-chart.component.html',
   styleUrls: ['./analysis-chart.component.scss']
 })
-export class AnalysisChartComponent implements OnInit {
+export class AnalysisChartComponent implements OnInit, OnChanges {
+   @Input() chartData;
 
-  constructor() { }
+   constructor() {
+   }
 
-  ngOnInit() {
-  }
+   // data = [{
+   //    name: 'ItSolutionStuff.com',
+   //    data: [500, 700, 555]
+   // }, {
+   //    name: 'Nicesnippets.com',
+   //    data: [677, 455, 677]
+   // }];
 
-  title = 'myHighchart';
-   
-    data = [{
-            name: 'ItSolutionStuff.com',
-            data: [500, 700, 555, 444, 777, 877, 944, 567, 666, 789, 456, 654]
-         },{
-            name: 'Nicesnippets.com',
-            data: [677, 455, 677, 877, 455, 778, 888, 567, 785, 488, 567, 654]
-         }];
-   
-    highcharts = Highcharts;
-    chartOptions = {   
+   highcharts;
+   chartOptions = {
       chart: {
-         type: "spline"
+         type: 'spline'
       },
       title: {
-         text: "Monthly Site Visitor"
+         text: ''
       },
-      xAxis:{
-         categories:["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+      xAxis: {
+         categories: ['Jan', 'Feb', 'Mar']
       },
-      yAxis: {          
-         title:{
-            text:"Visitors"
-         } 
+      yAxis: {
+         title: {
+            text: 'Visitors'
+         }
       },
-      series: this.data
-    };
+      series: []
+   };
 
+   ngOnInit() {
+   }
+
+   ngOnChanges() {
+      const category = [];
+      this.chartData.map(data => {
+         category.push(moment(data.uploadDate).format('DD, MMM'));
+      });
+
+      const chartdata = [];
+      chartdata.push({
+         name: 'completeness',
+         data: []
+      });
+      chartdata.push({
+         name: 'Uniqueness',
+         data: []
+      });
+      chartdata.push({
+         name: 'Validity',
+         data: []
+      });
+      this.chartData.map(data => {
+         chartdata[0].data.push(parseFloat(data.results.completeness));
+         chartdata[1].data.push(parseFloat(data.results.Uniqueness));
+         chartdata[2].data.push(parseFloat(data.results.Validity));
+      });
+      console.log(chartdata);
+      this.chartOptions.xAxis.categories = category;
+      this.chartOptions.series = chartdata;
+      this.highcharts = Highcharts;
+   }
 }

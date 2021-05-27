@@ -75,7 +75,7 @@ export class HttpService  {
       }),
     );
   }
-
+  // /api/GetTimeResultsfromDb
 
   launchAnalysisByKey(payload): Observable<any> {
     return this.http.post<any>(`${this.rootUrl}/api/LaunchAnalysisbyKeyfromDb`, payload).pipe(
@@ -86,6 +86,17 @@ export class HttpService  {
       }),
     );
   }
+
+  getAnalysisByTime(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/GetTimeResultsfromDb`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
   launchDelayAnalysisByKey(payload): Observable<any> {
     return this.http.post<any>(`${this.rootUrl}/api/DelayAnalysis`, payload).pipe(
       tap((res) => {

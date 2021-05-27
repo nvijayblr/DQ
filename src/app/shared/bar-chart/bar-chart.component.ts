@@ -91,7 +91,7 @@ export class BarChartComponent implements OnInit, AfterViewInit {
         labels: [],
         delay: []
     };
-    console.log(this.analysis)
+    console.log(this.analysis);
     this.analysis.data.map(data => {
         chartData.labels.push(data.airline ? data.airline : data.ORIGIN_AIRPORT);
         chartData.delay.push(+(data.value.NoOfDelays ? data.value.NoOfDelays : data.value.TotalDelays));
@@ -135,7 +135,7 @@ export class BarChartComponent implements OnInit, AfterViewInit {
     this.chartOptions.yAxis.title.text = this.analysis['Y-Axis'];
 
     this.chartOptions.chart.type = this.chartType ? this.chartType : 'column';
-    
+
     this.chartOptions.series = [{
         name: 'Delay',
         data: chartData.delay
@@ -146,11 +146,11 @@ export class BarChartComponent implements OnInit, AfterViewInit {
 
   loadDetailsChart(label) {
     if (Object.keys(this.analysis.data[0]).indexOf('airline') >= 0) {
-        this.analysisDetails = this.analysis.data.filter((data)=> data.airline === label)[0];
+        this.analysisDetails = this.analysis.data.filter((data) => data.airline === label)[0];
     } else {
-        this.analysisDetails = this.analysis.data.filter((data)=> data.ORIGIN_AIRPORT === label)[0];
+        this.analysisDetails = this.analysis.data.filter((data) => data.ORIGIN_AIRPORT === label)[0];
     }
-    console.log(this.analysisDetails)
+    console.log(this.analysisDetails);
     this.initDetailsChart(this.analysisDetails.value.details);
   }
 }

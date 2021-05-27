@@ -80,6 +80,8 @@
                   </app-cylinder-chart>
                   
                 </mat-tab>
+
+              <!-- 3D Map Tab -->
                <mat-tab label="3D Map">
                   <app-cylinder-chart 
                     *ngIf="analyseKeyData.length && isLoadChart"
@@ -91,8 +93,10 @@
                   >
                   </app-cylinder-chart>
                </mat-tab>
+
+               <!-- Analysis Tab-->
                <mat-tab label="Analysis">
-                <app-analysis-chart></app-analysis-chart>
+                <app-analysis-chart [chartData]="analysisByTimeData"></app-analysis-chart>
                </mat-tab>
               </mat-tab-group>
               <div class="analysis-preview">
