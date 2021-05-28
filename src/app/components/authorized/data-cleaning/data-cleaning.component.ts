@@ -23,22 +23,44 @@ export class DataCleaningComponent implements OnInit {
    frequencyShow = false;
    patternShow = false;
    maskShow = false;
-   sticky = false;
-  elementPosition: any;
-  defaultSelected = true;
-  drop: boolean = true;
-  impute: boolean = false;
-  dataTypeNum: boolean = false;
-  dataTypeAlpha: boolean = false;
-  nullType:boolean=true;
-  value: number = 10;
-  highValue: number = 67;
-  options: Options = {
-    floor: 0,
-    ceil: 100,
-    step: 10,
-    showTicks: true
-  };
+
+   sliderOptions: any = {
+      floor: 0,
+      ceil: 100,
+      step: 10,
+      showTicks: true
+   };
+
+   impute: any = {
+      sourcepath: '',
+      column: '',
+      column_data_type: '',
+      value : ''
+   };
+
+   delete: any = {
+      sourcepath: '',
+      type: 'column',
+      category: 'col_nan',
+      column_name: '',
+      values: '',
+      threshold : 50
+   };
+
+   mask: any = {
+      sourcepath: '',
+      column: '',
+      value: ''
+   };
+
+
+   analysis: any = {};
+
+   isPreviewLoaded = false;
+   isPreviewLoading = false;
+   defaultColDefs = { sortable: true, filter: true, minWidth: 180, resizable: true };
+   rowData: any = [];
+   columnDefs: any = [];
 
    constructor(private messageService: MessageService, private http: HttpService, ) {
    }
@@ -113,9 +135,12 @@ export class DataCleaningComponent implements OnInit {
   ngOnInit() {
    this.isLoading = true;
    setTimeout(() => {
-      const analysis = this.messageService.getSource();
-      this.source = analysis.source ? analysis.source : {};
+      this.analysis = this.messageService.getSource();
+      this.source = this.analysis.source ? this.analysis.source : {};
       if (this.source) {
+         this.mask.sourcepath = this.source.templateSourcePath;
+         this.impute.sourcepath = this.source.templateSourcePath;
+         this.delete.sourcepath = this.source.templateSourcePath;
          this.loadProfile(this.source);
       }
    }, 10);
@@ -123,15 +148,15 @@ export class DataCleaningComponent implements OnInit {
 
   changeProfile(profile) {
       this.profile = profile;
-      if (this.profile.LengthStatistics) {
-         this.options.floor = profile.LengthStatistics.Min ? profile.LengthStatistics.Min : 0;
-         this.options.ceil = profile.LengthStatistics.Max ? profile.LengthStatistics.Max : 0;
-      }
       this.attrubute = profile.column;
+
+      this.mask.column = profile.column;
+      this.impute.column = profile.column;
+      this.delete.column_name = profile.column;
       console.log(this.profile);
    }
 
-  loadProfile(source) {
+  loadProfile(source, profile = '') {
      this.isLoading = true;
      this.loaderMsg = 'Loading Profile...';
      const payload = {
@@ -140,43 +165,102 @@ export class DataCleaningComponent implements OnInit {
      this.http.getProfiles(payload).subscribe((result: any) => {
       this.profiles = result.profile ? result.profile : [];
       if (this.profiles.length) {
-         this.changeProfile(this.profiles[0]);
+         if (profile) {
+            this.changeProfile(profile);
+         } else {
+            this.changeProfile(this.profiles[0]);
+         }
       }
       this.isLoading = false;
    }, (error) => {
       this.isLoading = false;
    });
   }
-  
-  changeComboo(event) {
-    console.log(event && event.value);
-    if (event && event.value === 'drop') {
-      this.drop = true;
-      this.impute = false;
-    } else {
-      this.drop = false;
-      this.impute = true;
-    }
-  }
-  changeDataType(event) {
-    console.log(event && event.value); 
-    if (event && event.value === 'Numeric') {
-      this.dataTypeNum = true;
-      this.dataTypeAlpha = false;
-    } else {
-      this.dataTypeNum = false;
-      this.dataTypeAlpha = true;
-    }
-  }
 
-  enableCustom(event) {
-    console.log(event && event.value); 
-    if (event && event.value === 'custom') {
-      this.nullType = false;
-    } else {
-      this.nullType = true;
+   imputeColumns(datatype) {
+      this.impute.column_data_type = datatype;
+      this.impute = {
+         ...this.impute,
+         sourceFileName: 'flight-abc',
+         sourceId: this.analysis.sourceId,
+         uploadId: this.analysis.recentsourceUpload.uploadId,
+         rulesetId: this.analysis.rulesetId,
+         uploadDate: this.analysis.recentsourceUpload.uploadDate,
+      };
+      this.isLoading = true;
+      this.loaderMsg = 'Imputing columns...';
+      this.http.imputeColumnsReq(this.impute).subscribe((result: any) => {
+         this.isLoading = false;
+         // this.loadProfile(this.source, this.profile);
+         alert('Impution has been successfully completed.');
+      }, (error) => {
+         this.isLoading = false;
+      });
+   }
+
+   deleteColumnsRows() {
+      this.isLoading = true;
+      this.loaderMsg = 'Imputing columns...';
+      this.delete.threshold = (this.delete.category === 'col_nan' || this.delete.category === 'row_nan')
+         ? this.delete.threshold : undefined;
+      const payload = {...this.delete};
+      delete payload.type;
+      this.http.deleteColumnsRowsReq(this.delete).subscribe((result: any) => {
+         this.isLoading = false;
+         // this.loadProfile(this.source, this.profile);
+         alert(`${this.delete === 'column' ? 'Columns' : 'Rows'} are deleted successfully.`);
+      }, (error) => {
+         this.isLoading = false;
+      });
+   }
+
+   loadDuplicatePreview() {
+      const payload = {
+         sourcepath: this.source.templateSourcePath,
+         action: 'preview' ,
+         select_cols: [this.profile.column],
+         keep: ''
+      };
+      this.loadProfilePreview(payload);
+   }
+
+   loadProfilePreview(payload) {
+      this.isLoading = true;
+      this.loaderMsg = 'Loading preview...';
+      this.isPreviewLoaded = false;
+      this.isPreviewLoading = true;
+      this.columnDefs = [];
+      this.rowData = [];
+      this.http.getProfilePreview(payload).subscribe((res: any) => {
+         console.log('res', res);
+         const details: any = res.sourcePreview ? res.sourcePreview : {};
+         this.parseSourcePreview(details);
+         this.isLoading = false;
+      }, (error) => {
+         console.log(error);
+         this.isLoading = false;
+         this.isPreviewLoaded = false;
+         this.isPreviewLoading = false;
+      });
+   }
+
+    parseSourcePreview(details) {
+      Object.keys(details).map((key, index) => {
+        this.rowData.push({
+          ...details[key]
+        });
+      });
+      if (this.rowData.length) {
+        Object.keys(this.rowData[0]).map((key, index) => {
+          this.columnDefs.push({
+            field: key,
+            ...this.defaultColDefs
+          });
+        });
+      }
+      this.isPreviewLoaded = true;
+      this.isPreviewLoading = false;
     }
- }
 
    // ngAfterViewInit(){
    //    this.elementPosition = this.menuElement.nativeElement.offsetTop;

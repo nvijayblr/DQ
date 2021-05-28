@@ -119,6 +119,7 @@
                                           <div class=" list-item-0  inlb" *ngIf="rights.includes('VIEW_RESULTS')">
                                             <button class="button3d btnPush btnPurple addico v-p" 
                                               (click)="launchProfileView(data)" 
+                                              [disabled]="!data.rulesetId" 
                                               matTooltip="Profile">
                                               <mat-icon>link</mat-icon>
                                               Profile
@@ -151,7 +152,7 @@
                                             <div class="list flex-containers ml3" style="width:300px;">
                                             <div class=" list-item-0  inlb">
                                               <button type="button" class="button3d btnPush btnPurple addico w-t"
-                                              (click)="launchDataCleaning(data,'edit')" matTooltip="Data Cleaning">
+                                              (click)="launchDataCleaning(data,'edit')" [disabled]="!data.rulesetId"  matTooltip="Data Cleaning">
                                                 Data Cleaning
                                               </button>
                                             </div>

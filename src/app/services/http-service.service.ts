@@ -346,6 +346,35 @@ export class HttpService  {
   }
 
 
+  imputeColumnsReq(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/data_impute`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  deleteColumnsRowsReq(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/data_remove`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  getProfilePreview(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/show_remove_duplicates`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
 
 
 

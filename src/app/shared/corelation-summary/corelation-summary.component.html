@@ -1,17 +1,27 @@
+<div class="correlation-summary">
+  <mat-tab-group mat-align-tabs="start"  animationDuration="0ms" class="mm2" #tabGroup>
+    <mat-tab label="Positive Correlation">
+      <table class="table" *ngIf="summary.positiveSummary && summary.positiveSummary.length">
+        <tr *ngFor="let positive of summary.positiveSummary">
+           <td>{{positive.column}}</td>
+           <td>{{positive.value}}</td>
+        </tr>
+      </table>
+      <div class="not-found" *ngIf="!summary.positiveSummary || (summary.positiveSummary && !summary.positiveSummary.length)">Not found.</div>
+    </mat-tab>
+    <mat-tab label="Negative Correlation">
+      <table class="table" *ngIf="summary.negativeSummary && summary.negativeSummary.length">
+        <tr *ngFor="let negative of summary.negativeSummary">
+           <td>{{negative.column}}</td>
+           <td>{{negative.value}}</td>
+        </tr>
+      </table>
+      <div class="not-found" *ngIf="!summary.negativeSummary || (summary.negativeSummary && !summary.negativeSummary.length)">Not found.</div>
 
-<table class="table" *ngIf="summary.positiveSummary">
-  <tr><th colspan="2">Positive Correlation</th></tr>
-  <tr *ngFor="let positive of summary.positiveSummary | keyvalue">
-     <td>{{positive.key}}</td>
-     <td>{{positive.value}}</td>
-  </tr>
-</table>
+    </mat-tab>
+  </mat-tab-group>
+</div>
 
-<table class="table" *ngIf="summary.negativeSummary">
-  <tr><th colspan="2">Negative Correlation</th></tr>
-  <tr *ngFor="let negative of summary.negativeSummary | keyvalue">
-     <td>{{negative.key}}</td>
-     <td>{{negative.value}}</td>
-  </tr>
-</table>
+
+
 

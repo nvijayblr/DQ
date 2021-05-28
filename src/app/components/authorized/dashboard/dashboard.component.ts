@@ -197,6 +197,9 @@ export class DashboardComponent implements OnInit {
    }
 
    createEditRuleset(data, mode) {
+      if (mode === 'add') {
+         data.rulesetId = '';
+      }
       let rules = data.rules.filter((rule) => data.rulesetId === rule.rulesetId);
       rules = (rules && rules.length) ? rules[0] : { columns: [], selectedColumns: [] };
       // If create ruleset take the columns list from default ruleset.
@@ -238,6 +241,10 @@ export class DashboardComponent implements OnInit {
 
 
    launchProfileView(sourceData): void {
+      if (!sourceData.UploadsHistory.length || (sourceData.UploadsHistory.length && !sourceData.uploadDate)) {
+         alert('Please select the upload date.');
+         return;
+      }
       localStorage.setItem('dq-source-data', JSON.stringify(sourceData));
       this.router.navigate(
          [`auth/attribute-details-data`],
@@ -246,6 +253,10 @@ export class DashboardComponent implements OnInit {
    }
 
    launchDataCleaning(sourceData): void {
+      if (!sourceData.UploadsHistory.length || (sourceData.UploadsHistory.length && !sourceData.uploadDate)) {
+         alert('Please select the upload date.');
+         return;
+      }
       localStorage.setItem('dq-source-data', JSON.stringify(sourceData));
       this.router.navigate(
          [`auth/data-cleaning`],

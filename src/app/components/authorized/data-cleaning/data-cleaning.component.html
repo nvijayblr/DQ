@@ -1,6 +1,6 @@
 <section class="page-body home-bodys wts">
   <div class="container">
-     <h1 class="attTitle">Data Cleaning</h1>
+     <h1 class="attTitle">Data Cleaning  - {{profile.column}}</h1>
      <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
     <div class="profile-wrapper">
        <div class="flex-containers">
@@ -14,129 +14,142 @@
                 <mat-icon *ngIf="!show">expand_more</mat-icon> <mat-icon *ngIf="show">expand_less</mat-icon> </button>
           </div>
           <div class="attribute-details">
-              
-            <mat-card class="bg-azure">
-              <h2 class="share-sub-title">Action</h2>
-              <div class="form-row">
-              <mat-radio-group aria-label="Select an option" (change)="changeComboo($event)">
-                <mat-radio-button checked="defaultSelected" value="drop">Drop</mat-radio-button>
-                <mat-radio-button value="impute">Impute</mat-radio-button>
-              </mat-radio-group>
-            </div>
-              <div class="divLft">
-              <mat-card class="moccasin" *ngIf="drop">
-              <div class="form-row">
-                  <span class="sub_title mt">Category : </span>
-                  <mat-radio-group aria-label="Select an option">
-                    <mat-radio-button [checked]="true" value="column">Column</mat-radio-button>
-                    <mat-radio-button value="row">Row</mat-radio-button>
-                  </mat-radio-group>
-              </div>
-              <div class="form-row">
-                  <span class="sub_title">Columns : </span>
-                  <mat-form-field appearance="fill" class="mft">
-                    <mat-select placeholder="Select Columns">
-                      <mat-option *ngFor="let frequency of profile.frequncyAnalysis" [value]="frequency.unique_values">
-                        {{frequency.unique_values}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-              </div>
-              <div class="form-row">
-                  <span class="sub_title mt">Value : </span>
-                  <mat-radio-group aria-label="Select an option" (change)="enableCustom($event)">
-                    <mat-radio-button [checked]="true" value="null">Null</mat-radio-button>
-                    <mat-radio-button class="cst" value="custom" ></mat-radio-button>
-                    <mat-form-field appearance="fill" class="mft2">
-                      <mat-label>Custom Value</mat-label>
-                      <input matInput placeholder="" value="" [disabled]="nullType">
-                    </mat-form-field>
-                  </mat-radio-group>
-              </div>
-                <div class="form-row">
-                  <span class="sub_title">MaskAnalysis : </span>
-                  <mat-form-field appearance="fill" class="mft">
-                    <mat-select placeholder="Select Columns">
-                      <mat-option *ngFor="let mask of profile.maskAnalysis" [value]="mask.unique_values">
-                        {{mask.unique_values}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
+            <mat-card class="tab-card">
+              <mat-tab-group mat-align-tabs="start"  animationDuration="0ms" class="mm2" #tabGroup>
+                <mat-tab label="Data Imputation">
+                  <div class="impute-wrapper" *ngIf="profile.attributeSummary?.dataType === 'Numeric'">
+                    <h5 class="sub-title-label">Impute Null Data</h5>
+                    <div class="form-row">
+                      <mat-form-field appearance="fill" class="mft">
+                        <mat-select placeholder="Impute Option" [(ngModel)]="impute.value" [disabled]="!profile.attributeSummary?.null_records">
+                          <mat-option value="MEAN">Mean</mat-option>
+                          <mat-option value="MEDIAN">Median</mat-option>
+                          <mat-option value="MODE">Mode</mat-option>
+                          <mat-option value="MIN">Min</mat-option>
+                          <mat-option value="MAX">Max</mat-option>
+                          <mat-option value="IQR25">IQR25</mat-option>
+                          <mat-option value="IQR75">IQR75</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                        <button 
+                          type="button" 
+                          class="button3d btnPush btnPurple addico w-t"
+                          (click)="imputeColumns('numeric')"
+                          [disabled]="!profile.attributeSummary?.null_records || !impute.value"><mat-icon> layers_clear</mat-icon> IMPUTE 
+                        </button>
+                    </div>
+                  </div>
 
-                <div class="form-rows">
-                  <span class="sub_title">Threshold : </span>
-                  <div class="custom-slider b-g">
-                    <ngx-slider [(value)]="value" [(highValue)]="highValue" [options]="options"></ngx-slider>
+                  <div class="impute-wrapper" *ngIf="profile.attributeSummary?.dataType === 'Alphabetic' || profile.attributeSummary?.dataType === 'Alphanumeric'">
+                    <h5 class="sub-title-label">Impute Null Data</h5>
+                    <div class="form-row">
+                        <mat-form-field appearance="fill" class="mft">
+                          <mat-select placeholder="Select Value" [(ngModel)]="impute.value" [disabled]="!profile.attributeSummary?.null_records">
+                            <mat-option *ngFor="let frequency of profile.frequncyAnalysis" [value]="frequency.unique_values">{{frequency.unique_values}} - ({{frequency.counts}})</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      <button 
+                      type="button" 
+                        class="button3d btnPush btnPurple addico w-t"
+                        (click)="imputeColumns('string')"
+                        [disabled]="!profile.attributeSummary?.null_records || !impute.value"><mat-icon> layers_clear</mat-icon> IMPUTE </button>
+                    </div>
                   </div>
-                </div>
+                </mat-tab>
+                
+                <mat-tab label="Duplicate Analysis">
+                  <div class="impute-wrapper">
+                    <h5 class="sub-title-label">Dulicate Data</h5>
+                    <div class="form-row">
+                        <button 
+                          type="button" 
+                          (click)="loadDuplicatePreview()"
+                          class="button3d btnPush btnPurple addico w-t">
+                          <mat-icon> visibility</mat-icon> Preview 
+                        </button>
+                        <button 
+                          type="button" 
+                          class="button3d btnPush btnPurple addico w-t">
+                          <mat-icon> delete</mat-icon> Remove 
+                        </button>
+                    </div>
+                  </div>
+                </mat-tab>  
 
+                <mat-tab label="Mask Analysis">
+                  <div class="impute-wrapper">
+                    <h5 class="sub-title-label">Mask Analysis Data</h5>
+                    <div class="form-row">
+                      <mat-form-field appearance="fill" class="mft">
+                        <mat-select placeholder="" [(ngModel)]="mask.value">
+                          <mat-option *ngFor="let mask of profile.maskAnalysis" [value]="mask.unique_values">{{mask.unique_values}} - ({{mask.counts}})</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      <button 
+                        type="button" 
+                        [disabled]="!mask.value"
+                        class="button3d btnPush btnPurple addico w-t">
+                        <mat-icon> visibility</mat-icon> Preview 
+                      </button>
+                    </div>                    
+                  </div>
+                </mat-tab>
 
-                <div class="form-row">
-                  <button type="button" class="button3d btnPush btnPurple addico w-t"matTooltip="Drop Data">DROP <mat-icon> layers_clear</mat-icon></button>
-                </div>
-              </mat-card>
-            
-              <mat-card class="moccasin" *ngIf="impute">               
-                <div class="form-row">
-                    <span class="sub_title">Columns : </span>
-                    <mat-form-field appearance="fill" class="mft">
-                      <mat-select placeholder="Select Columns">
-                        <mat-option *ngFor="let frequency of profile.frequncyAnalysis" [value]="frequency.unique_values">
-                          {{frequency.unique_values}}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="form-row">
-                  <span class="sub_title">Data Type : </span>
-                  <mat-form-field appearance="fill" class="mft">
-                    <mat-select placeholder="Select Columns" (selectionChange)="changeDataType($event)">
-                      <mat-option [value]="profile.attributeSummary?.dataType">
-                        {{profile.attributeSummary?.dataType}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-               </div>              
-                  <div class="form-row" *ngIf="dataTypeNum">
-                    <span class="sub_title">Value  : </span>
-                     <mat-form-field appearance="fill" class="mft">
-                      <mat-select placeholder="Select Columns">
-                        <mat-option value="mean">Mean</mat-option>
-                        <mat-option value="median">Median</mat-option>
-                        <mat-option value="mode">Mode</mat-option>
-                        <mat-option value="min">Min</mat-option>
-                        <mat-option value="max">Max</mat-option>
-                      </mat-select>
-                    </mat-form-field>
+                <mat-tab label="Data Removal">
+                  <div class="impute-wrapper">
+                    <h5 class="sub-title-label">Delete Column / Row</h5>
+                    <div class="form-row">
+                      <mat-radio-group [(ngModel)]="delete.type">
+                        <mat-radio-button [checked]="true" value="column">Column</mat-radio-button>
+                        <mat-radio-button value="custom" value="row">Row</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+
+                    <div class="form-row" *ngIf="delete.type === 'column'">
+                      <mat-radio-group [(ngModel)]="delete.category">
+                        <mat-radio-button [checked]="true" value="col_nan">NaN</mat-radio-button>
+                        <mat-radio-button value="custom" value="col_with_value">Value</mat-radio-button>
+                        <mat-form-field appearance="fill" class="mft2" *ngIf="delete.category === 'col_with_value'">
+                          <mat-label>Custom Value</mat-label>
+                          <input matInput placeholder="" value="" [(ngModel)]="delete.values">
+                        </mat-form-field>
+                      </mat-radio-group>
+                    </div>
+
+                    <div class="form-row" *ngIf="delete.type === 'row'">
+                      <mat-radio-group [(ngModel)]="delete.category">
+                        <mat-radio-button [checked]="true" value="row_nan">NaN</mat-radio-button>
+                        <mat-radio-button value="custom" value="">Value</mat-radio-button>
+                        <mat-form-field appearance="fill" class="mft2" *ngIf="delete.category === ''">
+                          <mat-label>Custom Value</mat-label>
+                          <input matInput placeholder="" value="" [(ngModel)]="delete.values">
+                        </mat-form-field>
+                      </mat-radio-group>
+                    </div>
+
+                    <div class="form-rows" *ngIf="delete.category === 'col_nan' || delete.category === 'row_nan'">
+                      <span>Threshold : {{delete.threshold}}%</span>
+                      <div class="form-row">
+                        <mat-slider thumbLabel min="0" max="100" step="1" [(ngModel)]="delete.threshold"></mat-slider>
+                      </div>
+                    </div>
+
+                    <div class="form-row">
+                      <button 
+                        type="button" 
+                        (click)="deleteColumnsRows()"
+                        class="button3d btnPush btnPurple addico w-t">
+                        <mat-icon> delete</mat-icon> Remove 
+                      </button>
+                    </div>
+
                   </div>
-                  <div class="form-row" *ngIf="dataTypeAlpha">
-                    <span class="sub_title"> </span>
-                    <mat-form-field appearance="fill" class="mft3">
-                      <mat-label>Custom Value</mat-label>
-                      <input matInput placeholder="" value="">
-                    </mat-form-field>
-                  </div>
-                  <div class="form-row">
-                    <button type="button" class="button3d btnPush btnPurple addico w-t"matTooltip="Drop Data">IMPUTE <mat-icon> layers_clear</mat-icon></button>
-                  </div>
-              </mat-card>
-            </div>
-            <div class="divLft">
-              <mat-card class="moccasin2">
-                <h4 class="attr-tite">Count <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
-                    <div class="records">
-                      <highcharts-chart
-                          [Highcharts] = "highcharts" 
-                          [options] = "chartOptions" 
-                          style = "width: 100%; height: 400px; display: block;">
-                      </highcharts-chart>        
-                    </div>                     
-              </mat-card>
-            </div>
-            </mat-card> 
+                </mat-tab>
+                
+              </mat-tab-group>
+            </mat-card>
            
-           <!-- <h1 class="share-post-title"> {{attrubute}} </h1> -->
+
            <div class="lft-attr">
               <mat-card class="bg-violet">
               <h4 class="attr-tite">Attribute Summary <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
@@ -146,10 +159,32 @@
               </div>
               <div class="dotDiv"></div>
               <div class="records">
-                 <span>Data type</span>
-                 {{profile.attributeSummary?.dataType}}
+                <span>Data type</span>
+                {{profile.attributeSummary?.dataType}}
               </div>
-              </mat-card>
+              <div class="dotDiv"></div>
+              <div class="records">
+                <span>Null Counts</span>
+                {{profile.attributeSummary?.null_records}}
+              </div>
+              <div class="action-btn" *ngIf="profile.attributeSummary?.null_records">
+                <button 
+                  type="button" 
+                  mat-mini-fab color="accent"
+                  matTooltip="Impute Columns"
+                ><mat-icon>layers_clear</mat-icon></button>
+                <button 
+                  type="button" 
+                  mat-mini-fab color="warn"
+                  matTooltip="Delete Records"
+                ><mat-icon>delete</mat-icon></button>
+                <button 
+                  type="button" 
+                  mat-mini-fab color="warn"
+                  matTooltip="Delete Duplicates"
+                ><mat-icon>delete_sweep</mat-icon></button>
+              </div>
+            </mat-card>
         
               <mat-card class="bg-magenta" *ngIf="profile.frequncyAnalysis && profile.frequncyAnalysis.length">
                  <h4 class="attr-tite">Frequency Groups <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
@@ -209,42 +244,47 @@
                   <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
       
                   <div class="custom-slider">
-                     <ngx-slider [(value)]="profile.LengthStatistics.Min" [(highValue)]="profile.LengthStatistics.Max" [options]="options"></ngx-slider>
+                     <ngx-slider [(value)]="profile.LengthStatistics.Min" [(highValue)]="profile.LengthStatistics.Max" [options]="sliderOptions"></ngx-slider>
                   </div>
              </mat-card>
               <mat-card class="bg-green" *ngIf="profile.maskAnalysis && profile.maskAnalysis.length">
                  <h4 class="attr-tite">Mask Analysis <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
                  <div class="frequencyContainer" [class.maskShow]="maskShow">
-                 <table>
-                    <tr>
-                       <th>Value</th>
-                       <th>Count</th>
-                       <th style="width:20%">&nbsp;</th>
-                    </tr>
-        
-                    <tr *ngFor="let mask of profile.maskAnalysis">
-                       <td>{{mask.unique_values}}</td>
-                       <td>{{mask.counts}}</td>
-                       <td><mat-progress-bar mode="determinate" [value]="(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'}} %"></mat-progress-bar></td>
-                    </tr>
-                 </table>
-              </div>
-             <button *ngIf=" profile.maskAnalysis.length > 3" class="maskShowBtn" (click)="maskShow = !maskShow">  <!-- {{ maskShow ? 'Show less'  : 'Show More'  }} -->
+                  <table>
+                      <tr>
+                        <th>Value</th>
+                        <th>Count</th>
+                        <th style="width:20%">&nbsp;</th>
+                      </tr>
+          
+                      <tr *ngFor="let mask of profile.maskAnalysis">
+                        <td>{{mask.unique_values}}</td>
+                        <td>{{mask.counts}}</td>
+                        <td><mat-progress-bar mode="determinate" [value]="(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'}} %"></mat-progress-bar></td>
+                      </tr>
+                  </table>
+                </div>
+                <button *ngIf=" profile.maskAnalysis.length > 3" class="maskShowBtn" (click)="maskShow = !maskShow">  <!-- {{ maskShow ? 'Show less'  : 'Show More'  }} -->
                  <mat-icon *ngIf="!maskShow">expand_more</mat-icon> <mat-icon *ngIf="maskShow">expand_less</mat-icon> </button> 
               </mat-card>
 
-              <!-- <mat-card class="os aliceblue" *ngIf="profile.staticalAnalysis">
-                 <h4 class="attr-tite">Statistics <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
-                 <table class="table">
-                    <tr class="cpt">
-                    <td class="strong" *ngFor="let stats of profile.staticalAnalysis | keyvalue">{{stats.key}}</td>
-                    </tr>
-                    <tr class="cpt1">
-                    <td *ngFor="let stats of profile.staticalAnalysis | keyvalue">{{stats.value}}</td>
-                    </tr>
-                 </table>
+              <!-- Preview -->
+              <!-- <mat-card class="border no-rounded list shrare-post mat-card source-preview-card">
+                <div class="list flex-containers space-between">
+                  <h1 class="share-post-title">Preview</h1>
+                </div>
+                <app-progress-bar [message]="'Loading source preview...'" class="component" *ngIf="isRefPreviewLoading"></app-progress-bar>
+                <app-ag-grid 
+                  floatingFilter="true"
+                  *ngIf="isRefPreviewLoaded"
+                  [rowData]="refrowData"
+                  [columnDefs]="refcolumnDefs"
+                  [pageSize]="50"
+                  [rowSelection]="'multiple'"
+                  [suppressRowClickSelection]="false"
+                ></app-ag-grid>
               </mat-card> -->
-
+  
            </div>                      
         </div>
        </div>
