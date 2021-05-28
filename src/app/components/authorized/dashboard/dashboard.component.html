@@ -54,6 +54,249 @@
                                 <div class="editDetails" (click)="showEditDetails(i, data);">Edit Details</div></td>
                             </tr>
                             <tr class="subtab" *ngIf="visibleIndex === i">
+                              <td colspan="6" style="padding: 0px;width: 100%;" class="">
+                                <div class="step-indicator">
+                                  <div class="step completed">
+                                    <mat-icon>check_circle</mat-icon>
+                                    <span class="text">Data Source</span>                                    
+                                  </div>
+                                  <div class="step">
+                                    <mat-icon>check_circle</mat-icon>
+                                    <span class="text">Ruleset</span>
+                                  </div>
+                                  <div class="step">
+                                    <mat-icon>check_circle</mat-icon>
+                                    <span class="text">Data Upload</span>
+                                  </div>
+                                  <div class="step">
+                                    <mat-icon>check_circle</mat-icon>
+                                    <span class="text">View Analysis</span>
+                                  </div>
+                                  <div class="step">
+                                    <mat-icon>check_circle</mat-icon>
+                                    <span class="text">Data Cleaning</span>
+                                  </div>
+                                </div>
+                                <table style="width: 100%;">
+                                    <tr class="step1" style="display:block;">
+                                      <td class="bd">
+                                        <div class="list flex-containers ml4">
+                                          <div class=" list-item-0  inlb sName">{{data.source.sourceDataName}}</div>
+                                          <div class=" list-item-0  inlb">
+                                            <button type="button" class="button3d btnPush btnBlueGreen addico"
+                                            routerLink="/auth/add-source-data" matTooltip="" >
+                                            <mat-icon>add</mat-icon>
+                                            Create Source
+                                            </button>
+                                          </div>
+                                         
+                                          <div class="list-item-0 inlb" *ngIf="rights.includes('EDIT_SOURCE')">
+                                            <button type="button" class="button3d btnPush btnOrange addico"
+                                            (click)="editSourceData(data)" [disabled]="!data.sourceId" matTooltip="">                                           
+                                            <mat-icon>edit</mat-icon>  Edit Source
+                                            </button>
+                                          </div>
+  
+                                          
+                                         
+                                          <div class=" list-item-0  inlb">
+                                            <button type="button" class="button3d btnPush btnPurple addico w-t"
+                                           matTooltip="">
+                                              Disable
+                                            </button>
+                                          </div>
+                                          </div>
+                                      </td>
+                                    </tr>
+                                    <tr class="step2" style="display:none;">
+                                      <td class="bd">
+                                        <div class="list flex-containers ml4">
+                                          <div class=" list-item-0  inlb sName">Ruleset Name</div>
+                                          <div class=" list-item-0  inlb" *ngIf="rights.includes('ADD_RULESET')">
+                                            <button type="button" class="button3d btnPush btnBlueGreen addico"
+                                            (click)="createEditRuleset(data,'add')" matTooltip="Create Ruleset">
+                                            <mat-icon>add</mat-icon>
+                                            Create Ruleset
+                                            </button>
+                                          </div>
+                                          
+                                          <div class=" list-item-0  inlb" *ngIf="rights.includes('UPDATE_RULESET')">
+                                            <button type="button" class="button3d btnPush btnOrange addico"
+                                            (click)="createEditRuleset(data,'edit')" [disabled]="!data.rulesetId"  matTooltip="Edit Ruleset">
+                                            <mat-icon>edit</mat-icon> Edit Ruleset
+                                            </button>
+                                          </div>
+                                     
+                                          <div class=" list-item-0  inlb">
+                                            <button type="button" class="button3d btnPush btnPurple addico w-t"
+                                           matTooltip="">
+                                              Disable
+                                            </button>
+                                          </div>
+                                          </div>
+                                      </td>
+                                    </tr>
+                                    <tr class="step3" style="display:none;">
+                                      <td class="bd">
+                                        <table style="width: 100%;">
+                                          <tr>
+                                              <td class="bd">
+                                                <div class="outline">
+                                                    <mat-form-field appearance="fill">
+                                                      <mat-label class="lbl">Multi Source List</mat-label>
+                                                      <mat-select [(ngModel)]="data.multisource" [disabled]="data.settings?.multiSourceOptions && data.settings?.multiSourceOptions.length<=1">
+                                                        <mat-option *ngFor="let multisource of data.settings?.multiSourceOptions;" [value]="multisource">
+                                                            {{multisource}}
+                                                        </mat-option>
+                                                      </mat-select>
+                                                    </mat-form-field>
+                                                </div>
+                                              </td>
+                                              <td style="width: 25%;padding-top: 6px;" class="bd">
+                                                <div *ngIf="rights.includes('ADD_SOURCEFILE')">
+                                                  <app-image-cropper 
+                                                    [imageType]="'Source'"
+                                                    [fileTypes]="'.csv, .xls, .xlsx'"
+                                                    [imagePath]="''"
+                                                    (fileSelected)="onSourceCSVSelected($event, data)"
+                                                  >
+                                                  </app-image-cropper>
+                                                </div>
+                                              </td>
+                                              <td class="bd">
+                                                <div class="outline">
+                                                    <mat-form-field appearance="fill">
+                                                      <mat-label class="lbl">Date</mat-label>
+                                                    <input matInput [matDatepicker]="frompicker" [(ngModel)]="data.uploadDate" (click)="frompicker.open()" autocomplete="off">
+                                                    <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
+                                                    <mat-datepicker #frompicker (opened)="onOpenDatePicker(data)" [dateClass]="dateClass"></mat-datepicker>
+                                                    </mat-form-field>
+                                                </div>
+                                              </td>
+                                              <td class="bd">
+                                                <div class="outline">
+                                                    <mat-form-field appearance="fill">
+                                                      <mat-label class="lbl">Ruleset Name</mat-label>
+                                                        <mat-select [(ngModel)]="data.rulesetId">
+                                                          <mat-option *ngFor="let rule of data.rules;" [value]="rule.rulesetId">
+                                                              {{rule.rulesetName}}
+                                                          </mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                </div>
+                                              </td> 
+                                              <td style="padding-top:0px;" class="bd">
+                                                <div class="list flex-containers ml3" style="width:300px;" >
+                                                  <div class=" list-item-0  inlb" *ngIf="rights.includes('ADD_SOURCEFILE')">
+                                                  <button mat-stroked-button class="button3d btnPush btnBlueGreen addico1" (click)="uploadSource(data)">Upload <mat-icon>cloud_upload</mat-icon></button>
+                                                  </div>
+                                                  <div class=" list-item-0  inlb">
+                                                    <button class="button3d btnPush btnLightBlue addico v-a1" 
+                                                      >
+                                                      <mat-icon>launch</mat-icon>
+                                                      Re upload
+                                                    </button>
+                                                  </div>                                         
+                                                <!-- <div class=" list-item-0  inlb" *ngIf="rights.includes('VIEW_RESULTS')">
+                                                  <button class="button3d btnPush btnLightBlue addico v-a" 
+                                                    [disabled]="!data.rulesetId" 
+                                                    (click)="launchAnalysis(data)" 
+                                                    matTooltip="View Analysis">
+                                                    <mat-icon>launch</mat-icon>
+                                                    View Analysis
+                                                  </button>
+                                                </div> -->
+                                                <!-- <div class=" list-item-0  inlb" *ngIf="rights.includes('VIEW_RESULTS')">
+                                                  <button class="button3d btnPush btnPurple addico v-p" 
+                                                    (click)="launchProfileView(data)" 
+                                                    matTooltip="Profile">
+                                                    <mat-icon>link</mat-icon>
+                                                    Profile
+                                                  </button>
+                                                </div> -->
+                                              </div>
+                      
+                                                <!-- <div class="list flex-containers ml3" style="width:300px;">
+                                                  <div class="list-item-0 inlb" *ngIf="rights.includes('EDIT_SOURCE')">
+                                                    <button type="button" class="button3d btnPush btnOrange addico"
+                                                    (click)="editSourceData(data)" [disabled]="!data.sourceId" matTooltip="Edit Source">                                           
+                                                    <mat-icon>edit</mat-icon>  Edit Source
+                                                    </button>
+                                                  </div>
+                                                  <div class=" list-item-0  inlb" *ngIf="rights.includes('ADD_RULESET')">
+                                                    <button type="button" class="button3d btnPush btnBlueGreen addico"
+                                                    (click)="createEditRuleset(data,'add')" matTooltip="Create Ruleset">
+                                                    <mat-icon>add</mat-icon>
+                                                    Create Ruleset
+                                                    </button>
+                                                  </div>
+                                                
+                                                  <div class=" list-item-0  inlb" *ngIf="rights.includes('UPDATE_RULESET')">
+                                                    <button type="button" class="button3d btnPush btnOrange addico"
+                                                    (click)="createEditRuleset(data,'edit')" [disabled]="!data.rulesetId"  matTooltip="Edit Ruleset">
+                                                    <mat-icon>edit</mat-icon> Edit Ruleset
+                                                    </button>
+                                                  </div>
+                                                  </div>
+                                                  <div class="list flex-containers ml3" style="width:300px;">
+                                                  <div class=" list-item-0  inlb">
+                                                    <button type="button" class="button3d btnPush btnPurple addico w-t"
+                                                    (click)="launchDataCleaning(data,'edit')" matTooltip="Data Cleaning">
+                                                      Data Cleaning
+                                                    </button>
+                                                  </div>
+                                              </div> -->
+                                            </td>
+                                          </tr>
+                                        </table> 
+                                      </td>
+                                    </tr>
+                                    <tr class="step4" style="display:none;">
+                                      <td class="bd">
+                                        <div class="list flex-containers ml4">
+                                          <div class=" list-item-0  inlb" *ngIf="rights.includes('VIEW_RESULTS')">
+                                            <button class="button3d btnPush btnPurple addico v-p" 
+                                              (click)="launchProfileView(data)" 
+                                              matTooltip="Profile">
+                                              <mat-icon>link</mat-icon>
+                                              Profile
+                                            </button>
+                                          </div>                                     
+                                          <div class="list-item-0 inlb" >
+                                            <button type="button" class="button3d btnPush btnOrange addico"
+                                           matTooltip="">                                           
+                                           DQ monitoring
+                                            </button>
+                                          </div>
+                                           <div class=" list-item-0  inlb" *ngIf="rights.includes('VIEW_RESULTS')">
+                                            <button class="button3d btnPush btnLightBlue addico v-a" 
+                                              [disabled]="!data.rulesetId" 
+                                              (click)="launchAnalysis(data)" 
+                                              matTooltip="View Analysis">
+                                              <mat-icon>launch</mat-icon>
+                                              View Analysis
+                                            </button>
+                                          </div> 
+                                          </div> 
+                                      </td>
+                                    </tr>
+                                    <tr class="step5" style="display:none;">
+                                      <td>
+                                        <div class="list flex-containers ml3" style="width:300px;">
+                                          <div class=" list-item-0  inlb">
+                                            <button type="button" class="button3d btnPush btnPurple addico w-t"
+                                            (click)="launchDataCleaning(data,'edit')" matTooltip="Data Cleaning">
+                                              Data Cleaning
+                                            </button>
+                                          </div>
+                                      </div>  
+                                      </td>
+                                    </tr>
+                                  </table>
+                                 
+                              </td>
+                            </tr>
+                            <!-- <tr class="subtab" *ngIf="visibleIndex === i">
                               <td colspan="6" style="padding: 0px;width: 100%;">
                                   <table style="width: 100%;">
                                     <tr>
@@ -161,7 +404,7 @@
                                     </tr>
                                   </table>
                               </td>
-                            </tr>
+                            </tr> -->
                         </table>
                       </td>
                   </tr>

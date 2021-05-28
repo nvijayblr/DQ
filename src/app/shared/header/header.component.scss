@@ -278,3 +278,62 @@
     }
   }
 }
+.main-nav {
+  ul{
+    position: relative;
+    top: 30px;
+}
+  
+ li {
+   float: left!important;
+   border-right: 1px solid #a396e1;
+   padding-right: 15px;
+   height: 20px;
+   font-size: 16px;
+   cursor: pointer;
+   &:last-child  {
+    border-width: 0;
+    float: right;
+  }
+   a {
+     display: inline-block;
+     margin-left: 10px;
+     vertical-align: top;          
+     line-height: 16px;          
+     color: #fff;
+     transition: 0.25s ease;
+     font-family: "open-sans-condensed-bold";
+     &:hover {
+      color: #fff;
+       transition: 0.25s ease;
+     }
+     &.active {
+        border-bottom: 3px solid #a396e1;
+     }
+   }
+   &:last-child a {
+     border-width: 0;
+   }
+ }
+}
+.uf-c {
+  display: inline-block;
+  color: #a396e1;
+  text-decoration: none;
+}
+
+.uf-c::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 2px;
+  background: #a396e1;
+  transition: width .3s;
+  position: relative;
+  top:3px;
+}
+
+.uf-c:hover::after {
+  width: 100%;
+  //transition: width .3s;
+}

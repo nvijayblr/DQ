@@ -22,7 +22,7 @@ import { SignupComponent } from './components/login-signup/signup/signup.compone
   declarations: [
     AppComponent,
     LoginComponent,
-    SignupComponent
+    SignupComponent,
   ],
   imports: [
     BrowserModule,

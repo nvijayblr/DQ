@@ -15,6 +15,7 @@ import { AttributeDetailsComponent } from './attribute-details/attribute-details
 import { CorrelationDetailsComponent } from './correlation-details/correlation-details.component';
 import { AnalysisComponent } from './analysis/analysis.component';
 import { DataCleaningComponent } from './data-cleaning/data-cleaning.component';
+import { DataQualityComponent } from './data-quality/data-quality.component';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { DataCleaningComponent } from './data-cleaning/data-cleaning.component';
     AttributeDetailsComponent,
     CorrelationDetailsComponent,
     AnalysisComponent,
-    DataCleaningComponent
+    DataCleaningComponent,
+    DataQualityComponent
   ],
    imports: [
       HighchartsChartModule,
