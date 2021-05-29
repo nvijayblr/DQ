@@ -54,31 +54,31 @@
                                 <div class="editDetails" (click)="showEditDetails(i, data);">Edit Details</div></td>
                             </tr>
                             <tr class="subtab" *ngIf="visibleIndex === i">
-                              <td colspan="6" style="padding: 0px;width: 100%;" class="">
+                              <td colspan="6" style="padding: 0px;width: 100%;">
                                 <div class="step-indicator">
-                                  <div class="step completed">
+                                  <div class="step" [ngClass]="{completed: showDetails}" (click)="showTab('1');">
                                     <mat-icon>check_circle</mat-icon>
                                     <span class="text">Data Source</span>                                    
                                   </div>
-                                  <div class="step">
-                                    <mat-icon>check_circle</mat-icon>
+                                  <div class="step" [ngClass]="{completed: idT === '2'}"  (click)="showTab('2');">
+                                    <mat-icon *ngIf="idT === '2'">check_circle</mat-icon>
                                     <span class="text">Ruleset</span>
                                   </div>
-                                  <div class="step">
-                                    <mat-icon>check_circle</mat-icon>
+                                  <div class="step" [ngClass]="{completed: idT === '3'}" (click)="showTab('3');">
+                                    <mat-icon *ngIf="idT === '3'">check_circle</mat-icon>
                                     <span class="text">Data Upload</span>
                                   </div>
-                                  <div class="step">
-                                    <mat-icon>check_circle</mat-icon>
+                                  <div class="step" [ngClass]="{completed: idT === '4'}" (click)="showTab('4');">
+                                    <mat-icon *ngIf="idT === '4'">check_circle</mat-icon>
                                     <span class="text">View Analysis</span>
                                   </div>
-                                  <div class="step">
-                                    <mat-icon>check_circle</mat-icon>
+                                  <div class="step" [ngClass]="{completed: idT === '5'}" (click)="showTab('5');">
+                                    <mat-icon *ngIf="idT === '5'">check_circle</mat-icon>
                                     <span class="text">Data Cleaning</span>
                                   </div>
                                 </div>
                                 <table style="width: 100%;">
-                                    <tr class="step1" style="display:block;">
+                                    <tr class="step1" *ngIf="showFirst">
                                       <td class="bd">
                                         <div class="list flex-containers ml4">
                                           <div class=" list-item-0  inlb sName">{{data.source.sourceDataName}}</div>
@@ -108,7 +108,7 @@
                                           </div>
                                       </td>
                                     </tr>
-                                    <tr class="step2" style="display:none;">
+                                    <tr class="step2" *ngIf="idT === '2'">
                                       <td class="bd">
                                         <div class="list flex-containers ml4">
                                           <div class=" list-item-0  inlb sName">Ruleset Name</div>
@@ -136,7 +136,7 @@
                                           </div>
                                       </td>
                                     </tr>
-                                    <tr class="step3" style="display:none;">
+                                    <tr class="step3" *ngIf="idT === '3'">
                                       <td class="bd">
                                         <table style="width: 100%;">
                                           <tr>
@@ -251,7 +251,7 @@
                                         </table> 
                                       </td>
                                     </tr>
-                                    <tr class="step4" style="display:none;">
+                                    <tr class="step4" *ngIf="idT === '4'">
                                       <td class="bd">
                                         <div class="list flex-containers ml4">
                                           <div class=" list-item-0  inlb" *ngIf="rights.includes('VIEW_RESULTS')">
@@ -280,7 +280,7 @@
                                           </div> 
                                       </td>
                                     </tr>
-                                    <tr class="step5" style="display:none;">
+                                    <tr class="step5" *ngIf="idT === '5'">
                                       <td>
                                         <div class="list flex-containers ml3" style="width:300px;">
                                           <div class=" list-item-0  inlb">

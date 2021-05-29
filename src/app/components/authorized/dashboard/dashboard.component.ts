@@ -296,5 +296,23 @@ export class DashboardComponent implements OnInit {
       } else {
          this.visibleIndex = index;
       }
-   }
+  }
+  showDetails: boolean = true;
+  showFirst:boolean = true;
+  idT;
+  showTab(id) {
+    this.idT = id;
+    if (id === '1') {
+      this.showFirst = true;
+    } else {
+      this.showFirst = false;
+    }
+    if (id === this.idT) {
+        this.showDetails = true;
+      console.log('Yes');
+    } else {
+      this.showDetails = false;
+    }
+    
+  }
 }
