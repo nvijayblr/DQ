@@ -32,12 +32,12 @@
              <span class="seperator">&nbsp;</span>
  
              <!--  (click)="showCloseSerach()" -->
-             <!-- <button mat-icon-button class="notification-menu">
+            <!-- <button mat-icon-button class="notification-menu">
                <mat-icon>search</mat-icon>
-             </button>
+             </button> -->
              <button mat-icon-button class="notification-menu notification-btn" (click)="drawer.toggle()">
                <mat-icon matBadge="{{notificationsCount}}" matBadgeColor="warn">notifications</mat-icon>
-             </button> -->
+             </button>
  
              <button mat-icon-button [matMenuTriggerFor]="menu" [class.userimage]="user.path">
                <div class="profile-pic-small pic-xs img" *ngIf="user.path" [ngStyle]="{'background-image': 'url(' + appConfig.imgBaseUrl + user.path + ')'}"></div>

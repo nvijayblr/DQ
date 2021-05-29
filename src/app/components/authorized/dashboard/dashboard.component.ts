@@ -31,7 +31,10 @@ export class DashboardComponent implements OnInit {
    rights = '';
    sourceList: any = [];
    highlightDates: any = [];
-   visibleIndex = -1;
+  visibleIndex = -1;
+  showDetails: boolean = true;
+  showFirst:boolean = true;
+  idT;
 
    constructor(
       public dialog: MatDialog,
@@ -292,14 +295,15 @@ export class DashboardComponent implements OnInit {
       }
 
       if (this.visibleIndex === index) {
-         this.visibleIndex = -1;
+        this.visibleIndex = -1;
+        this.idT = -1;
       } else {
-         this.visibleIndex = index;
+        this.visibleIndex = index;
+        this.idT = '1';
+        this.showFirst = true;
       }
   }
-  showDetails: boolean = true;
-  showFirst:boolean = true;
-  idT;
+
   showTab(id) {
     this.idT = id;
     if (id === '1') {
@@ -309,7 +313,6 @@ export class DashboardComponent implements OnInit {
     }
     if (id === this.idT) {
         this.showDetails = true;
-      console.log('Yes');
     } else {
       this.showDetails = false;
     }
