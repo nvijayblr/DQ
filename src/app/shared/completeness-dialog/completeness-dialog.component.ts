@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./completeness-dialog.component.scss']
 })
 export class CompletenessDialogComponent implements OnInit {
-  @ViewChild('owlCatCar', { static: false }) owlCatCar;
+  @ViewChild('owlCar', { static: false }) owlCar;
   isLoading = false;
   defaultColDefs = { sortable: true, filter: true, minWidth: 180, resizable: true };
   columnDefs: any = [];
@@ -102,7 +102,7 @@ export class CompletenessDialogComponent implements OnInit {
     this.loadFirstItem();
   }
 
-  launchDataCleaning(sourceData): void {
+  launchDataCleaning(sourceData, mode= ''): void {
     const analysis = localStorage.getItem('selected-analysis');
     if (analysis) {
       localStorage.setItem('dq-source-data', analysis);
