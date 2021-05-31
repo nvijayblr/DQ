@@ -890,7 +890,7 @@ thead {background: #f0f7f7;}
   }
 }
 
-$stepColor: #dddddd;
+$stepColor: #bbbbbb;
 $stepColorHover: #41A4F0;
 $stepColorCompleted: #1C91E9;
 $textColor: #666;
@@ -970,10 +970,35 @@ $textColorCompleted: #fff;
     }
   }
 
+  .mat-icon.tick {
+    display: none;
+  }
+  &.disabled {
+    opacity: 0.52;
+    pointer-events: none;
+  }
+  &.uploaded {
+    .mat-icon.tick {
+      display: inline-block;
+    }
+    background: #3a9595;
+    color: $textColorCompleted;
+    .text {
+      opacity: 1;
+    }
+    
+    &:before {
+      border-color: #3a9595;
+      border-left-color: transparent;
+    }
+
+    &:after {
+      border-left-color: #3a9595;
+    }
+  }
   &.completed {
     background: $stepColorCompleted;
     color: $textColorCompleted;
-    
     .text {
       opacity: 1;
     }

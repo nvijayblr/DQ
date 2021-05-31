@@ -32,9 +32,9 @@ export class DashboardComponent implements OnInit {
    sourceList: any = [];
    highlightDates: any = [];
   visibleIndex = -1;
-  showDetails: boolean = true;
-  showFirst:boolean = true;
-  idT;
+  showDetails = true;
+  showFirst = true;
+  actionTabId;
 
    constructor(
       public dialog: MatDialog,
@@ -296,26 +296,26 @@ export class DashboardComponent implements OnInit {
 
       if (this.visibleIndex === index) {
         this.visibleIndex = -1;
-        this.idT = -1;
+        this.actionTabId = -1;
       } else {
         this.visibleIndex = index;
-        this.idT = '1';
+        this.actionTabId = '1';
         this.showFirst = true;
       }
   }
 
   showTab(id) {
-    this.idT = id;
+    this.actionTabId = id;
     if (id === '1') {
       this.showFirst = true;
     } else {
       this.showFirst = false;
     }
-    if (id === this.idT) {
+    if (id === this.actionTabId) {
         this.showDetails = true;
     } else {
       this.showDetails = false;
     }
-    
+
   }
 }

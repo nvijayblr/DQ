@@ -15,7 +15,7 @@
           </div>
           <div class="attribute-details">
             <mat-card class="tab-card">
-              <mat-tab-group mat-align-tabs="start"  animationDuration="0ms" class="mm2" #tabGroup>
+              <mat-tab-group mat-align-tabs="start"  animationDuration="0ms" class="mm2" #tabGroup (selectedTabChange)="resetPreview();">
                 <mat-tab label="Data Imputation">
                   <div class="impute-wrapper" *ngIf="profile.attributeSummary?.dataType === 'Numeric'">
                     <h5 class="sub-title-label">Impute Null Data</h5>
@@ -63,12 +63,13 @@
                     <div class="form-row">
                         <button 
                           type="button" 
-                          (click)="loadDuplicatePreview()"
+                          (click)="loadDuplicatePreview('duplicate')"
                           class="button3d btnPush btnPurple addico w-t">
                           <mat-icon> visibility</mat-icon> Preview 
                         </button>
                         <button 
                           type="button" 
+                          (click)="deleteDuplicates()"
                           class="button3d btnPush btnPurple addico w-t">
                           <mat-icon> delete</mat-icon> Remove 
                         </button>
@@ -88,6 +89,7 @@
                       <button 
                         type="button" 
                         [disabled]="!mask.value"
+                        (click)="loadDuplicatePreview('mask', mask.value)"
                         class="button3d btnPush btnPurple addico w-t">
                         <mat-icon> visibility</mat-icon> Preview 
                       </button>
@@ -149,6 +151,22 @@
               </mat-tab-group>
             </mat-card>
            
+          <!-- Preview -->
+          <mat-card class="border no-rounded list shrare-post mat-card source-preview-card" [hidden]="stepIndex === 1 || stepIndex === 2">
+            <div class="list flex-containers space-between">
+              <h1 class="share-post-title">Preview</h1>
+            </div>
+            <app-progress-bar [message]="'Loading preview...'" class="component" *ngIf="isPreviewLoading"></app-progress-bar>
+            <app-ag-grid
+              floatingFilter="true"
+              *ngIf="isPreviewLoaded"
+              [rowData]="rowData"
+              [columnDefs]="columnDefs"
+              [pageSize]="50"
+              [rowSelection]="'multiple'"
+              [suppressRowClickSelection]="false"
+            ></app-ag-grid>
+          </mat-card>
 
            <div class="lft-attr">
               <mat-card class="bg-violet">
@@ -165,7 +183,12 @@
               <div class="dotDiv"></div>
               <div class="records">
                 <span>Null Counts</span>
-                {{profile.attributeSummary?.null_records}}
+                <a href="javascript: void(0)" *ngIf="profile.attributeSummary && profile.attributeSummary.null_records" (click)="loadDuplicatePreview('nan')">
+                  {{profile.attributeSummary?.null_records}}
+                </a>
+                <div *ngIf="profile.attributeSummary && !profile.attributeSummary.null_records">
+                  {{profile.attributeSummary?.null_records}}
+                </div>
               </div>
               <div class="action-btn" *ngIf="profile.attributeSummary?.null_records">
                 <button 
@@ -258,7 +281,11 @@
                       </tr>
           
                       <tr *ngFor="let mask of profile.maskAnalysis">
-                        <td>{{mask.unique_values}}</td>
+                        <td>
+                          <a href="javascript: void(0)" (click)="loadDuplicatePreview('mask', mask.unique_values)">
+                            {{mask.unique_values}}
+                          </a>
+                        </td>
                         <td>{{mask.counts}}</td>
                         <td><mat-progress-bar mode="determinate" [value]="(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'}} %"></mat-progress-bar></td>
                       </tr>
@@ -267,26 +294,9 @@
                 <button *ngIf=" profile.maskAnalysis.length > 3" class="maskShowBtn" (click)="maskShow = !maskShow">  <!-- {{ maskShow ? 'Show less'  : 'Show More'  }} -->
                  <mat-icon *ngIf="!maskShow">expand_more</mat-icon> <mat-icon *ngIf="maskShow">expand_less</mat-icon> </button> 
               </mat-card>
+         </div>  
 
-              <!-- Preview -->
-              <!-- <mat-card class="border no-rounded list shrare-post mat-card source-preview-card">
-                <div class="list flex-containers space-between">
-                  <h1 class="share-post-title">Preview</h1>
-                </div>
-                <app-progress-bar [message]="'Loading source preview...'" class="component" *ngIf="isRefPreviewLoading"></app-progress-bar>
-                <app-ag-grid 
-                  floatingFilter="true"
-                  *ngIf="isRefPreviewLoaded"
-                  [rowData]="refrowData"
-                  [columnDefs]="refcolumnDefs"
-                  [pageSize]="50"
-                  [rowSelection]="'multiple'"
-                  [suppressRowClickSelection]="false"
-                ></app-ag-grid>
-              </mat-card> -->
-  
-           </div>                      
-        </div>
+          </div>
        </div>
         
       </div>     

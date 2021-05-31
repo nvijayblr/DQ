@@ -366,8 +366,28 @@ export class HttpService  {
     );
   }
 
-  getProfilePreview(payload): Observable<any> {
+  deleteDuplicatesReq(payload): Observable<any> {
     return this.http.post<any>(`${this.rootUrl}/api/show_remove_duplicates`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  getProfilePreview(payload, type): Observable<any> {
+    let typeUrl = 'show_remove_duplicates';
+    if (type === 'duplicate') {
+      typeUrl = 'show_remove_duplicates';
+    }
+    if (type === 'mask') {
+      typeUrl = 'maskAnalysis_query';
+    }
+    if (type === 'nan') {
+      typeUrl = 'nan_df_preview';
+    }
+    return this.http.post<any>(`${this.rootUrl}/api/${typeUrl}`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {

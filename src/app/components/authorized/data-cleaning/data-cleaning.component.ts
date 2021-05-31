@@ -53,7 +53,6 @@ export class DataCleaningComponent implements OnInit {
       value: ''
    };
 
-
    analysis: any = {};
 
    isPreviewLoaded = false;
@@ -148,12 +147,11 @@ export class DataCleaningComponent implements OnInit {
 
   changeProfile(profile) {
       this.profile = profile;
+      this.resetPreview();
       this.attrubute = profile.column;
-
       this.mask.column = profile.column;
       this.impute.column = profile.column;
       this.delete.column_name = profile.column;
-      console.log(this.profile);
    }
 
   loadProfile(source, profile = '') {
@@ -214,26 +212,52 @@ export class DataCleaningComponent implements OnInit {
       });
    }
 
-   loadDuplicatePreview() {
+   deleteDuplicates() {
+      this.isLoading = true;
+      this.loaderMsg = 'Deleting duplicate records...';
       const payload = {
-         sourcepath: this.source.templateSourcePath,
-         action: 'preview' ,
-         select_cols: [this.profile.column],
-         keep: ''
+         action: 'remove_duplicates' ,
+         select_cols: '',
+         keep: 'first'
       };
-      this.loadProfilePreview(payload);
+      this.http.deleteDuplicatesReq(payload).subscribe((result: any) => {
+         this.isLoading = false;
+         alert(`Duplicate records are deleted successfully.`);
+      }, (error) => {
+         this.isLoading = false;
+      });
    }
 
-   loadProfilePreview(payload) {
-      this.isLoading = true;
+   loadDuplicatePreview(type, mask = '') {
+      const payloads = {
+         duplicate: {
+            sourcepath: this.source.templateSourcePath,
+            action: 'preview' ,
+            select_cols: [this.profile.column],
+            keep: ''
+         },
+         mask: {
+            sourcepath: this.source.templateSourcePath,
+            column_name: this.profile.column,
+            mask_query_value : mask
+         },
+         nan: {
+            sourcepath: this.source.templateSourcePath,
+            column_name: this.profile.column,
+         }
+      };
+      this.loadProfilePreview(payloads[type], type);
+   }
+
+   loadProfilePreview(payload, type) {
       this.loaderMsg = 'Loading preview...';
       this.isPreviewLoaded = false;
       this.isPreviewLoading = true;
       this.columnDefs = [];
       this.rowData = [];
-      this.http.getProfilePreview(payload).subscribe((res: any) => {
+      this.http.getProfilePreview(payload, type).subscribe((res: any) => {
          console.log('res', res);
-         const details: any = res.sourcePreview ? res.sourcePreview : {};
+         const details: any = res.Preview ? res.Preview : {};
          this.parseSourcePreview(details);
          this.isLoading = false;
       }, (error) => {
@@ -242,6 +266,12 @@ export class DataCleaningComponent implements OnInit {
          this.isPreviewLoaded = false;
          this.isPreviewLoading = false;
       });
+   }
+
+   resetPreview() {
+      this.columnDefs = [];
+      this.rowData = [];
+      this.isPreviewLoaded = false;
    }
 
     parseSourcePreview(details) {

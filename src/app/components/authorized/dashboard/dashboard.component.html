@@ -56,24 +56,39 @@
                             <tr class="subtab" *ngIf="visibleIndex === i">
                               <td colspan="6" style="padding: 0px;width: 100%;">
                                 <div class="step-indicator">
-                                  <div class="step" [ngClass]="{completed: showDetails}" (click)="showTab('1');">
-                                    <mat-icon>check_circle</mat-icon>
+                                  <div class="step uploaded" [ngClass]="{completed: actionTabId === '1'}" (click)="showTab('1');">
+                                    <mat-icon class="tick">check_circle</mat-icon>
                                     <span class="text">Data Source</span>                                    
                                   </div>
-                                  <div class="step" [ngClass]="{completed: idT === '2'}"  (click)="showTab('2');">
-                                    <mat-icon *ngIf="idT === '2'">check_circle</mat-icon>
+                                  <div class="step" 
+                                    [class.uploaded]="data.rules.length" 
+                                    [ngClass]="{completed: actionTabId === '2'}"  
+                                    (click)="showTab('2');">
+                                    <mat-icon class="tick">check_circle</mat-icon>
                                     <span class="text">Ruleset</span>
                                   </div>
-                                  <div class="step" [ngClass]="{completed: idT === '3'}" (click)="showTab('3');">
-                                    <mat-icon *ngIf="idT === '3'">check_circle</mat-icon>
+                                  <div class="step" 
+                                    [class.disabled]="!data.rules.length" 
+                                    [class.uploaded]="data.UploadsHistory.length" 
+                                    [ngClass]="{completed: actionTabId === '3'}" 
+                                    (click)="data.rules.length && showTab('3');">
+                                    <mat-icon class="tick">check_circle</mat-icon>
                                     <span class="text">Data Upload</span>
                                   </div>
-                                  <div class="step" [ngClass]="{completed: idT === '4'}" (click)="showTab('4');">
-                                    <mat-icon *ngIf="idT === '4'">check_circle</mat-icon>
+                                  <div class="step" 
+                                    [class.disabled]="!data.rules.length || !data.UploadsHistory.length" 
+                                    [class.uploaded]="data.UploadsHistory.length && data.rules.length" 
+                                    [ngClass]="{completed: actionTabId === '4'}" 
+                                    (click)="(data.UploadsHistory.length && data.rules.length) && showTab('4');">
+                                    <mat-icon class="tick">check_circle</mat-icon>
                                     <span class="text">View Analysis</span>
                                   </div>
-                                  <div class="step" [ngClass]="{completed: idT === '5'}" (click)="showTab('5');">
-                                    <mat-icon *ngIf="idT === '5'">check_circle</mat-icon>
+                                  <div class="step" 
+                                    [class.disabled]="!data.rules.length || !data.UploadsHistory.length" 
+                                    [class.uploaded]="data.UploadsHistory.length && data.rules.length" 
+                                    [ngClass]="{completed: actionTabId === '5'}" 
+                                    (click)="(data.UploadsHistory.length && data.rules.length) && showTab('5');">
+                                    <mat-icon class="tick">check_circle</mat-icon>
                                     <span class="text">Data Cleaning</span>
                                   </div>
                                 </div>
@@ -96,8 +111,6 @@
                                             <mat-icon>edit</mat-icon>  Edit Source
                                             </button>
                                           </div>
-  
-                                          
                                          
                                           <div class=" list-item-0  inlb">
                                             <button type="button" class="button3d btnPush btnPurple addico w-t"
@@ -108,7 +121,8 @@
                                           </div>
                                       </td>
                                     </tr>
-                                    <tr class="step2" *ngIf="idT === '2'">
+
+                                    <tr class="step2" *ngIf="actionTabId === '2'">
                                       <td class="bd">
                                         <div class="list flex-containers ml4">
                                           <div class=" list-item-0  inlb sName">Ruleset Name</div>
@@ -136,7 +150,7 @@
                                           </div>
                                       </td>
                                     </tr>
-                                    <tr class="step3" *ngIf="idT === '3'">
+                                    <tr class="step3" *ngIf="actionTabId === '3'">
                                       <td class="bd">
                                         <table style="width: 100%;">
                                           <tr>
@@ -251,7 +265,29 @@
                                         </table> 
                                       </td>
                                     </tr>
-                                    <tr class="step4" *ngIf="idT === '4'">
+                                    <tr class="step4" *ngIf="actionTabId === '4'">
+                                      <td class="bd" style="max-width: 130px;">
+                                        <div class="outline">
+                                            <mat-form-field appearance="fill">
+                                              <mat-label class="lbl">Date</mat-label>
+                                            <input matInput [matDatepicker]="frompicker" [(ngModel)]="data.uploadDate" (click)="frompicker.open()" autocomplete="off">
+                                            <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
+                                            <mat-datepicker #frompicker (opened)="onOpenDatePicker(data)" [dateClass]="dateClass"></mat-datepicker>
+                                            </mat-form-field>
+                                        </div>
+                                      </td>
+                                      <td class="bd" style="max-width: 130px;">
+                                        <div class="outline">
+                                            <mat-form-field appearance="fill">
+                                              <mat-label class="lbl">Ruleset Name</mat-label>
+                                                <mat-select [(ngModel)]="data.rulesetId">
+                                                  <mat-option *ngFor="let rule of data.rules;" [value]="rule.rulesetId">
+                                                      {{rule.rulesetName}}
+                                                  </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                      </td> 
                                       <td class="bd">
                                         <div class="list flex-containers ml4">
                                           <div class=" list-item-0  inlb" *ngIf="rights.includes('VIEW_RESULTS')">
@@ -280,7 +316,29 @@
                                           </div> 
                                       </td>
                                     </tr>
-                                    <tr class="step5" *ngIf="idT === '5'">
+                                    <tr class="step5" *ngIf="actionTabId === '5'">
+                                      <td class="bd" style="max-width: 130px;">
+                                        <div class="outline">
+                                            <mat-form-field appearance="fill">
+                                              <mat-label class="lbl">Date</mat-label>
+                                            <input matInput [matDatepicker]="frompicker" [(ngModel)]="data.uploadDate" (click)="frompicker.open()" autocomplete="off">
+                                            <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
+                                            <mat-datepicker #frompicker (opened)="onOpenDatePicker(data)" [dateClass]="dateClass"></mat-datepicker>
+                                            </mat-form-field>
+                                        </div>
+                                      </td>
+                                      <td class="bd" style="max-width: 130px;">
+                                        <div class="outline">
+                                            <mat-form-field appearance="fill">
+                                              <mat-label class="lbl">Ruleset Name</mat-label>
+                                                <mat-select [(ngModel)]="data.rulesetId">
+                                                  <mat-option *ngFor="let rule of data.rules;" [value]="rule.rulesetId">
+                                                      {{rule.rulesetName}}
+                                                  </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                      </td>                                       
                                       <td>
                                         <div class="list flex-containers ml3" style="width:300px;">
                                           <div class=" list-item-0  inlb">
