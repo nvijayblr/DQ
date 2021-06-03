@@ -124,11 +124,11 @@
 
                                     <tr class="step2" *ngIf="actionTabId === '2'">
                                       <td class="bd">
-                                        <div class="list flex-containers ml4">
-                                          <div class=" list-item-0  inlb sName">Ruleset Name</div>
+                                        <div class="list flex-containers ml4" *ngFor="let rule of data.rules;">
+                                          <div class=" list-item-0 inlb sName" >{{rule.rulesetName}}</div>
                                           <div class=" list-item-0  inlb" *ngIf="rights.includes('ADD_RULESET')">
                                             <button type="button" class="button3d btnPush btnBlueGreen addico"
-                                            (click)="createEditRuleset(data,'add')" matTooltip="Create Ruleset">
+                                            (click)="data.rulesetId=rule.rulesetId; createEditRuleset(data,'add')" matTooltip="Create Ruleset">
                                             <mat-icon>add</mat-icon>
                                             Create Ruleset
                                             </button>
@@ -136,7 +136,7 @@
                                           
                                           <div class=" list-item-0  inlb" *ngIf="rights.includes('UPDATE_RULESET')">
                                             <button type="button" class="button3d btnPush btnOrange addico"
-                                            (click)="createEditRuleset(data,'edit')" [disabled]="!data.rulesetId"  matTooltip="Edit Ruleset">
+                                            (click)="data.rulesetId=rule.rulesetId; createEditRuleset(data,'edit')" matTooltip="Edit Ruleset">
                                             <mat-icon>edit</mat-icon> Edit Ruleset
                                             </button>
                                           </div>
@@ -147,7 +147,14 @@
                                               Disable
                                             </button>
                                           </div>
-                                          </div>
+                                        </div>
+                                        <div class="list flex-containers ml4" *ngIf="!data.rules.length">
+                                          <button type="button" class="button3d btnPush btnBlueGreen addico"
+                                          (click)="createEditRuleset(data,'add')" matTooltip="Create Ruleset">
+                                          <mat-icon>add</mat-icon>
+                                            Create Ruleset
+                                          </button>
+                                        </div>
                                       </td>
                                     </tr>
                                     <tr class="step3" *ngIf="actionTabId === '3'">

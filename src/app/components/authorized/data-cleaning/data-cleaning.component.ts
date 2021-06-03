@@ -53,6 +53,12 @@ export class DataCleaningComponent implements OnInit {
       value: ''
    };
 
+   duplicate: any = {
+      sourcepath: '',
+      column_name: '',
+      columns: []
+   };
+
    analysis: any = {};
 
    isPreviewLoaded = false;
@@ -140,6 +146,7 @@ export class DataCleaningComponent implements OnInit {
          this.mask.sourcepath = this.source.templateSourcePath;
          this.impute.sourcepath = this.source.templateSourcePath;
          this.delete.sourcepath = this.source.templateSourcePath;
+         this.duplicate.sourcepath = this.source.templateSourcePath;
          this.loadProfile(this.source);
       }
    }, 10);
@@ -152,34 +159,46 @@ export class DataCleaningComponent implements OnInit {
       this.mask.column = profile.column;
       this.impute.column = profile.column;
       this.delete.column_name = profile.column;
+      this.duplicate.column_name = profile.column;
    }
 
-  loadProfile(source, profile = '') {
-     this.isLoading = true;
-     this.loaderMsg = 'Loading Profile...';
-     const payload = {
-      sourcepath: source.templateSourcePath
-   };
-     this.http.getProfiles(payload).subscribe((result: any) => {
-      this.profiles = result.profile ? result.profile : [];
-      if (this.profiles.length) {
-         if (profile) {
-            this.changeProfile(profile);
-         } else {
-            this.changeProfile(this.profiles[0]);
+   loadProfile(source, profile = '') {
+      this.isLoading = true;
+      this.loaderMsg = 'Loading Profile...';
+      const payload = {
+         sourcepath: source.templateSourcePath
+      };
+      this.profiles = [];
+      this.http.getProfiles(payload).subscribe((result: any) => {
+         this.profiles = result.profile ? result.profile : [];
+         if (this.profiles.length) {
+            if (profile) {
+               this.changeProfile(profile);
+            } else {
+               this.changeProfile(this.profiles[0]);
+            }
          }
-      }
-      this.isLoading = false;
-   }, (error) => {
-      this.isLoading = false;
-   });
+         this.isLoading = false;
+      }, (error) => {
+         this.isLoading = false;
+      });
   }
+
+   updateSourcePath(path) {
+      this.source.templateSourcePath = path;
+      this.mask.sourcepath = path;
+      this.impute.sourcepath = path;
+      this.delete.sourcepath = path;
+      const profileCopy = {...this.profile};
+      this.profile = {};
+      this.loadProfile(this.source, profileCopy);
+   }
 
    imputeColumns(datatype) {
       this.impute.column_data_type = datatype;
       this.impute = {
          ...this.impute,
-         sourceFileName: 'flight-abc',
+         sourceFileName: this.impute.sourcepath,
          sourceId: this.analysis.sourceId,
          uploadId: this.analysis.recentsourceUpload.uploadId,
          rulesetId: this.analysis.rulesetId,
@@ -189,6 +208,9 @@ export class DataCleaningComponent implements OnInit {
       this.loaderMsg = 'Imputing columns...';
       this.http.imputeColumnsReq(this.impute).subscribe((result: any) => {
          this.isLoading = false;
+         if (result.outputpath) {
+            this.updateSourcePath(result.outputpath);
+         }
          // this.loadProfile(this.source, this.profile);
          alert('Impution has been successfully completed.');
       }, (error) => {
@@ -216,9 +238,15 @@ export class DataCleaningComponent implements OnInit {
       this.isLoading = true;
       this.loaderMsg = 'Deleting duplicate records...';
       const payload = {
+         sourcepath: this.source.templateSourcePath,
          action: 'remove_duplicates' ,
-         select_cols: '',
-         keep: 'first'
+         select_cols: this.duplicate.columns.length ? this.duplicate.columns : '',
+         keep: 'first',
+         sourceFileName: this.impute.sourcepath,
+         sourceId: this.analysis.sourceId,
+         uploadId: this.analysis.recentsourceUpload.uploadId,
+         rulesetId: this.analysis.rulesetId,
+         uploadDate: this.analysis.recentsourceUpload.uploadDate,
       };
       this.http.deleteDuplicatesReq(payload).subscribe((result: any) => {
          this.isLoading = false;
@@ -233,8 +261,13 @@ export class DataCleaningComponent implements OnInit {
          duplicate: {
             sourcepath: this.source.templateSourcePath,
             action: 'preview' ,
-            select_cols: [this.profile.column],
-            keep: ''
+            select_cols: this.duplicate.columns.length ? this.duplicate.columns : '',
+            keep: '',
+            sourceFileName: this.impute.sourcepath,
+            sourceId: this.analysis.sourceId,
+            uploadId: this.analysis.recentsourceUpload.uploadId,
+            rulesetId: this.analysis.rulesetId,
+            uploadDate: this.analysis.recentsourceUpload.uploadDate,
          },
          mask: {
             sourcepath: this.source.templateSourcePath,

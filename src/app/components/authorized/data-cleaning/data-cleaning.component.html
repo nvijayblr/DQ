@@ -60,6 +60,12 @@
                 <mat-tab label="Duplicate Analysis">
                   <div class="impute-wrapper">
                     <h5 class="sub-title-label">Dulicate Data</h5>
+                    <mat-form-field appearance="fill" class="mft">
+                      <mat-select placeholder="Select Columns" multiple [(ngModel)]="duplicate.columns">
+                        <mat-option *ngFor="let profile of profiles" [value]="profile.column">{{profile.column}})</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+
                     <div class="form-row">
                         <button 
                           type="button" 
@@ -169,7 +175,7 @@
           </mat-card>
 
            <div class="lft-attr">
-              <mat-card class="bg-violet">
+            <mat-card class="bg-violet">
               <h4 class="attr-tite">Attribute Summary <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
               <div class="records">
                  <span>records</span>

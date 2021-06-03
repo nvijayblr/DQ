@@ -163,7 +163,7 @@ export class AnalysisComponent implements OnInit {
       this.showAnalysisByKey = true;
       this.isLoadingDetails = true;
       this.selectedKey = keyname;
-      this.launchAnalysisByKeyDate(this.selectedKey, this.uploadId);
+      this.launchAnalysisByKeyDate('', this.uploadId);
    }
 
    launchAnalysisByKeyDate(keyname, uploadId) {
@@ -185,7 +185,9 @@ export class AnalysisComponent implements OnInit {
             this.gotoDashboard();
             return;
          }
-         this.analyseKeyData = result ? result : [];
+         this.analyseKeyData = result.results ? result.results : [];
+         this.selectedKey = result.keyname ? result.keyname : this.selectedKey;
+         this.selectedCDE = this.selectedKey;
          this.analysisKeys = [];
          const analyseRowItem = (this.analyseKeyData && this.analyseKeyData.length) ? this.analyseKeyData[0] : [];
          const chartData = {
