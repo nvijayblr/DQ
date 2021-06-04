@@ -38,12 +38,14 @@ export class DataCleaningComponent implements OnInit {
       value : ''
    };
 
+   operators = ['', '=', '>', '>=', '<', '<='];
    delete: any = {
       sourcepath: '',
       type: 'column',
       category: 'col_nan',
       column_name: '',
       values: '',
+      formula: {operator1 : '=', cond_value1 : '', operator2 : '', cond_value2 : ''},
       threshold : 50
    };
 
@@ -56,8 +58,20 @@ export class DataCleaningComponent implements OnInit {
    duplicate: any = {
       sourcepath: '',
       column_name: '',
-      columns: []
+      columns: [],
+      option: 'all'
    };
+
+   profileSummary = {
+      sourcepath: '',
+      records: '',
+      numeric: 0,
+      alphabetic: 0,
+      alphanumeric: 0,
+      nullcounts: 0,
+      duplicates: 0
+   };
+
 
    analysis: any = {};
 
@@ -134,9 +148,6 @@ export class DataCleaningComponent implements OnInit {
      ]
   };
 
-
-
-
   ngOnInit() {
    this.isLoading = true;
    setTimeout(() => {
@@ -147,6 +158,7 @@ export class DataCleaningComponent implements OnInit {
          this.impute.sourcepath = this.source.templateSourcePath;
          this.delete.sourcepath = this.source.templateSourcePath;
          this.duplicate.sourcepath = this.source.templateSourcePath;
+         this.profileSummary.sourcepath = this.source.templateSourcePath;
          this.loadProfile(this.source);
       }
    }, 10);
@@ -178,6 +190,23 @@ export class DataCleaningComponent implements OnInit {
                this.changeProfile(this.profiles[0]);
             }
          }
+         this.profileSummary.duplicates = result.nr_duplicates ? result.nr_duplicates : 0;
+         this.profiles.map(data => {
+            if (data.attributeSummary) {
+               this.profileSummary.records = data.attributeSummary.records ? data.attributeSummary.records : this.profileSummary.records;
+               if (data.attributeSummary.dataType === 'Numeric') {
+                  this.profileSummary.numeric = this.profileSummary.numeric + 1;
+               }
+               if (data.attributeSummary.dataType === 'Alphabetic') {
+                  this.profileSummary.alphabetic = this.profileSummary.alphabetic + 1;
+               }
+               if (data.attributeSummary.dataType === 'Alphanumeric') {
+                  this.profileSummary.alphanumeric = this.profileSummary.alphanumeric + 1;
+               }
+               this.profileSummary.nullcounts = this.profileSummary.nullcounts + parseInt(data.attributeSummary.null_records, 0);
+            }
+         });
+
          this.isLoading = false;
       }, (error) => {
          this.isLoading = false;
@@ -256,7 +285,10 @@ export class DataCleaningComponent implements OnInit {
       });
    }
 
-   loadDuplicatePreview(type, mask = '') {
+   loadPreview(type, mask = '') {
+      this.delete.formula.cond_value1 = this.delete.formula.cond_value1 ? this.delete.formula.cond_value1 : '';
+      this.delete.formula.cond_value2 = this.delete.formula.cond_value2 ? this.delete.formula.cond_value2 : '';
+
       const payloads = {
          duplicate: {
             sourcepath: this.source.templateSourcePath,
@@ -277,6 +309,15 @@ export class DataCleaningComponent implements OnInit {
          nan: {
             sourcepath: this.source.templateSourcePath,
             column_name: this.profile.column,
+         },
+         data_remove: {
+            sourcepath: this.source.templateSourcePath,
+            category: this.delete.category,
+            column_name: this.delete.category === 'col_with_value' ? this.delete.column_name : '',
+            values: this.delete.values ? [this.delete.values] : '',
+            formula: this.delete.values ? '' : this.delete.formula,
+            threshold : (this.delete.category === 'col_nan' || this.delete.category === 'row_nan')
+                           ? (this.delete.threshold / 100) : ''
          }
       };
       this.loadProfilePreview(payloads[type], type);
@@ -323,6 +364,14 @@ export class DataCleaningComponent implements OnInit {
       }
       this.isPreviewLoaded = true;
       this.isPreviewLoading = false;
+    }
+
+    changeRemoveCategory(type) {
+      if (type === 'column') {
+         this.delete.category = 'col_nan';
+      } else {
+         this.delete.category = 'row_nan';
+      }
     }
 
    // ngAfterViewInit(){

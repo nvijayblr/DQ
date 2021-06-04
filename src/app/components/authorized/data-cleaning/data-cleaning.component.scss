@@ -807,7 +807,10 @@ table{
   width: 250px;
   display: inline-block;
 }
-
+.mft-200 {
+  width: 200px;
+  display: inline-block;
+}
 // buttons
 
 .button3d {
@@ -975,4 +978,10 @@ h5.sub-title-label {
   margin-left: 0 !important;
   margin-right: 0 !important;
   width: 100%;
+}
+.formula-section {
+  .mat-form-field {
+    width: 100px;
+    margin-right: 7px;
+  }
 }

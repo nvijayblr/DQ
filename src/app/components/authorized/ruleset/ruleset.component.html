@@ -179,6 +179,12 @@
                                  </mat-form-field>
                               </div>
                            </div>
+
+                           <div class="rules-loading-message" *ngIf="isRulesLoading">
+                              Loading {{rulesList.length}} of {{selectedColumnsCopy.length + rulesList.length}} Complated
+                              <mat-spinner diameter="20"></mat-spinner>
+                          </div>
+
                            <div class="category-list-wrapper clearfix" *ngIf="showCDECar && !isLoading">
                               <div class="left-arrow">
                                  <button mat-stroked-button class="gv-secondary-btn primary-btn-gray prev-next-btn" (click)="owlCar.prev()">
@@ -285,7 +291,7 @@
                               </div>
                               <div class="list-item-2 outline act-btn-wrapper1">
                                  <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn" 
-                                 [disabled]="!afControls.rulesetName.value || !afControls.columnRules.value.length || !afControls.startDate.value || !afControls.endDate.value"
+                                 [disabled]="isRulesLoading || !afControls.rulesetName.value || !afControls.columnRules.value.length || !afControls.startDate.value || !afControls.endDate.value"
                                  (click)="generatePreview();">Next <mat-icon>navigate_next</mat-icon></button>
                               </div>
                               </div>

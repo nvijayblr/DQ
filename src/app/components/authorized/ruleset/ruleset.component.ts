@@ -115,6 +115,9 @@ export class RulesetComponent implements OnInit {
   sourceList = [];
   selectedSource: any = {};
   rulesList = [];
+  isRulesLoading = false;
+  initRuleValue = false;
+  selectedColumnsCopy: any = [];
   showCDECar = false;
   analyseData = [];
   sourceId = '';
@@ -456,7 +459,10 @@ export class RulesetComponent implements OnInit {
     // TODO: End Needs to update the logic here.
     const selectedRuleColumns = this.afControls.columnRules as FormArray;
     this.rulesList.map(rule => {
-      selectedRuleColumns.push(this.intiFormArrays('columnRules', rule));
+      if (!rule.isAdded) {
+        selectedRuleColumns.push(this.intiFormArrays('columnRules', rule));
+      }
+      rule.isAdded = true;
     });
   }
 
@@ -571,25 +577,53 @@ export class RulesetComponent implements OnInit {
       });
     }
 
+    this.afControls.columnRules = this.fb.array([]);
+
+    // Rules Sync loading Logic
+    this.isRulesLoading = true;
+    this.initRuleValue = true;
+    this.selectedColumnsCopy = [...payload.selectedColumns];
+
+    if (this.selectedColumnsCopy.length) {
+      payload.selectedColumns = this.selectedColumnsCopy.slice(0, 1);
+    }
+    this.getColumnnRuleBySync(this.selectedColumnsCopy, payload);
 
     // Clear the columns array
-    this.afControls.columnRules = this.fb.array([]);
+  }
+
+  getColumnnRuleBySync = (selectedColumns, payload) => {
+    this.getColumnnRuleRequest(payload, () => {
+      selectedColumns.splice(0, 1);
+      console.log(selectedColumns.length);
+      if (selectedColumns.length) {
+        payload.selectedColumns = selectedColumns.slice(0, 1);
+        this.getColumnnRuleBySync(selectedColumns, payload);
+      } else {
+        this.isRulesLoading = false;
+      }
+    });
+  }
+
+  getColumnnRuleRequest = (payload, callBack) => {
     this.http.getColumnsRules(payload).subscribe((result: any) => {
       this.isLoading = false;
       this.rulesList = this.rulesList.concat(result);
-      if (this.rulesList.length) {
+      console.log(this.rulesList);
+      if (this.rulesList.length && this.initRuleValue) {
         const firstRule = this.rulesList[0];
         this.selectedRuleColumn = firstRule.column;
         this.cdeStatistics = (firstRule.statistics && firstRule.statistics.length) ? firstRule.statistics[0] : {};
         this.correlationSummary = firstRule.correlationSummary ? firstRule.correlationSummary : {};
+        this.initRuleValue = false;
       }
-      this.initFormulaEditor(this.rulesList);
       this.initRulesFormArray();
+      callBack();
     }, (error) => {
       this.isLoading = false;
     });
-  }
 
+  }
 
 
   generatePreview() {

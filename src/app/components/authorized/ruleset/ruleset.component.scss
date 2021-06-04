@@ -1025,5 +1025,12 @@ tr:nth-child(odd) {background: #f0f7f7}
     background: rgb(180, 86, 117);
   }
 }
-
-
+.rules-loading-message {
+  text-align: right;
+  margin-right: 52px;
+  .mat-spinner {
+    text-align: right;
+    float: right;
+    margin-left: 10px;
+  }
+}

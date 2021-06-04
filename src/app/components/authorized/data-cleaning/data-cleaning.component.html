@@ -1,5 +1,39 @@
 <section class="page-body home-bodys wts">
   <div class="container">
+
+    <mat-card class="bg-violet">
+      <h4 class="attr-tite">Summary - {{profileSummary.sourcepath}}</h4>
+      <div class="records">
+         <span>Records</span>
+         {{profileSummary.records}}
+      </div>
+      <div class="dotDiv"></div>
+      <div class="records">
+        <span>Nr - Numeric Columns</span>
+        {{profileSummary.numeric}}
+      </div>
+      <div class="dotDiv"></div>
+      <div class="records">
+        <span>Nr - Alphabetic Columns</span>
+        {{profileSummary.alphabetic}}
+      </div>
+      <div class="dotDiv"></div>
+      <div class="records">
+        <span>Nr - Alphanumeric Columns</span>
+        {{profileSummary.alphanumeric}}
+      </div>
+      <div class="dotDiv"></div>
+      <div class="records">
+        <span>Duplicates</span>
+        {{profileSummary.duplicates}}
+      </div>
+      <div class="dotDiv"></div>
+      <div class="records">
+        <span>Total Null Counts</span>
+        {{profileSummary.nullcounts}}
+      </div>
+      <div class="dotDiv"></div>
+    </mat-card>
      <h1 class="attTitle">Data Cleaning  - {{profile.column}}</h1>
      <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
     <div class="profile-wrapper">
@@ -60,16 +94,24 @@
                 <mat-tab label="Duplicate Analysis">
                   <div class="impute-wrapper">
                     <h5 class="sub-title-label">Dulicate Data</h5>
-                    <mat-form-field appearance="fill" class="mft">
-                      <mat-select placeholder="Select Columns" multiple [(ngModel)]="duplicate.columns">
-                        <mat-option *ngFor="let profile of profiles" [value]="profile.column">{{profile.column}})</mat-option>
-                      </mat-select>
-                    </mat-form-field>
+                    <div style="margin-top: 10px;">
+                      <mat-radio-group [(ngModel)]="duplicate.option" (ngModelChange)="duplicate.columns = []">
+                        <mat-radio-button value="all">All Columns</mat-radio-button>
+                        <mat-radio-button value="selected">Specific Column</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                    <div style="margin-top: 10px;">
+                      <mat-form-field appearance="fill" class="mft" *ngIf="duplicate.option === 'selected'">
+                        <mat-select placeholder="Select Columns" multiple [(ngModel)]="duplicate.columns">
+                          <mat-option *ngFor="let profile of profiles" [value]="profile.column">{{profile.column}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
 
                     <div class="form-row">
                         <button 
                           type="button" 
-                          (click)="loadDuplicatePreview('duplicate')"
+                          (click)="loadPreview('duplicate')"
                           class="button3d btnPush btnPurple addico w-t">
                           <mat-icon> visibility</mat-icon> Preview 
                         </button>
@@ -95,7 +137,7 @@
                       <button 
                         type="button" 
                         [disabled]="!mask.value"
-                        (click)="loadDuplicatePreview('mask', mask.value)"
+                        (click)="loadPreview('mask', mask.value)"
                         class="button3d btnPush btnPurple addico w-t">
                         <mat-icon> visibility</mat-icon> Preview 
                       </button>
@@ -107,7 +149,7 @@
                   <div class="impute-wrapper">
                     <h5 class="sub-title-label">Delete Column / Row</h5>
                     <div class="form-row">
-                      <mat-radio-group [(ngModel)]="delete.type">
+                      <mat-radio-group [(ngModel)]="delete.type" (ngModelChange)="changeRemoveCategory(delete.type)">
                         <mat-radio-button [checked]="true" value="column">Column</mat-radio-button>
                         <mat-radio-button value="custom" value="row">Row</mat-radio-button>
                       </mat-radio-group>
@@ -117,25 +159,61 @@
                       <mat-radio-group [(ngModel)]="delete.category">
                         <mat-radio-button [checked]="true" value="col_nan">NaN</mat-radio-button>
                         <mat-radio-button value="custom" value="col_with_value">Value</mat-radio-button>
-                        <mat-form-field appearance="fill" class="mft2" *ngIf="delete.category === 'col_with_value'">
-                          <mat-label>Custom Value</mat-label>
-                          <input matInput placeholder="" value="" [(ngModel)]="delete.values">
-                        </mat-form-field>
+
+                        <div *ngIf="delete.category === 'col_with_value'" style="margin-top: 10px;">
+                          <mat-form-field appearance="fill" class="mft">
+                            <mat-select placeholder="Select Columns" [(ngModel)]="delete.column_name" disabled>
+                              <mat-option *ngFor="let profile of profiles" [value]="profile.column">{{profile.column}} - {{profile.attributeSummary?.dataType}}</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+
+                        <div *ngIf="delete.category === 'col_with_value' && profile.attributeSummary?.dataType === 'Alphabetic' || profile.attributeSummary?.dataType === 'Alphanumeric'">
+                          <mat-form-field appearance="fill" class="mft-200" style="width: 250px;">
+                            <mat-label>Value</mat-label>
+                            <input 
+                              matInput placeholder="" value="" 
+                              [(ngModel)]="delete.values"
+                              (ngModelChange)="delete.formula.cond_value1=''; delete.formula.cond_value2=''">
+                          </mat-form-field>
+                        </div>
+    
+                        <div style="margin-top: 10px;" class="formula-section" *ngIf="delete.category === 'col_with_value' && profile.attributeSummary?.dataType === 'Numeric'">
+                          <mat-form-field appearance="fill" class="mft">
+                            <mat-select placeholder="Operator" [(ngModel)]="delete.formula.operator1" (ngModelChange)="delete.values=''">
+                              <mat-option *ngFor="let operator of operators" [value]="operator">{{operator}}</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                          <mat-form-field appearance="fill" class="mft2">
+                            <mat-label>Value</mat-label>
+                            <input matInput placeholder="" type="number" value="" [(ngModel)]="delete.formula.cond_value1" (ngModelChange)="delete.values=''">
+                          </mat-form-field>
+
+                          <mat-form-field appearance="fill" class="mft">
+                            <mat-select placeholder="Operator" [(ngModel)]="delete.formula.operator2" (ngModelChange)="delete.values=''">
+                              <mat-option *ngFor="let operator of operators" [value]="operator">{{operator}}</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                          <mat-form-field appearance="fill" class="mft2">
+                            <mat-label>Value</mat-label>
+                            <input matInput placeholder="" type="number" value="" [(ngModel)]="delete.formula.cond_value2" (ngModelChange)="delete.values=''">
+                          </mat-form-field>
+                        </div>
                       </mat-radio-group>
                     </div>
 
                     <div class="form-row" *ngIf="delete.type === 'row'">
                       <mat-radio-group [(ngModel)]="delete.category">
                         <mat-radio-button [checked]="true" value="row_nan">NaN</mat-radio-button>
-                        <mat-radio-button value="custom" value="">Value</mat-radio-button>
+                        <!-- <mat-radio-button value="custom" value="">Value</mat-radio-button>
                         <mat-form-field appearance="fill" class="mft2" *ngIf="delete.category === ''">
                           <mat-label>Custom Value</mat-label>
                           <input matInput placeholder="" value="" [(ngModel)]="delete.values">
-                        </mat-form-field>
+                        </mat-form-field> -->
                       </mat-radio-group>
                     </div>
 
-                    <div class="form-rows" *ngIf="delete.category === 'col_nan' || delete.category === 'row_nan'">
+                    <div class="form-rows" style="margin-top: 10px;" *ngIf="delete.category === 'col_nan' || delete.category === 'row_nan'">
                       <span>Threshold : {{delete.threshold}}%</span>
                       <div class="form-row">
                         <mat-slider thumbLabel min="0" max="100" step="1" [(ngModel)]="delete.threshold"></mat-slider>
@@ -143,6 +221,12 @@
                     </div>
 
                     <div class="form-row">
+                      <button 
+                        type="button" 
+                        (click)="loadPreview('data_remove')"
+                        class="button3d btnPush btnPurple addico w-t">
+                        <mat-icon> visibility</mat-icon> Preview 
+                      </button>
                       <button 
                         type="button" 
                         (click)="deleteColumnsRows()"
@@ -189,7 +273,7 @@
               <div class="dotDiv"></div>
               <div class="records">
                 <span>Null Counts</span>
-                <a href="javascript: void(0)" *ngIf="profile.attributeSummary && profile.attributeSummary.null_records" (click)="loadDuplicatePreview('nan')">
+                <a href="javascript: void(0)" *ngIf="profile.attributeSummary && profile.attributeSummary.null_records" (click)="loadPreview('nan')">
                   {{profile.attributeSummary?.null_records}}
                 </a>
                 <div *ngIf="profile.attributeSummary && !profile.attributeSummary.null_records">
@@ -288,7 +372,7 @@
           
                       <tr *ngFor="let mask of profile.maskAnalysis">
                         <td>
-                          <a href="javascript: void(0)" (click)="loadDuplicatePreview('mask', mask.unique_values)">
+                          <a href="javascript: void(0)" (click)="loadPreview('mask', mask.unique_values)">
                             {{mask.unique_values}}
                           </a>
                         </td>

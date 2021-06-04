@@ -356,6 +356,16 @@ export class HttpService  {
     );
   }
 
+  dataRemovePreviewReq(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/data_remove_preview`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
   deleteColumnsRowsReq(payload): Observable<any> {
     return this.http.post<any>(`${this.rootUrl}/api/data_remove`, payload).pipe(
       tap((res) => {
@@ -386,6 +396,9 @@ export class HttpService  {
     }
     if (type === 'nan') {
       typeUrl = 'nan_df_preview';
+    }
+    if (type === 'data_remove') {
+      typeUrl = 'data_remove_preview';
     }
     return this.http.post<any>(`${this.rootUrl}/api/${typeUrl}`, payload).pipe(
       tap((res) => {
