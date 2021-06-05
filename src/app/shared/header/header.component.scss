@@ -33,10 +33,10 @@
     box-shadow: rgba(57, 73, 76, 0.35) 0px 1px 6px 0px;
   }
   .header-top {
-    height: 80px;
-    line-height: 80px;
-    opacity: 1;
-    transition: opacity .25s ease-out, height .15s ease, background-color .15s ease;
+    height: 50px;
+    line-height: 50px;
+    // opacity: 1;
+    // transition: opacity .25s ease-out, height .15s ease, background-color .15s ease;
     border-bottom: 1px solid #ebe9e9;
     .logo-wrapper {
       color: #ffffff;
@@ -47,6 +47,15 @@
          /* display: inline-block; */
          padding-left: 10px;
          vertical-align: top;
+         font-family: 'open-sans-bold';
+         color: #efa800;
+         .iLogo{
+          font-size: 18px;
+          padding-left: 0px;
+          line-height: 51px;
+          font-family: 'open-sans-condensed-bold';
+          color: #ffffff;
+         }
          
       }
       .logo-title {
@@ -278,18 +287,19 @@
     }
   }
 }
+
 .main-nav {
   ul{
     position: relative;
-    top: 30px;
+    top: 15px;
 }
   
  li {
    float: left!important;
-   border-right: 1px solid #a396e1;
+   border-right: 1px solid #efa800;
    padding-right: 15px;
-   height: 20px;
-   font-size: 16px;
+   height: 14px;
+   font-size: 13px;
    cursor: pointer;
    &:last-child  {
     border-width: 0;
@@ -308,7 +318,7 @@
        transition: 0.25s ease;
      }
      &.active {
-        border-bottom: 3px solid #a396e1;
+        border-bottom: 3px solid #efa800;
      }
    }
    &:last-child a {
@@ -318,7 +328,7 @@
 }
 .uf-c {
   display: inline-block;
-  color: #a396e1;
+  color: #efa800;
   text-decoration: none;
 }
 
@@ -327,7 +337,7 @@
   display: block;
   width: 0;
   height: 2px;
-  background: #a396e1;
+  background: #efa800;
   transition: width .3s;
   position: relative;
   top:3px;
@@ -336,4 +346,8 @@
 .uf-c:hover::after {
   width: 100%;
   //transition: width .3s;
+}
+
+.fa{
+  font-size: 18px;
 }

@@ -12,13 +12,18 @@
               (selectionChange)="stepperSelectionChange($event)"
               (animationDone)="stepperAnimationDone()">
               <mat-step>
-                  <ng-template matStepLabel>Source Data</ng-template>
-                  <mat-card class="border no-rounded list shrare-post pbl">
-                    <h1 class="share-post-title">Create Your<span class="yellow"> Source</span></h1>
+                  <ng-template matStepLabel>Source Data</ng-template>                  
+                    
                       <div class="form-continer">
+                        <mat-card class="border no-rounded list shrare-post pbl card1">
+                          <h1 class="share-post-title">Create Your<span class="yellow"> Source</span></h1>
                         <div class="list flex-containers flex-start wrap">
-                        <div class="list-item-2 outline wth">                          
-                              <mat-label>Source Data<span class="red">*</span>&nbsp;<span *ngIf="selectedType">({{selectedType}})</span></mat-label>
+                        <div class="list-item-2 outline wth">
+                          <div>
+                          <div class="srcData">
+                            <mat-label>Source Data<span class="red">*</span>&nbsp;<span *ngIf="selectedType">({{selectedType}})</span></mat-label>
+                          </div>                          
+                            <div class="cfile"> 
                               <app-image-cropper 
                                 *ngIf="!isEditMode"
                                 [imageType]="'Source'"
@@ -33,6 +38,8 @@
                               </h4>
                               <mat-error class="nerr" *ngIf="!flError">Please Select a Correct File Type</mat-error>
                               <mat-error class="nerr ftw" *ngIf="selFileNameErr && flError">Please Select a File</mat-error>
+                            </div>
+                          </div>
                               <mat-label class="sub-title">Source Name<span class="red">*</span></mat-label>
                               <mat-form-field appearance="fill">
                                 <input matInput placeholder="Source Name" formControlName="sourceDataName" maxlength="50" autocomplete="off"/>
@@ -42,30 +49,33 @@
                               <mat-form-field appearance="fill">
                                 <input matInput placeholder="Source Description" formControlName="sourceDataDescription" maxlength="250" autocomplete="off"/>
                               </mat-form-field>
-
-                              <mat-label class="mtop sub-title">Source Category</mat-label> 
-                              <mat-form-field appearance="fill">
-                                <mat-label>Category</mat-label>
-                                <mat-select>
-                                  <mat-option value="Category">
-                                    Category
-                                  </mat-option>
-                                  <mat-option value="Category1">
-                                    Category1
-                                  </mat-option>
-                                </mat-select>
-                              </mat-form-field>
-                            
-                            <mat-label class="mtop sub-title">Data Owner</mat-label> 
-                            <mat-form-field appearance="fill">
-                              <mat-select [disableOptionCentering]="true" #select1 placeholder="Auto Focus">
-                                <mat-select-filter *ngIf="select1.focused" [array]="variables" (filteredReturn)="filteredList2 =$event"></mat-select-filter>
-                                <mat-option *ngFor="let item of filteredList2" [value]="item">
-                                  {{item}}
-                                </mat-option>
-                              </mat-select>
-                            </mat-form-field>
-                            
+                              <div class="list-item-2 outline split">
+                                <mat-label class="mtop sub-title">Source Category</mat-label> 
+                                <mat-form-field appearance="fill">
+                                  <mat-label>Category</mat-label>
+                                  <mat-select>
+                                    <mat-option value="Category">
+                                      Category
+                                    </mat-option>
+                                    <mat-option value="Category1">
+                                      Category1
+                                    </mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                              </div>
+                              <div class="list-item-2 outline splitR">
+                                <mat-label class="mtop sub-title">Data Owner</mat-label> 
+                                  <mat-form-field appearance="fill">
+                                    <mat-select [disableOptionCentering]="true" #select1 placeholder="Auto Focus">
+                                      <mat-select-filter *ngIf="select1.focused" [array]="variables" (filteredReturn)="filteredList2 =$event"></mat-select-filter>
+                                      <mat-option *ngFor="let item of filteredList2" [value]="item">
+                                        {{item}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                              </div>
+                                                      
+                            <div class="list-item-2 outline split">
                             <mat-label class="mtop sub-title">Data Steward</mat-label> 
                               <mat-form-field appearance="fill">                                                   
                               <mat-select #select3 multiple placeholder="Using Groups" [(value)]="selected">
@@ -78,7 +88,8 @@
                                 </mat-optgroup>                                               
                               </mat-select>  
                             </mat-form-field>
-                            
+                            </div>
+                            <div class="list-item-2 outline splitR">
                             <mat-label class="mtop sub-title">Data User</mat-label> 
                               <mat-form-field appearance="fill">                                                   
                               <mat-select #select4 multiple placeholder="Using Groups" [(value)]="selected1">
@@ -91,14 +102,17 @@
                                 </mat-optgroup>                                               
                               </mat-select>  
                             </mat-form-field>
-
+                          </div>
                          </div>
 
-                         <div class="or-spacer-vertical left">
+                         <!-- <div class="or-spacer-vertical left">
                            <div class="mask"></div>
+                         </div> -->
                          </div>
-
-                          <div class="list-item-3 outline">
+                         </mat-card>
+                         <mat-card class="border no-rounded list shrare-post pbl card2">
+                         <div class="list flex-containers flex-start wrap">
+                          <div class="list-item-3 outline cat">
                            <div class="rule-selection-wrapper">
                               <div class="list flex-containers flex-start wrap cde-fields-wrp">
                                 <div class="list-item-1 outline">
@@ -158,23 +172,24 @@
                               </div>
                             </div>  
                           </div>
-
+                          <div class="bdr"></div>
+                                          
+                          <div class="act-btn-wrapper m1t">
+                              <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"
+                             
+                              (click)="validateSourceNameAndNext()">Next <mat-icon>navigate_next</mat-icon></button>
+      
+                              <!-- <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"
+                              [disabled]="!afControls.sourceDataName.value || !sourceSettings.frequency || !sourceSettings.uploadDate || !flError"
+                              (click)="validateSourceNameAndNext()">Next <mat-icon>navigate_next</mat-icon></button> -->
+                          </div>
                           
                         </div>
+                      </mat-card>
                       </div>
                       
-                      <div class="bdr"></div>
-                                          
-                    <div class="act-btn-wrapper m1t">
-                        <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"
-                       
-                        (click)="validateSourceNameAndNext()">Next <mat-icon>navigate_next</mat-icon></button>
-
-                        <!-- <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"
-                        [disabled]="!afControls.sourceDataName.value || !sourceSettings.frequency || !sourceSettings.uploadDate || !flError"
-                        (click)="validateSourceNameAndNext()">Next <mat-icon>navigate_next</mat-icon></button> -->
-                    </div>
-                  </mat-card>
+                      
+                  
                 </mat-step>
 
                 <mat-step>

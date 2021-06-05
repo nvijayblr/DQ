@@ -611,6 +611,11 @@ color: #C73D2F;
   .mat-badge-active.mat-badge-content {
     font-size: 10px;
     font-weight: 400;
+    width: 19px;
+    height: 19px;
+    line-height: 19px;
+    top: -9px;
+    right: -9px;
   }
 }
 
@@ -1197,7 +1202,7 @@ mat-paginator.mat-paginator {
     background-color: #afafaf;
   }
   .mat-step-label {
-    font-size: 16px;
+    font-size: 14px;
     //font-weight: 400;
     font-family: 'open-sans-condensed-bold';
   }
@@ -1247,8 +1252,9 @@ mat-paginator.mat-paginator {
    display: none;
 }
 .source-preview-card {
-  margin-right: 24px !important;
-  margin-left: 24px !important;
+  margin-right: 0px !important;
+  margin-left: 0px !important;
+  margin-top: -10px!important;
   .ag-grid-wrapper {
     height: 330px;
   }

@@ -4,8 +4,8 @@
        <div class="row">
          <div class="col-xs-12 col-sm-4 col-md-3">
            <a class="logo-wrapper" routerLink="/auth/home">
-            <img class="logo" src="assets/images/ai-logo.png" alt="AI">
-            <span>Data Driven</span>
+            <!-- <img class="logo" src="assets/images/ai-logo.png" alt="AI"> -->
+            <span>AI <span class="iLogo">Data Driven</span></span>
              <!-- <img class="logo" src="assets/images/logo-vertical.svg" alt="Moneyism"> -->
              <!-- <h4 class="logo-title">Know Your <span class="">Data</span></h4> -->
            </a>
@@ -36,7 +36,7 @@
                <mat-icon>search</mat-icon>
              </button> -->
              <button mat-icon-button class="notification-menu notification-btn" (click)="drawer.toggle()">
-               <mat-icon matBadge="{{notificationsCount}}" matBadgeColor="warn">notifications</mat-icon>
+               <mat-icon class="fa" matBadge="{{notificationsCount}}" matBadgeColor="warn">notifications</mat-icon>
              </button>
  
              <button mat-icon-button [matMenuTriggerFor]="menu" [class.userimage]="user.path">
