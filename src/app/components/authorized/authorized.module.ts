@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
+import { MatSelectFilterModule } from 'mat-select-filter';
+import {MatSelectModule, MatFormFieldModule} from '@angular/material';
 import { Routes, RouterModule, CanActivate } from '@angular/router';
 import { AuthGuardService as AuthGaurd } from './../../services/auth-guard.service';
 import { SharedModule } from './../../shared/shared.module';
@@ -35,7 +37,10 @@ import { DataQualityComponent } from './data-quality/data-quality.component';
       NgxSliderModule,
     CommonModule,
     AuthorizedRoutingModule,
-     SharedModule
+     SharedModule,
+     MatSelectModule, 
+    MatFormFieldModule,
+    MatSelectFilterModule 
    ],
    exports: [AttributeDetailsComponent, CorrelationDetailsComponent]
 

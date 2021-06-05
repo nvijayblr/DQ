@@ -38,13 +38,60 @@
                                 <input matInput placeholder="Source Name" formControlName="sourceDataName" maxlength="50" autocomplete="off"/>
                               </mat-form-field>
                               <mat-error class="errSty" *ngIf="!afControls.sourceDataName.value && afControls.sourceDataName.touched">Please Enter Source Name</mat-error>
-                              <mat-label class="mtop sub-title">Source Description</mat-label>
-                          
-                              
+                              <mat-label class="mtop sub-title">Source Description</mat-label>                                                    
                               <mat-form-field appearance="fill">
                                 <input matInput placeholder="Source Description" formControlName="sourceDataDescription" maxlength="250" autocomplete="off"/>
                               </mat-form-field>
+
+                              <mat-label class="mtop sub-title">Source Category</mat-label> 
+                              <mat-form-field appearance="fill">
+                                <mat-label>Category</mat-label>
+                                <mat-select>
+                                  <mat-option value="Category">
+                                    Category
+                                  </mat-option>
+                                  <mat-option value="Category1">
+                                    Category1
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
                             
+                            <mat-label class="mtop sub-title">Data Owner</mat-label> 
+                            <mat-form-field appearance="fill">
+                              <mat-select [disableOptionCentering]="true" #select1 placeholder="Auto Focus">
+                                <mat-select-filter *ngIf="select1.focused" [array]="variables" (filteredReturn)="filteredList2 =$event"></mat-select-filter>
+                                <mat-option *ngFor="let item of filteredList2" [value]="item">
+                                  {{item}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                            
+                            <mat-label class="mtop sub-title">Data Steward</mat-label> 
+                              <mat-form-field appearance="fill">                                                   
+                              <mat-select #select3 multiple placeholder="Using Groups" [(value)]="selected">
+                                <mat-select-filter *ngIf="select3.focused" [placeholder]="'Filter'" [array]="variablesGroups" hasGroup="true" groupArrayName="values"
+                                 displayMember="value" (filteredReturn)="groups=$event"></mat-select-filter>                          
+                                <mat-optgroup *ngFor="let group of groups" [label]="group.value">
+                                  <mat-option *ngFor="let option of group.values" [value]="option.id" color="accent">
+                                    {{ option.value }}
+                                  </mat-option>
+                                </mat-optgroup>                                               
+                              </mat-select>  
+                            </mat-form-field>
+                            
+                            <mat-label class="mtop sub-title">Data User</mat-label> 
+                              <mat-form-field appearance="fill">                                                   
+                              <mat-select #select4 multiple placeholder="Using Groups" [(value)]="selected1">
+                                <mat-select-filter *ngIf="select4.focused" [placeholder]="'Filter'" [array]="variablesGroups" hasGroup="true" groupArrayName="values"
+                                 displayMember="value" (filteredReturn)="groups=$event"></mat-select-filter>                          
+                                <mat-optgroup *ngFor="let group of groups" [label]="group.value">
+                                  <mat-option *ngFor="let option of group.values" [value]="option.id" color="accent">
+                                    {{ option.value }}
+                                  </mat-option>
+                                </mat-optgroup>                                               
+                              </mat-select>  
+                            </mat-form-field>
+
                          </div>
 
                          <div class="or-spacer-vertical left">
