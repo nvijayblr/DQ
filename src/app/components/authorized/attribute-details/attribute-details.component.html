@@ -1,14 +1,18 @@
 <section class="page-body home-bodys wts">
    <div class="container">
-      <h1 class="attTitle">Profile Summary</h1>
+      <!-- <h1 class="attTitle">Profile Summary</h1> -->
       <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
 
      <div class="profile-wrapper">
-        <div class="flex-containers">
+        <div class="flex-containers wht">
            <div class="list attribute-list">
+             <div class="srcTop"><mat-icon>widgets</mat-icon> Source List</div>
             <mat-list role="list" class="hideContainer" [class.show]="show">
                <mat-list-item role="listitem" *ngFor="let profile of profiles;" (click)="changeProfile(profile)" [class.active]="attrubute === profile.column">
-                  {{profile.column}}
+                 <span class="typIco" *ngIf="profile.attributeSummary?.dataType ==='Alphabetic' || profile.attributeSummary?.dataType ==='Alphanumeric'">T</span>
+                 <span class="typIco" *ngIf="profile.attributeSummary?.dataType ==='Numeric'">N</span>
+                  {{profile.column}} 
+                <mat-icon class="sAr">chevron_right</mat-icon> 
                </mat-list-item>
              </mat-list>
              <button class="moreBtn" (click)="show = !show">{{ show ? 'Show less'  : 'Show More'  }}
@@ -17,21 +21,21 @@
            <div class="attribute-details">                     
             <h1 class="share-post-title"> {{attrubute}} </h1>
             <div class="lft-attr">
-               <mat-card class="bg-violet">
-               <h4 class="attr-tite">Attribute Summary <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
+               <mat-card class="bg-violet mhgt">
+               <h4 class="attr-tite"> <span class="subT">Attribute Summary</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
                <div class="records">
-                  <span>records</span>
+                  <span><i class="fa fa-database" aria-hidden="true"></i> records</span>
                   {{profile.attributeSummary?.records}}
                </div>
                <div class="dotDiv"></div>
                <div class="records">
-                  <span>Data type</span>
+                  <span><i class="fa fa-file-code-o" aria-hidden="true"></i> Data type</span>
                   {{profile.attributeSummary?.dataType}}
                </div>
                </mat-card>
          
                <mat-card class="bg-magenta" *ngIf="profile.frequncyAnalysis && profile.frequncyAnalysis.length">
-                  <h4 class="attr-tite">Frequency Groups <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
+                  <h4 class="attr-tite"> <span class="subT">Frequency Groups</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
                   <div class="frequencyContainer" [class.frequencyShow]="frequencyShow">
                   <table>
                      <tr>
@@ -51,7 +55,7 @@
                </mat-card>
                  
                <mat-card class="bg-blue" *ngIf="profile.patternAnalysis && profile.patternAnalysis.length">
-                  <h4 class="attr-tite">Pattern Analysis <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
+                  <h4 class="attr-tite"> <span class="subT">Pattern Analysis</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
                   <div class="frequencyContainer" [class.patternShow]="patternShow">
                   <table>
                      <tr>
@@ -83,16 +87,14 @@
          
                   </div>                          
                </mat-card> -->
-               <mat-card class="honeydew" *ngIf="profile.LengthStatistics">
-                <h4 class="attr-tite">Length Statistics
-                   <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
-       
+               <mat-card class="honeydew mhgt1" *ngIf="profile.LengthStatistics">
+                   <h4 class="attr-tite"> <span class="subT">Length Statistics</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
                    <div class="custom-slider">
                       <ngx-slider [(value)]="profile.LengthStatistics.Min" [(highValue)]="profile.LengthStatistics.Max" [options]="options"></ngx-slider>
                    </div>
               </mat-card>
                <mat-card class="bg-green" *ngIf="profile.maskAnalysis && profile.maskAnalysis.length">
-                  <h4 class="attr-tite">Mask Analysis <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
+                  <h4 class="attr-tite"> <span class="subT">Mask Analysis</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
                   <div class="frequencyContainer" [class.maskShow]="maskShow">
                   <table>
                      <tr>
@@ -112,7 +114,7 @@
                   <mat-icon *ngIf="!maskShow">expand_more</mat-icon> <mat-icon *ngIf="maskShow">expand_less</mat-icon> </button> 
                </mat-card>
 
-               <mat-card class="os aliceblue" *ngIf="profile.staticalAnalysis">
+               <!-- <mat-card class="os aliceblue" *ngIf="profile.staticalAnalysis">
                   <h4 class="attr-tite">Statistics <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
                   <table class="table">
                      <tr class="cpt">
@@ -122,10 +124,10 @@
                      <td *ngFor="let stats of profile.staticalAnalysis | keyvalue">{{stats.value}}</td>
                      </tr>
                   </table>
-               </mat-card>
+               </mat-card> -->
 
                <mat-card class="bg-green">
-                  <h4 class="attr-tite">Correlation Summary</h4>
+                  <h4 class="attr-tite"> <span class="subT">Correlation Summary</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
                   <app-corelation-summary [summary]="profile.correlationSummary"></app-corelation-summary>
                </mat-card>
 

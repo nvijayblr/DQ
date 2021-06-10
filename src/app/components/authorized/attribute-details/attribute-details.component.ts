@@ -24,9 +24,9 @@ export class AttributeDetailsComponent implements OnInit {
    patternShow = false;
    maskShow = false;
    sticky = false;
-   elementPosition: any;
+  elementPosition: any;
 
-   constructor(private messageService: MessageService, private http: HttpService, ) {
+  constructor(private messageService: MessageService, private http: HttpService,) {
    }
    highcharts = Highcharts;
    chartOptions = {

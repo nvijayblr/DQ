@@ -9,7 +9,6 @@ import { MessageService } from 'src/app/services/message.service';
   styleUrls: ['./authorized.component.scss']
 })
 export class AuthorizedComponent implements OnInit {
-
   isLoading = true;
   constructor(private http: HttpService, private msg: MessageService) { }
 

@@ -53,6 +53,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userId = '';
   appConfig: any = {};
   isAdmin = false;
+  
 
   @HostListener('window:scroll')
   checkScroll() {
