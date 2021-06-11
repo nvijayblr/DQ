@@ -35,6 +35,18 @@
       <div class="dotDiv"></div>
     </mat-card>
      <h1 class="attTitle">Data Cleaning  - {{profile.column}}</h1>
+
+     <div style="text-align: right">
+      <button 
+        type="button" 
+        (click)="showSaveConfirm()"
+        [disabled]="!isSaveEnable"
+        class="button3d btnPush btnPurple addico w-t"
+        >
+        <mat-icon> save</mat-icon> Save 
+      </button>
+    </div>
+
      <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
     <div class="profile-wrapper">
        <div class="flex-containers">
@@ -258,8 +270,8 @@
             ></app-ag-grid>
           </mat-card>
 
-           <div class="lft-attr">
-            <mat-card class="bg-violet">
+          <div class="lft-attr">
+            <mat-card class="bg-violet" *ngIf="profile.attributeSummary">
               <h4 class="attr-tite">Attribute Summary <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
               <div class="records">
                  <span>records</span>

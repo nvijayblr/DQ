@@ -1,13 +1,15 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { Options } from '@angular-slider/ngx-slider';
 import { MessageService } from 'src/app/services/message.service';
 import { HttpService } from 'src/app/services/http-service.service';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-data-cleaning',
   templateUrl: './data-cleaning.component.html',
-  styleUrls: ['./data-cleaning.component.scss']
+  styleUrls: ['./data-cleaning.component.scss'],
 })
 export class DataCleaningComponent implements OnInit {
    @ViewChild('stickyMenu', {static: false}) menuElement: ElementRef;
@@ -81,7 +83,13 @@ export class DataCleaningComponent implements OnInit {
    rowData: any = [];
    columnDefs: any = [];
 
-   constructor(private messageService: MessageService, private http: HttpService, ) {
+   isSaveEnable = false;
+
+   constructor(
+      private messageService: MessageService,
+      private http: HttpService,
+      private dialog: MatDialog,
+   ) {
    }
    highcharts = Highcharts;
    chartOptions = {
@@ -174,18 +182,21 @@ export class DataCleaningComponent implements OnInit {
       this.duplicate.column_name = profile.column;
    }
 
-   loadProfile(source, profile = '') {
+   loadProfile(source, profile: any = '') {
       this.isLoading = true;
       this.loaderMsg = 'Loading Profile...';
       const payload = {
          sourcepath: source.templateSourcePath
       };
-      this.profiles = [];
       this.http.getProfiles(payload).subscribe((result: any) => {
          this.profiles = result.profile ? result.profile : [];
          if (this.profiles.length) {
             if (profile) {
-               this.changeProfile(profile);
+               const selectedProfile = this.profiles.filter(data => {
+                  return data.column === profile.column;
+               })[0];
+               this.isSaveEnable = true;
+               this.changeProfile(selectedProfile);
             } else {
                this.changeProfile(this.profiles[0]);
             }
@@ -206,7 +217,6 @@ export class DataCleaningComponent implements OnInit {
                this.profileSummary.nullcounts = this.profileSummary.nullcounts + parseInt(data.attributeSummary.null_records, 0);
             }
          });
-
          this.isLoading = false;
       }, (error) => {
          this.isLoading = false;
@@ -241,7 +251,7 @@ export class DataCleaningComponent implements OnInit {
             this.updateSourcePath(result.outputpath);
          }
          // this.loadProfile(this.source, this.profile);
-         alert('Impution has been successfully completed.');
+         // alert('Impution has been successfully completed.');
       }, (error) => {
          this.isLoading = false;
       });
@@ -372,6 +382,25 @@ export class DataCleaningComponent implements OnInit {
       } else {
          this.delete.category = 'row_nan';
       }
+    }
+
+    showSaveConfirm() {
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+         width: '400px',
+         data: {
+           title: 'Save soruce',
+           message: `Are you sure want to save this updated source?` ,
+           cancelLable: 'No',
+           okLable: 'OK'
+         }
+       });
+
+      dialogRef.afterClosed().subscribe(data => {
+         if (data.action === 'ok') {
+         } else {
+         }
+       });
+
     }
 
    // ngAfterViewInit(){

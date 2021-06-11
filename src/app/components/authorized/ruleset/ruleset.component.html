@@ -228,21 +228,24 @@
                                        <div class="list flex-containers flex-start wrap cde-fields-wrp">
                                        <div class="list-item-5 outline">
                                           <app-rule-selector 
-                                             [ruleItems]="ruleTypeList" 
-                                             [initValue]="rule.get('rule').value" 
-                                             (selectionChange)="rule.get('rule').setValue($event.value)"
+                                              [showAddItem]="false"
+                                              [ruleItems]="ruleTypeList" 
+                                              [initValue]="rule.get('rule').value" 
+                                              (selectionChange)="rule.get('rule').setValue($event.value)"
                                           ></app-rule-selector>
                                        </div>
                                        <div class="list-item-5 outline">
                                           <app-rule-selector 
-                                             [ruleItems]="ruleOperatorList[rule.get('rule').value]" 
-                                             [initValue]="rule.get('operator').value" 
-                                             (selectionChange)="rule.get('operator').setValue($event.value)"
+                                              [showAddItem]="false"
+                                              [ruleItems]="ruleOperatorList[rule.get('rule').value]" 
+                                              [initValue]="rule.get('operator').value" 
+                                              (selectionChange)="rule.get('operator').setValue($event.value)"
                                           ></app-rule-selector>
                                        </div>
                                        <div class="list-item-5 outline" [hidden]="rule.get('rule').value === 'Formula'">
                                           <app-rule-selector 
                                              *ngIf="rule.get('rule').value !== 'ReferenceCDE'"
+                                             [showAddItem]="false"
                                              [ruleItems]="ruleValueList[rule.get('rule').value]" 
                                              [initValue]="rule.get('value').value" 
                                              (selectionChange)="rule.get('value').setValue($event.value)"
@@ -260,13 +263,15 @@
                                              <span class="cde">{{formula.cde}}</span>
                                              </span>
                                           </div>
+                                          <div class="edit-link" (click)="showFormulaEditor(rule)" style="margin-left: 2px;">Advanced Formula Editor</div>
                                           <div class="edit-link" (click)="showFormulaEditor(rule)">Formula Editor</div>
                                        </div>
                                        <div class="list-item-5 outline">
                                           <app-rule-selector 
-                                             [ruleItems]="ruleDimenstionList" 
-                                             [initValue]="rule.get('dimension').value" 
-                                             (selectionChange)="rule.get('dimension').setValue($event.value)"
+                                              [showAddItem]="false"
+                                              [ruleItems]="ruleDimenstionList" 
+                                              [initValue]="rule.get('dimension').value" 
+                                              (selectionChange)="rule.get('dimension').setValue($event.value)"
                                           ></app-rule-selector>
                                        </div>
                                        <div class="list-item-0 add-remove-button">

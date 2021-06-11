@@ -32,6 +32,7 @@ import { FormulaEditorComponent } from './formula-editor/formula-editor.componen
 import { HeatMapComponent } from './heat-map/heat-map.component';
 import { AnalysisChartComponent } from './analysis-chart/analysis-chart.component';
 import { CorelationSummaryComponent } from './corelation-summary/corelation-summary.component';
+import { TagInputModule } from 'ngx-chips';
 
 @NgModule({
    imports: [
@@ -48,6 +49,7 @@ import { CorelationSummaryComponent } from './corelation-summary/corelation-summ
     OwlNativeDateTimeModule,
     ColorPickerModule,
     AgGridModule.withComponents([]),
+    TagInputModule,
   ],
   declarations: [
     HeaderComponent,
@@ -91,6 +93,7 @@ import { CorelationSummaryComponent } from './corelation-summary/corelation-summ
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     AgGridModule,
+    TagInputModule,
     ColumnSelectorComponent,
     DragDropListComponent,
     BarChartComponent,
@@ -99,7 +102,7 @@ import { CorelationSummaryComponent } from './corelation-summary/corelation-summ
     CompletenessDialogComponent,
     RuleSelectorComponent,
     AgGridComponent,
-     FormulaEditorComponent,
+    FormulaEditorComponent,
     HeatMapComponent,
     AnalysisChartComponent,
     CorelationSummaryComponent

@@ -78,13 +78,13 @@ export class RulesetComponent implements OnInit {
     loop: false,
     autoplay: false,
     autoplayTimeout: 6000,
-    autoplaySpeed: 700,
+    autoplaySpeed: 0,
     mouseDrag: true,
     touchDrag: true,
     pullDrag: true,
     dots: false,
     margin: 5,
-    navSpeed: 700,
+    navSpeed: 0,
     navText: [ '<i class="fa-chevron-left"></i>', '<i class="fa-chevron-right></i>"' ],
     autoWidth: true,
     nav: false,
@@ -609,7 +609,6 @@ export class RulesetComponent implements OnInit {
     this.http.getColumnsRules(payload).subscribe((result: any) => {
       this.isLoading = false;
       this.rulesList = this.rulesList.concat(result);
-      console.log(this.rulesList);
       if (this.rulesList.length && this.initRuleValue) {
         const firstRule = this.rulesList[0];
         this.selectedRuleColumn = firstRule.column;
@@ -728,6 +727,9 @@ export class RulesetComponent implements OnInit {
   }
 
   owlInitialized() {
+    if (this.selectedRuleColumn) {
+      this.owlCar.to(this.selectedRuleColumn);
+    }
   }
 
   initFormulaEditor(ruleList) {

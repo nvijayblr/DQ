@@ -31,10 +31,12 @@ export class DashboardComponent implements OnInit {
    rights = '';
    sourceList: any = [];
    highlightDates: any = [];
-  visibleIndex = -1;
-  showDetails = true;
-  showFirst = true;
-  actionTabId;
+   visibleIndex = -1;
+   showDetails = true;
+   showFirst = true;
+   actionTabId;
+
+   itemsAsObjects = [{id: 0, name: 'Angular'}, {id: 1, name: 'React'}];
 
    constructor(
       public dialog: MatDialog,
