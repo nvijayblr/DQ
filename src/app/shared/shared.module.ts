@@ -33,6 +33,7 @@ import { HeatMapComponent } from './heat-map/heat-map.component';
 import { AnalysisChartComponent } from './analysis-chart/analysis-chart.component';
 import { CorelationSummaryComponent } from './corelation-summary/corelation-summary.component';
 import { TagInputModule } from 'ngx-chips';
+import { AdvancedFormulaEditorComponent } from './advanced-formula-editor/advanced-formula-editor.component';
 
 @NgModule({
    imports: [
@@ -73,6 +74,7 @@ import { TagInputModule } from 'ngx-chips';
     HeatMapComponent,
     AnalysisChartComponent,
     CorelationSummaryComponent,
+    AdvancedFormulaEditorComponent,
   ],
   exports: [
     FormsModule,
@@ -105,7 +107,8 @@ import { TagInputModule } from 'ngx-chips';
     FormulaEditorComponent,
     HeatMapComponent,
     AnalysisChartComponent,
-    CorelationSummaryComponent
+    CorelationSummaryComponent,
+    AdvancedFormulaEditorComponent
   ],
   providers: [
      DatePipe,
@@ -115,7 +118,7 @@ import { TagInputModule } from 'ngx-chips';
      ColorDialogComponent,
      CompletenessDialogComponent,
      FormulaEditorComponent,
-
+     AdvancedFormulaEditorComponent
   ]
 })
 export class SharedModule {}
