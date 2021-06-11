@@ -10,8 +10,8 @@ import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 export class AdvancedFormulaEditorComponent implements OnInit {
 
   formulaDetailsForm: FormGroup;
-  operators = ['', '+', '-', '*', '/', '==', '!=',  '>', '>=', '<', '<='];
-  conditions = ['', 'AND', 'OR'];
+  operators = [' ', '+', '-', '*', '/', '==', '!=',  '>', '>=', '<', '<='];
+  conditions = [' ', 'AND', 'OR'];
   startgroups = ['(', '((', '((('];
   endgroups = [')', '))', ')))'];
   formulaObj: any = {
@@ -27,6 +27,7 @@ export class AdvancedFormulaEditorComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.data.columns.unshift(' ');
     this.initFormulaDetails(this.formulaObj);
   }
 

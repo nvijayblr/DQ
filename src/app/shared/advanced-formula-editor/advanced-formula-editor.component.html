@@ -40,8 +40,8 @@
 
             <div class="operator outline">
               <mat-form-field appearance="fill">
-                <mat-label>Operator</mat-label>
-                <mat-select formControlName="operator">
+                <mat-label>OPR</mat-label>
+                <mat-select formControlName="operator1">
                   <mat-option *ngFor="let operator of operators" [value]="operator">{{operator}}</mat-option>
                 </mat-select>
               </mat-form-field>
@@ -56,6 +56,13 @@
               </mat-form-field>
             </div>
 
+            <div class="cdelist outline">
+              <mat-form-field appearance="fill">
+                <mat-label>Value</mat-label>
+                <input matInput placeholder="Value" formControlName="value" autocomplete="off"/>
+              </mat-form-field>
+            </div>
+
             <div class="startend outline">
               <mat-form-field appearance="fill">
                 <mat-label>)</mat-label>
@@ -67,7 +74,7 @@
   
             <div class="condition outline">
               <mat-form-field appearance="fill">
-                <mat-label></mat-label>
+                <mat-label>CON</mat-label>
                 <mat-select formControlName="condition">
                   <mat-option *ngFor="let condition of conditions" [value]="condition">{{condition}}</mat-option>
                 </mat-select>
@@ -76,13 +83,12 @@
 
             <div class="operator outline">
               <mat-form-field appearance="fill">
-                <mat-label>Operator</mat-label>
-                <mat-select formControlName="operator">
+                <mat-label>OPR</mat-label>
+                <mat-select formControlName="operator2">
                   <mat-option *ngFor="let operator of operators" [value]="operator">{{operator}}</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
-
   
           </div>
 
