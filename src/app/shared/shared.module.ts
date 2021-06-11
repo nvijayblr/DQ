@@ -32,7 +32,6 @@ import { FormulaEditorComponent } from './formula-editor/formula-editor.componen
 import { HeatMapComponent } from './heat-map/heat-map.component';
 import { AnalysisChartComponent } from './analysis-chart/analysis-chart.component';
 import { CorelationSummaryComponent } from './corelation-summary/corelation-summary.component';
-import { TagInputModule } from 'ngx-chips';
 import { AdvancedFormulaEditorComponent } from './advanced-formula-editor/advanced-formula-editor.component';
 
 @NgModule({
@@ -50,7 +49,6 @@ import { AdvancedFormulaEditorComponent } from './advanced-formula-editor/advanc
     OwlNativeDateTimeModule,
     ColorPickerModule,
     AgGridModule.withComponents([]),
-    TagInputModule,
   ],
   declarations: [
     HeaderComponent,
@@ -95,7 +93,6 @@ import { AdvancedFormulaEditorComponent } from './advanced-formula-editor/advanc
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     AgGridModule,
-    TagInputModule,
     ColumnSelectorComponent,
     DragDropListComponent,
     BarChartComponent,
