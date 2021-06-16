@@ -39,8 +39,8 @@
                   <div class="frequencyContainer" [class.frequencyShow]="frequencyShow">
                   <table>
                      <tr>
-                        <th>Frequency</th>
-                        <th>Count</th>
+                        <th>Frequency <img src="assets/images/frequency.png" class="freq" /></th>
+                        <th>Count <img src="assets/images/count.png" class="freq" /></th>
                         <th style="width:20%">&nbsp;</th>
                      </tr>
                      <tr *ngFor="let frequency of profile.frequncyAnalysis">
@@ -59,8 +59,8 @@
                   <div class="frequencyContainer" [class.patternShow]="patternShow">
                   <table>
                      <tr>
-                        <th>Value</th>
-                        <th>Count</th>
+                        <th>Value <img src="assets/images/value.svg" class="freq" /></th>
+                        <th>Count <img src="assets/images/count.png" class="freq" /></th>
                         <th style="width:20%">&nbsp;</th>
                      </tr>
                      <tr *ngFor="let pattern of profile.patternAnalysis">
@@ -98,8 +98,8 @@
                   <div class="frequencyContainer" [class.maskShow]="maskShow">
                   <table>
                      <tr>
-                        <th>Value</th>
-                        <th>Count</th>
+                        <th>Value <img src="assets/images/value.svg" class="freq" /></th>
+                        <th>Count <img src="assets/images/count.png" class="freq" /></th>
                         <th style="width:20%">&nbsp;</th>
                      </tr>
          
@@ -128,7 +128,7 @@
 
                <mat-card class="bg-green">
                   <h4 class="attr-tite"> <span class="subT">Correlation Summary</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
-                  <!-- <app-corelation-summary [summary]="profile.correlationSummary"></app-corelation-summary> -->
+                  <app-corelation-summary [summary]="profile.correlationSummary"></app-corelation-summary> 
                   <highcharts-chart
                         [Highcharts] = "highcharts" 
                         [options] = "chartOptions" 
