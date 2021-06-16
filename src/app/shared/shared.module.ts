@@ -33,6 +33,7 @@ import { HeatMapComponent } from './heat-map/heat-map.component';
 import { AnalysisChartComponent } from './analysis-chart/analysis-chart.component';
 import { CorelationSummaryComponent } from './corelation-summary/corelation-summary.component';
 import { AdvancedFormulaEditorComponent } from './advanced-formula-editor/advanced-formula-editor.component';
+import { PieChartComponent } from './pie-chart/pie-chart.component';
 
 @NgModule({
    imports: [
@@ -49,6 +50,7 @@ import { AdvancedFormulaEditorComponent } from './advanced-formula-editor/advanc
     OwlNativeDateTimeModule,
     ColorPickerModule,
     AgGridModule.withComponents([]),
+    PieChartComponent
   ],
   declarations: [
     HeaderComponent,

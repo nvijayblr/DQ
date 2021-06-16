@@ -31,10 +31,10 @@ export class AttributeDetailsComponent implements OnInit {
    highcharts = Highcharts;
    chartOptions = {
       chart: {
-        type: 'bar'
+        type: 'column'
      },
      title: {
-        text: 'Historic World Population by Region'
+        text: 'Correlation Summary with negative values'
      },
      subtitle : {
         text: 'Source: Source Name'
@@ -52,18 +52,13 @@ export class AttributeDetailsComponent implements OnInit {
              '#FFFFFF'), shadow: true
         },
         xAxis: {
-           categories: ['Africa', 'America', 'Asia', 'Europe', 'Oceania'], title: {
-           text: null
-        }
-     },
-     yAxis : {
-        min: 0, title: {
-           text: 'Population (millions)', align: 'high'
+          categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
         },
-        labels: {
-           overflow: 'justify'
-        }
+        credits: {
+          enabled: false
+
      },
+     
      tooltip : {
         valueSuffix: ' millions'
      },
@@ -74,23 +69,16 @@ export class AttributeDetailsComponent implements OnInit {
            }
         }
      },
-     credits: {
-        enabled: false
-     },
-     series: [
-        {
-           name: 'Year 1800',
-           data: [107, 31, 635, 203, 2]
-        },
-        {
-           name: 'Year 1900',
-           data: [133, 156, 947, 408, 6]
-        },
-        {
-           name: 'Year 2008',
-           data: [973, 914, 4054, 732, 34]
-        }
-     ]
+     series: [{
+      name: 'John',
+      data: [5, 3, 4, 7, 2]
+    }, {
+      name: 'Jane',
+      data: [2, -2, -3, 2, 1]
+    }, {
+      name: 'Joe',
+      data: [3, 4, 4, -2, 5]
+    }]
   };
 
 
