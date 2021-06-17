@@ -41,6 +41,7 @@
         type="button" 
         (click)="showSaveConfirm()"
         [disabled]="!isSaveEnable"
+        *ngIf="this.profiles.length"
         class="button3d btnPush btnPurple addico w-t"
         >
         <mat-icon> save</mat-icon> Save 
@@ -48,7 +49,10 @@
     </div>
 
      <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
-    <div class="profile-wrapper">
+     <div *ngIf="!this.profiles.length">
+        <h4>Profile not found.</h4>
+     </div>
+    <div class="profile-wrapper" [hidden]="!this.profiles || !this.profiles.length">
        <div class="flex-containers">
           <div class="list attribute-list">
            <mat-list role="list" class="hideContainer" [class.show]="show">
@@ -137,7 +141,7 @@
                   </div>
                 </mat-tab>  
 
-                <mat-tab label="Mask Analysis">
+                <!-- <mat-tab label="Mask Analysis">
                   <div class="impute-wrapper">
                     <h5 class="sub-title-label">Mask Analysis Data</h5>
                     <div class="form-row">
@@ -155,7 +159,7 @@
                       </button>
                     </div>                    
                   </div>
-                </mat-tab>
+                </mat-tab> -->
 
                 <mat-tab label="Data Removal">
                   <div class="impute-wrapper">

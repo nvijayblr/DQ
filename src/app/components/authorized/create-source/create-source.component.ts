@@ -90,6 +90,26 @@ export class CreateSourceComponent implements OnInit {
   selFileName;
   selFileNameErr = false;
 
+  filteredList2: any = [];
+  public selected = [];
+  public selected1 = [];
+
+
+  public variablesGroups =
+    [
+      {
+        value: '127', values:
+          [{ id: 267, value: 'Formosa', parentId: 127 },
+            { id: 268, value: 'Matacos', parentId: 127 },
+            { id: 266, value: 'Patiño', parentId: 127 },
+            { id: 265, value: 'Pilcomayo', parentId: 127 }, { id: 269, value: 'Pirané', parentId: 127 }]
+      }];
+
+  public groups = this.variablesGroups.slice();
+
+  public variables = ['One', 'Two', 'County', 'Three', 'Zebra', 'XiOn'];
+  public filteredList1 = this.variables.slice();
+
   ngOnInit() {
     this.isUserLoggedIn = this.authGuardService.isUserLoggedIn();
     this.user = this.authGuardService.getLoggedInUserDetails();
@@ -455,22 +475,4 @@ export class CreateSourceComponent implements OnInit {
     this.isRefPreviewLoaded = true;
     this.isRefPreviewLoading = false;
   }
-  public selected = [];
-  public selected1 = [];
-
-
-  public variablesGroups =
-    [
-      {
-        "value": "127", "values":
-          [{ "id": 267, "value": "Formosa", "parentId": 127 },
-            { "id": 268, "value": "Matacos", "parentId": 127 },
-            { "id": 266, "value": "Patiño", "parentId": 127 },
-            { "id": 265, "value": "Pilcomayo", "parentId": 127 }, { "id": 269, "value": "Pirané", "parentId": 127 }]
-      }];
-
-  public groups = this.variablesGroups.slice();
-
-  public variables = ['One','Two','County', 'Three', 'Zebra', 'XiOn'];
-  public filteredList1 = this.variables.slice();
 }

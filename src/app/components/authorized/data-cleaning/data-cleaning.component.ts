@@ -259,13 +259,23 @@ export class DataCleaningComponent implements OnInit {
 
    deleteColumnsRows() {
       this.isLoading = true;
-      this.loaderMsg = 'Imputing columns...';
+      this.loaderMsg = 'Deleting columns...';
       this.delete.threshold = (this.delete.category === 'col_nan' || this.delete.category === 'row_nan')
          ? this.delete.threshold : undefined;
-      const payload = {...this.delete};
+      const payload = {
+         ...this.delete,
+         sourceFileName: this.delete.sourcepath,
+         sourceId: this.analysis.sourceId,
+         uploadId: this.analysis.recentsourceUpload.uploadId,
+         rulesetId: this.analysis.rulesetId,
+         uploadDate: this.analysis.recentsourceUpload.uploadDate,
+      };
       delete payload.type;
-      this.http.deleteColumnsRowsReq(this.delete).subscribe((result: any) => {
+      this.http.deleteColumnsRowsReq(payload).subscribe((result: any) => {
          this.isLoading = false;
+         if (result.outputpath) {
+            this.updateSourcePath(result.outputpath);
+         }
          // this.loadProfile(this.source, this.profile);
          alert(`${this.delete === 'column' ? 'Columns' : 'Rows'} are deleted successfully.`);
       }, (error) => {
