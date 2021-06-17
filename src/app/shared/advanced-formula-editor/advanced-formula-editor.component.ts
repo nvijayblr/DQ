@@ -12,8 +12,8 @@ export class AdvancedFormulaEditorComponent implements OnInit {
   formulaDetailsForm: FormGroup;
   operators = [' ', '+', '-', '*', '/', '==', '!=',  '>', '>=', '<', '<='];
   conditions = [' ', 'AND', 'OR'];
-  startgroups = ['(', '((', '((('];
-  endgroups = [')', '))', ')))'];
+  startgroups = [' ', '(', '((', '((('];
+  endgroups = [' ', ')', '))', ')))'];
   formulaObj: any = {
     formula: [{start: '', cde1: '', operator1: '', cde2: '', end: '', condition: '', operator2: ''}]
   };

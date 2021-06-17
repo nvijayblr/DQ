@@ -83,12 +83,28 @@
   padding: 5px 10px;
   overflow-x: auto;
   white-space: nowrap;
-  .operator {
+  .startend {
     font-weight: bold;
+    letter-spacing: 0.5px;
     margin: 0 4px;
   }
   .cde {
     font-weight: bold;
+    margin: 0 4px;
+    color: #ffe30e;
+  }
+  .operator {
+    font-weight: bold;
+    margin: 0 4px;
+    color: #c0ff5c;
+  }
+  .value {
+    font-weight: bold;
+    color: #0ff10f;    
+  }
+  .condition {
+    font-weight: bold;
+    color: #ff9090;
   }
 }
 

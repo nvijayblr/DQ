@@ -3,8 +3,14 @@
   <div mat-dialog-content>
     <div class="formula-preview">
       <span *ngFor="let formula of formulaDetailsForm.value.formula">
-        <span class="operator" *ngIf="formula.operator !== 'NULL'">{{formula.operator}}</span>
-        <span class="cde">{{formula.cde}}</span>
+        <span class="startend" *ngIf="formula.start">{{formula.start}}</span>
+        <span class="cde" *ngIf="formula.cde1">{{formula.cde1}}</span>
+        <span class="operator" *ngIf="formula.operator1">{{formula.operator1}}</span>
+        <span class="cde" *ngIf="formula.cde2">{{formula.cde2}}</span>
+        <span class="value" *ngIf="formula.value">{{formula.value}}</span>
+        <span class="startend" *ngIf="formula.end">{{formula.end}}</span>
+        <span class="condition" *ngIf="formula.condition">{{formula.condition}}</span>
+        <span class="operator" *ngIf="formula.operator2">{{formula.operator2}}</span>
       </span>
     </div>
     <form [formGroup]="formulaDetailsForm">
@@ -99,7 +105,7 @@
             </button>
             </div>
             <div class="list add-remove-button">
-            <button type="button" class="button3d btnPush btnOrange redico" (click)="removeFormItem('formula', i)" *ngIf="formulaDetailsForm.get('formula')['controls'].length > 2">
+            <button type="button" class="button3d btnPush btnOrange redico" (click)="removeFormItem('formula', i)" *ngIf="formulaDetailsForm.get('formula')['controls'].length > 1">
                <mat-icon>delete_outline</mat-icon>
             </button>
           </div>
