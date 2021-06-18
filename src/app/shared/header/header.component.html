@@ -35,7 +35,7 @@
                <mat-icon>search</mat-icon>
              </button>
              <button mat-icon-button class="notification-menu notification-btn" (click)="drawer.toggle()">
-               <mat-icon class="fa" matBadge="{{notificationsCount}}" matBadgeColor="warn">notifications</mat-icon>
+               <mat-icon class="fa" matBadge="{{notificationCount}}" matBadgeColor="warn">notifications</mat-icon>
              </button>
  
              <button mat-icon-button [matMenuTriggerFor]="menu" [class.userimage]="user.path">
@@ -121,16 +121,15 @@
        <div class="not-body">
          <app-progress-bar [message]="loaderMsg" class="component" *ngIf="isLoading"></app-progress-bar>
          <div *ngFor="let notification of notifications; index as i">
-           <div class="not-item" [class.read]="notification.status" (click)="makeNotificationRead(notification)">
+           <div class="not-item" [class.read]="notification.read === 'UnRead'" (click)="makeNotificationRead(notification)">
              <div class="flex-containers space-between">
                <div class="flex-item status">
                  <mat-icon class="unread-icon">brightness_1</mat-icon>
                </div>
-               <div class="flex-item label">{{notification.createdAt | date:'MMM dd, yyyy hh:mm a'}}</div>
+               <div class="flex-item label">{{notification.createdAt | date:'MMM dd, yyyy hh:mm a'}}2021-05-08T18:30:00.000Z</div>
              </div>
              <div class="message">
-               <h4>{{notification.subject}}</h4>
-               <p [innerHTML]="notification.description"></p>
+               <p [innerHTML]="notification.text"></p>
              </div>
            </div>
          </div>

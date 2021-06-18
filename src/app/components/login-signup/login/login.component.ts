@@ -82,9 +82,16 @@ export class LoginComponent implements OnInit {
         alert(result.errorMsg);
         return;
       }
-      const loggedUserDet = result.userdetail;
-      loggedUserDet.role = loggedUserDet.role[0];
-      loggedUserDet.rights = result.roleRights;
+      const loggedUserDet = {
+        ...result.userdetail,
+        role: result.userdetail.role[0],
+        rights: result.roleRights,
+        response: {...result}
+      };
+
+      // loggedUserDet.role = loggedUserDet.role[0];
+      // loggedUserDet.rights = result.roleRights;
+      // loggedUserDet.response = {...result};
       this.setLoginSessionAndRouting(loggedUserDet);
     }, (error) => {
       this.isLoading = false;

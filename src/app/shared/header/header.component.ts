@@ -48,12 +48,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }];
 
   notifications: any = [];
+  notificationCount = 0;
   isLoading = false;
   loaderMsg = 'Loading notifications...';
   userId = '';
   appConfig: any = {};
   isAdmin = false;
-  
+
 
   @HostListener('window:scroll')
   checkScroll() {
@@ -96,6 +97,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.isUserLoggedIn = this.authGuardService.isUserLoggedIn();
     this.isAdmin = this.authGuardService.isAdmin();
     this.user = this.authGuardService.getLoggedInUserDetails();
+    console.log(this.user, this.user.response);
+    if (this.user.response) {
+      this.notificationCount = this.user.response.notificationCount;
+      this.notifications = this.user.response.notification;
+    }
     if (!this.user.rights) {
       this.doLogout();
     }
@@ -115,7 +121,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.doLogin('create');
       }
       if (message.topic === 'notifications' ) {
-        this.getNotificationsCount();
+        this.notificationCount = this.notificationCount - 1;
       }
     });
     this.activatedRoute.queryParams.subscribe(queryParams => {
@@ -171,10 +177,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
 
   drawerOpen(event) {
-    this.notifications = [];
     if (event) {
     this.userId = this.user.user_id;
-    this.getAllNotifications();
+    // this.getAllNotifications();
    }
   }
 
@@ -190,11 +195,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   makeNotificationRead(notification) {
-    notification.showMsg = !notification.showMsg;
-    if (!notification.status) {
-      this.http.makeNotificationRead(this.userId, notification.id).subscribe((result: any) => {
+    if (notification.read === 'UnRead') {
+      const payload = {
+        Id: notification.Id,
+        userName: this.user.userName,
+        isRead: 'Read',
+        status: 'Active'
+      };
+      this.http.makeNotificationRead(payload).subscribe((result: any) => {
         this.isLoading = false;
-        notification.status = true;
+        notification.read = 'Read';
         this.messageService.sendCommonMessage({topic: 'notifications', reason: 'Read Notification'});
       }, (error) => {
         this.isLoading = false;

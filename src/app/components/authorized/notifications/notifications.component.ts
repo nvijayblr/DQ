@@ -57,9 +57,15 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   makeNotificationRead(notification) {
     notification.showMsg = !notification.showMsg;
     if (!notification.status) {
-      this.http.makeNotificationRead(this.userId, notification.id).subscribe((result: any) => {
+      const payload = {
+        Id: notification.Id,
+        userName: this.user.userName,
+        isRead: 'Read',
+        status: 'Active'
+      };
+      this.http.makeNotificationRead(payload).subscribe((result: any) => {
         this.isLoading = false;
-        notification.status = true;
+        notification.isRead = 'Read';
         this.messageService.sendCommonMessage({topic: 'notifications', reason: 'Read Notification'});
       }, (error) => {
         this.isLoading = false;

@@ -487,8 +487,8 @@ export class HttpService  {
     );
   }
 
-  makeNotificationRead(userId, notificationId): Observable<any> {
-    return this.http.put<any>(`${this.rootUrl}user/${userId}/notifications/${notificationId}/status?status=true`, {}).pipe(
+  makeNotificationRead(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/editNotificationStatus`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
