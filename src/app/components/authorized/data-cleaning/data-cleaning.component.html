@@ -49,7 +49,7 @@
     </div>
 
      <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
-     <div *ngIf="!this.profiles.length">
+     <div *ngIf="!this.profiles.length && !isLoading">
         <h4>Profile not found.</h4>
      </div>
     <div class="profile-wrapper" [hidden]="!this.profiles || !this.profiles.length">
@@ -81,14 +81,23 @@
                           <mat-option value="IQR75">IQR75</mat-option>
                         </mat-select>
                       </mat-form-field>
-                        <button 
-                          type="button" 
-                          class="button3d btnPush btnPurple addico w-t"
-                          (click)="imputeColumns('numeric')"
-                          [disabled]="!profile.attributeSummary?.null_records || !impute.value"><mat-icon> layers_clear</mat-icon> IMPUTE 
-                        </button>
                     </div>
-                  </div>
+                    <div>
+                      <button 
+                        type="button" 
+                        class="button3d btnPush btnPurple addico w-t"
+                        (click)="loadPreview('nan')"
+                        style="margin-left: 0;"
+                      ><mat-icon> layers_clear</mat-icon> PREVIEW </button>
+
+                      <button 
+                        type="button" 
+                        class="button3d btnPush btnPurple addico w-t"
+                        (click)="imputeColumns('numeric')"
+                        [disabled]="!profile.attributeSummary?.null_records || !impute.value"><mat-icon> layers_clear</mat-icon> IMPUTE 
+                      </button>
+                    </div>
+                </div>
 
                   <div class="impute-wrapper" *ngIf="profile.attributeSummary?.dataType === 'Alphabetic' || profile.attributeSummary?.dataType === 'Alphanumeric'">
                     <h5 class="sub-title-label">Impute Null Data</h5>
@@ -98,18 +107,26 @@
                             <mat-option *ngFor="let frequency of profile.frequncyAnalysis" [value]="frequency.unique_values">{{frequency.unique_values}} - ({{frequency.counts}})</mat-option>
                           </mat-select>
                         </mat-form-field>
-                      <button 
-                      type="button" 
-                        class="button3d btnPush btnPurple addico w-t"
-                        (click)="imputeColumns('string')"
-                        [disabled]="!profile.attributeSummary?.null_records || !impute.value"><mat-icon> layers_clear</mat-icon> IMPUTE </button>
-                    </div>
                   </div>
+                  <div>
+                    <button 
+                    type="button" 
+                    class="button3d btnPush btnPurple addico w-t"
+                    (click)="loadPreview('nan')"
+                    style="margin-left: 0;"
+                    ><mat-icon> layers_clear</mat-icon> PREVIEW </button>
+                  <button 
+                    type="button" 
+                    class="button3d btnPush btnPurple addico w-t"
+                    (click)="imputeColumns('string')"
+                    [disabled]="!profile.attributeSummary?.null_records || !impute.value"><mat-icon> layers_clear</mat-icon> IMPUTE </button>
+                </div>
+              </div>
                 </mat-tab>
                 
                 <mat-tab label="Duplicate Analysis">
                   <div class="impute-wrapper">
-                    <h5 class="sub-title-label">Dulicate Data</h5>
+                    <h5 class="sub-title-label">Remove Duplicate Rows</h5>
                     <div style="margin-top: 10px;">
                       <mat-radio-group [(ngModel)]="duplicate.option" (ngModelChange)="duplicate.columns = []">
                         <mat-radio-button value="all">All Columns</mat-radio-button>
@@ -271,6 +288,7 @@
               [pageSize]="50"
               [rowSelection]="'multiple'"
               [suppressRowClickSelection]="false"
+              [moveToColumn]="profile.column"
             ></app-ag-grid>
           </mat-card>
 

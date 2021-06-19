@@ -35,6 +35,7 @@ export class DataCleaningComponent implements OnInit {
 
    impute: any = {
       sourcepath: '',
+      sourceFileName: '',
       column: '',
       column_data_type: '',
       value : ''
@@ -43,6 +44,7 @@ export class DataCleaningComponent implements OnInit {
    operators = ['', '=', '>', '>=', '<', '<='];
    delete: any = {
       sourcepath: '',
+      sourceFileName: '',
       type: 'column',
       category: 'col_nan',
       column_name: '',
@@ -53,12 +55,14 @@ export class DataCleaningComponent implements OnInit {
 
    mask: any = {
       sourcepath: '',
+      sourceFileName: '',
       column: '',
       value: ''
    };
 
    duplicate: any = {
       sourcepath: '',
+      sourceFileName: '',
       column_name: '',
       columns: [],
       option: 'all'
@@ -66,6 +70,7 @@ export class DataCleaningComponent implements OnInit {
 
    profileSummary = {
       sourcepath: '',
+      sourceFileName: '',
       records: '',
       numeric: 0,
       alphabetic: 0,
@@ -167,6 +172,11 @@ export class DataCleaningComponent implements OnInit {
          this.delete.sourcepath = this.source.templateSourcePath;
          this.duplicate.sourcepath = this.source.templateSourcePath;
          this.profileSummary.sourcepath = this.source.templateSourcePath;
+         this.mask.sourceFileName = this.source.templateSourcePath;
+         this.impute.sourceFileName = this.source.templateSourcePath;
+         this.delete.sourceFileName = this.source.templateSourcePath;
+         this.duplicate.sourceFileName = this.source.templateSourcePath;
+         this.profileSummary.sourceFileName = this.source.templateSourcePath;
          this.loadProfile(this.source);
       }
    }, 10);
@@ -223,86 +233,124 @@ export class DataCleaningComponent implements OnInit {
       });
   }
 
-   updateSourcePath(path) {
+   updateSourcePath(path, outputFileName) {
       this.source.templateSourcePath = path;
       this.mask.sourcepath = path;
       this.impute.sourcepath = path;
       this.delete.sourcepath = path;
+      this.mask.sourceFileName = outputFileName;
+      this.impute.sourceFileName = outputFileName;
+      this.delete.sourceFileName = outputFileName;
       const profileCopy = {...this.profile};
       this.profile = {};
       this.loadProfile(this.source, profileCopy);
    }
 
    imputeColumns(datatype) {
-      this.impute.column_data_type = datatype;
-      this.impute = {
-         ...this.impute,
-         sourceFileName: this.impute.sourcepath,
-         sourceId: this.analysis.sourceId,
-         uploadId: this.analysis.recentsourceUpload.uploadId,
-         rulesetId: this.analysis.rulesetId,
-         uploadDate: this.analysis.recentsourceUpload.uploadDate,
-      };
-      this.isLoading = true;
-      this.loaderMsg = 'Imputing columns...';
-      this.http.imputeColumnsReq(this.impute).subscribe((result: any) => {
-         this.isLoading = false;
-         if (result.outputpath) {
-            this.updateSourcePath(result.outputpath);
-         }
-         // this.loadProfile(this.source, this.profile);
-         // alert('Impution has been successfully completed.');
-      }, (error) => {
-         this.isLoading = false;
-      });
+      this.showConfirmDialog({
+         title: 'Impute columns',
+         message: `Are you sure want to impute the "${this.profile.column}" column with "${this.impute.value}" value?` ,
+         cancelLable: 'No',
+         okLable: 'OK'
+       }, () => {
+         this.impute.column_data_type = datatype;
+         this.impute = {
+            ...this.impute,
+            sourceFileName: this.impute.sourceFileName,
+            sourceId: this.analysis.sourceId,
+            uploadId: this.analysis.recentsourceUpload.uploadId,
+            rulesetId: this.analysis.rulesetId,
+            uploadDate: this.analysis.recentsourceUpload.uploadDate,
+         };
+         this.isLoading = true;
+         this.loaderMsg = 'Imputing columns...';
+         this.http.imputeColumnsReq(this.impute).subscribe((result: any) => {
+            this.isLoading = false;
+            if (result.outputpath) {
+               this.updateSourcePath(result.outputpath, result.outputFileName);
+            }
+            // this.loadProfile(this.source, this.profile);
+            // alert('Impution has been successfully completed.');
+         }, (error) => {
+            this.isLoading = false;
+         });
+       }, () => {
+       });
+
    }
 
    deleteColumnsRows() {
-      this.isLoading = true;
-      this.loaderMsg = 'Deleting columns...';
-      this.delete.threshold = (this.delete.category === 'col_nan' || this.delete.category === 'row_nan')
-         ? this.delete.threshold : undefined;
-      const payload = {
-         ...this.delete,
-         sourceFileName: this.delete.sourcepath,
-         sourceId: this.analysis.sourceId,
-         uploadId: this.analysis.recentsourceUpload.uploadId,
-         rulesetId: this.analysis.rulesetId,
-         uploadDate: this.analysis.recentsourceUpload.uploadDate,
-      };
-      delete payload.type;
-      this.http.deleteColumnsRowsReq(payload).subscribe((result: any) => {
-         this.isLoading = false;
-         if (result.outputpath) {
-            this.updateSourcePath(result.outputpath);
+      this.showConfirmDialog({
+         title: `Delete ${this.delete.type}`,
+         message: `Are you sure want to delete the ${this.delete.type} with "Null" vlaues?` ,
+         cancelLable: 'No',
+         okLable: 'OK'
+       }, () => {
+         this.isLoading = true;
+         this.loaderMsg = 'Deleting columns...';
+         this.delete.threshold = (this.delete.category === 'col_nan' || this.delete.category === 'row_nan')
+            ? this.delete.threshold : undefined;
+         const payload = {
+            ...this.delete,
+            sourceFileName: this.delete.sourceFileName,
+            sourceId: this.analysis.sourceId,
+            uploadId: this.analysis.recentsourceUpload.uploadId,
+            rulesetId: this.analysis.rulesetId,
+            uploadDate: this.analysis.recentsourceUpload.uploadDate,
+         };
+         delete payload.type;
+         if (payload.category === 'row_nan') {
+            payload.formula = '';
          }
-         // this.loadProfile(this.source, this.profile);
-         alert(`${this.delete === 'column' ? 'Columns' : 'Rows'} are deleted successfully.`);
-      }, (error) => {
-         this.isLoading = false;
-      });
+         this.http.deleteColumnsRowsReq(payload).subscribe((result: any) => {
+            this.isLoading = false;
+            if (result.outputpath) {
+               this.updateSourcePath(result.outputpath, result.outputFileName);
+            }
+            // this.loadProfile(this.source, this.profile);
+            alert(`${this.delete === 'column' ? 'Columns' : 'Rows'} are deleted successfully.`);
+         }, (error) => {
+            this.isLoading = false;
+         });
+       }, () => {
+       });
+
    }
 
    deleteDuplicates() {
-      this.isLoading = true;
-      this.loaderMsg = 'Deleting duplicate records...';
-      const payload = {
-         sourcepath: this.source.templateSourcePath,
-         action: 'remove_duplicates' ,
-         select_cols: this.duplicate.columns.length ? this.duplicate.columns : '',
-         keep: 'first',
-         sourceFileName: this.impute.sourcepath,
-         sourceId: this.analysis.sourceId,
-         uploadId: this.analysis.recentsourceUpload.uploadId,
-         rulesetId: this.analysis.rulesetId,
-         uploadDate: this.analysis.recentsourceUpload.uploadDate,
-      };
-      this.http.deleteDuplicatesReq(payload).subscribe((result: any) => {
-         this.isLoading = false;
-         alert(`Duplicate records are deleted successfully.`);
-      }, (error) => {
-         this.isLoading = false;
-      });
+      this.showConfirmDialog({
+         title: 'Remove duplicate rows',
+         message: `Are you sure want to delete the duplicate of rows ${this.duplicate.columns.length ? 'based on the ' + this.duplicate.columns.join(',') + ' columns duplicate data' : ''}?` ,
+         cancelLable: 'No',
+         okLable: 'OK'
+       }, () => {
+         this.isLoading = true;
+         this.loaderMsg = 'Deleting duplicate records...';
+         const payload = {
+            sourcepath: this.source.templateSourcePath,
+            action: 'remove_duplicates' ,
+            select_cols: this.duplicate.columns.length ? this.duplicate.columns : '',
+            keep: 'first',
+            sourceFileName: this.impute.sourceFileName,
+            sourceId: this.analysis.sourceId,
+            uploadId: this.analysis.recentsourceUpload.uploadId,
+            rulesetId: this.analysis.rulesetId,
+            uploadDate: this.analysis.recentsourceUpload.uploadDate,
+         };
+         this.http.deleteDuplicatesReq(payload).subscribe((result: any) => {
+            this.isLoading = false;
+            if (result.outputpath) {
+               this.updateSourcePath(result.outputpath, result.outputFileName);
+            }
+            alert(`Duplicate records are deleted successfully.`);
+         }, (error) => {
+            this.isLoading = false;
+         });
+       }, () => {
+
+       });
+
+
    }
 
    loadPreview(type, mask = '') {
@@ -315,7 +363,7 @@ export class DataCleaningComponent implements OnInit {
             action: 'preview' ,
             select_cols: this.duplicate.columns.length ? this.duplicate.columns : '',
             keep: '',
-            sourceFileName: this.impute.sourcepath,
+            sourceFileName: this.impute.sourceFileName,
             sourceId: this.analysis.sourceId,
             uploadId: this.analysis.recentsourceUpload.uploadId,
             rulesetId: this.analysis.rulesetId,
@@ -382,6 +430,7 @@ export class DataCleaningComponent implements OnInit {
           });
         });
       }
+
       this.isPreviewLoaded = true;
       this.isPreviewLoading = false;
     }
@@ -394,23 +443,41 @@ export class DataCleaningComponent implements OnInit {
       }
     }
 
-    showSaveConfirm() {
+    showConfirmDialog(msg, successCallback, failureCallback) {
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
          width: '400px',
          data: {
-           title: 'Save soruce',
-           message: `Are you sure want to save this updated source?` ,
-           cancelLable: 'No',
-           okLable: 'OK'
+           title: msg.title,
+           message: msg.message,
+           cancelLable: msg.cancelLable,
+           okLable: msg.okLable
          }
        });
 
       dialogRef.afterClosed().subscribe(data => {
          if (data.action === 'ok') {
+            if (successCallback) {
+               successCallback();
+            }
          } else {
+            if (failureCallback) {
+               failureCallback();
+            }
          }
        });
+    }
 
+    showSaveConfirm() {
+      this.showConfirmDialog({
+         title: 'Save soruce',
+         message: `Are you sure want to save this updated source?` ,
+         cancelLable: 'No',
+         okLable: 'OK'
+       }, () => {
+         console.log('Okay');
+       }, () => {
+         console.log('Cancel');
+       });
     }
 
    // ngAfterViewInit(){
