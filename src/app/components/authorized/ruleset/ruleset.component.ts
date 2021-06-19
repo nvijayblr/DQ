@@ -621,6 +621,7 @@ export class RulesetComponent implements OnInit {
       callBack();
     }, (error) => {
       this.isLoading = false;
+      callBack();
     });
 
   }

@@ -251,7 +251,7 @@ export class DataCleaningComponent implements OnInit {
          title: 'Impute columns',
          message: `Are you sure want to impute the "${this.profile.column}" column with "${this.impute.value}" value?` ,
          cancelLable: 'No',
-         okLable: 'OK'
+         okLable: 'Yes'
        }, () => {
          this.impute.column_data_type = datatype;
          this.impute = {
@@ -282,9 +282,9 @@ export class DataCleaningComponent implements OnInit {
    deleteColumnsRows() {
       this.showConfirmDialog({
          title: `Delete ${this.delete.type}`,
-         message: `Are you sure want to delete the ${this.delete.type} with "Null" vlaues?` ,
+         message: `Are you sure want to delete the ${this.delete.type} with "Null" values?` ,
          cancelLable: 'No',
-         okLable: 'OK'
+         okLable: 'Yes'
        }, () => {
          this.isLoading = true;
          this.loaderMsg = 'Deleting columns...';
@@ -320,9 +320,9 @@ export class DataCleaningComponent implements OnInit {
    deleteDuplicates() {
       this.showConfirmDialog({
          title: 'Remove duplicate rows',
-         message: `Are you sure want to delete the duplicate of rows ${this.duplicate.columns.length ? 'based on the ' + this.duplicate.columns.join(',') + ' columns duplicate data' : ''}?` ,
+         message: `Are you sure want to delete the duplicate rows ${this.duplicate.columns.length ? 'based on the ' + this.duplicate.columns.join(', ') + ' columns' : ''}?` ,
          cancelLable: 'No',
-         okLable: 'OK'
+         okLable: 'Yes'
        }, () => {
          this.isLoading = true;
          this.loaderMsg = 'Deleting duplicate records...';
@@ -472,7 +472,7 @@ export class DataCleaningComponent implements OnInit {
          title: 'Save soruce',
          message: `Are you sure want to save this updated source?` ,
          cancelLable: 'No',
-         okLable: 'OK'
+         okLable: 'Yes'
        }, () => {
          console.log('Okay');
        }, () => {

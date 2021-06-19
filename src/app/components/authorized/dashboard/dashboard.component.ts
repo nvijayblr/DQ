@@ -262,6 +262,10 @@ export class DashboardComponent implements OnInit {
          alert('Please select the upload date.');
          return;
       }
+      const selectedSource = sourceData.UploadsHistory.filter(history => history.uploadDate === sourceData.uploadDate);
+      if (selectedSource && selectedSource.length) {
+         sourceData.source.templateSourcePath = selectedSource[0].sourceFileName;
+      }
       localStorage.setItem('dq-source-data', JSON.stringify(sourceData));
       this.router.navigate(
          [`auth/data-cleaning`],
