@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>Cateogry</h1>
+<div mat-dialog-content class="user-account">
+  <form [formGroup]="catForm" (ngSubmit)="saveDept()">
+    <div class="user-wrap">
+      <div class="list">
+        <mat-form-field appearance="fill">
+          <mat-label>Label</mat-label>
+          <input type="text" matInput formControlName="label" autocomplete="off" (keydown.space)="$event.preventDefault();">
+        </mat-form-field>
+      </div>
+      <div class="list">
+        <mat-form-field appearance="fill">
+          <mat-label>Value</mat-label>
+          <input type="text" matInput formControlName="value" autocomplete="off">
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="onNoClick()">Cancel</button>
+  <button mat-raised-button color="accent" (click)="saveDept()" cdkFocusInitial class="ma-cr">Ok</button>
+</div>

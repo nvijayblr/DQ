@@ -273,6 +273,27 @@ export class HttpService  {
     ) as any;
   }
 
+  getCategoryList(): Observable<any> {
+    return this.http.get<any>(`${this.rootUrl}/api/getAllUserCategory`).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  createEditCategory(payload, mode): Observable<any> {
+    return this.http[mode === 'create' ? 'post' : 'put'](`${this.rootUrl}/api/createUserCategory`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    ) as any;
+  }
+
+
   getRolesList(): Observable<any> {
     return this.http.get<any>(`${this.rootUrl}/api/getRoles`).pipe(
       tap((res) => {

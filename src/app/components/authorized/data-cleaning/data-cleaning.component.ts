@@ -90,6 +90,12 @@ export class DataCleaningComponent implements OnInit {
 
    isSaveEnable = false;
 
+   profileDetails = {
+      nr_duplicates: 0,
+      nr_totalcols: 0,
+      nr_totalrecords: 0
+   };
+
    constructor(
       private messageService: MessageService,
       private http: HttpService,
@@ -200,6 +206,13 @@ export class DataCleaningComponent implements OnInit {
       };
       this.http.getProfiles(payload).subscribe((result: any) => {
          this.profiles = result.profile ? result.profile : [];
+         this.profileDetails = {
+            nr_duplicates: result.nr_duplicates,
+            nr_totalcols: result.nr_totalcols,
+            nr_totalrecords: result.nr_totalrecords
+         };
+         console.log(this.profileDetails);
+
          if (this.profiles.length) {
             if (profile) {
                const selectedProfile = this.profiles.filter(data => {
@@ -212,6 +225,12 @@ export class DataCleaningComponent implements OnInit {
             }
          }
          this.profileSummary.duplicates = result.nr_duplicates ? result.nr_duplicates : 0;
+
+         this.profileSummary.numeric = 0;
+         this.profileSummary.alphabetic = 0;
+         this.profileSummary.alphanumeric = 0;
+         this.profileSummary.nullcounts = 0;
+
          this.profiles.map(data => {
             if (data.attributeSummary) {
                this.profileSummary.records = data.attributeSummary.records ? data.attributeSummary.records : this.profileSummary.records;
@@ -270,7 +289,14 @@ export class DataCleaningComponent implements OnInit {
                this.updateSourcePath(result.outputpath, result.outputFileName);
             }
             // this.loadProfile(this.source, this.profile);
-            // alert('Impution has been successfully completed.');
+            this.showConfirmDialog({
+               title: 'Delete',
+               message: `Impution has been successfully completed.`,
+               cancelLable: '',
+               okLable: 'Ok'
+             }, () => {
+             }, () => {
+             });
          }, (error) => {
             this.isLoading = false;
          });
@@ -289,7 +315,7 @@ export class DataCleaningComponent implements OnInit {
          this.isLoading = true;
          this.loaderMsg = 'Deleting columns...';
          this.delete.threshold = (this.delete.category === 'col_nan' || this.delete.category === 'row_nan')
-            ? this.delete.threshold : undefined;
+            ? (this.delete.threshold / 100) : undefined;
          const payload = {
             ...this.delete,
             sourceFileName: this.delete.sourceFileName,
@@ -308,7 +334,15 @@ export class DataCleaningComponent implements OnInit {
                this.updateSourcePath(result.outputpath, result.outputFileName);
             }
             // this.loadProfile(this.source, this.profile);
-            alert(`${this.delete === 'column' ? 'Columns' : 'Rows'} are deleted successfully.`);
+            this.showConfirmDialog({
+               title: 'Delete',
+               message: `${this.delete === 'column' ? 'Columns' : 'Rows'} are deleted successfully.`,
+               cancelLable: '',
+               okLable: 'Ok'
+             }, () => {
+             }, () => {
+             });
+
          }, (error) => {
             this.isLoading = false;
          });
@@ -342,7 +376,15 @@ export class DataCleaningComponent implements OnInit {
             if (result.outputpath) {
                this.updateSourcePath(result.outputpath, result.outputFileName);
             }
-            alert(`Duplicate records are deleted successfully.`);
+            this.showConfirmDialog({
+               title: 'Delete',
+               message: `Duplicate records are deleted successfully.`,
+               cancelLable: '',
+               okLable: 'Ok'
+             }, () => {
+             }, () => {
+             });
+
          }, (error) => {
             this.isLoading = false;
          });
@@ -383,9 +425,10 @@ export class DataCleaningComponent implements OnInit {
             category: this.delete.category,
             column_name: this.delete.category === 'col_with_value' ? this.delete.column_name : '',
             values: this.delete.values ? [this.delete.values] : '',
-            formula: this.delete.values ? '' : this.delete.formula,
-            threshold : (this.delete.category === 'col_nan' || this.delete.category === 'row_nan')
-                           ? (this.delete.threshold / 100) : ''
+            formula:
+               (this.delete.category === 'col_with_value' && this.profile.attributeSummary.dataType === 'Numeric')
+                  ? this.delete.formula : '',
+            threshold : (this.delete.category === 'col_nan' || this.delete.category === 'row_nan') ? (this.delete.threshold / 100) : ''
          }
       };
       this.loadProfilePreview(payloads[type], type);

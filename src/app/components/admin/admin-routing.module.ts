@@ -6,6 +6,7 @@ import { RolesComponent } from './roles/roles.component';
 import { DepartmentsComponent } from './departments/departments.component';
 import { FrequencyComponent } from './frequency/frequency.component';
 import { MultiSourceComponent } from './multi-source/multi-source.component';
+import { CategoryComponent } from './category/category.component';
 
 const routes: Routes = [
   {
@@ -17,6 +18,9 @@ const routes: Routes = [
   }, {
     path: 'departments',
     component: DepartmentsComponent,
+  }, {
+    path: 'category',
+    component: CategoryComponent,
   }, {
     path: 'frequency',
     component: FrequencyComponent,

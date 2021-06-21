@@ -4,10 +4,14 @@
     <mat-card class="bg-violet">
       <h4 class="attr-tite">Summary - {{profileSummary.sourcepath}}</h4>
       <div class="records">
-         <span>Records</span>
-         {{profileSummary.records}}
-      </div>
-      <div class="dotDiv"></div>
+        <span>Records</span>
+        {{profileDetails.nr_totalrecords}}
+     </div>
+     <div class="records">
+        <span>Total Columns</span>
+        {{profileDetails.nr_totalcols}}
+    </div>
+    <div class="dotDiv"></div>
       <div class="records">
         <span>Nr - Numeric Columns</span>
         {{profileSummary.numeric}}
@@ -247,7 +251,10 @@
                     </div>
 
                     <div class="form-rows" style="margin-top: 10px;" *ngIf="delete.category === 'col_nan' || delete.category === 'row_nan'">
-                      <span>Threshold : {{delete.threshold}}%</span>
+                      <span>
+                        Threshold : {{delete.threshold}}%
+                        <!-- (Considering NaNs across {{profileDetails.nr_totalcols - (delete.threshold * profileDetails.nr_totalrecords)}} columns at least, per row) -->
+                      </span>
                       <div class="form-row">
                         <mat-slider thumbLabel min="0" max="100" step="1" [(ngModel)]="delete.threshold"></mat-slider>
                       </div>
