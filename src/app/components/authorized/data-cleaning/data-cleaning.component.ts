@@ -365,6 +365,13 @@ export class DataCleaningComponent implements OnInit {
             payload.formula = '';
             payload.values = '';
          }
+
+         if (payload.category === 'col_with_value' && this.profile.attributeSummary.dataType !== 'Numeric') {
+            payload.formula = '';
+         }
+
+         payload.values = payload.values ? [payload.values] : '';
+
          this.http.deleteColumnsRowsReq(payload).subscribe((result: any) => {
             this.isLoading = false;
             if (result.outputpath) {
