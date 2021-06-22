@@ -315,11 +315,20 @@ export class DataCleaningComponent implements OnInit {
 
       let msg = `Are you sure want to delete the ${this.delete.type} with "Null" values?` ;
       if (this.delete.category === 'col_nan' && this.removeItems) {
-         msg = `Are you sure want to delete the ${this.removeItems.cols_removed.join(', ')} columns with "Null" values?`;
+         msg = `Are you sure want to delete the "${this.removeItems.cols_removed.join(', ')}" columns with "Null" values?`;
       }
 
       if (this.delete.category === 'row_nan' && this.removeItems) {
          msg = `Are you sure want to delete the ${this.removeItems.nr_rows_post} rows?`;
+      }
+
+      console.log(this.delete.formula);
+
+      if (this.delete.formula) {
+         msg = `Are you sure want to delete the rows with the ${this.delete.column_name}
+            column values
+            "${this.delete.formula.operator1} ${this.delete.formula.cond_value1} and
+            ${this.delete.formula.operator2} ${this.delete.formula.cond_value2}"?`;
       }
 
       this.showConfirmDialog({
