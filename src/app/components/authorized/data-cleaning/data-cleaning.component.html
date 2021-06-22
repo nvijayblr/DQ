@@ -253,7 +253,15 @@
                     <div class="form-rows" style="margin-top: 10px;" *ngIf="delete.category === 'col_nan' || delete.category === 'row_nan'">
                       <span>
                         Threshold : {{delete.threshold}}%
-                        <!-- (Considering NaNs across {{profileDetails.nr_totalcols - (delete.threshold * profileDetails.nr_totalrecords)}} columns at least, per row) -->
+                        <!-- row_nan -->
+                        <!-- Considering NaNs across {{(profileDetails.nr_totalcols - ((delete.threshold / 100)*profileDetails.nr_totalcols).toFixed(0))}} columns at least, per row.                      -->
+
+                        <!-- col_nan -->
+                        <!-- (Considering NaNs across {{((delete.threshold / 100) * profileDetails.nr_totalrecords)}} out of {{profileDetails.nr_totalrecords}} rows) -->
+
+                        <!-- Cols Removed -->
+
+                        
                       </span>
                       <div class="form-row">
                         <mat-slider thumbLabel min="0" max="100" step="1" [(ngModel)]="delete.threshold"></mat-slider>

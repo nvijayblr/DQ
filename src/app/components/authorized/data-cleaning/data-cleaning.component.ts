@@ -315,7 +315,7 @@ export class DataCleaningComponent implements OnInit {
          this.isLoading = true;
          this.loaderMsg = 'Deleting columns...';
          this.delete.threshold = (this.delete.category === 'col_nan' || this.delete.category === 'row_nan')
-            ? (this.delete.threshold / 100) : undefined;
+            ? (this.delete.threshold / 100) : '';
          const payload = {
             ...this.delete,
             sourceFileName: this.delete.sourceFileName,
