@@ -308,9 +308,15 @@ export class DataCleaningComponent implements OnInit {
    }
 
    deleteColumnsRows() {
+      const deleteObj = {...this.delete};
+
       if (!this.removeItems) {
          this.loadPreview('data_remove', '', this.deleteColumnsRows.bind(this));
          return;
+      }
+
+      if (deleteObj.category === 'row_nan' || deleteObj.category === 'col_nan') {
+         deleteObj.formula = '';
       }
 
       let msg = `Are you sure want to delete the ${this.delete.type} with "Null" values?` ;
@@ -319,16 +325,21 @@ export class DataCleaningComponent implements OnInit {
       }
 
       if (this.delete.category === 'row_nan' && this.removeItems) {
-         msg = `Are you sure want to delete the ${this.removeItems.nr_rows_post} rows?`;
+         msg = `Are you sure want to delete the ${this.removeItems.nr_rows_post} rows with Null values?`;
       }
 
-      console.log(this.delete.formula);
-
-      if (this.delete.formula) {
-         msg = `Are you sure want to delete the rows with the ${this.delete.column_name}
-            column values
-            "${this.delete.formula.operator1} ${this.delete.formula.cond_value1} and
-            ${this.delete.formula.operator2} ${this.delete.formula.cond_value2}"?`;
+      if (this.delete.category === 'col_with_value') {
+         if (deleteObj.formula) {
+            if (this.profile.attributeSummary.dataType === 'Numeric') {
+               msg = `Are you sure want to delete the rows with the ${this.delete.column_name}
+               column values
+               "${this.delete.formula.operator1} ${this.delete.formula.cond_value1} and
+               ${this.delete.formula.operator2} ${this.delete.formula.cond_value2}"?`;
+            } else {
+               msg = `Are you sure want to delete the rows with the ${this.delete.column_name}
+               value = ${this.delete.values}?`;
+            }
+         }
       }
 
       this.showConfirmDialog({
@@ -350,8 +361,9 @@ export class DataCleaningComponent implements OnInit {
             uploadDate: this.analysis.recentsourceUpload.uploadDate,
          };
          delete payload.type;
-         if (payload.category === 'row_nan') {
+         if (payload.category === 'row_nan' || this.delete.category === 'col_nan') {
             payload.formula = '';
+            payload.values = '';
          }
          this.http.deleteColumnsRowsReq(payload).subscribe((result: any) => {
             this.isLoading = false;
@@ -367,11 +379,12 @@ export class DataCleaningComponent implements OnInit {
              }, () => {
              }, () => {
              });
-
+            this.removeItems = '';
          }, (error) => {
             this.isLoading = false;
          });
        }, () => {
+         this.removeItems = '';
        });
 
    }
