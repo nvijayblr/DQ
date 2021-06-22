@@ -96,6 +96,8 @@ export class DataCleaningComponent implements OnInit {
       nr_totalrecords: 0
    };
 
+   removeItems: any = '';
+
    constructor(
       private messageService: MessageService,
       private http: HttpService,
@@ -306,9 +308,23 @@ export class DataCleaningComponent implements OnInit {
    }
 
    deleteColumnsRows() {
+      if (!this.removeItems) {
+         this.loadPreview('data_remove', '', this.deleteColumnsRows.bind(this));
+         return;
+      }
+
+      let msg = `Are you sure want to delete the ${this.delete.type} with "Null" values?` ;
+      if (this.delete.category === 'col_nan' && this.removeItems) {
+         msg = `Are you sure want to delete the ${this.removeItems.cols_removed.join(', ')} columns with "Null" values?`;
+      }
+
+      if (this.delete.category === 'row_nan' && this.removeItems) {
+         msg = `Are you sure want to delete the ${this.removeItems.nr_rows_post} rows?`;
+      }
+
       this.showConfirmDialog({
          title: `Delete ${this.delete.type}`,
-         message: `Are you sure want to delete the ${this.delete.type} with "Null" values?` ,
+         message: msg,
          cancelLable: 'No',
          okLable: 'Yes'
        }, () => {
@@ -395,7 +411,7 @@ export class DataCleaningComponent implements OnInit {
 
    }
 
-   loadPreview(type, mask = '') {
+   loadPreview(type, mask = '', callBack: any = '') {
       this.delete.formula.cond_value1 = this.delete.formula.cond_value1 ? this.delete.formula.cond_value1 : '';
       this.delete.formula.cond_value2 = this.delete.formula.cond_value2 ? this.delete.formula.cond_value2 : '';
 
@@ -431,20 +447,32 @@ export class DataCleaningComponent implements OnInit {
             threshold : (this.delete.category === 'col_nan' || this.delete.category === 'row_nan') ? (this.delete.threshold / 100) : ''
          }
       };
-      this.loadProfilePreview(payloads[type], type);
+      this.loadProfilePreview(payloads[type], type, callBack);
    }
 
-   loadProfilePreview(payload, type) {
+   loadProfilePreview(payload, type, callBack) {
       this.loaderMsg = 'Loading preview...';
       this.isPreviewLoaded = false;
       this.isPreviewLoading = true;
       this.columnDefs = [];
       this.rowData = [];
+      this.removeItems = '';
       this.http.getProfilePreview(payload, type).subscribe((res: any) => {
-         console.log('res', res);
          const details: any = res.Preview ? res.Preview : {};
+         if (type === 'data_remove') {
+            this.removeItems = {
+               cols_removed: res.cols_removed,
+               nr_cols_post: res.nr_cols_post,
+               nr_cols_prior: res.nr_cols_prior,
+               nr_rows_post: res.nr_rows_post,
+               nr_rows_prior: res.nr_rows_prior
+            };
+         }
          this.parseSourcePreview(details);
          this.isLoading = false;
+         if (callBack) {
+            callBack();
+         }
       }, (error) => {
          console.log(error);
          this.isLoading = false;
@@ -523,7 +551,19 @@ export class DataCleaningComponent implements OnInit {
        });
     }
 
-   // ngAfterViewInit(){
+    calulateRowNanThreshold() {
+      const value = (this.profileDetails.nr_totalcols - ((this.delete.threshold / 100) * this.profileDetails.nr_totalcols));
+      return value.toFixed(0);
+   }
+
+
+   calulateColNanThreshold() {
+      const value = ((this.delete.threshold / 100) * this.profileDetails.nr_totalrecords);
+      return value.toFixed(0);
+   }
+
+
+ // ngAfterViewInit(){
    //    this.elementPosition = this.menuElement.nativeElement.offsetTop;
    // }
 
