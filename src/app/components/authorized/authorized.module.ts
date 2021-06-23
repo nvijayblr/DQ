@@ -18,6 +18,7 @@ import { CorrelationDetailsComponent } from './correlation-details/correlation-d
 import { AnalysisComponent } from './analysis/analysis.component';
 import { DataCleaningComponent } from './data-cleaning/data-cleaning.component';
 import { DataQualityComponent } from './data-quality/data-quality.component';
+import { CreateProfileDataComponent } from './create-profile-data/create-profile-data.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { DataQualityComponent } from './data-quality/data-quality.component';
     CorrelationDetailsComponent,
     AnalysisComponent,
     DataCleaningComponent,
-    DataQualityComponent
+    DataQualityComponent,
+    CreateProfileDataComponent
   ],
    imports: [
       HighchartsChartModule,

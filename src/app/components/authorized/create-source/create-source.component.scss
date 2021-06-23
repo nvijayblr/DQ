@@ -334,11 +334,14 @@
       padding: 3px 9px;
       width: 150px;
       font-size: 12px;
-      position: relative;
-      top: -18px;
+      position: absolute;
+      margin-top:-10px;
+      //top: -18px;
       &.ps{
-        top: -7px;
-        left: -8px;
+        //top: -7px;
+        //left: -8px;
+        margin-top:2px;
+        position: relative;
       }
     }
  }
@@ -493,9 +496,9 @@
    line-height: 26px;
  }
 
- //::ng-deep.mat-form-field-appearance-fill .mat-form-field-flex{
-    //background:#eee8f8;
- //}
+//  ::ng-deep.mat-form-field-appearance-fill .mat-form-field-flex{
+//     background:#eee8f8;
+//  }
 
  ::-webkit-input-placeholder {
    color: #b9b9b9;
@@ -629,6 +632,23 @@ $input-text-active: #BFD2FF;
          font-size: 20px;
       }
    }
+   &.tollico{
+    width: 140px;
+    height: 26px;
+    line-height: 28px;
+    outline: none;
+    border: none;
+    //padding-top: 3px;
+    border-radius: 2px;
+    margin-right: 5px;
+    text-align: left;
+    .mat-icon{
+       font-size: 15px;
+       position: relative;
+       top:2px;
+       left:10px;
+    }
+ }
  }
  
  .btnLightBlue {
@@ -972,9 +992,9 @@ tr:nth-child(odd) {background: #ffffff}
    background:#fff;
 }
 
-.mat-form-field-appearance-fill .mat-form-field-flex {
-   background: #eee8f8;
-}
+// .mat-form-field-appearance-fill .mat-form-field-flex {
+//    background: #eee8f8;
+// }
 .yellow{ color :#efa800}
 
 .horizontal {
@@ -1120,8 +1140,9 @@ tr:nth-child(odd) {background: #ffffff}
 }
 ::ng-deep .mat-horizontal-stepper-header-container{
   border-radius: 0px !important;
-    box-shadow: 0px 1px 4px #b6b6b6, 0px 2px 17px #ebe8fb;
+    //box-shadow: 0px 1px 4px #b6b6b6, 0px 2px 17px #ebe8fb;
     background: #fff;
+    margin-bottom: 10px;
 }
 ::ng-deep .mat-horizontal-content-container {
   overflow: hidden;
@@ -1189,15 +1210,18 @@ tr:nth-child(odd) {background: #ffffff}
   vertical-align: top;
   margin-right: 1%!important;
   padding-bottom: 30px!important;
-  min-height: 470px;
+  box-shadow: none!important;
 }
 .card2{
   width:49%;
   display: inline-block;
   vertical-align: top;
   padding-bottom: 5px!important;
-  min-height: 440px;
+  box-shadow: none!important;
 }
 .cat{
   width:100%;
+}
+.source-preview-card{
+  box-shadow: none!important;
 }

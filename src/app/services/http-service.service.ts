@@ -159,6 +159,18 @@ export class HttpService  {
     );
   }
 
+   // Profile APIs
+  
+   saveSourceProfile(payload, method): Observable<any> {
+    return this.http[method]<any>(`${this.rootUrl}/api/configureSourceProfile`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
   uploadSource(payload): Observable<any> {
     return this.http.post<any>(`${this.rootUrl}/api/uploadSource`, payload).pipe(
       tap((res) => {

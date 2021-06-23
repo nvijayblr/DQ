@@ -14,7 +14,7 @@
               <mat-step>
                   <ng-template matStepLabel>Source Data</ng-template>                  
                     
-                      <div class="form-continer">
+                      <div class="form-continer flex-containers">
                         <mat-card class="border no-rounded list shrare-post pbl card1">
                           <h1 class="share-post-title">Create Your<span class="yellow"> Source</span></h1>
                         <div class="list flex-containers flex-start wrap">
@@ -107,6 +107,13 @@
                               </mat-select>  
                             </mat-form-field>
                           </div>
+                          <div class="list-item-2 outline split">
+                            <button type="button" class="button3d btnPush btnBlueGreen tollico" (click)="openToleranceLevelDialog()">
+                            <mat-icon>add</mat-icon>
+                            Tolerance Level
+                            </button>
+                          </div>
+                          
                          </div>
 
                          <!-- <div class="or-spacer-vertical left">
