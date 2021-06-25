@@ -33,6 +33,7 @@ import { HeatMapComponent } from './heat-map/heat-map.component';
 import { AnalysisChartComponent } from './analysis-chart/analysis-chart.component';
 import { CorelationSummaryComponent } from './corelation-summary/corelation-summary.component';
 import { AdvancedFormulaEditorComponent } from './advanced-formula-editor/advanced-formula-editor.component';
+import { ToleranceLevelDialogComponent } from './tolerance-level-dialog/tolerance-level-dialog.component';
 
 @NgModule({
    imports: [
@@ -73,6 +74,7 @@ import { AdvancedFormulaEditorComponent } from './advanced-formula-editor/advanc
     AnalysisChartComponent,
     CorelationSummaryComponent,
     AdvancedFormulaEditorComponent,
+    ToleranceLevelDialogComponent,
   ],
   exports: [
     FormsModule,
@@ -115,7 +117,8 @@ import { AdvancedFormulaEditorComponent } from './advanced-formula-editor/advanc
      ColorDialogComponent,
      CompletenessDialogComponent,
      FormulaEditorComponent,
-     AdvancedFormulaEditorComponent
+    AdvancedFormulaEditorComponent,
+    ToleranceLevelDialogComponent
   ]
 })
 export class SharedModule {}

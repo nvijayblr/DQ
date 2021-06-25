@@ -9,6 +9,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { AttributeDetailsComponent } from './attribute-details/attribute-details.component';
 import { DataCleaningComponent } from './data-cleaning/data-cleaning.component';
 import { DataQualityComponent } from './data-quality/data-quality.component';
+import { CreateProfileDataComponent } from './create-profile-data/create-profile-data.component';
 
 const routes: Routes = [
   {
@@ -48,8 +49,9 @@ const routes: Routes = [
        { path: 'add-source-data', component: ProfileComponent },
        { path: 'create-source-data', component: CreateSourceComponent },
        { path: 'attribute-details-data', component: AttributeDetailsComponent },
-      { path: 'data-cleaning', component: DataCleaningComponent },
+       { path: 'data-cleaning', component: DataCleaningComponent },
       { path: 'data-quality', component: DataQualityComponent },
+      { path: 'create-profile-data', component: CreateProfileDataComponent },
     ]
   },
 ];

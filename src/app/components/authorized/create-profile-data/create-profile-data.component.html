@@ -1,0 +1,127 @@
+
+<section class="page-body home-bodys pad-tp">
+  <div class="container">
+    <div class="home-wrapper">      
+      <div class="clearfix my-community-body">
+        <div class="home-panel">
+          <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
+                <form [formGroup]="analysisForm">          
+                  <ng-template matStepLabel>Source Data</ng-template>                  
+                      <div class="form-continer flex-containers">
+                        <mat-card class="border no-rounded list shrare-post pbl card1">
+                          <h1 class="share-post-title">Create Your<span class="yellow"> Source</span></h1>
+                        <div class="list flex-containers flex-start wrap">
+                        <div class="list-item-2 outline wth">
+                          <div>
+                          <div class="srcData">
+                            <mat-label>Source Data<span class="red">*</span>&nbsp;<span *ngIf="selectedType">({{selectedType}})</span></mat-label>
+                          </div>                          
+                            <div class="cfile"> 
+                              <app-image-cropper 
+                                *ngIf="!isEditMode"
+                                [imageType]="'Source'"
+                                [fileTypes]="chooseOptions"
+                                [imagePath]="''"
+                                [disabled]="isEditMode"
+                                (fileSelected)="onSourceFileSelected($event)"
+                              >
+                              </app-image-cropper>
+                              <h4 *ngIf="isEditMode">
+                                {{analysis.source.sourceFileName}}
+                              </h4>
+                              <mat-error class="nerr" *ngIf="!flError">Please Select a Correct File Type</mat-error>
+                              <mat-error class="nerr ftw" *ngIf="selFileNameErr && flError">Please Select a File</mat-error>
+                            </div>
+                          </div>
+                          <div class="list-item-2 outline split">
+                              <mat-label class="sub-title">Source Name<span class="red">*</span></mat-label>
+                              <mat-form-field appearance="fill">
+                                <input matInput placeholder="Source Name" formControlName="sourceDataName" maxlength="50" autocomplete="off"/>
+                              </mat-form-field>
+                              <mat-error class="errSty" *ngIf="!afControls.sourceDataName.value && afControls.sourceDataName.touched">Please Enter Source Name</mat-error>
+                              </div>
+                              <div class="list-item-2 outline splitR">
+                              <mat-label class="mtop sub-title">Source Description</mat-label>                                                    
+                              <mat-form-field appearance="fill">
+                                <input matInput placeholder="Source Description" formControlName="sourceDataDescription" maxlength="250" autocomplete="off"/>
+                              </mat-form-field>
+                              </div>
+                              <div class="list-item-2 outline split">
+                                <mat-label class="mtop sub-title">Source Category</mat-label> 
+                                <mat-form-field appearance="fill">
+                                  <mat-label>Category</mat-label>
+                                  <mat-select formControlName="sourceCategory">
+                                    <mat-option value="Category">
+                                      Category
+                                    </mat-option>
+                                    <mat-option value="Category1">
+                                      Category1
+                                    </mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                              </div>
+                              <div class="list-item-2 outline splitR">
+                                <mat-label class="mtop sub-title">Data Owner</mat-label> 
+                                  <mat-form-field appearance="fill">
+                                    <mat-select [disableOptionCentering]="true" #select placeholder="Data Owner" formControlName="dataOwner">
+                                      <mat-select-filter *ngIf="select.focused" [array]="variables" (filteredReturn)="filteredList =$event"></mat-select-filter>
+                                      <mat-option *ngFor="let item of filteredList" [value]="item">
+                                        {{item}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                              </div>
+
+                              <div class="list-item-2 outline split">
+                                <span class="sub-title"> Department</span>
+                                <app-rule-selector 
+                                  multiple="true" 
+                                  [ruleItems]="departmentList" 
+                                  [initValue]="sourceSettings.department" 
+                                  [showAddItem]="false"
+                                  (selectionChange)="sourceSettings.department=$event.value"
+                                ></app-rule-selector>
+                              </div>
+                              <div class="bdr"></div>
+                                          
+                              <div class="act-btn-wrapper m1t">
+                                  <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"
+                                 
+                                  (click)="saveSource()">Submit <mat-icon>navigate_next</mat-icon></button>
+          
+                                  <!-- <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"
+                                  [disabled]="!afControls.sourceDataName.value || !sourceSettings.frequency || !sourceSettings.uploadDate || !flError"
+                                  (click)="validateSourceNameAndNext()">Next <mat-icon>navigate_next</mat-icon></button> -->
+                              </div>                                                     
+                         </div>
+                         </div>
+                         </mat-card>
+
+                      </div>                                
+          </form>
+          <div class="agShowDetails" *ngIf="flError && showPreview">
+            <mat-card class="border no-rounded list shrare-post mat-card source-preview-card" [hidden]="stepIndex === 1 || stepIndex === 2">
+              <div class="list flex-containers space-between">
+                <h1 class="share-post-title">Source Preview</h1>
+                <button  class="horizontal" (click)="loadSourcePreview();"> <span class="text"><mat-icon>view_column</mat-icon> Preview </span></button>
+              </div>
+              <app-progress-bar [message]="'Loading source preview...'" class="component" *ngIf="isPreviewLoading"></app-progress-bar>
+              <app-ag-grid
+                floatingFilter="true"
+                *ngIf="isPreviewLoaded"
+                [rowData]="rowData"
+                [columnDefs]="columnDefs"
+                [pageSize]="50"
+                [rowSelection]="'multiple'"
+                [suppressRowClickSelection]="false"
+              ></app-ag-grid>
+            </mat-card>
+          </div>
+
+         
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</section>

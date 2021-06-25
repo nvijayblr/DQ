@@ -320,8 +320,10 @@
        transition: 0.25s ease;
      }
      &.active {
-        border-bottom: 3px solid #efa800;
+        border-bottom: 2px solid #efa800;
+        transition: width .3s;
      }
+    
    }
    &:last-child a {
      border-width: 0;

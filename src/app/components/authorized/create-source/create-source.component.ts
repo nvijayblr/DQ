@@ -10,6 +10,7 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-d
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { S } from '@angular/cdk/keycodes';
 import * as moment from 'moment';
+import { ToleranceLevelDialogComponent } from '../../../shared/tolerance-level-dialog/tolerance-level-dialog.component';
 
 @Component({
   selector: 'app-create-source',
@@ -475,5 +476,11 @@ export class CreateSourceComponent implements OnInit {
     }
     this.isRefPreviewLoaded = true;
     this.isRefPreviewLoading = false;
+  }
+
+  openToleranceLevelDialog(): void {
+    this.dialog.open(ToleranceLevelDialogComponent, {
+      width: '800px',
+    });
   }
 }
