@@ -70,12 +70,20 @@
                               <div class="list-item-2 outline splitR">
                                 <mat-label class="mtop sub-title">Data Owner</mat-label> 
                                   <mat-form-field appearance="fill">
-                                    <mat-select [disableOptionCentering]="true" #select1 placeholder="Auto Focus">
+
+                                    <!-- <mat-select [disableOptionCentering]="true" #select1 placeholder="Auto Focus">
                                       <mat-select-filter *ngIf="select1.focused" [array]="variables" (filteredReturn)="filteredList2 =$event"></mat-select-filter>
                                       <mat-option *ngFor="let item of filteredList2" [value]="item">
                                         {{item}}
                                       </mat-option>
+                                    </mat-select> -->
+
+                                    <mat-select [disableOptionCentering]="true" #select1 placeholder="Select">
+                                      <mat-option *ngFor="let option of usersList" [value]="option.value" color="accent">
+                                        {{ option.name }}
+                                      </mat-option>
                                     </mat-select>
+
                                   </mat-form-field>
                               </div>
                                                       
@@ -85,12 +93,10 @@
                               <mat-select #select3 multiple placeholder="Using Groups" [(value)]="selected">
                                 <mat-select-filter *ngIf="select3.focused" [placeholder]="'Filter'" [array]="variablesGroups" hasGroup="true" groupArrayName="values"
                                  displayMember="value" (filteredReturn)="groups=$event"></mat-select-filter>                          
-                                <mat-optgroup *ngFor="let group of groups" [label]="group.value">
-                                  <mat-option *ngFor="let option of group.values" [value]="option.id" color="accent">
-                                    {{ option.value }}
+                                  <mat-option *ngFor="let category of categoryList" [value]="category.value" color="accent">
+                                    {{ category.label }}
                                   </mat-option>
-                                </mat-optgroup>                                               
-                              </mat-select>  
+                                </mat-select>  
                             </mat-form-field>
                             </div>
                             <div class="list-item-2 outline splitR">
@@ -99,12 +105,10 @@
                               <mat-select #select4 multiple placeholder="Using Groups" [(value)]="selected1">
                                 <mat-select-filter *ngIf="select4.focused" [placeholder]="'Filter'" [array]="variablesGroups" hasGroup="true" groupArrayName="values"
                                  displayMember="value" (filteredReturn)="groups=$event"></mat-select-filter>                          
-                                <mat-optgroup *ngFor="let group of groups" [label]="group.value">
-                                  <mat-option *ngFor="let option of group.values" [value]="option.id" color="accent">
-                                    {{ option.value }}
+                                  <mat-option *ngFor="let category of categoryList" [value]="category.value" color="accent">
+                                    {{ category.label }}
                                   </mat-option>
-                                </mat-optgroup>                                               
-                              </mat-select>  
+                                </mat-select>  
                             </mat-form-field>
                           </div>
                          </div>

@@ -1,6 +1,6 @@
 <h1 mat-dialog-title>Cateogry</h1>
 <div mat-dialog-content class="user-account">
-  <form [formGroup]="catForm" (ngSubmit)="saveDept()">
+  <form [formGroup]="catForm" (ngSubmit)="saveCategory()">
     <div class="user-wrap">
       <div class="list">
         <mat-form-field appearance="fill">
@@ -14,10 +14,22 @@
           <input type="text" matInput formControlName="value" autocomplete="off">
         </mat-form-field>
       </div>
+      <div class="list">
+        <app-rule-selector 
+          multiple="false" 
+          [label]="'Department'"
+          [showAddItem]="false"
+          [ruleItems]="deptList" 
+          [initValue]="catForm.controls.department.value"
+          (selectionChange)="catForm.controls.department.setValue($event.value)"
+        ></app-rule-selector>
+        <mat-error class="rule-selector-error" *ngIf="fc.department.errors?.required">Department type is required.</mat-error>
+      </div>
+
     </div>
   </form>
 </div>
 <div mat-dialog-actions>
   <button mat-raised-button color="primary" (click)="onNoClick()">Cancel</button>
-  <button mat-raised-button color="accent" (click)="saveDept()" cdkFocusInitial class="ma-cr">Ok</button>
+  <button mat-raised-button color="accent" (click)="saveCategory()" cdkFocusInitial class="ma-cr">Ok</button>
 </div>

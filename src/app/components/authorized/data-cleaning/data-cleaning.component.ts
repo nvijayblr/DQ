@@ -96,6 +96,9 @@ export class DataCleaningComponent implements OnInit {
       nr_totalrecords: 0
    };
 
+   cleanLogs: any = [];
+   isLogsLoading = false;
+
    removeItems: any = '';
 
    constructor(
@@ -206,6 +209,7 @@ export class DataCleaningComponent implements OnInit {
       const payload = {
          sourcepath: source.templateSourcePath
       };
+      this.getCleanedLogs();
       this.http.getProfiles(payload).subscribe((result: any) => {
          this.profiles = result.profile ? result.profile : [];
          this.profileDetails = {
@@ -252,7 +256,22 @@ export class DataCleaningComponent implements OnInit {
       }, (error) => {
          this.isLoading = false;
       });
-  }
+   }
+
+   getCleanedLogs() {
+      this.isLogsLoading = true;
+      const payload = {
+         query_col : 'sourceId',
+         query_val : this.analysis.sourceId
+      };
+      this.http.getCleanedLogs(payload).subscribe((result: any) => {
+         this.isLogsLoading = false;
+         console.log(result);
+         this.cleanLogs = result.data ? result.data : [];
+      }, (error) => {
+         this.isLogsLoading = false;
+      });
+   }
 
    updateSourcePath(path, outputFileName) {
       this.source.templateSourcePath = path;
@@ -280,8 +299,7 @@ export class DataCleaningComponent implements OnInit {
             sourceFileName: this.impute.sourceFileName,
             sourceId: this.analysis.sourceId,
             uploadId: this.analysis.recentsourceUpload.uploadId,
-            rulesetId: this.analysis.rulesetId,
-            uploadDate: this.analysis.recentsourceUpload.uploadDate,
+            processTime: this.analysis.recentsourceUpload.uploadDate,
          };
          this.isLoading = true;
          this.loaderMsg = 'Imputing columns...';
@@ -299,6 +317,7 @@ export class DataCleaningComponent implements OnInit {
              }, () => {
              }, () => {
              });
+            this.getCleanedLogs();
          }, (error) => {
             this.isLoading = false;
          });
@@ -357,8 +376,7 @@ export class DataCleaningComponent implements OnInit {
             sourceFileName: this.delete.sourceFileName,
             sourceId: this.analysis.sourceId,
             uploadId: this.analysis.recentsourceUpload.uploadId,
-            rulesetId: this.analysis.rulesetId,
-            uploadDate: this.analysis.recentsourceUpload.uploadDate,
+            processTime: this.analysis.recentsourceUpload.uploadDate,
          };
          delete payload.type;
          if (payload.category === 'row_nan' || this.delete.category === 'col_nan') {
@@ -413,8 +431,7 @@ export class DataCleaningComponent implements OnInit {
             sourceFileName: this.impute.sourceFileName,
             sourceId: this.analysis.sourceId,
             uploadId: this.analysis.recentsourceUpload.uploadId,
-            rulesetId: this.analysis.rulesetId,
-            uploadDate: this.analysis.recentsourceUpload.uploadDate,
+            processTime: this.analysis.recentsourceUpload.uploadDate,
          };
          this.http.deleteDuplicatesReq(payload).subscribe((result: any) => {
             this.isLoading = false;
@@ -453,8 +470,7 @@ export class DataCleaningComponent implements OnInit {
             sourceFileName: this.impute.sourceFileName,
             sourceId: this.analysis.sourceId,
             uploadId: this.analysis.recentsourceUpload.uploadId,
-            rulesetId: this.analysis.rulesetId,
-            uploadDate: this.analysis.recentsourceUpload.uploadDate,
+            processTime: this.analysis.recentsourceUpload.uploadDate,
          },
          mask: {
             sourcepath: this.source.templateSourcePath,

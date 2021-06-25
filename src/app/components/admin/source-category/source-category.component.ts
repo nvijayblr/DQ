@@ -6,15 +6,15 @@ import { AuthGuardService } from 'src/app/services/auth-guard.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
 import * as moment from 'moment';
-import { CreateEditCategoryComponent } from './create-edit-category/create-edit-category.component';
+import { CreateEditSourceCategoryComponent } from './create-edit-source-category/create-edit-source-category.component';
 
 @Component({
-  selector: 'app-category',
-  templateUrl: './category.component.html',
-  styleUrls: ['./category.component.scss']
+  selector: 'app-source-category',
+  templateUrl: './source-category.component.html',
+  styleUrls: ['./source-category.component.scss']
 })
-export class CategoryComponent implements OnInit {
 
+export class SourceCategoryComponent implements OnInit {
   isLoading = false;
   loaderMsg = '';
   categoryList: any = [];
@@ -43,7 +43,7 @@ export class CategoryComponent implements OnInit {
    getCategoryList() {
     this.isLoading = true;
     this.loaderMsg = 'Loading category...';
-    this.http.getCategoryList().subscribe((result: any) => {
+    this.http.getSourceCategoryList().subscribe((result: any) => {
       this.categoryList = result.categoryList ? result.categoryList : [];
       this.isLoading = false;
     }, (error) => {
@@ -54,7 +54,7 @@ export class CategoryComponent implements OnInit {
   createEditCategory(category, mode) {
     this.isLoading = true;
     this.loaderMsg = 'Saving category details...';
-    this.http.createEditCategory(category, mode).subscribe((result: any) => {
+    this.http.createEditSourceCategory(category, mode).subscribe((result: any) => {
       this.isLoading = false;
       this.getCategoryList();
     }, (error) => {
@@ -63,7 +63,7 @@ export class CategoryComponent implements OnInit {
   }
 
   showAddEditCategory(category, mode) {
-    const dialogRef = this.dialog.open(CreateEditCategoryComponent, {
+    const dialogRef = this.dialog.open(CreateEditSourceCategoryComponent, {
         width: '450px',
         data: {category: category ? category : {}, mode, departmentsList: this.departmentsList}
     });

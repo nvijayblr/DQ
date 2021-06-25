@@ -293,6 +293,26 @@ export class HttpService  {
     ) as any;
   }
 
+  getSourceCategoryList(): Observable<any> {
+    return this.http.get<any>(`${this.rootUrl}/api/getsourceCategory`).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  createEditSourceCategory(payload, mode): Observable<any> {
+    return this.http[mode === 'create' ? 'post' : 'put'](`${this.rootUrl}/api/createsourceCategory`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    ) as any;
+  }
+
 
   getRolesList(): Observable<any> {
     return this.http.get<any>(`${this.rootUrl}/api/getRoles`).pipe(
@@ -430,6 +450,16 @@ export class HttpService  {
     );
   }
 
+
+  getCleanedLogs(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/cleandb_log_query`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
 
 
 

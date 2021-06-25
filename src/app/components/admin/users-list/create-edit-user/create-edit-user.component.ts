@@ -16,6 +16,7 @@ export class CreateEditUserComponent implements OnInit {
   mode = '';
   roleList: any = [];
   deptList: any = [];
+  categoryList: any = [];
   userTypes: any = [{
     label: 'DATA_OWNER',
     value: 'DATA_OWNER'
@@ -52,6 +53,8 @@ export class CreateEditUserComponent implements OnInit {
         value: dept.Name,
       });
     });
+    this.categoryList = this.data.categoryList;
+
     this.userForm = this.fb.group({
       name: [this.user.name, [Validators.required]],
       email: [this.user.email, [Validators.required, Validators.email]],
@@ -61,6 +64,7 @@ export class CreateEditUserComponent implements OnInit {
       type: [this.user.type, [Validators.required]],
       department: [this.user.department],
       status: [this.user.status, [Validators.required]],
+      userCategory: [this.user.userCategory, [Validators.required]],
     });
   }
 
@@ -70,7 +74,6 @@ export class CreateEditUserComponent implements OnInit {
 
   saveUser() {
     this.userForm.markAllAsTouched();
-    console.log(this.userForm.controls.type.errors.required);
     if (!this.userForm.valid) {
       return;
     }

@@ -44,6 +44,9 @@ export class CreateSourceComponent implements OnInit {
   multiSourceList = this.messageService.getPrefrences('multisource');
   frequencyList = this.messageService.getPrefrences('frequency');
   departmentList = this.messageService.getPrefrences('departments');
+  categoryList = this.messageService.getPrefrences('usercategory');
+  usersList = this.messageService.getPrefrences('users');
+
 
   sourceSettings = {
     isMuliSourceData: 'true',
@@ -93,7 +96,6 @@ export class CreateSourceComponent implements OnInit {
   filteredList2: any = [];
   public selected = [];
   public selected1 = [];
-
 
   public variablesGroups =
     [
@@ -168,7 +170,6 @@ export class CreateSourceComponent implements OnInit {
      // console.log(mode);
     this.minDate = moment().format('YYYY-MM-DD');
     this.analysis = analysis;
-    console.log(this.analysis.source.sourceFileName);
   }
 
   intiFormArrays(field, reference: any = {}) {

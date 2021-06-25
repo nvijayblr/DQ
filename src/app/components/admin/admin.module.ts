@@ -16,6 +16,8 @@ import { CreateEditFrequencyComponent } from './frequency/create-edit-frequency/
 import { CreateEditMultiSourceComponent } from './multi-source/create-edit-multi-source/create-edit-multi-source.component';
 import { CategoryComponent } from './category/category.component';
 import { CreateEditCategoryComponent } from './category/create-edit-category/create-edit-category.component';
+import { SourceCategoryComponent } from './source-category/source-category.component';
+import { CreateEditSourceCategoryComponent } from './source-category/create-edit-source-category/create-edit-source-category.component';
 
 
 @NgModule({
@@ -32,7 +34,9 @@ import { CreateEditCategoryComponent } from './category/create-edit-category/cre
     CreateEditFrequencyComponent,
     CreateEditMultiSourceComponent,
     CategoryComponent,
-    CreateEditCategoryComponent],
+    CreateEditCategoryComponent,
+    SourceCategoryComponent,
+    CreateEditSourceCategoryComponent],
   imports: [
     CommonModule,
     AdminRoutingModule,
@@ -44,7 +48,8 @@ import { CreateEditCategoryComponent } from './category/create-edit-category/cre
     CreateEditRoleComponent,
     CreateEditFrequencyComponent,
     CreateEditMultiSourceComponent,
-    CreateEditCategoryComponent
+    CreateEditCategoryComponent,
+    CreateEditSourceCategoryComponent
   ]
 })
 export class AdminModule { }

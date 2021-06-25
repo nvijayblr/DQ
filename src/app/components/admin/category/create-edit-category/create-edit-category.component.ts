@@ -12,8 +12,9 @@ export class CreateEditCategoryComponent implements OnInit {
   catForm: FormGroup;
   colorCtr: FormGroup;
   formVal: any = [];
-  dept: any = {};
+  category: any = {};
   mode = '';
+  deptList = [];
 
   constructor(
     private fb: FormBuilder,
@@ -24,20 +25,33 @@ export class CreateEditCategoryComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dept = this.data.dept;
+    const deptList = this.data.departmentsList;
+    deptList.map(dept => {
+      this.deptList.push({
+        label: dept.Display,
+        value: dept.Name,
+      });
+    });
+
+    this.category = this.data.category;
     this.mode = this.data.mode;
     this.catForm = this.fb.group({
-      label: [this.dept.label, [Validators.required]],
-      value: [this.dept.value, [Validators.required]],
+      label: [this.category.label, [Validators.required]],
+      value: [this.category.value, [Validators.required]],
+      department: [this.category.department, [Validators.required]],
     });
   }
 
-  saveDept() {
+  get fc() {
+    return this.catForm.controls;
+  }
+
+  saveCategory() {
     this.catForm.markAllAsTouched();
     if (!this.catForm.valid) {
       return;
     }
-    this.dialogRef.close({dept: this.catForm.value, mode: this.mode});
+    this.dialogRef.close({category: this.catForm.value, mode: this.mode});
   }
 
   onNoClick(): void {

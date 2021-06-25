@@ -37,6 +37,19 @@
         ></app-rule-selector>
         <mat-error class="rule-selector-error" *ngIf="fc.role.errors?.required">Role type is required.</mat-error>
       </div>
+
+      <div class="list">
+        <app-rule-selector 
+          multiple="true" 
+          [label]="'Category'"
+          [showAddItem]="false"
+          [ruleItems]="categoryList" 
+          [initValue]="userForm.controls.userCategory.value"
+          (selectionChange)="userForm.controls.userCategory.setValue($event.value)"
+        ></app-rule-selector>
+        <mat-error class="rule-selector-error" *ngIf="fc.userCategory.errors?.required">User category type is required.</mat-error>
+      </div>
+
       <div class="list">
         <app-rule-selector 
           multiple="true" 

@@ -7,6 +7,7 @@ import { DepartmentsComponent } from './departments/departments.component';
 import { FrequencyComponent } from './frequency/frequency.component';
 import { MultiSourceComponent } from './multi-source/multi-source.component';
 import { CategoryComponent } from './category/category.component';
+import { SourceCategoryComponent } from './source-category/source-category.component';
 
 const routes: Routes = [
   {
@@ -27,6 +28,9 @@ const routes: Routes = [
   }, {
     path: 'multi-source',
     component: MultiSourceComponent,
+  }, {
+    path: 'source-category',
+    component: SourceCategoryComponent,
   }
 ];
 

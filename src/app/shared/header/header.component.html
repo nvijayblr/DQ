@@ -58,6 +58,9 @@
               <button class="nav-category-item" mat-menu-item routerLink="/auth/admin/category" *ngIf="user.rights.includes('USER_MANAGEMENT')">
                 <mat-icon matPrefix>settings</mat-icon>Manage Category
               </button>
+              <button class="nav-category-item" mat-menu-item routerLink="/auth/admin/source-category" *ngIf="user.rights.includes('USER_MANAGEMENT')">
+                <mat-icon matPrefix>settings</mat-icon>Source Category
+              </button>
               <button class="nav-category-item" mat-menu-item routerLink="/auth/admin/users" *ngIf="user.rights.includes('USER_MANAGEMENT')">
                 <mat-icon matPrefix>settings</mat-icon>Users List
               </button>
