@@ -396,7 +396,7 @@ export class AttributeDetailsComponent implements OnInit {
   }
 
 
-  changeCategory(source, index) {
+  changeCategory(source) {
     localStorage.setItem('dq-profile-source', JSON.stringify(source));
     this.selectedSource = source;
     this.initLoadProfile = false;

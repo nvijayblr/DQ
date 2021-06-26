@@ -316,7 +316,7 @@
                   <div class="list-item-4">
                     <mat-form-field appearance="fill">
                       <mat-label class="lbl">Method</mat-label>
-                      <mat-select [(ngModel)]="method" (ngModelChange)="loadCorrelation(source, datatype, $event)">
+                      <mat-select [(ngModel)]="method" (ngModelChange)="loadCorrelation(selectedSource, datatype, $event)">
                         <mat-option *ngIf="datatype === 'numeric'" value="pearson">Pearson</mat-option>
                         <mat-option *ngIf="datatype === 'numeric'" value="kendall">Kendall</mat-option>
                         <mat-option *ngIf="datatype === 'numeric'" value="spearman">Spearman</mat-option>
