@@ -72,6 +72,8 @@ export class CreateProfileDataComponent implements OnInit {
   sourceId = '';
   sourceNames = [];
   summary: any = {};
+  srcCategory = [];
+  srcDataOwner: any = {};
 
   isPreviewLoaded = false;
   isPreviewLoading = false;
@@ -90,24 +92,22 @@ export class CreateProfileDataComponent implements OnInit {
   showPreview = false;
   selFileName;
   selFileNameErr = false;
-
-  filteredList2: any = [];
-  //public selected = [];
   public selected = [];
-
-
-  public variables = ['Data Owner 1', 'Data Owner 2', 'Data Owner 3'];
-  public filteredList = this.variables.slice();
+  public variables = [];
+  public filteredList;
+  editAnalysis;
 
   ngOnInit() {
     this.isUserLoggedIn = this.authGuardService.isUserLoggedIn();
     this.user = this.authGuardService.getLoggedInUserDetails();
     this.userId = this.user.user_id;
 
-    const sourceNames = localStorage.getItem('dq-source-names');
+    const sourceNames = localStorage.getItem('dq-source-data');
     this.sourceNames = sourceNames ? JSON.parse(sourceNames) : [];
 
     let analysis = this.messageService.getSource();
+    this.editAnalysis = this.messageService.getSource();
+   
     if (!analysis.source) {
       analysis = {
         source:  {}
@@ -144,7 +144,12 @@ export class CreateProfileDataComponent implements OnInit {
 
     const mode: string = this.route.snapshot.queryParamMap.get('mode');
     if (mode === 'edit') {
+      console.log('Edit mode', this.editAnalysis)
       this.isEditMode = true;
+      if(this.editAnalysis) {
+        this.afControls.sourceDataName.setValue(this.editAnalysis.sourceDataName);
+        this.afControls.sourceDataDescription.setValue(this.editAnalysis.sourceDataDescription);
+      }
       this.mode = 'edit';
       this.showPreview = true;
       this.loadSourcePreview();
@@ -159,7 +164,8 @@ export class CreateProfileDataComponent implements OnInit {
      // console.log(mode);
     this.minDate = moment().format('YYYY-MM-DD');
     this.analysis = analysis;
-    console.log(this.analysis.source.sourceFileName);
+    this.getsourceCategory();
+    this.getdataOwner();
   }
 
   intiFormArrays(field, reference: any = {}) {
@@ -182,6 +188,22 @@ export class CreateProfileDataComponent implements OnInit {
   removeFormItem(arrayName, index) {
     const fbArray = this.analysisForm.get(arrayName) as FormArray;
     fbArray.removeAt(index);
+  }
+
+  getsourceCategory() {
+    this.http.getsourceCategory().subscribe((result: any) => {
+      this.srcCategory = result.sourceCategory;
+    })
+  }
+
+  getdataOwner() {
+    this.http.getdataOwner().subscribe((result: any) => {
+      this.srcDataOwner = result.userList;
+      this.srcDataOwner.map(data => {
+        this.variables.push(data.name);
+      });
+      this.filteredList = this.variables.slice();
+    })
   }
 
   saveSource() {
@@ -245,6 +267,8 @@ export class CreateProfileDataComponent implements OnInit {
       //reference: refPayload,
       //settings: this.sourceSettings
     };
+    
+   
 
     if (sourceRefNameEqual) {
       alert('The source file and reference file should not be same.');
@@ -252,12 +276,53 @@ export class CreateProfileDataComponent implements OnInit {
     }
 
     formData.append('data', JSON.stringify(payload));
-
+   
     this.isLoading = true;
     //console.log('Loading', this.isLoading);
     this.loaderMsg = 'Saving Source and Reference data...';
-    this.http.saveSourceProfile(formData, this.mode === 'edit' ? 'put' : 'post').subscribe((result: any) => {
-      //console.log('Result', result);
+    
+      this.http.saveSourceProfile(formData, this.mode === 'edit' ? 'put' : 'post').subscribe((result: any) => {
+        //console.log('Result', result);
+        this.isLoading = false;
+        if (result.errorMsg) {
+          //this.stepIndex = 0;
+          alert(result.errorMsg);
+          return;
+        }
+        this.summary = result;
+        localStorage.setItem('dq-source-data', JSON.stringify(this.summary));
+        this.router.navigate([`auth/attribute-details-data`]);
+        //this.gotoStepper(2);
+        // this.showSaveSuccess();
+      }, (error) => {
+        //console.log('Error', error);
+        this.isLoading = false;
+      });
+    
+   
+  }
+
+  editSourceSave() {
+    const payload = {
+      action : "edit",        
+      old_source: {
+        sourceDataName: this.editAnalysis.sourceDataName,
+        sourceFileName: this.editAnalysis.sourceFileName,
+        sourceCategory: this.editAnalysis.sourceCategory,
+        dataOwner: this.editAnalysis.dataOwner,
+        sourceId: this.editAnalysis.sourceId,
+      },
+      new_source: {
+        sourceDataName:  this.afControls.sourceDataName.value,
+        sourceDataDescription: this.afControls.sourceDataDescription.value,
+        sourceFileName: this.sourceFile.name ? this.sourceFile.name : this.afControls.sourceFileName.value,
+        sourceCategory: this.afControls.sourceCategory.value,
+        dataOwner: this.afControls.dataOwner.value,
+        uploadDate: this.sourceSettings.uploadDate,
+        department : this.sourceSettings.department
+      },
+    }
+    this.http.saveEditSourceProfile(payload).subscribe((result: any) => {
       this.isLoading = false;
       if (result.errorMsg) {
         //this.stepIndex = 0;
@@ -265,6 +330,7 @@ export class CreateProfileDataComponent implements OnInit {
         return;
       }
       this.summary = result;
+      localStorage.setItem('dq-source-data', JSON.stringify(this.summary));
       this.router.navigate([`auth/attribute-details-data`]);
       //this.gotoStepper(2);
       // this.showSaveSuccess();
@@ -272,7 +338,15 @@ export class CreateProfileDataComponent implements OnInit {
       //console.log('Error', error);
       this.isLoading = false;
     });
+    const mode: string = this.route.snapshot.queryParamMap.get('mode');
+   console.log(mode, 'Loading');
+     
+      console.log('Loading2');
+   
   }
+
+
+
 
   showSaveSuccess() {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {

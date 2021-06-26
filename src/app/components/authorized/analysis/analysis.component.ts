@@ -241,7 +241,7 @@ export class AnalysisComponent implements OnInit {
       columnDefs.push({
          field: this.selectedKey
       });
-      this.analysisKeys.map(col => {
+     this.analysisKeys.map(col => {
          columnDefs.push({
             field: col,
             filter: false, // 'agNumberColumnFilter'

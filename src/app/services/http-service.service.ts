@@ -171,8 +171,68 @@ export class HttpService  {
     );
   }
 
+  saveEditSourceProfile(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/EditSourceProfileDB`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
   uploadSource(payload): Observable<any> {
     return this.http.post<any>(`${this.rootUrl}/api/uploadSource`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  getsourceCategory() {
+    return this.http.get<any>(`${this.rootUrl}/api/getsourceCategory`).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  getdataOwner() {
+    return this.http.get<any>(`${this.rootUrl}/api/getAllDataOwner`).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  getProfileSource() {
+    return this.http.get<any>(`${this.rootUrl}/api/GetAllProfiledBSourceList`).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  getProfileView(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/df_to_json_preview`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  deleteSource(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/EditSourceProfileDB`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
@@ -336,6 +396,16 @@ export class HttpService  {
     );
   }
 
+  getCleanedLogs(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/cleandb_log_query`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
   createEditRole(payload, mode): Observable<any> {
     return this.http[mode === 'create' ? 'post' : 'put'](`${this.rootUrl}/api/createRole`, payload).pipe(
       tap((res) => {
@@ -462,16 +532,6 @@ export class HttpService  {
     );
   }
 
-
-  getCleanedLogs(payload): Observable<any> {
-    return this.http.post<any>(`${this.rootUrl}/api/cleandb_log_query`, payload).pipe(
-      tap((res) => {
-      }),
-      catchError(err => {
-        return throwError(err);
-      }),
-    );
-  }
 
 
 
