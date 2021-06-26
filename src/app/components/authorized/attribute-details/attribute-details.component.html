@@ -1,4 +1,21 @@
-<section class="page-body home-bodys wts">
+<section class="page-body home-bodys" *ngIf="showAllDetails">
+  <div class="container">
+    <div class="">
+      <mat-card class="border no-rounded list shrare-post mct noFile">
+        <h1 class="no-margin ms nTitle inlb">Please Upload your Source</h1>
+        <div class="createLft inlb">
+          <button type="button" class="btnBlueGreenN addico"
+          routerLink="/auth/add-source-data" [queryParams]="{ type: 'profile'}" matTooltip="" >
+          <mat-icon>add</mat-icon>
+          Upload Source
+          </button>
+        </div>
+      </mat-card>      
+    </div>
+</div>
+</section>
+
+<section class="page-body home-bodys wts" *ngIf="!showAllDetails">
   <div class="container">
     
     <!-- (OR_ARIRPOT === 'JFK' && DES_AIRPORT === 'ORD' OR ) -->
@@ -23,7 +40,7 @@
                     <mat-panel-title >{{ item.prop }}</mat-panel-title>                   
                   </mat-expansion-panel-header>
                   <mat-list role="list">
-                    <mat-list-item role="listitem" *ngFor='let obj of item.value' >
+                    <mat-list-item role="listitem" *ngFor='let obj of item.value;' >
                         <div class="lftItem" (click)="changeCategory(obj)" [class.activeList]="obj.sourceId === sourceID" matTooltip="{{ obj.sourceDataName }}" >
                         <mat-icon> layers</mat-icon> 
                         {{ obj.sourceDataName }}              
@@ -47,7 +64,7 @@
                 Create Source
                 </button>
               </div>
-            </div>
+            </div>           
             <div class="dash-right">
               <h1 class="no-margin ms nTitle">Summary - {{titleSrc}}</h1>
               <div class="flex-containers">

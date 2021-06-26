@@ -65,6 +65,7 @@ export class AttributeDetailsComponent implements OnInit {
   initLoadProfile = true;
   selectedSource: any = {};
   actionItem = false;
+  showAllDetails:boolean = false;
 
   profileDetails = {
     nr_duplicates: 0,
@@ -383,30 +384,29 @@ export class AttributeDetailsComponent implements OnInit {
   ngOnInit() {
     this.isLoading = true;
 
-    if (this.initLoadProfile) {
-      setTimeout(() => {
-        const analysis = this.messageService.getSource();
-        this.source = analysis.SourceSettings ? analysis.SourceSettings : {};
-        if (this.source.length > 0) {
-          this.sourceID = this.source.sourceId;
-          this.loadProfile(this.source);
-          this.loadReferencePreview();
-          this.loadCorrelation(this.source, this.datatype, this.method);
-        } else {
-          this.http.getProfileSource().subscribe((result: any) => {
-            this.source = result.SourceDetailsList[0] ? result.SourceDetailsList[0] : {};
-            this.sourceID = this.source.sourceId;
-            this.loadProfile(this.source);
-            this.loadReferencePreview();
-            this.loadCorrelation(this.source, this.datatype, this.method);
-          });
-        }
-     }, 10);
-    }
+    // if (this.initLoadProfile) {
+    //   setTimeout(() => {
+    //     const analysis = this.messageService.getSource();
+    //     this.source = analysis.SourceSettings ? analysis.SourceSettings : {};
+    //     if (this.source.length > 0) {
+    //       this.sourceID = this.source.sourceId;
+    //       this.loadProfile(this.source);
+    //       this.loadReferencePreview();
+    //       this.loadCorrelation(this.source, this.datatype, this.method);
+    //     } else {
+    //       this.http.getProfileSource().subscribe((result: any) => {
+    //         this.source = result.SourceDetailsList[0] ? result.SourceDetailsList[0] : {};
+    //         this.sourceID = this.source.sourceId;
+    //         this.loadProfile(this.source);
+    //         this.loadReferencePreview();
+    //         this.loadCorrelation(this.source, this.datatype, this.method);
+    //       });
+    //     }
+    //  }, 10);
+    // }
 
     this.getProfileSource();
     this.getsourceCategory();
-    // this.loadSourcePreview();
   }
 
   changeProfile(profile) {
@@ -420,13 +420,8 @@ export class AttributeDetailsComponent implements OnInit {
   }
 
 
-  changeCategory(source) {
-    //// const sourceDataName = this.source.sourceDataName;
-    // const sourceFileName = this.source.sourceFileName.split('.');
-    // console.log(sourceDataName, sourceFileName[0])
-    // if (sourceDataName === sourceFileName[0]) {
-    //   this.actionItem = true;
-    // }
+  changeCategory(source, index) {
+    console.log('Index: ', index);
     this.sourceID = source.sourceId;
     this.initLoadProfile = false;
     this.titleSrc = source.templateSourcePath;
@@ -523,10 +518,9 @@ export class AttributeDetailsComponent implements OnInit {
      this.isLoading = false;
      this.coMatrix = {};
   });
- }
-
+  }
   deleteSourceData(source) {
-    alert('Are you sure you want to delete');
+    let confirm = window.confirm('Are you sure you want to delete');
     const payload = {
       action : 'remove',
       old_source: {
@@ -538,15 +532,32 @@ export class AttributeDetailsComponent implements OnInit {
       },
       new_source: ''
     };
-    this.http.deleteSource(payload).subscribe((res: any) => {
-      console.log('Deleteted', res);
+    if (confirm) {
+      this.http.deleteSource(payload).subscribe((res: any) => {
+        this.reloadCurrentRoute();
+      });
+    }
+    
+  }
+  
+  reloadCurrentRoute() {
+    let currentUrl = this.router.url;
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([currentUrl]);
     });
   }
-
 
   getProfileSource() {
     this.http.getProfileSource().subscribe((result: any) => {
       this.allSourceCategory = result.SourceDetailsList;
+      this.source = result.SourceDetailsList[0] ? result.SourceDetailsList[0] : [];
+      if (this.source.length === 0) {
+        this.showAllDetails = true;
+      }
+      this.sourceID = this.source.sourceId;
+      this.loadProfile(this.source);
+      this.loadReferencePreview();
+      this.loadCorrelation(this.source, this.datatype, this.method);
       const groupByCategory = {};
       this.allSourceCategory.map(category => {
         if (!groupByCategory[category.sourceCategory]) {
@@ -567,9 +578,7 @@ export class AttributeDetailsComponent implements OnInit {
       sourcepath: this.titleSrc
     };
     this.http.getProfileView(payload).subscribe((res: any) => {
-      // console.log('RES', res);
       const details: any = res.Preview ? res.Preview : {};
-      // console.log('DET', details)
       this.parseSourcePreview(details);
       }, (error) => {
         this.isPreviewLoaded = false;
@@ -592,12 +601,9 @@ export class AttributeDetailsComponent implements OnInit {
         });
       });
 
-      // console.log('this.columnDefs', this.columnDefs)
     }
     this.isPreviewLoaded = true;
     this.isPreviewLoading = false;
-
-    // console.log('RDATA', this.rowData)
   }
 
    // ngAfterViewInit(){
