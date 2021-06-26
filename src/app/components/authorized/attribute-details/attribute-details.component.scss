@@ -2217,6 +2217,10 @@ td.mat-cell, td.mat-footer-cell{
  }
 }
 
+::ng-deep .ag-grid-wrapper{
+  height: 400px !important;
+}
+
 
 
 

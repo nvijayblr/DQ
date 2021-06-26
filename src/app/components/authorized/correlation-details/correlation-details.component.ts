@@ -45,6 +45,7 @@ export class CorrelationDetailsComponent implements OnInit {
    }
 
   loadCorrelation(source, type, method) {
+    console.log('loadCorrelation....')
      this.isLoading = true;
      this.loaderMsg = 'Loading Correlation...';
      const payload = {

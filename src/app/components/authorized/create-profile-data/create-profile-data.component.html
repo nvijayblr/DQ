@@ -9,7 +9,8 @@
                   <ng-template matStepLabel>Source Data</ng-template>                  
                       <div class="form-continer flex-containers">
                         <mat-card class="border no-rounded list shrare-post pbl card1">
-                          <h1 class="share-post-title">Create Your<span class="yellow"> Source</span></h1>
+                          <h1 class="share-post-title" *ngIf="!isEditMode">Create Your<span class="yellow"> Source</span></h1>
+                          <h1 class="share-post-title"  *ngIf="isEditMode">Edit Your<span class="yellow"> Source</span></h1>
                         <div class="list flex-containers flex-start wrap">
                         <div class="list-item-2 outline wth">
                           <div>
@@ -18,7 +19,7 @@
                           </div>                          
                             <div class="cfile"> 
                               <app-image-cropper 
-                                *ngIf="!isEditMode"
+                              *ngIf="!isEditMode"
                                 [imageType]="'Source'"
                                 [fileTypes]="chooseOptions"
                                 [imagePath]="''"
@@ -26,9 +27,9 @@
                                 (fileSelected)="onSourceFileSelected($event)"
                               >
                               </app-image-cropper>
-                              <h4 *ngIf="isEditMode">
-                                {{analysis.source.sourceFileName}}
-                              </h4>
+                               <h4 *ngIf="isEditMode" class="flNa">
+                                {{editAnalysis.sourceFileName}}
+                              </h4>  
                               <mat-error class="nerr" *ngIf="!flError">Please Select a Correct File Type</mat-error>
                               <mat-error class="nerr ftw" *ngIf="selFileNameErr && flError">Please Select a File</mat-error>
                             </div>
@@ -51,12 +52,9 @@
                                 <mat-form-field appearance="fill">
                                   <mat-label>Category</mat-label>
                                   <mat-select formControlName="sourceCategory">
-                                    <mat-option value="Category">
-                                      Category
-                                    </mat-option>
-                                    <mat-option value="Category1">
-                                      Category1
-                                    </mat-option>
+                                    <mat-option *ngFor="let srcCat of srcCategory" value="{{srcCat.label}}">
+                                      {{srcCat.value}}
+                                    </mat-option>                                    
                                   </mat-select>
                                 </mat-form-field>
                               </div>
@@ -85,9 +83,8 @@
                               <div class="bdr"></div>
                                           
                               <div class="act-btn-wrapper m1t">
-                                  <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"
-                                 
-                                  (click)="saveSource()">Submit <mat-icon>navigate_next</mat-icon></button>
+                                  <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"  *ngIf="!isEditMode"  (click)="saveSource()">Submit <mat-icon>navigate_next</mat-icon></button>
+                                  <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"  *ngIf="isEditMode"  (click)="editSourceSave()">Submit <mat-icon>navigate_next</mat-icon></button>
           
                                   <!-- <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"
                                   [disabled]="!afControls.sourceDataName.value || !sourceSettings.frequency || !sourceSettings.uploadDate || !flError"
@@ -99,7 +96,7 @@
 
                       </div>                                
           </form>
-          <div class="agShowDetails" *ngIf="flError && showPreview">
+          <div class="agShowDetails" *ngIf="flError && showPreview && !isEditMode">
             <mat-card class="border no-rounded list shrare-post mat-card source-preview-card" [hidden]="stepIndex === 1 || stepIndex === 2">
               <div class="list flex-containers space-between">
                 <h1 class="share-post-title">Source Preview</h1>

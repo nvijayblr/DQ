@@ -15,33 +15,28 @@
               <div class="srcTop"><mat-icon>widgets</mat-icon> Sources</div>
               <mat-accordion>
                 <mat-expansion-panel 
-                  *ngFor="let item of items; let i = index;"
+                  *ngFor="let item of jsonObj; let i = index; first as isFirst" [expanded]="isFirst"
                   (opened)="setOpened(i)"
                   (closed)="setClosed(i)">
                   <mat-expansion-panel-header>
-                    <mat-panel-title>{{ item.header }}</mat-panel-title>                   
+                    <mat-panel-title >{{ item.prop }}</mat-panel-title>                   
                   </mat-expansion-panel-header>
                   <mat-list role="list">
-                    <mat-list-item role="listitem">
-                      <div class="lftItem activeList" matTooltip="Source name 1 Source name Source name Source name">
-                        <mat-icon> layers</mat-icon>                     
-                        Source name 1 Source name Source name Source name
+                    <mat-list-item role="listitem" *ngFor='let obj of item.value' >
+                        <!-- <mat-icon> layers</mat-icon>  -->
+                        <div class="lftItem" (click)="changeCategory(obj)" [class.activeList]="obj.sourceId === sourceID" matTooltip="{{ obj.sourceDataName }}" >
+                        <mat-icon> layers</mat-icon> 
+                        {{ obj.sourceDataName }}              
                       </div>                      
-                       <mat-icon class="ed" matTooltip="Edit Source">edit</mat-icon>
-                       <mat-icon class="de" matTooltip="Delete Source">delete</mat-icon>
+                       <mat-icon class="ed" matTooltip="Edit Source" *ngIf="obj.sourceId === sourceID" (click)="editSourceData(obj)">edit</mat-icon>
+                       <mat-icon class="de" matTooltip="Delete Source" *ngIf="obj.sourceId === sourceID" (click)="deleteSourceData(obj)">delete</mat-icon>
                       </mat-list-item>
-                      <mat-list-item role="listitem"> 
+                      <!-- <mat-list-item role="listitem"> 
                         <div class="lftItem" matTooltip="Source name 2">
                           <mat-icon> layers</mat-icon>                     
                           Source name 2
                         </div>                      
-                      </mat-list-item>
-                      <mat-list-item role="listitem"> 
-                        <div class="lftItem" matTooltip="Source name 3">
-                          <mat-icon> layers</mat-icon>                     
-                          Source name 3
-                        </div>                      
-                    </mat-list-item>
+                      </mat-list-item> -->
                   </mat-list>                                
                 </mat-expansion-panel>
               </mat-accordion>
@@ -54,7 +49,7 @@
               </div>
             </div>
             <div class="dash-right">
-              <h1 class="no-margin ms nTitle">Summary - {{profileSummary.sourcepath}}</h1>
+              <h1 class="no-margin ms nTitle">Summary - {{titleSrc}}</h1>
               <div class="flex-containers">
               <mat-card class="border no-rounded list shrare-post mct pad10">
                 <div class="summaryBlock fst">
@@ -295,11 +290,40 @@
 
             </div>
 
-            <div class="correlationView valign" *ngIf="previewCorrelation">
-              <app-correlation-details></app-correlation-details>
+            <div class="correlationView valign" *ngIf="previewCorrelation">            
+                <app-progress-bar [message]="'Loading'" class="page" *ngIf="isLoading"></app-progress-bar>
+                <h1 class="share-post-title"><span class="lgb">Correlation Summary</span></h1>
+                <div class="flex-containers">
+                  <div class="list-item-4">
+                    <mat-form-field appearance="fill">
+                      <mat-label class="lbl">Data Type</mat-label>
+                      <mat-select [(ngModel)]="datatype" (ngModelChange)="changeType($event)">
+                        <mat-option value="mixed">Mixed</mat-option>
+                        <mat-option value="numeric">Numeric</mat-option>
+                        <mat-option value="categorical">Categorical</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="list-item-4">
+                    <mat-form-field appearance="fill">
+                      <mat-label class="lbl">Method</mat-label>
+                      <mat-select [(ngModel)]="method" (ngModelChange)="loadCorrelation(source, datatype, $event)">
+                        <mat-option *ngIf="datatype === 'numeric'" value="pearson">Pearson</mat-option>
+                        <mat-option *ngIf="datatype === 'numeric'" value="kendall">Kendall</mat-option>
+                        <mat-option *ngIf="datatype === 'numeric'" value="spearman">Spearman</mat-option>
+                        <mat-option *ngIf="datatype === 'categorical'" value="theils_u">Theils_U</mat-option>
+                        <mat-option *ngIf="datatype === 'categorical'" value="cramers_v">Cramers_V</mat-option>
+                        <mat-option *ngIf="datatype === 'mixed'" value="">Correlation Ratio</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+              <app-heat-map [columns]="coMatrix.columns" *ngIf="coMatrix.matrix" [data]="coMatrix.matrix"></app-heat-map>
+              <mat-card class="no-data-msg" *ngIf="!coMatrix.matrix">
+                <h3>No correlations.</h3>
+              </mat-card>
             </div>
-
-
             </mat-card>
               
             </div>

@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener, AfterViewInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
+import * as _ from 'lodash';
+import { ActivatedRoute, Router } from '@angular/router';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { Options } from '@angular-slider/ngx-slider';
 import { MessageService } from 'src/app/services/message.service';
@@ -49,6 +51,15 @@ export class AttributeDetailsComponent implements OnInit {
    showFirst = true;
   actionTabId;
   showtable = true;
+  srcCategory;
+  items;
+  titleSrc;
+  sourceID;
+  allSourceCategory;
+  jsonObj;
+  initLoadProfile: boolean = true;
+  selectedSource: any = {};
+  actionItem:boolean = false;
 
   profileDetails = {
     nr_duplicates: 0,
@@ -66,7 +77,7 @@ export class AttributeDetailsComponent implements OnInit {
     duplicates: 0
  };
 
-   itemsAsObjects = [{id: 0, name: 'Angular'}, {id: 1, name: 'React'}];
+  itemsAsObjects = [{id: 0, name: 'Angular'}, {id: 1, name: 'React'}];
   typesOfShoes: string[] = ['Boots', 'Clogs', 'Loafers', 'Moccasins', 'Sneakers'];
   displayedColumns: string[] = ['id', 'name', 'progress', 'fruit'];
   dataSource: MatTableDataSource<UserData>;
@@ -130,64 +141,11 @@ export class AttributeDetailsComponent implements OnInit {
       }
   }
 
-  constructor(private messageService: MessageService, private http: HttpService,) {
+  constructor(private messageService: MessageService, private http: HttpService,private router: Router) {
     const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
     this.dataSource = new MatTableDataSource(users);
    }
-  //  highcharts = Highcharts;
-  //  chartOptions = {
-  //     chart: {
-  //       type: 'column'
-  //    },
-  //    title: {
-  //       text: 'Correlation Summary with negative values'
-  //    },
-  //    subtitle : {
-  //       text: 'Source: Source Name'
-  //    },
-  //    legend : {
-  //       layout: 'vertical',
-  //       align: 'left',
-  //       verticalAlign: 'top',
-  //       x: 250,
-  //       y: 100,
-  //       floating: true,
-  //       borderWidth: 1,
-
-  //       backgroundColor: (
-  //            '#FFFFFF'), shadow: true
-  //       },
-  //       xAxis: {
-  //         categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
-  //       },
-  //       credits: {
-  //         enabled: false
-
-  //    },
-     
-  //    tooltip : {
-  //       valueSuffix: ' millions'
-  //    },
-  //    plotOptions : {
-  //       bar: {
-  //          dataLabels: {
-  //             enabled: true
-  //          }
-  //       }
-  //    },
-  //    series: [{
-  //     name: 'John',
-  //     data: [5, 3, 4, 7, 2]
-  //   }, {
-  //     name: 'Jane',
-  //     data: [2, -2, -3, 2, 1]
-  //   }, {
-  //     name: 'Joe',
-  //     data: [3, 4, 4, -2, 5]
-  //   }]
-  // };
-
-
+  
   minValue = 0;
   maxValue = 90;
   options: Options = {
@@ -198,36 +156,70 @@ export class AttributeDetailsComponent implements OnInit {
   };
 
   ngOnInit() {
-   this.isLoading = true;
-   setTimeout(() => {
-     const analysis = this.messageService.getSource();
-     console.log('analysis', analysis);
-      this.source = analysis.source ? analysis.source : {};
-      if (this.source) {
-         this.loadProfile(this.source);
-      }
-   }, 10);
+    this.isLoading = true;
+    
+    if (this.initLoadProfile) {     
+      setTimeout(() => {
+        const analysis = this.messageService.getSource();
+        this.source = analysis.SourceSettings ? analysis.SourceSettings : {};
+        if (this.source.length > 0) {
+          console.log('this.source', this.source)
+          this.sourceID = this.source.sourceId;
+          this.loadProfile(this.source);
+          this.loadReferencePreview();
+          this.loadCorrelation(this.source, this.datatype, this.method);
+        } else {
+          this.http.getProfileSource().subscribe((result: any) => {
+            this.source = result.SourceDetailsList[0] ? result.SourceDetailsList[0] : {};
+            console.log('this.source2', this.source)
+            this.sourceID = this.source.sourceId;
+            this.loadProfile(this.source);
+            this.loadReferencePreview();
+            this.loadCorrelation(this.source, this.datatype, this.method);
+          })
+        }    
+     }, 10);
+    }
+    
+    this.getProfileSource();
+    this.getsourceCategory();
+    //this.loadSourcePreview();
   }
 
-  changeProfile(profile) {
+  changeProfile(profile) {    
       this.profile = profile;
       if (this.profile.LengthStatistics) {
          this.options.floor = profile.LengthStatistics.Min ? profile.LengthStatistics.Min : 0;
          this.options.ceil = profile.LengthStatistics.Max ? profile.LengthStatistics.Max : 0;
       }
       this.attrubute = profile.column;
-      console.log(this.profile);
-   }
+      //console.log(this.profile);
+  }
+  
 
+  changeCategory(source) {
+    console.log('this.source3', this.source)
+    //// const sourceDataName = this.source.sourceDataName;
+    // const sourceFileName = this.source.sourceFileName.split('.');
+    // console.log(sourceDataName, sourceFileName[0])
+    // if (sourceDataName === sourceFileName[0]) {
+    //   this.actionItem = true;
+    // }
+    this.sourceID = source.sourceId;
+    this.initLoadProfile = false
+    this.titleSrc = source.templateSourcePath;
+    this.loadProfile(source);
+    this.loadReferencePreview();
+    //this.loadCorrelation(this.source, this.datatype, this.method);
+  }
   loadProfile(source) {
-     this.isLoading = true;
-     this.loaderMsg = 'Loading Profile...';
+    this.isLoading = true;
+    this.loaderMsg = 'Loading Profile...';
+    this.titleSrc = source.templateSourcePath;
      const payload = {
-       //sourcepath: source.templateSourcePath
-       sourcepath: "S2flights_edited.csv"
+       sourcepath: source.templateSourcePath
    };
     this.http.getProfiles(payload).subscribe((result: any) => {
-       console.log('Result', result)
       this.profiles = result.profile ? result.profile : [];
       this.profileDetails = {
         nr_duplicates: result.nr_duplicates,
@@ -257,8 +249,7 @@ export class AttributeDetailsComponent implements OnInit {
                   this.profileSummary.alphanumeric = this.profileSummary.alphanumeric + 1;
                }
                this.profileSummary.nullcounts = this.profileSummary.nullcounts + parseInt(data.attributeSummary.null_records, 0);
-           }
-           this.loadSourcePreview();
+           }           
          });
       this.isLoading = false;
    }, (error) => {
@@ -266,40 +257,137 @@ export class AttributeDetailsComponent implements OnInit {
    });
   }
 
+
+  getsourceCategory() {
+    this.http.getsourceCategory().subscribe((result: any) => {
+      this.srcCategory = result.sourceCategory;
+      this.items = result.sourceCategory;
+    })
+  }
+
+  editSourceData(sourceData) {
+    localStorage.setItem('dq-source-data', JSON.stringify(sourceData));
+    this.router.navigate(
+       [`auth/create-profile-data`],
+       { queryParams: { sourceId: sourceData.sourceId, mode: 'edit' } }
+    );
+  }
+
+  coMatrix: any = {};
+  datatype = 'mixed';
+  method = '';
+
+  changeType(type) {
+    if (type === 'numeric') {
+        this.method = 'pearson';
+     }
+    if (type === 'categorical') {
+        this.method = 'theils_u';
+     }
+    if (type === 'mixed') {
+        this.method = '';
+     }
+    this.loadCorrelation(this.source, this.datatype, this.method);
+  }
+
+  loadCorrelation(source, type, method) {
+    this.isLoading = true;
+    this.loaderMsg = 'Loading Correlation...';
+    const payload = {
+     sourcepath: source.templateSourcePath,
+     cols_data_type: type,
+     method
+  };
+    this.http.getCorrMatrix(payload).subscribe((result: any) => {
+     this.coMatrix = result ? result : {};
+     this.isLoading = false;
+  }, (error) => {
+     this.isLoading = false;
+     this.coMatrix = {};
+  });
+ }
+  
+  deleteSourceData(source) {
+    alert('Are you sure you want to delete');
+    const payload = {
+      action : "remove",        
+      old_source: {
+        sourceDataName: source.sourceDataName,
+        sourceFileName: source.sourceFileName,
+        sourceCategory: source.sourceCategory,
+        dataOwner: source.dataOwner,
+        sourceId: source.sourceId,
+      },
+      new_source:""
+    };
+    this.http.deleteSource(payload).subscribe((res: any) => {
+      console.log('Deleteted', res);
+    })
+  }
+
+
+  getProfileSource() {
+    this.http.getProfileSource().subscribe((result: any) => {
+      this.allSourceCategory = result.SourceDetailsList;
+      const groupByCategory = {};
+      this.allSourceCategory.map(category => {
+        if (!groupByCategory[category.sourceCategory]) {
+          groupByCategory[category.sourceCategory] = [];
+        }
+        groupByCategory[category.sourceCategory].push(category)
+      })
+      this.jsonObj = _.map(groupByCategory, (value, prop) => ({ prop, value }));
+    })    
+  }
+
   isPreviewLoaded = false;
   isPreviewLoading = false;
-  selectedSource: any = {};
+  
   defaultColDefs = { sortable: true, filter: true, minWidth: 180, resizable: true };
   rowData: any = [];
   columnDefs: any = [];
   
-  loadSourcePreview() {
+  loadReferencePreview() {
     this.isPreviewLoaded = false;
     this.isPreviewLoading = true;
     this.columnDefs = [];
     this.rowData = [];
-    this.http.getSourcePreview(this.selectedSource.sourceId).subscribe((res: any) => {
-      const details: any = res.sourcePreview ? res.sourcePreview : {};
-      Object.keys(details).map((key, index) => {
-        this.rowData.push({
-          ...details[key]
+    const payload = {
+      sourcepath: this.titleSrc
+    };
+    this.http.getProfileView(payload).subscribe((res: any) => {
+      //console.log('RES', res);
+      const details: any = res.Preview ? res.Preview : {};
+      //console.log('DET', details)
+        this.parseSourcePreview(details);
+      }, (error) => {
+        this.isPreviewLoaded = false;
+        this.isPreviewLoading = false;
+      });
+
+  }
+
+  parseSourcePreview(details) {
+    Object.keys(details).map((key, index) => {
+      this.rowData.push({
+        ...details[key]
+      });
+    });
+    if (this.rowData.length) {
+      Object.keys(this.rowData[0]).map((key, index) => {
+        this.columnDefs.push({
+          field: key,
+          ...this.defaultColDefs
         });
       });
-      if (this.rowData.length) {
-        Object.keys(this.rowData[0]).map((key, index) => {
-          this.columnDefs.push({
-            field: key,
-            ...this.defaultColDefs
-          });
-        });
-      }
-      this.isPreviewLoaded = true;
-      this.isPreviewLoading = false;
-    }, (error) => {
-      this.isPreviewLoaded = false;
-      this.isPreviewLoading = false;
-    });
-   }
+
+      //console.log('this.columnDefs', this.columnDefs)
+    }
+    this.isPreviewLoaded = true;
+    this.isPreviewLoading = false;
+
+    //console.log('RDATA', this.rowData)
+  }
 
    // ngAfterViewInit(){
    //    this.elementPosition = this.menuElement.nativeElement.offsetTop;
@@ -332,11 +420,7 @@ export class AttributeDetailsComponent implements OnInit {
 
   currentlyOpenedItemIndex = -1;
 
-  items = [
-    { header: 'Category 1',  content: 'Content 1' },
-    { header: 'Category 2',  content: 'Content 2' },
-    
-  ];
+
 
   setOpened(itemIndex) {
     this.currentlyOpenedItemIndex = itemIndex;
@@ -603,7 +687,6 @@ export class AttributeDetailsComponent implements OnInit {
       this.previewProfile = false;
       this.previewCorrelation = false;
     }
-    console.log(menu);
   }
 }
 
