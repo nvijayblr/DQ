@@ -42,9 +42,9 @@ export class AttributeDetailsComponent implements OnInit {
    attrubute: any = '';
    isLoading = false;
    loaderMsg = '';
-   source: any = {};
    profiles: any = [];
    profile: any = {};
+   selectedCategoryKey: any = '';
    show = false;
    frequencyShow = false;
    patternShow = false;
@@ -52,20 +52,19 @@ export class AttributeDetailsComponent implements OnInit {
    sticky = false;
   elementPosition: any;
   visibleIndex = -1;
-   showDetails = true;
-   showFirst = true;
+  showDetails = true;
+  showFirst = true;
   actionTabId;
   showtable = true;
   srcCategory;
   items;
   titleSrc;
-  sourceID;
   allSourceCategory;
-  jsonObj;
+  sourceByCategory;
   initLoadProfile = true;
   selectedSource: any = {};
   actionItem = false;
-  showAllDetails:boolean = false;
+  showAllDetails = false;
 
   profileDetails = {
     nr_duplicates: 0,
@@ -383,30 +382,7 @@ export class AttributeDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.isLoading = true;
-
-    // if (this.initLoadProfile) {
-    //   setTimeout(() => {
-    //     const analysis = this.messageService.getSource();
-    //     this.source = analysis.SourceSettings ? analysis.SourceSettings : {};
-    //     if (this.source.length > 0) {
-    //       this.sourceID = this.source.sourceId;
-    //       this.loadProfile(this.source);
-    //       this.loadReferencePreview();
-    //       this.loadCorrelation(this.source, this.datatype, this.method);
-    //     } else {
-    //       this.http.getProfileSource().subscribe((result: any) => {
-    //         this.source = result.SourceDetailsList[0] ? result.SourceDetailsList[0] : {};
-    //         this.sourceID = this.source.sourceId;
-    //         this.loadProfile(this.source);
-    //         this.loadReferencePreview();
-    //         this.loadCorrelation(this.source, this.datatype, this.method);
-    //       });
-    //     }
-    //  }, 10);
-    // }
-
     this.getProfileSource();
-    this.getsourceCategory();
   }
 
   changeProfile(profile) {
@@ -421,14 +397,15 @@ export class AttributeDetailsComponent implements OnInit {
 
 
   changeCategory(source, index) {
-    console.log('Index: ', index);
-    this.sourceID = source.sourceId;
+    localStorage.setItem('dq-profile-source', JSON.stringify(source));
+    this.selectedSource = source;
     this.initLoadProfile = false;
     this.titleSrc = source.templateSourcePath;
     this.loadProfile(source);
     this.loadReferencePreview();
-    // this.loadCorrelation(this.source, this.datatype, this.method);
+    // this.loadCorrelation(this.selectedSource, this.datatype, this.method);
   }
+
   loadProfile(source) {
     this.isLoading = true;
     this.loaderMsg = 'Loading Profile...';
@@ -475,13 +452,6 @@ export class AttributeDetailsComponent implements OnInit {
   }
 
 
-  getsourceCategory() {
-    this.http.getsourceCategory().subscribe((result: any) => {
-      this.srcCategory = result.sourceCategory;
-      this.items = result.sourceCategory;
-    });
-  }
-
   editSourceData(sourceData) {
     localStorage.setItem('dq-source-data', JSON.stringify(sourceData));
     this.router.navigate(
@@ -500,27 +470,28 @@ export class AttributeDetailsComponent implements OnInit {
     if (type === 'mixed') {
         this.method = '';
      }
-    this.loadCorrelation(this.source, this.datatype, this.method);
+    this.loadCorrelation(this.selectedSource, this.datatype, this.method);
   }
 
   loadCorrelation(source, type, method) {
     this.isLoading = true;
     this.loaderMsg = 'Loading Correlation...';
     const payload = {
-     sourcepath: source.templateSourcePath,
-     cols_data_type: type,
-     method
-  };
+      sourcepath: source.templateSourcePath,
+      cols_data_type: type,
+      method
+    };
     this.http.getCorrMatrix(payload).subscribe((result: any) => {
-     this.coMatrix = result ? result : {};
-     this.isLoading = false;
-  }, (error) => {
-     this.isLoading = false;
-     this.coMatrix = {};
+      this.coMatrix = result ? result : {};
+      this.isLoading = false;
+    }, (error) => {
+      this.isLoading = false;
+      this.coMatrix = {};
   });
   }
+
   deleteSourceData(source) {
-    let confirm = window.confirm('Are you sure you want to delete');
+    const confirm = window.confirm('Are you sure you want to delete');
     const payload = {
       action : 'remove',
       old_source: {
@@ -537,11 +508,11 @@ export class AttributeDetailsComponent implements OnInit {
         this.reloadCurrentRoute();
       });
     }
-    
+
   }
-  
+
   reloadCurrentRoute() {
-    let currentUrl = this.router.url;
+    const currentUrl = this.router.url;
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
       this.router.navigate([currentUrl]);
     });
@@ -550,22 +521,31 @@ export class AttributeDetailsComponent implements OnInit {
   getProfileSource() {
     this.http.getProfileSource().subscribe((result: any) => {
       this.allSourceCategory = result.SourceDetailsList;
-      this.source = result.SourceDetailsList[0] ? result.SourceDetailsList[0] : [];
-      if (this.source.length === 0) {
-        this.showAllDetails = true;
-      }
-      this.sourceID = this.source.sourceId;
-      this.loadProfile(this.source);
-      this.loadReferencePreview();
-      this.loadCorrelation(this.source, this.datatype, this.method);
-      const groupByCategory = {};
-      this.allSourceCategory.map(category => {
-        if (!groupByCategory[category.sourceCategory]) {
-          groupByCategory[category.sourceCategory] = [];
+      const profieData = localStorage.getItem('dq-profile-source');
+      if (profieData) {
+        this.selectedSource = JSON.parse(profieData);
+      } else {
+        this.selectedSource = result.SourceDetailsList.length ? result.SourceDetailsList[0] : [];
+        if (this.selectedSource.length === 0) {
+          this.showAllDetails = true;
+          return;
         }
-        groupByCategory[category.sourceCategory].push(category);
-      });
-      this.jsonObj = _.map(groupByCategory, (value, prop) => ({ prop, value }));
+      }
+
+      this.loadProfile(this.selectedSource);
+      this.loadReferencePreview();
+      this.loadCorrelation(this.selectedSource, this.datatype, this.method);
+      this.sourceByCategory =
+        _.chain(this.allSourceCategory).
+        groupBy('sourceCategory')
+        .map((sourcesList, key) => {
+          sourcesList.map(source => {
+            if (source.sourceId === this.selectedSource.sourceId) {
+              this.selectedCategoryKey = key;
+            }
+          });
+          return { category: key, sources: sourcesList };
+        }).value();
     });
   }
 

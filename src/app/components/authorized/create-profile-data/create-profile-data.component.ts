@@ -107,7 +107,7 @@ export class CreateProfileDataComponent implements OnInit {
 
     let analysis = this.messageService.getSource();
     this.editAnalysis = this.messageService.getSource();
-   
+
     if (!analysis.source) {
       analysis = {
         source:  {}
@@ -124,8 +124,8 @@ export class CreateProfileDataComponent implements OnInit {
       templateSourcePath: [analysis.source.templateSourcePath || ''],
       sourceCategory: [analysis.source.sourceCategory || ''],
       dataOwner : [analysis.source.dataOwner || ''],
-      //settingsDate : ['', [Validators.required]],
-      //uploadTime : [''],
+      // settingsDate : ['', [Validators.required]],
+      // uploadTime : [''],
       referenceData: this.fb.array([]),
     });
 
@@ -144,9 +144,9 @@ export class CreateProfileDataComponent implements OnInit {
 
     const mode: string = this.route.snapshot.queryParamMap.get('mode');
     if (mode === 'edit') {
-      console.log('Edit mode', this.editAnalysis)
+      console.log('Edit mode', this.editAnalysis);
       this.isEditMode = true;
-      if(this.editAnalysis) {
+      if (this.editAnalysis) {
         this.afControls.sourceDataName.setValue(this.editAnalysis.sourceDataName);
         this.afControls.sourceDataDescription.setValue(this.editAnalysis.sourceDataDescription);
       }
@@ -193,7 +193,7 @@ export class CreateProfileDataComponent implements OnInit {
   getsourceCategory() {
     this.http.getsourceCategory().subscribe((result: any) => {
       this.srcCategory = result.sourceCategory;
-    })
+    });
   }
 
   getdataOwner() {
@@ -203,7 +203,7 @@ export class CreateProfileDataComponent implements OnInit {
         this.variables.push(data.name);
       });
       this.filteredList = this.variables.slice();
-    })
+    });
   }
 
   saveSource() {
@@ -264,11 +264,11 @@ export class CreateProfileDataComponent implements OnInit {
         uploadDate: this.sourceSettings.uploadDate,
         department : this.sourceSettings.department
       },
-      //reference: refPayload,
-      //settings: this.sourceSettings
+      // reference: refPayload,
+      // settings: this.sourceSettings
     };
-    
-   
+
+
 
     if (sourceRefNameEqual) {
       alert('The source file and reference file should not be same.');
@@ -276,35 +276,34 @@ export class CreateProfileDataComponent implements OnInit {
     }
 
     formData.append('data', JSON.stringify(payload));
-   
+
     this.isLoading = true;
-    //console.log('Loading', this.isLoading);
+    // console.log('Loading', this.isLoading);
     this.loaderMsg = 'Saving Source and Reference data...';
-    
-      this.http.saveSourceProfile(formData, this.mode === 'edit' ? 'put' : 'post').subscribe((result: any) => {
-        //console.log('Result', result);
+
+    this.http.saveSourceProfile(formData, this.mode === 'edit' ? 'put' : 'post').subscribe((result: any) => {
         this.isLoading = false;
         if (result.errorMsg) {
-          //this.stepIndex = 0;
           alert(result.errorMsg);
           return;
         }
-        this.summary = result;
-        localStorage.setItem('dq-source-data', JSON.stringify(this.summary));
+        this.summary = result.SourceSettings;
+        console.log(this.summary);
+        localStorage.setItem('dq-profile-source', JSON.stringify(this.summary));
         this.router.navigate([`auth/attribute-details-data`]);
-        //this.gotoStepper(2);
+        // this.gotoStepper(2);
         // this.showSaveSuccess();
       }, (error) => {
-        //console.log('Error', error);
+        // console.log('Error', error);
         this.isLoading = false;
       });
-    
-   
+
+
   }
 
   editSourceSave() {
     const payload = {
-      action : "edit",        
+      action : 'edit',
       old_source: {
         sourceDataName: this.editAnalysis.sourceDataName,
         sourceFileName: this.editAnalysis.sourceFileName,
@@ -321,32 +320,27 @@ export class CreateProfileDataComponent implements OnInit {
         uploadDate: this.sourceSettings.uploadDate,
         department : this.sourceSettings.department
       },
-    }
+    };
     this.http.saveEditSourceProfile(payload).subscribe((result: any) => {
       this.isLoading = false;
       if (result.errorMsg) {
-        //this.stepIndex = 0;
+        // this.stepIndex = 0;
         alert(result.errorMsg);
         return;
       }
-      this.summary = result;
-      localStorage.setItem('dq-source-data', JSON.stringify(this.summary));
+      this.summary = result.SourceSettings;
+      localStorage.setItem('dq-profile-source', JSON.stringify(this.summary));
       this.router.navigate([`auth/attribute-details-data`]);
-      //this.gotoStepper(2);
-      // this.showSaveSuccess();
     }, (error) => {
-      //console.log('Error', error);
+      // console.log('Error', error);
       this.isLoading = false;
     });
     const mode: string = this.route.snapshot.queryParamMap.get('mode');
-   console.log(mode, 'Loading');
-     
-      console.log('Loading2');
-   
+    console.log(mode, 'Loading');
+
+    console.log('Loading2');
+
   }
-
-
-
 
   showSaveSuccess() {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
