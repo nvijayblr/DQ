@@ -42,85 +42,6 @@ const NAMES: string[] = [
 })
 export class DashboardComponent implements OnInit {
 
-   analysisList = [];
-   selectedAnalysis: any = {};
-   uploadsHistory: any = [];
-   isLoading = false;
-   loaderMsg = '';
-   role = '';
-   rights = '';
-   sourceList: any = [];
-   highlightDates: any = [];
-   visibleIndex = -1;
-   showDetails = true;
-   showFirst = true;
-  actionTabId;
-  showtable = true;
-
-   itemsAsObjects = [{id: 0, name: 'Angular'}, {id: 1, name: 'React'}];
-  typesOfShoes: string[] = ['Boots', 'Clogs', 'Loafers', 'Moccasins', 'Sneakers'];
-  displayedColumns: string[] = ['id', 'name', 'progress', 'fruit'];
-  dataSource: MatTableDataSource<UserData>;
-
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
-  
-  customOptions: OwlOptions = {
-    loop: true,
-    margin: 10,
-    nav: true,
-    navText: [
-       "<i class='fa fa-angle-left'></i>",
-       "<i class='fa fa-angle-right'></i>"
-    ],
-    autoplay: false,
-    autoplayHoverPause: true,
-    autoWidth: true,
-    autoplayTimeout: 2000,
-    autoplaySpeed: 600,
-      items: 6,
-      responsive: {
-        0: {
-          items: 3,
-          center: true,
-          loop: true,
-        },
-        740: {
-          items: 6,
-          center: false,
-          loop: false,
-        }
-      }
-  }
-
-  profileOptions: OwlOptions = {
-    loop: true,
-    margin: 10,
-    nav: true,
-    navText: [
-       "<i class='fa fa-angle-left'></i>",
-       "<i class='fa fa-angle-right'></i>"
-    ],
-    autoplay: false,
-    autoplayHoverPause: true,
-    autoWidth: true,
-    autoplayTimeout: 2000,
-    autoplaySpeed: 600,
-      items: 6,
-      responsive: {
-        0: {
-          items: 3,
-          center: true,
-          loop: true,
-        },
-        740: {
-          items: 6,
-          center: false,
-          loop: false,
-        }
-      }
-  }
-  
    constructor(
       public dialog: MatDialog,
       private http: HttpService,
@@ -131,12 +52,323 @@ export class DashboardComponent implements OnInit {
       this.rights = rights ? rights : [];
 
       const role = this.auth.getUserRole().role;
-     this.role = role ? role : 'VIEWER';
-     const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
-     this.dataSource = new MatTableDataSource(users);
+      this.role = role ? role : 'VIEWER';
+      const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
+      this.dataSource = new MatTableDataSource(users);
   }
-  
-  
+
+   analysisList = [];
+   selectedAnalysis: any = {};
+   selectedAnalysisIndex = 0;
+   uploadsHistory: any = [];
+   isLoading = false;
+   loaderMsg = '';
+   role = '';
+   rights = '';
+   sourceList: any = [];
+   highlightDates: any = [];
+   visibleIndex = -1;
+   showDetails = true;
+   showFirst = true;
+   actionTabId;
+   showtable = true;
+
+   isOverviewLoading = true;
+   showAnalysisOverview = false;
+   overviewErrorMsg = '';
+
+   itemsAsObjects = [{id: 0, name: 'Angular'}, {id: 1, name: 'React'}];
+   typesOfShoes: string[] = ['Boots', 'Clogs', 'Loafers', 'Moccasins', 'Sneakers'];
+   displayedColumns: string[] = ['id', 'name', 'progress', 'fruit'];
+   dataSource: MatTableDataSource<UserData>;
+
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
+
+  customOptions: OwlOptions = {
+    loop: true,
+    margin: 10,
+    nav: true,
+    navText: [
+       '<i class=\'fa fa-angle-left\'></i>',
+       '<i class=\'fa fa-angle-right\'></i>'
+    ],
+    autoplay: false,
+    autoplayHoverPause: true,
+    autoWidth: true,
+    autoplayTimeout: 2000,
+    autoplaySpeed: 600,
+      items: 6,
+      responsive: {
+        0: {
+          items: 3,
+          center: true,
+          loop: true,
+        },
+        740: {
+          items: 6,
+          center: false,
+          loop: false,
+        }
+      }
+  };
+
+  profileOptions: OwlOptions = {
+    loop: true,
+    margin: 10,
+    nav: true,
+    navText: [
+       '<i class=\'fa fa-angle-left\'></i>',
+       '<i class=\'fa fa-angle-right\'></i>'
+    ],
+    autoplay: false,
+    autoplayHoverPause: true,
+    autoWidth: true,
+    autoplayTimeout: 2000,
+    autoplaySpeed: 600,
+      items: 6,
+      responsive: {
+        0: {
+          items: 3,
+          center: true,
+          loop: true,
+        },
+        740: {
+          items: 6,
+          center: false,
+          loop: false,
+        }
+      }
+  };
+
+  currentlyOpenedItemIndex = -1;
+
+  highcharts = Highcharts;
+   chartOptions = {
+      chart: {
+         type: 'column'
+      },
+      title: {
+         text: 'Monthly Average Rainfall'
+      },
+      subtitle: {
+         text: 'Source: WorldClimate.com'
+      },
+      xAxis: {
+         categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
+         'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+         crosshair: true
+      },
+      yAxis : {
+         min: 0,
+         title: {
+            text: 'Rainfall (mm)'
+         }
+      },
+      tooltip : {
+         headerFormat: '<span style = "font-size:10px">{point.key}</span><table>',
+         pointFormat: '<tr><td style = "color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style = "padding:0"><b>{point.y:.1f} mm</b></td></tr>', footerFormat: '</table>', shared: true, useHTML: true
+      },
+      plotOptions : {
+         column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+         }
+      },
+      series: [{
+         name: 'Tokyo',
+         data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6,
+            148.5, 216.4, 194.1, 95.6, 54.4]
+      },
+      {
+         name: 'New York',
+         data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3,
+            91.2, 83.5, 106.6, 92.3]
+      },
+      {
+         name: 'London',
+         data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6,
+            52.4, 65.2, 59.3, 51.2]
+      },
+      {
+         name: 'Berlin',
+         data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4,
+            47.6, 39.1, 46.8, 51.1]
+      }]
+  };
+
+  highcharts2 = Highcharts;
+   chartOptions2 = {
+      chart: {
+        type: 'column'
+     },
+     title: {
+        text: 'Correlation Summary with negative values'
+     },
+     subtitle : {
+        text: 'Source: Source Name'
+     },
+     legend : {
+        layout: 'vertical',
+        align: 'left',
+        verticalAlign: 'top',
+        x: 250,
+        y: 100,
+        floating: true,
+        borderWidth: 1,
+
+        backgroundColor: (
+             '#FFFFFF'), shadow: true
+        },
+        xAxis: {
+          categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
+        },
+        credits: {
+          enabled: false
+
+     },
+
+     tooltip : {
+        valueSuffix: ' millions'
+     },
+     plotOptions : {
+        bar: {
+           dataLabels: {
+              enabled: true
+           }
+        }
+     },
+     series: [{
+      name: 'John',
+      data: [5, 3, 4, 7, 2]
+    }, {
+      name: 'Jane',
+      data: [2, -2, -3, 2, 1]
+    }, {
+      name: 'Joe',
+      data: [3, 4, 4, -2, 5]
+    }]
+  };
+
+  highcharts3 = Highcharts;
+   chartOptions3 = {
+      chart : {
+         plotBorderWidth: null,
+         plotShadow: false
+      },
+      title : {
+         text: 'Frequency analysis'
+      },
+      tooltip : {
+         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+      },
+      plotOptions : {
+         pie: {
+            shadow: false,
+            center: ['50%', '50%'],
+            size: '45%',
+            innerSize: '20%'
+         }
+      },
+      series : [{
+         type: 'pie',
+         name: 'Browser share',
+         data: [
+            ['Firefox',   45.0],
+            ['IE',       26.8],
+            {
+               name: 'Chrome',
+               y: 12.8,
+               sliced: true,
+               selected: true
+            },
+            ['Safari',    8.5],
+            ['Opera',     6.2],
+            ['Others',      0.7]
+         ]
+      }]
+  };
+
+  highcharts4 = Highcharts;
+   chartOptions4 = {
+      chart : {
+         type: 'heatmap',
+         marginTop: 40,
+         marginBottom: 80
+      },
+      title : {
+         text: 'Correlation Details'
+      },
+      xAxis : {
+         categories: ['Alexander', 'Marie', 'Maximilian', 'Sophia', 'Lukas',
+            'Maria', 'Leon', 'Anna', 'Tim', 'Laura']
+      },
+      yAxis : {
+         categories: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+            title: null
+      },
+      colorAxis : {
+         min: 0,
+         minColor: '#FFFFFF',
+         maxColor: Highcharts.getOptions().colors[0]
+      },
+      legend : {
+         align: 'right',
+         layout: 'vertical',
+         margin: 0,
+         verticalAlign: 'top',
+         y: 25,
+         symbolHeight: 280
+      },
+      tooltip : {
+         formatter() {
+            return '<b>' + this.series.xAxis.categories[this.point.x] +
+               '</b> sold <br><b>' +
+               this.point.value +
+               '</b> items on <br><b>' +
+               this.series.yAxis.categories[this.point.y] + '</b>';
+         }
+      },
+      series : [{
+         name: 'Sales per employee',
+         borderWidth: 1,
+         data: [[0, 0, 10], [0, 1, 19], [0, 2, 8], [0, 3, 24], [0, 4, 67],
+         [1, 0, 92], [1, 1, 58], [1, 2, 78], [1, 3, 117], [1, 4, 48],
+         [2, 0, 35], [2, 1, 15], [2, 2, 123], [2, 3, 64], [2, 4, 52],
+         [3, 0, 72], [3, 1, 132], [3, 2, 114], [3, 3, 19], [3, 4, 16],
+         [4, 0, 38], [4, 1, 5], [4, 2, 8], [4, 3, 117], [4, 4, 115],
+         [5, 0, 88], [5, 1, 32], [5, 2, 12], [5, 3, 6], [5, 4, 120],
+         [6, 0, 13], [6, 1, 44], [6, 2, 88], [6, 3, 98], [6, 4, 96],
+         [7, 0, 31], [7, 1, 1], [7, 2, 82], [7, 3, 32], [7, 4, 30],
+         [8, 0, 85], [8, 1, 97], [8, 2, 123], [8, 3, 64], [8, 4, 84],
+         [9, 0, 47], [9, 1, 114], [9, 2, 31], [9, 3, 48], [9, 4, 91]],
+
+         dataLabels: {
+            enabled: true,
+            color: '#000000'
+         }
+      }]
+
+   };
+
+  columnDefs = [
+    { field: 'make', sortable: true, filter: true },
+    { field: 'model', sortable: true, filter: true },
+    { field: 'price', sortable: true, filter: true }
+];
+
+rowData = [
+    { make: 'Toyota', model: 'Celica', price: 35000 },
+    { make: 'Ford', model: 'Mondeo', price: 32000 },
+    { make: 'Porsche', model: 'Boxter', price: 72000 }
+  ];
+
+  previewTable = true;
+  previewProfile = false;
+  previewCorrelation = false;
+
+
    ngOnInit() {
       localStorage.removeItem('dq-source-names');
       this.getAllSources();
@@ -153,7 +385,9 @@ export class DashboardComponent implements OnInit {
             sourceNames.push(item.source.sourceDataName);
          });
          localStorage.setItem('dq-source-names', JSON.stringify(sourceNames));
-
+         if (this.sourceList.length) {
+            this.showEditDetails(0, this.sourceList[0]);
+         }
          this.isLoading = false;
       }, (error) => {
          this.isLoading = false;
@@ -183,6 +417,36 @@ export class DashboardComponent implements OnInit {
    onSourceCSVSelected(file, analysis) {
       analysis.file = file;
    }
+
+   showEditDetails(index, data) {
+      this.isOverviewLoading = true;
+      this.showAnalysisOverview = false;
+
+      this.selectedAnalysis = data;
+      this.selectedAnalysisIndex = index;
+
+      const uploadsHistory = data.UploadsHistory;
+      if (uploadsHistory && uploadsHistory.length) {
+         const upload = uploadsHistory[uploadsHistory.length - 1];
+         this.onOpenDatePicker(data);
+         data.uploadDate = upload.uploadDate;
+      }
+      const rules = data.rules;
+      if (rules && rules.length) {
+         const ruleset = rules[rules.length - 1];
+         data.rulesetId = ruleset.rulesetId;
+      }
+
+      if (this.visibleIndex === index) {
+        this.visibleIndex = -1;
+        this.actionTabId = -1;
+      } else {
+        this.visibleIndex = index;
+        this.actionTabId = '1';
+        this.showFirst = true;
+      }
+      this.initOverview(this.selectedAnalysis);
+  }
 
 
    uploadSource(analysis, reason = '') {
@@ -258,6 +522,31 @@ export class DashboardComponent implements OnInit {
       });
    }
 
+   initOverview(analysis) {
+      console.log('initOverview');
+      this.selectedAnalysis = analysis;
+      const uploadDate = this.selectedAnalysis.uploadDate ? moment(this.selectedAnalysis.uploadDate).format('MM-DD-YYYY') : '';
+      const uploadsHistory = this.selectedAnalysis.UploadsHistory ? this.selectedAnalysis.UploadsHistory : [];
+
+      this.overviewErrorMsg = '';
+
+      if (!uploadsHistory.length) {
+         this.overviewErrorMsg = 'Please upload the source to preview the analysis.';
+      }
+      if (uploadsHistory.length && !uploadDate) {
+         this.overviewErrorMsg = 'Please the upload date to preview the analysis.';
+      }
+
+      if (uploadsHistory.length && uploadDate && !this.selectedAnalysis.highlightDates.includes(uploadDate)) {
+         this.overviewErrorMsg = 'There is no source for selected date.';
+      }
+
+      localStorage.setItem('selected-analysis', JSON.stringify(this.selectedAnalysis));
+
+      this.isOverviewLoading = false;
+      this.showAnalysisOverview = true;
+   }
+
    launchAnalysis(analysis) {
       this.selectedAnalysis = analysis;
       const uploadDate = this.selectedAnalysis.uploadDate ? moment(this.selectedAnalysis.uploadDate).format('MM-DD-YYYY') : '';
@@ -277,6 +566,10 @@ export class DashboardComponent implements OnInit {
       }
 
       localStorage.setItem('selected-analysis', JSON.stringify(this.selectedAnalysis));
+
+      this.isOverviewLoading = false;
+      this.showAnalysisOverview = true;
+
       this.router.navigate(['auth/analysis']);
       return;
    }
@@ -373,29 +666,6 @@ export class DashboardComponent implements OnInit {
       return (this.highlightDates.includes(date)) ? 'highlight-dates' : undefined;
    }
 
-   showEditDetails(index, data) {
-      const uploadsHistory = data.UploadsHistory;
-      if (uploadsHistory && uploadsHistory.length) {
-         const upload = uploadsHistory[uploadsHistory.length - 1];
-         this.onOpenDatePicker(data);
-         data.uploadDate = upload.uploadDate;
-      }
-      const rules = data.rules;
-      if (rules && rules.length) {
-         const ruleset = rules[rules.length - 1];
-         data.rulesetId = ruleset.rulesetId;
-      }
-
-      if (this.visibleIndex === index) {
-        this.visibleIndex = -1;
-        this.actionTabId = -1;
-      } else {
-        this.visibleIndex = index;
-        this.actionTabId = '1';
-        this.showFirst = true;
-      }
-  }
-
   showTab(id) {
     this.actionTabId = id;
     if (id === '1') {
@@ -411,20 +681,12 @@ export class DashboardComponent implements OnInit {
 
   }
 
-  currentlyOpenedItemIndex = -1;
-
-  items = [
-    { header: 'Category 1',  content: 'Content 1' },
-    { header: 'Category 2',  content: 'Content 2' },
-    
-  ];
-
   setOpened(itemIndex) {
     this.currentlyOpenedItemIndex = itemIndex;
   }
 
   setClosed(itemIndex) {
-    if(this.currentlyOpenedItemIndex === itemIndex) {
+    if (this.currentlyOpenedItemIndex === itemIndex) {
       this.currentlyOpenedItemIndex = -1;
     }
   }
@@ -442,228 +704,8 @@ export class DashboardComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-  highcharts = Highcharts;
-   chartOptions = {   
-      chart: {
-         type: 'column'
-      },
-      title: {
-         text: 'Monthly Average Rainfall'
-      },
-      subtitle:{
-         text: 'Source: WorldClimate.com' 
-      },
-      xAxis:{
-         categories: ['Jan','Feb','Mar','Apr','May','Jun','Jul',
-         'Aug','Sep','Oct','Nov','Dec'],
-         crosshair: true        
-      },     
-      yAxis : {
-         min: 0,
-         title: {
-            text: 'Rainfall (mm)'         
-         }      
-      },
-      tooltip : {
-         headerFormat: '<span style = "font-size:10px">{point.key}</span><table>',
-         pointFormat: '<tr><td style = "color:{series.color};padding:0">{series.name}: </td>' +
-            '<td style = "padding:0"><b>{point.y:.1f} mm</b></td></tr>', footerFormat: '</table>', shared: true, useHTML: true
-      },
-      plotOptions : {
-         column: {
-            pointPadding: 0.2,
-            borderWidth: 0
-         }
-      },
-      series: [{
-         name: 'Tokyo',
-         data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6,
-            148.5, 216.4, 194.1, 95.6, 54.4]
-      }, 
-      {
-         name: 'New York',
-         data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3,
-            91.2, 83.5, 106.6, 92.3]
-      }, 
-      {
-         name: 'London',
-         data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6,
-            52.4, 65.2, 59.3, 51.2]
-      }, 
-      {
-         name: 'Berlin',
-         data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4,
-            47.6, 39.1, 46.8, 51.1]
-      }]
-  };
 
-  highcharts2 = Highcharts;
-   chartOptions2 = {
-      chart: {
-        type: 'column'
-     },
-     title: {
-        text: 'Correlation Summary with negative values'
-     },
-     subtitle : {
-        text: 'Source: Source Name'
-     },
-     legend : {
-        layout: 'vertical',
-        align: 'left',
-        verticalAlign: 'top',
-        x: 250,
-        y: 100,
-        floating: true,
-        borderWidth: 1,
 
-        backgroundColor: (
-             '#FFFFFF'), shadow: true
-        },
-        xAxis: {
-          categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
-        },
-        credits: {
-          enabled: false
-
-     },
-     
-     tooltip : {
-        valueSuffix: ' millions'
-     },
-     plotOptions : {
-        bar: {
-           dataLabels: {
-              enabled: true
-           }
-        }
-     },
-     series: [{
-      name: 'John',
-      data: [5, 3, 4, 7, 2]
-    }, {
-      name: 'Jane',
-      data: [2, -2, -3, 2, 1]
-    }, {
-      name: 'Joe',
-      data: [3, 4, 4, -2, 5]
-    }]
-  };
-
-  highcharts3 = Highcharts;
-   chartOptions3 = {   
-      chart : {
-         plotBorderWidth: null,
-         plotShadow: false
-      },
-      title : {
-         text: 'Frequency analysis'   
-      },
-      tooltip : {
-         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-      },
-      plotOptions : {
-         pie: {
-            shadow: false,
-            center: ['50%', '50%'],
-            size:'45%',
-            innerSize: '20%'            
-         }
-      },
-      series : [{
-         type: 'pie',
-         name: 'Browser share',
-         data: [
-            ['Firefox',   45.0],
-            ['IE',       26.8],
-            {
-               name: 'Chrome',
-               y: 12.8,
-               sliced: true,
-               selected: true
-            },
-            ['Safari',    8.5],
-            ['Opera',     6.2],
-            ['Others',      0.7]
-         ]
-      }]
-  };
-  
-  highcharts4 = Highcharts;
-   chartOptions4 = {   
-      chart : {
-         type: 'heatmap',
-         marginTop: 40,
-         marginBottom: 80
-      },
-      title : {
-         text: 'Correlation Details'   
-      },
-      xAxis : {
-         categories: ['Alexander', 'Marie', 'Maximilian', 'Sophia', 'Lukas',
-            'Maria', 'Leon', 'Anna', 'Tim', 'Laura']
-      },
-      yAxis : {
-         categories: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-            title: null
-      },
-      colorAxis : {
-         min: 0,
-         minColor: '#FFFFFF',
-         maxColor: Highcharts.getOptions().colors[0]
-      },
-      legend : {
-         align: 'right',
-         layout: 'vertical',
-         margin: 0,
-         verticalAlign: 'top',
-         y: 25,
-         symbolHeight: 280
-      },
-      tooltip : {
-         formatter: function () {
-            return '<b>' + this.series.xAxis.categories[this.point.x] +
-               '</b> sold <br><b>' +
-               this.point.value +
-               '</b> items on <br><b>' +
-               this.series.yAxis.categories[this.point.y] + '</b>';
-         }
-      },
-      series : [{
-         name: 'Sales per employee',
-         borderWidth: 1,
-         data: [[0, 0, 10], [0, 1, 19], [0, 2, 8], [0, 3, 24], [0, 4, 67],
-         [1, 0, 92], [1, 1, 58], [1, 2, 78], [1, 3, 117], [1, 4, 48],
-         [2, 0, 35], [2, 1, 15], [2, 2, 123], [2, 3, 64], [2, 4, 52],
-         [3, 0, 72], [3, 1, 132], [3, 2, 114], [3, 3, 19], [3, 4, 16],
-         [4, 0, 38], [4, 1, 5], [4, 2, 8], [4, 3, 117], [4, 4, 115],
-         [5, 0, 88], [5, 1, 32], [5, 2, 12], [5, 3, 6], [5, 4, 120],
-         [6, 0, 13], [6, 1, 44], [6, 2, 88], [6, 3, 98], [6, 4, 96],
-         [7, 0, 31], [7, 1, 1], [7, 2, 82], [7, 3, 32], [7, 4, 30],
-         [8, 0, 85], [8, 1, 97], [8, 2, 123], [8, 3, 64], [8, 4, 84],
-         [9, 0, 47], [9, 1, 114], [9, 2, 31], [9, 3, 48], [9, 4, 91]],
-         
-         dataLabels: {
-            enabled: true,
-            color: '#000000'
-         }
-      }]
-     
-   };
-  
-  columnDefs = [
-    { field: 'make', sortable: true, filter: true },
-    { field: 'model', sortable: true, filter: true },
-    { field: 'price', sortable: true, filter: true }
-];
-
-rowData = [
-    { make: 'Toyota', model: 'Celica', price: 35000 },
-    { make: 'Ford', model: 'Mondeo', price: 32000 },
-    { make: 'Porsche', model: 'Boxter', price: 72000 }
-  ];
-  
-  
   changeView(view) {
     if (view === 'table') {
       this.showtable = true;
@@ -671,10 +713,6 @@ rowData = [
       this.showtable = false;
     }
   }
-
-  previewTable = true;
-  previewProfile = false;
-  previewCorrelation = false;
 
   changeMenu(menu) {
     if (menu === 'preview') {
@@ -705,9 +743,9 @@ function createNewUser(id: number): UserData {
 
   return {
     id: id.toString(),
-    name: name,
+    name,
     progress: Math.round(Math.random() * 100).toString(),
     fruit: FRUITS[Math.round(Math.random() * (FRUITS.length - 1))]
-  }
+  };
 
 }

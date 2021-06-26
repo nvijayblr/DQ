@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ViewChild } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { MessageService } from '../../../services/message.service';
@@ -27,6 +27,8 @@ export class AnalysisComponent implements OnInit {
   @ViewChild('owlCar', { static: false }) owlCar;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
+
+  @Input() isOverview = false;
 
   public stores: any[];
 
@@ -241,7 +243,7 @@ export class AnalysisComponent implements OnInit {
       columnDefs.push({
          field: this.selectedKey
       });
-     this.analysisKeys.map(col => {
+      this.analysisKeys.map(col => {
          columnDefs.push({
             field: col,
             filter: false, // 'agNumberColumnFilter'

@@ -14,16 +14,16 @@
             <div class="dash-left">
               <div class="srcTop"><mat-icon>widgets</mat-icon> Sources</div>
               <mat-accordion>
+                <!-- (opened)="setOpened(i)"
+                  (closed)="setClosed(i)" -->
                 <mat-expansion-panel 
                   *ngFor="let item of jsonObj; let i = index; first as isFirst" [expanded]="isFirst"
-                  (opened)="setOpened(i)"
-                  (closed)="setClosed(i)">
+                  >
                   <mat-expansion-panel-header>
                     <mat-panel-title >{{ item.prop }}</mat-panel-title>                   
                   </mat-expansion-panel-header>
                   <mat-list role="list">
                     <mat-list-item role="listitem" *ngFor='let obj of item.value' >
-                        <!-- <mat-icon> layers</mat-icon>  -->
                         <div class="lftItem" (click)="changeCategory(obj)" [class.activeList]="obj.sourceId === sourceID" matTooltip="{{ obj.sourceDataName }}" >
                         <mat-icon> layers</mat-icon> 
                         {{ obj.sourceDataName }}              

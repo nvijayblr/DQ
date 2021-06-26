@@ -10,6 +10,7 @@ import { SharedModule } from './../../shared/shared.module';
 
 import { AuthorizedRoutingModule } from './authorized-routing.module';
 import { AuthorizedComponent } from './authorized.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 import { DelayAnalysisComponent } from './delay-analysis/delay-analysis.component';
 import { CreateSourceComponent } from './create-source/create-source.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -24,6 +25,7 @@ import { CreateProfileDataComponent } from './create-profile-data/create-profile
 @NgModule({
   declarations: [
     AuthorizedComponent,
+    DashboardComponent,
     DelayAnalysisComponent,
     CreateSourceComponent,
     ProfileComponent,
@@ -35,14 +37,14 @@ import { CreateProfileDataComponent } from './create-profile-data/create-profile
     CreateProfileDataComponent
   ],
    imports: [
-      HighchartsChartModule,
-      NgxSliderModule,
+    HighchartsChartModule,
+    NgxSliderModule,
     CommonModule,
     AuthorizedRoutingModule,
-     SharedModule,
-     MatSelectModule, 
+    SharedModule,
+    MatSelectModule,
     MatFormFieldModule,
-    MatSelectFilterModule 
+    MatSelectFilterModule
    ],
    exports: [AttributeDetailsComponent, CorrelationDetailsComponent]
 

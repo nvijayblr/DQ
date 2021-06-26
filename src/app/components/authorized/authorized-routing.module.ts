@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuardService as AuthGaurd } from 'src/app/services/auth-guard.service';
 import { AuthorizedComponent } from './authorized.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 import { AnalysisComponent } from './analysis/analysis.component';
 import { DelayAnalysisComponent } from './delay-analysis/delay-analysis.component';
 import { CreateSourceComponent } from './create-source/create-source.component';
@@ -18,7 +19,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       {
         path: 'dashboard',
-        loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
+        component: DashboardComponent,
         // canActivate: [AuthGaurd]
       },
       {

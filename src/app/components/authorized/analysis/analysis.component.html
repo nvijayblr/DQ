@@ -6,10 +6,10 @@
           <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
           <div class="shrare-post">
             <!-- Analysis by CDE-->
-            <mat-card class="border no-rounded list shrare-post">
+            <mat-card class="border no-rounded list shrare-post" [class.overview-card]="isOverview">
               <!-- <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoadingDetails"></app-progress-bar> -->
               <div class="list flex-containers analysis-wrp tpBg2 flex-start wrap ">
-                <div class="list-item-4 outline">
+                <div class="list-item-4 outline" *ngIf="!isOverview">
                   <h1 class="share-post-title">
                     Source: <span class="yellow"> {{selectedAnalysis.source?.sourceDataName}}</span>
                   </h1>
@@ -33,7 +33,7 @@
                     </mat-select>
                   </mat-form-field>
                 </div>
-                <div class="list-item-3 outline">
+                <div class="list-item-3 outline" *ngIf="!isOverview">
                   <div class="act-btn-wrapper">
                     <button mat-stroked-button class="button3d btnPush btnPurple ebckBtn" (click)="gotoDashboard();"><mat-icon>keyboard_arrow_left</mat-icon> Back</button>
                   </div>
@@ -67,7 +67,7 @@
                   </div>
                </div>
               </div>
-              <mat-tab-group mat-align-tabs="start"  animationDuration="0ms">
+              <mat-tab-group mat-align-tabs="start"  animationDuration="0ms" *ngIf="!isOverview">
                <mat-tab label="2D Map">
                   <app-cylinder-chart 
                     *ngIf="analyseKeyData.length && isLoadChart"
@@ -99,6 +99,19 @@
                 <app-analysis-chart [chartData]="analysisByTimeData"></app-analysis-chart>
                </mat-tab>
               </mat-tab-group>
+
+              <div class="overview-chart" *ngIf="isOverview">
+                <app-cylinder-chart 
+                  *ngIf="analyseKeyData.length && isLoadChart"
+                  [analysisKeys]="analysisKeys"
+                  [chartData]="analyseKeyChartData"
+                  [chartType]="'column'" 
+                  [options3d]= false
+                  (barClicked)="onBarClicked($event)"
+                >
+                </app-cylinder-chart>
+              </div>
+
               <div class="analysis-preview">
                 <div class="actions-wrapper">
                   <button  class="horizontal" (click)="openHighlightSettingsDialog()"> 
