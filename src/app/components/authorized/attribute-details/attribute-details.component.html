@@ -40,20 +40,14 @@
                     <mat-panel-title >{{ item.prop }}</mat-panel-title>                   
                   </mat-expansion-panel-header>
                   <mat-list role="list">
-                    <mat-list-item role="listitem" *ngFor='let obj of item.value;' >
+                    <mat-list-item role="listitem" *ngFor='let obj of item.value;'>
                         <div class="lftItem" (click)="changeCategory(obj)" [class.activeList]="obj.sourceId === sourceID" matTooltip="{{ obj.sourceDataName }}" >
                         <mat-icon> layers</mat-icon> 
                         {{ obj.sourceDataName }}              
-                      </div>                      
+                        </div>                      
                        <mat-icon class="ed" matTooltip="Edit Source" *ngIf="obj.sourceId === sourceID" (click)="editSourceData(obj)">edit</mat-icon>
                        <mat-icon class="de" matTooltip="Delete Source" *ngIf="obj.sourceId === sourceID" (click)="deleteSourceData(obj)">delete</mat-icon>
-                      </mat-list-item>
-                      <!-- <mat-list-item role="listitem"> 
-                        <div class="lftItem" matTooltip="Source name 2">
-                          <mat-icon> layers</mat-icon>                     
-                          Source name 2
-                        </div>                      
-                      </mat-list-item> -->
+                   </mat-list-item>
                   </mat-list>                                
                 </mat-expansion-panel>
               </mat-accordion>
