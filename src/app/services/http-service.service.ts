@@ -162,7 +162,7 @@ export class HttpService  {
    // Profile APIs
   
    saveSourceProfile(payload, method): Observable<any> {
-    return this.http[method]<any>(`${this.rootUrl}/api/configureSourceProfile`, payload).pipe(
+    return this.http[method]<any>(`${this.rootUrl}/api/configureSourcePC`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
@@ -172,7 +172,7 @@ export class HttpService  {
   }
 
   saveEditSourceProfile(payload): Observable<any> {
-    return this.http.post<any>(`${this.rootUrl}/api/EditSourceProfileDB`, payload).pipe(
+    return this.http.post<any>(`${this.rootUrl}/api/EditSourcePC`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
@@ -232,7 +232,7 @@ export class HttpService  {
   }
 
   deleteSource(payload): Observable<any> {
-    return this.http.post<any>(`${this.rootUrl}/api/EditSourceProfileDB`, payload).pipe(
+    return this.http.post<any>(`${this.rootUrl}/api/EditSourcePC`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {

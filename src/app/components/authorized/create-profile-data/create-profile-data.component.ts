@@ -122,7 +122,7 @@ export class CreateProfileDataComponent implements OnInit {
       sourceDataDescription: [analysis.source.sourceDataDescription || ''],
       sourceFileName: [analysis.source.sourceFileName || ''],
       templateSourcePath: [analysis.source.templateSourcePath || ''],
-      sourceCategory: [analysis.source.sourceCategory || ''],
+      sourceCategory: [analysis.source.sourceCategory, [Validators.required]],
       dataOwner : [analysis.source.dataOwner || ''],
       // settingsDate : ['', [Validators.required]],
       // uploadTime : [''],
@@ -236,7 +236,7 @@ export class CreateProfileDataComponent implements OnInit {
       }
     });
 
-    if (isRefFileErr) {
+    if (isRefFileErr || !analysis.sourceCategory) {
       return;
     }
     let sourceRefNameEqual = false;
@@ -255,6 +255,7 @@ export class CreateProfileDataComponent implements OnInit {
     });
     const payload = {
       sourceId: this.sourceId ? this.sourceId : undefined,
+      db : "profile",
       SourceSettings: {
         sourceDataName: analysis.sourceDataName,
         sourceDataDescription: analysis.sourceDataDescription,
@@ -288,7 +289,6 @@ export class CreateProfileDataComponent implements OnInit {
           return;
         }
         this.summary = result.SourceSettings;
-        console.log(this.summary);
         localStorage.setItem('dq-profile-source', JSON.stringify(this.summary));
         this.router.navigate([`auth/attribute-details-data`]);
         // this.gotoStepper(2);
@@ -303,7 +303,8 @@ export class CreateProfileDataComponent implements OnInit {
 
   editSourceSave() {
     const payload = {
-      action : 'edit',
+      action: 'edit',
+      db : "profile",
       old_source: {
         sourceDataName: this.editAnalysis.sourceDataName,
         sourceFileName: this.editAnalysis.sourceFileName,

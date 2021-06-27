@@ -50,7 +50,7 @@
                 </mat-expansion-panel>
               </mat-accordion>
               <div class="createLft">
-                <button type="button" class="button3d btnPush btnBlueGreen addico"
+                <button type="button" class="btnBlueGreenN addico"
                 routerLink="/auth/add-source-data" [queryParams]="{ type: 'profile'}" matTooltip="" >
                 <mat-icon>add</mat-icon>
                 Create Source
@@ -300,7 +300,7 @@
             </div>
 
             <div class="correlationView valign" *ngIf="previewCorrelation">            
-                <app-progress-bar [message]="'Loading'" class="page" *ngIf="isLoading"></app-progress-bar>
+                <app-progress-bar [message]="'Loading'" class="component" *ngIf="isLoading"></app-progress-bar>
                 <h1 class="share-post-title"><span class="lgb">Correlation Summary</span></h1>
                 <div class="flex-containers">
                   <div class="list-item-4">
@@ -326,9 +326,8 @@
                       </mat-select>
                     </mat-form-field>
                   </div>
-                </div>
-
-              <app-heat-map [columns]="coMatrix.columns" *ngIf="coMatrix.matrix" [data]="coMatrix.matrix"></app-heat-map>
+                </div>                
+              <app-heat-map [columns]="coMatrix.columns" *ngIf="coMatrix.matrix" [data]="coMatrix.matrix" [isOverview]="true"></app-heat-map>
               <mat-card class="no-data-msg" *ngIf="!coMatrix.matrix">
                 <h3>No correlations.</h3>
               </mat-card>

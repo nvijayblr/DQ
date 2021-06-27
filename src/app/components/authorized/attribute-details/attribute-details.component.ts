@@ -383,6 +383,7 @@ export class AttributeDetailsComponent implements OnInit {
   ngOnInit() {
     this.isLoading = true;
     this.getProfileSource();
+    
   }
 
   changeProfile(profile) {
@@ -397,7 +398,8 @@ export class AttributeDetailsComponent implements OnInit {
 
 
   changeCategory(source) {
-    localStorage.setItem('dq-profile-source', JSON.stringify(source));
+    //localStorage.setItem('dq-profile-source', JSON.stringify(source));
+    localStorage.removeItem('dq-profile-source');    
     this.selectedSource = source;
     this.initLoadProfile = false;
     this.titleSrc = source.templateSourcePath;
@@ -493,7 +495,8 @@ export class AttributeDetailsComponent implements OnInit {
   deleteSourceData(source) {
     const confirm = window.confirm('Are you sure you want to delete');
     const payload = {
-      action : 'remove',
+      action: 'remove',
+      db : "profile",
       old_source: {
         sourceDataName: source.sourceDataName,
         sourceFileName: source.sourceFileName,
@@ -504,6 +507,7 @@ export class AttributeDetailsComponent implements OnInit {
       new_source: ''
     };
     if (confirm) {
+      localStorage.removeItem('dq-profile-source'); 
       this.http.deleteSource(payload).subscribe((res: any) => {
         this.reloadCurrentRoute();
       });
@@ -522,6 +526,12 @@ export class AttributeDetailsComponent implements OnInit {
     this.http.getProfileSource().subscribe((result: any) => {
       this.allSourceCategory = result.SourceDetailsList;
       const profieData = localStorage.getItem('dq-profile-source');
+      // this.selectedSource = result.SourceDetailsList.length ? result.SourceDetailsList[0] : [];
+      //   if (this.selectedSource.length === 0) {
+      //     this.showAllDetails = true;
+      //     return;
+      //   }
+      console.log('profieData', profieData)
       if (profieData) {
         this.selectedSource = JSON.parse(profieData);
       } else {

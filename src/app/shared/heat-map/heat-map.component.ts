@@ -14,7 +14,8 @@ highchartsHeatmap(Highcharts);
 export class HeatMapComponent implements OnInit, OnChanges {
    @Input() columns: any = [];
    @Input() data: any = [];
-   @ViewChild('charts', {static: true}) public chartEl: ElementRef;
+  @ViewChild('charts', { static: true }) public chartEl: ElementRef;
+  @Input() isOverview : false;
 
    highcharts;
 
@@ -140,7 +141,8 @@ export class HeatMapComponent implements OnInit, OnChanges {
       this.initChart();
    }
 
-   ngOnInit() {
+  ngOnInit() {
+    console.log('ngOnInit', this.isOverview);
       this.initChart();
    }
 

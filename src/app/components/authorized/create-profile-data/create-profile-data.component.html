@@ -56,6 +56,7 @@
                                       {{srcCat.value}}
                                     </mat-option>                                    
                                   </mat-select>
+                                  <mat-error class="nerr ftw1" *ngIf="!afControls.sourceCategory.value">Please Select a Category</mat-error>
                                 </mat-form-field>
                               </div>
                               <div class="list-item-2 outline splitR">
