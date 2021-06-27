@@ -398,8 +398,8 @@ export class AttributeDetailsComponent implements OnInit {
 
 
   changeCategory(source) {
-    //localStorage.setItem('dq-profile-source', JSON.stringify(source));
-    localStorage.removeItem('dq-profile-source');    
+    //localStorage.setItem('dq-source-data', JSON.stringify(source));
+    localStorage.removeItem('dq-source-data');    
     this.selectedSource = source;
     this.initLoadProfile = false;
     this.titleSrc = source.templateSourcePath;
@@ -507,7 +507,7 @@ export class AttributeDetailsComponent implements OnInit {
       new_source: ''
     };
     if (confirm) {
-      localStorage.removeItem('dq-profile-source'); 
+      localStorage.removeItem('dq-source-data'); 
       this.http.deleteSource(payload).subscribe((res: any) => {
         this.reloadCurrentRoute();
       });
@@ -525,15 +525,17 @@ export class AttributeDetailsComponent implements OnInit {
   getProfileSource() {
     this.http.getProfileSource().subscribe((result: any) => {
       this.allSourceCategory = result.SourceDetailsList;
-      const profieData = localStorage.getItem('dq-profile-source');
+      const profieData = localStorage.getItem('dq-source-data');
       // this.selectedSource = result.SourceDetailsList.length ? result.SourceDetailsList[0] : [];
       //   if (this.selectedSource.length === 0) {
       //     this.showAllDetails = true;
       //     return;
       //   }
-      console.log('profieData', profieData)
+      //console.log('profieData', profieData)
       if (profieData) {
+        //this.selectedSource = JSON.parse(profieData);
         this.selectedSource = JSON.parse(profieData);
+        //console.log('selected', this.selectedSource);
       } else {
         this.selectedSource = result.SourceDetailsList.length ? result.SourceDetailsList[0] : [];
         if (this.selectedSource.length === 0) {

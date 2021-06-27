@@ -289,7 +289,8 @@ export class CreateProfileDataComponent implements OnInit {
           return;
         }
         this.summary = result.SourceSettings;
-        localStorage.setItem('dq-profile-source', JSON.stringify(this.summary));
+        //console.log('Save', this.summary);
+        localStorage.setItem('dq-source-data', JSON.stringify(this.summary));
         this.router.navigate([`auth/attribute-details-data`]);
         // this.gotoStepper(2);
         // this.showSaveSuccess();
@@ -323,23 +324,25 @@ export class CreateProfileDataComponent implements OnInit {
       },
     };
     this.http.saveEditSourceProfile(payload).subscribe((result: any) => {
+      //console.log('result', result)
       this.isLoading = false;
       if (result.errorMsg) {
         // this.stepIndex = 0;
         alert(result.errorMsg);
         return;
       }
-      this.summary = result.SourceSettings;
-      localStorage.setItem('dq-profile-source', JSON.stringify(this.summary));
+      this.summary = result.SourceDetailsList[0];
+      //console.log('this.summary', this.summary)
+      localStorage.setItem('dq-source-data', JSON.stringify(this.summary));
       this.router.navigate([`auth/attribute-details-data`]);
     }, (error) => {
       // console.log('Error', error);
       this.isLoading = false;
     });
     const mode: string = this.route.snapshot.queryParamMap.get('mode');
-    console.log(mode, 'Loading');
+    //console.log(mode, 'Loading');
 
-    console.log('Loading2');
+    //console.log('Loading2');
 
   }
 
