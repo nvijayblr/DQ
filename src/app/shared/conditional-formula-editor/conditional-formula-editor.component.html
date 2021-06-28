@@ -1,0 +1,184 @@
+<div class="formula-editir">
+  <h1 mat-dialog-title>Conditional Editor</h1>
+  <div mat-dialog-content>
+    <div class="formula-preview">
+      <div *ngFor="let formula of formulaDetailsForm.value.formula">
+        <span class="cde" *ngIf="formula.logic">{{formula.logic}}</span>
+        <span class="startend" *ngIf="formula.start">{{formula.start}}</span>
+        <span class="cde" *ngIf="formula.cde1">{{formula.cde1}}</span>
+        <span class="operator" *ngIf="formula.logicoperator">{{formula.logicoperator}}</span>
+        <span class="operator" *ngIf="formula.operator1">{{formula.operator1}}</span>
+        <span class="cde" *ngIf="formula.cde2">{{formula.cde2}}</span>
+        <span class="value" *ngIf="formula.value">{{formula.value}}</span>
+        <span class="startend" *ngIf="formula.end">{{formula.end}}</span>
+        <span class="condition" *ngIf="formula.condition">{{formula.condition}}</span>
+        <span class="operator" *ngIf="formula.operator2">{{formula.operator2}}</span>
+
+        <div *ngIf="formula.retcde1" style="margin-left: 17px;">
+          <span class="operator">&#123;</span>
+          <span class="operator" *ngIf="formula.retcde1">return {{formula.retcde1}}</span>
+          <span class="operator" *ngIf="formula.retoperator1">{{formula.retoperator1}}</span>
+          <span class="operator" *ngIf="formula.retcde2">{{formula.retcde2}}</span>
+          <span class="operator" *ngIf="formula.retvalue">{{formula.retvalue}}</span>
+          <span class="operator">&#125;</span>
+        </div>
+
+      </div>
+    </div>
+    <form [formGroup]="formulaDetailsForm">
+      <div class="btn-main-right-wrapper top-sapce" style="margin-right: 10px;">
+        <button type="button" mat-stroked-button class="primary-btn-gray" 
+          (click)="addFormItem('formula')" 
+          *ngIf="!formulaDetailsForm.get('formula')['controls'].length">
+            Add
+        </button>
+      </div>
+      <div class="flex-containerss formula-controls" 
+        formArrayName="formula" *ngFor="let edu of formulaDetailsForm.get('formula')['controls']; index as i; last as isLast; first as isFirst">
+        <ng-container [formGroupName]="i">
+
+          <div>
+            <div class="list flex-containers flex-start wrap">
+
+              <div class="cdelist outline">
+                <mat-form-field appearance="fill">
+                  <mat-label>If/Else</mat-label>
+                  <mat-select formControlName="logic">
+                    <mat-option *ngFor="let logic of logical" [value]="logic">{{logic}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+  
+              <div class="startend outline">
+                <mat-form-field appearance="fill">
+                  <mat-label>(</mat-label>
+                  <mat-select formControlName="start">
+                    <mat-option *ngFor="let group of startgroups" [value]="group">{{group}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+  
+              <div class="cdelist outline">
+                <mat-form-field appearance="fill">
+                  <mat-label>Select CDE</mat-label>
+                  <mat-select formControlName="cde1">
+                    <mat-option *ngFor="let column of data.columns" [value]="column">{{column}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+  
+              <div class="operator outline">
+                <mat-form-field appearance="fill">
+                  <mat-label>OPR</mat-label>
+                  <mat-select formControlName="logicoperator">
+                    <mat-option *ngFor="let operator of logicoperators" [value]="operator">{{operator}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+  
+              <!-- <div class="cdelist outline">
+                <mat-form-field appearance="fill">
+                  <mat-label>Select CDE</mat-label>
+                  <mat-select formControlName="cde2">
+                    <mat-option *ngFor="let column of data.columns" [value]="column">{{column}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div> -->
+  
+              <div class="cdelist outline">
+                <mat-form-field appearance="fill">
+                  <mat-label>Value</mat-label>
+                  <input matInput placeholder="Value" formControlName="value" autocomplete="off"/>
+                </mat-form-field>
+              </div>
+  
+              <div class="startend outline">
+                <mat-form-field appearance="fill">
+                  <mat-label>)</mat-label>
+                  <mat-select formControlName="end">
+                    <mat-option *ngFor="let group of endgroups" [value]="group">{{group}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+    
+              <!-- <div class="condition outline">
+                <mat-form-field appearance="fill">
+                  <mat-label>CON</mat-label>
+                  <mat-select formControlName="condition">
+                    <mat-option *ngFor="let condition of conditions" [value]="condition">{{condition}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div> -->
+  
+              <!-- <div class="operator outline">
+                <mat-form-field appearance="fill">
+                  <mat-label>OPR</mat-label>
+                  <mat-select formControlName="operator2">
+                    <mat-option *ngFor="let operator of operators" [value]="operator">{{operator}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div> -->
+
+              <div class="list add-remove-button">
+                <button  type="button"  class="button3d btnPush btnBlueGreen addico" (click)="addFormItem('formula')" *ngIf="isLast">
+                  <mat-icon>add</mat-icon>
+                </button>
+                </div>
+                <div class="list add-remove-button">
+                <button type="button" class="button3d btnPush btnOrange redico" (click)="removeFormItem('formula', i)" *ngIf="formulaDetailsForm.get('formula')['controls'].length > 1">
+                   <mat-icon>delete_outline</mat-icon>
+                </button>
+              </div>
+    
+            </div>
+          </div>
+          
+          <div style="margin-left: 50px;">
+            <div class="list flex-containers flex-start wrap">
+              <div class="cdelist outline">
+                <mat-form-field appearance="fill">
+                  <mat-label>Select CDE</mat-label>
+                  <mat-select formControlName="retcde1">
+                    <mat-option *ngFor="let column of data.columns" [value]="column">{{column}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+  
+              <div class="operator outline">
+                <mat-form-field appearance="fill">
+                  <mat-label>OPR</mat-label>
+                  <mat-select formControlName="retoperator1">
+                    <mat-option *ngFor="let operator of operators" [value]="operator">{{operator}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+  
+              <div class="cdelist outline">
+                <mat-form-field appearance="fill">
+                  <mat-label>Select CDE</mat-label>
+                  <mat-select formControlName="retcde2">
+                    <mat-option *ngFor="let column of data.columns" [value]="column">{{column}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="cdelist outline">
+                <mat-form-field appearance="fill">
+                  <mat-label>Value</mat-label>
+                  <input matInput placeholder="Value" formControlName="retvalue" autocomplete="off"/>
+                </mat-form-field>
+              </div>
+
+            </div>
+          </div>
+          
+        </ng-container>
+      </div> 
+    </form>
+  </div>
+  <div class="footer">
+    <button mat-stroked-button class="primary-btn-gray white" matDialogClose (click)="onCloseDialog('cancel')">Cancel</button>
+    <button mat-stroked-button class="primary-btn-gray" [disabled]="formulaDetailsForm.status === 'INVALID'" matDialogClose (click)="onCloseDialog('ok'); " cdkFocusInitial>OK</button>
+  </div>
+
+</div>

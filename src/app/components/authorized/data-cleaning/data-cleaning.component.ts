@@ -15,6 +15,15 @@ import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-di
   styleUrls: ['./data-cleaning.component.scss'],
 })
 export class DataCleaningComponent implements OnInit {
+
+   constructor(
+      private messageService: MessageService,
+      private http: HttpService,
+      private dialog: MatDialog,
+      private route: ActivatedRoute,
+      private router: Router,
+   ) {
+   }
   @ViewChild('stickyMenu', { static: false }) menuElement: ElementRef;
   profileOptions: OwlOptions = {
     loop: true,
@@ -55,12 +64,12 @@ export class DataCleaningComponent implements OnInit {
    frequencyShow = false;
    patternShow = false;
   maskShow = false;
-  showAllDetails: boolean = false;
+  showAllDetails = false;
   allSourceCategory;
   sourceByCategory;
   selectedCategoryKey: any = '';
   mode: string;
-  //selectedSource: any = {};
+  // selectedSource: any = {};
   initLoadProfile = true;
   titleSrc;
   uploadId;
@@ -140,15 +149,7 @@ export class DataCleaningComponent implements OnInit {
    isLogsLoading = false;
 
    removeItems: any = '';
-
-   constructor(
-      private messageService: MessageService,
-      private http: HttpService,
-     private dialog: MatDialog,
-     private route: ActivatedRoute,
-     private router: Router,
-   ) {
-   }
+   previewProfile: any = '';
    highcharts = Highcharts;
    chartOptions = {
       chart: {
@@ -213,11 +214,12 @@ export class DataCleaningComponent implements OnInit {
         }
      ]
   };
+  previewTable;
 
   ngOnInit() {
     this.mode = this.route.snapshot.queryParamMap.get('mode');
     if (this.mode === 'dqm') {
-      this.getProfileFromMonitoring();      
+      this.getProfileFromMonitoring();
     } else {
       this.getProfileSource();
     }
@@ -227,7 +229,7 @@ export class DataCleaningComponent implements OnInit {
     //   this.uploadId = ""
     // }
 
-    
+
   }
 
   getProfileFromMonitoring() {
@@ -236,8 +238,8 @@ export class DataCleaningComponent implements OnInit {
       this.analysis = this.messageService.getSource();
       this.uploadId = this.analysis.recentsourceUpload.uploadId;
       this.processTime = this.analysis.recentsourceUpload.uploadDate;
-       this.source = this.analysis.source ? this.analysis.source : {};
-       if (this.source) {
+      this.source = this.analysis.source ? this.analysis.source : {};
+      if (this.source) {
          this.sourcePathSelected();
        }
     }, 10);
@@ -254,7 +256,7 @@ export class DataCleaningComponent implements OnInit {
         this.sourcePathSelected();
         this.uploadId = this.source.sourceId;
       } else {
-        this.analysis = result.SourceDetailsList.length ? result.SourceDetailsList[0] : [];        
+        this.analysis = result.SourceDetailsList.length ? result.SourceDetailsList[0] : [];
         this.source = this.analysis;
         this.sourcePathSelected();
         this.uploadId = this.source.sourceId;
@@ -263,7 +265,7 @@ export class DataCleaningComponent implements OnInit {
           this.showAllDetails = true;
           return;
         }
-      }      
+      }
       this.loadProfile(this.source);
       this.sourceByCategory =
         _.chain(this.allSourceCategory).
@@ -278,7 +280,7 @@ export class DataCleaningComponent implements OnInit {
         }).value();
     });
   }
-        
+
   sourcePathSelected() {
     this.mask.sourcepath = this.source.templateSourcePath;
     this.impute.sourcepath = this.source.templateSourcePath;
@@ -292,16 +294,16 @@ export class DataCleaningComponent implements OnInit {
     this.profileSummary.sourceFileName = this.source.templateSourcePath;
     this.loadProfile(this.source);
   }
- 
+
   changeCategory(source) {
-    console.log('source', source)
-    //localStorage.setItem('dq-source-data', JSON.stringify(source));
-    localStorage.removeItem('dq-source-data');    
+    console.log('source', source);
+    // localStorage.setItem('dq-source-data', JSON.stringify(source));
+    localStorage.removeItem('dq-source-data');
     this.source = source;
     this.initLoadProfile = false;
     this.titleSrc = source.templateSourcePath;
     this.loadProfile(source);
-    //this.loadReferencePreview();
+    // this.loadReferencePreview();
     // this.loadCorrelation(this.selectedSource, this.datatype, this.method);
   }
 
@@ -309,7 +311,7 @@ export class DataCleaningComponent implements OnInit {
     const confirm = window.confirm('Are you sure you want to delete');
     const payload = {
       action: 'remove',
-      db : "clean",
+      db : 'clean',
       old_source: {
         sourceDataName: source.sourceDataName,
         sourceFileName: source.sourceFileName,
@@ -320,7 +322,7 @@ export class DataCleaningComponent implements OnInit {
       new_source: ''
     };
     if (confirm) {
-      localStorage.removeItem('dq-source-data'); 
+      localStorage.removeItem('dq-source-data');
       this.http.deleteSource(payload).subscribe((res: any) => {
         this.reloadCurrentRoute();
       });
@@ -354,25 +356,25 @@ export class DataCleaningComponent implements OnInit {
    }
 
   loadProfile(source, profile: any = '') {
-    console.log('Loading profile', source.templateSourcePath)
+    console.log('Loading profile', source.templateSourcePath);
     this.titleSrc = source.templateSourcePath;
-      this.isLoading = true;
-      this.loaderMsg = 'Loading Profile...';
-      const payload = {
+    this.isLoading = true;
+    this.loaderMsg = 'Loading Profile...';
+    const payload = {
          sourcepath: source.templateSourcePath
       };
-      this.getCleanedLogs();
+    this.getCleanedLogs();
     this.http.getProfiles(payload).subscribe((result: any) => {
-        console.log('result', result)
-         this.profiles = result.profile ? result.profile : [];
-         this.profileDetails = {
+        console.log('result', result);
+        this.profiles = result.profile ? result.profile : [];
+        this.profileDetails = {
             nr_duplicates: result.nr_duplicates,
             nr_totalcols: result.nr_totalcols,
             nr_totalrecords: result.nr_totalrecords
          };
-         console.log(this.profileDetails);
+        console.log(this.profileDetails);
 
-         if (this.profiles.length) {
+        if (this.profiles.length) {
             if (profile) {
                const selectedProfile = this.profiles.filter(data => {
                   return data.column === profile.column;
@@ -383,14 +385,14 @@ export class DataCleaningComponent implements OnInit {
                this.changeProfile(this.profiles[0]);
             }
          }
-         this.profileSummary.duplicates = result.nr_duplicates ? result.nr_duplicates : 0;
+        this.profileSummary.duplicates = result.nr_duplicates ? result.nr_duplicates : 0;
 
-         this.profileSummary.numeric = 0;
-         this.profileSummary.alphabetic = 0;
-         this.profileSummary.alphanumeric = 0;
-         this.profileSummary.nullcounts = 0;
+        this.profileSummary.numeric = 0;
+        this.profileSummary.alphabetic = 0;
+        this.profileSummary.alphanumeric = 0;
+        this.profileSummary.nullcounts = 0;
 
-         this.profiles.map(data => {
+        this.profiles.map(data => {
             if (data.attributeSummary) {
                this.profileSummary.records = data.attributeSummary.records ? data.attributeSummary.records : this.profileSummary.records;
                if (data.attributeSummary.dataType === 'Numeric') {
@@ -405,20 +407,20 @@ export class DataCleaningComponent implements OnInit {
                this.profileSummary.nullcounts = this.profileSummary.nullcounts + parseInt(data.attributeSummary.null_records, 0);
             }
          });
-         this.isLoading = false;
+        this.isLoading = false;
       }, (error) => {
          this.isLoading = false;
       });
    }
 
   getCleanedLogs() {
-     console.log('this.ID', this.analysis.sourceId)
-      this.isLogsLoading = true;
-      const payload = {
+     console.log('this.ID', this.analysis.sourceId);
+     this.isLogsLoading = true;
+     const payload = {
          query_col : 'sourceId',
          query_val : this.analysis.sourceId
       };
-      this.http.getCleanedLogs(payload).subscribe((result: any) => {
+     this.http.getCleanedLogs(payload).subscribe((result: any) => {
          this.isLogsLoading = false;
          console.log(result);
          this.cleanLogs = result.data ? result.data : [];
@@ -651,13 +653,13 @@ export class DataCleaningComponent implements OnInit {
 
   loadProfilePreview(payload, type, callBack) {
      console.log('loadProfilePreview', payload);
-      this.loaderMsg = 'Loading preview...';
-      this.isPreviewLoaded = false;
-      this.isPreviewLoading = true;
-      this.columnDefs = [];
-      this.rowData = [];
-      this.removeItems = '';
-      this.http.getProfilePreview(payload, type).subscribe((res: any) => {
+     this.loaderMsg = 'Loading preview...';
+     this.isPreviewLoaded = false;
+     this.isPreviewLoading = true;
+     this.columnDefs = [];
+     this.rowData = [];
+     this.removeItems = '';
+     this.http.getProfilePreview(payload, type).subscribe((res: any) => {
          const details: any = res.Preview ? res.Preview : {};
          if (type === 'data_remove') {
             this.removeItems = {
@@ -751,27 +753,27 @@ export class DataCleaningComponent implements OnInit {
       }
     });
 
-   dialogRef.afterClosed().subscribe(data => {
+    dialogRef.afterClosed().subscribe(data => {
       if (data.action === 'ok') {
-        console.log(data.reason)
+        console.log(data.reason);
         const payload = {
           sourceId : source.sourceId,
           sourcePath : source.templateSourcePath,
           uploadId : source.sourceId,
           uploadTime : source.uploadDate,
-          outputPath : "cleaned_data",
-          outputFileName : data.reason + ".csv"
-        }
+          outputPath : 'cleaned_data',
+          outputFileName : data.reason + '.csv'
+        };
         this.http.saveCleanSource(payload).subscribe((result: any) => {
           console.log('result', result.CleanedFilesLog.outputpath);
-          //this.analysis = res;
+          // this.analysis = res;
           if (result.CleanedFilesLog.outputpath) {
-            this.updateSourcePath(result.CleanedFilesLog.outputpath[result.CleanedFilesLog.outputpath.length-1], result.CleanedFilesLog.outputFileName[result.CleanedFilesLog.outputFileName.length-1]);
+            this.updateSourcePath(result.CleanedFilesLog.outputpath[result.CleanedFilesLog.outputpath.length - 1], result.CleanedFilesLog.outputFileName[result.CleanedFilesLog.outputFileName.length - 1]);
          }
-          //localStorage.setItem('dq-source-data', JSON.stringify(this.analysis));
-        })
+          // localStorage.setItem('dq-source-data', JSON.stringify(this.analysis));
+        });
       } else {
-        
+
       }
     });
       // this.showConfirmDialog({
@@ -808,7 +810,6 @@ export class DataCleaningComponent implements OnInit {
       const value = ((this.delete.threshold / 100) * this.profileDetails.nr_totalrecords);
       return value.toFixed(0);
   }
-  previewTable;
   changeMenu(menu) {
     if (menu === 'preview') {
       this.previewTable = true;

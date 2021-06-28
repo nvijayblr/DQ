@@ -34,6 +34,7 @@ import { AnalysisChartComponent } from './analysis-chart/analysis-chart.componen
 import { CorelationSummaryComponent } from './corelation-summary/corelation-summary.component';
 import { AdvancedFormulaEditorComponent } from './advanced-formula-editor/advanced-formula-editor.component';
 import { ToleranceLevelDialogComponent } from './tolerance-level-dialog/tolerance-level-dialog.component';
+import { ConditionalFormulaEditorComponent } from './conditional-formula-editor/conditional-formula-editor.component';
 
 @NgModule({
    imports: [
@@ -75,6 +76,7 @@ import { ToleranceLevelDialogComponent } from './tolerance-level-dialog/toleranc
     CorelationSummaryComponent,
     AdvancedFormulaEditorComponent,
     ToleranceLevelDialogComponent,
+    ConditionalFormulaEditorComponent,
   ],
   exports: [
     FormsModule,
@@ -107,18 +109,20 @@ import { ToleranceLevelDialogComponent } from './tolerance-level-dialog/toleranc
     HeatMapComponent,
     AnalysisChartComponent,
     CorelationSummaryComponent,
-    AdvancedFormulaEditorComponent
+    AdvancedFormulaEditorComponent,
+    ConditionalFormulaEditorComponent
   ],
   providers: [
      DatePipe,
   ],
   entryComponents: [
-     ConfirmDialogComponent,
-     ColorDialogComponent,
-     CompletenessDialogComponent,
-     FormulaEditorComponent,
+    ConfirmDialogComponent,
+    ColorDialogComponent,
+    CompletenessDialogComponent,
+    FormulaEditorComponent,
     AdvancedFormulaEditorComponent,
-    ToleranceLevelDialogComponent
+    ToleranceLevelDialogComponent,
+    ConditionalFormulaEditorComponent
   ]
 })
 export class SharedModule {}

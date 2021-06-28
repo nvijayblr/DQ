@@ -10,6 +10,7 @@ import { appConfig } from '../../../app.config';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
 import { FormulaEditorComponent } from '../../../shared/formula-editor/formula-editor.component';
 import { AdvancedFormulaEditorComponent } from '../../../shared/advanced-formula-editor/advanced-formula-editor.component';
+import { ConditionalFormulaEditorComponent } from '../../../shared/conditional-formula-editor/conditional-formula-editor.component';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { S } from '@angular/cdk/keycodes';
 import { _ } from 'ag-grid-community';
@@ -709,7 +710,28 @@ export class RulesetComponent implements OnInit {
     this.selectedColumns.map(column => {
       selectedColumns.push(column.title);
     });
+
     const dialogRef = this.dialog.open(AdvancedFormulaEditorComponent, {
+      width: '1300px',
+      data: {
+        columns: selectedColumns
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(data => {
+      if (data.action === 'ok' && data.formula) {
+        rule.controls.value.setValue(data.formula);
+      }
+    });
+
+  }
+
+  showConditionalFormulaEditor(rule) {
+    const selectedColumns = [];
+    this.selectedColumns.map(column => {
+      selectedColumns.push(column.title);
+    });
+    const dialogRef = this.dialog.open(ConditionalFormulaEditorComponent, {
       width: '1300px',
       data: {
         columns: selectedColumns
