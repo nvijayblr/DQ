@@ -96,6 +96,7 @@ export class CreateProfileDataComponent implements OnInit {
   public variables = [];
   public filteredList;
   editAnalysis;
+  uploadMethod;
 
   ngOnInit() {
     this.isUserLoggedIn = this.authGuardService.isUserLoggedIn();
@@ -141,7 +142,8 @@ export class CreateProfileDataComponent implements OnInit {
 
     const fileType: string = this.route.snapshot.queryParamMap.get('type');
     this.selectedType = fileType;
-
+    this.uploadMethod = this.route.snapshot.queryParamMap.get('method');
+    console.log('this.uploadMethod', this.uploadMethod);
     const mode: string = this.route.snapshot.queryParamMap.get('mode');
     if (mode === 'edit') {
       console.log('Edit mode', this.editAnalysis);
@@ -255,7 +257,7 @@ export class CreateProfileDataComponent implements OnInit {
     });
     const payload = {
       sourceId: this.sourceId ? this.sourceId : undefined,
-      db : "profile",
+      db : this.uploadMethod,
       SourceSettings: {
         sourceDataName: analysis.sourceDataName,
         sourceDataDescription: analysis.sourceDataDescription,
@@ -290,8 +292,16 @@ export class CreateProfileDataComponent implements OnInit {
         }
         this.summary = result.SourceSettings;
         //console.log('Save', this.summary);
-        localStorage.setItem('dq-source-data', JSON.stringify(this.summary));
+      localStorage.setItem('dq-source-data', JSON.stringify(this.summary));
+      if (this.uploadMethod === 'clean') {
+        this.router.navigate([`auth/data-cleaning`]);
+        this.router.navigate(
+          [`auth/data-cleaning`]);
+        
+      } else {
         this.router.navigate([`auth/attribute-details-data`]);
+      }
+        
         // this.gotoStepper(2);
         // this.showSaveSuccess();
       }, (error) => {
@@ -305,7 +315,7 @@ export class CreateProfileDataComponent implements OnInit {
   editSourceSave() {
     const payload = {
       action: 'edit',
-      db : "profile",
+      db : this.uploadMethod,
       old_source: {
         sourceDataName: this.editAnalysis.sourceDataName,
         sourceFileName: this.editAnalysis.sourceFileName,
@@ -334,7 +344,12 @@ export class CreateProfileDataComponent implements OnInit {
       this.summary = result.SourceDetailsList[0];
       //console.log('this.summary', this.summary)
       localStorage.setItem('dq-source-data', JSON.stringify(this.summary));
-      this.router.navigate([`auth/attribute-details-data`]);
+      if (this.uploadMethod === 'clean') {
+        this.router.navigate([`auth/data-cleaning`]);
+      } else {
+        this.router.navigate([`auth/attribute-details-data`]);
+      }
+      
     }, (error) => {
       // console.log('Error', error);
       this.isLoading = false;

@@ -8,15 +8,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class ProfileComponent implements OnInit {
   changeUrl: string;
+  profileType:string;
   constructor(private route: ActivatedRoute,
     private router: Router) { }
 
   ngOnInit() {
-    const profileType: string = this.route.snapshot.queryParamMap.get('type');
-    console.log(profileType);
-    if (profileType === 'profile') {
+    this.profileType  = this.route.snapshot.queryParamMap.get('type');
+    console.log(this.profileType);
+    if (this.profileType === 'profile') {
       this.changeUrl = 'create-profile-data'
-    } else {
+    } else if (this.profileType === 'clean') {
+      this.changeUrl = 'create-profile-data'
+    }
+    else {
       this.changeUrl = 'create-source-data'
     }
   }

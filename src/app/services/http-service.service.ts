@@ -221,6 +221,26 @@ export class HttpService  {
     );
   }
 
+  getCleanSource() {
+    return this.http.get<any>(`${this.rootUrl}/api/GetAllCleandBSourceList`).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  saveCleanSource(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/clean_data_save`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
   getProfileView(payload): Observable<any> {
     return this.http.post<any>(`${this.rootUrl}/api/df_to_json_preview`, payload).pipe(
       tap((res) => {

@@ -8,6 +8,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 })
 export class ConfirmDialogComponent implements OnInit {
   reason = '';
+  reasonLabel = "Reason";
   constructor(
     public dialog: MatDialogRef<ConfirmDialogComponent>,
     private ngZone: NgZone,

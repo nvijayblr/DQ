@@ -458,7 +458,7 @@ export class AttributeDetailsComponent implements OnInit {
     localStorage.setItem('dq-source-data', JSON.stringify(sourceData));
     this.router.navigate(
        [`auth/create-profile-data`],
-       { queryParams: { sourceId: sourceData.sourceId, mode: 'edit' } }
+       { queryParams: { sourceId: sourceData.sourceId, mode: 'edit', method: 'profile' } }
     );
   }
 

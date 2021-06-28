@@ -1,444 +1,606 @@
-<section class="page-body home-bodys wts">
+<section class="page-body home-bodys" *ngIf="showAllDetails">
   <div class="container">
-
-    <mat-card class="bg-violet">
-      <h4 class="attr-tite">Summary - {{profileSummary.sourcepath}}</h4>
-      <div class="records">
-        <span>Records</span>
-        {{profileDetails.nr_totalrecords}}
-     </div>
-     <div class="records">
-        <span>Total Columns</span>
-        {{profileDetails.nr_totalcols}}
+    <div class="">
+      <mat-card class="border no-rounded list shrare-post mct noFile">
+        <h1 class="no-margin ms nTitle inlb">Please Upload your Source</h1>
+        <div class="createLft inlb">
+          <button type="button" class="btnBlueGreenN addico"
+          routerLink="/auth/add-source-data" [queryParams]="{ type: 'clean'}" matTooltip="" >
+          <mat-icon>add</mat-icon>
+          Upload Source
+          </button>
+        </div>
+      </mat-card>      
     </div>
-    <div class="dotDiv"></div>
-      <div class="records">
-        <span>Nr - Numeric Columns</span>
-        {{profileSummary.numeric}}
-      </div>
-      <div class="dotDiv"></div>
-      <div class="records">
-        <span>Nr - Alphabetic Columns</span>
-        {{profileSummary.alphabetic}}
-      </div>
-      <div class="dotDiv"></div>
-      <div class="records">
-        <span>Nr - Alphanumeric Columns</span>
-        {{profileSummary.alphanumeric}}
-      </div>
-      <div class="dotDiv"></div>
-      <div class="records">
-        <span>Duplicates</span>
-        {{profileSummary.duplicates}}
-      </div>
-      <div class="dotDiv"></div>
-      <div class="records">
-        <span>Total Null Counts</span>
-        {{profileSummary.nullcounts}}
-      </div>
-      <div class="dotDiv"></div>
-    </mat-card>
-     <h1 class="attTitle">Data Cleaning  - {{profile.column}}</h1>
+</div>
+</section>
 
-     <div style="text-align: right">
-      <button 
-        type="button" 
-        (click)="showSaveConfirm()"
-        [disabled]="!isSaveEnable"
-        *ngIf="this.profiles.length"
-        class="button3d btnPush btnPurple addico w-t"
-        >
-        <mat-icon> save</mat-icon> Save 
-      </button>
-    </div>
+<section class="page-body home-bodys wts" *ngIf="!showAllDetails">
+  <div class="container">
+    
+    <!-- (OR_ARIRPOT === 'JFK' && DES_AIRPORT === 'ORD' OR ) -->
+    
+    <div class="home-wrapper">
+      <div class="clearfix my-community-body">
+        <div class="home-panel">
+          <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
+          <div class="shrare-post">
 
-     <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
-     <div *ngIf="!this.profiles.length && !isLoading">
-        <h4>Profile not found.</h4>
-     </div>
-    <div class="profile-wrapper" [hidden]="!this.profiles || !this.profiles.length">
-       <div class="flex-containers">
-          <div class="list attribute-list">
-           <mat-list role="list" class="hideContainer" [class.show]="show">
-              <mat-list-item role="listitem" *ngFor="let profile of profiles;" (click)="changeProfile(profile)" [class.active]="attrubute === profile.column">
-                 {{profile.column}}
-              </mat-list-item>
-            </mat-list>
-            <button class="moreBtn" (click)="show = !show">{{ show ? 'Show less'  : 'Show More'  }}
-                <mat-icon *ngIf="!show">expand_more</mat-icon> <mat-icon *ngIf="show">expand_less</mat-icon> </button>
-          </div>
-          <div class="attribute-details">
-            <mat-card class="tab-card">
-              <mat-tab-group mat-align-tabs="start"  animationDuration="0ms" class="mm2" #tabGroup (selectedTabChange)="resetPreview();">
-                <mat-tab label="Data Imputation">
-                  <div class="impute-wrapper" *ngIf="profile.attributeSummary?.dataType === 'Numeric'">
-                    <h5 class="sub-title-label">Impute Null Data</h5>
-                    <div class="form-row">
-                      <mat-form-field appearance="fill" class="mft">
-                        <mat-select placeholder="Impute Option" [(ngModel)]="impute.value" [disabled]="!profile.attributeSummary?.null_records">
-                          <mat-option value="MEAN">Mean</mat-option>
-                          <mat-option value="MEDIAN">Median</mat-option>
-                          <mat-option value="MODE">Mode</mat-option>
-                          <mat-option value="MIN">Min</mat-option>
-                          <mat-option value="MAX">Max</mat-option>
-                          <mat-option value="IQR25">IQR25</mat-option>
-                          <mat-option value="IQR75">IQR75</mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                    </div>
-                    <div>
-                      <button 
-                        type="button" 
-                        class="button3d btnPush btnPurple addico w-t"
-                        (click)="loadPreview('nan')"
-                        style="margin-left: 0;"
-                      ><mat-icon> layers_clear</mat-icon> PREVIEW </button>
+          <!-- Source List --> 
+          <div class="dashBoard flex-containers">
+            <div class="dash-left">
+              <div class="srcTop"><mat-icon>widgets</mat-icon> Sources</div>
+              <mat-accordion>
+                <!-- (opened)="setOpened(i)"
+                  (closed)="setClosed(i)" -->
+                <mat-expansion-panel *ngFor="let item of sourceByCategory; let i = index; first as isFirst" [expanded]="item.category === selectedCategoryKey">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title >{{ item.category }}</mat-panel-title>                   
+                  </mat-expansion-panel-header>
+                  <mat-list role="list">
+                    <mat-list-item role="listitem" *ngFor='let selectedSource of item.sources;'>
+                        <div class="lftItem" (click)="changeCategory(selectedSource)" [class.activeList]="selectedSource.sourceId === source.sourceId" matTooltip="{{ source.sourceDataName }}" >
+                        <mat-icon> layers</mat-icon> 
+                        {{ selectedSource.sourceDataName }}              
+                        </div>                      
+                       <mat-icon class="ed" matTooltip="Edit Source" *ngIf="selectedSource.sourceId === source.sourceId" (click)="editSourceData(selectedSource)">edit</mat-icon>
+                       <mat-icon class="de" matTooltip="Delete Source" *ngIf="selectedSource.sourceId === source.sourceId" (click)="deleteSourceData(selectedSource)">delete</mat-icon>
+                   </mat-list-item>
+                  </mat-list>                                
+                </mat-expansion-panel>
+              </mat-accordion>
+              <div class="createLft">
+                <button type="button" class="btnBlueGreenN addico"
+                routerLink="/auth/add-source-data" [queryParams]="{ type: 'clean'}" matTooltip="" >
+                <mat-icon>add</mat-icon>
+                Create Source
+                </button>
+              </div>
+            </div>           
+            <div class="dash-right">
+              <h1 class="no-margin ms nTitle">Summary - {{titleSrc}}</h1>
+              <div class="flex-containers">
+              <mat-card class="border no-rounded list shrare-post mct pad10">
+                <div class="summaryBlock fst">
+                  <div class="topTitle green">Records</div>
+                  <div class="mid-cnt">  {{profileDetails.nr_totalrecords}}</div>
+                </div>
+                <div class="dividerTop"></div>
+                <div class="summaryBlock">
+                  <div class="topTitle red">Total Columns</div>
+                  <div class="mid-cnt"> {{profileDetails.nr_totalcols}}</div>
+                </div>
+                <div class="dividerTop"></div>
+                <div class="summaryBlock">
+                  <div class="topTitle green">Nr - Numeric Columns</div>
+                  <div class="mid-cnt"> {{profileSummary.numeric}}</div>
+                </div>
+                <div class="dividerTop"></div>
+                <div class="summaryBlock">
+                  <div class="topTitle red">Nr - Alphabetic Columns</div>
+                  <div class="mid-cnt"> {{profileSummary.alphabetic}}</div>
+                </div>
+                <div class="dividerTop"></div>
+                <div class="summaryBlock">
+                  <div class="topTitle green">Nr - Alphanumeric Columns</div>
+                  <div class="mid-cnt"> {{profileSummary.alphanumeric}}</div>
+                </div>
+                <div class="dividerTop"></div>
 
-                      <button 
-                        type="button" 
-                        class="button3d btnPush btnPurple addico w-t"
-                        (click)="imputeColumns('numeric')"
-                        [disabled]="!profile.attributeSummary?.null_records || !impute.value"><mat-icon> layers_clear</mat-icon> IMPUTE 
-                      </button>
-                    </div>
+                <div class="summaryBlock">
+                  <div class="topTitle red">Duplicates</div>
+                  <div class="mid-cnt"> {{profileDetails.nr_duplicates}}</div>
+                </div>
+                <div class="dividerTop"></div>
+                <div class="summaryBlock lst">
+                  <div class="topTitle green">Total Null Counts</div>
+                  <div class="mid-cnt"> {{profileSummary.nullcounts}}</div>
                 </div>
 
-                  <div class="impute-wrapper" *ngIf="profile.attributeSummary?.dataType === 'Alphabetic' || profile.attributeSummary?.dataType === 'Alphanumeric'">
-                    <h5 class="sub-title-label">Impute Null Data</h5>
-                    <div class="form-row">
-                        <mat-form-field appearance="fill" class="mft">
-                          <mat-select placeholder="Select Value" [(ngModel)]="impute.value" [disabled]="!profile.attributeSummary?.null_records">
-                            <mat-option *ngFor="let frequency of profile.frequncyAnalysis" [value]="frequency.unique_values">{{frequency.unique_values}} - ({{frequency.counts}})</mat-option>
-                          </mat-select>
-                        </mat-form-field>
+              </mat-card> 
+
+              <!-- <mat-card class="border no-rounded list shrare-post mini-card minC">
+                <div class="topTitle">Type</div>
+                <div class="mid-cnt"> <span class="red">S</span></div>
+              </mat-card>
+              <mat-card class="border no-rounded list shrare-post mini-card minC">
+                <div class="topTitle">ID</div>
+                <div class="mid-cnt"> <span >S1</span> </div>
+              </mat-card> -->
+              <!-- <mat-card class="border no-rounded list shrare-post mini-card">
+                <div class="topTitle">Source Name</div>
+                <div class="mid-cnt"> <span class="min">flights_new lot of empty cells</span> </div>
+              </mat-card> -->
+              <!-- <mat-card class="border no-rounded list shrare-post mini-card">
+                <div class="topTitle">File Name</div>
+                <div class="mid-cnt"> <span class="red min">flights_new lot of empty cells.xls</span> </div>
+              </mat-card> -->
+              <!-- <mat-card class="border no-rounded list shrare-post mini-card last">
+                <div class="topTitle">Referennce</div>
+                <div class="mid-cnt"> <span class="min">Ref1 - airport origin reference</span> </div>
+              </mat-card> -->
+            </div>
+             
+              
+            
+             
+              <div class="allView">
+                <div class="viewProfile">
+                  <div class="prevMenu" (click)="changeMenu('profile')">
+                    <img src="assets/images/profile-data.svg" class="prof"  />
+                    <span [ngClass]="{act: previewProfile}">Profile</span>
                   </div>
-                  <div>
-                    <button 
-                    type="button" 
-                    class="button3d btnPush btnPurple addico w-t"
-                    (click)="loadPreview('nan')"
-                    style="margin-left: 0;"
-                    ><mat-icon> layers_clear</mat-icon> PREVIEW </button>
+                  <!-- <span class="divider"></span>                  
+                  <div class="prevMenu" (click)="changeMenu('preview')">
+                    <img src="assets/images/preview.svg" class="prev"  />
+                    <span [ngClass]="{act: previewTable}">Preview</span>
+                  </div> 
+                  <span class="divider"></span> 
+                  <div class="prevMenu" (click)="changeMenu('correlation')">
+                    <img src="assets/images/correlation.svg" class="prof"  />
+                    <span [ngClass]="{act: previewCorrelation}">Correlation</span>
+                  </div> -->
+                </div>
+            </div>
+            <mat-card class="border no-rounded list shrare-post mct">
+              
+              <!-- <div class="previewView valign" *ngIf="previewTable">
+                <app-ag-grid
+                floatingFilter="true"
+                *ngIf="isPreviewLoaded"
+                [rowData]="rowData"
+                [columnDefs]="columnDefs"
+                [pageSize]="50"
+                [rowSelection]="'multiple'"
+                [suppressRowClickSelection]="false"
+              ></app-ag-grid>
+            </div> -->
+
+            <div class="profileView valign">
+              <div class="analysis-infoDashboard">
+                <div style="text-align: right">
                   <button 
                     type="button" 
+                    (click)="showSaveConfirm(source)"
+                    [disabled]="!isSaveEnable"
+                    *ngIf="this.profiles.length"
                     class="button3d btnPush btnPurple addico w-t"
-                    (click)="imputeColumns('string')"
-                    [disabled]="!profile.attributeSummary?.null_records || !impute.value"><mat-icon> layers_clear</mat-icon> IMPUTE </button>
+                    >
+                    <mat-icon> save</mat-icon> Save 
+                  </button>
                 </div>
-              </div>
-                </mat-tab>
-                
-                <mat-tab label="Duplicate Analysis">
-                  <div class="impute-wrapper">
-                    <h5 class="sub-title-label">Remove Duplicate Rows</h5>
-                    <div style="margin-top: 10px;">
-                      <mat-radio-group [(ngModel)]="duplicate.option" (ngModelChange)="duplicate.columns = []">
-                        <mat-radio-button value="all">All Columns</mat-radio-button>
-                        <mat-radio-button value="selected">Specific Column</mat-radio-button>
-                      </mat-radio-group>
-                    </div>
-                    <div style="margin-top: 10px;">
-                      <mat-form-field appearance="fill" class="mft" *ngIf="duplicate.option === 'selected'">
-                        <mat-select placeholder="Select Columns" multiple [(ngModel)]="duplicate.columns">
-                          <mat-option *ngFor="let profile of profiles" [value]="profile.column">{{profile.column}}</mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                    </div>
-
-                    <div class="form-row">
-                        <button 
-                          type="button" 
-                          (click)="loadPreview('duplicate')"
-                          class="button3d btnPush btnPurple addico w-t">
-                          <mat-icon> visibility</mat-icon> Preview 
-                        </button>
-                        <button 
-                          type="button" 
-                          (click)="deleteDuplicates()"
-                          class="button3d btnPush btnPurple addico w-t">
-                          <mat-icon> delete</mat-icon> Remove 
-                        </button>
-                    </div>
-                  </div>
-                </mat-tab>  
-
-                <!-- <mat-tab label="Mask Analysis">
-                  <div class="impute-wrapper">
-                    <h5 class="sub-title-label">Mask Analysis Data</h5>
-                    <div class="form-row">
-                      <mat-form-field appearance="fill" class="mft">
-                        <mat-select placeholder="" [(ngModel)]="mask.value">
-                          <mat-option *ngFor="let mask of profile.maskAnalysis" [value]="mask.unique_values">{{mask.unique_values}} - ({{mask.counts}})</mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                      <button 
-                        type="button" 
-                        [disabled]="!mask.value"
-                        (click)="loadPreview('mask', mask.value)"
-                        class="button3d btnPush btnPurple addico w-t">
-                        <mat-icon> visibility</mat-icon> Preview 
-                      </button>
-                    </div>                    
-                  </div>
-                </mat-tab> -->
-
-                <mat-tab label="Data Removal">
-                  <div class="impute-wrapper">
-                    <h5 class="sub-title-label">Delete Column / Row</h5>
-                    <div class="form-row">
-                      <mat-radio-group [(ngModel)]="delete.type" (ngModelChange)="changeRemoveCategory(delete.type)">
-                        <mat-radio-button [checked]="true" value="column">Column</mat-radio-button>
-                        <mat-radio-button value="custom" value="row">Row</mat-radio-button>
-                      </mat-radio-group>
-                    </div>
-
-                    <div class="form-row" *ngIf="delete.type === 'column'">
-                      <mat-radio-group [(ngModel)]="delete.category">
-                        <mat-radio-button [checked]="true" value="col_nan">NaN</mat-radio-button>
-                        <mat-radio-button value="custom" value="col_with_value">Value</mat-radio-button>
-
-                        <div *ngIf="delete.category === 'col_with_value'" style="margin-top: 10px;">
-                          <mat-form-field appearance="fill" class="mft">
-                            <mat-select placeholder="Select Columns" [(ngModel)]="delete.column_name" disabled>
-                              <mat-option *ngFor="let profile of profiles" [value]="profile.column">{{profile.column}} - {{profile.attributeSummary?.dataType}}</mat-option>
-                            </mat-select>
-                          </mat-form-field>
-                        </div>
-
-                        <div *ngIf="delete.category === 'col_with_value' && profile.attributeSummary?.dataType === 'Alphabetic' || profile.attributeSummary?.dataType === 'Alphanumeric'">
-                          <mat-form-field appearance="fill" class="mft-200" style="width: 250px;">
-                            <mat-label>Value</mat-label>
-                            <input 
-                              matInput placeholder="" value="" 
-                              [(ngModel)]="delete.values"
-                              (ngModelChange)="delete.formula.cond_value1=''; delete.formula.cond_value2=''">
-                          </mat-form-field>
-                        </div>
-    
-                        <div style="margin-top: 10px;" class="formula-section" *ngIf="delete.category === 'col_with_value' && profile.attributeSummary?.dataType === 'Numeric'">
-                          <mat-form-field appearance="fill" class="mft">
-                            <mat-select placeholder="Operator" [(ngModel)]="delete.formula.operator1" (ngModelChange)="delete.values=''">
-                              <mat-option *ngFor="let operator of operators" [value]="operator">{{operator}}</mat-option>
-                            </mat-select>
-                          </mat-form-field>
-                          <mat-form-field appearance="fill" class="mft2">
-                            <mat-label>Value</mat-label>
-                            <input matInput placeholder="" type="number" value="" [(ngModel)]="delete.formula.cond_value1" (ngModelChange)="delete.values=''">
-                          </mat-form-field>
-
-                          <mat-form-field appearance="fill" class="mft">
-                            <mat-select placeholder="Operator" [(ngModel)]="delete.formula.operator2" (ngModelChange)="delete.values=''">
-                              <mat-option *ngFor="let operator of operators" [value]="operator">{{operator}}</mat-option>
-                            </mat-select>
-                          </mat-form-field>
-                          <mat-form-field appearance="fill" class="mft2">
-                            <mat-label>Value</mat-label>
-                            <input matInput placeholder="" type="number" value="" [(ngModel)]="delete.formula.cond_value2" (ngModelChange)="delete.values=''">
-                          </mat-form-field>
-                        </div>
-                      </mat-radio-group>
-                    </div>
-
-                    <div class="form-row" *ngIf="delete.type === 'row'">
-                      <mat-radio-group [(ngModel)]="delete.category">
-                        <mat-radio-button [checked]="true" value="row_nan">NaN</mat-radio-button>
-                        <!-- <mat-radio-button value="custom" value="">Value</mat-radio-button>
-                        <mat-form-field appearance="fill" class="mft2" *ngIf="delete.category === ''">
-                          <mat-label>Custom Value</mat-label>
-                          <input matInput placeholder="" value="" [(ngModel)]="delete.values">
-                        </mat-form-field> -->
-                      </mat-radio-group>
-                    </div>
-
-                    <div class="form-rows" style="margin-top: 10px;" *ngIf="delete.category === 'col_nan' || delete.category === 'row_nan'">
-                      <div style="font-weight: bold;">
-                        Threshold : {{delete.threshold}}%
+                <div class="category-list-wrapper clearfix">
+                  <owl-carousel-o class="selected" [options]="profileOptions">
+                    <ng-template carouselSlide *ngFor="let profile of profiles;">
+                      <div class="category-item" (click)="changeProfile(profile)" [class.selected]="attrubute === profile.column">
+                        {{profile.column}} 
                       </div>
-                      <div style="margin: 10px 0 20px">
-                        <!-- row_nan -->
-                        <span *ngIf="delete.category === 'row_nan'">
-                          Considering NaNs across {{calulateRowNanThreshold()}} columns at least, per row.
-                        </span>
-                        <!-- col_nan -->
-                        <span *ngIf="delete.category === 'col_nan'">
-                          (Considering NaNs across {{calulateColNanThreshold()}} out of {{profileDetails.nr_totalrecords}} rows)
-                        </span>
-                      </div>
-                      <div class="form-row">
-                        <mat-slider thumbLabel min="0" max="100" step="1" [(ngModel)]="delete.threshold"></mat-slider>
-                      </div>
-                    </div>
-
-                    <div class="form-row">
-                      <button 
-                        type="button" 
-                        (click)="loadPreview('data_remove')"
-                        class="button3d btnPush btnPurple addico w-t">
-                        <mat-icon> visibility</mat-icon> Preview 
-                      </button>
-                      <button 
-                        type="button" 
-                        (click)="deleteColumnsRows()"
-                        class="button3d btnPush btnPurple addico w-t">
-                        <mat-icon> delete</mat-icon> Remove 
-                      </button>
-                    </div>
-
-                  </div>
-                </mat-tab>
-                
-              </mat-tab-group>
-            </mat-card>
-           
-          <!-- Preview -->
-          <mat-card class="border no-rounded list shrare-post mat-card source-preview-card">
-            <div class="list flex-containers space-between">
-              <h1 class="share-post-title">Preview</h1>
-            </div>
-            <app-progress-bar [message]="'Loading preview...'" class="component" *ngIf="isPreviewLoading"></app-progress-bar>
-            <app-ag-grid
-              floatingFilter="true"
-              *ngIf="isPreviewLoaded"
-              [rowData]="rowData"
-              [columnDefs]="columnDefs"
-              [pageSize]="50"
-              [rowSelection]="'multiple'"
-              [suppressRowClickSelection]="false"
-              [moveToColumn]="profile.column"
-            ></app-ag-grid>
-          </mat-card>
-
-          <div class="lft-attr">
-            <mat-card class="bg-violet" *ngIf="profile.attributeSummary">
-              <h4 class="attr-tite">Attribute Summary <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
-              <div class="records">
-                 <span>records</span>
-                 {{profile.attributeSummary?.records}}
+                    </ng-template>                     
+                  </owl-carousel-o>                                     
+               </div>
               </div>
-              <div class="dotDiv"></div>
-              <div class="records">
-                <span>Data type</span>
-                {{profile.attributeSummary?.dataType}}
-              </div>
-              <div class="dotDiv"></div>
-              <div class="records">
-                <span>Null Counts</span>
-                <a href="javascript: void(0)" *ngIf="profile.attributeSummary && profile.attributeSummary.null_records" (click)="loadPreview('nan')">
-                  {{profile.attributeSummary?.null_records}}
-                </a>
-                <div *ngIf="profile.attributeSummary && !profile.attributeSummary.null_records">
-                  {{profile.attributeSummary?.null_records}}
-                </div>
-              </div>
-              <div class="action-btn" *ngIf="profile.attributeSummary?.null_records">
-                <button 
-                  type="button" 
-                  mat-mini-fab color="accent"
-                  matTooltip="Impute Columns"
-                ><mat-icon>layers_clear</mat-icon></button>
-                <button 
-                  type="button" 
-                  mat-mini-fab color="warn"
-                  matTooltip="Delete Records"
-                ><mat-icon>delete</mat-icon></button>
-                <button 
-                  type="button" 
-                  mat-mini-fab color="warn"
-                  matTooltip="Delete Duplicates"
-                ><mat-icon>delete_sweep</mat-icon></button>
-              </div>
-            </mat-card>
-        
-              <mat-card class="bg-magenta" *ngIf="profile.frequncyAnalysis && profile.frequncyAnalysis.length">
-                 <h4 class="attr-tite">Frequency Groups <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
-                 <div class="frequencyContainer" [class.frequencyShow]="frequencyShow">
-                 <table>
-                    <tr>
-                       <th>Frequency</th>
-                       <th>Count</th>
-                       <th style="width:20%">&nbsp;</th>
-                    </tr>
-                    <tr *ngFor="let frequency of profile.frequncyAnalysis">
-                       <td>{{frequency.unique_values}}</td>
-                       <td>{{frequency.counts}}</td>
-                       <td><mat-progress-bar mode="determinate" [value]="(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %" ></mat-progress-bar></td>
-                    </tr>
-                 </table>
-              </div>
-              <button *ngIf="profile.frequncyAnalysis.length > 3" class="frequencyBtn" (click)="frequencyShow = !frequencyShow">
-                 <mat-icon *ngIf="!frequencyShow">expand_more</mat-icon> <mat-icon *ngIf="frequencyShow">expand_less</mat-icon> </button>  
-              </mat-card>
-                
-              <mat-card class="bg-blue" *ngIf="profile.patternAnalysis && profile.patternAnalysis.length">
-                 <h4 class="attr-tite">Pattern Analysis <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
-                 <div class="frequencyContainer" [class.patternShow]="patternShow">
-                 <table>
-                    <tr>
-                       <th>Value</th>
-                       <th>Count</th>
-                       <th style="width:20%">&nbsp;</th>
-                    </tr>
-                    <tr *ngFor="let pattern of profile.patternAnalysis">
-                       <td>{{pattern.unique_values}}</td>
-                       <td>{{pattern.counts}}</td>
-                       <td><mat-progress-bar mode="determinate" [value]="(pattern.counts * 100) / profile.attributeSummary?.records | number:'1.0-2' " matTooltip="{{(pattern.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %"></mat-progress-bar></td>
-                    </tr>
-                 </table>
-              </div>
-              <button *ngIf="profile.patternAnalysis.length > 3" class="patternBtn" (click)="patternShow = !patternShow"><!--  {{ patternShow ? 'Show less'  : 'Show More'  }} -->
-                 <mat-icon *ngIf="!patternShow">expand_more</mat-icon> <mat-icon *ngIf="patternShow">expand_less</mat-icon> </button> 
-              </mat-card>
-        
-           </div>
-           <div class="rgt-attr">
-              <!-- <mat-card class="wt2">
-                 <h4 class="attr-tite">Count <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
-                 <div class="records">
-                    <highcharts-chart
-                       [Highcharts] = "highcharts" 
-                       [options] = "chartOptions" 
-                       style = "width: 100%; height: 400px; display: block;">
-                    </highcharts-chart>
-        
-                 </div>                          
-              </mat-card> -->
-              <mat-card class="honeydew" *ngIf="profile.LengthStatistics">
-               <h4 class="attr-tite">Length Statistics
-                  <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
+              <div class="flex-containers prof-details">
+                <div class="attribute-details">
+                  <mat-card class="tab-card">
+                    <mat-tab-group mat-align-tabs="start"  animationDuration="0ms" class="mm2" #tabGroup (selectedTabChange)="resetPreview();">
+                      <mat-tab label="Data Imputation">
+                        <div class="impute-wrapper" *ngIf="profile.attributeSummary?.dataType === 'Numeric'">
+                          <h5 class="sub-title-label">Impute Null Data</h5>
+                          <div class="form-row">
+                            <mat-form-field appearance="fill" class="mft">
+                              <mat-select placeholder="Impute Option" [(ngModel)]="impute.value" [disabled]="!profile.attributeSummary?.null_records">
+                                <mat-option value="MEAN">Mean</mat-option>
+                                <mat-option value="MEDIAN">Median</mat-option>
+                                <mat-option value="MODE">Mode</mat-option>
+                                <mat-option value="MIN">Min</mat-option>
+                                <mat-option value="MAX">Max</mat-option>
+                                <mat-option value="IQR25">IQR25</mat-option>
+                                <mat-option value="IQR75">IQR75</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <div>
+                            <button 
+                              type="button" 
+                              class="button3d btnPush btnPurple addico w-t"
+                              (click)="loadPreview('nan')"
+                              style="margin-left: 0;"
+                            ><mat-icon> layers_clear</mat-icon> PREVIEW </button>
       
-                  <div class="custom-slider">
-                     <ngx-slider [(value)]="profile.LengthStatistics.Min" [(highValue)]="profile.LengthStatistics.Max" [options]="sliderOptions"></ngx-slider>
-                  </div>
-             </mat-card>
-              <mat-card class="bg-green" *ngIf="profile.maskAnalysis && profile.maskAnalysis.length">
-                 <h4 class="attr-tite">Mask Analysis <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
-                 <div class="frequencyContainer" [class.maskShow]="maskShow">
-                  <table>
-                      <tr>
-                        <th>Value</th>
-                        <th>Count</th>
-                        <th style="width:20%">&nbsp;</th>
-                      </tr>
+                            <button 
+                              type="button" 
+                              class="button3d btnPush btnPurple addico w-t"
+                              (click)="imputeColumns('numeric')"
+                              [disabled]="!profile.attributeSummary?.null_records || !impute.value"><mat-icon> layers_clear</mat-icon> IMPUTE 
+                            </button>
+                          </div>
+                      </div>
+      
+                        <div class="impute-wrapper" *ngIf="profile.attributeSummary?.dataType === 'Alphabetic' || profile.attributeSummary?.dataType === 'Alphanumeric'">
+                          <h5 class="sub-title-label">Impute Null Data</h5>
+                          <div class="form-row">
+                              <mat-form-field appearance="fill" class="mft">
+                                <mat-select placeholder="Select Value" [(ngModel)]="impute.value" [disabled]="!profile.attributeSummary?.null_records">
+                                  <mat-option *ngFor="let frequency of profile.frequncyAnalysis" [value]="frequency.unique_values">{{frequency.unique_values}} - ({{frequency.counts}})</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                        </div>
+                        <div>
+                          <button 
+                          type="button" 
+                          class="button3d btnPush btnPurple addico w-t"
+                          (click)="loadPreview('nan')"
+                          style="margin-left: 0;"
+                          ><mat-icon> layers_clear</mat-icon> PREVIEW </button>
+                        <button 
+                          type="button" 
+                          class="button3d btnPush btnPurple addico w-t"
+                          (click)="imputeColumns('string')"
+                          [disabled]="!profile.attributeSummary?.null_records || !impute.value"><mat-icon> layers_clear</mat-icon> IMPUTE </button>
+                      </div>
+                    </div>
+                      </mat-tab>
+                      
+                      <mat-tab label="Duplicate Analysis">
+                        <div class="impute-wrapper">
+                          <h5 class="sub-title-label">Remove Duplicate Rows</h5>
+                          <div style="margin-top: 10px;">
+                            <mat-radio-group [(ngModel)]="duplicate.option" (ngModelChange)="duplicate.columns = []">
+                              <mat-radio-button value="all">All Columns</mat-radio-button>
+                              <mat-radio-button value="selected">Specific Column</mat-radio-button>
+                            </mat-radio-group>
+                          </div>
+                          <div style="margin-top: 10px;">
+                            <mat-form-field appearance="fill" class="mft" *ngIf="duplicate.option === 'selected'">
+                              <mat-select placeholder="Select Columns" multiple [(ngModel)]="duplicate.columns">
+                                <mat-option *ngFor="let profile of profiles" [value]="profile.column">{{profile.column}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+      
+                          <div class="form-row">
+                              <button 
+                                type="button" 
+                                (click)="loadPreview('duplicate')"
+                                class="button3d btnPush btnPurple addico w-t">
+                                <mat-icon> visibility</mat-icon> Preview 
+                              </button>
+                              <button 
+                                type="button" 
+                                (click)="deleteDuplicates()"
+                                class="button3d btnPush btnPurple addico w-t">
+                                <mat-icon> delete</mat-icon> Remove 
+                              </button>
+                          </div>
+                        </div>
+                      </mat-tab>  
+      
+                      <!-- <mat-tab label="Mask Analysis">
+                        <div class="impute-wrapper">
+                          <h5 class="sub-title-label">Mask Analysis Data</h5>
+                          <div class="form-row">
+                            <mat-form-field appearance="fill" class="mft">
+                              <mat-select placeholder="" [(ngModel)]="mask.value">
+                                <mat-option *ngFor="let mask of profile.maskAnalysis" [value]="mask.unique_values">{{mask.unique_values}} - ({{mask.counts}})</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                            <button 
+                              type="button" 
+                              [disabled]="!mask.value"
+                              (click)="loadPreview('mask', mask.value)"
+                              class="button3d btnPush btnPurple addico w-t">
+                              <mat-icon> visibility</mat-icon> Preview 
+                            </button>
+                          </div>                    
+                        </div>
+                      </mat-tab> -->
+      
+                      <mat-tab label="Data Removal">
+                        <div class="impute-wrapper">
+                          <h5 class="sub-title-label">Delete Column / Row</h5>
+                          <div class="form-row">
+                            <mat-radio-group [(ngModel)]="delete.type" (ngModelChange)="changeRemoveCategory(delete.type)">
+                              <mat-radio-button [checked]="true" value="column">Column</mat-radio-button>
+                              <mat-radio-button value="custom" value="row">Row</mat-radio-button>
+                            </mat-radio-group>
+                          </div>
+      
+                          <div class="form-row" *ngIf="delete.type === 'column'">
+                            <mat-radio-group [(ngModel)]="delete.category">
+                              <mat-radio-button [checked]="true" value="col_nan">NaN</mat-radio-button>
+                              <mat-radio-button value="custom" value="col_with_value">Value</mat-radio-button>
+      
+                              <div *ngIf="delete.category === 'col_with_value'" style="margin-top: 10px;">
+                                <mat-form-field appearance="fill" class="mft">
+                                  <mat-select placeholder="Select Columns" [(ngModel)]="delete.column_name" disabled>
+                                    <mat-option *ngFor="let profile of profiles" [value]="profile.column">{{profile.column}} - {{profile.attributeSummary?.dataType}}</mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                              </div>
+      
+                              <div *ngIf="delete.category === 'col_with_value' && profile.attributeSummary?.dataType === 'Alphabetic' || profile.attributeSummary?.dataType === 'Alphanumeric'">
+                                <mat-form-field appearance="fill" class="mft-200" style="width: 250px;">
+                                  <mat-label>Value</mat-label>
+                                  <input 
+                                    matInput placeholder="" value="" 
+                                    [(ngModel)]="delete.values"
+                                    (ngModelChange)="delete.formula.cond_value1=''; delete.formula.cond_value2=''">
+                                </mat-form-field>
+                              </div>
           
-                      <tr *ngFor="let mask of profile.maskAnalysis">
-                        <td>
-                          <a href="javascript: void(0)" (click)="loadPreview('mask', mask.unique_values)">
-                            {{mask.unique_values}}
-                          </a>
-                        </td>
-                        <td>{{mask.counts}}</td>
-                        <td><mat-progress-bar mode="determinate" [value]="(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'}} %"></mat-progress-bar></td>
-                      </tr>
-                  </table>
-                </div>
-                <button *ngIf=" profile.maskAnalysis.length > 3" class="maskShowBtn" (click)="maskShow = !maskShow">  <!-- {{ maskShow ? 'Show less'  : 'Show More'  }} -->
-                 <mat-icon *ngIf="!maskShow">expand_more</mat-icon> <mat-icon *ngIf="maskShow">expand_less</mat-icon> </button> 
+                              <div style="margin-top: 10px;" class="formula-section" *ngIf="delete.category === 'col_with_value' && profile.attributeSummary?.dataType === 'Numeric'">
+                                <mat-form-field appearance="fill" class="mft">
+                                  <mat-select placeholder="Operator" [(ngModel)]="delete.formula.operator1" (ngModelChange)="delete.values=''">
+                                    <mat-option *ngFor="let operator of operators" [value]="operator">{{operator}}</mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                                <mat-form-field appearance="fill" class="mft2">
+                                  <mat-label>Value</mat-label>
+                                  <input matInput placeholder="" type="number" value="" [(ngModel)]="delete.formula.cond_value1" (ngModelChange)="delete.values=''">
+                                </mat-form-field>
+      
+                                <mat-form-field appearance="fill" class="mft">
+                                  <mat-select placeholder="Operator" [(ngModel)]="delete.formula.operator2" (ngModelChange)="delete.values=''">
+                                    <mat-option *ngFor="let operator of operators" [value]="operator">{{operator}}</mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                                <mat-form-field appearance="fill" class="mft2">
+                                  <mat-label>Value</mat-label>
+                                  <input matInput placeholder="" type="number" value="" [(ngModel)]="delete.formula.cond_value2" (ngModelChange)="delete.values=''">
+                                </mat-form-field>
+                              </div>
+                            </mat-radio-group>
+                          </div>
+      
+                          <div class="form-row" *ngIf="delete.type === 'row'">
+                            <mat-radio-group [(ngModel)]="delete.category">
+                              <mat-radio-button [checked]="true" value="row_nan">NaN</mat-radio-button>
+                              <!-- <mat-radio-button value="custom" value="">Value</mat-radio-button>
+                              <mat-form-field appearance="fill" class="mft2" *ngIf="delete.category === ''">
+                                <mat-label>Custom Value</mat-label>
+                                <input matInput placeholder="" value="" [(ngModel)]="delete.values">
+                              </mat-form-field> -->
+                            </mat-radio-group>
+                          </div>
+      
+                          <div class="form-rows" style="margin-top: 10px;" *ngIf="delete.category === 'col_nan' || delete.category === 'row_nan'">
+                            <div style="font-weight: bold;">
+                              Threshold : {{delete.threshold}}%
+                            </div>
+                            <div style="margin: 10px 0 20px">
+                              <!-- row_nan -->
+                              <span *ngIf="delete.category === 'row_nan'">
+                                Considering NaNs across {{calulateRowNanThreshold()}} columns at least, per row.
+                              </span>
+                              <!-- col_nan -->
+                              <span *ngIf="delete.category === 'col_nan'">
+                                (Considering NaNs across {{calulateColNanThreshold()}} out of {{profileDetails.nr_totalrecords}} rows)
+                              </span>
+                            </div>
+                            <div class="form-row">
+                              <mat-slider thumbLabel min="0" max="100" step="1" [(ngModel)]="delete.threshold"></mat-slider>
+                            </div>
+                          </div>
+      
+                          <div class="form-row">
+                            <button 
+                              type="button" 
+                              (click)="loadPreview('data_remove')"
+                              class="button3d btnPush btnPurple addico w-t">
+                              <mat-icon> visibility</mat-icon> Preview 
+                            </button>
+                            <button 
+                              type="button" 
+                              (click)="deleteColumnsRows()"
+                              class="button3d btnPush btnPurple addico w-t">
+                              <mat-icon> delete</mat-icon> Remove 
+                            </button>
+                          </div>
+      
+                        </div>
+                      </mat-tab>
+                      
+                    </mat-tab-group>
+                  </mat-card>
+                 
+                <!-- Preview -->
+                <mat-card class="border no-rounded list shrare-post mat-card source-preview-card">
+                  <div class="list flex-containers space-between">
+                    <h1 class="share-post-title">Preview</h1>
+                  </div>
+                  <app-progress-bar [message]="'Loading preview...'" class="component" *ngIf="isPreviewLoading"></app-progress-bar>
+                  <app-ag-grid
+                    floatingFilter="true"
+                    *ngIf="isPreviewLoaded"
+                    [rowData]="rowData"
+                    [columnDefs]="columnDefs"
+                    [pageSize]="50"
+                    [rowSelection]="'multiple'"
+                    [suppressRowClickSelection]="false"
+                    [moveToColumn]="profile.column"
+                  ></app-ag-grid>
+                </mat-card>
+      
+                <div class="lft-attr">
+                  <mat-card class="bg-violet" *ngIf="profile.attributeSummary">
+                    <h4 class="attr-tite">Attribute Summary <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
+                    <div class="records">
+                       <span>records</span>
+                       {{profile.attributeSummary?.records}}
+                    </div>
+                    <div class="dotDiv"></div>
+                    <div class="records">
+                      <span>Data type</span>
+                      {{profile.attributeSummary?.dataType}}
+                    </div>
+                    <div class="dotDiv"></div>
+                    <div class="records">
+                      <span>Null Counts</span>
+                      <a href="javascript: void(0)" *ngIf="profile.attributeSummary && profile.attributeSummary.null_records" (click)="loadPreview('nan')">
+                        {{profile.attributeSummary?.null_records}}
+                      </a>
+                      <div *ngIf="profile.attributeSummary && !profile.attributeSummary.null_records">
+                        {{profile.attributeSummary?.null_records}}
+                      </div>
+                    </div>
+                    <div class="action-btn" *ngIf="profile.attributeSummary?.null_records">
+                      <button 
+                        type="button" 
+                        mat-mini-fab color="accent"
+                        matTooltip="Impute Columns"
+                      ><mat-icon>layers_clear</mat-icon></button>
+                      <button 
+                        type="button" 
+                        mat-mini-fab color="warn"
+                        matTooltip="Delete Records"
+                      ><mat-icon>delete</mat-icon></button>
+                      <button 
+                        type="button" 
+                        mat-mini-fab color="warn"
+                        matTooltip="Delete Duplicates"
+                      ><mat-icon>delete_sweep</mat-icon></button>
+                    </div>
+                  </mat-card>
+              
+                    <mat-card class="bg-magenta" *ngIf="profile.frequncyAnalysis && profile.frequncyAnalysis.length">
+                       <h4 class="attr-tite">Frequency Groups <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
+                       <div class="frequencyContainer" [class.frequencyShow]="frequencyShow">
+                       <table>
+                          <tr>
+                             <th>Frequency</th>
+                             <th>Count</th>
+                             <th style="width:20%">&nbsp;</th>
+                          </tr>
+                          <tr *ngFor="let frequency of profile.frequncyAnalysis">
+                             <td>{{frequency.unique_values}}</td>
+                             <td>{{frequency.counts}}</td>
+                             <td><mat-progress-bar mode="determinate" [value]="(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %" ></mat-progress-bar></td>
+                          </tr>
+                       </table>
+                    </div>
+                    <button *ngIf="profile.frequncyAnalysis.length > 3" class="frequencyBtn" (click)="frequencyShow = !frequencyShow">
+                       <mat-icon *ngIf="!frequencyShow">expand_more</mat-icon> <mat-icon *ngIf="frequencyShow">expand_less</mat-icon> </button>  
+                    </mat-card>
+                      
+                    <mat-card class="bg-blue" *ngIf="profile.patternAnalysis && profile.patternAnalysis.length">
+                       <h4 class="attr-tite">Pattern Analysis <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
+                       <div class="frequencyContainer" [class.patternShow]="patternShow">
+                       <table>
+                          <tr>
+                             <th>Value</th>
+                             <th>Count</th>
+                             <th style="width:20%">&nbsp;</th>
+                          </tr>
+                          <tr *ngFor="let pattern of profile.patternAnalysis">
+                             <td>{{pattern.unique_values}}</td>
+                             <td>{{pattern.counts}}</td>
+                             <td><mat-progress-bar mode="determinate" [value]="(pattern.counts * 100) / profile.attributeSummary?.records | number:'1.0-2' " matTooltip="{{(pattern.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %"></mat-progress-bar></td>
+                          </tr>
+                       </table>
+                    </div>
+                    <button *ngIf="profile.patternAnalysis.length > 3" class="patternBtn" (click)="patternShow = !patternShow"><!--  {{ patternShow ? 'Show less'  : 'Show More'  }} -->
+                       <mat-icon *ngIf="!patternShow">expand_more</mat-icon> <mat-icon *ngIf="patternShow">expand_less</mat-icon> </button> 
+                    </mat-card>
+              
+                 </div>
+                 <div class="rgt-attr">
+                    <!-- <mat-card class="wt2">
+                       <h4 class="attr-tite">Count <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
+                       <div class="records">
+                          <highcharts-chart
+                             [Highcharts] = "highcharts" 
+                             [options] = "chartOptions" 
+                             style = "width: 100%; height: 400px; display: block;">
+                          </highcharts-chart>
+              
+                       </div>                          
+                    </mat-card> -->
+                    <mat-card class="honeydew" *ngIf="profile.LengthStatistics">
+                     <h4 class="attr-tite">Length Statistics
+                        <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
+            
+                        <div class="custom-slider">
+                           <ngx-slider [(value)]="profile.LengthStatistics.Min" [(highValue)]="profile.LengthStatistics.Max" [options]="sliderOptions"></ngx-slider>
+                        </div>
+                   </mat-card>
+                    <mat-card class="bg-green" *ngIf="profile.maskAnalysis && profile.maskAnalysis.length">
+                       <h4 class="attr-tite">Mask Analysis <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
+                       <div class="frequencyContainer" [class.maskShow]="maskShow">
+                        <table>
+                            <tr>
+                              <th>Value</th>
+                              <th>Count</th>
+                              <th style="width:20%">&nbsp;</th>
+                            </tr>
+                
+                            <tr *ngFor="let mask of profile.maskAnalysis">
+                              <td>
+                                <a href="javascript: void(0)" (click)="loadPreview('mask', mask.unique_values)">
+                                  {{mask.unique_values}}
+                                </a>
+                              </td>
+                              <td>{{mask.counts}}</td>
+                              <td><mat-progress-bar mode="determinate" [value]="(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'}} %"></mat-progress-bar></td>
+                            </tr>
+                        </table>
+                      </div>
+                      <button *ngIf=" profile.maskAnalysis.length > 3" class="maskShowBtn" (click)="maskShow = !maskShow">  <!-- {{ maskShow ? 'Show less'  : 'Show More'  }} -->
+                       <mat-icon *ngIf="!maskShow">expand_more</mat-icon> <mat-icon *ngIf="maskShow">expand_less</mat-icon> </button> 
+                    </mat-card>
+               </div>  
+      
+                </div>           
+            </div>
+
+            </div>
+
+            <!-- <div class="correlationView valign" *ngIf="previewCorrelation">            
+                <app-progress-bar [message]="'Loading'" class="component" *ngIf="isLoading"></app-progress-bar>
+                <h1 class="share-post-title"><span class="lgb">Correlation Summary</span></h1>
+                <div class="flex-containers">
+                  <div class="list-item-4">
+                    <mat-form-field appearance="fill">
+                      <mat-label class="lbl">Data Type</mat-label>
+                      <mat-select [(ngModel)]="datatype" (ngModelChange)="changeType($event)">
+                        <mat-option value="mixed">Mixed</mat-option>
+                        <mat-option value="numeric">Numeric</mat-option>
+                        <mat-option value="categorical">Categorical</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="list-item-4">
+                    <mat-form-field appearance="fill">
+                      <mat-label class="lbl">Method</mat-label>
+                      <mat-select [(ngModel)]="method" (ngModelChange)="loadCorrelation(selectedSource, datatype, $event)">
+                        <mat-option *ngIf="datatype === 'numeric'" value="pearson">Pearson</mat-option>
+                        <mat-option *ngIf="datatype === 'numeric'" value="kendall">Kendall</mat-option>
+                        <mat-option *ngIf="datatype === 'numeric'" value="spearman">Spearman</mat-option>
+                        <mat-option *ngIf="datatype === 'categorical'" value="theils_u">Theils_U</mat-option>
+                        <mat-option *ngIf="datatype === 'categorical'" value="cramers_v">Cramers_V</mat-option>
+                        <mat-option *ngIf="datatype === 'mixed'" value="">Correlation Ratio</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>                
+              <app-heat-map [columns]="coMatrix.columns" *ngIf="coMatrix.matrix" [data]="coMatrix.matrix" [isOverview]="true"></app-heat-map>
+              <mat-card class="no-data-msg" *ngIf="!coMatrix.matrix">
+                <h3>No correlations.</h3>
               </mat-card>
-         </div>  
+            </div> -->
+            </mat-card>
+              
+            </div>
+          </div>
 
           </div>
-       </div>
-        
-      </div>     
+
+        </div>
+      </div> 
+    </div>
+
   </div>
 </section>
+
+
+
+

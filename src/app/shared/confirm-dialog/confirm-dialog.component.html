@@ -6,8 +6,8 @@
   <div class="reason-wrp" *ngIf="data.showReason">
     <p>{{data.reasongMsg}}</p>
     <mat-form-field class="input-full-width" name="reason-input">
-      <mat-label>Reason</mat-label>
-      <textarea matInput placeholder="Ex. Reason..." [(ngModel)]="reason"></textarea>
+      <mat-label>{{data.reasonLabel ? data.reasonLabel : reasonLabel}}</mat-label>
+      <textarea matInput placeholder="" [(ngModel)]="reason"></textarea>
     </mat-form-field>
   </div>
   <div class="footer">

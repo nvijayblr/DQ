@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import * as Highcharts from 'highcharts';
+import * as _ from 'lodash';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Options } from '@angular-slider/ngx-slider';
+import { OwlOptions } from 'ngx-owl-carousel-o';
 import { MessageService } from 'src/app/services/message.service';
 import { HttpService } from 'src/app/services/http-service.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -12,7 +15,34 @@ import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-di
   styleUrls: ['./data-cleaning.component.scss'],
 })
 export class DataCleaningComponent implements OnInit {
-   @ViewChild('stickyMenu', {static: false}) menuElement: ElementRef;
+  @ViewChild('stickyMenu', { static: false }) menuElement: ElementRef;
+  profileOptions: OwlOptions = {
+    loop: true,
+    margin: 10,
+    nav: true,
+    navText: [
+       '<i class=\'fa fa-angle-left\'></i>',
+       '<i class=\'fa fa-angle-right\'></i>'
+    ],
+    autoplay: false,
+    autoplayHoverPause: true,
+    autoWidth: true,
+    autoplayTimeout: 2000,
+    autoplaySpeed: 600,
+      items: 6,
+      responsive: {
+        0: {
+          items: 3,
+          center: true,
+          loop: true,
+        },
+        740: {
+          items: 6,
+          center: false,
+          loop: false,
+        }
+      }
+  };
    rules: any = [];
    statistics: any = {};
    attrubute: any = '';
@@ -24,7 +54,17 @@ export class DataCleaningComponent implements OnInit {
    show = false;
    frequencyShow = false;
    patternShow = false;
-   maskShow = false;
+  maskShow = false;
+  showAllDetails: boolean = false;
+  allSourceCategory;
+  sourceByCategory;
+  selectedCategoryKey: any = '';
+  mode: string;
+  //selectedSource: any = {};
+  initLoadProfile = true;
+  titleSrc;
+  uploadId;
+  processTime;
 
    sliderOptions: any = {
       floor: 0,
@@ -104,7 +144,9 @@ export class DataCleaningComponent implements OnInit {
    constructor(
       private messageService: MessageService,
       private http: HttpService,
-      private dialog: MatDialog,
+     private dialog: MatDialog,
+     private route: ActivatedRoute,
+     private router: Router,
    ) {
    }
    highcharts = Highcharts;
@@ -173,24 +215,132 @@ export class DataCleaningComponent implements OnInit {
   };
 
   ngOnInit() {
-   this.isLoading = true;
-   setTimeout(() => {
+    this.mode = this.route.snapshot.queryParamMap.get('mode');
+    if (this.mode === 'dqm') {
+      this.getProfileFromMonitoring();      
+    } else {
+      this.getProfileSource();
+    }
+    // if (this.analysis.recentsourceUpload) {
+    //    this.uploadId = this.analysis.recentsourceUpload.uploadId
+    // } else {
+    //   this.uploadId = ""
+    // }
+
+    
+  }
+
+  getProfileFromMonitoring() {
+    this.isLoading = true;
+    setTimeout(() => {
       this.analysis = this.messageService.getSource();
-      this.source = this.analysis.source ? this.analysis.source : {};
-      if (this.source) {
-         this.mask.sourcepath = this.source.templateSourcePath;
-         this.impute.sourcepath = this.source.templateSourcePath;
-         this.delete.sourcepath = this.source.templateSourcePath;
-         this.duplicate.sourcepath = this.source.templateSourcePath;
-         this.profileSummary.sourcepath = this.source.templateSourcePath;
-         this.mask.sourceFileName = this.source.templateSourcePath;
-         this.impute.sourceFileName = this.source.templateSourcePath;
-         this.delete.sourceFileName = this.source.templateSourcePath;
-         this.duplicate.sourceFileName = this.source.templateSourcePath;
-         this.profileSummary.sourceFileName = this.source.templateSourcePath;
-         this.loadProfile(this.source);
-      }
-   }, 10);
+      this.uploadId = this.analysis.recentsourceUpload.uploadId;
+      this.processTime = this.analysis.recentsourceUpload.uploadDate;
+       this.source = this.analysis.source ? this.analysis.source : {};
+       if (this.source) {
+         this.sourcePathSelected();
+       }
+    }, 10);
+  }
+
+  getProfileSource() {
+    this.http.getCleanSource().subscribe((result: any) => {
+      this.allSourceCategory = result.SourceDetailsList;
+      this.analysis = this.messageService.getSource();
+      if (this.analysis) {
+        this.uploadId = this.analysis.sourceId;
+        this.processTime = this.analysis.uploadDate;
+        this.source = this.analysis;
+        this.sourcePathSelected();
+        this.uploadId = this.source.sourceId;
+      } else {
+        this.analysis = result.SourceDetailsList.length ? result.SourceDetailsList[0] : [];        
+        this.source = this.analysis;
+        this.sourcePathSelected();
+        this.uploadId = this.source.sourceId;
+        this.processTime = this.analysis.uploadDate;
+        if (this.source.length === 0) {
+          this.showAllDetails = true;
+          return;
+        }
+      }      
+      this.loadProfile(this.source);
+      this.sourceByCategory =
+        _.chain(this.allSourceCategory).
+        groupBy('sourceCategory')
+        .map((sourcesList, key) => {
+          sourcesList.map(source => {
+            if (source.sourceId === this.source.sourceId) {
+              this.selectedCategoryKey = key;
+            }
+          });
+          return { category: key, sources: sourcesList };
+        }).value();
+    });
+  }
+        
+  sourcePathSelected() {
+    this.mask.sourcepath = this.source.templateSourcePath;
+    this.impute.sourcepath = this.source.templateSourcePath;
+    this.delete.sourcepath = this.source.templateSourcePath;
+    this.duplicate.sourcepath = this.source.templateSourcePath;
+    this.profileSummary.sourcepath = this.source.templateSourcePath;
+    this.mask.sourceFileName = this.source.templateSourcePath;
+    this.impute.sourceFileName = this.source.templateSourcePath;
+    this.delete.sourceFileName = this.source.templateSourcePath;
+    this.duplicate.sourceFileName = this.source.templateSourcePath;
+    this.profileSummary.sourceFileName = this.source.templateSourcePath;
+    this.loadProfile(this.source);
+  }
+ 
+  changeCategory(source) {
+    console.log('source', source)
+    //localStorage.setItem('dq-source-data', JSON.stringify(source));
+    localStorage.removeItem('dq-source-data');    
+    this.source = source;
+    this.initLoadProfile = false;
+    this.titleSrc = source.templateSourcePath;
+    this.loadProfile(source);
+    //this.loadReferencePreview();
+    // this.loadCorrelation(this.selectedSource, this.datatype, this.method);
+  }
+
+  deleteSourceData(source) {
+    const confirm = window.confirm('Are you sure you want to delete');
+    const payload = {
+      action: 'remove',
+      db : "clean",
+      old_source: {
+        sourceDataName: source.sourceDataName,
+        sourceFileName: source.sourceFileName,
+        sourceCategory: source.sourceCategory,
+        dataOwner: source.dataOwner,
+        sourceId: source.sourceId,
+      },
+      new_source: ''
+    };
+    if (confirm) {
+      localStorage.removeItem('dq-source-data'); 
+      this.http.deleteSource(payload).subscribe((res: any) => {
+        this.reloadCurrentRoute();
+      });
+    }
+
+  }
+
+  editSourceData(sourceData) {
+    localStorage.setItem('dq-source-data', JSON.stringify(sourceData));
+    this.router.navigate(
+       [`auth/create-profile-data`],
+       { queryParams: { sourceId: sourceData.sourceId, mode: 'edit', method: 'clean'} }
+    );
+  }
+
+  reloadCurrentRoute() {
+    const currentUrl = this.router.url;
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([currentUrl]);
+    });
   }
 
   changeProfile(profile) {
@@ -203,14 +353,17 @@ export class DataCleaningComponent implements OnInit {
       this.duplicate.column_name = profile.column;
    }
 
-   loadProfile(source, profile: any = '') {
+  loadProfile(source, profile: any = '') {
+    console.log('Loading profile', source.templateSourcePath)
+    this.titleSrc = source.templateSourcePath;
       this.isLoading = true;
       this.loaderMsg = 'Loading Profile...';
       const payload = {
          sourcepath: source.templateSourcePath
       };
       this.getCleanedLogs();
-      this.http.getProfiles(payload).subscribe((result: any) => {
+    this.http.getProfiles(payload).subscribe((result: any) => {
+        console.log('result', result)
          this.profiles = result.profile ? result.profile : [];
          this.profileDetails = {
             nr_duplicates: result.nr_duplicates,
@@ -258,7 +411,8 @@ export class DataCleaningComponent implements OnInit {
       });
    }
 
-   getCleanedLogs() {
+  getCleanedLogs() {
+     console.log('this.ID', this.analysis.sourceId)
       this.isLogsLoading = true;
       const payload = {
          query_col : 'sourceId',
@@ -298,8 +452,8 @@ export class DataCleaningComponent implements OnInit {
             ...this.impute,
             sourceFileName: this.impute.sourceFileName,
             sourceId: this.analysis.sourceId,
-            uploadId: this.analysis.recentsourceUpload.uploadId,
-            processTime: this.analysis.recentsourceUpload.uploadDate,
+            uploadId: this.uploadId,
+            processTime: this.processTime,
          };
          this.isLoading = true;
          this.loaderMsg = 'Imputing columns...';
@@ -375,8 +529,8 @@ export class DataCleaningComponent implements OnInit {
             ...this.delete,
             sourceFileName: this.delete.sourceFileName,
             sourceId: this.analysis.sourceId,
-            uploadId: this.analysis.recentsourceUpload.uploadId,
-            processTime: this.analysis.recentsourceUpload.uploadDate,
+            uploadId: this.uploadId,
+            processTime: this.processTime,
          };
          delete payload.type;
          if (payload.category === 'row_nan' || this.delete.category === 'col_nan') {
@@ -430,8 +584,8 @@ export class DataCleaningComponent implements OnInit {
             keep: 'first',
             sourceFileName: this.impute.sourceFileName,
             sourceId: this.analysis.sourceId,
-            uploadId: this.analysis.recentsourceUpload.uploadId,
-            processTime: this.analysis.recentsourceUpload.uploadDate,
+            uploadId: this.uploadId,
+            processTime: this.processTime,
          };
          this.http.deleteDuplicatesReq(payload).subscribe((result: any) => {
             this.isLoading = false;
@@ -469,8 +623,8 @@ export class DataCleaningComponent implements OnInit {
             keep: '',
             sourceFileName: this.impute.sourceFileName,
             sourceId: this.analysis.sourceId,
-            uploadId: this.analysis.recentsourceUpload.uploadId,
-            processTime: this.analysis.recentsourceUpload.uploadDate,
+            uploadId: this.uploadId,
+            processTime: this.processTime,
          },
          mask: {
             sourcepath: this.source.templateSourcePath,
@@ -495,7 +649,8 @@ export class DataCleaningComponent implements OnInit {
       this.loadProfilePreview(payloads[type], type, callBack);
    }
 
-   loadProfilePreview(payload, type, callBack) {
+  loadProfilePreview(payload, type, callBack) {
+     console.log('loadProfilePreview', payload);
       this.loaderMsg = 'Loading preview...';
       this.isPreviewLoaded = false;
       this.isPreviewLoading = true;
@@ -583,17 +738,64 @@ export class DataCleaningComponent implements OnInit {
        });
     }
 
-    showSaveConfirm() {
-      this.showConfirmDialog({
-         title: 'Save soruce',
+  showSaveConfirm(source) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Save soruce',
          message: `Are you sure want to save this updated source?` ,
          cancelLable: 'No',
-         okLable: 'Yes'
-       }, () => {
-         console.log('Okay');
-       }, () => {
-         console.log('Cancel');
-       });
+        okLable: 'Yes',
+        showReason: true,
+        reasonLabel : 'File Name'
+      }
+    });
+
+   dialogRef.afterClosed().subscribe(data => {
+      if (data.action === 'ok') {
+        console.log(data.reason)
+        const payload = {
+          sourceId : source.sourceId,
+          sourcePath : source.templateSourcePath,
+          uploadId : source.sourceId,
+          uploadTime : source.uploadDate,
+          outputPath : "cleaned_data",
+          outputFileName : data.reason + ".csv"
+        }
+        this.http.saveCleanSource(payload).subscribe((result: any) => {
+          console.log('result', result.CleanedFilesLog.outputpath);
+          //this.analysis = res;
+          if (result.CleanedFilesLog.outputpath) {
+            this.updateSourcePath(result.CleanedFilesLog.outputpath[result.CleanedFilesLog.outputpath.length-1], result.CleanedFilesLog.outputFileName[result.CleanedFilesLog.outputFileName.length-1]);
+         }
+          //localStorage.setItem('dq-source-data', JSON.stringify(this.analysis));
+        })
+      } else {
+        
+      }
+    });
+      // this.showConfirmDialog({
+      //    title: 'Save soruce',
+      //    message: `Are you sure want to save this updated source?` ,
+      //    cancelLable: 'No',
+      //   okLable: 'Yes',
+      //   showReason: true,
+      //  }, () => {
+      //   console.log('Okay');
+      //   console.log(source);
+      //   const payload = {
+      //     source_ID : source.sourceId,
+      //     source_path : source.templateSourcePath,
+      //     upload_ID : source.sourceId,
+      //     upload_time : source.uploadDate,
+      //     output_path : "cleaned_data",
+      //     output_filename : source.sourceDataName + "_updated"
+      //   }
+      //   this.http.saveCleanSource(payload).subscribe((res: any) => {
+      //   })
+      //  }, () => {
+      //    console.log('Cancel');
+      //  });
     }
 
     calulateRowNanThreshold() {
@@ -605,7 +807,15 @@ export class DataCleaningComponent implements OnInit {
    calulateColNanThreshold() {
       const value = ((this.delete.threshold / 100) * this.profileDetails.nr_totalrecords);
       return value.toFixed(0);
-   }
+  }
+  previewTable;
+  changeMenu(menu) {
+    if (menu === 'preview') {
+      this.previewTable = true;
+    } else {
+      this.previewTable = true;
+    }
+  }
 
 
  // ngAfterViewInit(){

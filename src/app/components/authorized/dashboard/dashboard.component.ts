@@ -378,7 +378,8 @@ rowData = [
    getAllSources() {
       this.isLoading = true;
       this.loaderMsg = 'Loading Sources...';
-      this.http.getSources().subscribe((result: any) => {
+     this.http.getSources().subscribe((result: any) => {
+        console.log('result', result);
          this.sourceList = (result && result.Analysis) ? result.Analysis : [];
          const sourceNames = [];
          this.sourceList.map(item => {
@@ -648,7 +649,7 @@ rowData = [
       localStorage.setItem('dq-source-data', JSON.stringify(sourceData));
       this.router.navigate(
          [`auth/data-cleaning`],
-         { queryParams: { sourceId: sourceData.sourceId } }
+         { queryParams: { sourceId: sourceData.sourceId, mode: 'dqm' } }
       );
    }
 
