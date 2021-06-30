@@ -122,6 +122,7 @@ export class CreateSourceComponent implements OnInit {
     this.sourceNames = sourceNames ? JSON.parse(sourceNames) : [];
 
     let analysis = this.messageService.getSource();
+    console.log('analysis', analysis)
     if (!analysis.source) {
       analysis = {
         source:  {}

@@ -29,6 +29,7 @@ export class AnalysisComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   @Input() isOverview = false;
+  @Input() isOverviewTable = false;
 
   public stores: any[];
 
@@ -112,14 +113,15 @@ export class AnalysisComponent implements OnInit {
    }
 
    ngOnInit() {
-      const analysis = localStorage.getItem('selected-analysis');
+     const analysis = localStorage.getItem('selected-analysis');    
       if (analysis) {
-         this.initAnalysis(JSON.parse(analysis));
+        this.initAnalysis(JSON.parse(analysis));
+        console.log('analysisanalysis', analysis);
       }
    }
 
    initAnalysis(analysis) {
-      console.log(analysis);
+      console.log('aasdasd', analysis);
       this.selectedAnalysis = analysis;
       this.uploadsHistory = analysis.UploadsHistory ? analysis.UploadsHistory : [];
       const payload = {
@@ -168,7 +170,8 @@ export class AnalysisComponent implements OnInit {
       this.launchAnalysisByKeyDate('', this.uploadId);
    }
 
-   launchAnalysisByKeyDate(keyname, uploadId) {
+  hideAnalysis:boolean = false;
+  launchAnalysisByKeyDate(keyname, uploadId) {
       this.selectedKey = keyname;
       const payload = {
          sourceId: this.selectedAnalysis.sourceId,
@@ -182,8 +185,11 @@ export class AnalysisComponent implements OnInit {
       this.isLoadChart = false;
       this.http.launchAnalysisByKey(payload).subscribe((result: any) => {
          this.isLoadingDetails = false;
-         if (result.errorCode && result.errorMsg) {
-            alert(result.errorMsg);
+        if (result.errorCode && result.errorMsg) {
+          this.isLoading = false;
+          this.hideAnalysis = true
+          console.log('HIDE', this.hideAnalysis);
+            alert(result.errorMsg);           
             this.gotoDashboard();
             return;
          }

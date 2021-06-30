@@ -1,4 +1,4 @@
-<section class="page-body home-bodys">
+<section class="page-body home-bodys" [class.noHeight]="isOverview || isOverviewTable">
   <div class="container">
     <div class="home-wrapper">
       <div class="clearfix my-community-body">
@@ -6,7 +6,9 @@
           <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
           <div class="shrare-post">
             <!-- Analysis by CDE-->
-            <mat-card class="border no-rounded list shrare-post" [class.overview-card]="isOverview">
+            <mat-card class="border no-rounded list shrare-post" [class.overview-card]="isOverview" >
+              <div *ngIf="hideAnalysis">The processing is going on.Please try again after some time</div>
+              <div *ngIf="!hideAnalysis">
               <!-- <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoadingDetails"></app-progress-bar> -->
               <div class="list flex-containers analysis-wrp tpBg2 flex-start wrap ">
                 <div class="list-item-4 outline" *ngIf="!isOverview">
@@ -67,7 +69,7 @@
                   </div>
                </div>
               </div>
-              <mat-tab-group mat-align-tabs="start"  animationDuration="0ms" *ngIf="!isOverview">
+              <mat-tab-group mat-align-tabs="start"  animationDuration="0ms" *ngIf="!isOverview && !isOverviewTable">
                <mat-tab label="2D Map">
                   <app-cylinder-chart 
                     *ngIf="analyseKeyData.length && isLoadChart"
@@ -100,7 +102,7 @@
                </mat-tab>
               </mat-tab-group>
 
-              <div class="overview-chart" *ngIf="isOverview">
+              <div class="overview-chart" *ngIf="isOverview && !isOverviewTable">
                 <app-cylinder-chart 
                   *ngIf="analyseKeyData.length && isLoadChart"
                   [analysisKeys]="analysisKeys"
@@ -111,7 +113,7 @@
                 >
                 </app-cylinder-chart>
               </div>
-
+              <div *ngIf="isOverviewTable">
               <div class="analysis-preview">
                 <div class="actions-wrapper">
                   <button  class="horizontal" (click)="openHighlightSettingsDialog()"> 
@@ -134,6 +136,7 @@
                   (cellClicked)="onCellClicked($event)"
                 >
               </ag-grid-angular>
+            </div>
               <!-- <table class="table brd-rt tableChart">
                   <thead>
                     <tr>
@@ -155,6 +158,7 @@
                   </tbody>
                 </table>  -->
               </div>
+            </div>
             </mat-card>   
           </div>
         </div>

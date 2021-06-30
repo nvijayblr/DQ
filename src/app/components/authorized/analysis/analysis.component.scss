@@ -966,4 +966,7 @@ table.mat-table {
 ::ng-deep .ag-header-container{
   font-size: 14px!important;
 }
+.noHeight{
+  min-height:inherit!important;
+}
 

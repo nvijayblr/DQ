@@ -19,12 +19,14 @@
                   <mat-list role="list">
                     <!--  class="activeList" -->
                     <mat-list-item 
-                      *ngFor="let data of sourceList; let i= index;" 
-                      (click)="showEditDetails(i, data)"
-                      [class.activeList]="i===selectedAnalysisIndex"
-                    >
+                      *ngFor="let data of sourceList; let i= index;">
+                    <div class="lftItem" (click)="showEditDetails(i, data)"
+                    [class.activeList]="i===selectedAnalysisIndex">
                       <mat-icon> layers</mat-icon>                     
                         {{data.source.sourceDataName}}
+                      </div>
+                      <mat-icon class="ed" matTooltip="Edit Source" *ngIf="i===selectedAnalysisIndex" (click)="editSourceData(data)">edit</mat-icon>
+                      <mat-icon class="de" matTooltip="Delete Source" *ngIf="i===selectedAnalysisIndex" (click)="deleteSourceData(data)">delete</mat-icon>
                     </mat-list-item>
                   </mat-list>                                
                 </mat-expansion-panel>
@@ -353,26 +355,34 @@
               
               <h1 class="no-margin ms nTitle">Analysis</h1>
               <mat-card class="border no-rounded list shrare-post mct">
-                <div class="viewTable">Views: <img src="assets/images/table.svg" class="tabV" (click)="changeView('table')" /> <span class="divider"></span> <img src="assets/images/chart.svg" class="chartV" (click)="changeView('chart')" /></div>
-                
+                <div class="viewTable">Views: 
+                  <img src="assets/images/table.svg" class="tabV" (click)="changeView('table')" /> <span class="divider"></span> 
+                  <img src="assets/images/chart.svg" class="chartV" (click)="changeView('chart')" />
+                </div>
+             <div class="chart" *ngIf="showtable">  
                 <app-progress-bar [message]="'Loading...'" class="component" *ngIf="isOverviewLoading"></app-progress-bar>
-                <app-analysis *ngIf="showAnalysisOverview && !overviewErrorMsg" [isOverview]="true"></app-analysis>
+                <app-analysis *ngIf="showAnalysisOverview && !overviewErrorMsg" [isOverview]="true"></app-analysis> 
                 <h3 *ngIf="overviewErrorMsg">{{overviewErrorMsg}}</h3>
-                
+              </div>
+              <div class="chart" *ngIf="!showtable"> 
+                  <app-analysis *ngIf="showAnalysisOverview && !overviewErrorMsg" [isOverviewTable]="true"></app-analysis> 
+              </div>   
               </mat-card>
-             
+           
+            
+           
 
               <div class="allView">
                 <div class="viewProfile">
+                  <div class="prevMenu" (click)="changeMenu('profile')">
+                    <img src="assets/images/profile-data.svg" class="prof"  />
+                    <span [ngClass]="{act: previewProfile}">Profile</span>
+                  </div>                 
+                  <span class="divider"></span> 
                   <div class="prevMenu" (click)="changeMenu('preview')">
                     <img src="assets/images/preview.svg" class="prev"  />
                     <span [ngClass]="{act: previewTable}">Preview</span>
                   </div> 
-                  <span class="divider"></span> 
-                  <div class="prevMenu" (click)="changeMenu('profile')">
-                    <img src="assets/images/profile-data.svg" class="prof"  />
-                    <span [ngClass]="{act: previewProfile}">Profile</span>
-                  </div>
                   <span class="divider"></span> 
                   <div class="prevMenu" (click)="changeMenu('correlation')">
                     <img src="assets/images/correlation.svg" class="prof"  />
@@ -382,193 +392,194 @@
             </div>
             <mat-card class="border no-rounded list shrare-post mct">
               
-              <div class="previewView valign" *ngIf="previewTable">
-                <ag-grid-angular
-                    style="width: 100%; height: 200px;"
-                    class="ag-theme-alpine"
-                    [rowData]="rowData"
-                    [columnDefs]="columnDefs"
-                >
-                </ag-grid-angular>
-            </div>
-
             <div class="profileView valign" *ngIf="previewProfile">
               <div class="analysis-infoDashboard">
                 <div class="category-list-wrapper clearfix">
                   <owl-carousel-o class="selected" [options]="profileOptions">
-                    <ng-template carouselSlide>
-                      <div class="category-item selected">
-                        Year
+                    <ng-template carouselSlide *ngFor="let profile of profiles;">
+                      <div class="category-item" (click)="changeProfile(profile)" [class.selected]="attrubute === profile.column">
+                        {{profile.column}} 
                       </div>
-                    </ng-template> 
-                    <ng-template carouselSlide>
-                      <div class="category-item">
-                        Month
-                       </div>
-                    </ng-template>
-                    <ng-template carouselSlide>
-                      <div class="category-item">
-                        Tail Number
-                       </div>
-                    </ng-template>
-
-                    <ng-template carouselSlide>
-                      <div class="category-item">
-                        Flight Number
-                       </div>
-                    </ng-template>
-
-                    <ng-template carouselSlide>
-                      <div class="category-item">
-                        Airline
-                       </div>
-                    </ng-template>
-
-                    <ng-template carouselSlide>
-                      <div class="category-item">
-                        Year
-                      </div>
-                    </ng-template> 
-                    <ng-template carouselSlide>
-                      <div class="category-item">
-                        Month
-                       </div>
-                    </ng-template>
-                    <ng-template carouselSlide>
-                      <div class="category-item">
-                        Tail Number
-                       </div>
-                    </ng-template>
-
-                    <ng-template carouselSlide>
-                      <div class="category-item">
-                        Flight Number
-                       </div>
-                    </ng-template>
-
-                    <ng-template carouselSlide>
-                      <div class="category-item">
-                        Airline
-                       </div>
-                    </ng-template>
-
-                    <ng-template carouselSlide>
-                      <div class="category-item">
-                        Year
-                      </div>
-                    </ng-template> 
-                    <ng-template carouselSlide>
-                      <div class="category-item">
-                        Month
-                       </div>
-                    </ng-template>
-                    <ng-template carouselSlide>
-                      <div class="category-item">
-                        Tail Number
-                       </div>
-                    </ng-template>
-
-                    <ng-template carouselSlide>
-                      <div class="category-item">
-                        Flight Number
-                       </div>
-                    </ng-template>
-
-                    <ng-template carouselSlide>
-                      <div class="category-item">
-                        Airline
-                       </div>
-                    </ng-template>
-
-                    <ng-template carouselSlide>
-                      <div class="category-item">
-                        Year
-                      </div>
-                    </ng-template> 
-                    <ng-template carouselSlide>
-                      <div class="category-item">
-                        Month
-                       </div>
-                    </ng-template>
-                    <ng-template carouselSlide>
-                      <div class="category-item">
-                        Tail Number
-                       </div>
-                    </ng-template>
-
-                    <ng-template carouselSlide>
-                      <div class="category-item">
-                        Flight Number
-                       </div>
-                    </ng-template>
-
-                    <ng-template carouselSlide>
-                      <div class="category-item">
-                        Airline
-                       </div>
-                    </ng-template>
-
-                    <ng-template carouselSlide>
-                      <div class="category-item">
-                        Year
-                      </div>
-                    </ng-template> 
-                    <ng-template carouselSlide>
-                      <div class="category-item">
-                        Month
-                       </div>
-                    </ng-template>
-                    <ng-template carouselSlide>
-                      <div class="category-item">
-                        Tail Number
-                       </div>
-                    </ng-template>
-
-                    <ng-template carouselSlide>
-                      <div class="category-item">
-                        Flight Number
-                       </div>
-                    </ng-template>
-
-                    <ng-template carouselSlide>
-                      <div class="category-item">
-                        Airline
-                       </div>
-                    </ng-template>
-
-                  </owl-carousel-o> 
-                  
-                  
+                    </ng-template>                     
+                  </owl-carousel-o>                                     
                </div>
               </div>
-              <div class="flex-containers">
-              <mat-card class="border no-rounded list shrare-post mct" style="width: 50%; margin-right: 30px;">
-                  <highcharts-chart
-                  [Highcharts] = "highcharts2" 
-                  [options] = "chartOptions2" 
-                  style = "width: 100%; height: 400px; display: block;">
-                  </highcharts-chart>
-              </mat-card>
-              <mat-card class="border no-rounded list shrare-post mct" style="width: 50%;">
-                <highcharts-chart
-                  [Highcharts] = "highcharts3" 
-                  [options] = "chartOptions3" 
-                  style = "width: 100%; height: 400px; display: block;">
-                  </highcharts-chart>
-              </mat-card>
+              <div class="flex-containers prof-details">
+                <div class="attribute-details">
+                  <h1 class="sTitle"> {{attrubute}} </h1>
+                  <div class="lft-attr">
+                    <mat-card class="bg-violet mhgt">
+                      <h4 class="attr-tite"> <span class="subT">Attribute Summary</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
+                      <div class="records">
+                         <span><img src="assets/images/database.svg" class="record" /> records</span>
+                         <span class="dp">{{profile.attributeSummary?.records}}</span>
+                      </div>
+                      <div class="dotDiv"></div>
+                      <div class="records">
+                         <span><img src="assets/images/type.svg" class="record1" /> <span class="dp1"> type</span></span>
+                         <span class="dp al">{{profile.attributeSummary?.dataType}}</span>
+                      </div>
+                    </mat-card>
+
+                    <mat-card class="bg-magenta" *ngIf="profile.frequncyAnalysis && profile.frequncyAnalysis.length">
+                      <h4 class="attr-tite"> <span class="subT">Frequency Groups</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
+                      <div class="frequencyContainer" [class.frequencyShow]="frequencyShow">
+                      <table>
+                         <tr>
+                            <th>
+                              <div class="records">
+                                <span><img src="assets/images/frequency.svg" class="record1" /> <span class="dp1"> Frequency</span></span>
+                             </div>
+                              </th>
+                            <th>
+                              <div class="records">
+                                <span><img src="assets/images/counting.svg" class="record1" /> <span class="dp1"> Count</span></span>
+                             </div>
+                            <th style="width:20%">&nbsp;</th>
+                         </tr>
+                         <tr *ngFor="let frequency of profile.frequncyAnalysis">
+                            <td class="fst">{{frequency.unique_values}}</td>
+                            <td>{{frequency.counts}}</td>
+                            <td><mat-progress-bar mode="determinate" [value]="(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %" ></mat-progress-bar></td>
+                         </tr>
+                      </table>
+                   </div>
+                   <button *ngIf="profile.frequncyAnalysis.length > 3" class="frequencyBtn" (click)="frequencyShow = !frequencyShow">
+                      <mat-icon *ngIf="!frequencyShow">expand_more</mat-icon> <mat-icon *ngIf="frequencyShow">expand_less</mat-icon> </button>  
+                   </mat-card>
+
+                   <mat-card class="bg-blue" *ngIf="profile.patternAnalysis && profile.patternAnalysis.length">
+                    <h4 class="attr-tite"> <span class="subT">Pattern Analysis</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
+                    <div class="frequencyContainer" [class.patternShow]="patternShow">
+                    <table>
+                       <tr>
+                          <th><img src="assets/images/value.svg" class="freq" /> Value </th>
+                          <th>Count <img src="assets/images/count.png" class="freq" /></th>
+                          <th style="width:20%">&nbsp;</th>
+                       </tr>
+                       <tr *ngFor="let pattern of profile.patternAnalysis">
+                          <td>{{pattern.unique_values}}</td>
+                          <td>{{pattern.counts}}</td>
+                          <td><mat-progress-bar mode="determinate" [value]="(pattern.counts * 100) / profile.attributeSummary?.records | number:'1.0-2' " matTooltip="{{(pattern.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %"></mat-progress-bar></td>
+                       </tr>
+                    </table>
+                 </div>
+                 <button *ngIf="profile.patternAnalysis.length > 3" class="patternBtn" (click)="patternShow = !patternShow"><!--  {{ patternShow ? 'Show less'  : 'Show More'  }} -->
+                    <mat-icon *ngIf="!patternShow">expand_more</mat-icon> <mat-icon *ngIf="patternShow">expand_less</mat-icon> </button> 
+                 </mat-card>
+                  </div>
+                  <div class="rgt-attr">
+                    <!-- <mat-card class="wt2">
+                        <h4 class="attr-tite">Count <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
+                        <div class="records">
+                           <highcharts-chart
+                              [Highcharts] = "highcharts" 
+                              [options] = "chartOptions" 
+                              style = "width: 100%; height: 400px; display: block;">
+                           </highcharts-chart>
+               
+                        </div>                          
+                     </mat-card>  -->
+                     <mat-card class="honeydew mhgt1" *ngIf="profile.LengthStatistics">
+                         <h4 class="attr-tite"> <span class="subT">Length Statistics</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
+                         <div class="custom-slider">
+                            <ngx-slider [(value)]="profile.LengthStatistics.Min" [(highValue)]="profile.LengthStatistics.Max" [options]="options"></ngx-slider>
+                         </div>
+                    </mat-card>
+                     <mat-card class="bg-green" *ngIf="profile.maskAnalysis && profile.maskAnalysis.length">
+                        <h4 class="attr-tite"> <span class="subT">Mask Analysis</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
+                        <div class="frequencyContainer" [class.maskShow]="maskShow">
+                        <table>
+                           <tr>
+                              <th>Value <img src="assets/images/value.svg" class="freq" /></th>
+                              <th>Count <img src="assets/images/count.png" class="freq" /></th>
+                              <th style="width:20%">&nbsp;</th>
+                           </tr>
+               
+                           <tr *ngFor="let mask of profile.maskAnalysis">
+                              <td>{{mask.unique_values}}</td>
+                              <td>{{mask.counts}}</td>
+                              <td><mat-progress-bar mode="determinate" [value]="(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'}} %"></mat-progress-bar></td>
+                           </tr>
+                        </table>
+                     </div>
+                    <button *ngIf=" profile.maskAnalysis.length > 3" class="maskShowBtn" (click)="maskShow = !maskShow">  <!-- {{ maskShow ? 'Show less'  : 'Show More'  }} -->
+                        <mat-icon *ngIf="!maskShow">expand_more</mat-icon> <mat-icon *ngIf="maskShow">expand_less</mat-icon> </button> 
+                     </mat-card>
+      
+                     <!-- <mat-card class="os aliceblue" *ngIf="profile.staticalAnalysis">
+                        <h4 class="attr-tite">Statistics <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
+                        <table class="table">
+                           <tr class="cpt">
+                           <td class="strong" *ngFor="let stats of profile.staticalAnalysis | keyvalue">{{stats.key}}</td>
+                           </tr>
+                           <tr class="cpt1">
+                           <td *ngFor="let stats of profile.staticalAnalysis | keyvalue">{{stats.value}}</td>
+                           </tr>
+                        </table>
+                     </mat-card> -->
+      
+                     <mat-card class="bg-green">
+                        <h4 class="attr-tite"> <span class="subT">Correlation Summary</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
+                        <app-corelation-summary [summary]="profile.correlationSummary"></app-corelation-summary> 
+                        <!-- <highcharts-chart
+                              [Highcharts] = "highcharts" 
+                              [options] = "chartOptions" 
+                              style = "width: 100%; height: 400px; display: block;">
+                           </highcharts-chart> -->
+                     </mat-card>
+      
+                  </div>  
+                </div>             
             </div>
 
             </div>
 
-            <div class="correlationView valign" *ngIf="previewCorrelation">
-              <mat-card class="border no-rounded list shrare-post mct">
-                <highcharts-chart
-                  [Highcharts] = "highcharts4" 
-                  [options] = "chartOptions4" 
-                  style = "width: 100%; height: 400px; display: block;">
-                  </highcharts-chart>
-              </mat-card>
-            </div>
+            <div class="previewView valign" *ngIf="previewTable">
+              <app-ag-grid
+              floatingFilter="true"
+              *ngIf="isPreviewLoaded"
+              [rowData]="rowData"
+              [columnDefs]="columnDefs"
+              [pageSize]="50"
+              [rowSelection]="'multiple'"
+              [suppressRowClickSelection]="false"
+            ></app-ag-grid>
+          </div>
+
+          <div class="correlationView valign" *ngIf="previewCorrelation">            
+            <app-progress-bar [message]="'Loading'" class="component" *ngIf="isLoading"></app-progress-bar>
+            <h1 class="share-post-title"><span class="lgb">Correlation Summary</span></h1>
+            <div class="flex-containers">
+              <div class="list-item-4">
+                <mat-form-field appearance="fill">
+                  <mat-label class="lbl">Data Type</mat-label>
+                  <mat-select [(ngModel)]="datatype" (ngModelChange)="changeType($event)">
+                    <mat-option value="mixed">Mixed</mat-option>
+                    <mat-option value="numeric">Numeric</mat-option>
+                    <mat-option value="categorical">Categorical</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="list-item-4">
+                <mat-form-field appearance="fill">
+                  <mat-label class="lbl">Method</mat-label>
+                  <mat-select [(ngModel)]="method" (ngModelChange)="loadCorrelation(selectedSource, datatype, $event)">
+                    <mat-option *ngIf="datatype === 'numeric'" value="pearson">Pearson</mat-option>
+                    <mat-option *ngIf="datatype === 'numeric'" value="kendall">Kendall</mat-option>
+                    <mat-option *ngIf="datatype === 'numeric'" value="spearman">Spearman</mat-option>
+                    <mat-option *ngIf="datatype === 'categorical'" value="theils_u">Theils_U</mat-option>
+                    <mat-option *ngIf="datatype === 'categorical'" value="cramers_v">Cramers_V</mat-option>
+                    <mat-option *ngIf="datatype === 'mixed'" value="">Correlation Ratio</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>                
+          <app-heat-map [columns]="coMatrix.columns" *ngIf="coMatrix.matrix" [data]="coMatrix.matrix" [isOverview]="true"></app-heat-map>
+          <mat-card class="no-data-msg" *ngIf="!coMatrix.matrix">
+            <h3>No correlations.</h3>
+          </mat-card>
+        </div>
 
 
             </mat-card>

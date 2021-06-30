@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import * as _ from 'lodash';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Options } from '@angular-slider/ngx-slider';
+import { Options, LabelType } from '@angular-slider/ngx-slider';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { MessageService } from 'src/app/services/message.service';
 import { HttpService } from 'src/app/services/http-service.service';
@@ -75,12 +75,18 @@ export class DataCleaningComponent implements OnInit {
   uploadId;
   processTime;
   savedFiles;
+  removeItemMessage;
+  messageDisplay;
+  showMessage: boolean = false;
+  newMessage;
 
    sliderOptions: any = {
       floor: 0,
       ceil: 100,
-      step: 10,
-      showTicks: true
+      step: 1,
+     showTicks: false,
+     draggableRange: false,
+     sliderControl : false,
    };
 
    impute: any = {
@@ -648,8 +654,10 @@ export class DataCleaningComponent implements OnInit {
             threshold : (this.delete.category === 'col_nan' || this.delete.category === 'row_nan') ? (this.delete.threshold / 100) : ''
          }
       };
-      this.loadProfilePreview(payloads[type], type, callBack);
-   }
+     this.loadProfilePreview(payloads[type], type, callBack);     
+  }
+  
+
 
   loadProfilePreview(payload, type, callBack) {
      this.loaderMsg = 'Loading preview...';
@@ -659,7 +667,9 @@ export class DataCleaningComponent implements OnInit {
      this.rowData = [];
      this.removeItems = '';
      this.http.getProfilePreview(payload, type).subscribe((res: any) => {
-         const details: any = res.Preview ? res.Preview : {};
+       const details: any = res.Preview ? res.Preview : {};     
+       this.removeItemMessage = res.cols_removed;
+       console.log('removeItemss', this.removeItemMessage)
          if (type === 'data_remove') {
             this.removeItems = {
                cols_removed: res.cols_removed,
@@ -668,7 +678,17 @@ export class DataCleaningComponent implements OnInit {
                nr_rows_post: res.nr_rows_post,
                nr_rows_prior: res.nr_rows_prior
             };
-         }
+       }
+       this.showMessage = false;
+       if (this.delete.category === 'col_nan') {
+         if (this.removeItemMessage.length > 0) {
+          this.showMessage = true;
+           console.log(this.removeItemMessage.join(', '));
+           this.messageDisplay = this.removeItemMessage.join(', ') ? this.removeItemMessage : [];
+           this.newMessage = this.messageDisplay
+         } 
+       
+      }
          this.parseSourcePreview(details);
          this.isLoading = false;
          if (callBack) {

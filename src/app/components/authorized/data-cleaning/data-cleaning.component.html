@@ -396,6 +396,10 @@
                               <mat-icon> delete</mat-icon> Remove 
                             </button>
                           </div>
+
+                          <span class="mSg" *ngIf="delete.category === 'col_nan' && showMessage">
+                            Columns  getting removed -  <span class="nMsg">{{newMessage}}</span>
+                          </span>
       
                         </div>
                       </mat-tab>

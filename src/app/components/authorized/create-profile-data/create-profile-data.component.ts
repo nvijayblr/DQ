@@ -108,6 +108,10 @@ export class CreateProfileDataComponent implements OnInit {
 
     let analysis = this.messageService.getSource();
     this.editAnalysis = this.messageService.getSource();
+    if (this.editAnalysis) {
+      analysis.source = this.editAnalysis;
+      this.sourceSettings.department = this.editAnalysis.department
+    }
 
     if (!analysis.source) {
       analysis = {
@@ -143,15 +147,9 @@ export class CreateProfileDataComponent implements OnInit {
     const fileType: string = this.route.snapshot.queryParamMap.get('type');
     this.selectedType = fileType;
     this.uploadMethod = this.route.snapshot.queryParamMap.get('method');
-    console.log('this.uploadMethod', this.uploadMethod);
     const mode: string = this.route.snapshot.queryParamMap.get('mode');
     if (mode === 'edit') {
-      console.log('Edit mode', this.editAnalysis);
       this.isEditMode = true;
-      if (this.editAnalysis) {
-        this.afControls.sourceDataName.setValue(this.editAnalysis.sourceDataName);
-        this.afControls.sourceDataDescription.setValue(this.editAnalysis.sourceDataDescription);
-      }
       this.mode = 'edit';
       this.showPreview = true;
       this.loadSourcePreview();
