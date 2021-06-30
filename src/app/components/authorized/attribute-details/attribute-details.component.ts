@@ -524,7 +524,9 @@ export class AttributeDetailsComponent implements OnInit {
 
   getProfileSource() {
     this.http.getProfileSource().subscribe((result: any) => {
+      console.log('result', result);
       this.allSourceCategory = result.SourceDetailsList;
+      console.log('this.allSourceCategory', this.allSourceCategory)
       const profieData = localStorage.getItem('dq-source-data');
       // this.selectedSource = result.SourceDetailsList.length ? result.SourceDetailsList[0] : [];
       //   if (this.selectedSource.length === 0) {

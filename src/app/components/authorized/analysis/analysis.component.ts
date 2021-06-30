@@ -113,7 +113,8 @@ export class AnalysisComponent implements OnInit {
    }
 
    ngOnInit() {
-     const analysis = localStorage.getItem('selected-analysis');    
+     const analysis = localStorage.getItem('selected-analysis');
+     console.log('analysis', analysis); 
       if (analysis) {
         this.initAnalysis(JSON.parse(analysis));
         console.log('analysisanalysis', analysis);

@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OwlOptions } from 'ngx-owl-carousel-o';
+import * as _ from 'lodash';
 import { Options } from '@angular-slider/ngx-slider';
 import { MessageService } from '../../../services/message.service';
 import { HttpService } from '../../../services/http-service.service';
@@ -192,11 +193,18 @@ export class DashboardComponent implements OnInit {
     }
     this.attrubute = profile.column;
     // console.log(this.profile);
-}
+  }
+  
+  createSource() {
+    localStorage.removeItem('selected-analysis');
+    localStorage.removeItem('selected-index');
+    this.router.navigate(
+      [`/auth/add-source-data`]);
+  }
 
 
   changeCategory(source) {
-    console.log('change category', source);
+    //console.log('change category', source);
     //localStorage.setItem('dq-source-data', JSON.stringify(source));
     localStorage.removeItem('dq-source-data');    
     this.selectedSource = source;
@@ -205,7 +213,7 @@ export class DashboardComponent implements OnInit {
   }
 
   loadProfile(source) {
-      console.log('source.templateSourcePath', source)
+      //console.log('source.templateSourcePath', source)
       this.isLoading = true;
       this.loaderMsg = 'Loading Profile...';
       this.titleSrc = source.templateSourcePath;
@@ -249,24 +257,44 @@ export class DashboardComponent implements OnInit {
     this.isLoading = false;
  });
 }
-
+  showAllDetails = false;
+  sourceByCategory;
+  selectedCategoryKey: any = '';
+  sourceNames = [];
    getAllSources() {
       this.isLoading = true;
       this.loaderMsg = 'Loading Sources...';
      this.http.getSources().subscribe((result: any) => {
-        console.log('result', result);
-       this.sourceList = (result && result.Analysis) ? result.Analysis : [];
-       console.log('sourceList', this.sourceList);
-         const sourceNames = [];
-         this.sourceList.map(item => {
-            sourceNames.push(item.source.sourceDataName);
-         });
-         localStorage.setItem('dq-source-names', JSON.stringify(sourceNames));
-         if (this.sourceList.length) {
-            this.showEditDetails(0, this.sourceList[0]);
-         }
+       this.sourceList = (result && result.Analysis) ? result.Analysis : [];      
+       if (this.sourceList.length === 0) {
+         this.showAllDetails = true;
+         return;
+       }
+       const getSelectedItem = localStorage.getItem('selected-analysis'); 
+       const getSelectedIndex = localStorage.getItem('selected-index');
+       if (getSelectedItem && getSelectedIndex) {
+         this.selectedSource = JSON.parse(getSelectedItem);
+         this.showEditDetails(+getSelectedIndex, this.selectedSource);
+       } else {
+        this.selectedSource = this.sourceList[this.sourceList.length - 1];
+         this.showEditDetails(this.sourceList.length - 1, this.sourceList[this.sourceList.length - 1]);
+       }
+
+       console.log('this.selectedSource', this.selectedSource)
        this.isLoading = false;
-       this.loadProfile(this.sourceList[0].source);
+       this.loadProfile(this.sourceList[this.sourceList.length - 1].source);
+       
+       this.sourceByCategory =
+       _.chain(this.sourceList).
+       groupBy('source.sourceCategory')
+         .map((sourcesList, key) => {
+           sourcesList.map(source => {
+           if (source.sourceId === this.selectedSource.sourceId) {
+             this.selectedCategoryKey = key;
+           }
+         });
+         return { category: key, sources: sourcesList };
+         }).value();
       //  this.selectedSource = this.sourceList[0].source;
       //  console.log('this.selectedSource', this.sourceList[0].source.templateSourcePath)
       }, (error) => {
@@ -329,13 +357,13 @@ export class DashboardComponent implements OnInit {
    }
 
   showEditDetails(index, data) {
-    console.log('data', data);
+    this.selectedSource = data;
       this.isOverviewLoading = true;
       this.showAnalysisOverview = false;
-
       this.selectedAnalysis = data;
-      this.selectedAnalysisIndex = index;
-
+    this.selectedAnalysisIndex = index;
+    localStorage.setItem('selected-index', JSON.stringify(this.selectedAnalysisIndex));
+    localStorage.setItem('selected-analysis', JSON.stringify(this.selectedAnalysis));
       const uploadsHistory = data.UploadsHistory;
       if (uploadsHistory && uploadsHistory.length) {
          const upload = uploadsHistory[uploadsHistory.length - 1];
@@ -501,10 +529,11 @@ export class DashboardComponent implements OnInit {
    }
 
    initOverview(analysis) {
-      console.log('initOverview');
+      //console.log('initOverview');
       this.selectedAnalysis = analysis;
       const uploadDate = this.selectedAnalysis.uploadDate ? moment(this.selectedAnalysis.uploadDate).format('MM-DD-YYYY') : '';
-      const uploadsHistory = this.selectedAnalysis.UploadsHistory ? this.selectedAnalysis.UploadsHistory : [];
+     const uploadsHistory = this.selectedAnalysis.UploadsHistory ? this.selectedAnalysis.UploadsHistory : [];
+     //console.log('uploadsHistory', uploadsHistory)
 
       this.overviewErrorMsg = '';
 
@@ -695,7 +724,7 @@ export class DashboardComponent implements OnInit {
       this.previewProfile = true;
       this.previewCorrelation = false;
     }
-    console.log(menu);
+    //console.log(menu);
   }
 }
 

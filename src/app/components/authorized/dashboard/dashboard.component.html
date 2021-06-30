@@ -1,4 +1,21 @@
-<section class="page-body home-bodys wts">
+<section class="page-body home-bodys" *ngIf="showAllDetails">
+  <div class="container">
+    <div class="">
+      <mat-card class="border no-rounded list shrare-post mct noFile">
+        <h1 class="no-margin ms nTitle inlb">Please Upload your Source</h1>
+        <div class="createLft inlb">
+          <button type="button" class="btnBlueGreenN addico"
+          (click)="createSource()" >
+          <mat-icon>add</mat-icon>
+          Upload Source
+          </button>
+        </div>
+      </mat-card>      
+    </div>
+</div>
+</section>
+
+<section class="page-body home-bodys wts" *ngIf="!showAllDetails">
   <div class="container">
     
     <div class="home-wrapper">
@@ -12,16 +29,16 @@
             <div class="dash-left">
               <div class="srcTop"><mat-icon>widgets</mat-icon> Sources</div>
               <mat-accordion>
-                <mat-expansion-panel expanded>
+                <mat-expansion-panel *ngFor="let item of sourceByCategory; let i = index; first as isFirst" [expanded]="item.category === selectedCategoryKey">
                   <mat-expansion-panel-header>
-                    <mat-panel-title>Sources</mat-panel-title>                   
+                    <mat-panel-title>{{ item.category }}</mat-panel-title>                   
                   </mat-expansion-panel-header>
                   <mat-list role="list">
                     <!--  class="activeList" -->
                     <mat-list-item 
-                      *ngFor="let data of sourceList; let i= index;">
+                      *ngFor="let data of item.sources; let i= index;">
                     <div class="lftItem" (click)="showEditDetails(i, data)"
-                    [class.activeList]="i===selectedAnalysisIndex">
+                    [class.activeList]="data.sourceId === selectedSource.sourceId">
                       <mat-icon> layers</mat-icon>                     
                         {{data.source.sourceDataName}}
                       </div>
@@ -32,7 +49,7 @@
                 </mat-expansion-panel>
               </mat-accordion>
               <div class="list-item-2 text-right" *ngIf="rights.includes('CONFIGURE_SOURCE')">
-                <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn" routerLink="/auth/add-source-data">  New Source <mat-icon>open_in_new</mat-icon></button>
+                <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn" (click)="createSource()">  New Source <mat-icon>open_in_new</mat-icon></button>
               </div>
             </div>
             <div class="dash-right">
@@ -243,8 +260,7 @@
                                                           <button mat-stroked-button class="button3d btnPush btnBlueGreen addico1" (click)="uploadSource(data)">Upload <mat-icon>cloud_upload</mat-icon></button>
                                                           </div>
                                                           <div class=" list-item-0  inlb">
-                                                            <button class="button3d btnPush btnLightBlue addico v-a1" 
-                                                              >
+                                                            <button class="button3d btnPush btnLightBlue addico v-a1">
                                                               <mat-icon>launch</mat-icon>
                                                               Re upload
                                                             </button>
@@ -364,9 +380,9 @@
                 <app-analysis *ngIf="showAnalysisOverview && !overviewErrorMsg" [isOverview]="true"></app-analysis> 
                 <h3 *ngIf="overviewErrorMsg">{{overviewErrorMsg}}</h3>
               </div>
-              <div class="chart" *ngIf="!showtable"> 
+              <!-- <div class="chart" *ngIf="!showtable"> 
                   <app-analysis *ngIf="showAnalysisOverview && !overviewErrorMsg" [isOverviewTable]="true"></app-analysis> 
-              </div>   
+              </div>    -->
               </mat-card>
            
             

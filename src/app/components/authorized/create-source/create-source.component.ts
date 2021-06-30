@@ -75,6 +75,8 @@ export class CreateSourceComponent implements OnInit {
   sourceId = '';
   sourceNames = [];
   summary: any = {};
+  srcCategory = [];
+  srcDataOwner: any = {};
 
   isPreviewLoaded = false;
   isPreviewLoading = false;
@@ -93,10 +95,11 @@ export class CreateSourceComponent implements OnInit {
   showPreview = false;
   selFileName;
   selFileNameErr = false;
-
+  public filteredList;
   filteredList2: any = [];
   public selected = [];
   public selected1 = [];
+  public variables = [];
 
   public variablesGroups =
     [
@@ -110,8 +113,8 @@ export class CreateSourceComponent implements OnInit {
 
   public groups = this.variablesGroups.slice();
 
-  public variables = ['One', 'Two', 'County', 'Three', 'Zebra', 'XiOn'];
-  public filteredList1 = this.variables.slice();
+  // //public variables = ['One', 'Two', 'County', 'Three', 'Zebra', 'XiOn'];
+  // public filteredList1 = this.variables.slice();
 
   ngOnInit() {
     this.isUserLoggedIn = this.authGuardService.isUserLoggedIn();
@@ -136,6 +139,10 @@ export class CreateSourceComponent implements OnInit {
       sourceDataName: [analysis.source.sourceDataName, [Validators.required, Validators.maxLength(100)]],
       sourceDataDescription: [analysis.source.sourceDataDescription || ''],
       sourceFileName: [analysis.source.sourceFileName || ''],
+      sourceCategory: [analysis.source.sourceCategory, [Validators.required]],
+      dataOwner: [analysis.source.dataOwner || ''],
+      dataSteward: [analysis.source.dataSteward || ''],
+      dataUser : [analysis.source.dataUser || ''],
       templateSourcePath: [analysis.source.templateSourcePath || ''],
       settingsDate : ['', [Validators.required]],
       uploadTime : [''],
@@ -172,6 +179,8 @@ export class CreateSourceComponent implements OnInit {
      // console.log(mode);
     this.minDate = moment().format('YYYY-MM-DD');
     this.analysis = analysis;
+    this.getsourceCategory();
+    this.getdataOwner();
   }
 
   intiFormArrays(field, reference: any = {}) {
@@ -194,6 +203,22 @@ export class CreateSourceComponent implements OnInit {
   removeFormItem(arrayName, index) {
     const fbArray = this.analysisForm.get(arrayName) as FormArray;
     fbArray.removeAt(index);
+  }
+
+  getsourceCategory() {
+    this.http.getsourceCategory().subscribe((result: any) => {
+      this.srcCategory = result.sourceCategory;
+    });
+  }
+
+  getdataOwner() {
+    this.http.getdataOwner().subscribe((result: any) => {
+      this.srcDataOwner = result.userList;
+      this.srcDataOwner.map(data => {
+        this.variables.push(data.name);
+      });
+      this.filteredList = this.variables.slice();
+    });
   }
 
   saveSource() {
@@ -248,7 +273,11 @@ export class CreateSourceComponent implements OnInit {
       source: {
         sourceDataName: analysis.sourceDataName,
         sourceDataDescription: analysis.sourceDataDescription,
-        sourceFileName: this.sourceFile.name ? this.sourceFile.name : analysis.sourceFileName
+        sourceFileName: this.sourceFile.name ? this.sourceFile.name : analysis.sourceFileName,
+        sourceCategory: analysis.sourceCategory,
+        dataOwner: this.afControls.dataOwner.value ? this.afControls.dataOwner.value : analysis.dataOwner,
+        dataSteward: this.afControls.dataSteward.value ? this.afControls.dataSteward.value : analysis.dataSteward,
+        dataUser : this.afControls.dataUser.value ? this.afControls.dataUser.value : analysis.dataUser                
       },
       reference: refPayload,
       settings: this.sourceSettings
@@ -292,6 +321,7 @@ export class CreateSourceComponent implements OnInit {
     dialogRef.afterClosed().subscribe(data => {
       if (data.action === 'ok') {
         this.router.navigate(['auth/dashboard']);
+        localStorage.setItem('selected-analysis', JSON.stringify(this.summary));
       } else {
       }
     });
