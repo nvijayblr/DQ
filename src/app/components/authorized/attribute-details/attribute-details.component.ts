@@ -147,7 +147,7 @@ export class AttributeDetailsComponent implements OnInit {
   };
 
   minValue = 0;
-  maxValue = 90;
+  maxValue = 0;
   options: Options = {
     floor: 0,
     ceil: 100,
