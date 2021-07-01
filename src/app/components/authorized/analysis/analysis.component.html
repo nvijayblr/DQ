@@ -69,7 +69,7 @@
                   </div>
                </div>
               </div>
-              <mat-tab-group mat-align-tabs="start"  animationDuration="0ms" *ngIf="!isOverview && !isOverviewTable">
+              <mat-tab-group mat-align-tabs="start"  animationDuration="0ms" *ngIf="!isOverview">
                <mat-tab label="2D Map">
                   <app-cylinder-chart 
                     *ngIf="analyseKeyData.length && isLoadChart"
@@ -102,7 +102,7 @@
                </mat-tab>
               </mat-tab-group>
 
-              <div class="overview-chart" *ngIf="isOverview && !isOverviewTable">
+              <div class="overview-chart" *ngIf="isOverview">
                 <app-cylinder-chart 
                   *ngIf="analyseKeyData.length && isLoadChart"
                   [analysisKeys]="analysisKeys"
@@ -113,7 +113,7 @@
                 >
                 </app-cylinder-chart>
               </div>
-              <div *ngIf="isOverviewTable">
+              <div>
               <div class="analysis-preview">
                 <div class="actions-wrapper">
                   <button  class="horizontal" (click)="openHighlightSettingsDialog()"> 
