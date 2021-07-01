@@ -42,8 +42,8 @@
                       <mat-icon> layers</mat-icon>                     
                         {{data.source.sourceDataName}}
                       </div>
-                      <mat-icon class="ed" matTooltip="Edit Source" *ngIf="i===selectedAnalysisIndex" (click)="editSourceData(data)">edit</mat-icon>
-                      <mat-icon class="de" matTooltip="Delete Source" *ngIf="i===selectedAnalysisIndex" (click)="deleteSourceData(data)">delete</mat-icon>
+                      <mat-icon class="ed" matTooltip="Edit Source" *ngIf="data.sourceId === selectedSource.sourceId" (click)="editSourceData(data)">edit</mat-icon>
+                      <!-- <mat-icon class="de" matTooltip="Delete Source" *ngIf="i===selectedAnalysisIndex" (click)="deleteSourceData(data)">delete</mat-icon> -->
                     </mat-list-item>
                   </mat-list>                                
                 </mat-expansion-panel>

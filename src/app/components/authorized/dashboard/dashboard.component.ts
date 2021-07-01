@@ -17,25 +17,7 @@ import {MatAutocompleteSelectedEvent, MatAutocomplete} from '@angular/material/a
 import {MatChipInputEvent} from '@angular/material/chips';
 import {Observable} from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import * as Highcharts from 'highcharts';
 
-export interface UserData {
-  id: string;
-  name: string;
-  progress: string;
-  fruit: string;
-}
-
-const FRUITS: string[] = [
-  'blueberry', 'lychee', 'kiwi', 'mango', 'peach', 'lime', 'pomegranate', 'pineapple'
-];
-const NAMES: string[] = [
-  'Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack', 'Charlotte', 'Theodore', 'Isla', 'Oliver',
-  'Isabella', 'Jasper', 'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'
-];
 
 @Component({
    selector: 'app-dashboard',
@@ -177,6 +159,10 @@ export class DashboardComponent implements OnInit {
   coMatrix: any = {};
   datatype = 'mixed';
   method = '';
+  showAllDetails = false;
+  sourceByCategory;
+  selectedCategoryKey: any = '';
+  sourceNames = [];
 
 
    ngOnInit() {
@@ -257,10 +243,7 @@ export class DashboardComponent implements OnInit {
     this.isLoading = false;
  });
 }
-  showAllDetails = false;
-  sourceByCategory;
-  selectedCategoryKey: any = '';
-  sourceNames = [];
+
    getAllSources() {
       this.isLoading = true;
       this.loaderMsg = 'Loading Sources...';
@@ -280,7 +263,7 @@ export class DashboardComponent implements OnInit {
          this.showEditDetails(this.sourceList.length - 1, this.sourceList[this.sourceList.length - 1]);
        }
 
-       console.log('this.selectedSource', this.selectedSource)
+       //console.log('this.selectedSource', this.selectedSource)
        this.isLoading = false;
        this.loadProfile(this.sourceList[this.sourceList.length - 1].source);
        
@@ -310,36 +293,6 @@ export class DashboardComponent implements OnInit {
       );
   }
   
-  deleteSourceData(source) {
-    const confirm = window.confirm('Are you sure you want to delete');
-    const payload = {
-      action: 'remove',
-      db : "profile",
-      old_source: {
-        sourceDataName: source.sourceDataName,
-        sourceFileName: source.sourceFileName,
-        sourceCategory: source.sourceCategory,
-        dataOwner: source.dataOwner,
-        sourceId: source.sourceId,
-      },
-      new_source: ''
-    };
-    if (confirm) {
-      localStorage.removeItem('dq-source-data'); 
-      this.http.deleteSource(payload).subscribe((res: any) => {
-        this.reloadCurrentRoute();
-      });
-    }
-
-  }
-
-  reloadCurrentRoute() {
-    const currentUrl = this.router.url;
-    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-      this.router.navigate([currentUrl]);
-    });
-  }
-
    getAllAnalysis() {
       this.isLoading = true;
       this.loaderMsg = 'Loading Analysis...';
@@ -358,9 +311,9 @@ export class DashboardComponent implements OnInit {
 
   showEditDetails(index, data) {
     this.selectedSource = data;
-      this.isOverviewLoading = true;
-      this.showAnalysisOverview = false;
-      this.selectedAnalysis = data;
+    this.isOverviewLoading = true;
+    this.showAnalysisOverview = false;
+    this.selectedAnalysis = data;
     this.selectedAnalysisIndex = index;
     localStorage.setItem('selected-index', JSON.stringify(this.selectedAnalysisIndex));
     localStorage.setItem('selected-analysis', JSON.stringify(this.selectedAnalysis));
@@ -483,7 +436,7 @@ export class DashboardComponent implements OnInit {
          uploadTime: '20:28',
          uploadReason: reason ? reason : '',
          settings: analysis.settings,
-       sourceObj: {
+         sourceObj: {
          ...analysis.source,
          type: "",
          connectionDetails: {

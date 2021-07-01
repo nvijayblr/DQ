@@ -114,15 +114,12 @@ export class AnalysisComponent implements OnInit {
 
    ngOnInit() {
      const analysis = localStorage.getItem('selected-analysis');
-     console.log('analysis', analysis); 
       if (analysis) {
         this.initAnalysis(JSON.parse(analysis));
-        console.log('analysisanalysis', analysis);
       }
    }
 
    initAnalysis(analysis) {
-      console.log('aasdasd', analysis);
       this.selectedAnalysis = analysis;
       this.uploadsHistory = analysis.UploadsHistory ? analysis.UploadsHistory : [];
       const payload = {
@@ -189,7 +186,6 @@ export class AnalysisComponent implements OnInit {
         if (result.errorCode && result.errorMsg) {
           this.isLoading = false;
           this.hideAnalysis = true
-          console.log('HIDE', this.hideAnalysis);
             alert(result.errorMsg);           
             this.gotoDashboard();
             return;
