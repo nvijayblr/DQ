@@ -290,13 +290,17 @@ export class CreateProfileDataComponent implements OnInit {
         }
         this.summary = result.SourceSettings;
         //console.log('Save', this.summary);
-      localStorage.setItem('dq-source-data', JSON.stringify(this.summary));
+      
       if (this.uploadMethod === 'clean') {
+        localStorage.setItem('dq-source-data', JSON.stringify(this.summary));
+        localStorage.setItem('dq-upload-data', 'clean');
         this.router.navigate([`auth/data-cleaning`]);
         this.router.navigate(
           [`auth/data-cleaning`]);
         
       } else {
+        localStorage.setItem('dq-source-data', JSON.stringify(this.summary));
+        localStorage.setItem('dq-upload-data', 'profile');
         this.router.navigate([`auth/attribute-details-data`]);
       }
         

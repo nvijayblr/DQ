@@ -35,6 +35,7 @@ import { CorelationSummaryComponent } from './corelation-summary/corelation-summ
 import { AdvancedFormulaEditorComponent } from './advanced-formula-editor/advanced-formula-editor.component';
 import { ToleranceLevelDialogComponent } from './tolerance-level-dialog/tolerance-level-dialog.component';
 import { ConditionalFormulaEditorComponent } from './conditional-formula-editor/conditional-formula-editor.component';
+import { PreviewDialogComponent } from './preview-dialog/preview-dialog.component';
 
 @NgModule({
    imports: [
@@ -77,6 +78,7 @@ import { ConditionalFormulaEditorComponent } from './conditional-formula-editor/
     AdvancedFormulaEditorComponent,
     ToleranceLevelDialogComponent,
     ConditionalFormulaEditorComponent,
+    PreviewDialogComponent,
   ],
   exports: [
     FormsModule,
@@ -110,7 +112,8 @@ import { ConditionalFormulaEditorComponent } from './conditional-formula-editor/
     AnalysisChartComponent,
     CorelationSummaryComponent,
     AdvancedFormulaEditorComponent,
-    ConditionalFormulaEditorComponent
+    ConditionalFormulaEditorComponent,
+    PreviewDialogComponent
   ],
   providers: [
      DatePipe,
@@ -122,7 +125,8 @@ import { ConditionalFormulaEditorComponent } from './conditional-formula-editor/
     FormulaEditorComponent,
     AdvancedFormulaEditorComponent,
     ToleranceLevelDialogComponent,
-    ConditionalFormulaEditorComponent
+    ConditionalFormulaEditorComponent,
+    PreviewDialogComponent
   ]
 })
 export class SharedModule {}

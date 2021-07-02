@@ -256,7 +256,8 @@ export class DataCleaningComponent implements OnInit {
     this.http.getCleanSource().subscribe((result: any) => {
       this.allSourceCategory = result.SourceDetailsList;
       this.analysis = this.messageService.getSource();
-      if (this.analysis) {
+      const uploadMethod = localStorage.getItem('dq-upload-data');
+      if (this.analysis && uploadMethod === "clean") {
         this.uploadId = this.analysis.sourceId;
         this.processTime = this.analysis.uploadDate;
         this.source = this.analysis;

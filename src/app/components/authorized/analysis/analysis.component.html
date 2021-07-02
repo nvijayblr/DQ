@@ -11,7 +11,7 @@
               <div *ngIf="!hideAnalysis">
               <!-- <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoadingDetails"></app-progress-bar> -->
               <div class="list flex-containers analysis-wrp tpBg2 flex-start wrap ">
-                <div class="list-item-4 outline" *ngIf="!isOverview">
+                <div class="list-item-4 outline">
                   <h1 class="share-post-title">
                     Source: <span class="yellow"> {{selectedAnalysis.source?.sourceDataName}}</span>
                   </h1>
@@ -35,7 +35,7 @@
                     </mat-select>
                   </mat-form-field>
                 </div>
-                <div class="list-item-3 outline" *ngIf="!isOverview">
+                <div class="list-item-3 outline" *ngIf="!isOverview && !isOverviewTable">
                   <div class="act-btn-wrapper">
                     <button mat-stroked-button class="button3d btnPush btnPurple ebckBtn" (click)="gotoDashboard();"><mat-icon>keyboard_arrow_left</mat-icon> Back</button>
                   </div>
@@ -69,7 +69,7 @@
                   </div>
                </div>
               </div>
-              <mat-tab-group mat-align-tabs="start"  animationDuration="0ms" *ngIf="!isOverview">
+              <mat-tab-group mat-align-tabs="start"  animationDuration="0ms" *ngIf="!isOverview && !isOverviewTable">
                <mat-tab label="2D Map">
                   <app-cylinder-chart 
                     *ngIf="analyseKeyData.length && isLoadChart"
@@ -102,7 +102,7 @@
                </mat-tab>
               </mat-tab-group>
 
-              <div class="overview-chart" *ngIf="isOverview">
+              <div class="overview-chart" *ngIf="isOverview && !isOverviewTable">
                 <app-cylinder-chart 
                   *ngIf="analyseKeyData.length && isLoadChart"
                   [analysisKeys]="analysisKeys"
@@ -113,7 +113,7 @@
                 >
                 </app-cylinder-chart>
               </div>
-              <div>
+              <div *ngIf="isOverviewTable">
               <div class="analysis-preview">
                 <div class="actions-wrapper">
                   <button  class="horizontal" (click)="openHighlightSettingsDialog()"> 

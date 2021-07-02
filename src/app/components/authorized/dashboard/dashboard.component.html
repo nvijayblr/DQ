@@ -372,17 +372,19 @@
               <h1 class="no-margin ms nTitle">Analysis</h1>
               <mat-card class="border no-rounded list shrare-post mct">
                 <div class="viewTable">Views: 
-                  <img src="assets/images/table.svg" class="tabV" (click)="changeView('table')" /> <span class="divider"></span> 
-                  <img src="assets/images/chart.svg" class="chartV" (click)="changeView('chart')" />
+                  <img src="assets/images/chart.svg" class="chartV" (click)="changeView('table')" />
+                 <span class="divider"></span> 
+                 <img src="assets/images/table.svg" class="tabV" (click)="changeView('chart')" />                  
                 </div>
              <div class="chart" *ngIf="showtable">  
                 <app-progress-bar [message]="'Loading...'" class="component" *ngIf="isOverviewLoading"></app-progress-bar>
                 <app-analysis *ngIf="showAnalysisOverview && !overviewErrorMsg" [isOverview]="true"></app-analysis> 
                 <h3 *ngIf="overviewErrorMsg">{{overviewErrorMsg}}</h3>
               </div>
-              <!-- <div class="chart" *ngIf="!showtable"> 
+              <div class="chart" *ngIf="!showtable"> 
+                bbbb
                   <app-analysis *ngIf="showAnalysisOverview && !overviewErrorMsg" [isOverviewTable]="true"></app-analysis> 
-              </div>    -->
+              </div>   
               </mat-card>
            
             

@@ -173,16 +173,47 @@
                   <div class="flex-containers">                                      
                   <div class="lft-attr">
                     <h4 class="attr-tite"> <span class="subT m">Attribute Summary</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
-                    <mat-card class="bg-violet ch">                      
-                      <div class="records twt">
-                         <span><img src="assets/images/database.svg" class="record" /> records</span>
-                         <span class="dp">{{profile.attributeSummary?.records}}</span>
-                      </div>
-                      <div class="dotDiv"></div>
-                      <div class="records">
-                         <span><img src="assets/images/type.svg" class="record1" /> <span class="dp1"> type</span></span>
-                         <span class="dp al">{{profile.attributeSummary?.dataType}}</span>
-                      </div>
+                    <mat-card class="bg-violet ch"> 
+                      <table>
+                        <tr>
+                          <th>
+                            <div class="recordsTop">
+                              <span><img src="assets/images/database.svg" class="record" /> records</span>
+                              
+                           </div>
+                           <!-- <div class="dotDiv"></div> -->
+                          </th>
+                          <th>
+                            <div class="recordsTop">
+                              <span><img src="assets/images/type.svg" class="record1" /> <span class="dp1"> type</span></span>
+                              
+                           </div>
+     
+                           <!-- <div class="dotDiv"></div> -->
+                          </th>
+                          <th>
+                            <div class="recordsTop">
+                              <span><img src="assets/images/type.svg" class="record1" /> <span class="dp1"> NULL COUNTS</span></span>
+                             
+                           </div>
+                          </th>
+                        </tr>
+                        <tr>
+                          <td><span class="dp">{{profile.attributeSummary?.records}}</span></td>
+                          <td><span class="dp al">{{profile.attributeSummary?.dataType}}</span></td>
+                          <td><span class="dp al1">
+                            <a href="javascript: void(0)" *ngIf="profile.attributeSummary && profile.attributeSummary.null_records" (click)="showPreviewDetails()">
+                              {{profile.attributeSummary?.null_records}}
+                            </a>
+                            <div *ngIf="profile.attributeSummary && !profile.attributeSummary.null_records">
+                              {{profile.attributeSummary?.null_records}}
+                            </div>
+                          </span></td>
+                        </tr>                       
+                      </table>                     
+                     
+                      
+                     
                     </mat-card>
                     <h4 class="attr-tite"> <span class="subT mg">Frequency Groups</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
                     <mat-card class="bg-magenta ch1" *ngIf="profile.frequncyAnalysis && profile.frequncyAnalysis.length">                     

@@ -435,13 +435,14 @@ export class DashboardComponent implements OnInit {
          uploadDate: analysis.uploadDate,
          uploadTime: '20:28',
          uploadReason: reason ? reason : '',
-         settings: analysis.settings,
-         sourceObj: {
-         ...analysis.source,
-         type: "",
-         connectionDetails: {
-         },
-         } 
+       settings: analysis.settings,
+       sourceObj : analysis.source
+        //  sourceObj: {
+        //  ...analysis.source,
+        //  type: "",
+        //  connectionDetails: {
+        //  },
+         //} 
       };
       const formData: any = new FormData();
       formData.append('file[]', analysis.file);
@@ -624,7 +625,9 @@ export class DashboardComponent implements OnInit {
    dateClass = (d: Date) => {
       const date = moment(d).format('MM-DD-YYYY');
       return (this.highlightDates.includes(date)) ? 'highlight-dates' : undefined;
-   }
+  }
+  
+  
 
   showTab(id) {
     this.actionTabId = id;

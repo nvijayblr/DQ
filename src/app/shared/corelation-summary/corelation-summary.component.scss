@@ -46,3 +46,10 @@
   text-align: center;
   margin: 30px 0;
 }
+.progTitle {
+  text-transform: lowercase;
+}
+
+.progTitle::first-letter {
+  text-transform: uppercase;
+}

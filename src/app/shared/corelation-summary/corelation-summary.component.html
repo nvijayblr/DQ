@@ -3,7 +3,7 @@
     <mat-tab label="Positive Correlation">
       <table class="table" *ngIf="summary.positiveSummary && summary.positiveSummary.length">
         <tr *ngFor="let positive of summary.positiveSummary">
-           <td>{{positive.column}}</td>
+           <td class="progTitle">{{positive.column}}</td>
            <td>{{positive.value}}</td>
         </tr>
       </table>
@@ -12,7 +12,7 @@
     <mat-tab label="Negative Correlation">
       <table class="table" *ngIf="summary.negativeSummary && summary.negativeSummary.length">
         <tr *ngFor="let negative of summary.negativeSummary">
-           <td>{{negative.column}}</td>
+           <td class="progTitle">{{negative.column}}</td>
            <td>{{negative.value}}</td>
         </tr>
       </table>

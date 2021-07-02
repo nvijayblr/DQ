@@ -2200,3 +2200,8 @@ td.mat-cell, td.mat-footer-cell{
      }
   }
 }
+
+::ng-deep .image-crop-wrapper .file-form-group .gv-file-input {
+  width: auto!important;
+  min-width: auto!important;
+}

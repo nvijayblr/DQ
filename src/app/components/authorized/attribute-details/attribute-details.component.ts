@@ -4,11 +4,10 @@ import * as _ from 'lodash';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { Options } from '@angular-slider/ngx-slider';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MessageService } from 'src/app/services/message.service';
 import { HttpService } from 'src/app/services/http-service.service';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { PreviewDialogComponent } from '../../../shared/preview-dialog/preview-dialog.component';
 
 export interface UserData {
   id: string;
@@ -17,13 +16,6 @@ export interface UserData {
   fruit: string;
 }
 
-const FRUITS: string[] = [
-  'blueberry', 'lychee', 'kiwi', 'mango', 'peach', 'lime', 'pomegranate', 'pineapple'
-];
-const NAMES: string[] = [
-  'Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack', 'Charlotte', 'Theodore', 'Isla', 'Oliver',
-  'Isabella', 'Jasper', 'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'
-];
 
 @Component({
   selector: 'app-attribute-details',
@@ -32,9 +24,8 @@ const NAMES: string[] = [
 })
 export class AttributeDetailsComponent implements OnInit {
 
-  constructor(private messageService: MessageService, private http: HttpService, private router: Router) {
-    const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
-    this.dataSource = new MatTableDataSource(users);
+  constructor(private messageService: MessageService, private http: HttpService, private router: Router, public dialog: MatDialog,) {
+   
    }
    @ViewChild('stickyMenu', {static: false}) menuElement: ElementRef;
    rules: any = [];
@@ -82,13 +73,7 @@ export class AttributeDetailsComponent implements OnInit {
     duplicates: 0
  };
 
-  itemsAsObjects = [{id: 0, name: 'Angular'}, {id: 1, name: 'React'}];
-  typesOfShoes: string[] = ['Boots', 'Clogs', 'Loafers', 'Moccasins', 'Sneakers'];
-  displayedColumns: string[] = ['id', 'name', 'progress', 'fruit'];
-  dataSource: MatTableDataSource<UserData>;
 
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   customOptions: OwlOptions = {
     loop: true,
@@ -167,214 +152,7 @@ export class AttributeDetailsComponent implements OnInit {
   columnDefs: any = [];
 
   currentlyOpenedItemIndex = -1;
-  highcharts = Highcharts;
-   chartOptions = {
-      chart: {
-         type: 'column'
-      },
-      title: {
-         text: 'Monthly Average Rainfall'
-      },
-      subtitle: {
-         text: 'Source: WorldClimate.com'
-      },
-      xAxis: {
-         categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
-         'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-         crosshair: true
-      },
-      yAxis : {
-         min: 0,
-         title: {
-            text: 'Rainfall (mm)'
-         }
-      },
-      tooltip : {
-         headerFormat: '<span style = "font-size:10px">{point.key}</span><table>',
-         pointFormat: '<tr><td style = "color:{series.color};padding:0">{series.name}: </td>' +
-            '<td style = "padding:0"><b>{point.y:.1f} mm</b></td></tr>', footerFormat: '</table>', shared: true, useHTML: true
-      },
-      plotOptions : {
-         column: {
-            pointPadding: 0.2,
-            borderWidth: 0
-         }
-      },
-      series: [{
-         name: 'Tokyo',
-         data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6,
-            148.5, 216.4, 194.1, 95.6, 54.4]
-      },
-      {
-         name: 'New York',
-         data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3,
-            91.2, 83.5, 106.6, 92.3]
-      },
-      {
-         name: 'London',
-         data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6,
-            52.4, 65.2, 59.3, 51.2]
-      },
-      {
-         name: 'Berlin',
-         data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4,
-            47.6, 39.1, 46.8, 51.1]
-      }]
-  };
-
-  highcharts2 = Highcharts;
-   chartOptions2 = {
-      chart: {
-        type: 'column'
-     },
-     title: {
-        text: 'Correlation Summary with negative values'
-     },
-     subtitle : {
-        text: 'Source: Source Name'
-     },
-     legend : {
-        layout: 'vertical',
-        align: 'left',
-        verticalAlign: 'top',
-        x: 250,
-        y: 100,
-        floating: true,
-        borderWidth: 1,
-
-        backgroundColor: (
-             '#FFFFFF'), shadow: true
-        },
-        xAxis: {
-          categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
-        },
-        credits: {
-          enabled: false
-
-     },
-
-     tooltip : {
-        valueSuffix: ' millions'
-     },
-     plotOptions : {
-        bar: {
-           dataLabels: {
-              enabled: true
-           }
-        }
-     },
-     series: [{
-      name: 'John',
-      data: [5, 3, 4, 7, 2]
-    }, {
-      name: 'Jane',
-      data: [2, -2, -3, 2, 1]
-    }, {
-      name: 'Joe',
-      data: [3, 4, 4, -2, 5]
-    }]
-  };
-
-  highcharts3 = Highcharts;
-   chartOptions3 = {
-      chart : {
-         plotBorderWidth: null,
-         plotShadow: false
-      },
-      title : {
-         text: 'Frequency analysis'
-      },
-      tooltip : {
-         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-      },
-      plotOptions : {
-         pie: {
-            shadow: false,
-            center: ['50%', '50%'],
-            size: '45%',
-            innerSize: '20%'
-         }
-      },
-      series : [{
-         type: 'pie',
-         name: 'Browser share',
-         data: [
-            ['Firefox',   45.0],
-            ['IE',       26.8],
-            {
-               name: 'Chrome',
-               y: 12.8,
-               sliced: true,
-               selected: true
-            },
-            ['Safari',    8.5],
-            ['Opera',     6.2],
-            ['Others',      0.7]
-         ]
-      }]
-  };
-
-  highcharts4 = Highcharts;
-   chartOptions4 = {
-      chart : {
-         type: 'heatmap',
-         marginTop: 40,
-         marginBottom: 80
-      },
-      title : {
-         text: 'Correlation Details'
-      },
-      xAxis : {
-         categories: ['Alexander', 'Marie', 'Maximilian', 'Sophia', 'Lukas',
-            'Maria', 'Leon', 'Anna', 'Tim', 'Laura']
-      },
-      yAxis : {
-         categories: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-            title: null
-      },
-      colorAxis : {
-         min: 0,
-         minColor: '#FFFFFF',
-         maxColor: Highcharts.getOptions().colors[0]
-      },
-      legend : {
-         align: 'right',
-         layout: 'vertical',
-         margin: 0,
-         verticalAlign: 'top',
-         y: 25,
-         symbolHeight: 280
-      },
-      tooltip : {
-         formatter() {
-            return '<b>' + this.series.xAxis.categories[this.point.x] +
-               '</b> sold <br><b>' +
-               this.point.value +
-               '</b> items on <br><b>' +
-               this.series.yAxis.categories[this.point.y] + '</b>';
-         }
-      },
-      series : [{
-         name: 'Sales per employee',
-         borderWidth: 1,
-         data: [[0, 0, 10], [0, 1, 19], [0, 2, 8], [0, 3, 24], [0, 4, 67],
-         [1, 0, 92], [1, 1, 58], [1, 2, 78], [1, 3, 117], [1, 4, 48],
-         [2, 0, 35], [2, 1, 15], [2, 2, 123], [2, 3, 64], [2, 4, 52],
-         [3, 0, 72], [3, 1, 132], [3, 2, 114], [3, 3, 19], [3, 4, 16],
-         [4, 0, 38], [4, 1, 5], [4, 2, 8], [4, 3, 117], [4, 4, 115],
-         [5, 0, 88], [5, 1, 32], [5, 2, 12], [5, 3, 6], [5, 4, 120],
-         [6, 0, 13], [6, 1, 44], [6, 2, 88], [6, 3, 98], [6, 4, 96],
-         [7, 0, 31], [7, 1, 1], [7, 2, 82], [7, 3, 32], [7, 4, 30],
-         [8, 0, 85], [8, 1, 97], [8, 2, 123], [8, 3, 64], [8, 4, 84],
-         [9, 0, 47], [9, 1, 114], [9, 2, 31], [9, 3, 48], [9, 4, 91]],
-
-         dataLabels: {
-            enabled: true,
-            color: '#000000'
-         }
-      }]
-
-   };
+ 
 
   previewTable = false;
   previewProfile = true;
@@ -524,17 +302,17 @@ export class AttributeDetailsComponent implements OnInit {
 
   getProfileSource() {
     this.http.getProfileSource().subscribe((result: any) => {
-      console.log('result', result);
       this.allSourceCategory = result.SourceDetailsList;
       console.log('this.allSourceCategory', this.allSourceCategory)
       const profieData = localStorage.getItem('dq-source-data');
+      const uploadMethod = localStorage.getItem('dq-upload-data');
       // this.selectedSource = result.SourceDetailsList.length ? result.SourceDetailsList[0] : [];
       //   if (this.selectedSource.length === 0) {
       //     this.showAllDetails = true;
       //     return;
       //   }
       //console.log('profieData', profieData)
-      if (profieData) {
+      if (profieData && uploadMethod === "profile") {
         //this.selectedSource = JSON.parse(profieData);
         this.selectedSource = JSON.parse(profieData);
         //console.log('selected', this.selectedSource);
@@ -628,6 +406,29 @@ export class AttributeDetailsComponent implements OnInit {
     }
 
   }
+  nullcounts : any;
+  showPreviewDetails() {
+    console.log('showPreviewDetails', this.selectedSource.templateSourcePath, this.profile.column)
+    const payload = {
+      sourcepath: this.selectedSource.templateSourcePath,
+      column_name: this.profile.column,
+    };
+    this.http.getNullCounts(payload).subscribe((res: any) => {
+      this.nullcounts = res.Preview ? res.Preview : {};
+      console.log('details', this.nullcounts);
+      this.dialog.open(PreviewDialogComponent, {
+        width: '95%',
+        // height: '95%',
+        data: {
+         ...this.nullcounts
+        }
+     });
+      }, (error) => {
+        this.isPreviewLoaded = false;
+        this.isPreviewLoading = false;
+      });
+   
+ }
 
 
 
@@ -641,19 +442,7 @@ export class AttributeDetailsComponent implements OnInit {
     }
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
+ 
 
 
 
@@ -687,16 +476,4 @@ export class AttributeDetailsComponent implements OnInit {
   }
 }
 
-/** Builds and returns a new User. */
-function createNewUser(id: number): UserData {
-  const name = NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-    NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
 
-  return {
-    id: id.toString(),
-    name,
-    progress: Math.round(Math.random() * 100).toString(),
-    fruit: FRUITS[Math.round(Math.random() * (FRUITS.length - 1))]
-  };
-
-}
