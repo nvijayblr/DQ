@@ -100,6 +100,8 @@ export class CreateSourceComponent implements OnInit {
   public selected = [];
   public selected1 = [];
   public variables = [];
+  dataUserTollerance: any = [];
+  dataOwnerTollerance: any = [];
 
   public variablesGroups =
     [
@@ -125,7 +127,6 @@ export class CreateSourceComponent implements OnInit {
     this.sourceNames = sourceNames ? JSON.parse(sourceNames) : [];
 
     let analysis = this.messageService.getSource();
-    console.log('analysis', analysis)
     if (!analysis.source) {
       analysis = {
         source:  {}
@@ -277,7 +278,7 @@ export class CreateSourceComponent implements OnInit {
         sourceCategory: analysis.sourceCategory,
         dataOwner: this.afControls.dataOwner.value ? this.afControls.dataOwner.value : analysis.dataOwner,
         dataSteward: this.afControls.dataSteward.value ? this.afControls.dataSteward.value : analysis.dataSteward,
-        dataUser : this.afControls.dataUser.value ? this.afControls.dataUser.value : analysis.dataUser                
+        dataUser : this.afControls.dataUser.value ? this.afControls.dataUser.value : analysis.dataUser
       },
       reference: refPayload,
       settings: this.sourceSettings
@@ -507,6 +508,28 @@ export class CreateSourceComponent implements OnInit {
     }
     this.isRefPreviewLoaded = true;
     this.isRefPreviewLoading = false;
+  }
+
+  setDataUserTollerance(e) {
+    this.dataUserTollerance = [];
+    e.value.map(user => {
+      this.dataUserTollerance.push({
+        user
+      });
+    });
+  }
+
+  setDataOwnerTollerance(e) {
+    this.dataOwnerTollerance = [];
+    e.value.map(user => {
+      this.dataOwnerTollerance.push({
+        user
+      });
+    });
+  }
+
+  sliderChanged(e) {
+    console.log(e);
   }
 
   openToleranceLevelDialog(): void {
