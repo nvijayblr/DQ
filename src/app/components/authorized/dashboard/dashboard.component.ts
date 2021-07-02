@@ -53,7 +53,11 @@ export class DashboardComponent implements OnInit {
    showDetails = true;
    showFirst = true;
    actionTabId;
-   showtable = true;
+  showtable = true;
+  show = false;
+  maskShow = false;
+  frequencyShow = false;
+  patternShow = false;
 
    isOverviewLoading = true;
    showAnalysisOverview = false;
@@ -342,6 +346,19 @@ export class DashboardComponent implements OnInit {
     this.loadProfile(data.source);
     this.loadReferencePreview();
     this.loadCorrelation(data.source, this.datatype, this.method);
+  }
+
+  changeType(type) {
+    if (type === 'numeric') {
+        this.method = 'pearson';
+     }
+    if (type === 'categorical') {
+        this.method = 'theils_u';
+     }
+    if (type === 'mixed') {
+        this.method = '';
+     }
+    this.loadCorrelation(this.selectedSource, this.datatype, this.method);
   }
 
   loadCorrelation(source, type, method) {
