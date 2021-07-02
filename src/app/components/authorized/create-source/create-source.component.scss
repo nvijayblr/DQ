@@ -1170,6 +1170,7 @@ tr:nth-child(odd) {background: #ffffff}
     margin-left: 0px!important;
     margin-right: 35px!important;
     margin-bottom: 10px;
+    vertical-align: top;
 }
 .splitR{
   display: inline-block;
@@ -1224,4 +1225,28 @@ tr:nth-child(odd) {background: #ffffff}
 }
 .source-preview-card{
   box-shadow: none!important;
+}
+
+.tollerance-wrapper {
+  margin-top: 16px;
+  .mat-card {
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-size: 18px;
+    margin: 12px 0;
+  }
+  h3 {
+    font-size: 14px;
+    display: inline-block;
+    margin-right: 10px;
+    min-width: 110px;
+  }
+  .value {
+    display: inline-block;
+    font-size: 18px;
+  }
+  .mat-slider-horizontal {
+    min-width: 110px;
+  }
 }

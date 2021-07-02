@@ -75,30 +75,176 @@
                                   </mat-select>
                                 </mat-form-field>
                               </div>
-                                                      
+
                             <div class="list-item-2 outline split">
-                            <mat-label class="mtop sub-title">Data Steward</mat-label> 
-                              <mat-form-field appearance="fill">                                                   
-                              <mat-select #select3 multiple placeholder="Using Groups" [(value)]="selected" formControlName="dataSteward">
-                                <!-- <mat-select-filter *ngIf="select3.focused" [placeholder]="'Filter'" [array]="variablesGroups" hasGroup="true" groupArrayName="values"
-                                 displayMember="value" (filteredReturn)="groups=$event"></mat-select-filter>                           -->
-                                  <mat-option *ngFor="let category of categoryList" [value]="category.value" color="accent">
-                                    {{ category.label }}
-                                  </mat-option>
-                                </mat-select>  
-                            </mat-form-field>
+                              <mat-label class="mtop sub-title">Data Steward</mat-label> 
+                                <mat-form-field appearance="fill">                                                   
+                                <mat-select #select3 multiple placeholder="Using Groups" (selectionChange)="setDataOwnerTollerance($event)" [(value)]="selected" formControlName="dataSteward">
+                                    <mat-option *ngFor="let category of categoryList" [value]="category.value" color="accent">
+                                      {{ category.label }}
+                                    </mat-option>
+                                  </mat-select>  
+                              </mat-form-field>
+
+                              <div class="tollerance-wrapper">
+                                <mat-card *ngFor="let user of dataOwnerTollerance">
+                                  <h2>Tollerance - {{user.user}}</h2>
+                                  <div class="wrap">
+                                    <div class="outline">
+                                      <h3>Completeness</h3>
+                                      <mat-slider
+                                        (change)="user.Completeness = $event.value"
+                                        thumbLabel
+                                        tickInterval="10"
+                                        step="1"
+                                        min="0"
+                                        max="100"
+                                        aria-label="units">
+                                      </mat-slider>
+                                      <div class="value">{{user.Completeness ? user.Completeness : 0}}%</div>
+                                    </div>
+                                    <div class="outline">
+                                      <h3>Accuracy</h3>
+                                      <mat-slider
+                                        (change)="user.Accuracy = $event.value"
+                                        thumbLabel
+                                        tickInterval="10"
+                                        step="1"
+                                        min="0"
+                                        max="100"
+                                        aria-label="units">
+                                      </mat-slider>
+                                      <div class="value">{{user.Accuracy ? user.Accuracy : 0}}%</div>
+                                    </div>
+                                    <div class="outline">
+                                      <h3>Uniqueness</h3>
+                                      <mat-slider
+                                        (change)="user.Uniqueness = $event.value"
+                                        thumbLabel
+                                        tickInterval="10"
+                                        step="1"
+                                        min="0"
+                                        max="100"
+                                        aria-label="units">
+                                      </mat-slider>
+                                      <div class="value">{{user.Uniqueness ? user.Uniqueness : 0}}%</div>
+                                    </div>
+                                    <div class="outline">
+                                      <h3>Validity</h3>
+                                      <mat-slider
+                                        (change)="user.Validity = $event.value"
+                                        thumbLabel
+                                        tickInterval="10"
+                                        step="1"
+                                        min="0"
+                                        max="100"
+                                        aria-label="units">
+                                      </mat-slider>
+                                      <div class="value">{{user.Validity ? user.Validity : 0}}%</div>
+                                    </div>
+                                    <div class="outline">
+                                      <h3>Integrity</h3>
+                                      <mat-slider
+                                        (change)="user.Integrity = $event.value"
+                                        thumbLabel
+                                        tickInterval="10"
+                                        step="1"
+                                        min="0"
+                                        max="100"
+                                        aria-label="units">
+                                      </mat-slider>
+                                      <div class="value">{{user.Integrity ? user.Integrity : 0}}%</div>
+                                    </div>
+                                  </div>
+                                </mat-card>
+                                
+                              </div>
+
                             </div>
                             <div class="list-item-2 outline splitR">
                             <mat-label class="mtop sub-title">Data User</mat-label> 
                               <mat-form-field appearance="fill">                                                   
-                              <mat-select #select4 multiple placeholder="Using Groups" [(value)]="selected1" formControlName="dataUser">
-                                <!-- <mat-select-filter *ngIf="select4.focused" [placeholder]="'Filter'" [array]="variablesGroups" hasGroup="true" groupArrayName="values"
-                                 displayMember="value" (filteredReturn)="groups=$event"></mat-select-filter>                           -->
+                              <mat-select #select4 multiple placeholder="Using Groups" (selectionChange)="setDataUserTollerance($event)" [(value)]="selected1" formControlName="dataUser">
                                   <mat-option *ngFor="let category of categoryList" [value]="category.value" color="accent">
                                     {{ category.label }}
                                   </mat-option>
                                 </mat-select>  
                             </mat-form-field>
+
+                            <div class="tollerance-wrapper">
+                              <mat-card *ngFor="let user of dataUserTollerance">
+                                <h2>Tollerance - {{user.user}}</h2>
+                                <div class="wrap">
+                                  <div class="outline">
+                                    <h3>Completeness</h3>
+                                    <mat-slider
+                                      (change)="user.Completeness = $event.value"
+                                      thumbLabel
+                                      tickInterval="10"
+                                      step="1"
+                                      min="0"
+                                      max="100"
+                                      aria-label="units">
+                                    </mat-slider>
+                                    <div class="value">{{user.Completeness ? user.Completeness : 0}}%</div>
+                                  </div>
+                                  <div class="outline">
+                                    <h3>Accuracy</h3>
+                                    <mat-slider
+                                      (change)="user.Accuracy = $event.value"
+                                      thumbLabel
+                                      tickInterval="10"
+                                      step="1"
+                                      min="0"
+                                      max="100"
+                                      aria-label="units">
+                                    </mat-slider>
+                                    <div class="value">{{user.Accuracy ? user.Accuracy : 0}}%</div>
+                                  </div>
+                                  <div class="outline">
+                                    <h3>Uniqueness</h3>
+                                    <mat-slider
+                                      (change)="user.Uniqueness = $event.value"
+                                      thumbLabel
+                                      tickInterval="10"
+                                      step="1"
+                                      min="0"
+                                      max="100"
+                                      aria-label="units">
+                                    </mat-slider>
+                                    <div class="value">{{user.Uniqueness ? user.Uniqueness : 0}}%</div>
+                                  </div>
+                                  <div class="outline">
+                                    <h3>Validity</h3>
+                                    <mat-slider
+                                      (change)="user.Validity = $event.value"
+                                      thumbLabel
+                                      tickInterval="10"
+                                      step="1"
+                                      min="0"
+                                      max="100"
+                                      aria-label="units">
+                                    </mat-slider>
+                                    <div class="value">{{user.Validity ? user.Validity : 0}}%</div>
+                                  </div>
+                                  <div class="outline">
+                                    <h3>Integrity</h3>
+                                    <mat-slider
+                                      (change)="user.Integrity = $event.value"
+                                      thumbLabel
+                                      tickInterval="10"
+                                      step="1"
+                                      min="0"
+                                      max="100"
+                                      aria-label="units">
+                                    </mat-slider>
+                                    <div class="value">{{user.Integrity ? user.Integrity : 0}}%</div>
+                                  </div>
+                                </div>
+                              </mat-card>
+                              
+                            </div>
+
                           </div>
                           <div class="list-item-2 outline split">
                             <button type="button" class="button3d btnPush btnBlueGreen tollico" (click)="openToleranceLevelDialog()">
