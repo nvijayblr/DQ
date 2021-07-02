@@ -3,18 +3,12 @@ import * as Highcharts from 'highcharts';
 import * as _ from 'lodash';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OwlOptions } from 'ngx-owl-carousel-o';
-import { Options } from '@angular-slider/ngx-slider';
+import { Options, LabelType } from '@angular-slider/ngx-slider';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MessageService } from 'src/app/services/message.service';
 import { HttpService } from 'src/app/services/http-service.service';
 import { PreviewDialogComponent } from '../../../shared/preview-dialog/preview-dialog.component';
 
-export interface UserData {
-  id: string;
-  name: string;
-  progress: string;
-  fruit: string;
-}
 
 
 @Component({
@@ -137,7 +131,17 @@ export class AttributeDetailsComponent implements OnInit {
     floor: 0,
     ceil: 100,
     step: 1,
-    showTicks: true
+    //showTicks: true,
+    translate: (value: number, label: LabelType): string => {
+      switch (label) {
+        case LabelType.Low:
+          return "<b>Min</b> " + value;
+        case LabelType.High:
+          return "<b>Max</b> " + value;
+        default:
+          return "" + value;
+      }
+    }
   };
 
   coMatrix: any = {};
@@ -165,19 +169,31 @@ export class AttributeDetailsComponent implements OnInit {
   }
 
   changeProfile(profile) {
-      this.profile = profile;
-      if (this.profile.LengthStatistics) {
+    this.profile = profile;
+    console.log(this.profile);
+    if (this.profile.LengthStatistics) {
+      this.setNewCeil(profile.LengthStatistics.Max);
          this.options.floor = profile.LengthStatistics.Min ? profile.LengthStatistics.Min : 0;
-         this.options.ceil = profile.LengthStatistics.Max ? profile.LengthStatistics.Max : 0;
-      }
+        this.options.ceil = profile.LengthStatistics.Max ? profile.LengthStatistics.Max : 0;
+        this.minValue = this.options.floor;
+        this.maxValue = this.options.ceil;
+      } 
       this.attrubute = profile.column;
       // console.log(this.profile);
+  }
+
+  setNewCeil(newCeil: number): void {
+    // Due to change detection rules in Angular, we need to re-create the options object to apply the change
+    const newOptions: Options = Object.assign({}, this.options);
+    newOptions.ceil = newCeil;
+    this.options = newOptions;
   }
 
 
   changeCategory(source) {
     //localStorage.setItem('dq-source-data', JSON.stringify(source));
-    localStorage.removeItem('dq-source-data');    
+    localStorage.removeItem('dq-source-data');
+    localStorage.removeItem('dq-upload-data');
     this.selectedSource = source;
     this.initLoadProfile = false;
     this.titleSrc = source.templateSourcePath;
@@ -285,7 +301,8 @@ export class AttributeDetailsComponent implements OnInit {
       new_source: ''
     };
     if (confirm) {
-      localStorage.removeItem('dq-source-data'); 
+      localStorage.removeItem('dq-source-data');
+      localStorage.removeItem('dq-upload-data');
       this.http.deleteSource(payload).subscribe((res: any) => {
         this.reloadCurrentRoute();
       });

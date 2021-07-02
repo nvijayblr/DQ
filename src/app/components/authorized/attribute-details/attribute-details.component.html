@@ -233,8 +233,18 @@
                          </tr>
                          <tr *ngFor="let frequency of profile.frequncyAnalysis">
                             <td class="fst">{{frequency.unique_values}}</td>
-                            <td>{{frequency.counts}}</td>
-                            <td><mat-progress-bar mode="determinate" [value]="(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %" ></mat-progress-bar></td>
+                            <td class="mid">{{frequency.counts}}</td>
+                            <td>
+                              <!-- <mat-progress-bar mode="determinate" [value]="(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %" ></mat-progress-bar> -->
+                              <mat-slider
+                              min="0" 
+                              max="100" 
+                              step="1" 
+                              [value]="(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'"
+                              matTooltip="{{(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %"
+                              >
+                              </mat-slider>
+                            </td>
                          </tr>
                       </table>
                    </div>
@@ -262,8 +272,19 @@
                         </tr>
                         <tr *ngFor="let pattern of profile.patternAnalysis">
                           <td>{{pattern.unique_values}}</td>
-                          <td>{{pattern.counts}}</td>
-                          <td><mat-progress-bar mode="determinate" [value]="(pattern.counts * 100) / profile.attributeSummary?.records | number:'1.0-2' " matTooltip="{{(pattern.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %"></mat-progress-bar></td>
+                          <td class="mid">{{pattern.counts}}</td>
+                          <td>
+                            <!-- <mat-progress-bar mode="determinate" [value]="(pattern.counts * 100) / profile.attributeSummary?.records | number:'1.0-2' " matTooltip="{{(pattern.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %"></mat-progress-bar> -->
+                          
+                            <mat-slider 
+                            min="0" 
+                            max="100" 
+                            step="1" 
+                            [value]="(pattern.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'"
+                            matTooltip="{{(pattern.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %"
+                            >
+                            </mat-slider>
+                          </td>
                        </tr>
                      </table>
                     <!-- <table>
@@ -288,6 +309,7 @@
                  </mat-card>
                   </div>
                   <div class="rgt-attr">
+                    <!-- <app-pie-chart ></app-pie-chart> -->
                     <!-- <mat-card class="wt2">
                         <h4 class="attr-tite">Count <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
                         <div class="records">
@@ -300,12 +322,15 @@
                         </div>                          
                      </mat-card>  -->
                      <h4 class="attr-tite"> <span class="subT hd">Length Statistics</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
-                     <mat-card class="honeydew ch" >                         
+                     <mat-card class="honeydew ch" > 
+                                           
                          <div class="custom-slider" *ngIf="profile.LengthStatistics">
                             <ngx-slider [(value)]="profile.LengthStatistics.Min" [(highValue)]="profile.LengthStatistics.Max" [options]="options"></ngx-slider>
                          </div>
                          <div class="custom-slider" *ngIf="!profile.LengthStatistics">
-                          <ngx-slider [(value)]="minValue" [(highValue)]="maxValue" [options]="options"></ngx-slider>
+                          <div class="not-found" *ngIf="!profile.LengthStatistics">
+                              Not Available
+                          </div>
                        </div>
                        <!-- <div class="not-found" *ngIf="!profile.LengthStatistics">
                            Not found
@@ -331,8 +356,18 @@
                             </tr>
                             <tr *ngFor="let mask of profile.maskAnalysis">
                               <td>{{mask.unique_values}}</td>
-                              <td>{{mask.counts}}</td>
-                              <td><mat-progress-bar mode="determinate" [value]="(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'}} %"></mat-progress-bar></td>
+                              <td class="mid">{{mask.counts}}</td>
+                              <td>
+                                <!-- <mat-progress-bar mode="determinate" [value]="(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'}} %"></mat-progress-bar> -->
+                                <mat-slider
+                              min="0" 
+                              max="100" 
+                              step="1" 
+                              [value]="(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'"
+                              matTooltip="{{(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'}} %"
+                              >
+                              </mat-slider>
+                              </td>
                            </tr>
                          </table>
                         <!-- <table>

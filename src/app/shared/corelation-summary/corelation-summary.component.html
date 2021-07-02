@@ -4,7 +4,7 @@
       <table class="table" *ngIf="summary.positiveSummary && summary.positiveSummary.length">
         <tr *ngFor="let positive of summary.positiveSummary">
            <td class="progTitle">{{positive.column}}</td>
-           <td>{{positive.value}}</td>
+           <td class="progTitle">{{positive.value}}</td>
         </tr>
       </table>
       <div class="not-found" *ngIf="!summary.positiveSummary || (summary.positiveSummary && !summary.positiveSummary.length)">Not found.</div>
@@ -13,7 +13,7 @@
       <table class="table" *ngIf="summary.negativeSummary && summary.negativeSummary.length">
         <tr *ngFor="let negative of summary.negativeSummary">
            <td class="progTitle">{{negative.column}}</td>
-           <td>{{negative.value}}</td>
+           <td class="progTitle">{{negative.value}}</td>
         </tr>
       </table>
       <div class="not-found" *ngIf="!summary.negativeSummary || (summary.negativeSummary && !summary.negativeSummary.length)">Not found.</div>

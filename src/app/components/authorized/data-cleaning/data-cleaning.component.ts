@@ -306,6 +306,7 @@ export class DataCleaningComponent implements OnInit {
   changeCategory(source) {
     // localStorage.setItem('dq-source-data', JSON.stringify(source));
     localStorage.removeItem('dq-source-data');
+    localStorage.removeItem('dq-upload-data');
     this.source = source;
     this.initLoadProfile = false;
     this.titleSrc = source.templateSourcePath;
@@ -330,6 +331,7 @@ export class DataCleaningComponent implements OnInit {
     };
     if (confirm) {
       localStorage.removeItem('dq-source-data');
+      localStorage.removeItem('dq-upload-data');
       this.http.deleteSource(payload).subscribe((res: any) => {
         this.reloadCurrentRoute();
       });

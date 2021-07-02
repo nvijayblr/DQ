@@ -1708,6 +1708,9 @@ td.mat-cell, td.mat-footer-cell{
     td{
        padding-top: 13px;
        padding-left: 15px;
+       font-family: 'open-sans-condensed-bold'!important;
+        color: #6a6969!important;
+        font-size: 14px!important;
        &.fst{
          padding-left: 20px;
        }
@@ -1715,51 +1718,51 @@ td.mat-cell, td.mat-footer-cell{
  }
  
  // We need to use ::ng-deep to overcome view encapsulation
- ::ng-deep {
-    .custom-slider .ngx-slider .ngx-slider-bar {
-      background: #ffe4d1;
-      height: 2px;
-    }
-    .custom-slider .ngx-slider .ngx-slider-selection {
-      background: orange;
-    }
+//  ::ng-deep {
+//     .custom-slider .ngx-slider .ngx-slider-bar {
+//       background: #ffe4d1;
+//       height: 2px;
+//     }
+//     .custom-slider .ngx-slider .ngx-slider-selection {
+//       background: orange;
+//     }
   
-    .custom-slider .ngx-slider .ngx-slider-pointer {
-      width: 8px;
-      height: 16px;
-      top: auto; /* to remove the default positioning */
-      bottom: 0;
-      background-color: #333;
-      border-top-left-radius: 3px;
-      border-top-right-radius: 3px;
-    }
+//     .custom-slider .ngx-slider .ngx-slider-pointer {
+//       width: 8px;
+//       height: 16px;
+//       top: auto; /* to remove the default positioning */
+//       bottom: 0;
+//       background-color: #333;
+//       border-top-left-radius: 3px;
+//       border-top-right-radius: 3px;
+//     }
   
-    .custom-slider .ngx-slider .ngx-slider-pointer:after {
-      display: none;
-    }
+//     .custom-slider .ngx-slider .ngx-slider-pointer:after {
+//       display: none;
+//     }
   
-    .custom-slider .ngx-slider .ngx-slider-bubble {
-      bottom: 14px;
-    }
+//     .custom-slider .ngx-slider .ngx-slider-bubble {
+//       bottom: 14px;
+//     }
   
-    .custom-slider .ngx-slider .ngx-slider-limit {
-      font-weight: bold;
-      color: orange;
-    }
+//     .custom-slider .ngx-slider .ngx-slider-limit {
+//       font-weight: bold;
+//       color: orange;
+//     }
   
-    .custom-slider .ngx-slider .ngx-slider-tick {
-      width: 1px;
-      height: 10px;
-      margin-left: 4px;
-      border-radius: 0;
-      background: #ffe4d1;
-      top: -1px;
-    }
+//     .custom-slider .ngx-slider .ngx-slider-tick {
+//       width: 1px;
+//       height: 10px;
+//       margin-left: 4px;
+//       border-radius: 0;
+//       background: #ffe4d1;
+//       top: -1px;
+//     }
   
-    .custom-slider .ngx-slider .ngx-slider-tick.ngx-slider-selected {
-      background: orange;
-    }
-  }
+//     .custom-slider .ngx-slider .ngx-slider-tick.ngx-slider-selected {
+//       background: orange;
+//     }
+//   }
   
  .attribute-list {
     width: 225px;
@@ -2074,7 +2077,7 @@ td.mat-cell, td.mat-footer-cell{
     width: 9%;
     position: relative;
     top: 33px;
-    left: 200px;
+    left: 220px;
     font-size: 12px;
     line-height: 12px;
     text-align: center;
@@ -2297,8 +2300,8 @@ td.mat-cell, td.mat-footer-cell{
   display: inline-block;
   text-align: center;
   //margin-top: 11px;
-  color: #000;
-  font-family: 'open-sans-regular'!important;
+  //color: #000;
+  //font-family: 'open-sans-regular'!important;
   &.al{
     margin-left: 2px;
     margin-top: 1px;
@@ -2365,13 +2368,42 @@ td.mat-cell, td.mat-footer-cell{
   }
 }
 
-.progTitle {
-  text-transform: lowercase;
+
+.mid{
+  padding-left: 35px!important;
+}
+::ng-deep .progTitle{
+  font-family: 'open-sans-condensed-bold';
+  font-size: 13px!important;
+  color: #6a6969 !important;
+}
+::ng-deep .mat-slider-horizontal{
+  height: 8px!important;
+  min-width: 128px;
+}
+::ng-deep .mat-slider {
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  padding: 8px;
+  outline: 0;
+  vertical-align: top;
+  top: -14px;
 }
 
-.progTitle::first-letter {
-  text-transform: uppercase;
-}
+// ::ng-deep {
+//   .mat-slider-thumb-label {
+//     transform: rotate(45deg) !important;
+//     border-radius: 50% 50% 0 !important;
+//   }  
+//   .mat-slider-thumb {
+//     transform: scale(0) !important;
+//   }  
+//   .mat-slider-thumb-label-text {
+//     opacity: 1 !important;
+//   }
+// }
+
 
 
 

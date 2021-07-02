@@ -36,6 +36,7 @@ import { AdvancedFormulaEditorComponent } from './advanced-formula-editor/advanc
 import { ToleranceLevelDialogComponent } from './tolerance-level-dialog/tolerance-level-dialog.component';
 import { ConditionalFormulaEditorComponent } from './conditional-formula-editor/conditional-formula-editor.component';
 import { PreviewDialogComponent } from './preview-dialog/preview-dialog.component';
+import { PieChartComponent } from './pie-chart/pie-chart.component';
 
 @NgModule({
    imports: [
@@ -79,6 +80,7 @@ import { PreviewDialogComponent } from './preview-dialog/preview-dialog.componen
     ToleranceLevelDialogComponent,
     ConditionalFormulaEditorComponent,
     PreviewDialogComponent,
+    PieChartComponent,
   ],
   exports: [
     FormsModule,
@@ -113,7 +115,8 @@ import { PreviewDialogComponent } from './preview-dialog/preview-dialog.componen
     CorelationSummaryComponent,
     AdvancedFormulaEditorComponent,
     ConditionalFormulaEditorComponent,
-    PreviewDialogComponent
+    PreviewDialogComponent,
+    PieChartComponent,
   ],
   providers: [
      DatePipe,
@@ -126,7 +129,8 @@ import { PreviewDialogComponent } from './preview-dialog/preview-dialog.componen
     AdvancedFormulaEditorComponent,
     ToleranceLevelDialogComponent,
     ConditionalFormulaEditorComponent,
-    PreviewDialogComponent
+    PreviewDialogComponent,
+    PieChartComponent,
   ]
 })
 export class SharedModule {}
