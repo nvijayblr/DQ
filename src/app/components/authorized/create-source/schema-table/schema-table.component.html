@@ -9,14 +9,14 @@
               <div class="lft">
                 <h2 class="nTitle">SCHEMAS</h2>
                 <mat-selection-list #shoes>
-                  <mat-list-option *ngFor="let shoe of typesOfShoes" [value]="shoe">
-                    {{shoe}}
+                  <mat-list-option *ngFor="let item of schemaTable | keyvalue" [value]="item.value.USERNAME" (click)="getconnectionTables(item.value.USERNAME)" [class.active]="item.value.USERNAME === selectedItem">
+                   {{item.value.USERNAME}}
                   </mat-list-option>
                 </mat-selection-list>
                 
-                <p>
+                <!-- <p>
                   Options selected: {{shoes.selectedOptions.selected.length}}
-                </p>
+                </p> -->
               </div>
               <div class="rgt">
                 <h2 class="nTitle">TABLES</h2>
@@ -34,17 +34,17 @@
                   
                     <!-- Checkbox Column -->
                     <ng-container matColumnDef="select">
-                      <th mat-header-cell *matHeaderCellDef>
-                        <mat-checkbox (change)="$event ? masterToggle() : null"
+                      <th mat-header-cell *matHeaderCellDef style="width:10px;">
+                        <!-- <mat-checkbox (change)="$event ? masterToggle() : null"
                                       [checked]="selection.hasValue() && isAllSelected()"
                                       [indeterminate]="selection.hasValue() && !isAllSelected()">
-                        </mat-checkbox>
+                        </mat-checkbox> -->
                       </th>
                       <td mat-cell *matCellDef="let row">
-                        <mat-checkbox (click)="$event.stopPropagation()"
+                        <!-- <mat-checkbox (click)="$event.stopPropagation()"
                                       (change)="$event ? selection.toggle(row) : null"
                                       [checked]="selection.isSelected(row)">
-                        </mat-checkbox>
+                        </mat-checkbox> -->
                       </td>
                     </ng-container>
                   
@@ -52,7 +52,7 @@
                     <!-- Name Column -->
                     <ng-container matColumnDef="name">
                       <th mat-header-cell *matHeaderCellDef> Name </th>
-                      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                      <td mat-cell *matCellDef="let element"> {{element.TABLE_NAME}} </td>
                     </ng-container>
                                                
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

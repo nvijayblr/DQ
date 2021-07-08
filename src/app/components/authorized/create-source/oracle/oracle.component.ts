@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HttpService } from 'src/app/services/http-service.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConnectionTestComponent } from '../../../../../app/shared/connection-test/connection-test.component';
 
@@ -11,8 +12,11 @@ import { ConnectionTestComponent } from '../../../../../app/shared/connection-te
 })
 export class OracleComponent implements OnInit {
   roleForm: FormGroup;
-  data: any = {};
-  constructor( private fb: FormBuilder, private router: Router, public dialog: MatDialog,) { }
+  dataTable: any = {};
+  testConnectivity: any = {};
+  schema: any = {};
+  isLoading = false;
+  constructor( private fb: FormBuilder, private router: Router, public dialog: MatDialog,private http: HttpService,) { }
 
   ngOnInit() {
     this.roleForm = this.fb.group({
@@ -26,31 +30,60 @@ export class OracleComponent implements OnInit {
     });
   }
 
-     saveRole() {
+
+  getConnectionSchema() {
       this.roleForm.markAllAsTouched();
       if (!this.roleForm.valid) {
         return;
       }
-       this.data = {
-         customName: this.roleForm.controls.customName.value,
-         host: this.roleForm.controls.host.value,
-         port: this.roleForm.controls.port.value,
-         databaseName: this.roleForm.controls.databaseName.value,
-         userName: this.roleForm.controls.userName.value,
-         password: this.roleForm.controls.password.value,
-         rememberPassword: this.roleForm.controls.rememberPassword.value,
+    this.dataTable = {
+      host: this.roleForm.controls.host.value,
+      port: this.roleForm.controls.port.value,
+      dbName: this.roleForm.controls.databaseName.value,
+      userName: this.roleForm.controls.userName.value,
+      password: this.roleForm.controls.password.value,
+    }
+    localStorage.setItem('dataTable', JSON.stringify(this.dataTable));
+      const payload = {
+        host: this.roleForm.controls.host.value,
+        port: this.roleForm.controls.port.value,
+        dbName: this.roleForm.controls.databaseName.value,
+        userName: this.roleForm.controls.userName.value,
+        password: this.roleForm.controls.password.value,
        }
-       //
-
-       console.log('DATA', this.data);
-       this.router.navigate([`auth/catalog/sources`]);
-      
+       this.http.getConnectionSchema(payload).subscribe((result: any) => {
+         this.schema = result ? result : {};
+         localStorage.setItem('schema', JSON.stringify(this.schema));
+         this.router.navigate([`auth/catalog/sources`]);
+      }, (error) => {
+        this.schema = {};
+      });
+    }
+    
+  getTestConnectivity() {
+    const payload = {
+      host: this.roleForm.controls.host.value,
+      port: this.roleForm.controls.port.value,
+      dbName: this.roleForm.controls.databaseName.value,
+      userName: this.roleForm.controls.userName.value,
+      password: this.roleForm.controls.password.value,
      }
+     this.isLoading = true;
+     this.http.testConnectivity(payload).subscribe((result: any) => {
+       console.log('RESULT', result);
+      this.testConnectivity = result ? result : {};
+      this.isLoading = false;
+    }, (error) => {
+      this.isLoading = false;
+      this.dataTable = {};
+    });
+  }
   
-     openDialog(): void {
+  openDialog(): void {
+    this.getTestConnectivity();
       const dialogRef = this.dialog.open(ConnectionTestComponent, {
         width: '450px',
-        data : {name : 'krishna'}
+        data: this.testConnectivity,        
       });
   
       // dialogRef.afterClosed().subscribe(result => {
