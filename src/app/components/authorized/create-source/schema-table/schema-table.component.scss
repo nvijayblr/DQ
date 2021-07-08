@@ -1,0 +1,96 @@
+.pad-tp{
+  padding-top:0px;
+}
+.card1{
+  width:100%;
+  display: inline-block;
+  vertical-align: top;
+  padding-bottom: 30px!important;
+  box-shadow: none!important;
+  margin: 0 auto !important;
+  margin-top: 10px!important;
+  margin-bottom: 20px!important;
+ }
+ .share-post-title {
+  font-size: 16px;
+  color: #322a54;
+  font-weight: 400;
+  margin: 0px 10px 35px 10px;
+  font-family: 'open-sans-condensed-bold';
+  position: relative;
+  &:before {
+     content: "";
+     position: absolute;
+     left: 0;
+     bottom: -12px;
+     height: 5px;
+     width: 55px;
+     background-color: #efa800;
+   }
+   &:after {
+     content: "";
+     position: absolute;
+     left: 0;
+     bottom: -10px;
+     height: 1px;
+     width: 95%;
+     max-width: 125px;
+     background-color: #efa800;
+   }
+}
+
+.lft {
+  width:300px;
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 30px;
+}
+.rgt {
+  width:calc(100% - 340px);
+  display: inline-block;
+  vertical-align: top;
+  border-left: 1px solid #ddd;
+  padding-left: 30px;
+}
+.nTitle{
+  font-size: 14px;
+  margin-top: 15px!important;
+  margin-bottom: 20px;
+  position: relative;
+  font-family: 'open-sans-condensed-bold';
+  &:before {
+    position: absolute;
+    left: 0;
+    bottom: -8px;
+    width: 50px;
+    height: 4px;
+    content: "";
+    background-color: lavender;
+  }
+}
+::ng-deep.mat-pseudo-checkbox{
+  display: none !important;
+}
+table {
+  width: 100%;
+}
+
+::ng-deep .mat-list-base .mat-list-item .mat-list-item-content, .mat-list-base .mat-list-option .mat-list-item-content{
+  border-bottom: 1px solid rgba(0,0,0,.12);
+}
+
+.has-search .form-control {
+  padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  width: 2.375rem;
+  height: 2.375rem;
+  line-height: 2.375rem;
+  text-align: center;
+  pointer-events: none;
+  color: #aaa;
+}

@@ -20,6 +20,8 @@ import { AnalysisComponent } from './analysis/analysis.component';
 import { DataCleaningComponent } from './data-cleaning/data-cleaning.component';
 import { DataQualityComponent } from './data-quality/data-quality.component';
 import { CreateProfileDataComponent } from './create-profile-data/create-profile-data.component';
+import { OracleComponent } from './create-source/oracle/oracle.component';
+import { SchemaTableComponent } from './create-source/schema-table/schema-table.component';
 
 
 @NgModule({
@@ -34,7 +36,9 @@ import { CreateProfileDataComponent } from './create-profile-data/create-profile
     AnalysisComponent,
     DataCleaningComponent,
     DataQualityComponent,
-    CreateProfileDataComponent
+    CreateProfileDataComponent,
+    OracleComponent,
+    SchemaTableComponent
   ],
    imports: [
     HighchartsChartModule,

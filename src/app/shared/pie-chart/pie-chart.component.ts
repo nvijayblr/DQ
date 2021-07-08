@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import * as Highcharts from 'highcharts';
 
 @Component({
@@ -13,23 +13,40 @@ export class PieChartComponent implements OnInit {
   public label;
   options: any;
 
+  @Input() pieChartData;
+
   constructor() {
+    
+    
+   
+  }
+
+  ngOnInit() {
+    setTimeout(() => {
+      console.log('pieChartData5', this.pieChartData);
     this.options = {
       chart: {
         type: 'pie',
+        backgroundColor: '#f7f9fc',
+        margin: [0, 0, 0, 0],
+        spacingTop: 0,
+        spacingBottom: 0,
+        spacingLeft: 0,
+        spacingRight: 0,
         options3d: {
-          enabled: false,
-          alpha: 45
+          enabled: true,
+          alpha: 45,
         }
       },
-      title: {
-        text: 'Weekly fruit delivery'
-      },
-      subtitle: {
-        text: ''
-      },
+      // title: {
+      //   text: 'Weekly fruit delivery'
+      // },
+      // subtitle: {
+      //   text: ''
+      // },
       plotOptions: {
         pie: {
+          //size: 160,
           innerSize: 100,
           depth: 45,
           allowPointSelect: true,
@@ -40,22 +57,15 @@ export class PieChartComponent implements OnInit {
         {
           name: 'Delivered amount',
           data: [
-            ['Bananas', 8],
-            ['Kiwi', 3],
-            ['Mixed nuts', 1],
-            ['Oranges', 6],
-            ['Apples', 8],
-            ['Pears', 4],
-            ['Clementines', 4],
-            ['Reddish (bag)', 1],
-            ['Grapes (bunch)', 1]
+          ...this.pieChartData
+           
           ]
         }
       ]
     };
-  }
-
-  ngOnInit() {
+    console.log('pieChartData3', this.options.series[0].data)
     Highcharts.chart('container', this.options);
+    }, 1000)
+    
   }
 }

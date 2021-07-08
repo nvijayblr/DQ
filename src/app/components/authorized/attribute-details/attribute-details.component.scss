@@ -1628,7 +1628,7 @@ td.mat-cell, td.mat-footer-cell{
     font-size: 12px;
     line-height:26px;  
     font-family: 'open-sans-semibold';
-    padding-right: 40px;
+    //padding-right: 40px;
     vertical-align:top;
     height:10px;
     // &.twt{
@@ -1637,8 +1637,8 @@ td.mat-cell, td.mat-footer-cell{
     span{
        display: block;
        color:#908ba1;
-       font-size: 12px;
-       line-height: 12px;
+       font-size: 11px;
+       line-height: 11px;
        //padding-bottom: 5px;
        font-family: 'open-sans-bold';
        text-transform: uppercase;
@@ -1712,7 +1712,7 @@ td.mat-cell, td.mat-footer-cell{
         color: #6a6969!important;
         font-size: 14px!important;
        &.fst{
-         padding-left: 20px;
+         padding-left: 40px;
        }
     }
  }
@@ -2404,7 +2404,85 @@ td.mat-cell, td.mat-footer-cell{
 //   }
 // }
 
+.nBg{
+  background:#f7f9fc;
+  //box-shadow: 0 0 2px #333!important;
+  position: relative;
+  height: 500px;
 
+}
+
+.viewTableN{
+  float: right;
+  font-size: 14px;
+  font-family: 'open-sans-condensed-bold';
+  background: rgba(76, 175, 80, 0.1);
+  padding: 0 20px;
+  color: #4caf50;
+  border-radius: 3px;
+  text-transform: uppercase;
+  position: relative;
+  right: -20px;
+  top: -20px;
+ // z-index: 10;
+  .tabV{
+    width:40px;
+    height: 40px;
+    position: relative;
+    cursor: pointer;
+    top: 3px;
+  }
+  .chartV{
+    width:40px;
+    height: 40px;
+    position: relative;
+    cursor: pointer;
+    top: 2px;
+  }
+  .divider{
+    width: 3px;
+    height: 25px;
+    /* background: #96a9ec; */
+    display: inline-block;
+    position: relative;
+    left: 1px;
+    top: 8px;
+    border-right: 1px dotted #4caf50;
+  }
+}
+
+::ng-deep .highcharts-credits{
+  display: none !important;
+}
+.attTable{
+  //display:block !important;
+  //height:410px;
+  //overflow-y: scroll;
+  //overflow: auto;
+  th{
+    width:30%!important;
+    border-bottom-width: 1px!important;
+    border-bottom-style: solid!important;
+    border-bottom-color: rgba(0,0,0,.12)!important;
+  }
+  .tdP{
+      padding-left: 50px!important;
+  }
+}
+
+.my-custom-scrollbar {
+  position: relative;
+  height: 410px;
+  overflow: auto;
+  width: 100%;
+  }
+  .table-wrapper-scroll-y {
+  display: block;
+  }
+
+.progressbar{
+    height: 12px !important;
+  }
 
 
 

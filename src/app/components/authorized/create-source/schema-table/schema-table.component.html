@@ -1,0 +1,76 @@
+<section class="page-body home-bodys pad-tp">
+  <div class="container">
+    <div class="home-wrapper">
+      <div class="clearfix my-community-body">
+        <div class="home-panel">
+          <div class="form-continer flex-containers">
+            <mat-card class="border no-rounded list shrare-post pbl card1">
+             
+              <div class="lft">
+                <h2 class="nTitle">SCHEMAS</h2>
+                <mat-selection-list #shoes>
+                  <mat-list-option *ngFor="let shoe of typesOfShoes" [value]="shoe">
+                    {{shoe}}
+                  </mat-list-option>
+                </mat-selection-list>
+                
+                <p>
+                  Options selected: {{shoes.selectedOptions.selected.length}}
+                </p>
+              </div>
+              <div class="rgt">
+                <h2 class="nTitle">TABLES</h2>
+                <div class="">
+                  <div class="example-header">
+                    <!-- <mat-form-field appearance="none">
+                       <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter"> 
+                    </mat-form-field> -->
+                    <div class="form-group has-search">
+                      <span class="fa fa-search form-control-feedback"></span>
+                      <input type="text" class="form-control" placeholder="Search"  (keyup)="applyFilter($event.target.value)">
+                    </div>
+                  </div>
+                  <table mat-table [dataSource]="dataSource">
+                  
+                    <!-- Checkbox Column -->
+                    <ng-container matColumnDef="select">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <mat-checkbox (change)="$event ? masterToggle() : null"
+                                      [checked]="selection.hasValue() && isAllSelected()"
+                                      [indeterminate]="selection.hasValue() && !isAllSelected()">
+                        </mat-checkbox>
+                      </th>
+                      <td mat-cell *matCellDef="let row">
+                        <mat-checkbox (click)="$event.stopPropagation()"
+                                      (change)="$event ? selection.toggle(row) : null"
+                                      [checked]="selection.isSelected(row)">
+                        </mat-checkbox>
+                      </td>
+                    </ng-container>
+                  
+                  
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="name">
+                      <th mat-header-cell *matHeaderCellDef> Name </th>
+                      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                    </ng-container>
+                                               
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                        (click)="selection.toggle(row)">
+                    </tr>
+                  </table>
+                    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                    </div>
+                  <br><br>
+                    <div>
+                      <button  mat-raised-button (click)="logSelection()">Console Log Selected</button>
+                    </div>
+              </div> 
+            </mat-card>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

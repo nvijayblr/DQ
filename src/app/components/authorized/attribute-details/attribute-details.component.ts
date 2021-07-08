@@ -50,6 +50,7 @@ export class AttributeDetailsComponent implements OnInit {
   selectedSource: any = {};
   actionItem = false;
   showAllDetails = false;
+  chartData: any = [];
 
   profileDetails = {
     nr_duplicates: 0,
@@ -125,6 +126,33 @@ export class AttributeDetailsComponent implements OnInit {
       }
   };
 
+  highcharts = Highcharts;
+   chartOptions = {   
+      chart: {
+       type: 'column',
+       backgroundColor: '#f7f9fc',
+      },
+      title: {
+         text: 'Column chart with negative values'
+      },
+      xAxis:{
+         categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']        
+      },     
+      series: [
+         {
+            name: 'John',
+            data: [5, 3, 4, 7, 2]
+         }, 
+         {
+            name: 'Jane',
+            data: [2, -2, -3, 2, 1]
+         }, {
+            name: 'Joe',
+            data: [3, 4, 4, -2, 5]
+         }
+      ]
+   };
+
   minValue = 0;
   maxValue = 0;
   options: Options = {
@@ -170,7 +198,10 @@ export class AttributeDetailsComponent implements OnInit {
 
   changeProfile(profile) {
     this.profile = profile;
-    console.log(this.profile);
+    console.log('AAA', this.profile.frequncyAnalysis);
+    const extractValues = ({ unique_values, counts}) => [unique_values, counts];
+    this.chartData = this.profile.frequncyAnalysis.map(extractValues);
+    console.log('result', this.chartData);
     if (this.profile.LengthStatistics) {
       this.setNewCeil(profile.LengthStatistics.Max);
          this.options.floor = profile.LengthStatistics.Min ? profile.LengthStatistics.Min : 0;

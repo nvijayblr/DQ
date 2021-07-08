@@ -1,0 +1,94 @@
+<section class="page-body home-bodys pad-tp">
+  <div class="container">
+    <div class="home-wrapper">
+      <div class="clearfix my-community-body">
+        <div class="home-panel">
+          <ng-template matStepLabel>Source Data</ng-template>
+            <div class="form-continer flex-containers">
+            
+              <mat-card class="border no-rounded list shrare-post pbl card1">
+                <form  [formGroup]="roleForm" (ngSubmit)="saveRole()">
+                <h1 class="share-post-title">General<span class="yellow"> Information</span></h1>
+                <div class="list flex-containers flex-start wrap">
+                  <div class="list-item-2 outline wth">
+                    <div class="list outline">
+                      <mat-label class="sub-title">Custom Name<span class="red">*</span></mat-label>
+                      <mat-form-field appearance="fill">
+                        <input matInput placeholder="Custom Name"  maxlength="50" autocomplete="off" formControlName="customName"/>
+                      </mat-form-field>
+                    </div>
+                    <div class="list outline">                      
+                      <h2 class="nTitle">Connection Details</h2>
+                      <div class="host">
+                        <mat-label class="sub-title">Host<span class="red">*</span></mat-label>
+                        <mat-form-field appearance="fill">
+                          <input matInput placeholder="Host"  maxlength="50" autocomplete="off" formControlName="host"/>
+                        </mat-form-field>
+                    </div>
+                    <div class="port">
+                      <mat-label class="sub-title">Port<span class="red">*</span></mat-label>
+                        <mat-form-field appearance="fill">
+                          <input matInput placeholder="Port" maxlength="50" autocomplete="off" formControlName="port"/>
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div class="list outline">                      
+                        <mat-label class="sub-title">Database Name<span class="red">*</span></mat-label>
+                        <mat-form-field appearance="fill">
+                          <input matInput placeholder="Database Name" maxlength="50" autocomplete="off" formControlName="databaseName"/>
+                        </mat-form-field>
+                    </div>
+                    <div class="list outline">
+                      <div class="connect" routerLink="/">Use JDBC Connection String</div>
+                    </div>
+
+                    <div class="list outline">                      
+                      <h2 class="nTitle">Credentials</h2>
+                        <mat-label class="sub-title">User Name<span class="red">*</span></mat-label>
+                        <mat-form-field appearance="fill">
+                          <input matInput placeholder="User Name"  maxlength="50" autocomplete="off" formControlName="userName"/>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="list outline">                      
+                        <mat-label class="sub-title">Password<span class="red">*</span></mat-label>
+                        <mat-form-field appearance="fill">
+                          <input type="password" matInput placeholder="Password"  maxlength="50" autocomplete="off" formControlName="password"/>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="list outline">                      
+                      <mat-checkbox class="remember" checked="true" formControlName="rememberPassword">Remember credentials <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></mat-checkbox>
+                  </div>
+
+                  <div class="list outline">                      
+                    <div class="host-btn">                      
+                       <button type="button" class="btnBlueGreenN addico blue" (click)="openDialog()">
+                        Test Connection</button>
+                  </div>
+                  <div class="host-btn">
+                    <button type="button" class="btnBlueGreenN addico" (click)="saveRole()">
+                      Proceed</button>
+                </div>
+                  </div>
+
+                  </div>
+                  <div class="list-item-2 outline wth">
+                    <div class="list outline lstR">                      
+                      <h2 class="nTitle">Advanced Settings</h2>
+                      <mat-checkbox class="adv-setting">Start Date Discovery <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></mat-checkbox>
+                      <mat-checkbox class="adv-setting">Generate drill through for all data <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></mat-checkbox>
+                      <mat-checkbox class="adv-setting">Limit Number of Profile Rows<i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></mat-checkbox>
+                    </div>
+                  </div>
+                </div>
+              </form>
+              </mat-card>
+            
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

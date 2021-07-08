@@ -1,0 +1,190 @@
+.card1{
+  width:50%;
+  display: inline-block;
+  vertical-align: top;
+  padding-bottom: 30px!important;
+  box-shadow: none!important;
+  margin: 0 auto !important;
+  margin-top: 10px!important;
+  margin-bottom: 20px!important;
+ }
+ .share-post-title {
+  font-size: 16px;
+  color: #322a54;
+  font-weight: 400;
+  margin: 0px 10px 35px 10px;
+  font-family: 'open-sans-condensed-bold';
+  position: relative;
+  &:before {
+     content: "";
+     position: absolute;
+     left: 0;
+     bottom: -12px;
+     height: 5px;
+     width: 55px;
+     background-color: #efa800;
+   }
+   &:after {
+     content: "";
+     position: absolute;
+     left: 0;
+     bottom: -10px;
+     height: 1px;
+     width: 95%;
+     max-width: 125px;
+     background-color: #efa800;
+   }
+}
+::ng-deep .outline mat-label{
+  font-size: 12px!important;
+  font-family: 'open-sans-condensed-bold';
+  color: #7D7D7D;
+  &.sub-title {
+     font-family: "open-sans-condensed-bold";
+     font-size: 13px;
+     color: #373737!important;
+     display: inline-block;
+     margin: 0px;
+ }
+}
+::ng-deep .mat-form-field-wrapper{
+  padding-bottom: 10px;
+ }
+ ::ng-deep .mat-form-field-appearance-fill .mat-form-field-underline::before {
+  bottom: -8px;
+  height: 2px;
+ }
+ ::ng-deep .mat-form-field-appearance-fill .mat-form-field-ripple{
+  bottom: -8px;
+  height: 3px;
+ }
+ ::ng-deep.mat-form-field-appearance-outline .mat-form-field-infix {
+  padding: 4px 10px 14px 0px!important;
+  font-size: 16px;
+  color: #484848;
+  font-family: 'open-sans-condensed-bold'!important;
+}
+::ng-deep.mat-form-field-appearance-outline .mat-form-field-wrapper{
+  margin: .11em 0!important;
+}
+input.mat-input-element{
+  font-family: 'open-sans-condensed-bold';
+  font-size: 13px;
+}
+.mat-form-field-wrapper {
+  margin-top:1px;
+}
+::ng-deep .mat-form-field-infix{
+  border-top: 0px;
+ }
+ .nTitle{
+  font-size: 14px;
+  margin-top: 15px!important;
+  margin-bottom: 20px;
+  position: relative;
+  font-family: 'open-sans-condensed-bold';
+  &:before {
+    position: absolute;
+    left: 0;
+    bottom: -8px;
+    width: 50px;
+    height: 4px;
+    content: "";
+    background-color: lavender;
+  }
+}
+.host{
+  width:65%; 
+  display: inline-block; 
+  margin-right: 5%;
+}
+.port{
+  width:30%;
+  display: inline-block;
+}
+.connect{
+  font-family: 'open-sans-semibold';
+  font-size: 10px;
+  color: #b00000;
+  text-decoration: underline;
+  margin-top: -10px;
+  margin-bottom: 25px;
+}
+.remember{
+  font-family: 'open-sans-semibold';
+  font-size: 11px;
+  color: #383737;
+  margin-top: -10px;
+  margin-bottom: 25px;
+  display:block;
+  i{
+    font-size: 14px;
+    color: #9e9a96;
+    position: relative;
+    right: -5px;
+    top: 1px;
+  }
+}
+.adv-setting{
+  font-family: 'open-sans-semibold';
+  font-size: 11px;
+  color: #383737;
+  margin-bottom: 6px;
+  display:block;
+  i{
+    font-size: 14px;
+    color: #9e9a96;
+    position: relative;
+    right: -5px;
+    top: 1px;
+  }
+}
+
+.host-btn{
+  //width:45%; 
+  display: inline-block; 
+  //margin-right: 5%;
+}
+
+.btnBlueGreenN {
+  background: #00AE68;
+  color: #fff;
+ 
+  
+  &.addico{
+    width: 130px;
+    height: 30px;
+    font-family: 'open-sans-condensed-bold'!important;
+     line-height: 17px;
+     outline: none;
+     border: none;
+     //padding-top: 3px;
+     border-radius: 2px;
+     margin-right: 15px;
+    //  box-shadow: none!important;
+     &:hover{
+       background:#059c60;
+     }
+     .mat-icon{
+        font-size: 14px;
+        width: 14px;
+        height: 14px;
+        position: relative;
+        top: 2px;
+     }
+  }
+  &.blue{ 
+    background:#433683;
+    &:hover{ 
+      background:#261f4b;
+    }
+  }
+ 
+}
+.pad-tp{
+  padding-top:0px;
+}
+.lstR{
+  background: aliceblue;
+  padding: 10px 0 10px 20px;
+}

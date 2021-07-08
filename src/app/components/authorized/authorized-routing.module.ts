@@ -11,6 +11,8 @@ import { AttributeDetailsComponent } from './attribute-details/attribute-details
 import { DataCleaningComponent } from './data-cleaning/data-cleaning.component';
 import { DataQualityComponent } from './data-quality/data-quality.component';
 import { CreateProfileDataComponent } from './create-profile-data/create-profile-data.component';
+import { OracleComponent } from './create-source/oracle/oracle.component';
+import { SchemaTableComponent } from './create-source/schema-table/schema-table.component';
 
 const routes: Routes = [
   {
@@ -51,8 +53,10 @@ const routes: Routes = [
        { path: 'create-source-data', component: CreateSourceComponent },
        { path: 'attribute-details-data', component: AttributeDetailsComponent },
        { path: 'data-cleaning', component: DataCleaningComponent },
-      { path: 'data-quality', component: DataQualityComponent },
+       { path: 'data-quality', component: DataQualityComponent },
       { path: 'create-profile-data', component: CreateProfileDataComponent },
+      { path: 'add-source-data/oracle', component: OracleComponent },
+      { path: 'catalog/sources', component: SchemaTableComponent },
     ]
   },
 ];

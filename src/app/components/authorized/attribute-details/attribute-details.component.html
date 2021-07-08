@@ -170,7 +170,75 @@
               <div class="flex-containers prof-details">
                 <div class="attribute-details">
                   <!-- <h1 class="sTitle"> {{attrubute}} </h1> -->
-                  <div class="flex-containers">                                      
+
+                  <div class="flex-containers"> 
+                    <div class="lft-attr">
+                      <h4 class="attr-tite"> <span class="subT mg">Frequency Groups</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
+                      <mat-card class="nBg">
+                        <div class="viewTableN"> 
+                          <img src="assets/images/chart.svg" class="chartV" (click)="changeView('table')" />
+                         <span class="divider"></span> 
+                         <img src="assets/images/table.svg" class="tabV" (click)="changeView('chart')" />                  
+                        </div>
+                        <div *ngIf="showtable">
+                          <app-pie-chart [pieChartData]="chartData" ></app-pie-chart>
+                      </div>
+                      <div *ngIf="!showtable">
+                        <div class="table-wrapper-scroll-y my-custom-scrollbar">
+
+                          <table class="table table-bordered table-striped mb-0 attTable" *ngIf="profile.frequncyAnalysis && profile.frequncyAnalysis.length">
+                            <thead>
+                              <tr>
+                                <th scope="col">
+                                  <div class="records">
+                                    <span><img src="assets/images/frequency.svg" class="record1" /> <span class="dp1"> Frequency</span></span>
+                                 </div>
+                                </th>
+                                <th scope="col">
+                                  <div class="records">
+                                    <span><img src="assets/images/counting.svg" class="record1" /> <span class="dp1"> Count</span></span>
+                                 </div>
+                                </th>
+                                <th scope="col" style="width:24%!important;">&nbsp;</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let frequency of profile.frequncyAnalysis">
+                                <td class="tdP">{{frequency.unique_values}}</td>
+                                <td class="tdP">{{frequency.counts}}</td>
+                                <td>
+                                  <mat-progress-bar class="progressbar" mode="determinate" [value]="(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %" ></mat-progress-bar> 
+                                </td>
+                              </tr>
+                            
+                            </tbody>
+                          </table>
+                        
+                        </div>
+            
+                      </div>
+                      </mat-card>
+                    </div>
+
+                    <div class="rgt-attr">
+                      <h4 class="attr-tite"> <span class="subT mg">CORRELATION SUMMARY</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
+                      <mat-card class="nBg">
+                        <div class="viewTableN"> 
+                          <img src="assets/images/chart.svg" class="chartV" (click)="changeView('table')" />
+                         <span class="divider"></span> 
+                         <img src="assets/images/table.svg" class="tabV" (click)="changeView('chart')" />                  
+                        </div>
+                        <highcharts-chart
+                              [Highcharts] = "highcharts" 
+                              [options] = "chartOptions" 
+                              style = "width: 100%; height: 400px; display: block;">
+                           </highcharts-chart>
+                      </mat-card>
+                    </div>
+                  </div>
+
+
+                  <div class="flex-containers">                                    
                   <div class="lft-attr">
                     <h4 class="attr-tite"> <span class="subT m">Attribute Summary</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
                     <mat-card class="bg-violet ch"> 
@@ -235,15 +303,15 @@
                             <td class="fst">{{frequency.unique_values}}</td>
                             <td class="mid">{{frequency.counts}}</td>
                             <td>
-                              <!-- <mat-progress-bar mode="determinate" [value]="(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %" ></mat-progress-bar> -->
-                              <mat-slider
+                               <mat-progress-bar mode="determinate" [value]="(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %" ></mat-progress-bar> 
+                              <!-- <mat-slider
                               min="0" 
                               max="100" 
                               step="1" 
                               [value]="(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'"
                               matTooltip="{{(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %"
                               >
-                              </mat-slider>
+                              </mat-slider> -->
                             </td>
                          </tr>
                       </table>
@@ -309,7 +377,7 @@
                  </mat-card>
                   </div>
                   <div class="rgt-attr">
-                    <!-- <app-pie-chart ></app-pie-chart> -->
+                    <!-- <app-pie-chart ></app-pie-chart>  -->
                     <!-- <mat-card class="wt2">
                         <h4 class="attr-tite">Count <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
                         <div class="records">
@@ -413,6 +481,7 @@
                      </mat-card>
       
                   </div>  
+                 
                 </div>
                 </div>             
             </div>

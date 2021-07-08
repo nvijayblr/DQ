@@ -37,6 +37,7 @@ import { ToleranceLevelDialogComponent } from './tolerance-level-dialog/toleranc
 import { ConditionalFormulaEditorComponent } from './conditional-formula-editor/conditional-formula-editor.component';
 import { PreviewDialogComponent } from './preview-dialog/preview-dialog.component';
 import { PieChartComponent } from './pie-chart/pie-chart.component';
+import { ConnectionTestComponent } from './connection-test/connection-test.component';
 
 @NgModule({
    imports: [
@@ -81,6 +82,7 @@ import { PieChartComponent } from './pie-chart/pie-chart.component';
     ConditionalFormulaEditorComponent,
     PreviewDialogComponent,
     PieChartComponent,
+    ConnectionTestComponent,
   ],
   exports: [
     FormsModule,
@@ -131,6 +133,7 @@ import { PieChartComponent } from './pie-chart/pie-chart.component';
     ConditionalFormulaEditorComponent,
     PreviewDialogComponent,
     PieChartComponent,
+    ConnectionTestComponent
   ]
 })
 export class SharedModule {}
