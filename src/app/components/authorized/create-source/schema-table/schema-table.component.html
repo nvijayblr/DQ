@@ -8,15 +8,27 @@
              
               <div class="lft">
                 <h2 class="nTitle">SCHEMAS</h2>
-                <mat-selection-list #shoes>
+                <!-- <mat-selection-list #shoes>
                   <mat-list-option *ngFor="let item of schemaTable | keyvalue" [value]="item.value.USERNAME" (click)="getconnectionTables(item.value.USERNAME)" [class.active]="item.value.USERNAME === selectedItem">
                    {{item.value.USERNAME}}
                   </mat-list-option>
                 </mat-selection-list>
                 
-                <!-- <p>
+                <p>
                   Options selected: {{shoes.selectedOptions.selected.length}}
-                </p> -->
+                </p>  -->
+
+                <mat-list role="list">
+                  <mat-list-item role="listitem" *ngFor="let item of schemaTable | keyvalue; let i = index" (click)="getconnectionTables(item.value.USERNAME)" [class.active]="item.value.USERNAME === selectedItem">
+                    <mat-radio-button class="schema"  [checked]="i == defaultSelected" [value]="i" (change)="selectionNew = $event.value">
+                      {{item.value.USERNAME}}
+                    </mat-radio-button>
+                  </mat-list-item>
+                </mat-list>
+                <!-- <mat-card style="margin-top: 1rem">
+                  Currently selected: {{selectionNew}}
+                </mat-card>  -->
+
               </div>
               <div class="rgt">
                 <h2 class="nTitle">TABLES</h2>
@@ -34,17 +46,24 @@
                   
                     <!-- Checkbox Column -->
                     <ng-container matColumnDef="select">
-                      <th mat-header-cell *matHeaderCellDef style="width:10px;">
+                      <th mat-header-cell *matHeaderCellDef>
                         <!-- <mat-checkbox (change)="$event ? masterToggle() : null"
                                       [checked]="selection.hasValue() && isAllSelected()"
                                       [indeterminate]="selection.hasValue() && !isAllSelected()">
                         </mat-checkbox> -->
                       </th>
-                      <td mat-cell *matCellDef="let row">
-                        <!-- <mat-checkbox (click)="$event.stopPropagation()"
-                                      (change)="$event ? selection.toggle(row) : null"
-                                      [checked]="selection.isSelected(row)">
-                        </mat-checkbox> -->
+                      <td mat-cell *matCellDef="let row; let i = index" style="width:70px;">
+                        <!-- {{i}}
+                         <mat-checkbox (click)="$event.stopPropagation()"
+                         [checked]="selected === i" (change)="selected = i">
+                        </mat-checkbox>
+                        {{row.selected}} -->
+                        <mat-radio-button class="pos"
+                        name="rhSelectionRadio" 
+                        [value]="rowIndex" 
+                         (click)="selectRow($event, row.TABLE_NAME)"
+                        [checked]="row.selected">
+                       </mat-radio-button>
                       </td>
                     </ng-container>
                   
@@ -52,7 +71,7 @@
                     <!-- Name Column -->
                     <ng-container matColumnDef="name">
                       <th mat-header-cell *matHeaderCellDef> Name </th>
-                      <td mat-cell *matCellDef="let element"> {{element.TABLE_NAME}} </td>
+                      <td mat-cell *matCellDef="let element" (click)="getdataframeFromTable(element.OWNER, element.TABLE_NAME)"> {{element.TABLE_NAME}} </td>
                     </ng-container>
                                                
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -64,7 +83,7 @@
                     </div>
                   <br><br>
                     <div>
-                      <button  mat-raised-button (click)="logSelection()">Console Log Selected</button>
+                      <button  mat-raised-button (click)="logSelection()">Selected ITEM</button>
                     </div>
               </div> 
             </mat-card>

@@ -2,6 +2,8 @@ import { Component, OnInit,ViewChild } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { HttpService } from 'src/app/services/http-service.service';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { PreviewDialogComponent } from '../../../../shared/preview-dialog/preview-dialog.component';
 
 export interface PeriodicElement {
   OWNER: string;
@@ -22,8 +24,14 @@ export class SchemaTableComponent implements OnInit {
   selection = new SelectionModel<PeriodicElement>(true, []);
   schemaTable: any = {};
   connectionTable: any = {};
+  dataframe: any;
+  newTable;
+  newTableItem: any = [];
+  selectedItem;
+  private defaultSelected = 0
+  private selectionNew: number
  
-  constructor(private http: HttpService,) {
+  constructor(private http: HttpService,public dialog: MatDialog,) {
     const schema = JSON.parse(localStorage.getItem('schema'));
     this.schemaTable = schema.schema;
     const dataTable = JSON.parse(localStorage.getItem('dataTable'));    
@@ -35,14 +43,11 @@ export class SchemaTableComponent implements OnInit {
     
   }
 
-  newTable;
-  newTable2: any = [];
-  selectedItem;
+
 
   getconnectionTables(item) {
-    console.log(item)
     this.selectedItem = item;
-    this.newTable2 = [];
+    this.newTableItem = [];
     const payload = {
       host: this.connectionTable.host,
       port: this.connectionTable.port,
@@ -51,18 +56,44 @@ export class SchemaTableComponent implements OnInit {
       password: this.connectionTable.password,
       schema : item
     }
-     this.http.getconnectionTables(payload).subscribe((result: any) => {
+    this.http.getconnectionTables(payload).subscribe((result: any) => {
+      console.log('123', result);
        this.newTable = result.tables;
        Object.entries(this.newTable).map(item => {
-         this.newTable2.push(item[1]);
+         this.newTableItem.push(item[1]);
        })
-       const ELEMENT_DATA: PeriodicElement[] = this.newTable2;
+       const ELEMENT_DATA: PeriodicElement[] = this.newTableItem;
        //console.log('ELEMENT_DATA', ELEMENT_DATA)
        this.dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
        this.dataSource.paginator = this.paginator;
     }, (error) => {
       
     });
+  }
+
+  getdataframeFromTable(item ,table) {
+    const payload = {
+      host: this.connectionTable.host,
+      port: this.connectionTable.port,
+      dbName: this.connectionTable.dbName,
+      userName: this.connectionTable.userName,
+      password: this.connectionTable.password,
+      schema : item,
+      table : table
+    }
+
+    this.http.getDataframeFromTable(payload).subscribe((result: any) => {
+      this.dataframe = result.dataframe ? result.dataframe : {};
+      this.dialog.open(PreviewDialogComponent, {
+        width: '95%',
+        // height: '95%',
+        data: {
+         ...this.dataframe
+        }
+     });
+   }, (error) => {
+     
+   });
   }
 
     /** Whether the number of selected elements matches the total number of rows. */
@@ -85,44 +116,16 @@ export class SchemaTableComponent implements OnInit {
       this.dataSource.filter = filterValue;
     }
   
-    logSelection() {
+  logSelection() {
+    console.log(this.selection.selected);
       this.selection.selected.forEach(s => console.log(s.TABLE_NAME));
-    }
-  
-  // getAbc() {
-  //   const ELEMENT_DATA: PeriodicElement[] = [
-  //     {name: 'Hydrogen'},
-  //     {name: 'Helium'},
-  //     {name: 'Hydrogen'},
-  //     { name: 'Helium' },
-  //     {name: 'Hydrogen'},
-  //     {name: 'Helium'},
-  //     {name: 'Hydrogen'},
-  //     { name: 'Helium' },
-  //     {name: 'Hydrogen'},
-  //     {name: 'Helium'},
-  //     {name: 'Hydrogen'},
-  //     { name: 'Helium' },
-  //     {name: 'Hydrogen'},
-  //     { name: 'Helium' },
-  //     {name: 'Hydrogen'},
-  //     {name: 'Helium'},
-  //     {name: 'Hydrogen'},
-  //     {name: 'Helium'},
-  //     {name: 'Hydrogen'},
-  //     { name: 'Helium' },
-  //     {name: 'Hydrogen'},
-  //     {name: 'Helium'},
-  //     {name: 'Hydrogen'},
-  //     { name: 'Helium' },
-  //     {name: 'Hydrogen'},
-  //     {name: 'Helium'},
-  //     {name: 'Hydrogen'},
-  //     {name: 'Helium'}
-  //   ];
-  //   this.dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
-  // }
-    
+  }
+  selectionValue;
+  selectRow($event: any, row: Element) {    
+    this.selectionValue = row;
+    console.log(this.selectionValue);
+  }
+      
 }
 
 

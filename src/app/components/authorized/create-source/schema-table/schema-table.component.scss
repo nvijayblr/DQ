@@ -68,9 +68,9 @@
     background-color: lavender;
   }
 }
-::ng-deep.mat-pseudo-checkbox{
-  display: none !important;
-}
+// ::ng-deep.mat-pseudo-checkbox{
+//   display: none !important;
+// }
 table {
   width: 100%;
 }
@@ -94,6 +94,39 @@ table {
   pointer-events: none;
   color: #aaa;
 }
+
+::ng-deep .ag-grid-wrapper{
+  height: 400px !important;
+}
+
+td.mat-cell:last-of-type{
+  padding-right: 24px;
+  cursor: pointer;
+  font-family: 'open-sans-regular';
+  font-size: 13px;
+}
+td:hover{color : #b00000}
+::ng-deep .mat-list-option{
+  font-family: 'open-sans-regular';
+  font-size: 13px;
+}
 .active{
-  background: rgba(0,0,0,.04);
+  background: rgba(0,0,0,.04);  
+  font-size: 13px;
+  
+}
+::ng-deep .mat-radio-label-content{
+  font-family: 'open-sans-condensed-bold';
+  font-size: 13px;
+}
+.schema{
+  ::ng-deep .mat-radio-label {
+    width: 270px!important;
+  }
+}
+
+
+.pos{
+  position: relative;
+  top: 5px;
 }

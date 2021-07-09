@@ -20,7 +20,7 @@ export class PreviewDialogComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log("DATA", this.data)
+    //console.log("DATA", this.data)
     this.parseSourcePreview(this.data)
   }
 
