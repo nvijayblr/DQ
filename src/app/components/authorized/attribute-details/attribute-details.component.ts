@@ -242,6 +242,7 @@ export class AttributeDetailsComponent implements OnInit {
    };
     this.http.getProfiles(payload).subscribe((result: any) => {
       this.profiles = result.profile ? result.profile : [];
+      console.log('this.profiles', this.profiles);
       this.profileDetails = {
         nr_duplicates: result.nr_duplicates,
         nr_totalcols: result.nr_totalcols,

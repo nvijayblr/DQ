@@ -2215,6 +2215,10 @@ td.mat-cell, td.mat-footer-cell{
     //color:#c110a0;
     color: #433683;
    }
+   &.mg2{
+    color: #433683;
+    //margin-left: -26px;
+   }
    &.pt{
      //color: #00a0d2;
      color: #433683;
@@ -2412,6 +2416,14 @@ td.mat-cell, td.mat-footer-cell{
 
 }
 
+.nBg2{
+  background:#f7f9fc;
+  //box-shadow: 0 0 2px #333!important;
+  position: relative;
+  height: 320px;
+
+}
+
 .viewTableN{
   float: right;
   font-size: 14px;
@@ -2472,7 +2484,7 @@ td.mat-cell, td.mat-footer-cell{
 
 .my-custom-scrollbar {
   position: relative;
-  height: 410px;
+  height: 240px;
   overflow: auto;
   width: 100%;
   }
@@ -2486,11 +2498,16 @@ td.mat-cell, td.mat-footer-cell{
 
   .example-card {
     max-width: 400px;
+    background:#f7f9fc;
   }
   
   .example-header-image {
     background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
     background-size: cover;
+  }
+
+  .card-block{
+    padding:20px 0!important;
   }
 
 

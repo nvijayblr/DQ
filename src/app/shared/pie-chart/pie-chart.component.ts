@@ -34,7 +34,7 @@ export class PieChartComponent implements OnInit {
         spacingLeft: 0,
         spacingRight: 0,
         options3d: {
-          enabled: true,
+          enabled: false,
           alpha: 45,
         }
       },
@@ -46,8 +46,8 @@ export class PieChartComponent implements OnInit {
       // },
       plotOptions: {
         pie: {
-          //size: 160,
-          innerSize: 100,
+          size: 160,
+          innerSize: 80,
           depth: 45,
           allowPointSelect: true,
           cursor: 'pointer',

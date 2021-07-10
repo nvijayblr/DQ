@@ -172,31 +172,9 @@
                   <!-- <h1 class="sTitle"> {{attrubute}} </h1> -->
 
                   <div class="flex-containers"> 
-                    <div class="lft-attr">
-
-                      <mat-card class="example-card">
-                        <mat-card-header>
-                          <div mat-card-avatar class="example-header-image"></div>
-                          <mat-card-title><h4 class="attr-tite"> <span class="subT mg">Frequency Groups</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4></mat-card-title>
-                        </mat-card-header>
-                        <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
-                        <mat-card-content>
-                          <p>
-                            The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-                            A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-                            bred for hunting.
-                          </p>
-                        </mat-card-content>
-                        <mat-card-actions>
-                          <button mat-button>LIKE</button>
-                          <button mat-button>SHARE</button>
-                        </mat-card-actions>
-                      </mat-card>
-                      
-
-
+                    <div class="lft-attr"> 
                       <h4 class="attr-tite"> <span class="subT mg">Frequency Groups</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
-                      <mat-card class="nBg">
+                      <mat-card class="nBg2">
                         <div class="viewTableN"> 
                           <img src="assets/images/chart.svg" class="chartV" (click)="changeView('table')" />
                          <span class="divider"></span> 
@@ -243,6 +221,53 @@
                     </div>
 
                     <div class="rgt-attr">
+
+                      <!-- <mat-card class="example-card card-block">
+                        <mat-card-header>
+                          <mat-card-title><h4 class="attr-tite"> <span class="subT mg2">Frequency Groups</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4></mat-card-title>
+                        </mat-card-header>
+                        <highcharts-chart
+                              [Highcharts] = "highcharts" 
+                              [options] = "chartOptions" 
+                              style = "width: 100%; height: 250px; display: block; background:#fff;">
+                           </highcharts-chart>
+                        <mat-card-content  *ngIf="!collapsed">
+                          <table class="table table-bordered table-striped mb-0 attTable" *ngIf="profile.frequncyAnalysis && profile.frequncyAnalysis.length">
+                            <thead>
+                              <tr>
+                                <th scope="col">
+                                  <div class="records">
+                                    <span><img src="assets/images/frequency.svg" class="record1" /> <span class="dp1"> Frequency</span></span>
+                                 </div>
+                                </th>
+                                <th scope="col">
+                                  <div class="records">
+                                    <span><img src="assets/images/counting.svg" class="record1" /> <span class="dp1"> Count</span></span>
+                                 </div>
+                                </th>
+                                <th scope="col" style="width:24%!important;">&nbsp;</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let frequency of profile.frequncyAnalysis">
+                                <td class="tdP">{{frequency.unique_values}}</td>
+                                <td class="tdP">{{frequency.counts}}</td>
+                                <td>
+                                  <mat-progress-bar class="progressbar" mode="determinate" [value]="(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %" ></mat-progress-bar> 
+                                </td>
+                              </tr>
+                            
+                            </tbody>
+                          </table>
+                        </mat-card-content>
+                        <mat-card-actions>
+                          <button mat-button (click)="collapsed=true">Collapse text</button>
+                          <button mat-button (click)="collapsed=false">Uncollapse text</button>
+                       </mat-card-actions>
+                      </mat-card> -->
+
+
+
                       <h4 class="attr-tite"> <span class="subT mg">CORRELATION SUMMARY</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
                       <mat-card class="nBg">
                         <div class="viewTableN"> 

@@ -11,11 +11,10 @@ import * as env from './../../assets/config/env.json';
 export class HttpService  {
 
   private rootUrl = '';
-
-
   private cancelGetPersonalDetailsReq$ = new Subject<void>();
 
   constructor(
+   
     private http: HttpClient,
     private authGuardService: AuthGuardService
   ) {
@@ -354,6 +353,17 @@ export class HttpService  {
   getDataframeFromTable(payload): Observable<any> {
     return this.http.post<any>(`${this.rootUrl}/api/getdataframeFromTable`, payload).pipe(
       tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }));   
+  }
+
+  
+
+  getSearchCollections (payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/MongoCluster_query`, payload).pipe(
+      tap((res : any) => {
       }),
       catchError(err => {
         return throwError(err);

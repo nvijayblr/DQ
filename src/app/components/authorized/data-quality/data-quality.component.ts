@@ -1,7 +1,9 @@
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
+import { HttpService } from 'src/app/services/http-service.service';
+import * as _ from 'lodash';
 
 export interface UserData {
   id: string;
@@ -35,7 +37,7 @@ export class DataQualityComponent implements AfterViewInit {
   @ViewChild(MatPaginator, { static:false}) paginator: MatPaginator;
   @ViewChild(MatSort,{ static:false}) sort: MatSort;
 
-  constructor() {
+  constructor(private http: HttpService) {
     // Create 100 users
     const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
 
@@ -57,7 +59,47 @@ export class DataQualityComponent implements AfterViewInit {
       this.dataSource.paginator.firstPage();
     }
   }
+  searchValue;
+  searchResult: any = [];
+  isLoading: boolean = false;
+  allObjHeader: any = [];
+  allObjKeys: any = [];
+  allObjKeysExt;
+  allObjValues: any = [];
+  collections:any = [];
+    
+  applySearch(event: Event) {  
+    this.searchValue = event;
+    const payload = {
+      query : this.searchValue
+    }
+    this.isLoading = true;
+    this.http.getSearchCollections(payload).subscribe((result: any) => {
+      console.log('result', result);
+      this.isLoading = false;
+      this.searchResult = result;
+      this.allObjHeader = _.keys(this.searchResult);
+      this.allObjValues = _.values(this.searchResult);
+      for (let i = 0; i < this.allObjValues.length; i++) {
+        this.allObjKeys.push(_.keys(this.allObjValues[i][0]))
+      };
+      for (let i = 0; i < this.allObjHeader.length; i++){
+        console.log(this.allObjHeader[i]);
+        this.allObjKeysExt = this.searchResult[this.allObjHeader[i]].map(function (key, value) {
+          return _.values(key);
+        });
+       this.collections.push(this.allObjKeysExt);
+      };
+
+    }, (error) => {
+      alert(error.message);
+    });
+  }
 }
+
+
+
+
 
 /** Builds and returns a new User. */
 function createNewUser(id: number): UserData {

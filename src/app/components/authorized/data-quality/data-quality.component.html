@@ -1,7 +1,36 @@
 <section class="page-body home-bodys wts">
   <div class="container">
      <h1 class="attTitle">My Dashboard</h1>
-     <div class="lftSec">
+
+     <div class="input-group has-search">
+      <span class="fa fa-search form-control-feedback"></span>
+      <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+        aria-describedby="search-addon" [(ngModel)]='searchValue' (keyup.enter)="applySearch($event.target.value)"/>
+      <button type="button" class="btn btn-primary" (click)="applySearch(searchValue)">search</button>
+    </div>
+    <div class="loader-12" *ngIf="isLoading"></div>
+      <div class="mbt" *ngFor="let header of allObjHeader; let i = index;">
+        <h2 class="nTitle">{{header}}</h2>
+        <table class="table table-bordered table-striped mb-0 attTable" >                  
+          <thead scope="col">
+            <tr>
+              <th scope="col" *ngFor="let keyh of allObjKeys[i]">
+                {{keyh}}
+              </th>             
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let collection of collections[i]"> 
+              <td *ngFor="let item of collection">
+              {{item}}
+              </td>
+            </tr>
+          
+          </tbody>
+        </table>
+      </div>
+
+     <div class="lftSec">  
        <h2 class="share-post-title">Data Quality Overview</h2>
        <mat-form-field appearance="fill">
         <mat-label>Select Dates</mat-label>
