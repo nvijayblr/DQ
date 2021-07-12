@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import * as Highcharts from 'highcharts';
 
 @Component({
@@ -6,7 +6,7 @@ import * as Highcharts from 'highcharts';
   templateUrl: './pie-chart.component.html',
   styleUrls: ['./pie-chart.component.scss']
 })
-export class PieChartComponent implements OnInit {
+export class PieChartComponent implements OnInit, OnChanges{
 
   public activity;
   public xData;
@@ -16,14 +16,12 @@ export class PieChartComponent implements OnInit {
   @Input() pieChartData;
 
   constructor() {
-    
-    
-   
   }
 
-  ngOnInit() {
-    setTimeout(() => {
-      console.log('pieChartData5', this.pieChartData);
+  ngOnInit() {   
+  }
+
+  ngOnChanges() {
     this.options = {
       chart: {
         type: 'pie',
@@ -63,9 +61,7 @@ export class PieChartComponent implements OnInit {
         }
       ]
     };
-    console.log('pieChartData3', this.options.series[0].data)
-    Highcharts.chart('container', this.options);
-    }, 1000)
-    
+    Highcharts.chart('container', this.options);    
   }
+  
 }

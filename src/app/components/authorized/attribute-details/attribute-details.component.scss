@@ -2498,7 +2498,15 @@ td.mat-cell, td.mat-footer-cell{
 
   .example-card {
     max-width: 400px;
-    background:#f7f9fc;
+    //background:#f7f9fc;
+    
+  }
+
+  .mat-card-image{
+    background: linear-gradient(
+      60deg
+      ,#ffa726,#fb8c00);
+      height:250px;
   }
   
   .example-header-image {

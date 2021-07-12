@@ -198,10 +198,8 @@ export class AttributeDetailsComponent implements OnInit {
 
   changeProfile(profile) {
     this.profile = profile;
-    console.log('AAA', this.profile.frequncyAnalysis);
     const extractValues = ({ unique_values, counts}) => [unique_values, counts];
     this.chartData = this.profile.frequncyAnalysis.map(extractValues);
-    console.log('result', this.chartData);
     if (this.profile.LengthStatistics) {
       this.setNewCeil(profile.LengthStatistics.Max);
          this.options.floor = profile.LengthStatistics.Min ? profile.LengthStatistics.Min : 0;
@@ -242,7 +240,6 @@ export class AttributeDetailsComponent implements OnInit {
    };
     this.http.getProfiles(payload).subscribe((result: any) => {
       this.profiles = result.profile ? result.profile : [];
-      console.log('this.profiles', this.profiles);
       this.profileDetails = {
         nr_duplicates: result.nr_duplicates,
         nr_totalcols: result.nr_totalcols,
@@ -352,7 +349,6 @@ export class AttributeDetailsComponent implements OnInit {
   getProfileSource() {
     this.http.getProfileSource().subscribe((result: any) => {
       this.allSourceCategory = result.SourceDetailsList;
-      console.log('this.allSourceCategory', this.allSourceCategory)
       const profieData = localStorage.getItem('dq-source-data');
       const uploadMethod = localStorage.getItem('dq-upload-data');
       // this.selectedSource = result.SourceDetailsList.length ? result.SourceDetailsList[0] : [];
