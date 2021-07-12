@@ -28,8 +28,8 @@ export class SchemaTableComponent implements OnInit {
   newTable;
   newTableItem: any = [];
   selectedItem;
-  private defaultSelected = 0
-  private selectionNew: number
+  defaultSelected = 0
+  selectionNew: number
  
   constructor(private http: HttpService,public dialog: MatDialog,) {
     const schema = JSON.parse(localStorage.getItem('schema'));
@@ -57,7 +57,6 @@ export class SchemaTableComponent implements OnInit {
       schema : item
     }
     this.http.getconnectionTables(payload).subscribe((result: any) => {
-      console.log('123', result);
        this.newTable = result.tables;
        Object.entries(this.newTable).map(item => {
          this.newTableItem.push(item[1]);
