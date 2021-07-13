@@ -1563,14 +1563,14 @@ td.mat-cell, td.mat-footer-cell{
     display: inline-block;
     vertical-align: top;
     &.green{
-      color: #4caf50;
+      color: #433683;
       background: rgba(76, 175, 80, 0.1);
       padding: 2px 6px;
       border-radius: 3px;
       margin-bottom: 5px;
     }
     &.red{
-      color: rgb(244, 67, 54);
+      color: #433683;
       background: rgba(244, 67, 54, 0.1);
       padding: 2px 6px;
       border-radius: 3px;
@@ -1709,7 +1709,7 @@ td.mat-cell, td.mat-footer-cell{
        padding-top: 13px;
        padding-left: 15px;
        font-family: 'open-sans-condensed-bold'!important;
-        color: #6a6969!important;
+        color: #000!important;
         font-size: 14px!important;
        &.fst{
          padding-left: 40px;
@@ -2516,6 +2516,75 @@ td.mat-cell, td.mat-footer-cell{
 
   .card-block{
     padding:20px 0!important;
+  }
+
+  ::ng-deep .ngx-slider-floor{
+    visibility: hidden !important;;
+  }
+
+  .minMax{
+    width:100%;
+    font-size: 12px;
+    font-family: 'open-sans-semibold';
+    float:left;
+    .values{
+      float: left;
+      margin-bottom: 10px;
+      &.fr{
+        float: right;
+      }
+    }
+
+    .bar{
+      left: 0;
+      width: 439px;
+      height: 4px;
+      z-index: 1;
+      background: #d8e0f3;
+      border-radius: 2px;
+      float: left;
+      position: relative;
+      top: 14px;
+    }
+  }
+  
+
+  .dot {
+    height: 20px;
+    width: 20px;
+    background-color: #0db9f0;
+    border-radius: 50%;
+    //display: inline-block;
+    position: relative;
+    float: left;
+    top: 6px;
+    &.fr{
+      float: right;
+      height: 32px;
+      width: 32px;
+      position: relative;
+      top: -5px;
+      &:after {
+        content: "";
+        width: 8px;
+        height: 8px;
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        border-radius: 4px;
+        background: #fff;
+      }
+    }
+    &:after {
+      content: "";
+      width: 4px;
+      height: 4px;
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      border-radius: 4px;
+      background: #fff;
+    }
   }
 
 

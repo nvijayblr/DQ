@@ -75,13 +75,46 @@
 
                   </div>
                   <div class="list-item-2 outline wth">
+                    <div class="list outline"> 
+                        <mat-label class="sub-title">Source Data Description<span class="red">*</span></mat-label>
+                        <mat-form-field appearance="fill">
+                          <input matInput placeholder="Source Data Description"  maxlength="50" autocomplete="off" formControlName="sourceDataDescription" />
+                        </mat-form-field>                      
+                    </div>
+                    <div class="list outline m49"> 
+                      <mat-label>Source Category</mat-label>
+                      <mat-form-field appearance="fill"> 
+                        <mat-label>Category</mat-label>                       
+                        <mat-select formControlName="sourceCategory">
+                          <mat-option *ngFor="let srcCat of srcCategory" value="{{srcCat.label}}">
+                            {{srcCat.value}}
+                          </mat-option>                                    
+                        </mat-select>
+                      </mat-form-field>                  
+                  </div>
+
+                  <div class="list outline"> 
+                    <mat-label>Data Owner</mat-label>
+                    <mat-form-field appearance="fill">
+                      <mat-label>Data Owner</mat-label>
+                      <mat-select [disableOptionCentering]="true" #select formControlName="dataOwner">
+                        <mat-select-filter *ngIf="select.focused" [array]="variables" (filteredReturn)="filteredList =$event"></mat-select-filter>
+                        <mat-option *ngFor="let item of filteredList" [value]="item">
+                          {{item}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>                  
+                 </div>
+
+                  </div>
+                  <!-- <div class="list-item-2 outline wth">
                     <div class="list outline lstR">                      
                       <h2 class="nTitle">Advanced Settings</h2>
                       <mat-checkbox class="adv-setting">Start Date Discovery <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></mat-checkbox>
                       <mat-checkbox class="adv-setting">Generate drill through for all data <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></mat-checkbox>
                       <mat-checkbox class="adv-setting">Limit Number of Profile Rows<i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></mat-checkbox>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
               </form>
               </mat-card>

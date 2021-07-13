@@ -198,7 +198,7 @@ export class AttributeDetailsComponent implements OnInit {
 
   changeProfile(profile) {
     this.profile = profile;
-    const extractValues = ({ unique_values, counts}) => [unique_values, counts];
+    const extractValues = ({ unique_values, counts }) => [unique_values.toString(), counts];   
     this.chartData = this.profile.frequncyAnalysis.map(extractValues);
     if (this.profile.LengthStatistics) {
       this.setNewCeil(profile.LengthStatistics.Max);
@@ -240,6 +240,7 @@ export class AttributeDetailsComponent implements OnInit {
    };
     this.http.getProfiles(payload).subscribe((result: any) => {
       this.profiles = result.profile ? result.profile : [];
+      console.log('RESULT', result)
       this.profileDetails = {
         nr_duplicates: result.nr_duplicates,
         nr_totalcols: result.nr_totalcols,
@@ -368,6 +369,8 @@ export class AttributeDetailsComponent implements OnInit {
           return;
         }
       }
+
+      console.log('this.selectedSource', this.selectedSource)
 
       this.loadProfile(this.selectedSource);
       this.loadReferencePreview();

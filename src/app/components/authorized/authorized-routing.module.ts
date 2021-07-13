@@ -13,6 +13,7 @@ import { DataQualityComponent } from './data-quality/data-quality.component';
 import { CreateProfileDataComponent } from './create-profile-data/create-profile-data.component';
 import { OracleComponent } from './create-source/oracle/oracle.component';
 import { SchemaTableComponent } from './create-source/schema-table/schema-table.component';
+import { MainDashboardComponent } from './main-dashboard/main-dashboard.component';
 
 const routes: Routes = [
   {
@@ -20,7 +21,8 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       {
-        path: 'dashboard',
+        //path: 'dashboard',
+        path: 'data-quality-monitoring',
         component: DashboardComponent,
         // canActivate: [AuthGaurd]
       },
@@ -53,10 +55,11 @@ const routes: Routes = [
        { path: 'create-source-data', component: CreateSourceComponent },
        { path: 'attribute-details-data', component: AttributeDetailsComponent },
        { path: 'data-cleaning', component: DataCleaningComponent },
-       { path: 'data-quality', component: DataQualityComponent },
+       { path: 'reference-data', component: DataQualityComponent },
       { path: 'create-profile-data', component: CreateProfileDataComponent },
       { path: 'add-source-data/oracle', component: OracleComponent },
       { path: 'catalog/sources', component: SchemaTableComponent },
+      { path: 'dashboard', component: MainDashboardComponent },
     ]
   },
 ];

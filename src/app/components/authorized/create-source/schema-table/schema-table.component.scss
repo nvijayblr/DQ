@@ -130,3 +130,38 @@ td:hover{color : #b00000}
   position: relative;
   top: 5px;
 }
+.btnBlueGreenN {
+  background: #00AE68;
+  color: #fff;
+  float: right;
+  
+  &.addico{
+    width: 130px;
+    height: 30px;
+    font-family: 'open-sans-condensed-bold'!important;
+     line-height: 17px;
+     outline: none;
+     border: none;
+     //padding-top: 3px;
+     border-radius: 2px;
+     margin-right: 15px;
+    //  box-shadow: none!important;
+     &:hover{
+       background:#059c60;
+     }
+     .mat-icon{
+        font-size: 14px;
+        width: 14px;
+        height: 14px;
+        position: relative;
+        top: 2px;
+     }
+  }
+  &.blue{ 
+    background:#433683;
+    &:hover{ 
+      background:#261f4b;
+    }
+  }
+ 
+}

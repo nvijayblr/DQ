@@ -20,12 +20,12 @@
 
                 <mat-list role="list">
                   <mat-list-item role="listitem" *ngFor="let item of schemaTable | keyvalue; let i = index" (click)="getconnectionTables(item.value.USERNAME)" [class.active]="item.value.USERNAME === selectedItem">
-                    <mat-radio-button class="schema"  [checked]="i == defaultSelected" [value]="i" (change)="selectionNew = $event.value">
+                    <mat-radio-button class="schema" [value]="item.value.USERNAME" (change)="selectionNew = $event.value">
                       {{item.value.USERNAME}}
                     </mat-radio-button>
                   </mat-list-item>
                 </mat-list>
-                <!-- <mat-card style="margin-top: 1rem">
+                 <!-- <mat-card style="margin-top: 1rem">
                   Currently selected: {{selectionNew}}
                 </mat-card>  -->
 
@@ -81,8 +81,12 @@
                     <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
                     </div>
                   <br><br>
-                    <div>
+                    <!-- <div>
                       <button  mat-raised-button (click)="logSelection()">Selected ITEM</button>
+                    </div> -->
+
+                    <div>
+                      <button class="btnBlueGreenN addico blue"  mat-raised-button (click)="profileConfigureSourceForOracle()">Proceed</button>
                     </div>
               </div> 
             </mat-card>

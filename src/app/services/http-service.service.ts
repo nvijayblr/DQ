@@ -359,7 +359,14 @@ export class HttpService  {
       }));   
   }
 
-  
+  profileConfigureSourceForOracle(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/configureSourceForOracle`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }));   
+  }
 
   getSearchCollections (payload): Observable<any> {
     return this.http.post<any>(`${this.rootUrl}/api/MongoCluster_query`, payload).pipe(
@@ -368,6 +375,25 @@ export class HttpService  {
       catchError(err => {
         return throwError(err);
       }));   
+  }
+
+  getDBCollections(): Observable<any> {
+    return this.http.get<any>(`${this.rootUrl}/api/GetDB_Collections`).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }));   
+  }
+
+  getDBPreview(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/MongoDB_Collection_Preview`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
   }
 
   // Users Management

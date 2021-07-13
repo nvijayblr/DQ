@@ -55,8 +55,7 @@ export class PieChartComponent implements OnInit, OnChanges{
         {
           name: 'Delivered amount',
           data: [
-          ...this.pieChartData
-           
+          ...this.pieChartData           
           ]
         }
       ]

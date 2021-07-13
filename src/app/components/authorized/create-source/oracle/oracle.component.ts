@@ -16,11 +16,18 @@ export class OracleComponent implements OnInit {
   testConnectivity: any = {};
   schema: any = {};
   isLoading = false;
+  srcCategory = [];
+  public filteredList;
+  srcDataOwner: any = {};
+  public variables = [];
   constructor( private fb: FormBuilder, private router: Router, public dialog: MatDialog,private http: HttpService,) { }
 
   ngOnInit() {
     this.roleForm = this.fb.group({
       customName: ['', [Validators.required]],
+      sourceDataDescription: ['', []],
+      sourceCategory: ['', []],
+      dataOwner: ['', []],
       host: ['', [Validators.required]],
       port: ['', [Validators.required]],
       databaseName: ['', [Validators.required]],
@@ -28,9 +35,11 @@ export class OracleComponent implements OnInit {
       password: ['', [Validators.required]],
       rememberPassword :['Yes', []],
     });
+    this.getsourceCategory();
+    this.getdataOwner();
   }
 
-
+  configureSourceForOracle;
   getConnectionSchema() {
       this.roleForm.markAllAsTouched();
       if (!this.roleForm.valid) {
@@ -44,6 +53,22 @@ export class OracleComponent implements OnInit {
       password: this.roleForm.controls.password.value,
     }
     localStorage.setItem('dataTable', JSON.stringify(this.dataTable));
+    this.configureSourceForOracle = {
+      source: {
+        sourceDataName: this.roleForm.controls.customName.value,
+        sourceDataDescription: this.roleForm.controls.sourceDataDescription.value,
+        sourceFileName: "",
+        templateSourcePath: "",
+        dataOwner: this.roleForm.controls.dataOwner.value,
+        dataUser: [],
+        dataProcessingOwner: [],
+        reference: [],
+        settings: {
+        },
+        type: "oracle",
+      }
+    }
+    localStorage.setItem('configureSourceForOracle', JSON.stringify(this.configureSourceForOracle));
       const payload = {
         host: this.roleForm.controls.host.value,
         port: this.roleForm.controls.port.value,
@@ -89,6 +114,22 @@ export class OracleComponent implements OnInit {
       // dialogRef.afterClosed().subscribe(result => {
       //   console.log(result)        
       // });
-    }
+  }
+  
+  getsourceCategory() {
+    this.http.getsourceCategory().subscribe((result: any) => {
+      this.srcCategory = result.sourceCategory;
+    });
+  }
+
+  getdataOwner() {
+    this.http.getdataOwner().subscribe((result: any) => {
+      this.srcDataOwner = result.userList;
+      this.srcDataOwner.map(data => {
+        this.variables.push(data.name);
+      });
+      this.filteredList = this.variables.slice();
+    });
+  }
 
 }

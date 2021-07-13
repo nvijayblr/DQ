@@ -1,0 +1,98 @@
+<section class="page-body home-bodys wts">
+  <div class="container">
+     <h1 class="attTitle">My Dashboard</h1>
+     <div class="lftSec">  
+       <h2 class="share-post-title">Data Quality Overview</h2>
+       <mat-form-field appearance="fill">
+        <mat-label>Select Dates</mat-label>
+        <mat-select>
+          <mat-option>
+            date1
+          </mat-option>
+          <mat-option>
+            date2
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+        <mat-form-field>         
+          <mat-label>Filter</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+        </mat-form-field>
+        
+        <div class="mat-elevation-z8">
+          <table mat-table [dataSource]="dataSource" matSort>
+        
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+              <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+            </ng-container>
+        
+            <!-- Progress Column -->
+            <ng-container matColumnDef="progress">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Progress </th>
+              <td mat-cell *matCellDef="let row"> {{row.progress}}% </td>
+            </ng-container>
+        
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+              <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+            </ng-container>
+        
+            <!-- Fruit Column -->
+            <ng-container matColumnDef="fruit">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Fruit </th>
+              <td mat-cell *matCellDef="let row"> {{row.fruit}} </td>
+            </ng-container>
+        
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            </tr>
+          </table>
+        
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        </div>
+    </div>
+    <div class="lftSec last">
+      <h2 class="share-post-title">My Tasks</h2>
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSourceMy">
+      
+          <!-- Position Column -->
+          <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef> No. </th>
+            <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+          </ng-container>
+      
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+          </ng-container>
+      
+          <!-- Weight Column -->
+          <ng-container matColumnDef="weight">
+            <th mat-header-cell *matHeaderCellDef> Weight </th>
+            <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
+          </ng-container>
+      
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="symbol">
+            <th mat-header-cell *matHeaderCellDef> Symbol </th>
+            <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+          </ng-container>
+      
+          <tr mat-header-row *matHeaderRowDef="displayedMyColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedMyColumns;"></tr>
+        </table>
+      
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+    </div>
+  </div>
+</section>

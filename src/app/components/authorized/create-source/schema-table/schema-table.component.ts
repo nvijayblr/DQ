@@ -29,21 +29,22 @@ export class SchemaTableComponent implements OnInit {
   newTableItem: any = [];
   selectedItem;
   defaultSelected = 0
-  selectionNew: number
+  selectionNew: string
+  getConfigureSourceForOracle;
  
   constructor(private http: HttpService,public dialog: MatDialog,) {
     const schema = JSON.parse(localStorage.getItem('schema'));
     this.schemaTable = schema.schema;
     const dataTable = JSON.parse(localStorage.getItem('dataTable'));    
     this.connectionTable = dataTable;
+    this.getConfigureSourceForOracle = JSON.parse(localStorage.getItem('configureSourceForOracle'));
+    console.log(this.getConfigureSourceForOracle);
   }
 
   ngOnInit() {
     this.getconnectionTables(this.schemaTable[0].USERNAME);
     
   }
-
-
 
   getconnectionTables(item) {
     this.selectedItem = item;
@@ -95,6 +96,42 @@ export class SchemaTableComponent implements OnInit {
    });
   }
 
+  profileConfigureSourceForOracle() {
+    const item = this.selectionNew;
+    const table = this.selectionValue
+    const payload = {
+      source: {
+        sourceDataName: this.getConfigureSourceForOracle.source.sourceDataName,
+        sourceDataDescription: this.getConfigureSourceForOracle.source.sourceDataDescription,
+        sourceFileName: "",
+        templateSourcePath: "",
+        dataOwner: [],
+        dataUser: [],
+        dataProcessingOwner: [],
+        type: "oracle",
+        connectionDetails: {
+          host: this.connectionTable.host,
+          port: this.connectionTable.port,
+          dbName: this.connectionTable.dbName,
+          username: this.connectionTable.userName,
+          password: this.connectionTable.password,
+          schema: item,
+          sourceTableName: table
+        }
+      },
+      reference: [],
+      settings: {},
+    }
+
+    console.log(payload)
+
+    this.http.profileConfigureSourceForOracle(payload).subscribe((result: any) => {
+      console.log('RESULT', result);
+   }, (error) => {
+     console.log(error.message);
+   });
+  }
+
     /** Whether the number of selected elements matches the total number of rows. */
     isAllSelected() {
       const numSelected = this.selection.selected.length;
@@ -115,14 +152,14 @@ export class SchemaTableComponent implements OnInit {
       this.dataSource.filter = filterValue;
     }
   
-  logSelection() {
-    console.log(this.selection.selected);
-      this.selection.selected.forEach(s => console.log(s.TABLE_NAME));
-  }
+  // logSelection() {
+  //   console.log(this.selection.selected);
+  //     this.selection.selected.forEach(s => console.log(s.TABLE_NAME));
+  // }
   selectionValue;
   selectRow($event: any, row: Element) {    
     this.selectionValue = row;
-    console.log(this.selectionValue);
+    //console.log(this.selectionValue);
   }
       
 }

@@ -22,6 +22,7 @@ import { DataQualityComponent } from './data-quality/data-quality.component';
 import { CreateProfileDataComponent } from './create-profile-data/create-profile-data.component';
 import { OracleComponent } from './create-source/oracle/oracle.component';
 import { SchemaTableComponent } from './create-source/schema-table/schema-table.component';
+import { MainDashboardComponent } from './main-dashboard/main-dashboard.component';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { SchemaTableComponent } from './create-source/schema-table/schema-table.
     DataQualityComponent,
     CreateProfileDataComponent,
     OracleComponent,
-    SchemaTableComponent
+    SchemaTableComponent,
+    MainDashboardComponent
   ],
    imports: [
     HighchartsChartModule,
