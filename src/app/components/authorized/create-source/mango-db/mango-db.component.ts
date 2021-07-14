@@ -10,6 +10,7 @@ import { HttpService } from '../../../../services/http-service.service';
 })
 export class MangoDBComponent implements OnInit {
   analysisForm: FormGroup;
+  srcCategory = [];
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -27,7 +28,11 @@ export class MangoDBComponent implements OnInit {
       sourceFileName: ['', []],
       database: ['', [Validators.required, Validators.maxLength(100)]],
       collection: ['', [Validators.required, Validators.maxLength(100)]],
+      sourceCategory: ['', [Validators.required]],
     });
+
+    this.getsourceCategory();
+    
   }
 
   sourceFile: any = {};
@@ -137,6 +142,12 @@ export class MangoDBComponent implements OnInit {
       });
 
 
+  }
+
+  getsourceCategory() {
+    this.http.getsourceCategory().subscribe((result: any) => {
+      this.srcCategory = result.sourceCategory;
+    });
   }
 
 }

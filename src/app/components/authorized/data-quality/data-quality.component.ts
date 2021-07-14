@@ -96,7 +96,7 @@ export class DataQualityComponent implements OnInit {
   cityKey;
   collectionKey: any = [];
   collectionValue : any = [];
-  getDBPreview() {
+  getDBPreview() {    
     const payload = {
       client_url : "",
       db: this.getDB.controls.database.value,
@@ -105,13 +105,10 @@ export class DataQualityComponent implements OnInit {
     this.isLoadingCO = true;
     this.http.getDBPreview(payload).subscribe((result: any) => {
       this.isLoadingCO = false;
+      this.rowData = [];
+    this.columnDefs = [];
       this.collectionTable = result.Preview;
-    //   this.cityKey = _.keys(result.Preview);
-    //  console.log(_.values(result.Preview));
-    //   this.collectionKey.push(_.keys(result.Preview[0]));
-    //   const newTableSrc = _.values(result.Preview);
-    //   console.log(newTableSrc);
-
+      if (this.collectionTable) {     
       Object.keys(this.collectionTable).map((key, index) => {
         this.rowData.push({
           ...this.collectionTable[key]
@@ -125,11 +122,13 @@ export class DataQualityComponent implements OnInit {
           });
         });
       }
+    }
   
       this.isPreviewLoaded = true;
       this.isPreviewLoading = false;
 
     }, (error) => {
+      this.isLoadingCO = false;
       alert(error.message);
     })
   }

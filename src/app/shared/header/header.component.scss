@@ -327,6 +327,14 @@
    }
    &:last-child a {
      border-width: 0;
+     &:hover {
+      color: #fff;
+       transition: 0.25s ease;
+     }
+     &.active {
+        border-bottom: 2px solid #efa800;
+        transition: width .3s;
+     }
    }
  }
 }

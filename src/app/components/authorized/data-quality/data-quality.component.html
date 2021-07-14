@@ -1,9 +1,85 @@
 <section class="page-body home-bodys wts">
-  <div class="container">
-     <h1 class="attTitle">REFERNCE DATA</h1>
-     <div>
-      <button  class="btnBlueGreenN addico" routerLink="/auth/add-source-data/mango-db">UPLOAD SOURCE</button>
+  <div class="dashBoard container">   
+  <div class="flex-containers">
+    <div class="dash-left">
+      <div class="srcTop"><mat-icon>widgets</mat-icon> Collection</div>
+      <mat-accordion>
+        <!-- (opened)="setOpened(i)"
+          (closed)="setClosed(i)" -->
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title >category</mat-panel-title>                   
+          </mat-expansion-panel-header>
+          <mat-list role="list">
+            <mat-list-item role="listitem">
+                <div class="lftItem" matTooltip="source Data Name" >
+                <mat-icon> layers</mat-icon> 
+                source Data Name            
+                </div>                      
+               <mat-icon class="ed" matTooltip="Edit Source" >edit</mat-icon>
+               <mat-icon class="de" matTooltip="Delete Source">delete</mat-icon>
+           </mat-list-item>
+          </mat-list>                                
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title >category2</mat-panel-title>                   
+          </mat-expansion-panel-header>
+          <mat-list role="list">
+            <mat-list-item role="listitem">
+                <div class="lftItem" matTooltip="source Data Name" >
+                <mat-icon> layers</mat-icon> 
+                source Data Name            
+                </div>                      
+               <mat-icon class="ed" matTooltip="Edit Source" >edit</mat-icon>
+               <mat-icon class="de" matTooltip="Delete Source">delete</mat-icon>
+           </mat-list-item>
+          </mat-list>                                
+        </mat-expansion-panel>
+      </mat-accordion>
+      <div class="createLft">
+        <button type="button" class="btnBlueGreenN addico fl"
+        routerLink="/auth/add-source-data/mango-db" matTooltip="" >
+        <mat-icon>add</mat-icon>
+        UPLOAD SOURCE
+        </button>
+      </div>
     </div>
+    <div class="dash-right"> 
+      <h1 class="no-margin ms nTitle">Reference Data</h1>
+     <!-- <div>
+      <button  class="btnBlueGreenN addico" routerLink="/auth/add-source-data/mango-db">UPLOAD SOURCE</button>
+    </div> -->
+
+
+     <div class="input-group has-search">
+      <span class="fa fa-search form-control-feedback"></span>
+      <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+        aria-describedby="search-addon" [(ngModel)]='searchValue' (keyup.enter)="applySearch($event.target.value)"/>
+      <button type="button" class="btn btn-primary" (click)="applySearch(searchValue)">search</button>
+    </div>
+    <div class="loader-12" *ngIf="isLoading"></div>
+       <div class="mbt" *ngFor="let header of allObjHeader; let i = index;">
+        <h2 class="nTitle">{{header}}</h2>
+        <table class="table table-bordered table-striped mb-0 attTable" >                  
+          <thead scope="col">
+            <tr>
+              <th scope="col" *ngFor="let keyh of allObjKeys[i]">
+                {{keyh}}
+              </th>             
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let collection of collections[i]"> 
+              <td *ngFor="let item of collection">
+              {{item}}
+              </td>
+            </tr>
+          
+          </tbody>
+        </table>
+      </div> 
+
       <button  class="btnBlueGreenN addico blue" (click)="getDBCollections()">GET DB COLLECTIONS</button>
       <div class="loader-12" *ngIf="isLoadingDB" style="margin-top:40px;"></div>
       <div *ngIf="showAllDetails">
@@ -55,35 +131,9 @@
             [suppressRowClickSelection]="false"     
             ></app-ag-grid>
       </div>
-
-     <div class="input-group has-search">
-      <span class="fa fa-search form-control-feedback"></span>
-      <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
-        aria-describedby="search-addon" [(ngModel)]='searchValue' (keyup.enter)="applySearch($event.target.value)"/>
-      <button type="button" class="btn btn-primary" (click)="applySearch(searchValue)">search</button>
     </div>
-    <div class="loader-12" *ngIf="isLoading"></div>
-       <div class="mbt" *ngFor="let header of allObjHeader; let i = index;">
-        <h2 class="nTitle">{{header}}</h2>
-        <table class="table table-bordered table-striped mb-0 attTable" >                  
-          <thead scope="col">
-            <tr>
-              <th scope="col" *ngFor="let keyh of allObjKeys[i]">
-                {{keyh}}
-              </th>             
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let collection of collections[i]"> 
-              <td *ngFor="let item of collection">
-              {{item}}
-              </td>
-            </tr>
-          
-          </tbody>
-        </table>
-      </div> 
   </div>
+</div>
 </section>
 
 

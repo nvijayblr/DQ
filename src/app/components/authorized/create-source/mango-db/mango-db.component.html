@@ -62,6 +62,18 @@
                                     <input matInput placeholder="Collection" formControlName="collection" maxlength="250" autocomplete="off"/>
                                   </mat-form-field>
                                   </div>
+
+                                  <div class="list-item-2 outline split">
+                                    <mat-label class="mtop sub-title">Database/Category</mat-label>                                                    
+                                    <mat-form-field appearance="fill">
+                                      <mat-label >Category</mat-label> 
+                                      <mat-select formControlName="sourceCategory">
+                                        <mat-option *ngFor="let srcCat of srcCategory" value="{{srcCat.label}}">
+                                          {{srcCat.value}}
+                                        </mat-option>                                    
+                                      </mat-select>
+                                      </mat-form-field>
+                                    </div>
                              
                               <div class="bdr"></div>
                                           
