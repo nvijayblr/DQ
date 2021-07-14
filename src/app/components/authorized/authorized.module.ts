@@ -23,6 +23,7 @@ import { CreateProfileDataComponent } from './create-profile-data/create-profile
 import { OracleComponent } from './create-source/oracle/oracle.component';
 import { SchemaTableComponent } from './create-source/schema-table/schema-table.component';
 import { MainDashboardComponent } from './main-dashboard/main-dashboard.component';
+import { MangoDBComponent } from './create-source/mango-db/mango-db.component';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { MainDashboardComponent } from './main-dashboard/main-dashboard.componen
     CreateProfileDataComponent,
     OracleComponent,
     SchemaTableComponent,
-    MainDashboardComponent
+    MainDashboardComponent,
+    MangoDBComponent
   ],
    imports: [
     HighchartsChartModule,

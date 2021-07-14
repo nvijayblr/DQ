@@ -1,10 +1,9 @@
 import {AfterViewInit, Component, ViewChild, OnInit} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+
 import { HttpService } from 'src/app/services/http-service.service';
 import * as _ from 'lodash';
 import { FormBuilder, FormGroup, FormArray, Validators, AbstractControl, FormControl } from '@angular/forms';
+
 
 
 @Component({
@@ -14,6 +13,12 @@ import { FormBuilder, FormGroup, FormArray, Validators, AbstractControl, FormCon
 })
   
 export class DataQualityComponent implements OnInit {
+  isPreviewLoaded = false;
+  isPreviewLoading = false;
+  defaultColDefs = { sortable: true, filter: true, minWidth: 180, resizable: true };
+  rowData: any = [];
+  columnDefs: any = [];
+
 
   getDB: FormGroup;
   constructor(private http: HttpService, private fb: FormBuilder,) {
@@ -27,6 +32,8 @@ export class DataQualityComponent implements OnInit {
     });
 
   }
+
+
   
   searchValue;
   searchResult: any = [];
@@ -63,22 +70,29 @@ export class DataQualityComponent implements OnInit {
       alert(error.message);
     });
   }
+
   db;
   dbCollections;
   showAllDetails: boolean = false;
-  isLoadingDB : boolean = false;
+  isLoadingDB: boolean = false;
+  newDB;
   getDBCollections() {
     this.isLoadingDB = true;
     this.showAllDetails = false
     this.http.getDBCollections().subscribe((result: any) => {
+      this.newDB = result.Cluster_Contents;
       this.db = _.keys(result.Cluster_Contents);
-      this.dbCollections = _.keys(result.Collection_Contents);
+      //this.dbCollections = _.keys(result.Collection_Contents);
       this.isLoadingDB = false;
       this.showAllDetails = true
     })
   }
+
+  onOptionsSelected(value:string){
+    this.dbCollections = this.newDB[value]
+}
   isLoadingCO: boolean = false;
-  collectionTable;
+  collectionTable: any = [];
   cityKey;
   collectionKey: any = [];
   collectionValue : any = [];
@@ -89,18 +103,32 @@ export class DataQualityComponent implements OnInit {
       collection : this.getDB.controls.databaseCollection.value
     }
     this.isLoadingCO = true;
-    this.http.getDBPreview(payload).subscribe((result: any) => {      
+    this.http.getDBPreview(payload).subscribe((result: any) => {
+      this.isLoadingCO = false;
       this.collectionTable = result.Preview;
-      this.cityKey = _.keys(result.Preview);
-      console.log(this.cityKey);
-      this.collectionKey.push(_.keys(result.Preview[0]));
-      for (var i = 0; i < this.cityKey.length; i++) {
-        //console.log(_.keys(result.Preview[i]));
-        //console.log(_.values(result.Preview[i]));        
-        this.collectionValue.push(_.values(result.Preview[i]));
-        this.isLoadingCO = false;
+    //   this.cityKey = _.keys(result.Preview);
+    //  console.log(_.values(result.Preview));
+    //   this.collectionKey.push(_.keys(result.Preview[0]));
+    //   const newTableSrc = _.values(result.Preview);
+    //   console.log(newTableSrc);
+
+      Object.keys(this.collectionTable).map((key, index) => {
+        this.rowData.push({
+          ...this.collectionTable[key]
+        });
+      });
+      if (this.rowData.length) {
+        Object.keys(this.rowData[0]).map((key, index) => {
+          this.columnDefs.push({
+            field: key,
+            ...this.defaultColDefs
+          });
+        });
       }
-      //console.log(this.collectionValue);
+  
+      this.isPreviewLoaded = true;
+      this.isPreviewLoading = false;
+
     }, (error) => {
       alert(error.message);
     })

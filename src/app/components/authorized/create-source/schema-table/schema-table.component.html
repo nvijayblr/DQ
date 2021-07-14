@@ -20,7 +20,7 @@
 
                 <mat-list role="list">
                   <mat-list-item role="listitem" *ngFor="let item of schemaTable | keyvalue; let i = index" (click)="getconnectionTables(item.value.USERNAME)" [class.active]="item.value.USERNAME === selectedItem">
-                    <mat-radio-button class="schema" [value]="item.value.USERNAME" (change)="selectionNew = $event.value">
+                    <mat-radio-button class="schema" [checked]="i == defaultSelected" [value]="item.value.USERNAME" (change)="selectionNew = $event.value">
                       {{item.value.USERNAME}}
                     </mat-radio-button>
                   </mat-list-item>
@@ -42,6 +42,7 @@
                       <input type="text" class="form-control" placeholder="Search"  (keyup)="applyFilter($event.target.value)">
                     </div>
                   </div>
+                  <mat-error class="nerr" *ngIf="tableErr">Please Select any one of the table Row</mat-error>
                   <table mat-table [dataSource]="dataSource">
                   
                     <!-- Checkbox Column -->

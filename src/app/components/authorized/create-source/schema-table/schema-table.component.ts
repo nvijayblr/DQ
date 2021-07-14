@@ -1,6 +1,7 @@
 import { Component, OnInit,ViewChild } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpService } from 'src/app/services/http-service.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PreviewDialogComponent } from '../../../../shared/preview-dialog/preview-dialog.component';
@@ -31,8 +32,9 @@ export class SchemaTableComponent implements OnInit {
   defaultSelected = 0
   selectionNew: string
   getConfigureSourceForOracle;
+  profileType: string;
  
-  constructor(private http: HttpService,public dialog: MatDialog,) {
+  constructor(private http: HttpService,public dialog: MatDialog,private router: Router,private route: ActivatedRoute) {
     const schema = JSON.parse(localStorage.getItem('schema'));
     this.schemaTable = schema.schema;
     const dataTable = JSON.parse(localStorage.getItem('dataTable'));    
@@ -43,7 +45,8 @@ export class SchemaTableComponent implements OnInit {
 
   ngOnInit() {
     this.getconnectionTables(this.schemaTable[0].USERNAME);
-    
+    this.profileType = this.route.snapshot.queryParamMap.get('method');
+
   }
 
   getconnectionTables(item) {
@@ -96,37 +99,54 @@ export class SchemaTableComponent implements OnInit {
    });
   }
 
+  tableErr:boolean = false;
   profileConfigureSourceForOracle() {
-    const item = this.selectionNew;
-    const table = this.selectionValue
+    const formData: any = new FormData();
+    let item = this.selectionNew;
+    const table = this.selectionValue    
+    if (!item) {
+      item = this.schemaTable[0].USERNAME;
+    }
+    if (!table) {
+      this.tableErr = true;
+      return;
+    } else {
+      this.tableErr = false;
+    }
+    console.log(table);
     const payload = {
-      source: {
-        sourceDataName: this.getConfigureSourceForOracle.source.sourceDataName,
-        sourceDataDescription: this.getConfigureSourceForOracle.source.sourceDataDescription,
-        sourceFileName: "",
-        templateSourcePath: "",
-        dataOwner: [],
-        dataUser: [],
-        dataProcessingOwner: [],
-        type: "oracle",
-        connectionDetails: {
-          host: this.connectionTable.host,
-          port: this.connectionTable.port,
-          dbName: this.connectionTable.dbName,
-          username: this.connectionTable.userName,
-          password: this.connectionTable.password,
-          schema: item,
-          sourceTableName: table
-        }
-      },
-      reference: [],
-      settings: {},
+        source: {
+          sourceDataName: this.getConfigureSourceForOracle.source.sourceDataName,
+          sourceDataDescription: this.getConfigureSourceForOracle.source.sourceDataDescription,
+          sourceFileName: "",
+          templateSourcePath: "",
+          dataOwner: [],
+          dataUser: [],
+          dataProcessingOwner: [],
+          type: "oracle",
+          connectionDetails: {
+            host: this.connectionTable.host,
+            port: this.connectionTable.port,
+            dbName: this.connectionTable.dbName,
+            username: this.connectionTable.userName,
+            password: this.connectionTable.password,
+            schema: item,
+            sourceTableName: table
+          }
+        },
+        reference: [],
+        settings: {},
+      
     }
 
-    console.log(payload)
-
-    this.http.profileConfigureSourceForOracle(payload).subscribe((result: any) => {
-      console.log('RESULT', result);
+    formData.append('data', JSON.stringify(payload));
+    this.http.profileConfigureSourceForOracle(formData).subscribe((result: any) => {
+      localStorage.setItem('dq-oracle-data', JSON.stringify(result));
+      if (this.profileType === 'profile') {
+        this.router.navigate(
+          [`auth/attribute-details-data`]
+        );
+      }
    }, (error) => {
      console.log(error.message);
    });

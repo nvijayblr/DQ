@@ -11,7 +11,7 @@
                   <mat-label>Database</mat-label>
                   <mat-form-field appearance="fill"> 
                     <mat-label>Database</mat-label>                       
-                    <mat-select formControlName="database">
+                    <mat-select formControlName="database" (selectionChange)='onOptionsSelected($event.value)'>
                       <mat-option *ngFor="let srcDB of db" value="{{srcDB}}">
                         {{srcDB}}
                       </mat-option>                                    
@@ -36,28 +36,21 @@
 
           </div>
         </form>
+        <div>
         <button  class="btnBlueGreenN addico" (click)="getDBPreview()">GET DB PREVIEW</button>
-
+      </div>
       </div>
       <div class="loader-12" *ngIf="isLoadingCO" style="margin-top:40px;"></div>
-      <div>
-        <table class="table table-bordered table-striped mb-0 attTable" >                  
-          <thead scope="col">
-            <tr *ngFor="let keyh of collectionKey">
-              <th scope="col" *ngFor="let keyB of keyh">
-                {{keyB}}
-              </th>             
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let ctable of collectionValue"> 
-              <td *ngFor="let item of ctable">
-              {{item}}
-              </td>
-            </tr>
-          
-          </tbody>
-        </table>
+      <div style="clear: both;">
+        <app-ag-grid
+            floatingFilter="true"
+            *ngIf="isPreviewLoaded"
+            [rowData]="rowData"
+            [columnDefs]="columnDefs"
+            [pageSize]="50"
+            [rowSelection]="'multiple'"
+            [suppressRowClickSelection]="false"     
+            ></app-ag-grid>
       </div>
 
      <div class="input-group has-search">
@@ -67,7 +60,7 @@
       <button type="button" class="btn btn-primary" (click)="applySearch(searchValue)">search</button>
     </div>
     <div class="loader-12" *ngIf="isLoading"></div>
-      <div class="mbt" *ngFor="let header of allObjHeader; let i = index;">
+       <div class="mbt" *ngFor="let header of allObjHeader; let i = index;">
         <h2 class="nTitle">{{header}}</h2>
         <table class="table table-bordered table-striped mb-0 attTable" >                  
           <thead scope="col">
@@ -86,6 +79,10 @@
           
           </tbody>
         </table>
-      </div>
+      </div> 
   </div>
 </section>
+
+
+
+    

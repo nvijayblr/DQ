@@ -79,7 +79,7 @@
                      <section>
                         <div class="flipbox">
                           <div class="back">
-                           <div class="ol" routerLink="/auth/add-source-data/oracle">
+                           <div class="ol" routerLink="/auth/add-source-data/oracle" [queryParams]="{ method:profileType}">
                               <img src="assets/images/oracle.png" />
                               <p>Oracle</p>
                             </div> 
@@ -106,7 +106,7 @@
 
                       <section>
                         <div class="flipbox">
-                          <div class="back pl10">
+                          <div class="back pl10" routerLink="/auth/add-source-data/mango-db" [queryParams]="{ method:profileType}">
                               <img src="assets/images/mango.png" />
                               <p class="pl4">MongoDB</p>
                           </div>

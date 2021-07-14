@@ -14,6 +14,7 @@ import { CreateProfileDataComponent } from './create-profile-data/create-profile
 import { OracleComponent } from './create-source/oracle/oracle.component';
 import { SchemaTableComponent } from './create-source/schema-table/schema-table.component';
 import { MainDashboardComponent } from './main-dashboard/main-dashboard.component';
+import { MangoDBComponent } from './create-source/mango-db/mango-db.component';
 
 const routes: Routes = [
   {
@@ -60,6 +61,7 @@ const routes: Routes = [
       { path: 'add-source-data/oracle', component: OracleComponent },
       { path: 'catalog/sources', component: SchemaTableComponent },
       { path: 'dashboard', component: MainDashboardComponent },
+      { path: 'add-source-data/mango-db', component: MangoDBComponent },
     ]
   },
 ];

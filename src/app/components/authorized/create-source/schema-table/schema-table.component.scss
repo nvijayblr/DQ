@@ -165,3 +165,23 @@ td:hover{color : #b00000}
   }
  
 }
+.nerr{
+  position: relative;
+  top: -16px;
+  left: 8px;
+  font-family: 'open-sans-condensed-bold';
+  background: #FFBABA;
+  color: #D8000C;
+  padding: 3px 9px;
+  width: 99%;
+  font-size: 12px;
+  margin-top: 40px;
+  &.ftw{
+   width: 120px;
+  }
+  &.ftw1{
+    width: 180px;
+    top: -3px;
+    left: -10px;
+   }
+}

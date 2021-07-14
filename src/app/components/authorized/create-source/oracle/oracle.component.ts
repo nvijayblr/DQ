@@ -20,7 +20,8 @@ export class OracleComponent implements OnInit {
   public filteredList;
   srcDataOwner: any = {};
   public variables = [];
-  constructor( private fb: FormBuilder, private router: Router, public dialog: MatDialog,private http: HttpService,) { }
+  profileType: string;
+  constructor( private fb: FormBuilder, private router: Router, public dialog: MatDialog,private http: HttpService,private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.roleForm = this.fb.group({
@@ -37,6 +38,7 @@ export class OracleComponent implements OnInit {
     });
     this.getsourceCategory();
     this.getdataOwner();
+    this.profileType = this.route.snapshot.queryParamMap.get('method');
   }
 
   configureSourceForOracle;
@@ -79,7 +81,10 @@ export class OracleComponent implements OnInit {
        this.http.getConnectionSchema(payload).subscribe((result: any) => {
          this.schema = result ? result : {};
          localStorage.setItem('schema', JSON.stringify(this.schema));
-         this.router.navigate([`auth/catalog/sources`]);
+         this.router.navigate(
+           [`auth/catalog/sources`],
+           { queryParams: { method: this.profileType } }
+         );
       }, (error) => {
         this.schema = {};
       });

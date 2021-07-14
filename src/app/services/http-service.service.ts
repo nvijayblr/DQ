@@ -395,6 +395,17 @@ export class HttpService  {
       }),
     );
   }
+  saveSourceMangoDB(payload, method): Observable<any> {
+    return this.http[method]<any>(`${this.rootUrl}/api/createNewMongoDBSource`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+
 
   // Users Management
   loginRequest(payload): Observable<any> {
