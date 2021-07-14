@@ -1,6 +1,9 @@
 <section class="page-body home-bodys wts">
   <div class="container">
      <h1 class="attTitle">REFERNCE DATA</h1>
+     <div>
+      <button  class="btnBlueGreenN addico" routerLink="/auth/add-source-data/mango-db">UPLOAD SOURCE</button>
+    </div>
       <button  class="btnBlueGreenN addico blue" (click)="getDBCollections()">GET DB COLLECTIONS</button>
       <div class="loader-12" *ngIf="isLoadingDB" style="margin-top:40px;"></div>
       <div *ngIf="showAllDetails">
@@ -36,7 +39,7 @@
 
           </div>
         </form>
-        <div>
+      <div>
         <button  class="btnBlueGreenN addico" (click)="getDBPreview()">GET DB PREVIEW</button>
       </div>
       </div>

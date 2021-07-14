@@ -1,57 +1,33 @@
 import {AfterViewInit, Component, ViewChild, OnInit} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { HttpService } from 'src/app/services/http-service.service';
 import * as _ from 'lodash';
+import * as moment from 'moment';
 import { FormBuilder, FormGroup, FormArray, Validators, AbstractControl, FormControl } from '@angular/forms';
 
-export interface UserData {
-  id: string;
-  name: string;
-  progress: string;
-  fruit: string;
-}
-
-/** Constants used to fill up our data base. */
-const FRUITS: string[] = [
-  'blueberry', 'lychee', 'kiwi', 'mango', 'peach', 'lime', 'pomegranate', 'pineapple'
-];
-const NAMES: string[] = [
-  'Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack', 'Charlotte', 'Theodore', 'Isla', 'Oliver',
-  'Isabella', 'Jasper', 'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'
-];
 
 @Component({
   selector: 'app-main-dashboard',
   templateUrl: './main-dashboard.component.html',
   styleUrls: ['./main-dashboard.component.scss']
 })
-export class MainDashboardComponent implements AfterViewInit {
-
-  displayedColumns: string[] = ['id', 'name', 'progress', 'fruit'];
-  dataSource: MatTableDataSource<UserData>;
-
-  displayedMyColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSourceMy = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+export class MainDashboardComponent implements OnInit {
+  displayedColumns: string[] = ['completeness', 'Accuracy', 'Uniqueness', 'Validity'];
+  dataSource;
 
   @ViewChild(MatPaginator, { static:false}) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
+  userLogin;
   getDB: FormGroup;
   constructor(private http: HttpService, private fb: FormBuilder,) {
-    
-    // Create 100 users
-    const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
-
-    // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(users);
+    this.userLogin = JSON.parse(localStorage.getItem('dq_rights'));    
   }
 
   
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-    this.dataSourceMy.paginator = this.paginator;
+  ngOnInit() {
+    this.getSourceResults();
   }
   
 
@@ -63,59 +39,47 @@ export class MainDashboardComponent implements AfterViewInit {
       this.dataSource.paginator.firstPage();
     }
   }
- 
-    
- 
-  
+  allSourceCategory;
+  sourceByCategory:any = [];;
+  newObj;
+  taskDetails: any = [];
+  uploadDate: any = [];
+  getSourceResults() {
+    const payload = {
+      username : this.userLogin.name,
+    }
+    this.http.getSourceResults(payload).subscribe((result: any) => {
+      this.allSourceCategory = result;
+      console.log(result);
+      this.allSourceCategory.map((result, i) => {
+        this.taskDetails.push({'sourceID' : result.sourceId, 'sourceDes' : result.sourceDesc, 'sourceName' : result.sourceName })
+      })
+      Object.keys(this.allSourceCategory).map((key, index) => {
+        this.newObj = this.allSourceCategory[key].results.map((val, i) => {
+          return val;
+        });
+      });
+      this.newObj.map((key, index) => {
+        this.uploadDate.push(key.uploadDate);
+        this.sourceByCategory.push(key.results);
+      })
 
+      console.log(this.uploadDate);
+
+      //console.log(moment(this.uploadDate).format('MM-DD-YYYY'));
+           
+      const ELEMENT_DATA: PeriodicElement[] = this.sourceByCategory;
+      this.dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+      this.dataSource.sort = this.sort;
+       this.dataSource.paginator = this.paginator;
+    });
+  }
 }
 
-
-
-
-
-
-
-/** Builds and returns a new User. */
-function createNewUser(id: number): UserData {
-  const name = NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-    NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
-
-  return {
-    id: id.toString(),
-    name: name,
-    progress: Math.round(Math.random() * 100).toString(),
-    fruit: FRUITS[Math.round(Math.random() * (FRUITS.length - 1))]
-  };
-
-}
 
 export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
+  completeness: string;
+  Accuracy: number;
+  Uniqueness: number;
+  Validity: string;
 }
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-  {position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na'},
-  {position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg'},
-  {position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al'},
-  {position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si'},
-  {position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P'},
-  {position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S'},
-  {position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl'},
-  {position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar'},
-  {position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K'},
-  {position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca'},
-];

@@ -86,6 +86,11 @@ export class MangoDBComponent implements OnInit {
       return;
     }
 
+    if (!this.sourceFile.name) {
+      alert('Please upload the source file.');
+      return;
+    }
+
     if (this.sourceFile.name) {
       formData.append('file[]', this.sourceFile);
     }
