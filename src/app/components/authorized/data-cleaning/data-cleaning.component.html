@@ -1,4 +1,4 @@
-<section class="page-body home-bodys" *ngIf="showAllDetails">
+<section class="page-body home-bodys wts" *ngIf="showAllDetails">
   <div class="container">
     <div class="">
       <mat-card class="border no-rounded list shrare-post mct noFile">
@@ -58,45 +58,44 @@
               </div>
             </div>           
             <div class="dash-right">
-              <h1 class="no-margin ms nTitle">Summary - {{titleSrc}}</h1>
+              <h1 class="no-margin ms nTitle">Summary</h1>
               <div class="flex-containers">
               <mat-card class="border no-rounded list shrare-post mct pad10">
                 <div class="summaryBlock fst">
-                  <div class="topTitle green">Records</div>
-                  <div class="mid-cnt">  {{profileDetails.nr_totalrecords}}</div>
+                  <div class="mid-cnt">Records</div>
+                  <div class="topTitle green">{{profileDetails.nr_totalrecords}}</div>                  
                 </div>
                 <div class="dividerTop"></div>
                 <div class="summaryBlock">
-                  <div class="topTitle red">Total Columns</div>
-                  <div class="mid-cnt"> {{profileDetails.nr_totalcols}}</div>
+                  <div class="mid-cnt">Total Columns </div>
+                  <div class="topTitle red">{{profileDetails.nr_totalcols}}</div>
+                  
+                </div>
+                 <div class="dividerTop"></div>
+                <div class="summaryBlock">
+                  <div class="mid-cnt"> Numeric Columns</div>
+                  <div class="topTitle green">{{profileSummary.numeric}} </div>                 
+                </div>
+               <div class="dividerTop"></div>
+                <div class="summaryBlock">
+                  <div class="mid-cnt"> Alphabetic Columns</div>
+                  <div class="topTitle red">{{profileSummary.alphabetic}}</div>                  
+                </div>
+                 <div class="dividerTop"></div>
+                <div class="summaryBlock">
+                  <div class="mid-cnt">Alphanumeric Columns </div>
+                  <div class="topTitle green">{{profileSummary.alphanumeric}}</div>                  
                 </div>
                 <div class="dividerTop"></div>
                 <div class="summaryBlock">
-                  <div class="topTitle green">Nr - Numeric Columns</div>
-                  <div class="mid-cnt"> {{profileSummary.numeric}}</div>
-                </div>
-                <div class="dividerTop"></div>
-                <div class="summaryBlock">
-                  <div class="topTitle red">Nr - Alphabetic Columns</div>
-                  <div class="mid-cnt"> {{profileSummary.alphabetic}}</div>
-                </div>
-                <div class="dividerTop"></div>
-                <div class="summaryBlock">
-                  <div class="topTitle green">Nr - Alphanumeric Columns</div>
-                  <div class="mid-cnt"> {{profileSummary.alphanumeric}}</div>
-                </div>
-                <div class="dividerTop"></div>
-
-                <div class="summaryBlock">
-                  <div class="topTitle red">Duplicates</div>
-                  <div class="mid-cnt"> {{profileDetails.nr_duplicates}}</div>
+                  <div class="mid-cnt">Duplicates </div>
+                  <div class="topTitle red">{{profileDetails.nr_duplicates}}</div>                  
                 </div>
                 <div class="dividerTop"></div>
                 <div class="summaryBlock lst">
-                  <div class="topTitle green">Total Null Counts</div>
-                  <div class="mid-cnt"> {{profileSummary.nullcounts}}</div>
+                  <div class="mid-cnt">Total Null Counts</div>
+                  <div class="topTitle green">{{profileSummary.nullcounts}}</div>                 
                 </div>
-
               </mat-card> 
 
               <!-- <mat-card class="border no-rounded list shrare-post mini-card minC">
@@ -158,7 +157,19 @@
 
             <div class="profileView valign">
               <div class="analysis-infoDashboard">
-                <div style="text-align: right">
+                <div style="width: 100%;text-align: right;">
+                <div style="text-align: right; display: inline-block;">
+                  <button 
+                    type="button" 
+                    (click)="showCleanLogs()"
+                    [disabled]="!isCleanLog"
+                    class="button3d btnPush btnPurple addico w-t"
+                    >
+                    <mat-icon> history</mat-icon> Logs 
+                  </button>
+                </div>
+
+                <div style="text-align: right; display: inline-block;">
                   <button 
                     type="button" 
                     (click)="showSaveConfirm(source)"
@@ -169,6 +180,7 @@
                     <mat-icon> save</mat-icon> Save 
                   </button>
                 </div>
+              </div>
                 <div class="category-list-wrapper clearfix">
                   <owl-carousel-o class="selected" [options]="profileOptions">
                     <ng-template carouselSlide *ngFor="let profile of profiles;">
@@ -408,8 +420,8 @@
                   </mat-card>
                  
                 <!-- Preview -->
-                <mat-card class="border no-rounded list shrare-post mat-card source-preview-card">
-                  <div class="list flex-containers space-between">
+                <mat-card class="border no-rounded list shrare-post mat-card source-preview-card" *ngIf="showPreviewTable">
+                  <div class="list">
                     <h1 class="share-post-title">Preview</h1>
                   </div>
                   <app-progress-bar [message]="'Loading preview...'" class="component" *ngIf="isPreviewLoading"></app-progress-bar>
@@ -425,133 +437,351 @@
                   ></app-ag-grid>
                 </mat-card>
       
-                <div class="lft-attr">
-                  <mat-card class="bg-violet" *ngIf="profile.attributeSummary">
-                    <h4 class="attr-tite">Attribute Summary <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
-                    <div class="records">
-                       <span>records</span>
-                       {{profile.attributeSummary?.records}}
-                    </div>
-                    <div class="dotDiv"></div>
-                    <div class="records">
-                      <span>Data type</span>
-                      {{profile.attributeSummary?.dataType}}
-                    </div>
-                    <div class="dotDiv"></div>
-                    <div class="records">
-                      <span>Null Counts</span>
-                      <a href="javascript: void(0)" *ngIf="profile.attributeSummary && profile.attributeSummary.null_records" (click)="loadPreview('nan')">
-                        {{profile.attributeSummary?.null_records}}
-                      </a>
-                      <div *ngIf="profile.attributeSummary && !profile.attributeSummary.null_records">
-                        {{profile.attributeSummary?.null_records}}
+                <div class="flex-containers"> 
+                  <div class="lft-attr"> 
+                    <h4 class="attr-tite"> <span class="subT mg">Frequency Groups</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
+                    <mat-card class="nBg2">
+                      <div class="viewTableN"> 
+                        <img src="assets/images/chart.svg" class="chartV" (click)="changeView('table')" />
+                       <span class="divider"></span> 
+                       <img src="assets/images/table.svg" class="tabV" (click)="changeView('chart')" />                  
                       </div>
+                      <div *ngIf="showtable">
+                        <app-pie-chart [pieChartData]="chartData" ></app-pie-chart>
                     </div>
-                    <div class="action-btn" *ngIf="profile.attributeSummary?.null_records">
-                      <button 
-                        type="button" 
-                        mat-mini-fab color="accent"
-                        matTooltip="Impute Columns"
-                      ><mat-icon>layers_clear</mat-icon></button>
-                      <button 
-                        type="button" 
-                        mat-mini-fab color="warn"
-                        matTooltip="Delete Records"
-                      ><mat-icon>delete</mat-icon></button>
-                      <button 
-                        type="button" 
-                        mat-mini-fab color="warn"
-                        matTooltip="Delete Duplicates"
-                      ><mat-icon>delete_sweep</mat-icon></button>
-                    </div>
-                  </mat-card>
-              
-                    <mat-card class="bg-magenta" *ngIf="profile.frequncyAnalysis && profile.frequncyAnalysis.length">
-                       <h4 class="attr-tite">Frequency Groups <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
-                       <div class="frequencyContainer" [class.frequencyShow]="frequencyShow">
-                       <table>
-                          <tr>
-                             <th>Frequency</th>
-                             <th>Count</th>
-                             <th style="width:20%">&nbsp;</th>
-                          </tr>
-                          <tr *ngFor="let frequency of profile.frequncyAnalysis">
-                             <td>{{frequency.unique_values}}</td>
-                             <td>{{frequency.counts}}</td>
-                             <td><mat-progress-bar mode="determinate" [value]="(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %" ></mat-progress-bar></td>
-                          </tr>
-                       </table>
-                    </div>
-                    <button *ngIf="profile.frequncyAnalysis.length > 3" class="frequencyBtn" (click)="frequencyShow = !frequencyShow">
-                       <mat-icon *ngIf="!frequencyShow">expand_more</mat-icon> <mat-icon *ngIf="frequencyShow">expand_less</mat-icon> </button>  
-                    </mat-card>
-                      
-                    <mat-card class="bg-blue" *ngIf="profile.patternAnalysis && profile.patternAnalysis.length">
-                       <h4 class="attr-tite">Pattern Analysis <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
-                       <div class="frequencyContainer" [class.patternShow]="patternShow">
-                       <table>
-                          <tr>
-                             <th>Value</th>
-                             <th>Count</th>
-                             <th style="width:20%">&nbsp;</th>
-                          </tr>
-                          <tr *ngFor="let pattern of profile.patternAnalysis">
-                             <td>{{pattern.unique_values}}</td>
-                             <td>{{pattern.counts}}</td>
-                             <td><mat-progress-bar mode="determinate" [value]="(pattern.counts * 100) / profile.attributeSummary?.records | number:'1.0-2' " matTooltip="{{(pattern.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %"></mat-progress-bar></td>
-                          </tr>
-                       </table>
-                    </div>
-                    <button *ngIf="profile.patternAnalysis.length > 3" class="patternBtn" (click)="patternShow = !patternShow"><!--  {{ patternShow ? 'Show less'  : 'Show More'  }} -->
-                       <mat-icon *ngIf="!patternShow">expand_more</mat-icon> <mat-icon *ngIf="patternShow">expand_less</mat-icon> </button> 
-                    </mat-card>
-              
-                 </div>
-                 <div class="rgt-attr">
-                    <!-- <mat-card class="wt2">
-                       <h4 class="attr-tite">Count <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
-                       <div class="records">
-                          <highcharts-chart
-                             [Highcharts] = "highcharts" 
-                             [options] = "chartOptions" 
-                             style = "width: 100%; height: 400px; display: block;">
-                          </highcharts-chart>
-              
-                       </div>                          
-                    </mat-card> -->
-                    <mat-card class="honeydew" *ngIf="profile.LengthStatistics">
-                     <h4 class="attr-tite">Length Statistics
-                        <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
-            
-                        <div class="custom-slider">
-                           <ngx-slider [(value)]="profile.LengthStatistics.Min" [(highValue)]="profile.LengthStatistics.Max" [options]="sliderOptions"></ngx-slider>
-                        </div>
-                   </mat-card>
-                    <mat-card class="bg-green" *ngIf="profile.maskAnalysis && profile.maskAnalysis.length">
-                       <h4 class="attr-tite">Mask Analysis <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
-                       <div class="frequencyContainer" [class.maskShow]="maskShow">
-                        <table>
+                    <div *ngIf="!showtable">
+                      <div class="table-wrapper-scroll-y my-custom-scrollbar">
+
+                        <table class="table table-bordered table-striped mb-0 attTable" *ngIf="profile.frequncyAnalysis && profile.frequncyAnalysis.length">
+                          <thead>
                             <tr>
-                              <th>Value</th>
-                              <th>Count</th>
-                              <th style="width:20%">&nbsp;</th>
+                              <th scope="col">
+                                <div class="records">
+                                  <span><img src="assets/images/frequency.svg" class="record1" /> <span class="dp1"> Frequency</span></span>
+                               </div>
+                              </th>
+                              <th scope="col">
+                                <div class="records">
+                                  <span><img src="assets/images/counting.svg" class="record1" /> <span class="dp1"> Count</span></span>
+                               </div>
+                              </th>
+                              <th scope="col" style="width:24%!important;">&nbsp;</th>
                             </tr>
-                
-                            <tr *ngFor="let mask of profile.maskAnalysis">
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let frequency of profile.frequncyAnalysis">
+                              <td class="tdP">{{frequency.unique_values}}</td>
+                              <td class="tdP">{{frequency.counts}}</td>
                               <td>
-                                <a href="javascript: void(0)" (click)="loadPreview('mask', mask.unique_values)">
-                                  {{mask.unique_values}}
-                                </a>
+                                <mat-progress-bar class="progressbar" mode="determinate" [value]="(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %" ></mat-progress-bar> 
                               </td>
-                              <td>{{mask.counts}}</td>
-                              <td><mat-progress-bar mode="determinate" [value]="(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'}} %"></mat-progress-bar></td>
                             </tr>
+                          
+                          </tbody>
                         </table>
+                      
                       </div>
-                      <button *ngIf=" profile.maskAnalysis.length > 3" class="maskShowBtn" (click)="maskShow = !maskShow">  <!-- {{ maskShow ? 'Show less'  : 'Show More'  }} -->
-                       <mat-icon *ngIf="!maskShow">expand_more</mat-icon> <mat-icon *ngIf="maskShow">expand_less</mat-icon> </button> 
+          
+                    </div>
                     </mat-card>
-               </div>  
+                  </div>
+
+                  <div class="rgt-attr">
+                    <h4 class="attr-tite"> <span class="subT gb">Correlation Summary</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
+                   <mat-card class="bg-green ch2" style="height:320px;">                       
+                      <app-corelation-summary [summary]="profile.correlationSummary"></app-corelation-summary> 
+                      <!-- <highcharts-chart
+                            [Highcharts] = "highcharts" 
+                            [options] = "chartOptions" 
+                            style = "width: 100%; height: 400px; display: block;">
+                         </highcharts-chart> -->
+                   </mat-card>               
+                    <!-- <h4 class="attr-tite"> <span class="subT mg">CORRELATION SUMMARY</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
+                    <mat-card class="nBg">
+                      <div class="viewTableN"> 
+                        <img src="assets/images/chart.svg" class="chartV" (click)="changeView('table')" />
+                       <span class="divider"></span> 
+                       <img src="assets/images/table.svg" class="tabV" (click)="changeView('chart')" />                  
+                      </div>
+                      <highcharts-chart
+                            [Highcharts] = "highcharts" 
+                            [options] = "chartOptions" 
+                            style = "width: 100%; height: 400px; display: block;">
+                         </highcharts-chart> 
+                    </mat-card>-->
+
+                    
+                  </div>
+                </div>
+
+
+                <div class="flex-containers">                                    
+                <div class="lft-attr">
+                  <h4 class="attr-tite"> <span class="subT m">Attribute Summary</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
+                  <mat-card class="bg-violet ch"> 
+                    <table>
+                      <tr>
+                        <th>
+                          <div class="recordsTop">
+                            <span><img src="assets/images/database.svg" class="record" /> records</span>
+                            
+                         </div>
+                         <!-- <div class="dotDiv"></div> -->
+                        </th>
+                        <th>
+                          <div class="recordsTop">
+                            <span><img src="assets/images/type.svg" class="record1" /> <span class="dp1"> type</span></span>
+                            
+                         </div>
+   
+                         <!-- <div class="dotDiv"></div> -->
+                        </th>
+                        <th>
+                          <div class="recordsTop">
+                            <span><img src="assets/images/type.svg" class="record1" /> <span class="dp1"> NULL COUNTS</span></span>
+                           
+                         </div>
+                        </th>
+                      </tr>
+                      <tr>
+                        <td><span class="dp">{{profile.attributeSummary?.records}}</span></td>
+                        <td><span class="dp al">{{profile.attributeSummary?.dataType}}</span></td>
+                        <td><span class="dp al1">
+                          <a href="javascript: void(0)" *ngIf="profile.attributeSummary && profile.attributeSummary.null_records" (click)="showPreviewDetails()">
+                            {{profile.attributeSummary?.null_records}}
+                          </a>
+                          <div *ngIf="profile.attributeSummary && !profile.attributeSummary.null_records">
+                            {{profile.attributeSummary?.null_records}}
+                          </div>
+                        </span></td>
+                      </tr>                       
+                    </table>                                          
+                  </mat-card> 
+                  
+                  
+
+
+                  <!-- <h4 class="attr-tite"> <span class="subT mg">Frequency Groups</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
+                  <mat-card class="bg-magenta ch1" *ngIf="profile.frequncyAnalysis && profile.frequncyAnalysis.length">                     
+                    <div class="frequencyContainer" [class.frequencyShow]="frequencyShow">
+                    <table>
+                       <tr>
+                          <th>
+                            <div class="records">
+                              <span><img src="assets/images/frequency.svg" class="record1" /> <span class="dp1"> Frequency</span></span>
+                           </div>
+                            </th>
+                          <th>
+                            <div class="records">
+                              <span><img src="assets/images/counting.svg" class="record1" /> <span class="dp1"> Count</span></span>
+                           </div>
+                          <th style="width:20%">&nbsp;</th>
+                       </tr>
+                       <tr *ngFor="let frequency of profile.frequncyAnalysis">
+                          <td class="fst">{{frequency.unique_values}}</td>
+                          <td class="mid">{{frequency.counts}}</td>
+                          <td>
+                             <mat-progress-bar mode="determinate" [value]="(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %" ></mat-progress-bar> 
+                           
+                          </td>
+                       </tr>
+                    </table>
+                 </div>
+                 <button *ngIf="profile.frequncyAnalysis.length > 3" class="frequencyBtn" (click)="frequencyShow = !frequencyShow">
+                    <mat-icon *ngIf="!frequencyShow">expand_more</mat-icon> <mat-icon *ngIf="frequencyShow">expand_less</mat-icon> </button>  
+                 </mat-card> -->
+
+                 <h4 class="attr-tite"> <span class="subT pt">Pattern Analysis</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
+
+                 <mat-card class="bg-blue ch1">
+                  <div *ngIf="profile.patternAnalysis && profile.patternAnalysis.length; else noPattern">
+                  <div class="frequencyContainer" [class.patternShow]="patternShow">
+                    <table>
+                      <tr>
+                         <th>
+                           <div class="records">
+                             <span><img src="assets/images/value.svg" class="record1" /> <span class="dp1"> Value</span></span>
+                          </div>
+                           </th>
+                         <th>
+                           <div class="records">
+                             <span><img src="assets/images/counting.svg" class="record1" /> <span class="dp1"> Count</span></span>
+                          </div>
+                         <th style="width:20%">&nbsp;</th>
+                      </tr>
+                      <tr *ngFor="let pattern of profile.patternAnalysis">
+                        <td>{{pattern.unique_values}}</td>
+                        <td class="mid">{{pattern.counts}}</td>
+                        <td>
+                           <mat-progress-bar mode="determinate" [value]="(pattern.counts * 100) / profile.attributeSummary?.records | number:'1.0-2' " matTooltip="{{(pattern.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %"></mat-progress-bar> 
+                        
+                          <!-- <mat-slider 
+                          min="0" 
+                          max="100" 
+                          step="1" 
+                          [value]="(pattern.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'"
+                          matTooltip="{{(pattern.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %"
+                          >
+                          </mat-slider> -->
+                        </td>
+                     </tr>
+                   </table>
+                  <!-- <table>
+                     <tr>
+                        <th><img src="assets/images/value.svg" class="freq" /> Value </th>
+                        <th>Count <img src="assets/images/count.png" class="freq" /></th>
+                        <th style="width:20%">&nbsp;</th>
+                     </tr>
+                     <tr *ngFor="let pattern of profile.patternAnalysis">
+                        <td>{{pattern.unique_values}}</td>
+                        <td>{{pattern.counts}}</td>
+                        <td><mat-progress-bar mode="determinate" [value]="(pattern.counts * 100) / profile.attributeSummary?.records | number:'1.0-2' " matTooltip="{{(pattern.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %"></mat-progress-bar></td>
+                     </tr>
+                  </table> -->
+               </div>
+               <button *ngIf="profile.patternAnalysis.length > 3" class="patternBtn" (click)="patternShow = !patternShow"><!--  {{ patternShow ? 'Show less'  : 'Show More'  }} -->
+                  <mat-icon *ngIf="!patternShow">expand_more</mat-icon> <mat-icon *ngIf="patternShow">expand_less</mat-icon> </button> 
+                </div>
+               <ng-template #noPattern>
+                <div class="not-found" >Not Available</div> 
+               </ng-template>
+               </mat-card>
+                </div>
+                <div class="rgt-attr">
+                  <!-- <app-pie-chart ></app-pie-chart>  -->
+                  <!-- <mat-card class="wt2">
+                      <h4 class="attr-tite">Count <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
+                      <div class="records">
+                         <highcharts-chart
+                            [Highcharts] = "highcharts" 
+                            [options] = "chartOptions" 
+                            style = "width: 100%; height: 400px; display: block;">
+                         </highcharts-chart>
+             
+                      </div>                          
+                   </mat-card>  -->
+                   <!-- <h4 class="attr-tite"> <span class="subT hd">Length Statistics</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
+                   <mat-card class="honeydew ch" > 
+                                         
+                       <div class="custom-slider" *ngIf="profile.LengthStatistics">
+                         <div class="minMax"> 
+                           <div class="values">Min {{profile.LengthStatistics.Min}}</div>
+                           <div class="values fr">Max {{profile.LengthStatistics.Max}}</div>
+                          </div>
+                         <div class="minMax">
+                          <div class="dot"></div>
+                          <div class="bar"></div>
+                          <div class="dot fr"></div>
+                         </div>
+                         
+                       </div>
+                       <div class="custom-slider" *ngIf="!profile.LengthStatistics">
+                        <div class="not-found" *ngIf="!profile.LengthStatistics">
+                            Not Available
+                        </div>
+                     </div>
+                  </mat-card> -->
+
+                  <h4 class="attr-tite"> <span class="subT hd">Length Statistics</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
+                   <mat-card class="honeydew ch" > 
+                                         
+                       <div class="custom-slider" *ngIf="profile.LengthStatistics">
+                         <div class="minMax"> 
+                           <div class="values">Min {{profile.LengthStatistics.Min}}</div>
+                           <div class="values fr">Max {{profile.LengthStatistics.Max}}</div>
+                          </div>
+                         <div class="minMax">
+                          <div class="dot"></div>
+                          <div class="bar"></div>
+                          <div class="dot fr"></div>
+                         </div>
+                         
+                          <!-- <ngx-slider [(value)]="profile.LengthStatistics.Min" [(highValue)]="profile.LengthStatistics.Max" [options]="options"></ngx-slider> -->
+                       </div>
+                       <div class="custom-slider" *ngIf="!profile.LengthStatistics">
+                        <div class="not-found" *ngIf="!profile.LengthStatistics">
+                            Not Available
+                        </div>
+                     </div>
+                     <!-- <div class="not-found" *ngIf="!profile.LengthStatistics">
+                         Not Available
+                    </div> -->
+                  </mat-card>
+                  
+                  <h4 class="attr-tite"> <span class="subT ac">Mask Analysis</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
+                   <mat-card class="aliceblue ch1">
+                     <div *ngIf="profile.maskAnalysis && profile.maskAnalysis.length; else noMask">                       
+                      <div class="frequencyContainer" [class.maskShow]="maskShow" >
+                        <table>
+                          <tr>
+                             <th>
+                               <div class="records">
+                                 <span><img src="assets/images/value.svg" class="record1" /> <span class="dp1"> Value</span></span>
+                              </div>
+                               </th>
+                             <th>
+                               <div class="records">
+                                 <span><img src="assets/images/counting.svg" class="record1" /> <span class="dp1"> Count</span></span>
+                              </div>
+                             <th style="width:20%">&nbsp;</th>
+                          </tr>
+                          <tr *ngFor="let mask of profile.maskAnalysis">
+                            <td>{{mask.unique_values}}</td>
+                            <td class="mid">{{mask.counts}}</td>
+                            <td>
+                               <mat-progress-bar mode="determinate" [value]="(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'}} %"></mat-progress-bar> 
+                              <!-- <mat-slider
+                            min="0" 
+                            max="100" 
+                            step="1" 
+                            [value]="(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'"
+                            matTooltip="{{(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'}} %"
+                            >
+                            </mat-slider> -->
+                            </td>
+                         </tr>
+                       </table>
+                      <!-- <table>
+                         <tr>
+                            <th>Value <img src="assets/images/value.svg" class="freq" /></th>
+                            <th>Count <img src="assets/images/count.png" class="freq" /></th>
+                            <th style="width:20%">&nbsp;</th>
+                         </tr>
+             
+                         <tr *ngFor="let mask of profile.maskAnalysis">
+                            <td>{{mask.unique_values}}</td>
+                            <td>{{mask.counts}}</td>
+                            <td><mat-progress-bar mode="determinate" [value]="(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'}} %"></mat-progress-bar></td>
+                         </tr>
+                      </table> -->
+                   </div>
+                  <button *ngIf="profile.maskAnalysis.length > 3" class="maskShowBtn" (click)="maskShow = !maskShow">  <!-- {{ maskShow ? 'Show less'  : 'Show More'  }} -->
+                      <mat-icon *ngIf="!maskShow">expand_more</mat-icon> <mat-icon *ngIf="maskShow">expand_less</mat-icon> </button> 
+                    </div>
+                    <ng-template #noMask>
+                      <div class="not-found">Not Available</div> 
+                    </ng-template>                                                                  
+                   </mat-card>
+                   <!-- <mat-card class="os aliceblue" *ngIf="profile.staticalAnalysis">
+                      <h4 class="attr-tite">Statistics <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
+                      <table class="table">
+                         <tr class="cpt">
+                         <td class="strong" *ngFor="let stats of profile.staticalAnalysis | keyvalue">{{stats.key}}</td>
+                         </tr>
+                         <tr class="cpt1">
+                         <td *ngFor="let stats of profile.staticalAnalysis | keyvalue">{{stats.value}}</td>
+                         </tr>
+                      </table>
+                   </mat-card> -->
+                   <!-- <h4 class="attr-tite"> <span class="subT gb">Correlation Summary</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
+                   <mat-card class="bg-green ch2">                       
+                      <app-corelation-summary [summary]="profile.correlationSummary"></app-corelation-summary> 
+                     
+                   </mat-card> -->
+    
+                </div>  
+               
+              </div> 
       
                 </div>           
             </div>

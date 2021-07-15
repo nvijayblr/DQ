@@ -8,6 +8,7 @@ import { MessageService } from 'src/app/services/message.service';
 import { HttpService } from 'src/app/services/http-service.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
+import { CleanLogsComponent } from 'src/app/shared/clean-logs/clean-logs.component';
 
 @Component({
   selector: 'app-data-cleaning',
@@ -79,6 +80,8 @@ export class DataCleaningComponent implements OnInit {
   messageDisplay;
   showMessage: boolean = false;
   newMessage;
+  showtable = true;
+  chartData: any = [];
 
    sliderOptions: any = {
       floor: 0,
@@ -274,6 +277,7 @@ export class DataCleaningComponent implements OnInit {
           return;
         }
       }
+      console.log(this.analysis);
       this.loadProfile(this.source);
       this.sourceByCategory =
         _.chain(this.allSourceCategory).
@@ -355,7 +359,9 @@ export class DataCleaningComponent implements OnInit {
   }
 
   changeProfile(profile) {
-      this.profile = profile;
+    this.profile = profile;
+    const extractValues = ({ unique_values, counts }) => [unique_values.toString(), counts];   
+    this.chartData = this.profile.frequncyAnalysis.map(extractValues);
       this.resetPreview();
       this.attrubute = profile.column;
       this.mask.column = profile.column;
@@ -423,7 +429,7 @@ export class DataCleaningComponent implements OnInit {
          this.isLoading = false;
       });
    }
-
+   isCleanLog : boolean = false;
   getCleanedLogs() {
      this.isLogsLoading = true;
      const payload = {
@@ -432,7 +438,11 @@ export class DataCleaningComponent implements OnInit {
       };
      this.http.getCleanedLogs(payload).subscribe((result: any) => {
          this.isLogsLoading = false;
-         this.cleanLogs = result.data ? result.data : [];
+       this.cleanLogs = result ? result : [];
+       if (this.cleanLogs) {
+         this.isCleanLog = true;
+       }
+       console.log('From Clean Logs',this.cleanLogs)
       }, (error) => {
          this.isLogsLoading = false;
       });
@@ -622,7 +632,9 @@ export class DataCleaningComponent implements OnInit {
 
    }
 
-   loadPreview(type, mask = '', callBack: any = '') {
+  showPreviewTable:boolean = false;
+  loadPreview(type, mask = '', callBack: any = '') {
+    this.showPreviewTable = true;
       this.delete.formula.cond_value1 = this.delete.formula.cond_value1 ? this.delete.formula.cond_value1 : '';
       this.delete.formula.cond_value2 = this.delete.formula.cond_value2 ? this.delete.formula.cond_value2 : '';
 
@@ -661,7 +673,6 @@ export class DataCleaningComponent implements OnInit {
   }
   
 
-
   loadProfilePreview(payload, type, callBack) {
      this.loaderMsg = 'Loading preview...';
      this.isPreviewLoaded = false;
@@ -672,7 +683,6 @@ export class DataCleaningComponent implements OnInit {
      this.http.getProfilePreview(payload, type).subscribe((res: any) => {
        const details: any = res.Preview ? res.Preview : {};     
        this.removeItemMessage = res.cols_removed;
-       console.log('removeItemss', this.removeItemMessage)
          if (type === 'data_remove') {
             this.removeItems = {
                cols_removed: res.cols_removed,
@@ -684,13 +694,12 @@ export class DataCleaningComponent implements OnInit {
        }
        this.showMessage = false;
        if (this.delete.category === 'col_nan') {
-         if (this.removeItemMessage.length > 0) {
+         if (this.removeItemMessage && this.removeItemMessage.length > 0) {
           this.showMessage = true;
            console.log(this.removeItemMessage.join(', '));
            this.messageDisplay = this.removeItemMessage.join(', ') ? this.removeItemMessage : [];
            this.newMessage = this.messageDisplay
-         } 
-       
+         }        
       }
          this.parseSourcePreview(details);
          this.isLoading = false;
@@ -839,6 +848,20 @@ export class DataCleaningComponent implements OnInit {
     }
   }
 
+  showCleanLogs() {
+        this.dialog.open(CleanLogsComponent, {
+          width: '900px',
+          data: this.cleanLogs     
+        });
+    }
+  
+    changeView(view) {
+      if (view === 'table') {
+        this.showtable = true;
+      } else {
+        this.showtable = false;
+      }
+    }
 
  // ngAfterViewInit(){
    //    this.elementPosition = this.menuElement.nativeElement.offsetTop;

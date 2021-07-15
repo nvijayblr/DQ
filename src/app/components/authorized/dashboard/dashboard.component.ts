@@ -68,7 +68,8 @@ export class DashboardComponent implements OnInit {
  
    defaultColDefs = { sortable: true, filter: true, minWidth: 180, resizable: true };
    rowData: any = [];
-   columnDefs: any = [];
+  columnDefs: any = [];
+  chartData: any = [];
 
   customOptions: OwlOptions = {
     loop: true,
@@ -177,6 +178,8 @@ export class DashboardComponent implements OnInit {
   
   changeProfile(profile) {
     this.profile = profile;
+    const extractValues = ({ unique_values, counts }) => [unique_values.toString(), counts];   
+    this.chartData = this.profile.frequncyAnalysis.map(extractValues);
     if (this.profile.LengthStatistics) {
        this.options.floor = profile.LengthStatistics.Min ? profile.LengthStatistics.Min : 0;
        this.options.ceil = profile.LengthStatistics.Max ? profile.LengthStatistics.Max : 0;

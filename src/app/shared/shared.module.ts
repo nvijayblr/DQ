@@ -38,6 +38,7 @@ import { ConditionalFormulaEditorComponent } from './conditional-formula-editor/
 import { PreviewDialogComponent } from './preview-dialog/preview-dialog.component';
 import { PieChartComponent } from './pie-chart/pie-chart.component';
 import { ConnectionTestComponent } from './connection-test/connection-test.component';
+import { CleanLogsComponent } from './clean-logs/clean-logs.component';
 
 @NgModule({
    imports: [
@@ -83,6 +84,7 @@ import { ConnectionTestComponent } from './connection-test/connection-test.compo
     PreviewDialogComponent,
     PieChartComponent,
     ConnectionTestComponent,
+    CleanLogsComponent,
   ],
   exports: [
     FormsModule,
@@ -133,7 +135,8 @@ import { ConnectionTestComponent } from './connection-test/connection-test.compo
     ConditionalFormulaEditorComponent,
     PreviewDialogComponent,
     PieChartComponent,
-    ConnectionTestComponent
+    ConnectionTestComponent,
+    CleanLogsComponent
   ]
 })
 export class SharedModule {}
