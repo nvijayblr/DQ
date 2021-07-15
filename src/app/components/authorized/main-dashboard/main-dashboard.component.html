@@ -1,89 +1,170 @@
 <section class="page-body home-bodys wts">
   <div class="container">
-     <h1 class="attTitle">My Dashboard</h1>
-     <div class="lftSec">  
-       <h2 class="share-post-title">Data Quality Overview</h2>
-       <mat-form-field appearance="fill">
-        <mat-label>Select Dates</mat-label>
-        <mat-select>
-          <mat-option>
-            date1
-          </mat-option>
-          <mat-option>
-            date2
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-        <!-- <mat-form-field>         
-          <mat-label>Filter</mat-label>
-          <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
-        </mat-form-field>  -->
+     <h1 class="nTitle">My Dashboard</h1>
+     <mat-tab-group mat-align-tabs="start"  animationDuration="0ms">
+      <mat-tab label="Data Quality Overview"> 
+        <div class="lftSec">  
+          <!-- <h2 class="share-post-title">Data Quality Overview</h2> -->
+          <!-- <mat-form-field appearance="fill">
+           <mat-label>Select Dates</mat-label>
+           <mat-select>
+             <mat-option>
+               date1
+             </mat-option>
+             <mat-option>
+               date2
+             </mat-option>
+           </mat-select>
+         </mat-form-field> -->
+           <!-- <mat-form-field>         
+             <mat-label>Filter</mat-label>
+             <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+           </mat-form-field>  -->
+   
+           <!-- <div class="flex-containers" *ngFor="let src of taskDetails"> -->
+             <!-- <mat-card class="border no-rounded list shrare-post mini-card minC">
+               <div class="topTitle">Type</div>
+               <div class="mid-cnt"> <span class="red">S</span></div>
+             </mat-card> -->
+             <!-- <mat-card class="border no-rounded list shrare-post mini-card minC">
+               <div class="topTitle">ID</div>
+               <div class="mid-cnt"> <span >{{src.sourceID}}</span> </div>
+             </mat-card> -->
+             <!-- <mat-card class="border no-rounded list shrare-post mini-card">
+               <div class="topTitle">Source Name</div>
+               <div class="mid-cnt"> <span class="min">flights_new lot of empty cells</span> </div>
+             </mat-card> -->
+             <!-- <mat-card class="border no-rounded list shrare-post mini-card">
+               <div class="topTitle">File Name</div>
+               <div class="mid-cnt"> <span class="red min">{{src.sourceName}}</span> </div>
+             </mat-card>
+             <mat-card class="border no-rounded list shrare-post mini-card last" style="width: 50%;">
+               <div class="topTitle">Description</div>
+               <div class="mid-cnt"> <span class="min">{{src.sourceDes}}</span> </div>
+             </mat-card> -->
+           <!-- </div> -->
+   
+           <div class="form-group has-search">
+             <span class="fa fa-search form-control-feedback"></span>
+             <input type="text" class="form-control" placeholder="Search"  (keyup)="applyFilter($event)">
+           </div>
+           
+           <div class="mat-elevation-z8" *ngIf="!showDetailedTable">
+             <table #table1 mat-table [dataSource]="dataSource" matSort >   
+               <!-- Position Column -->
+               <ng-container matColumnDef="completeness">
+                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Completeness </th>
+                 <td mat-cell *matCellDef="let element" (click)="getDetailedResults()"> {{element.completeness}} </td>
+               </ng-container>
+             
+               <!-- Name Column -->
+               <ng-container matColumnDef="Accuracy">
+                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Accuracy </th>
+                 <td mat-cell *matCellDef="let element" (click)="getDetailedResults()"> {{element.Accuracy}} </td>
+               </ng-container>
+             
+               <!-- Weight Column -->
+               <ng-container matColumnDef="Uniqueness">
+                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Uniqueness </th>
+                 <td mat-cell *matCellDef="let element" (click)="getDetailedResults()"> {{element.Uniqueness}} </td>
+               </ng-container>
+             
+               <!-- Symbol Column -->
+               <ng-container matColumnDef="Validity">
+                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Validity </th>
+                 <td mat-cell *matCellDef="let element" (click)="getDetailedResults()"> {{element.Validity}} </td>
+               </ng-container>
+             
+               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+               <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+             </table>
+           
+             <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+           </div>
 
-        <div class="flex-containers" *ngFor="let src of taskDetails">
-          <!-- <mat-card class="border no-rounded list shrare-post mini-card minC">
-            <div class="topTitle">Type</div>
-            <div class="mid-cnt"> <span class="red">S</span></div>
-          </mat-card> -->
-          <mat-card class="border no-rounded list shrare-post mini-card minC">
-            <div class="topTitle">ID</div>
-            <div class="mid-cnt"> <span >{{src.sourceID}}</span> </div>
-          </mat-card>
-          <!-- <mat-card class="border no-rounded list shrare-post mini-card">
-            <div class="topTitle">Source Name</div>
-            <div class="mid-cnt"> <span class="min">flights_new lot of empty cells</span> </div>
-          </mat-card> -->
-          <mat-card class="border no-rounded list shrare-post mini-card">
-            <div class="topTitle">File Name</div>
-            <div class="mid-cnt"> <span class="red min">{{src.sourceName}}</span> </div>
-          </mat-card>
-          <mat-card class="border no-rounded list shrare-post mini-card last" style="width: 50%;">
-            <div class="topTitle">Description</div>
-            <div class="mid-cnt"> <span class="min">{{src.sourceDes}}</span> </div>
-          </mat-card>
-        </div>
 
-        <div class="form-group has-search">
-          <span class="fa fa-search form-control-feedback"></span>
-          <input type="text" class="form-control" placeholder="Search"  (keyup)="applyFilter($event)">
-        </div>
+            <div class="mat-elevation-z8" *ngIf="showDetailedTable">
+             <table #table2 mat-table [dataSource]="dataSourceDetails" matSort multiTemplateDataRows> 
+
+                <!-- Position Column -->
+                <ng-container matColumnDef="uploadDate">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header style="width:30%;"> Upload Date </th>
+                  <td mat-cell *matCellDef="let element"> {{element.uploadDate}} </td>
+                </ng-container>
+
+                <!-- Position Column -->
+                <ng-container matColumnDef="sourceName">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Source Name </th>
+                  <td mat-cell *matCellDef="let element"> {{element.sourceName}} </td>
+                </ng-container> 
+
+               <!-- Position Column -->
+               <ng-container matColumnDef="completeness">
+                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Completeness </th>
+                 <td mat-cell *matCellDef="let element"> {{element.completeness}} </td>
+               </ng-container>
+             
+               <!-- Name Column -->
+               <ng-container matColumnDef="Accuracy">
+                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Accuracy </th>
+                 <td mat-cell *matCellDef="let element"> {{element.Accuracy}} </td>
+               </ng-container>
+             
+               <!-- Weight Column -->
+               <ng-container matColumnDef="Uniqueness">
+                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Uniqueness </th>
+                 <td mat-cell *matCellDef="let element"> {{element.Uniqueness}} </td>
+               </ng-container>
+             
+               <!-- Symbol Column -->
+               <ng-container matColumnDef="Validity">
+                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Validity </th>
+                 <td mat-cell *matCellDef="let element"> {{element.Validity}} </td>
+               </ng-container>
+
+               <ng-container matColumnDef="expandedDetail">
+                <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumnsDetails.length" style="padding-left: 0px; padding-right: 0px;">
+                  <div class="example-element-detail"
+                       [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                       
+                    <div class="example-element-description">
+                      <table>
+                        <tr>
+                          <td style="width: 30%;"></td>
+                          <td></td>
+                          <td>{{element.description.completeness}}</td>
+                          <td>{{element.description.Accuracy}}</td>
+                          <td>{{element.description.Uniqueness}}</td>
+                          <td>{{element.description.Validity}}</td>
+                        </tr>
+                      </table>
+                      <!-- {{element.description.Validity}} -->
+                    </div>
+                  </div>
+                </td>
+              </ng-container>
+             
+               <tr mat-header-row *matHeaderRowDef="displayedColumnsDetails"></tr>
+               <tr mat-row *matRowDef="let element; columns: displayedColumnsDetails;"
+               class="example-element-row"
+               [class.example-expanded-row]="expandedElement === element"
+               (click)="expandedElement = expandedElement === element ? null : element"></tr>
+               <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+             </table>
+           
+             <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+           </div>
+       </div>  
+      </mat-tab>
+      <mat-tab label="My Tasks">
+        <div class="lftSec last">
+          <h2 class="share-post-title">My Tasks</h2>
         
-        <div class="mat-elevation-z8">
-          <table mat-table [dataSource]="dataSource" matSort >
+        </div>  
+      </mat-tab>
+    </mat-tab-group>
+     
 
-            <!-- Position Column -->
-            <ng-container matColumnDef="completeness">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Completeness </th>
-              <td mat-cell *matCellDef="let element"> {{element.completeness}} </td>
-            </ng-container>
-          
-            <!-- Name Column -->
-            <ng-container matColumnDef="Accuracy">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Accuracy </th>
-              <td mat-cell *matCellDef="let element"> {{element.Accuracy}} </td>
-            </ng-container>
-          
-            <!-- Weight Column -->
-            <ng-container matColumnDef="Uniqueness">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Uniqueness </th>
-              <td mat-cell *matCellDef="let element"> {{element.Uniqueness}} </td>
-            </ng-container>
-          
-            <!-- Symbol Column -->
-            <ng-container matColumnDef="Validity">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Validity </th>
-              <td mat-cell *matCellDef="let element"> {{element.Validity}} </td>
-            </ng-container>
-          
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>
-        
-          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-        </div>
-    </div>
-    <div class="lftSec last">
-      <h2 class="share-post-title">My Tasks</h2>
-    
-    </div>
+
   </div>
 </section>

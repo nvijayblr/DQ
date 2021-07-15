@@ -237,7 +237,7 @@
 .table tbody td{
    font-family: 'open-sans-regular';
    font-size: 13px;
-   border-top: 1px solid #efeff2;
+   border-top: 0px solid #efeff2!important;
    height: 20px;
 }
 ::ng-deep.mat-option {

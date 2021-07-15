@@ -13,14 +13,12 @@
    padding: 10px 20px;
  }
  .lftSec{
-   width:49%;
+   width:100%;
    display: inline-block;
    vertical-align: top;
-   margin-right: 3%;
+   margin-top:30px;
    &.last{
-     margin-right: 0%;
-     margin-top: 127px;
-      width: 48%;
+      width: 100%;
    }
  }
  table {
@@ -34,6 +32,9 @@
 
 td, th {
   width: 25%;
+}
+td{
+  cursor: pointer;
 }
 .share-post-title {
   font-size: 16px;
@@ -295,4 +296,96 @@ td.mat-cell, td.mat-footer-cell{
      }
    }
   }
+}
+
+::ng-deep .mat-tab-labels{
+  border-bottom:0px;
+}
+::ng-deep .mat-tab-label-content{
+  font-family: 'open-sans-condensed-bold';
+  font-size: 13px;
+}
+::ng-deep .mat-tab-label-active{
+  border-bottom: 4px solid #efa800;
+  background:#f2f1f1;
+}
+
+.nTitle{
+  font-size: 22px;
+  margin-bottom: 20px;
+  position: relative;
+  font-family: 'open-sans-condensed-bold';
+  &:before {
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 50px;
+    height: 4px;
+    content: "";
+    background-color: lavender;
+  }
+}
+
+table {
+  width: 100%;
+}
+
+tr.example-detail-row {
+  height: 0;
+}
+
+tr.example-element-row:not(.example-expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.example-element-row:not(.example-expanded-row):active {
+  background: #efefef;
+}
+
+.example-element-row td {
+  border-bottom-width: 0;
+}
+
+.example-element-detail {
+  overflow: hidden;
+  display: flex;
+}
+
+.example-element-diagram {
+  min-width: 80px;
+  border: 2px solid black;
+  padding: 8px;
+  font-weight: lighter;
+  margin: 8px 0;
+  height: 104px;
+}
+
+.example-element-symbol {
+  font-weight: bold;
+  font-size: 40px;
+  line-height: normal;
+}
+
+.example-element-description {
+  padding: 16px;
+  padding-left: 0px;
+  padding-right: 0px;
+  font-weight: bold;
+  color: brown;
+}
+
+.example-element-description-attribution {
+  opacity: 0.5;
+}
+
+table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+th, td {
+  overflow: hidden;
+  width: 20%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
