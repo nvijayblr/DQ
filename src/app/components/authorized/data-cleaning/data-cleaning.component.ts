@@ -9,6 +9,7 @@ import { HttpService } from 'src/app/services/http-service.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 import { CleanLogsComponent } from 'src/app/shared/clean-logs/clean-logs.component';
+import { PreviewDialogComponent } from '../../../shared/preview-dialog/preview-dialog.component';
 
 @Component({
   selector: 'app-data-cleaning',
@@ -853,7 +854,29 @@ export class DataCleaningComponent implements OnInit {
           width: '900px',
           data: this.cleanLogs     
         });
-    }
+  }
+  
+    nullcounts : any;
+  showPreviewDetails() {
+    const payload = {
+      sourcepath: this.source.templateSourcePath,
+      column_name: this.profile.column,
+    };
+    this.http.getNullCounts(payload).subscribe((res: any) => {
+      this.nullcounts = res.Preview ? res.Preview : {};
+      this.dialog.open(PreviewDialogComponent, {
+        width: '95%',
+        // height: '95%',
+        data: {
+         ...this.nullcounts
+        }
+     });
+      }, (error) => {
+        this.isPreviewLoaded = false;
+        this.isPreviewLoading = false;
+      });
+   
+ }
   
     changeView(view) {
       if (view === 'table') {

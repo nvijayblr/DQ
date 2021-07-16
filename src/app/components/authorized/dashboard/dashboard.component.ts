@@ -17,6 +17,7 @@ import {MatAutocompleteSelectedEvent, MatAutocomplete} from '@angular/material/a
 import {MatChipInputEvent} from '@angular/material/chips';
 import {Observable} from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { PreviewDialogComponent } from '../../../shared/preview-dialog/preview-dialog.component';
 
 
 @Component({
@@ -646,6 +647,28 @@ export class DashboardComponent implements OnInit {
       const date = moment(d).format('MM-DD-YYYY');
       return (this.highlightDates.includes(date)) ? 'highlight-dates' : undefined;
   }
+
+  nullcounts : any;
+  showPreviewDetails() {
+    const payload = {
+      sourcepath: this.selectedSource.templateSourcePath,
+      column_name: this.profile.column,
+    };
+    this.http.getNullCounts(payload).subscribe((res: any) => {
+      this.nullcounts = res.Preview ? res.Preview : {};
+      this.dialog.open(PreviewDialogComponent, {
+        width: '95%',
+        // height: '95%',
+        data: {
+         ...this.nullcounts
+        }
+     });
+      }, (error) => {
+        this.isPreviewLoaded = false;
+        this.isPreviewLoading = false;
+      });
+   
+ }
   
   
 

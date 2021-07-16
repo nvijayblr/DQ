@@ -9,8 +9,8 @@
                   <ng-template matStepLabel>Source Data</ng-template>                  
                       <div class="form-continer flex-containers">
                         <mat-card class="border no-rounded list shrare-post pbl card1">
-                          <h1 class="share-post-title" *ngIf="!isEditMode">Create Your<span class="yellow"> Source</span></h1>
-                          <h1 class="share-post-title"  *ngIf="isEditMode">Edit Your<span class="yellow"> Source</span></h1>
+                          <h1 class="share-post-title">Create Your<span class="yellow"> Source</span></h1>
+                          <!-- <h1 class="share-post-title"  *ngIf="isEditMode">Edit Your<span class="yellow"> Source</span></h1> -->
                         <div class="list flex-containers flex-start wrap">
                         <div class="list-item-2 outline wth">
                           <div>
@@ -19,11 +19,9 @@
                           </div>                          
                             <div class="cfile"> 
                               <app-image-cropper 
-                              *ngIf="!isEditMode"
                                 [imageType]="'Source'"
                                 [fileTypes]="chooseOptions"
                                 [imagePath]="''"
-                                [disabled]="isEditMode"
                                 (fileSelected)="onSourceFileSelected($event)"
                               >
                               </app-image-cropper>
@@ -78,8 +76,8 @@
                               <div class="bdr"></div>
                                           
                               <div class="act-btn-wrapper m1t">
-                                  <button mat-stroked-button class="btnBlueGreenN addico"  *ngIf="!isEditMode"  (click)="saveSource()">Submit <mat-icon>navigate_next</mat-icon></button>
-                                  <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"  *ngIf="isEditMode"  (click)="editSourceSave()">Submit <mat-icon>navigate_next</mat-icon></button>
+                                  <button mat-stroked-button class="btnBlueGreenN addico"    (click)="saveSource()">Submit <mat-icon>navigate_next</mat-icon></button>
+                                  <!-- <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"  *ngIf="isEditMode"  (click)="editSourceSave()">Submit <mat-icon>navigate_next</mat-icon></button> -->
           
                                   <!-- <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"
                                   [disabled]="!afControls.sourceDataName.value || !sourceSettings.frequency || !sourceSettings.uploadDate || !flError"
