@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, AfterViewInit, DoCheck, Input} from '@angular/core';
 import * as Highcharts from 'highcharts';
 import * as _ from 'lodash';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,11 +17,11 @@ import { PreviewDialogComponent } from '../../../shared/preview-dialog/preview-d
   styleUrls: ['./attribute-details.component.scss']
 })
 export class AttributeDetailsComponent implements OnInit {
-
   constructor(private messageService: MessageService, private http: HttpService, private router: Router, public dialog: MatDialog,) {
    
    }
    @ViewChild('stickyMenu', {static: false}) menuElement: ElementRef;
+   
    rules: any = [];
    statistics: any = {};
    attrubute: any = '';
@@ -51,6 +51,9 @@ export class AttributeDetailsComponent implements OnInit {
   actionItem = false;
   showAllDetails = false;
   chartData: any = [];
+  domainType: any = {};
+  showDomainType = false;
+
 
   profileDetails = {
     nr_duplicates: 0,
@@ -192,12 +195,15 @@ export class AttributeDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.isLoading = true;
+    this.showDomainType = false;
     this.getProfileSource();
-    
   }
-
+  domainMatches;
   changeProfile(profile) {
     this.profile = profile;
+    const propColumn = this.profile.column
+    this.domainMatches = _.keys(this.domainType.Domain_Matches);
+   
     const extractValues = ({ unique_values, counts }) => [unique_values.toString(), counts];   
     this.chartData = this.profile.frequncyAnalysis.map(extractValues);
     if (this.profile.LengthStatistics) {
@@ -240,7 +246,6 @@ export class AttributeDetailsComponent implements OnInit {
    };
     this.http.getProfiles(payload).subscribe((result: any) => {
       this.profiles = result.profile ? result.profile : [];
-      console.log('RESULT', result)
       this.profileDetails = {
         nr_duplicates: result.nr_duplicates,
         nr_totalcols: result.nr_totalcols,
@@ -370,7 +375,8 @@ export class AttributeDetailsComponent implements OnInit {
         }
       }
 
-      console.log('this.selectedSource', this.selectedSource)
+      this.domainTypeIdentity();
+      //console.log('this.selectedSource', this.selectedSource)
 
       this.loadProfile(this.selectedSource);
       this.loadReferencePreview();
@@ -387,6 +393,18 @@ export class AttributeDetailsComponent implements OnInit {
           return { category: key, sources: sourcesList };
         }).value();
     });
+  }
+
+  domainTypeIdentity() {
+    const payload = {
+      sourcepath: this.selectedSource.templateSourcePath
+    };
+    this.http.getDomainTypeIdentity(payload).subscribe((result: any) => {
+      console.log('RESULT', result)
+      this.domainType = result;
+    }, (error) => {
+      console.log('ERROR', error);
+    })
   }
 
   loadReferencePreview() {
@@ -456,14 +474,12 @@ export class AttributeDetailsComponent implements OnInit {
   }
   nullcounts : any;
   showPreviewDetails() {
-    console.log('showPreviewDetails', this.selectedSource.templateSourcePath, this.profile.column)
     const payload = {
       sourcepath: this.selectedSource.templateSourcePath,
       column_name: this.profile.column,
     };
     this.http.getNullCounts(payload).subscribe((res: any) => {
       this.nullcounts = res.Preview ? res.Preview : {};
-      console.log('details', this.nullcounts);
       this.dialog.open(PreviewDialogComponent, {
         width: '95%',
         // height: '95%',

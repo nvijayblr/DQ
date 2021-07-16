@@ -35,7 +35,7 @@
           </thead>
           <tbody *ngFor="let preview of cleanLogDetails;let i= index;">           
             <tr *ngFor="let clean of preview">
-              <td>{{clean.processTime}}</td>
+              <td>{{clean.processTime | date:'medium'  }}</td>
               <td> {{clean.action}}</td>
             </tr>
           

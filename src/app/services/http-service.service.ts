@@ -321,6 +321,16 @@ export class HttpService  {
     );
   }
 
+  getDomainTypeIdentity(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/DomainType_Identifier`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
   // Oracle DB API
 
   testConnectivity(payload): Observable<any> {
