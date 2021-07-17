@@ -201,9 +201,7 @@ export class AttributeDetailsComponent implements OnInit {
   domainMatches;
   changeProfile(profile) {
     this.profile = profile;
-    const propColumn = this.profile.column
-    this.domainMatches = _.keys(this.domainType.Domain_Matches);
-   
+    this.domainMatches = _.keys(this.domainType.Domain_Matches);  
     const extractValues = ({ unique_values, counts }) => [unique_values.toString(), counts];   
     this.chartData = this.profile.frequncyAnalysis.map(extractValues);
     if (this.profile.LengthStatistics) {

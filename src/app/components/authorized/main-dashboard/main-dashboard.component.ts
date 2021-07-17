@@ -25,7 +25,7 @@ import { FormBuilder, FormGroup, FormArray, Validators, AbstractControl, FormCon
 export class MainDashboardComponent implements OnInit {
   displayedColumns: string[] = ['completeness', 'Accuracy', 'Uniqueness', 'Validity'];
   dataSource;
-  displayedColumnsDetails: string[] = ['uploadDate', 'sourceName', 'completeness', 'Accuracy', 'Uniqueness', 'Validity'];
+  displayedColumnsDetails: string[] = ['sourceID', 'sourceName', 'sourceDesc', 'sourceType'];
   dataSourceDetails;
   expandedElement: PeriodicElementDetails | null;
 
@@ -59,12 +59,12 @@ export class MainDashboardComponent implements OnInit {
     }
   }
   allSourceCategory;
-  sourceByCategory:any = [];;
-  newObj;
+  sourceByCategory:any = [];
   taskDetails: any = [];
   uploadDate: any = [];
   detailedResults: any;
   showDetailedTable: boolean = false;
+
   getSourceResults() {
     const payload = {
       username : this.userLogin.name,
@@ -72,24 +72,18 @@ export class MainDashboardComponent implements OnInit {
     this.http.getSourceResults(payload).subscribe((result: any) => {
       this.allSourceCategory = result.Aggresults;
       this.detailedResults = result.detailedResults;
-      console.log(this.detailedResults);
       this.detailedResults.map((result, i) => {
+        console.log(result);
+        this.sourceByCategory.push({
+          'sourceID' : result.sourceId,
+          'sourceName': result.sourceName,
+          'sourceDesc': result.sourceDesc,
+          'sourceType': result.sourceType,
+          "description": result.detailedResults,
+          "subResult" : result.AggSubResults
+        });
        
-        result.detailedResults.map((res, i) => {
-          this.taskDetails.push({
-            'sourceName': result.sourceName,
-            'uploadDate': res.uploadDate,
-            'completeness': res.results.completeness,
-            'Accuracy': res.results.Accuracy,
-            'Uniqueness': res.results.Uniqueness,
-            'Validity': res.results.Validity,
-            "description": result.AggSubResults
-          })
-        })
-        
       })
-      console.log(this.taskDetails)
-
       const ELEMENT_DATA: PeriodicElement[] = [this.allSourceCategory];
       this.dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
       this.dataSource.sort = this.sort;
@@ -99,10 +93,13 @@ export class MainDashboardComponent implements OnInit {
 
   getDetailedResults() {
     this.showDetailedTable = true;
-    const ELEMENT_DATA: PeriodicElementDetails[] = this.taskDetails;
+    const ELEMENT_DATA: PeriodicElementDetails[] = this.sourceByCategory;
       this.dataSourceDetails = new MatTableDataSource<PeriodicElementDetails>(ELEMENT_DATA);
       this.dataSourceDetails.sort = this.sortDetails;
        this.dataSourceDetails.paginator = this.paginator;   
+  }
+  goPrevious() {
+    this.showDetailedTable = false;
   }
 }
 

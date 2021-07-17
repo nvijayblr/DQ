@@ -81,16 +81,7 @@ td.mat-cell, td.mat-footer-cell{
   font-family: 'open-sans-condensed-bold'!important;
 }
 
-.mat-row:nth-child(even){
-  background-color: #eee1ff;
-}
-      
-.mat-row:nth-child(odd){
-  background-color: #fbf7ff;
-}
-.mat-paginator-container{
-  background: beige;
-}
+
 .has-search .form-control {
   padding-left: 2.375rem;
 }
@@ -196,10 +187,11 @@ td.mat-cell, td.mat-footer-cell{
 .btnBlueGreenN {
   background: #00AE68;
   color: #fff;
-  float: right;
+  position: relative;
+    top: -45px;
   
   &.addico{
-    width: 160px;
+    width: 70px;
     height: 30px;
     font-family: 'open-sans-condensed-bold'!important;
      line-height: 17px;
@@ -210,6 +202,7 @@ td.mat-cell, td.mat-footer-cell{
      margin-right: 15px;
     //  box-shadow: none!important;
     margin-bottom: 30px;
+    text-align: left;
      &:hover{
        background:#059c60;
      }
@@ -219,6 +212,7 @@ td.mat-cell, td.mat-footer-cell{
         height: 14px;
         position: relative;
         top: 2px;
+        left: 2px;
      }
   }
   &.blue{ 
@@ -335,11 +329,14 @@ tr.example-detail-row {
 }
 
 tr.example-element-row:not(.example-expanded-row):hover {
-  background: whitesmoke;
+  background: #aac6f0;
 }
 
 tr.example-element-row:not(.example-expanded-row):active {
   background: #efefef;
+}
+.example-expanded-row{
+  background: #aac6f0;
 }
 
 .example-element-row td {
@@ -370,22 +367,42 @@ tr.example-element-row:not(.example-expanded-row):active {
   padding: 16px;
   padding-left: 0px;
   padding-right: 0px;
+ 
+  width: 100%;
+  table{
+    width: 100%;
+  }
+}
+
+.total{
   font-weight: bold;
   color: brown;
+  font-size: 16px;
 }
 
 .example-element-description-attribution {
   opacity: 0.5;
 }
 
-table {
-  width: 100%;
-  table-layout: fixed;
-}
+// .mat-row:nth-child(even){
+//   background-color: #eee1ff;
+// }
+      
+// .mat-row:nth-child(odd){
+//   background-color: #fbf7ff;
+// }
+// .mat-paginator-container{
+//   background: beige;
+// }
 
-th, td {
-  overflow: hidden;
-  width: 20%;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+// table {
+//   width: 100%;
+//   table-layout: fixed;
+// }
+
+// th, td {
+//   overflow: hidden;
+//   width: 20%;
+//   text-overflow: ellipsis;
+//   white-space: nowrap;
+// }
