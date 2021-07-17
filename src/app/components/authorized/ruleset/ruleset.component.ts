@@ -732,7 +732,7 @@ export class RulesetComponent implements OnInit {
       selectedColumns.push(column.title);
     });
     const dialogRef = this.dialog.open(ConditionalFormulaEditorComponent, {
-      width: '1300px',
+      width: '1400px',
       data: {
         columns: selectedColumns
       }

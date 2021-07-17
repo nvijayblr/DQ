@@ -19,6 +19,7 @@ import {Observable} from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { PreviewDialogComponent } from '../../../shared/preview-dialog/preview-dialog.component';
 
+import { ConditionalFormulaEditorComponent } from '../../../shared/conditional-formula-editor/conditional-formula-editor.component';
 
 @Component({
    selector: 'app-dashboard',
@@ -66,7 +67,7 @@ export class DashboardComponent implements OnInit {
 
    isPreviewLoaded = false;
    isPreviewLoading = false;
- 
+
    defaultColDefs = { sortable: true, filter: true, minWidth: 180, resizable: true };
    rowData: any = [];
   columnDefs: any = [];
@@ -170,16 +171,18 @@ export class DashboardComponent implements OnInit {
   selectedCategoryKey: any = '';
   sourceNames = [];
 
+  nullcounts: any;
+
 
    ngOnInit() {
       localStorage.removeItem('dq-source-names');
       this.getAllSources();
       // this.getAllAnalysis();
   }
-  
+
   changeProfile(profile) {
     this.profile = profile;
-    const extractValues = ({ unique_values, counts }) => [unique_values.toString(), counts];   
+    const extractValues = ({ unique_values, counts }) => [unique_values.toString(), counts];
     this.chartData = this.profile.frequncyAnalysis.map(extractValues);
     if (this.profile.LengthStatistics) {
        this.options.floor = profile.LengthStatistics.Min ? profile.LengthStatistics.Min : 0;
@@ -188,7 +191,7 @@ export class DashboardComponent implements OnInit {
     this.attrubute = profile.column;
     // console.log(this.profile);
   }
-  
+
   createSource() {
     localStorage.removeItem('selected-analysis');
     localStorage.removeItem('selected-index');
@@ -198,23 +201,23 @@ export class DashboardComponent implements OnInit {
 
 
   changeCategory(source) {
-    //console.log('change category', source);
-    //localStorage.setItem('dq-source-data', JSON.stringify(source));
-    localStorage.removeItem('dq-source-data');    
+    // console.log('change category', source);
+    // localStorage.setItem('dq-source-data', JSON.stringify(source));
+    localStorage.removeItem('dq-source-data');
     this.selectedSource = source;
     this.initLoadProfile = false;
     this.titleSrc = source.templateSourcePath;
   }
 
   loadProfile(source) {
-      //console.log('source.templateSourcePath', source)
+      // console.log('source.templateSourcePath', source)
       this.isLoading = true;
       this.loaderMsg = 'Loading Profile...';
       this.titleSrc = source.templateSourcePath;
       const payload = {
         sourcepath: source.templateSourcePath
     };
-  this.http.getProfiles(payload).subscribe((result: any) => {
+      this.http.getProfiles(payload).subscribe((result: any) => {
     this.profiles = result.profile ? result.profile : [];
     this.profileDetails = {
       nr_duplicates: result.nr_duplicates,
@@ -255,26 +258,26 @@ export class DashboardComponent implements OnInit {
    getAllSources() {
       this.isLoading = true;
       this.loaderMsg = 'Loading Sources...';
-     this.http.getSources().subscribe((result: any) => {
-       this.sourceList = (result && result.Analysis) ? result.Analysis : [];      
+      this.http.getSources().subscribe((result: any) => {
+       this.sourceList = (result && result.Analysis) ? result.Analysis : [];
        if (this.sourceList.length === 0) {
          this.showAllDetails = true;
          return;
        }
-       const getSelectedItem = localStorage.getItem('selected-analysis'); 
+       const getSelectedItem = localStorage.getItem('selected-analysis');
        const getSelectedIndex = localStorage.getItem('selected-index');
        if (getSelectedItem && getSelectedIndex) {
          this.selectedSource = JSON.parse(getSelectedItem);
          this.showEditDetails(+getSelectedIndex, this.selectedSource);
        } else {
         this.selectedSource = this.sourceList[this.sourceList.length - 1];
-         this.showEditDetails(this.sourceList.length - 1, this.sourceList[this.sourceList.length - 1]);
+        this.showEditDetails(this.sourceList.length - 1, this.sourceList[this.sourceList.length - 1]);
        }
 
-       //console.log('this.selectedSource', this.selectedSource)
+       // console.log('this.selectedSource', this.selectedSource)
        this.isLoading = false;
        this.loadProfile(this.sourceList[this.sourceList.length - 1].source);
-       
+
        this.sourceByCategory =
        _.chain(this.sourceList).
        groupBy('source.sourceCategory')
@@ -284,7 +287,7 @@ export class DashboardComponent implements OnInit {
              this.selectedCategoryKey = key;
            }
          });
-         return { category: key, sources: sourcesList };
+           return { category: key, sources: sourcesList };
          }).value();
       //  this.selectedSource = this.sourceList[0].source;
       //  console.log('this.selectedSource', this.sourceList[0].source.templateSourcePath)
@@ -300,7 +303,7 @@ export class DashboardComponent implements OnInit {
          { queryParams: { sourceId: sourceData.sourceId, mode: 'edit' } }
       );
   }
-  
+
    getAllAnalysis() {
       this.isLoading = true;
       this.loaderMsg = 'Loading Analysis...';
@@ -325,19 +328,19 @@ export class DashboardComponent implements OnInit {
     this.selectedAnalysisIndex = index;
     localStorage.setItem('selected-index', JSON.stringify(this.selectedAnalysisIndex));
     localStorage.setItem('selected-analysis', JSON.stringify(this.selectedAnalysis));
-      const uploadsHistory = data.UploadsHistory;
-      if (uploadsHistory && uploadsHistory.length) {
+    const uploadsHistory = data.UploadsHistory;
+    if (uploadsHistory && uploadsHistory.length) {
          const upload = uploadsHistory[uploadsHistory.length - 1];
          this.onOpenDatePicker(data);
          data.uploadDate = upload.uploadDate;
       }
-      const rules = data.rules;
-      if (rules && rules.length) {
+    const rules = data.rules;
+    if (rules && rules.length) {
          const ruleset = rules[rules.length - 1];
          data.rulesetId = ruleset.rulesetId;
       }
 
-      if (this.visibleIndex === index) {
+    if (this.visibleIndex === index) {
         this.visibleIndex = -1;
         this.actionTabId = -1;
       } else {
@@ -346,7 +349,7 @@ export class DashboardComponent implements OnInit {
         this.showFirst = true;
       }
     this.initOverview(this.selectedAnalysis);
-    this.changeCategory(data);    
+    this.changeCategory(data);
     this.loadProfile(data.source);
     this.loadReferencePreview();
     this.loadCorrelation(data.source, this.datatype, this.method);
@@ -446,8 +449,8 @@ export class DashboardComponent implements OnInit {
          alert('Please select the upload date.');
          return;
       }
-     const payload = {
-         type: "",
+      const payload = {
+         type: '',
          connectionDetails: {},
          sourceId: analysis.sourceId,
          rulesetId: analysis.rules.length ? analysis.rules[0].rulesetId : '',
@@ -463,7 +466,7 @@ export class DashboardComponent implements OnInit {
         //  type: "",
         //  connectionDetails: {
         //  },
-         //} 
+         // }
       };
       const formData: any = new FormData();
       formData.append('file[]', analysis.file);
@@ -504,11 +507,11 @@ export class DashboardComponent implements OnInit {
    }
 
    initOverview(analysis) {
-      //console.log('initOverview');
+      // console.log('initOverview');
       this.selectedAnalysis = analysis;
       const uploadDate = this.selectedAnalysis.uploadDate ? moment(this.selectedAnalysis.uploadDate).format('MM-DD-YYYY') : '';
-     const uploadsHistory = this.selectedAnalysis.UploadsHistory ? this.selectedAnalysis.UploadsHistory : [];
-     //console.log('uploadsHistory', uploadsHistory)
+      const uploadsHistory = this.selectedAnalysis.UploadsHistory ? this.selectedAnalysis.UploadsHistory : [];
+     // console.log('uploadsHistory', uploadsHistory)
 
       this.overviewErrorMsg = '';
 
@@ -647,8 +650,6 @@ export class DashboardComponent implements OnInit {
       const date = moment(d).format('MM-DD-YYYY');
       return (this.highlightDates.includes(date)) ? 'highlight-dates' : undefined;
   }
-
-  nullcounts : any;
   showPreviewDetails() {
     const payload = {
       sourcepath: this.selectedSource.templateSourcePath,
@@ -667,10 +668,10 @@ export class DashboardComponent implements OnInit {
         this.isPreviewLoaded = false;
         this.isPreviewLoading = false;
       });
-   
+
  }
-  
-  
+
+
 
   showTab(id) {
     this.actionTabId = id;
@@ -723,7 +724,20 @@ export class DashboardComponent implements OnInit {
       this.previewProfile = true;
       this.previewCorrelation = false;
     }
-    //console.log(menu);
+    // console.log(menu);
   }
+
+  showConditionalFormulaEditor(rule) {
+   const dialogRef = this.dialog.open(ConditionalFormulaEditorComponent, {
+     width: '1400px',
+     data: {
+       columns: []
+     }
+   });
+
+   dialogRef.afterClosed().subscribe(data => {
+   });
+
+ }
 }
 

@@ -48,23 +48,29 @@ export class ConditionalFormulaEditorComponent implements OnInit {
   intiFormArrays(field, value: any = {}) {
     if (field === 'formula') {
       return this.fb.group({
-        logic: [value.cde1 ? value.cde1 : ''],
-        start: [value.cde1 ? value.cde1 : ''],
-        cde1: [value.cde1 ? value.cde1 : ''],
-        logicoperator: [value.operator1 ? value.operator1 : ''],
-        cde2: [value.cde2 ? value.cde2 : ''],
-        value: [value.value ? value.value : ''],
-        end: [value.cde1 ? value.cde1 : ''],
-        condition: [value.condition ? value.condition : ''],
-        operator1: [value.operator1 ? value.operator1 : ''],
-        operator2: [value.operator2 ? value.operator2 : ''],
+        logic: [value.logic ? value.logic : ''],
+        conditions: this.fb.array([
+          this.initCondition()
+        ]),
         retcde1: [value.cde1 ? value.cde1 : ''],
-        retoperator1: [value.operator1 ? value.operator1 : ''],
-        retoperator2: [value.operator2 ? value.operator2 : ''],
+        retoperator: [value.operator1 ? value.operator1 : ''],
         retcde2: [value.cde2 ? value.cde2 : ''],
         retvalue: [value.value ? value.value : ''],
       });
     }
+  }
+
+  initCondition(value: any = {}) {
+    return this.fb.group({
+      start: [value.cde1 ? value.cde1 : ''],
+      cde1: [value.cde1 ? value.cde1 : ''],
+      operator1: [value.operator1 ? value.operator1 : ''],
+      cde2: [value.cde2 ? value.cde2 : ''],
+      value: [value.value ? value.value : ''],
+      end: [value.cde1 ? value.cde1 : ''],
+      condition: [value.condition ? value.condition : ''],
+      operator2: [value.operator2 ? value.operator2 : ''],
+    });
   }
 
   addFormItem(arrayName) {
@@ -78,8 +84,30 @@ export class ConditionalFormulaEditorComponent implements OnInit {
   }
 
 
+  formulaForm(): FormArray {
+    return this.formulaDetailsForm.get('formula') as FormArray;
+  }
+
+  formulaCondition(index: number): FormArray {
+    return this.formulaForm().at(index).get('conditions') as FormArray;
+  }
+
+  addFormCondition(formulaIndex) {
+    // const fbArray = this.formulaDetailsForm.get(arrayName) as FormArray;
+    // fbArray.push(this.intiFormArrays(arrayName));
+    this.formulaCondition(formulaIndex).push(this.initCondition());
+  }
+
+  removeFormCondition(formulaIndex, condIndex) {
+    // const formula = this.formulaDetailsForm.get(arrayName) as FormArray;
+    // formula.removeAt(index);
+    this.formulaCondition(formulaIndex).removeAt(condIndex);
+  }
+
+
   onCloseDialog(action) {
     this.ngZone.run(() => {
+      console.log(this.formulaDetailsForm.value);
       this.dialog.close({action, ...this.formulaDetailsForm.value});
     });
   }
