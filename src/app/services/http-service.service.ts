@@ -1,7 +1,8 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { tap, catchError } from 'rxjs/operators';
-import { Observable, throwError, Subject } from 'rxjs';
+import { Observable, throwError, Subject, forkJoin, of, BehaviorSubject, from} from 'rxjs';
+import { delay, concatMap, mergeMap } from 'rxjs/operators';
 import { takeUntil } from 'rxjs/operators';
 import { AuthGuardService } from './auth-guard.service';
 import * as env from './../../assets/config/env.json';
@@ -423,6 +424,23 @@ export class HttpService  {
         return throwError(err);
       }),
     );
+  }
+  public results$: BehaviorSubject<Array<any>> = new BehaviorSubject([]);
+  startRequests(payload): void {
+    let requests = [];
+    payload.forEach((name) => {
+      requests.push(this.http.post<any>(`${this.rootUrl}/api/MongoCluster_query`, {query: name}))
+    })
+    from(requests).pipe(
+      concatMap((request) => request.pipe(delay(10)))
+    ).subscribe((res) => {
+      this.results$.next(this.results$.getValue().concat(res))
+    })
+
+  }
+
+  public getStartRequests() {
+    return this.results$.asObservable();
   }
 
 

@@ -8,6 +8,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { MessageService } from 'src/app/services/message.service';
 import { HttpService } from 'src/app/services/http-service.service';
 import { PreviewDialogComponent } from '../../../shared/preview-dialog/preview-dialog.component';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -17,8 +18,8 @@ import { PreviewDialogComponent } from '../../../shared/preview-dialog/preview-d
   styleUrls: ['./attribute-details.component.scss']
 })
 export class AttributeDetailsComponent implements OnInit {
-  constructor(private messageService: MessageService, private http: HttpService, private router: Router, public dialog: MatDialog,) {
-   
+  constructor(private messageService: MessageService, private http: HttpService, private router: Router, public dialog: MatDialog,private modalService: NgbModal) {
+    
    }
    @ViewChild('stickyMenu', {static: false}) menuElement: ElementRef;
    
@@ -197,6 +198,8 @@ export class AttributeDetailsComponent implements OnInit {
     this.isLoading = true;
     this.showDomainType = false;
     this.getProfileSource();
+    
+    
   }
   domainMatches;
   changeProfile(profile) {
@@ -213,6 +216,7 @@ export class AttributeDetailsComponent implements OnInit {
       } 
       this.attrubute = profile.column;
       // console.log(this.profile);
+      //this.searchMultipleNumbers();
   }
 
   setNewCeil(newCeil: number): void {
@@ -374,6 +378,7 @@ export class AttributeDetailsComponent implements OnInit {
       }
 
       this.domainTypeIdentity();
+     
       //console.log('this.selectedSource', this.selectedSource)
 
       this.loadProfile(this.selectedSource);
@@ -393,13 +398,16 @@ export class AttributeDetailsComponent implements OnInit {
     });
   }
 
+  uniqueName;
   domainTypeIdentity() {
     const payload = {
       sourcepath: this.selectedSource.templateSourcePath
     };
     this.http.getDomainTypeIdentity(payload).subscribe((result: any) => {
-      console.log('RESULT', result)
+     
       this.domainType = result;
+      this.uniqueName = result.Unique_values.DESTINATION_AIRPORT;
+      
     }, (error) => {
       console.log('ERROR', error);
     })
@@ -490,10 +498,31 @@ export class AttributeDetailsComponent implements OnInit {
         this.isPreviewLoading = false;
       });
    
- }
-
-
-
+  }
+  
+  searchMultipleNumbers() {
+    const payload = this.uniqueName;
+    this.http.startRequests(payload)
+    this.getAllSearchRequest();
+    if (this.closeResult) {
+      return;
+    }
+   
+  }
+ 
+  newVal;
+  isLoad = false;
+  getAllSearchRequest() {
+      this.http.getStartRequests().subscribe((result: any) => {
+        this.newVal = _.values(result);
+        this.isLoad = true;
+        if (this.closeResult) {
+          return;
+        }
+      });
+  }
+  
+  
   setOpened(itemIndex) {
     this.currentlyOpenedItemIndex = itemIndex;
   }
@@ -503,11 +532,6 @@ export class AttributeDetailsComponent implements OnInit {
       this.currentlyOpenedItemIndex = -1;
     }
   }
-
- 
-
-
-
 
   changeView(view) {
     if (view === 'table') {
@@ -534,6 +558,27 @@ export class AttributeDetailsComponent implements OnInit {
       this.previewTable = true;
       this.previewProfile = false;
       this.previewCorrelation = false;
+    }
+  }
+
+  closeResult: string;
+  openScrollableContent(longContent) {
+     this.searchMultipleNumbers(); 
+    this.modalService.open(longContent, { scrollable: true, size: 'xl' }).result.then((result) => {
+      console.log(result);
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });       
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return  `with: ${reason}`;
     }
   }
 }

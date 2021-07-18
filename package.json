@@ -23,6 +23,7 @@
     "@angular/platform-browser-dynamic": "~8.2.14",
     "@angular/router": "~8.2.14",
     "@kolkov/angular-editor": "^1.1.2",
+    "@ng-bootstrap/ng-bootstrap": "^5.3.1",
     "@types/lodash": "^4.14.170",
     "ag-grid-angular": "^24.0.0",
     "ag-grid-community": "^24.0.0",

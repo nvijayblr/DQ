@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { MatSelectFilterModule } from 'mat-select-filter';
 import {MatSelectModule, MatFormFieldModule} from '@angular/material';
 import { Routes, RouterModule, CanActivate } from '@angular/router';
@@ -42,7 +43,8 @@ import { MangoDBComponent } from './create-source/mango-db/mango-db.component';
     OracleComponent,
     SchemaTableComponent,
     MainDashboardComponent,
-    MangoDBComponent
+    MangoDBComponent,
+    
   ],
    imports: [
     HighchartsChartModule,
@@ -52,9 +54,10 @@ import { MangoDBComponent } from './create-source/mango-db/mango-db.component';
     SharedModule,
     MatSelectModule,
     MatFormFieldModule,
-    MatSelectFilterModule
+     MatSelectFilterModule,
+     NgbModule
    ],
-   exports: [AttributeDetailsComponent, CorrelationDetailsComponent]
+   exports: [AttributeDetailsComponent, CorrelationDetailsComponent,NgbModule]
 
 })
 export class AuthorizedModule { }

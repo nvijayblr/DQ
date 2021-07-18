@@ -2,6 +2,7 @@ import 'hammerjs';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
@@ -31,8 +32,10 @@ import { SignupComponent } from './components/login-signup/signup/signup.compone
     AppRoutingModule,
     SharedModule,
     SocialLoginModule,
+    NgbModule
   ],
   providers: [
+    NgbModule,
     HttpService,
     { provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true },
     AuthGuardService,
