@@ -321,7 +321,7 @@ export class CreateSourceComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(data => {
       if (data.action === 'ok') {
-        this.router.navigate(['auth/dashboard']);
+        this.router.navigate(['auth/data-quality-monitoring']);
         localStorage.setItem('selected-analysis', JSON.stringify(this.summary));
       } else {
       }

@@ -30,6 +30,7 @@ export class DataQualityComponent implements OnInit {
       database: ['', []],
       databaseCollection: ['', []],
     });
+    this.getDBCollections();
 
   }
 
@@ -76,12 +77,18 @@ export class DataQualityComponent implements OnInit {
   showAllDetails: boolean = false;
   isLoadingDB: boolean = false;
   newDB;
+  dbValues:any = [];
   getDBCollections() {
     this.isLoadingDB = true;
     this.showAllDetails = false
-    this.http.getDBCollections().subscribe((result: any) => {
+    this.http.getDBCollections().subscribe((result: any) => {     
       this.newDB = result.Cluster_Contents;
       this.db = _.keys(result.Cluster_Contents);
+      // console.log(this.newDB);
+      // console.log(this.db);
+      this.dbValues.push(this.newDB);
+      this.dataSource = _.values(result.Cluster_Contents);
+      console.log(this.dataSource);
       //this.dbCollections = _.keys(result.Collection_Contents);
       this.isLoadingDB = false;
       this.showAllDetails = true
@@ -95,12 +102,16 @@ export class DataQualityComponent implements OnInit {
   collectionTable: any = [];
   cityKey;
   collectionKey: any = [];
-  collectionValue : any = [];
-  getDBPreview() {    
+  collectionValue: any = [];
+  selectdItem;
+  getDBPreview(item, column) {
+    console.log(item, column);
+    this.selectdItem = column;
+    console.log(column.toString());
     const payload = {
       client_url : "",
-      db: this.getDB.controls.database.value,
-      collection : this.getDB.controls.databaseCollection.value
+      db: item,
+      collection : column.toString()
     }
     this.isLoadingCO = true;
     this.http.getDBPreview(payload).subscribe((result: any) => {
@@ -133,5 +144,11 @@ export class DataQualityComponent implements OnInit {
     })
   }
 
+  dataSource;
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+    console.log(filterValue);
+    }
 }
 

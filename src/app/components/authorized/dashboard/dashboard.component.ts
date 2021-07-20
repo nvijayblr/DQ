@@ -27,6 +27,7 @@ import { ConditionalFormulaEditorComponent } from '../../../shared/conditional-f
    styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
+  @ViewChild('step1', { static: false }) step1: ElementRef;
 
    constructor(
       public dialog: MatDialog,
@@ -56,6 +57,7 @@ export class DashboardComponent implements OnInit {
    showFirst = true;
    actionTabId;
   showtable = true;
+  showtableAnalysis = true;
   show = false;
   maskShow = false;
   frequencyShow = false;
@@ -176,8 +178,8 @@ export class DashboardComponent implements OnInit {
 
    ngOnInit() {
       localStorage.removeItem('dq-source-names');
-      this.getAllSources();
-      // this.getAllAnalysis();
+     this.getAllSources();
+     console.log(this.selectedSource);
   }
 
   changeProfile(profile) {
@@ -207,6 +209,7 @@ export class DashboardComponent implements OnInit {
     this.selectedSource = source;
     this.initLoadProfile = false;
     this.titleSrc = source.templateSourcePath;
+    console.log(this.selectedSource);
   }
 
   loadProfile(source) {
@@ -259,7 +262,8 @@ export class DashboardComponent implements OnInit {
       this.isLoading = true;
       this.loaderMsg = 'Loading Sources...';
       this.http.getSources().subscribe((result: any) => {
-       this.sourceList = (result && result.Analysis) ? result.Analysis : [];
+        this.sourceList = (result && result.Analysis) ? result.Analysis : [];
+        console.log(this.sourceList);
        if (this.sourceList.length === 0) {
          this.showAllDetails = true;
          return;
@@ -269,12 +273,14 @@ export class DashboardComponent implements OnInit {
        if (getSelectedItem && getSelectedIndex) {
          this.selectedSource = JSON.parse(getSelectedItem);
          this.showEditDetails(+getSelectedIndex, this.selectedSource);
+         console.log('this.selectedSource', this.selectedSource)
        } else {
         this.selectedSource = this.sourceList[this.sourceList.length - 1];
-        this.showEditDetails(this.sourceList.length - 1, this.sourceList[this.sourceList.length - 1]);
+         this.showEditDetails(this.sourceList.length - 1, this.sourceList[this.sourceList.length - 1]);
+         console.log('this.selectedSource2', this.selectedSource)
        }
 
-       // console.log('this.selectedSource', this.selectedSource)
+        console.log(this.sourceList);
        this.isLoading = false;
        this.loadProfile(this.sourceList[this.sourceList.length - 1].source);
 
@@ -674,6 +680,8 @@ export class DashboardComponent implements OnInit {
 
 
   showTab(id) {
+    console.log('has class', this.step1.nativeElement.classList.contains('uploaded'));
+
     this.actionTabId = id;
     if (id === '1') {
       this.showFirst = true;
@@ -695,6 +703,14 @@ export class DashboardComponent implements OnInit {
   setClosed(itemIndex) {
     if (this.currentlyOpenedItemIndex === itemIndex) {
       this.currentlyOpenedItemIndex = -1;
+    }
+  }
+
+  changeViewAnlysis(view) {
+    if (view === 'table') {
+      this.showtableAnalysis = true;
+    } else {
+      this.showtableAnalysis = false;
     }
   }
 

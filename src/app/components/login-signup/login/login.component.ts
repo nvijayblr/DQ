@@ -1,7 +1,8 @@
-import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Inject, ViewEncapsulation,ViewChild, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { forkJoin, Subscriber } from 'rxjs';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SocialAuthService } from 'angularx-social-login';
 import { FacebookLoginProvider, GoogleLoginProvider } from 'angularx-social-login';
 import { SocialUser } from 'angularx-social-login';
@@ -9,20 +10,24 @@ import { HttpService } from '../../../services/http-service.service';
 import { InputValidation } from '../../../services/InputValidation';
 import { MessageService } from '../../../services/message.service';
 
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class LoginComponent implements OnInit {
 
+
+export class LoginComponent implements OnInit {
+  @ViewChild("content", {static: false}) modalContent: TemplateRef<any>;
   loginForm: FormGroup;
   otpForm: FormGroup;
   user: SocialUser;
   isSubmitted = false;
   isLoading = false;
   errorMessage = '';
+  alertMessage = '';
   loaderMsg = '';
   isOtpScreen = false;
   isOtpGenerated = false;
@@ -38,7 +43,8 @@ export class LoginComponent implements OnInit {
     private http: HttpService,
     public inputValidation: InputValidation,
     private router: Router,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private modalService: NgbModal
   ) { }
 
   ngOnInit() {
@@ -79,7 +85,9 @@ export class LoginComponent implements OnInit {
     this.http.loginRequest(this.loginForm.value).subscribe((result: any) => {
       this.isLoading = false;
       if (result.errorMsg) {
-        alert(result.errorMsg);
+        this.alertMessage = result.errorMsg;
+        this.modalService.open(this.modalContent, { windowClass: 'modal-holder' });
+       // alert(result.errorMsg);
         return;
       }
       const loggedUserDet = {
@@ -223,6 +231,10 @@ export class LoginComponent implements OnInit {
 
   signOut(): void {
     this.socialAuthService.signOut();
+  }
+
+  openSm(content) {
+    this.modalService.open(content, { size: 'sm' });
   }
 
 }

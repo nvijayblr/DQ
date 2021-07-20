@@ -1,13 +1,32 @@
+
 <div class="login-wrapper">
-   <div class="logo-ai"> <img class="login-image" src="assets/images/logo-ai.png" /> </div>
+   <div class="logo-ai logo-wrapper">
+    <span>AI <span class="iLogo">Data Driven</span></span>
+      <!-- <img class="login-image" src="assets/images/logo-ai.png" />  -->
+    </div>
    <!-- <div class="login-top shadow bottom">
      <img class="login-image" src="assets/images/logo.png" /> 
       <h2>Know Your Data</h2>
 </div> -->
+
 <div class="lft-cnt">
    <h3>Artificial <br>  intelligence</h3>
    <p>New technology may help scientists decode dolphin communication. Florida-based dolphin researcher Jack Kassewitz and British acoustic engineer John Stuart Reid are analyzing dolphin sounds with an instrument called a CymaScope. The scope has a thin membrane that vibrates as sound passes through it. Then it converts those vibrations into a high-definition image. Kassewitz hopes the unprecedented detail will solve some mysteries.</p>
 </div>
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Login Details</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>{{alertMessage}}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+  </div>
+</ng-template>
 
 <div class="flex-containers login-container top">
     <!-- <div class="title-wrp">

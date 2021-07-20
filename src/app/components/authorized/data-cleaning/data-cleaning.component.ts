@@ -669,7 +669,8 @@ export class DataCleaningComponent implements OnInit {
                   ? this.delete.formula : '',
             threshold : (this.delete.category === 'col_nan' || this.delete.category === 'row_nan') ? (this.delete.threshold / 100) : ''
          }
-      };
+    };
+    
      this.loadProfilePreview(payloads[type], type, callBack);     
   }
   

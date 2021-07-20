@@ -85,6 +85,9 @@
     font-size: 14px;
   }
   .shrare-post {
+    .mat-card {
+      box-shadow: none;
+    }
     textarea {
       height: 80px;
     }

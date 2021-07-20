@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { MatSelectFilterModule } from 'mat-select-filter';
 import {MatSelectModule, MatFormFieldModule} from '@angular/material';
 import { Routes, RouterModule, CanActivate } from '@angular/router';
@@ -55,7 +56,8 @@ import { MangoDBComponent } from './create-source/mango-db/mango-db.component';
     MatSelectModule,
     MatFormFieldModule,
      MatSelectFilterModule,
-     NgbModule
+     NgbModule,
+     Ng2SearchPipeModule
    ],
    exports: [AttributeDetailsComponent, CorrelationDetailsComponent,NgbModule]
 

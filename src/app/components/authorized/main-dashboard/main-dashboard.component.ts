@@ -25,7 +25,7 @@ import { FormBuilder, FormGroup, FormArray, Validators, AbstractControl, FormCon
 export class MainDashboardComponent implements OnInit {
   displayedColumns: string[] = ['completeness', 'Accuracy', 'Uniqueness', 'Validity'];
   dataSource;
-  displayedColumnsDetails: string[] = ['sourceID', 'sourceName', 'sourceDesc', 'sourceType'];
+  displayedColumnsDetails: string[] = ['sourceName', 'completeness', 'Accuracy', 'Uniqueness', 'Validity'];
   dataSourceDetails;
   expandedElement: PeriodicElementDetails | null;
 
@@ -82,7 +82,7 @@ export class MainDashboardComponent implements OnInit {
           "description": result.detailedResults,
           "subResult" : result.AggSubResults
         });
-       
+       console.log(this.sourceByCategory)
       })
       const ELEMENT_DATA: PeriodicElement[] = [this.allSourceCategory];
       this.dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

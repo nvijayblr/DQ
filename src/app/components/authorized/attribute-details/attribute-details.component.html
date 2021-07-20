@@ -143,7 +143,7 @@
               
               <ng-template #longContent let-modal>
                 <div class="modal-header">
-                  <h4 class="modal-title">Modal title</h4>
+                  <h4 class="modal-title">DOMAIN ANALYSIS</h4>
                   <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -251,6 +251,78 @@
                 <div class="attribute-details">
                   <!-- <h1 class="sTitle"> {{attrubute}} </h1> -->
 
+                  <div class="flex-containers">                                    
+                    <div class="lft-attr">
+                      <h4 class="attr-tite"> <span class="subT m">Attribute Summary</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
+                      <mat-card class="bg-violet ch"> 
+                        <table>
+                          <tr>
+                            <th>
+                              <div class="recordsTop">
+                                <span><img src="assets/images/database.svg" class="record" /> records</span>
+                                
+                             </div>
+                             <!-- <div class="dotDiv"></div> -->
+                            </th>
+                            <th>
+                              <div class="recordsTop">
+                                <span><img src="assets/images/type.svg" class="record1" /> <span class="dp1"> type</span></span>
+                                
+                             </div>
+       
+                             <!-- <div class="dotDiv"></div> -->
+                            </th>
+                            <th>
+                              <div class="recordsTop">
+                                <span><img src="assets/images/type.svg" class="record1" /> <span class="dp1"> NULL COUNTS</span></span>
+                               
+                             </div>
+                            </th>
+                          </tr>
+                          <tr>
+                            <td><span class="dp">{{profile.attributeSummary?.records}}</span></td>
+                            <td><span class="dp al">{{profile.attributeSummary?.dataType}}</span></td>
+                            <td><span class="dp al1">
+                              <a href="javascript: void(0)" *ngIf="profile.attributeSummary && profile.attributeSummary.null_records" (click)="showPreviewDetails()">
+                                {{profile.attributeSummary?.null_records}}
+                              </a>
+                              <div *ngIf="profile.attributeSummary && !profile.attributeSummary.null_records">
+                                {{profile.attributeSummary?.null_records}}
+                              </div>
+                            </span></td>
+                          </tr>                       
+                        </table>                                          
+                      </mat-card> 
+                    </div>
+                    <div class="rgt-attr">
+                      <h4 class="attr-tite"> <span class="subT hd">Length Statistics</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
+                      <mat-card class="honeydew ch" > 
+                                            
+                          <div class="custom-slider" *ngIf="profile.LengthStatistics">
+                            <div class="minMax"> 
+                              <div class="values">Min {{profile.LengthStatistics.Min}}</div>
+                              <div class="values fr">Max {{profile.LengthStatistics.Max}}</div>
+                             </div>
+                            <div class="minMax">
+                             <div class="dot"></div>
+                             <div class="bar"></div>
+                             <div class="dot fr"></div>
+                            </div>
+                            
+                             <!-- <ngx-slider [(value)]="profile.LengthStatistics.Min" [(highValue)]="profile.LengthStatistics.Max" [options]="options"></ngx-slider> -->
+                          </div>
+                          <div class="custom-slider" *ngIf="!profile.LengthStatistics">
+                           <div class="not-found" *ngIf="!profile.LengthStatistics">
+                               Not Available
+                           </div>
+                        </div>
+                        <!-- <div class="not-found" *ngIf="!profile.LengthStatistics">
+                            Not Available
+                       </div> -->
+                     </mat-card>
+                    </div>
+                  </div>
+
                   <div class="flex-containers"> 
                     <div class="lft-attr"> 
                       <h4 class="attr-tite"> <span class="subT mg">Frequency Groups</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
@@ -336,50 +408,12 @@
                   </div>
 
 
+
                   <div class="flex-containers">                                    
                   <div class="lft-attr">
                    
                     
-                    <h4 class="attr-tite"> <span class="subT m">Attribute Summary</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
-                    <mat-card class="bg-violet ch"> 
-                      <table>
-                        <tr>
-                          <th>
-                            <div class="recordsTop">
-                              <span><img src="assets/images/database.svg" class="record" /> records</span>
-                              
-                           </div>
-                           <!-- <div class="dotDiv"></div> -->
-                          </th>
-                          <th>
-                            <div class="recordsTop">
-                              <span><img src="assets/images/type.svg" class="record1" /> <span class="dp1"> type</span></span>
-                              
-                           </div>
-     
-                           <!-- <div class="dotDiv"></div> -->
-                          </th>
-                          <th>
-                            <div class="recordsTop">
-                              <span><img src="assets/images/type.svg" class="record1" /> <span class="dp1"> NULL COUNTS</span></span>
-                             
-                           </div>
-                          </th>
-                        </tr>
-                        <tr>
-                          <td><span class="dp">{{profile.attributeSummary?.records}}</span></td>
-                          <td><span class="dp al">{{profile.attributeSummary?.dataType}}</span></td>
-                          <td><span class="dp al1">
-                            <a href="javascript: void(0)" *ngIf="profile.attributeSummary && profile.attributeSummary.null_records" (click)="showPreviewDetails()">
-                              {{profile.attributeSummary?.null_records}}
-                            </a>
-                            <div *ngIf="profile.attributeSummary && !profile.attributeSummary.null_records">
-                              {{profile.attributeSummary?.null_records}}
-                            </div>
-                          </span></td>
-                        </tr>                       
-                      </table>                                          
-                    </mat-card> 
+                 
                     
                     
 
@@ -525,31 +559,7 @@
                        </div>
                     </mat-card> -->
 
-                    <h4 class="attr-tite"> <span class="subT hd">Length Statistics</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
-                     <mat-card class="honeydew ch" > 
-                                           
-                         <div class="custom-slider" *ngIf="profile.LengthStatistics">
-                           <div class="minMax"> 
-                             <div class="values">Min {{profile.LengthStatistics.Min}}</div>
-                             <div class="values fr">Max {{profile.LengthStatistics.Max}}</div>
-                            </div>
-                           <div class="minMax">
-                            <div class="dot"></div>
-                            <div class="bar"></div>
-                            <div class="dot fr"></div>
-                           </div>
-                           
-                            <!-- <ngx-slider [(value)]="profile.LengthStatistics.Min" [(highValue)]="profile.LengthStatistics.Max" [options]="options"></ngx-slider> -->
-                         </div>
-                         <div class="custom-slider" *ngIf="!profile.LengthStatistics">
-                          <div class="not-found" *ngIf="!profile.LengthStatistics">
-                              Not Available
-                          </div>
-                       </div>
-                       <!-- <div class="not-found" *ngIf="!profile.LengthStatistics">
-                           Not Available
-                      </div> -->
-                    </mat-card>
+                    
                     
                     <h4 class="attr-tite"> <span class="subT ac">Mask Analysis</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
                      <mat-card class="aliceblue ch1">
@@ -631,7 +641,7 @@
             </div>
 
             <div class="correlationView valign" *ngIf="previewCorrelation">            
-                <app-progress-bar [message]="'Loading'" class="component" *ngIf="isLoading"></app-progress-bar>
+                <!-- <app-progress-bar [message]="'Loading'" class="component" *ngIf="isLoading"></app-progress-bar> -->
                 <h1 class="share-post-title"><span class="lgb">Correlation Summary</span></h1>
                 <div class="flex-containers">
                   <div class="list-item-4">

@@ -195,7 +195,7 @@ export class AttributeDetailsComponent implements OnInit {
   previewCorrelation = false;
 
   ngOnInit() {
-    this.isLoading = true;
+    //this.isLoading = true;
     this.showDomainType = false;
     this.getProfileSource();
     
@@ -307,8 +307,8 @@ export class AttributeDetailsComponent implements OnInit {
   }
 
   loadCorrelation(source, type, method) {
-    this.isLoading = true;
-    this.loaderMsg = 'Loading Correlation...';
+    //this.isLoading = true;
+    //this.loaderMsg = 'Loading Correlation...';
     const payload = {
       sourcepath: source.templateSourcePath,
       cols_data_type: type,
@@ -569,6 +569,7 @@ export class AttributeDetailsComponent implements OnInit {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      //window.location.reload();
     });       
   }
 

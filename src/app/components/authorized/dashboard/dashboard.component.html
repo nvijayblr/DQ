@@ -56,36 +56,36 @@
             </div>
             <div class="dash-right">
               <h1 class="no-margin ms nTitle">Summary</h1>
-              <div class="">
-                <div *ngFor="let data of sourceList; let i= index;" style="width: 100%;">
-                <div *ngIf="selectedAnalysisIndex === i">
+              <div *ngIf="selectedSource">
+                <div style="width: 100%;">
+                <div>
                   <mat-card class="border no-rounded list shrare-post mct pad10">
                     <div class="summaryBlock fst">
                       <div class="mid-cnt">Type</div>
-                      <div class="topTitle green" *ngIf="data.settings?.multiSourceOptions && data.settings?.multiSourceOptions.length<=1">S</div>
-                      <div class="topTitle green" *ngIf="data.settings?.multiSourceOptions && data.settings?.multiSourceOptions.length >1">M</div>                   
+                      <div class="topTitle green" *ngIf="selectedSource.settings?.multiSourceOptions && selectedSource.settings?.multiSourceOptions.length<=1">S</div>
+                      <div class="topTitle green" *ngIf="selectedSource.settings?.multiSourceOptions && selectedSource.settings?.multiSourceOptions.length >1">M</div>                   
                     </div>
                     <div class="dividerTop"></div>
                     <div class="summaryBlock">
                       <div class="mid-cnt">ID </div>
-                      <div class="topTitle red" >{{data.sourceId}}</div>                      
+                      <div class="topTitle red" >{{selectedSource.sourceId}}</div>                      
                     </div>
                     <div class="dividerTop"></div>
                     <div class="summaryBlock">
                       <div class="mid-cnt">File Name </div>
-                      <div class="topTitle green" >{{data.source.sourceFileName}}</div>                      
+                      <div class="topTitle green" >{{selectedSource.source.sourceFileName}}</div>                      
                     </div>
 
-                    <div class="dividerTop" *ngFor="let ref of data.reference;" ></div>
-                    <div class="summaryBlock" *ngFor="let ref of data.reference;" >
+                    <!-- <div class="dividerTop" *ngFor="let ref of data.reference;" ></div> -->
+                    <div class="summaryBlock">
                       <div class="mid-cnt">Referennce </div>
-                      <div class="topTitle red" >{{ref.referenceId}} - {{ref.referenceDataName}}</div>                      
+                      <div class="topTitle red" >{{selectedSource.referenceId}} - {{selectedSource.referenceDataName}}</div>                      
                     </div>
                   </mat-card>
             
             </div>
             </div>
-            </div>
+            </div> 
               <h1 class="no-margin ms nTitle">Details</h1>
               <mat-card class="border no-rounded list shrare-post mct">
 
@@ -93,8 +93,8 @@
                   <div class="analysis-preview">
                     <table class="table">
                         <tbody>
-                          <tr *ngFor="let data of sourceList; let i= index;"  class="tableinner">
-                              <td colspan="6" style="padding: 0px;" *ngIf="selectedAnalysisIndex === i">
+                          <tr  class="tableinner">
+                              <td colspan="6" style="padding: 0px;" *ngIf="selectedSource as data">
                                 <table style="width: 100%;" >
                                     <!-- <tr>
                                       <td style="width: 10%;">
@@ -114,7 +114,7 @@
                                     <tr class="subtab">
                                       <td colspan="6" style="padding: 0px;width: 100%;">
                                         <div class="step-indicator">
-                                          <div class="step uploaded" [ngClass]="{completed: actionTabId === '1'}" (click)="showTab('1');">
+                                          <div #step1 class="step uploaded" [ngClass]="{completed: actionTabId === '1'}" (click)="showTab('1');">
                                             <mat-icon class="tick">check_circle</mat-icon>
                                             <span class="text">Data Source</span>                                    
                                           </div>
@@ -265,16 +265,16 @@
                                                         </div>
                                                       </td> 
                                                       <td style="padding-top:0px;" class="bd">
-                                                        <div class="list flex-containers ml3" style="width:300px;" >
+                                                        <div class="list flex-containers ml3" >
                                                           <div class=" list-item-0  inlb" *ngIf="rights.includes('ADD_SOURCEFILE')">
                                                           <button mat-stroked-button class="button3d btnPush btnBlueGreen addico1" (click)="uploadSource(data)">Upload <mat-icon>cloud_upload</mat-icon></button>
                                                           </div>
-                                                          <div class=" list-item-0  inlb">
+                                                          <!-- <div class=" list-item-0  inlb">
                                                             <button class="button3d btnPush btnLightBlue addico v-a1">
                                                               <mat-icon>launch</mat-icon>
                                                               Re upload
                                                             </button>
-                                                          </div>                                         
+                                                          </div>                                          -->
                                                       </div>
                                                     </td>
                                                   </tr>
@@ -382,16 +382,16 @@
               <h1 class="no-margin ms nTitle">Analysis</h1>
               <mat-card class="border no-rounded list shrare-post mct">
                 <div class="viewTable">Views: 
-                  <img src="assets/images/chart.svg" class="chartV" (click)="changeView('table')" />
+                  <img src="assets/images/chart.svg" class="chartV" (click)="changeViewAnlysis('table')" />
                  <span class="divider"></span> 
-                 <img src="assets/images/table.svg" class="tabV" (click)="changeView('chart')" />                  
+                 <img src="assets/images/table.svg" class="tabV" (click)="changeViewAnlysis('chart')" />                  
                 </div>
-             <div class="chart" *ngIf="showtable">  
+             <div class="chart" *ngIf="showtableAnalysis">  
                 <app-progress-bar [message]="'Loading...'" class="component" *ngIf="isOverviewLoading"></app-progress-bar>
                 <app-analysis *ngIf="showAnalysisOverview && !overviewErrorMsg" [isOverview]="true"></app-analysis> 
                 <h3 *ngIf="overviewErrorMsg">{{overviewErrorMsg}}</h3>
               </div>
-              <div class="chart" *ngIf="!showtable"> 
+              <div class="chart" *ngIf="!showtableAnalysis"> 
                   <app-analysis *ngIf="showAnalysisOverview && !overviewErrorMsg" [isOverviewTable]="true"></app-analysis> 
               </div>   
               </mat-card>
@@ -443,7 +443,7 @@
                          <img src="assets/images/table.svg" class="tabV" (click)="changeView('chart')" />                  
                         </div>
                         <div *ngIf="showtable">
-                          <app-pie-chart [pieChartData]="chartData" ></app-pie-chart>
+                           <app-pie-chart [pieChartData]="chartData" ></app-pie-chart> 
                       </div>
                       <div *ngIf="!showtable">
                         <div class="table-wrapper-scroll-y my-custom-scrollbar">

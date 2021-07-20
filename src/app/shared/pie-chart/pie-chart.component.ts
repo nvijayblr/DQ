@@ -53,14 +53,14 @@ export class PieChartComponent implements OnInit, OnChanges{
       },
       series: [
         {
-          name: 'Delivered amount',
+          name: 'Count',
           data: [
           ...this.pieChartData           
           ]
         }
       ]
     };
-    Highcharts.chart('container', this.options);    
+    Highcharts.chart('containerPie', this.options);    
   }
   
 }
