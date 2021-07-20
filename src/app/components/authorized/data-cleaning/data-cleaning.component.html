@@ -163,7 +163,7 @@
                     type="button" 
                     (click)="showCleanLogs()"
                     [disabled]="!isCleanLog"
-                    class="button3d btnPush btnPurple addico w-t"
+                    class="btn btn-info w-t"
                     >
                     <mat-icon> history</mat-icon> Logs 
                   </button>
@@ -175,7 +175,7 @@
                     (click)="showSaveConfirm(source)"
                     [disabled]="!isSaveEnable"
                     *ngIf="this.profiles.length"
-                    class="button3d btnPush btnPurple addico w-t"
+                    class="btn btn-success w-t"
                     >
                     <mat-icon> save</mat-icon> Save 
                   </button>
@@ -214,14 +214,14 @@
                           <div>
                             <button 
                               type="button" 
-                              class="button3d btnPush btnPurple addico w-t"
+                              class="btn btn-primary"
                               (click)="loadPreview('nan')"
                               style="margin-left: 0;"
                             ><mat-icon> layers_clear</mat-icon> PREVIEW </button>
       
                             <button 
                               type="button" 
-                              class="button3d btnPush btnPurple addico w-t"
+                              class="btn btn-danger"
                               (click)="imputeColumns('numeric')"
                               [disabled]="!profile.attributeSummary?.null_records || !impute.value"><mat-icon> layers_clear</mat-icon> IMPUTE 
                             </button>
@@ -240,13 +240,13 @@
                         <div>
                           <button 
                           type="button" 
-                          class="button3d btnPush btnPurple addico w-t"
+                          class="btn btn-primary"
                           (click)="loadPreview('nan')"
                           style="margin-left: 0;"
                           ><mat-icon> layers_clear</mat-icon> PREVIEW </button>
                         <button 
                           type="button" 
-                          class="button3d btnPush btnPurple addico w-t"
+                          class="btn btn-danger"
                           (click)="imputeColumns('string')"
                           [disabled]="!profile.attributeSummary?.null_records || !impute.value"><mat-icon> layers_clear</mat-icon> IMPUTE </button>
                       </div>
@@ -274,13 +274,13 @@
                               <button 
                                 type="button" 
                                 (click)="loadPreview('duplicate')"
-                                class="button3d btnPush btnPurple addico w-t">
+                                class="btn btn-primary">
                                 <mat-icon> visibility</mat-icon> Preview 
                               </button>
                               <button 
                                 type="button" 
                                 (click)="deleteDuplicates()"
-                                class="button3d btnPush btnPurple addico w-t">
+                                class="btn btn-danger">
                                 <mat-icon> delete</mat-icon> Remove 
                               </button>
                           </div>
@@ -398,13 +398,13 @@
                             <button 
                               type="button" 
                               (click)="loadPreview('data_remove')"
-                              class="button3d btnPush btnPurple addico w-t">
+                              class="btn btn-primary">
                               <mat-icon> visibility</mat-icon> Preview 
                             </button>
                             <button 
                               type="button" 
                               (click)="deleteColumnsRows()"
-                              class="button3d btnPush btnPurple addico w-t">
+                              class="btn btn-danger">
                               <mat-icon> delete</mat-icon> Remove 
                             </button>
                           </div>
@@ -437,10 +437,101 @@
                   ></app-ag-grid>
                 </mat-card>
       
+                <div class="flex-containers">                                    
+                  <div class="lft-attr">
+                    <h4 class="attr-tite"> <span class="subT m">Attribute Summary</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
+                    <mat-card class="bg-violet ch"> 
+                      <table>
+                        <tr>
+                          <th>
+                            <div class="recordsTop">
+                              <span><img src="assets/images/database.svg" class="record" /> records</span>
+                              
+                           </div>
+                           <!-- <div class="dotDiv"></div> -->
+                          </th>
+                          <th>
+                            <div class="recordsTop">
+                              <span><img src="assets/images/type.svg" class="record1" /> <span class="dp1"> type</span></span>
+                              
+                           </div>
+     
+                           <!-- <div class="dotDiv"></div> -->
+                          </th>
+                          <th>
+                            <div class="recordsTop">
+                              <span><img src="assets/images/type.svg" class="record1" /> <span class="dp1"> NULL COUNTS</span></span>
+                             
+                           </div>
+                          </th>
+                        </tr>
+                        <tr>
+                          <td><span class="dp">{{profile.attributeSummary?.records}}</span></td>
+                          <td><span class="dp al">{{profile.attributeSummary?.dataType}}</span></td>
+                          <td><span class="dp al1">
+                            <a href="javascript: void(0)" *ngIf="profile.attributeSummary && profile.attributeSummary.null_records" (click)="showPreviewDetails()">
+                              {{profile.attributeSummary?.null_records}}
+                            </a>
+                            <div *ngIf="profile.attributeSummary && !profile.attributeSummary.null_records">
+                              {{profile.attributeSummary?.null_records}}
+                            </div>
+                          </span></td>
+                        </tr>                       
+                      </table>                                          
+                    </mat-card> 
+                  </div>
+                  <div class="rgt-attr">
+                    <h4 class="attr-tite"> <span class="subT hd">Length Statistics</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
+                    <mat-card class="honeydew ch" > 
+                                          
+                        <div class="custom-slider" *ngIf="profile.LengthStatistics">
+                          <div class="minMax"> 
+                            <div class="values">Min {{profile.LengthStatistics.Min}}</div>
+                            <div class="values fr">Max {{profile.LengthStatistics.Max}}</div>
+                           </div>
+                          <div class="minMax">
+                           <div class="dot"></div>
+                           <div class="bar"></div>
+                           <div class="dot fr"></div>
+                          </div>
+                          
+                           <!-- <ngx-slider [(value)]="profile.LengthStatistics.Min" [(highValue)]="profile.LengthStatistics.Max" [options]="options"></ngx-slider> -->
+                        </div>
+
+                        <div class="custom-slider" *ngIf="profile.valueStatistics">
+                          <div class="minMax"> 
+                            <div class="values">Min {{profile.valueStatistics.MinValLength}}</div>
+                            <div class="values fr">Max {{profile.valueStatistics.MaxValLength}}</div>
+                           </div>
+                          <div class="minMax">
+                           <div class="dot"></div>
+                           <div class="bar"></div>
+                           <div class="dot fr"></div>
+                          </div>
+                          
+                           <!-- <ngx-slider [(value)]="profile.LengthStatistics.Min" [(highValue)]="profile.LengthStatistics.Max" [options]="options"></ngx-slider> -->
+                        </div>
+                        <!-- <div class="custom-slider" *ngIf="!profile.LengthStatistics">
+                         <div class="not-found" *ngIf="!profile.LengthStatistics">
+                             Not Available
+                         </div>
+                      </div> -->
+                      <!-- <div class="not-found" *ngIf="!profile.LengthStatistics">
+                          Not Available
+                     </div> -->
+                   </mat-card>
+                  </div>
+                </div>
+
                 <div class="flex-containers"> 
                   <div class="lft-attr"> 
                     <h4 class="attr-tite"> <span class="subT mg">Frequency Groups</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
                     <mat-card class="nBg2">
+                      <div *ngFor="let domain of domainMatches" class="domain">
+                         <button class="btn btn-outline-primary mb-2 mr-2 fs-b"  *ngIf="domain === profile.column" (click)="openScrollableContent(longContent)">View Domain Analysis</button>
+                      </div>
+                      
+                     
                       <div class="viewTableN"> 
                         <img src="assets/images/chart.svg" class="chartV" (click)="changeView('table')" />
                        <span class="divider"></span> 
@@ -487,15 +578,16 @@
                   </div>
 
                   <div class="rgt-attr">
+                    
                     <h4 class="attr-tite"> <span class="subT gb">Correlation Summary</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
-                   <mat-card class="bg-green ch2" style="height:320px;">                       
+                   <mat-card class="bg-green ch2" style="height:319px;" [ngClass]="{'my_class': step === 'step1'}">                       
                       <app-corelation-summary [summary]="profile.correlationSummary"></app-corelation-summary> 
                       <!-- <highcharts-chart
                             [Highcharts] = "highcharts" 
                             [options] = "chartOptions" 
                             style = "width: 100%; height: 400px; display: block;">
                          </highcharts-chart> -->
-                   </mat-card>               
+                   </mat-card>  
                     <!-- <h4 class="attr-tite"> <span class="subT mg">CORRELATION SUMMARY</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
                     <mat-card class="nBg">
                       <div class="viewTableN"> 
@@ -509,54 +601,19 @@
                             style = "width: 100%; height: 400px; display: block;">
                          </highcharts-chart> 
                     </mat-card>-->
-
+                  
+  
                     
                   </div>
                 </div>
 
 
+
                 <div class="flex-containers">                                    
                 <div class="lft-attr">
-                  <h4 class="attr-tite"> <span class="subT m">Attribute Summary</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
-                  <mat-card class="bg-violet ch"> 
-                    <table>
-                      <tr>
-                        <th>
-                          <div class="recordsTop">
-                            <span><img src="assets/images/database.svg" class="record" /> records</span>
-                            
-                         </div>
-                         <!-- <div class="dotDiv"></div> -->
-                        </th>
-                        <th>
-                          <div class="recordsTop">
-                            <span><img src="assets/images/type.svg" class="record1" /> <span class="dp1"> type</span></span>
-                            
-                         </div>
-   
-                         <!-- <div class="dotDiv"></div> -->
-                        </th>
-                        <th>
-                          <div class="recordsTop">
-                            <span><img src="assets/images/type.svg" class="record1" /> <span class="dp1"> NULL COUNTS</span></span>
-                           
-                         </div>
-                        </th>
-                      </tr>
-                      <tr>
-                        <td><span class="dp">{{profile.attributeSummary?.records}}</span></td>
-                        <td><span class="dp al">{{profile.attributeSummary?.dataType}}</span></td>
-                        <td><span class="dp al1">
-                          <a href="javascript: void(0)" *ngIf="profile.attributeSummary && profile.attributeSummary.null_records" (click)="showPreviewDetails()">
-                            {{profile.attributeSummary?.null_records}}
-                          </a>
-                          <div *ngIf="profile.attributeSummary && !profile.attributeSummary.null_records">
-                            {{profile.attributeSummary?.null_records}}
-                          </div>
-                        </span></td>
-                      </tr>                       
-                    </table>                                          
-                  </mat-card> 
+                 
+                  
+               
                   
                   
 
@@ -591,10 +648,10 @@
                     <mat-icon *ngIf="!frequencyShow">expand_more</mat-icon> <mat-icon *ngIf="frequencyShow">expand_less</mat-icon> </button>  
                  </mat-card> -->
 
-                 <h4 class="attr-tite"> <span class="subT pt">Pattern Analysis</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
+                 <h4 class="attr-tite" *ngIf="profile.patternAnalysis && profile.patternAnalysis.length"> <span class="subT pt">Pattern Analysis</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
 
-                 <mat-card class="bg-blue ch1">
-                  <div *ngIf="profile.patternAnalysis && profile.patternAnalysis.length; else noPattern">
+                 <mat-card class="bg-blue ch1" *ngIf="profile.patternAnalysis && profile.patternAnalysis.length">
+                  <div >
                   <div class="frequencyContainer" [class.patternShow]="patternShow">
                     <table>
                       <tr>
@@ -642,10 +699,30 @@
                <button *ngIf="profile.patternAnalysis.length > 3" class="patternBtn" (click)="patternShow = !patternShow"><!--  {{ patternShow ? 'Show less'  : 'Show More'  }} -->
                   <mat-icon *ngIf="!patternShow">expand_more</mat-icon> <mat-icon *ngIf="patternShow">expand_less</mat-icon> </button> 
                 </div>
-               <ng-template #noPattern>
+               <!-- <ng-template #noPattern>
                 <div class="not-found" >Not Available</div> 
-               </ng-template>
+               </ng-template> -->
                </mat-card>
+                
+               <div *ngFor="let domain of domainMatches">
+                      
+                <mat-card  class="bg-violet ch" *ngIf="domain === profile.column"> 
+                  <table>
+                    <tr>
+                      <th>
+                        <div class="recordsTop">
+                          <span><img src="assets/images/airport.svg" class="record" /> Domain Analysis</span>                                  
+                       </div>
+                      </th>
+                                              
+                    </tr>
+                    <tr >
+                      <td><span class="dp" *ngIf="domain === profile.column">IATA Code</span></td>
+                      
+                    </tr>                       
+                  </table>                                          
+                </mat-card> 
+              </div>
                 </div>
                 <div class="rgt-attr">
                   <!-- <app-pie-chart ></app-pie-chart>  -->
@@ -682,35 +759,11 @@
                      </div>
                   </mat-card> -->
 
-                  <h4 class="attr-tite"> <span class="subT hd">Length Statistics</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
-                   <mat-card class="honeydew ch" > 
-                                         
-                       <div class="custom-slider" *ngIf="profile.LengthStatistics">
-                         <div class="minMax"> 
-                           <div class="values">Min {{profile.LengthStatistics.Min}}</div>
-                           <div class="values fr">Max {{profile.LengthStatistics.Max}}</div>
-                          </div>
-                         <div class="minMax">
-                          <div class="dot"></div>
-                          <div class="bar"></div>
-                          <div class="dot fr"></div>
-                         </div>
-                         
-                          <!-- <ngx-slider [(value)]="profile.LengthStatistics.Min" [(highValue)]="profile.LengthStatistics.Max" [options]="options"></ngx-slider> -->
-                       </div>
-                       <div class="custom-slider" *ngIf="!profile.LengthStatistics">
-                        <div class="not-found" *ngIf="!profile.LengthStatistics">
-                            Not Available
-                        </div>
-                     </div>
-                     <!-- <div class="not-found" *ngIf="!profile.LengthStatistics">
-                         Not Available
-                    </div> -->
-                  </mat-card>
                   
-                  <h4 class="attr-tite"> <span class="subT ac">Mask Analysis</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
-                   <mat-card class="aliceblue ch1">
-                     <div *ngIf="profile.maskAnalysis && profile.maskAnalysis.length; else noMask">                       
+                  
+                  <h4 class="attr-tite" *ngIf="profile.maskAnalysis && profile.maskAnalysis.length"> <span class="subT ac">Mask Analysis</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
+                   <mat-card class="aliceblue ch1" *ngIf="profile.maskAnalysis && profile.maskAnalysis.length">
+                     <div >                       
                       <div class="frequencyContainer" [class.maskShow]="maskShow" >
                         <table>
                           <tr>
@@ -758,9 +811,9 @@
                   <button *ngIf="profile.maskAnalysis.length > 3" class="maskShowBtn" (click)="maskShow = !maskShow">  <!-- {{ maskShow ? 'Show less'  : 'Show More'  }} -->
                       <mat-icon *ngIf="!maskShow">expand_more</mat-icon> <mat-icon *ngIf="maskShow">expand_less</mat-icon> </button> 
                     </div>
-                    <ng-template #noMask>
+                    <!-- <ng-template #noMask>
                       <div class="not-found">Not Available</div> 
-                    </ng-template>                                                                  
+                    </ng-template>                                                                   -->
                    </mat-card>
                    <!-- <mat-card class="os aliceblue" *ngIf="profile.staticalAnalysis">
                       <h4 class="attr-tite">Statistics <mat-icon matTooltip="Info about the action">info</mat-icon></h4>
@@ -781,7 +834,7 @@
     
                 </div>  
                
-              </div> 
+              </div>
       
                 </div>           
             </div>

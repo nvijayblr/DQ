@@ -7,7 +7,7 @@
            <td class="progTitle">{{positive.value}}</td>
         </tr>
       </table>
-      <div class="not-found" *ngIf="!summary.positiveSummary || (summary.positiveSummary && !summary.positiveSummary.length)">Not found.</div>
+      <div class="not-found" *ngIf="!summary.positiveSummary || (summary.positiveSummary && !summary.positiveSummary.length)">Not Available.</div>
     </mat-tab>
     <mat-tab label="Negative Correlation">
       <table class="table" *ngIf="summary.negativeSummary && summary.negativeSummary.length">

@@ -730,16 +730,23 @@ export class DataCleaningComponent implements OnInit {
       });
       if (this.rowData.length) {
         Object.keys(this.rowData[0]).map((key, index) => {
+          console.log(key)
           this.columnDefs.push({
             field: key,
-            ...this.defaultColDefs
+            ...this.defaultColDefs,
+            cellClass : this.cellClass
+            
           });
         });
       }
 
       this.isPreviewLoaded = true;
       this.isPreviewLoading = false;
-    }
+  }
+  
+  cellClass(params) {
+    return params.value === 'None' ? 'rag-green' : 'rag-amber';
+  }
 
     changeRemoveCategory(type) {
       if (type === 'column') {

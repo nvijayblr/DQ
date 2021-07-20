@@ -1,8 +1,8 @@
 <div class="ag-grid-wrapper">
   <ag-grid-angular
     #agGrid
-    style="max-width: 100%; height: 100%"
-    class="ag-theme-alpine"
+    style="height: 100%"
+    class="ag-theme-balham"
     animateRows
     autoSizeColumns
     headerHeight="40"
@@ -29,6 +29,7 @@
     [colResizeDefault]='colResizeDefault'
     (filterChanged)="onSortFilterChanged()"
     (sortChanged)="onSortFilterChanged()"
+    
   >
   </ag-grid-angular>
 

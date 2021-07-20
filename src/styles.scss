@@ -749,23 +749,23 @@ app-progress-bar.page {
   }
 }
 
-.mat-tab-label {
-  text-transform: uppercase;
-  font-size: 18px;
-  font-weight: 400;
-}
-.mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar {
-  background-color: transparent;
-}
-.mat-tab-labels {
-  border-bottom: 1px solid #070707;
-}
-.mat-tab-label-active {
-  border-bottom: 2px solid #070707;
-  color: #060606;
-  font-weight: 500;
-  opacity: 1 !important;
-}
+// .mat-tab-label {
+//   text-transform: uppercase;
+//   font-size: 18px;
+//   font-weight: 400;
+// }
+// .mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar {
+//   background-color: transparent;
+// }
+// .mat-tab-labels {
+//   border-bottom: 1px solid #070707;
+// }
+// .mat-tab-label-active {
+//   border-bottom: 2px solid #070707;
+//   color: #060606;
+//   font-weight: 500;
+//   opacity: 1 !important;
+// }
 
 
 owl-date-time-container {
@@ -1285,6 +1285,24 @@ mat-paginator.mat-paginator {
   }
 }
 
+.mat-tab-label-content{
+  font-family: 'open-sans-condensed-bold'!important;
+  font-size: 13px!important;
+}
+.mat-tab-label-active{
+  //border-bottom: 4px solid #efa800!important;
+  background:#f2f1f1!important;
+}
+::ng-deep .mat-ink-bar{
+  height: 4px !important;
+}
+
+.mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar{
+  height: 4px;
+}
+.ag-theme-balham .ag-paging-panel{
+  font-family: 'open-sans-semibold';
+}
 $font-path : '../src/assets/fonts/';
 
 @font-face {

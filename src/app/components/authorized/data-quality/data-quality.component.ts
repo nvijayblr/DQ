@@ -43,12 +43,12 @@ export class DataQualityComponent implements OnInit {
   allObjKeys: any = [];
   allObjKeysExt;
   allObjValues: any = [];
-  collections:any = [];
+  collections: any = [];
     
-  applySearch(event: Event) {  
+  applySearch(event: Event) {
     this.searchValue = event;
     const payload = {
-      query : this.searchValue
+      query: this.searchValue
     }
     this.isLoading = true;
     this.http.getSearchCollections(payload).subscribe((result: any) => {
@@ -59,12 +59,11 @@ export class DataQualityComponent implements OnInit {
       for (let i = 0; i < this.allObjValues.length; i++) {
         this.allObjKeys.push(_.keys(this.allObjValues[i][0]))
       };
-      for (let i = 0; i < this.allObjHeader.length; i++){
-        console.log(this.allObjHeader[i]);
+      for (let i = 0; i < this.allObjHeader.length; i++) {
         this.allObjKeysExt = this.searchResult[this.allObjHeader[i]].map(function (key, value) {
           return _.values(key);
         });
-       this.collections.push(this.allObjKeysExt);
+        this.collections.push(this.allObjKeysExt);
       };
 
     }, (error) => {
@@ -77,49 +76,51 @@ export class DataQualityComponent implements OnInit {
   showAllDetails: boolean = false;
   isLoadingDB: boolean = false;
   newDB;
-  dbValues:any = [];
+  dbValues: any = [];
   getDBCollections() {
     this.isLoadingDB = true;
     this.showAllDetails = false
-    this.http.getDBCollections().subscribe((result: any) => {     
+    this.http.getDBCollections().subscribe((result: any) => {
       this.newDB = result.Cluster_Contents;
       this.db = _.keys(result.Cluster_Contents);
-      // console.log(this.newDB);
-      // console.log(this.db);
       this.dbValues.push(this.newDB);
       this.dataSource = _.values(result.Cluster_Contents);
-      console.log(this.dataSource);
-      //this.dbCollections = _.keys(result.Collection_Contents);
       this.isLoadingDB = false;
       this.showAllDetails = true
     })
   }
 
-  onOptionsSelected(value:string){
+  onOptionsSelected(value: string) {
     this.dbCollections = this.newDB[value]
-}
+  }
+  
+
   isLoadingCO: boolean = false;
+  isLoadingBt: boolean = false;
   collectionTable: any = [];
   cityKey;
   collectionKey: any = [];
   collectionValue: any = [];
   selectdItem;
-  getDBPreview(item, column) {
-    console.log(item, column);
-    this.selectdItem = column;
-    console.log(column.toString());
+  selectedColumn;
+  isButtonShow: boolean = false;
+  startIndex: number = 0;
+  endIndex: number = 100;
+
+  loadMoreDb() {
+    this.startIndex = this.endIndex;
+    this.endIndex = this.endIndex + 100;
     const payload = {
-      client_url : "",
-      db: item,
-      collection : column.toString()
+      client_url: "",
+      db: this.selectdItem,
+      collection: this.selectedColumn,
+      start_index: this.startIndex,
+      end_index: this.endIndex
     }
-    this.isLoadingCO = true;
+    this.isLoadingBt = true;
     this.http.getDBPreview(payload).subscribe((result: any) => {
-      this.isLoadingCO = false;
-      this.rowData = [];
-    this.columnDefs = [];
+      this.isLoadingBt = false;
       this.collectionTable = result.Preview;
-      if (this.collectionTable) {     
       Object.keys(this.collectionTable).map((key, index) => {
         this.rowData.push({
           ...this.collectionTable[key]
@@ -133,6 +134,30 @@ export class DataQualityComponent implements OnInit {
           });
         });
       }
+      this.rowData = JSON.parse(JSON.stringify(this.rowData));
+    })
+  }
+
+  getDBPreview(item, column) {
+    this.selectedColumn = column.toString();
+    this.selectdItem = item;
+    this.isButtonShow = false;
+    const payload = {
+      client_url : "",
+      db: this.selectdItem,
+      collection: this.selectedColumn,
+      start_index: this.startIndex,
+      end_index : this.endIndex
+    }
+    this.isLoadingCO = true;
+    this.http.getDBPreview(payload).subscribe((result: any) => {
+      this.isLoadingCO = false;
+      this.isButtonShow = true;
+      this.rowData = [];
+      this.columnDefs = [];
+      this.collectionTable = result.Preview;
+      if (this.collectionTable) {     
+        this.previewTable();
     }
   
       this.isPreviewLoaded = true;
@@ -144,11 +169,27 @@ export class DataQualityComponent implements OnInit {
     })
   }
 
+  previewTable() {
+    Object.keys(this.collectionTable).map((key, index) => {
+      this.rowData.push({
+        ...this.collectionTable[key]
+      });
+    });
+    if (this.rowData.length) {
+      Object.keys(this.rowData[0]).map((key, index) => {
+        this.columnDefs.push({
+          field: key,
+          ...this.defaultColDefs
+        });
+      });
+    }
+  }
+  
+
   dataSource;
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-    console.log(filterValue);
     }
 }
 

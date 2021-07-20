@@ -19,7 +19,7 @@
             
 
             <mat-list-item role="listitem"  *ngFor="let column of dbValues" >
-                <div class="lftItem" matTooltip="source Data Name" (click)="getDBPreview(item,column[item])" [class.activeList]="column[item] === selectdItem">
+                <div class="lftItem" matTooltip="{{column[item]}}" (click)="getDBPreview(item,column[item])" [class.activeList]="column[item] === selectdItem">
                 <mat-icon> layers</mat-icon> 
                 {{column[item]}}
                 </div>                      
@@ -116,13 +116,20 @@
         <app-ag-grid
             floatingFilter="true"
             *ngIf="isPreviewLoaded"
+            class="ag-theme-material"
             [rowData]="rowData"
             [columnDefs]="columnDefs"
             [pageSize]="50"
             [rowSelection]="'multiple'"
-            [suppressRowClickSelection]="false"     
+            [suppressRowClickSelection]="false" 
             ></app-ag-grid>
       </div>
+
+      <button *ngIf="isButtonShow" type="button" class="btn btn-light lMore" (click)="loadMoreDb()">
+        <span *ngIf="isLoadingBt" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+           <span *ngIf="isLoadingBt"> Loading...</span>
+          <span *ngIf="!isLoadingBt">Load More</span>
+        </button>
     </div>
   </div>
 </div>

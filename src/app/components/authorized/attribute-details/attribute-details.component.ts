@@ -12,6 +12,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 
 
+
 @Component({
   selector: 'app-attribute-details',
   templateUrl: './attribute-details.component.html',
@@ -19,7 +20,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 })
 export class AttributeDetailsComponent implements OnInit {
   constructor(private messageService: MessageService, private http: HttpService, private router: Router, public dialog: MatDialog,private modalService: NgbModal) {
-    
+   
    }
    @ViewChild('stickyMenu', {static: false}) menuElement: ElementRef;
    

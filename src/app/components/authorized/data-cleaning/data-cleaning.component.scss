@@ -850,45 +850,45 @@ thead {background: #f0f7f7;}
   }
 }
 
-::ng-deep .mat-tab-label-container {
-  //background: #f0f7f7;
-  -webkit-box-shadow: -1px 7px 8px -7px rgba(65,66,66,1);
-    -moz-box-shadow: -1px 7px 8px -7px rgba(65,66,66,1);
-    box-shadow: -1px 7px 8px -7px rgba(65,66,66,1);    
-}
-::ng-deep .mat-tab-body-content {
-  padding:0px!important;
-}
-::ng-deep .mat-tab-body-content {
- height: 100%;
- overflow: inherit!important;
-}
+// ::ng-deep .mat-tab-label-container {
+//   //background: #f0f7f7;
+//   -webkit-box-shadow: -1px 7px 8px -7px rgba(65,66,66,1);
+//     -moz-box-shadow: -1px 7px 8px -7px rgba(65,66,66,1);
+//     box-shadow: -1px 7px 8px -7px rgba(65,66,66,1);    
+// }
+// ::ng-deep .mat-tab-body-content {
+//   padding:0px!important;
+// }
+// ::ng-deep .mat-tab-body-content {
+//  height: 100%;
+//  overflow: inherit!important;
+// }
 
-::ng-deep .mat-tab-label{
-  border-radius: 4px 4px 0 0;
-  background: #6bc1c1!important;
-  margin-right: 5px;
-}
-::ng-deep .mat-tab-label-active {
-  background: #2d7777!important;
-  color: #fff;
-  //opacity: 1;
-  border-bottom: 2px solid #2d7777;
-}
-::ng-deep .mat-tab-labels {
-  border-bottom: 4px solid #2d7777;
-  margin-top: 30px;
-  margin-bottom: 30px;
-  box-shadow: 0 6px 10px -5px #2d7777;
-}
-::ng-deep .mat-tab-label .mat-tab-label-content{
-  font-family: "open-sans-condensed-bold";
-  text-transform: none;
-  font-size: 16px;
-}
-::ng-deep .mat-tab-header, .mat-tab-nav-bar{
-  border-bottom: 0px;
-} 
+// ::ng-deep .mat-tab-label{
+//   border-radius: 4px 4px 0 0;
+//   background: #6bc1c1!important;
+//   margin-right: 5px;
+// }
+// ::ng-deep .mat-tab-label-active {
+//   background: #2d7777!important;
+//   color: #fff;
+//   //opacity: 1;
+//   border-bottom: 2px solid #2d7777;
+// }
+// ::ng-deep .mat-tab-labels {
+//   border-bottom: 4px solid #2d7777;
+//   margin-top: 30px;
+//   margin-bottom: 30px;
+//   box-shadow: 0 6px 10px -5px #2d7777;
+// }
+// ::ng-deep .mat-tab-label .mat-tab-label-content{
+//   font-family: "open-sans-condensed-bold";
+//   text-transform: none;
+//   font-size: 16px;
+// }
+// ::ng-deep .mat-tab-header, .mat-tab-nav-bar{
+//   border-bottom: 0px;
+// } 
 
 .custom-forumula-eidot {
  .mat-chip.mat-standard-chip {
@@ -1973,31 +1973,31 @@ td.mat-cell, td.mat-footer-cell{
    font-size: 11px;
     //font-size: 12px;
     font-family: "open-sans-regular";
-   ::ng-deep .mat-tab-label {
-     border-radius: 2px 2px 0 0;
-     background: #433683!important;
-     margin-right: 5px;
-     height: 23px !important;
-     font-size: 12px;
-     color: #d1cdcd
- }
- ::ng-deep .mat-tab-label-active {
-   background: #433683 !important;
-   color: #fff!important;
-   border-bottom: 2px solid #433683;
- }
- ::ng-deep .mat-tab-labels {
-   border-bottom: 0px solid #433683;
-   margin-top: 0;
-   margin-bottom: 0;
-   box-shadow: 0 6px 10px -5px #433683;
- }
- ::ng-deep .mat-tab-label .mat-tab-label-content {
-   font-family: 'open-sans-regular';
-   text-transform: none;
-   font-size: 12px;
-   //color: #d1cdcd;
- }
+//    ::ng-deep .mat-tab-label {
+//      border-radius: 2px 2px 0 0;
+//      background: #433683!important;
+//      margin-right: 5px;
+//      height: 23px !important;
+//      font-size: 12px;
+//      color: #d1cdcd
+//  }
+//  ::ng-deep .mat-tab-label-active {
+//    background: #433683 !important;
+//    color: #fff!important;
+//    border-bottom: 2px solid #433683;
+//  }
+//  ::ng-deep .mat-tab-labels {
+//    border-bottom: 0px solid #433683;
+//    margin-top: 0;
+//    margin-bottom: 0;
+//    box-shadow: 0 6px 10px -5px #433683;
+//  }
+//  ::ng-deep .mat-tab-label .mat-tab-label-content {
+//    font-family: 'open-sans-regular';
+//    text-transform: none;
+//    font-size: 12px;
+//    //color: #d1cdcd;
+//  }
  }
  .aliceblue{
     background: aliceblue;
@@ -2379,45 +2379,45 @@ td.mat-cell, td.mat-footer-cell{
 
 // OLD Styles
 
- ::ng-deep .mat-tab-label-container {
-  //background: #f0f7f7;
-  -webkit-box-shadow: -1px 7px 8px -7px rgba(65,66,66,1);
-    -moz-box-shadow: -1px 7px 8px -7px rgba(65,66,66,1);
-    box-shadow: -1px 7px 8px -7px rgba(65,66,66,1);    
-}
-::ng-deep .mat-tab-body-content {
-  padding:0px!important;
-}
-::ng-deep .mat-tab-body-content {
- height: 100%;
- overflow: inherit!important;
-}
+//  ::ng-deep .mat-tab-label-container {
+//   //background: #f0f7f7;
+//   -webkit-box-shadow: -1px 7px 8px -7px rgba(65,66,66,1);
+//     -moz-box-shadow: -1px 7px 8px -7px rgba(65,66,66,1);
+//     box-shadow: -1px 7px 8px -7px rgba(65,66,66,1);    
+// }
+// ::ng-deep .mat-tab-body-content {
+//   padding:0px!important;
+// }
+// ::ng-deep .mat-tab-body-content {
+//  height: 100%;
+//  overflow: inherit!important;
+// }
 
-::ng-deep .mat-tab-label{
-  border-radius: 4px 4px 0 0;
-  background: #6bc1c1!important;
-  margin-right: 5px;
-}
-::ng-deep .mat-tab-label-active {
-  background: #2d7777!important;
-  color: #fff;
-  //opacity: 1;
-  border-bottom: 2px solid #2d7777;
-}
-::ng-deep .mat-tab-labels {
-  border-bottom: 4px solid #2d7777;
-  margin-top: 0;
-  margin-bottom: 0;
-  box-shadow: 0 6px 10px -5px #2d7777;
-}
-::ng-deep .mat-tab-label .mat-tab-label-content{
-  font-family: "open-sans-condensed-bold";
-  text-transform: none;
-  font-size: 16px;
-}
-::ng-deep .mat-tab-header, .mat-tab-nav-bar{
-  border-bottom: 0px;
-} 
+// ::ng-deep .mat-tab-label{
+//   border-radius: 4px 4px 0 0;
+//   background: #6bc1c1!important;
+//   margin-right: 5px;
+// }
+// ::ng-deep .mat-tab-label-active {
+//   background: #2d7777!important;
+//   color: #fff;
+//   //opacity: 1;
+//   border-bottom: 2px solid #2d7777;
+// }
+// ::ng-deep .mat-tab-labels {
+//   border-bottom: 4px solid #2d7777;
+//   margin-top: 0;
+//   margin-bottom: 0;
+//   box-shadow: 0 6px 10px -5px #2d7777;
+// }
+// ::ng-deep .mat-tab-label .mat-tab-label-content{
+//   font-family: "open-sans-condensed-bold";
+//   text-transform: none;
+//   font-size: 16px;
+// }
+// ::ng-deep .mat-tab-header, .mat-tab-nav-bar{
+//   border-bottom: 0px;
+// } 
 
  .tab-card {
    padding: 0;
@@ -3524,3 +3524,22 @@ h5.sub-title-label {
     height: 320px;
   
   }
+
+  ::ng-deep .rag-green{
+    background: lightcoral !important;
+  }
+.btn{
+  margin-right: 10px;
+  font-family: 'open-sans-condensed-bold'!important;
+  .mat-icon{
+    position: relative;
+    top: 5px;
+  }
+ 
+}
+.btn.disabled, .btn:disabled {
+  opacity: 0.2;
+  cursor: not-allowed;
+  //background: gray !important;
+}
+
