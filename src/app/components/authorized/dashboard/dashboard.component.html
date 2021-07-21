@@ -527,6 +527,70 @@
                         <div *ngFor="let domain of domainMatches" class="domain">
                            <button class="btn btn-outline-primary mb-2 mr-2 fs-b"  *ngIf="domain === profile.column" (click)="openScrollableContent(longContent)">View Domain Analysis</button>
                         </div>
+
+                        <ng-template #content let-modal>
+                          <div class="modal-header">
+                            <h4 class="modal-title">DOMAIN ANALYSIS</h4>
+                            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <p>One fine body&hellip;</p>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+                          </div>
+                        </ng-template>
+                        
+                        <ng-template #longContent let-modal>
+                          <div class="modal-header">
+                            <h4 class="modal-title">DOMAIN ANALYSIS</h4>
+                            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <table class="table table-striped">
+                              <thead>
+                              <tr>
+                                <th scope="col">Continent</th>
+                                <th scope="col">Coordinates</th>
+                                <th scope="col">elevation_ft</th>
+                                <th scope="col">gps_code</th>
+                                <th scope="col">iata_code</th>
+                                <th scope="col">ident</th>
+                                <th scope="col">iso_country</th>
+                                <th scope="col">iso_region</th>
+                                <th scope="col">local_code</th>
+                                <th scope="col">municipality</th>
+                                <th scope="col">name</th>
+                                <th scope="col">type</th> 
+                              </tr>
+                              </thead>
+                              <tbody *ngFor="let val of newVal">
+                              <tr *ngFor="let airline of val.airportCodes; let i= index" style="width:100%;">
+                              <td>{{airline.continent}}</td>
+                              <td>{{airline.coordinates}}</td>
+                              <td>{{airline.elevation_ft}}</td>
+                              <td>{{airline.gps_code}}</td>
+                              <td>{{airline.iata_code}}</td>
+                              <td>{{airline.ident}}</td>
+                              <td>{{airline.iso_country}}</td>
+                              <td>{{airline.iso_region}}</td>
+                              <td>{{airline.local_code}}</td>
+                              <td>{{airline.municipality}}</td>
+                              <td>{{airline.name}}</td>
+                              <td>{{airline.type}}</td> 
+                            </tr>
+                              </tbody>
+                            </table>
+                            <div class="loader-12" *ngIf="isLoad" style="margin-top:40px;"></div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+                          </div>
+                        </ng-template>
                         
                        
                         <div class="viewTableN"> 
@@ -577,7 +641,7 @@
                     <div class="rgt-attr">
                       
                       <h4 class="attr-tite"> <span class="subT gb">Correlation Summary</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
-                     <mat-card class="bg-green ch2" style="height:319px;" [ngClass]="{'my_class': step === 'step1'}">                       
+                     <mat-card class="bg-green ch2" style="height:319px;">                       
                         <app-corelation-summary [summary]="profile.correlationSummary"></app-corelation-summary> 
                         <!-- <highcharts-chart
                               [Highcharts] = "highcharts" 

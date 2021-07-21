@@ -3,9 +3,9 @@ import { HttpService } from 'src/app/services/http-service.service';
 import * as _ from 'lodash';
 import { FormBuilder, FormGroup, FormArray, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { DiffContent, DiffResults } from 'ngx-text-diff/lib/ngx-text-diff.model';
-import * as XLSX from 'xlsx';
-type AOA = any[][];
+// import { DiffContent, DiffResults } from 'ngx-text-diff/lib/ngx-text-diff.model';
+// import * as XLSX from 'xlsx';
+// type AOA = any[][];
 
 
 @Component({
@@ -43,9 +43,9 @@ export class DataQualityComponent implements OnInit {
 
   }
 
-  onCompareResults(diffResults: DiffResults) {
-    console.log('diffResults', diffResults);
-  }
+  // onCompareResults(diffResults: DiffResults) {
+  //   console.log('diffResults', diffResults);
+  // }
 
   // onFileChange(evt: any) {
   //   /* wire up file reader */
@@ -266,7 +266,7 @@ export class DataQualityComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-  
+  urlValue;
   open(content) {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;

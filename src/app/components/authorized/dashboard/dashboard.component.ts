@@ -18,6 +18,7 @@ import {MatChipInputEvent} from '@angular/material/chips';
 import {Observable} from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { PreviewDialogComponent } from '../../../shared/preview-dialog/preview-dialog.component';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 import { ConditionalFormulaEditorComponent } from '../../../shared/conditional-formula-editor/conditional-formula-editor.component';
 
@@ -34,7 +35,7 @@ export class DashboardComponent implements OnInit {
       private http: HttpService,
       private messageService: MessageService,
       private auth: AuthGuardService,
-      private router: Router) {
+      private router: Router, private modalService: NgbModal) {
       const rights = this.auth.getUserRole().rights;
       this.rights = rights ? rights : [];
 
@@ -74,6 +75,8 @@ export class DashboardComponent implements OnInit {
    rowData: any = [];
   columnDefs: any = [];
   chartData: any = [];
+  domainType: any = {};
+  showDomainType = false;
 
   customOptions: OwlOptions = {
     loop: true,
@@ -181,9 +184,10 @@ export class DashboardComponent implements OnInit {
      this.getAllSources();
      console.log(this.selectedSource);
   }
-
+  domainMatches;
   changeProfile(profile) {
     this.profile = profile;
+    this.domainMatches = _.keys(this.domainType.Domain_Matches); 
     const extractValues = ({ unique_values, counts }) => [unique_values.toString(), counts];
     this.chartData = this.profile.frequncyAnalysis.map(extractValues);
     if (this.profile.LengthStatistics) {
@@ -680,7 +684,7 @@ export class DashboardComponent implements OnInit {
 
 
   showTab(id) {
-    console.log('has class', this.step1.nativeElement.classList.contains('uploaded'));
+    //console.log('has class', this.step1.nativeElement.classList.contains('uploaded'));
 
     this.actionTabId = id;
     if (id === '1') {
@@ -754,6 +758,64 @@ export class DashboardComponent implements OnInit {
    dialogRef.afterClosed().subscribe(data => {
    });
 
- }
+  }
+  uniqueName;
+  domainTypeIdentity() {
+    const payload = {
+      sourcepath: this.selectedSource.templateSourcePath
+    };
+    this.http.getDomainTypeIdentity(payload).subscribe((result: any) => {
+     
+      this.domainType = result;
+      this.uniqueName = result.Unique_values.DESTINATION_AIRPORT;
+      
+    }, (error) => {
+      console.log('ERROR', error);
+    })
+  }
+
+  newVal;
+  isLoad = false;
+  getAllSearchRequest() {
+      this.http.getStartRequests().subscribe((result: any) => {
+        this.newVal = _.values(result);
+        this.isLoad = true;
+        if (this.closeResult) {
+          return;
+        }
+      });
+  }
+
+  searchMultipleNumbers() {
+    const payload = this.uniqueName;
+    this.http.startRequests(payload)
+    this.getAllSearchRequest();
+    if (this.closeResult) {
+      return;
+    }
+   
+  }
+  
+  closeResult: string;
+  openScrollableContent(longContent) {
+     this.searchMultipleNumbers(); 
+    this.modalService.open(longContent, { scrollable: true, size: 'xl' }).result.then((result) => {
+      console.log(result);
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      //window.location.reload();
+    });       
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return  `with: ${reason}`;
+    }
+  }
 }
 

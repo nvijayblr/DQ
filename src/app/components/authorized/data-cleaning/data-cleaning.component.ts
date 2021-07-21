@@ -10,6 +10,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 import { CleanLogsComponent } from 'src/app/shared/clean-logs/clean-logs.component';
 import { PreviewDialogComponent } from '../../../shared/preview-dialog/preview-dialog.component';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-data-cleaning',
@@ -23,7 +24,8 @@ export class DataCleaningComponent implements OnInit {
       private http: HttpService,
       private dialog: MatDialog,
       private route: ActivatedRoute,
-      private router: Router,
+     private router: Router,
+     private modalService: NgbModal
    ) {
    }
   @ViewChild('stickyMenu', { static: false }) menuElement: ElementRef;
@@ -83,6 +85,8 @@ export class DataCleaningComponent implements OnInit {
   newMessage;
   showtable = true;
   chartData: any = [];
+  domainType: any = {};
+  showDomainType = false;
 
    sliderOptions: any = {
       floor: 0,
@@ -358,8 +362,9 @@ export class DataCleaningComponent implements OnInit {
       this.router.navigate([currentUrl]);
     });
   }
-
+  domainMatches;
   changeProfile(profile) {
+    this.domainMatches = _.keys(this.domainType.Domain_Matches); 
     this.profile = profile;
     const extractValues = ({ unique_values, counts }) => [unique_values.toString(), counts];   
     this.chartData = this.profile.frequncyAnalysis.map(extractValues);
@@ -907,5 +912,66 @@ export class DataCleaningComponent implements OnInit {
    //      this.sticky = false;
    //    }
    //  }
+  
 
-}
+   uniqueName;
+   domainTypeIdentity() {
+     const payload = {
+       sourcepath: this.titleSrc
+     };
+     this.http.getDomainTypeIdentity(payload).subscribe((result: any) => {
+      
+       this.domainType = result;
+       this.uniqueName = result.Unique_values.DESTINATION_AIRPORT;
+       
+     }, (error) => {
+       console.log('ERROR', error);
+     })
+   }
+ 
+   newVal;
+   isLoad = false;
+   getAllSearchRequest() {
+       this.http.getStartRequests().subscribe((result: any) => {
+         this.newVal = _.values(result);
+         this.isLoad = true;
+         if (this.closeResult) {
+           return;
+         }
+       });
+   }
+ 
+   searchMultipleNumbers() {
+     const payload = this.uniqueName;
+     this.http.startRequests(payload)
+     this.getAllSearchRequest();
+     if (this.closeResult) {
+       return;
+     }
+    
+   }
+   
+   closeResult: string;
+   openScrollableContent(longContent) {
+      this.searchMultipleNumbers(); 
+     this.modalService.open(longContent, { scrollable: true, size: 'xl' }).result.then((result) => {
+       console.log(result);
+       this.closeResult = `Closed with: ${result}`;
+     }, (reason) => {
+       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+       //window.location.reload();
+     });       
+   }
+ 
+   private getDismissReason(reason: any): string {
+     if (reason === ModalDismissReasons.ESC) {
+       return 'by pressing ESC';
+     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+       return 'by clicking on a backdrop';
+     } else {
+       return  `with: ${reason}`;
+     }
+   }
+ }
+
+
