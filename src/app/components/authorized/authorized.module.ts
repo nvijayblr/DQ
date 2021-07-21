@@ -27,6 +27,7 @@ import { OracleComponent } from './create-source/oracle/oracle.component';
 import { SchemaTableComponent } from './create-source/schema-table/schema-table.component';
 import { MainDashboardComponent } from './main-dashboard/main-dashboard.component';
 import { MangoDBComponent } from './create-source/mango-db/mango-db.component';
+import { NgxTextDiffModule } from 'ngx-text-diff';
 
 
 @NgModule({
@@ -58,7 +59,8 @@ import { MangoDBComponent } from './create-source/mango-db/mango-db.component';
     MatFormFieldModule,
      MatSelectFilterModule,
      NgbModule,
-     Ng2SearchPipeModule
+     Ng2SearchPipeModule,
+     NgxTextDiffModule
   ],
   providers:[CanDeactivateContact, CanDeactivateSource],
    exports: [AttributeDetailsComponent, CorrelationDetailsComponent,NgbModule]
