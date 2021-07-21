@@ -9,6 +9,7 @@ import {MatSelectModule, MatFormFieldModule} from '@angular/material';
 import { Routes, RouterModule, CanActivate } from '@angular/router';
 import { AuthGuardService as AuthGaurd } from './../../services/auth-guard.service';
 import { SharedModule } from './../../shared/shared.module';
+import { CanDeactivateContact , CanDeactivateSource} from './candeactivate.route';
 
 import { AuthorizedRoutingModule } from './authorized-routing.module';
 import { AuthorizedComponent } from './authorized.component';
@@ -58,7 +59,8 @@ import { MangoDBComponent } from './create-source/mango-db/mango-db.component';
      MatSelectFilterModule,
      NgbModule,
      Ng2SearchPipeModule
-   ],
+  ],
+  providers:[CanDeactivateContact, CanDeactivateSource],
    exports: [AttributeDetailsComponent, CorrelationDetailsComponent,NgbModule]
 
 })

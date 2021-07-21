@@ -15,6 +15,7 @@ import { OracleComponent } from './create-source/oracle/oracle.component';
 import { SchemaTableComponent } from './create-source/schema-table/schema-table.component';
 import { MainDashboardComponent } from './main-dashboard/main-dashboard.component';
 import { MangoDBComponent } from './create-source/mango-db/mango-db.component';
+import { CanDeactivateContact, CanDeactivateSource } from './candeactivate.route';
 
 const routes: Routes = [
   {
@@ -53,11 +54,11 @@ const routes: Routes = [
         // canActivate: [AuthGaurd]
        },
        { path: 'add-source-data', component: ProfileComponent },
-       { path: 'create-source-data', component: CreateSourceComponent },
+       { path: 'create-source-data', component: CreateSourceComponent, canDeactivate: [CanDeactivateSource] },
        { path: 'attribute-details-data', component: AttributeDetailsComponent },
        { path: 'data-cleaning', component: DataCleaningComponent },
        { path: 'reference-data', component: DataQualityComponent },
-      { path: 'create-profile-data', component: CreateProfileDataComponent },
+      { path: 'create-profile-data', component: CreateProfileDataComponent,canDeactivate: [CanDeactivateContact] },
       { path: 'add-source-data/oracle', component: OracleComponent },
       { path: 'catalog/sources', component: SchemaTableComponent },
       { path: 'dashboard', component: MainDashboardComponent },

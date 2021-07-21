@@ -39,6 +39,7 @@ import { PreviewDialogComponent } from './preview-dialog/preview-dialog.componen
 import { PieChartComponent } from './pie-chart/pie-chart.component';
 import { ConnectionTestComponent } from './connection-test/connection-test.component';
 import { CleanLogsComponent } from './clean-logs/clean-logs.component';
+import { DeactiveDialogComponent } from './deactive-dialog/deactive-dialog.component';
 
 @NgModule({
    imports: [
@@ -85,6 +86,7 @@ import { CleanLogsComponent } from './clean-logs/clean-logs.component';
     PieChartComponent,
     ConnectionTestComponent,
     CleanLogsComponent,
+    DeactiveDialogComponent,
   ],
   exports: [
     FormsModule,
@@ -136,7 +138,8 @@ import { CleanLogsComponent } from './clean-logs/clean-logs.component';
     PreviewDialogComponent,
     PieChartComponent,
     ConnectionTestComponent,
-    CleanLogsComponent
+    CleanLogsComponent,
+    DeactiveDialogComponent
   ]
 })
 export class SharedModule {}

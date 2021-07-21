@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation, ViewChild, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable} from 'rxjs';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { HttpService } from '../../../services/http-service.service';
@@ -11,6 +12,7 @@ import { OwlOptions } from 'ngx-owl-carousel-o';
 import { S } from '@angular/cdk/keycodes';
 import * as moment from 'moment';
 import { ToleranceLevelDialogComponent } from '../../../shared/tolerance-level-dialog/tolerance-level-dialog.component';
+import { DeactiveDialogComponent } from '../../../shared/deactive-dialog/deactive-dialog.component';
 
 @Component({
   selector: 'app-create-source',
@@ -536,5 +538,16 @@ export class CreateSourceComponent implements OnInit {
     this.dialog.open(ToleranceLevelDialogComponent, {
       width: '800px',
     });
+  }
+
+  confirmDialog(): Observable<boolean> {
+    const message = 'You have not saved your current work. Do you want to proceed and discard?';
+    const data = { 'message': message, 'toShowCancel': true, 'buttonYesCaption': 'Yes', 'buttonNoCaption': 'No' };
+    const dialogRef = this.dialog.open(DeactiveDialogComponent, {
+      width: '400px',
+      height: '200px',
+      data: data
+    });
+    return dialogRef.afterClosed();
   }
 }
