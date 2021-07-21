@@ -5,7 +5,7 @@
       <div class="clearfix my-community-body">
         <div class="home-panel">
           <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
-                <form [formGroup]="analysisForm">          
+                <form [formGroup]="analysisForm" *ngIf="!collectionsForm">          
                   <ng-template matStepLabel>Source Data</ng-template>                  
                       <div class="form-continer flex-containers">
                         <mat-card class="border no-rounded list shrare-post pbl card1">
@@ -88,8 +88,78 @@
                          </mat-card>
 
                       </div>                                
-          </form>
-        
+                 </form>
+
+                 <ng-template #content let-modal>
+                  <div class="modal-header">
+                    <h4 class="modal-title">Save Collections</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <p>{{alertMessage}}</p>
+                    <p>Path : {{savePath}}</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+                  </div>
+                </ng-template>
+
+                 <form [formGroup]="collectionForm" *ngIf="collectionsForm">          
+                  <ng-template matStepLabel>Source Data</ng-template>                  
+                      <div class="form-continer flex-containers">
+                        <mat-card class="border no-rounded list shrare-post pbl card1">
+                           <h1 class="share-post-title">Save Your<span class="yellow"> Collection</span></h1> 
+                          <!-- <h1 class="share-post-title"  *ngIf="isEditMode">Edit Your<span class="yellow"> Source</span></h1> -->
+                        <div class="list flex-containers flex-start wrap">
+                        <div class="list-item-2 outline wth">
+                        
+                          <div class="list-item-2 outline split">
+                              <mat-label class="sub-title">Source Name<span class="red">*</span></mat-label>
+                              <mat-form-field appearance="fill">
+                                <input matInput placeholder="Source Name" formControlName="sourceDataName" maxlength="50" autocomplete="off"/>
+                              </mat-form-field>
+                              <!-- <mat-error class="errSty" *ngIf="!afControls.sourceDataName.value && afControls.sourceDataName.touched">Please Enter Source Name</mat-error> -->
+                              </div>
+                              <div class="list-item-2 outline splitR">
+                              <mat-label class="mtop sub-title">Client URL <i class="fa fa-question-circle-o" aria-hidden="true"></i>
+                              </mat-label>                                                    
+                              <mat-form-field appearance="fill">
+                                <input matInput placeholder="Client URL" formControlName="clientUrl" maxlength="250" autocomplete="off"/>
+                              </mat-form-field>
+                              </div>
+
+                              <div class="list-item-2 outline split">
+                                <mat-label class="mtop sub-title">Database</mat-label>                                                    
+                                <mat-form-field appearance="fill">
+                                  <input matInput placeholder="Database" formControlName="database" maxlength="250" autocomplete="off"/>
+                                </mat-form-field>
+                                </div>
+
+                                <div class="list-item-2 outline splitR">
+                                  <mat-label class="mtop sub-title">Collection</mat-label>                                                    
+                                  <mat-form-field appearance="fill">
+                                    <input matInput placeholder="Collection" formControlName="collection" maxlength="250" autocomplete="off"/>
+                                  </mat-form-field>
+                                  </div>
+
+                              <div class="bdr"></div>
+                                          
+                              <div class="act-btn-wrapper m1t">
+                                  <button mat-stroked-button class="btnBlueGreenN addico"    (click)="saveMangoDbCollection()">Submit <mat-icon>navigate_next</mat-icon></button>
+                                  <!-- <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"  *ngIf="isEditMode"  (click)="editSourceSave()">Submit <mat-icon>navigate_next</mat-icon></button> -->
+          
+                                  <!-- <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"
+                                  [disabled]="!afControls.sourceDataName.value || !sourceSettings.frequency || !sourceSettings.uploadDate || !flError"
+                                  (click)="validateSourceNameAndNext()">Next <mat-icon>navigate_next</mat-icon></button> -->
+                              </div>                                                     
+                         </div>
+                         </div>
+                         </mat-card>
+
+                      </div>                                
+                 </form>
          
         </div>
       </div>

@@ -1281,3 +1281,13 @@ tr:nth-child(odd) {background: #ffffff}
   }
  
 }
+
+.modal-holder{
+  animation-name: example;
+  animation-duration: 0.3s;
+}
+
+@keyframes example {
+  0%   {transform: scale(0.5)}
+  100% {transform: scale(1)}
+}

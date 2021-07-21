@@ -87,6 +87,7 @@ export class LoginComponent implements OnInit {
       if (result.errorMsg) {
         this.alertMessage = result.errorMsg;
         this.modalService.open(this.modalContent, { windowClass: 'modal-holder' });
+        
        // alert(result.errorMsg);
         return;
       }

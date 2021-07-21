@@ -1,8 +1,8 @@
 import {AfterViewInit, Component, ViewChild, OnInit} from '@angular/core';
-
 import { HttpService } from 'src/app/services/http-service.service';
 import * as _ from 'lodash';
 import { FormBuilder, FormGroup, FormArray, Validators, AbstractControl, FormControl } from '@angular/forms';
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -18,10 +18,9 @@ export class DataQualityComponent implements OnInit {
   defaultColDefs = { sortable: true, filter: true, minWidth: 180, resizable: true };
   rowData: any = [];
   columnDefs: any = [];
-
-
   getDB: FormGroup;
-  constructor(private http: HttpService, private fb: FormBuilder,) {
+  closeResult = '';
+  constructor(private http: HttpService, private fb: FormBuilder,private modalService: NgbModal) {
   
   }
 
@@ -77,10 +76,14 @@ export class DataQualityComponent implements OnInit {
   isLoadingDB: boolean = false;
   newDB;
   dbValues: any = [];
+  clientUrl;
   getDBCollections() {
     this.isLoadingDB = true;
-    this.showAllDetails = false
-    this.http.getDBCollections().subscribe((result: any) => {
+    this.showAllDetails = false;
+    const payload = {
+      client_url: this.clientUrl || "",
+    }
+    this.http.getDBCollections(payload).subscribe((result: any) => {
       this.newDB = result.Cluster_Contents;
       this.db = _.keys(result.Cluster_Contents);
       this.dbValues.push(this.newDB);
@@ -190,6 +193,26 @@ export class DataQualityComponent implements OnInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+  
+  open(content) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+      this.clientUrl = result;
+      this.getDBCollections();
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
     }
+  }
 }
 

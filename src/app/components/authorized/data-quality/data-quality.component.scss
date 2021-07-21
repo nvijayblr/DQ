@@ -230,6 +230,15 @@ td.mat-cell, td.mat-footer-cell{
       background:#261f4b;
     }
   }
+
+  &.green{ 
+    background:#17a2b8;
+    float: right;
+    width: 200px;
+    &:hover{ 
+      background:#1a8191;
+    }
+  }
  
 }
 ::ng-deep .ag-grid-wrapper{

@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpService } from '../../../../services/http-service.service';
 
@@ -9,32 +10,12 @@ import { HttpService } from '../../../../services/http-service.service';
   styleUrls: ['./mango-db.component.scss']
 })
 export class MangoDBComponent implements OnInit {
+  @ViewChild("content", {static: false}) modalContent: TemplateRef<any>;
   analysisForm: FormGroup;
+  collectionForm : FormGroup;
   srcCategory = [];
-  constructor(
-    private fb: FormBuilder,
-    private route: ActivatedRoute,
-    private http: HttpService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-  ) {
-   
-   }
-   get afControls(): any { return this.analysisForm.controls; }
-  ngOnInit() {
-    this.analysisForm = this.fb.group({
-      sourceDataName: ['', [Validators.required, Validators.maxLength(100)]],
-      clientUrl: ['', [Validators.required]],
-      sourceFileName: ['', []],
-      database: ['', [Validators.required, Validators.maxLength(100)]],
-      collection: ['', [Validators.required, Validators.maxLength(100)]],
-      sourceCategory: ['', [Validators.required]],
-    });
-
-    this.getsourceCategory();
-    
-  }
-
+  saveCollections;
+  collectionsForm: boolean = false;
   sourceFile: any = {};
   flError = true;
   sourceNameErr = false;
@@ -44,6 +25,68 @@ export class MangoDBComponent implements OnInit {
   selectedType;
   chooseOptions: string;
   mode;
+  alertMessage;
+  savePath;
+  isLoading = false;
+  loaderMsg = '';
+  refFiles: any = [];
+  summary: any = {};
+  uploadMethod;
+  constructor(
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private http: HttpService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private modalService: NgbModal
+  ) {
+   
+   }
+   get afControls(): any { return this.analysisForm.controls; }
+  ngOnInit() {
+    this.saveCollections = this.route.snapshot.queryParamMap.get('save');
+    if (this.saveCollections) {
+      this.collectionsForm = true;
+    }
+    console.log(this.collectionsForm);
+    this.analysisForm = this.fb.group({
+      sourceDataName: ['', [Validators.required, Validators.maxLength(100)]],
+      clientUrl: ['', [Validators.required]],
+      sourceFileName: ['', []],
+      database: ['', [Validators.required, Validators.maxLength(100)]],
+      collection: ['', [Validators.required, Validators.maxLength(100)]],
+      sourceCategory: ['', [Validators.required]],
+    });
+
+    this.collectionForm = this.fb.group({
+      sourceDataName: ['', [Validators.required, Validators.maxLength(100)]],
+      clientUrl: ['', []],
+      database: ['', [Validators.required, Validators.maxLength(100)]],
+      collection: ['', [Validators.required, Validators.maxLength(100)]],
+    });
+
+    this.getsourceCategory();
+    
+  }
+
+  saveMangoDbCollection() {
+    const payload = {  
+      client_url: this.collectionForm.controls.clientUrl.value || '',
+      db: this.collectionForm.controls.database.value,
+      collection:this.collectionForm.controls.collection.value,   
+      output_filename : this.collectionForm.controls.sourceDataName.value + '.csv',
+    }
+    this.http.saveMangoDbCollection(payload).subscribe((result: any) => {
+      this.alertMessage = result.Message;
+      this.savePath = result.outputpath;
+      this.modalService.open(this.modalContent, { windowClass: 'modal-holder' });
+      this.router.navigate([`auth/reference-data`]);
+    }, (error) => {
+      this.isLoading = false;
+    });
+  }
+
+
 
   onSourceFileSelected(file) {
     this.sourceFile = file;
@@ -77,11 +120,7 @@ export class MangoDBComponent implements OnInit {
     //this.loadSourcePreview();
   }
 
-  isLoading = false;
-  loaderMsg = '';
-  refFiles: any = [];
-  summary: any = {};
-  uploadMethod;
+
 
   saveSource() {
     const analysis = this.analysisForm.value;
@@ -114,7 +153,6 @@ export class MangoDBComponent implements OnInit {
     this.loaderMsg = 'Saving Source and Reference data...';
 
     this.http.saveSourceMangoDB(formData, this.mode === 'edit' ? 'put' : 'post').subscribe((result: any) => {
-      console.log('RESULT', result)
       this.isLoading = false;
       alert(result.message);
         if (result.errorMsg) {
@@ -137,7 +175,6 @@ export class MangoDBComponent implements OnInit {
       // }
         
       }, (error) => {
-        console.log('Error', error);
         this.isLoading = false;
       });
 

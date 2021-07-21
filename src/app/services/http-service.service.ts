@@ -388,8 +388,8 @@ export class HttpService  {
       }));   
   }
 
-  getDBCollections(): Observable<any> {
-    return this.http.get<any>(`${this.rootUrl}/api/GetDB_Collections`).pipe(
+  getDBCollections(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/GetDB_Collections`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
@@ -399,6 +399,16 @@ export class HttpService  {
 
   getDBPreview(payload): Observable<any> {
     return this.http.post<any>(`${this.rootUrl}/api/MongoDB_Collection_Preview`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  saveMangoDbCollection(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/MongoDB_Collection_Save`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {
