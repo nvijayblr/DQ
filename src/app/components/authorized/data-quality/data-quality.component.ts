@@ -278,7 +278,7 @@ export class DataQualityComponent implements OnInit {
   }
 
 
-   status: any[];
+  status: any[];
   formula: string = 'mongoDb';
   
   downloadCSV() {

@@ -84,7 +84,8 @@
         aria-describedby="search-addon" [(ngModel)]='searchValue' (keyup.enter)="applySearch($event.target.value)"/>
       <button type="button" class="btn btn-primary" (click)="applySearch(searchValue)">search</button>
     </div>
-    <div class="loader-12" *ngIf="isLoading"></div>
+    <!-- <div class="loader-12" *ngIf="isLoading"></div> -->
+    <div class="spinner2" *ngIf="isLoading"></div>
        <div class="mbt" *ngFor="let header of allObjHeader; let i = index;">
         <h2 class="nTitle">{{header}}</h2>
         <table class="table table-bordered table-striped mb-0 attTable" >                  
@@ -151,7 +152,8 @@
         <button  class="btnBlueGreenN addico" (click)="getDBPreview()">GET DB PREVIEW</button>
       </div>
       </div> -->
-      <div class="loader-12" *ngIf="isLoadingCO" style="margin-top:40px;"></div>
+      <!-- <div class="loader-12" *ngIf="isLoadingCO" style="margin-top:40px;"></div> -->
+      <div class="spinner2" *ngIf="isLoadingCO"></div>
       <div style="clear: both;">
         <app-ag-grid
             floatingFilter="true"
@@ -207,7 +209,7 @@
       <div class="form-group">
         <label for="url">Mongo DB Cluster Client URL</label>
         <div class="input-group">
-          <input type="text" class="form-control"  name="urlValue" #uname="ngModel"  [(ngModel)]="urlValue"  placeholder="URL" >
+          <input type="text" class="form-control"  name="urlValue" #uname="ngModel"  [(ngModel)]="urlValue"  placeholder="URL" required>
           <ng-container *ngIf="uname.touched && uname.invalid">
             <p class="err">Please enter your URL</p>
           </ng-container>
