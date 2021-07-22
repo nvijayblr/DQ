@@ -44,11 +44,10 @@ export class MangoDBComponent implements OnInit {
    }
    get afControls(): any { return this.analysisForm.controls; }
   ngOnInit() {
-    this.saveCollections = this.route.snapshot.queryParamMap.get('save');
-    if (this.saveCollections) {
-      this.collectionsForm = true;
-    }
-    console.log(this.collectionsForm);
+    // this.saveCollections = this.route.snapshot.queryParamMap.get('save');
+    // if (this.saveCollections) {
+    //   this.collectionsForm = true;
+    // }
     this.analysisForm = this.fb.group({
       sourceDataName: ['', [Validators.required, Validators.maxLength(100)]],
       clientUrl: ['', [Validators.required]],
@@ -58,33 +57,33 @@ export class MangoDBComponent implements OnInit {
       sourceCategory: ['', [Validators.required]],
     });
 
-    this.collectionForm = this.fb.group({
-      sourceDataName: ['', [Validators.required, Validators.maxLength(100)]],
-      clientUrl: ['', []],
-      database: ['', [Validators.required, Validators.maxLength(100)]],
-      collection: ['', [Validators.required, Validators.maxLength(100)]],
-    });
+    // this.collectionForm = this.fb.group({
+    //   sourceDataName: ['', [Validators.required, Validators.maxLength(100)]],
+    //   clientUrl: ['', []],
+    //   database: ['', [Validators.required, Validators.maxLength(100)]],
+    //   collection: ['', [Validators.required, Validators.maxLength(100)]],
+    // });
 
     this.getsourceCategory();
     
   }
 
-  saveMangoDbCollection() {
-    const payload = {  
-      client_url: this.collectionForm.controls.clientUrl.value || '',
-      db: this.collectionForm.controls.database.value,
-      collection:this.collectionForm.controls.collection.value,   
-      output_filename : this.collectionForm.controls.sourceDataName.value + '.csv',
-    }
-    this.http.saveMangoDbCollection(payload).subscribe((result: any) => {
-      this.alertMessage = result.Message;
-      this.savePath = result.outputpath;
-      this.modalService.open(this.modalContent, { windowClass: 'modal-holder' });
-      this.router.navigate([`auth/reference-data`]);
-    }, (error) => {
-      this.isLoading = false;
-    });
-  }
+  // saveMangoDbCollection() {
+  //   const payload = {  
+  //     client_url: this.collectionForm.controls.clientUrl.value || '',
+  //     db: this.collectionForm.controls.database.value,
+  //     collection:this.collectionForm.controls.collection.value,   
+  //     output_filename : this.collectionForm.controls.sourceDataName.value + '.csv',
+  //   }
+  //   this.http.saveMangoDbCollection(payload).subscribe((result: any) => {
+  //     this.alertMessage = result.Message;
+  //     this.savePath = result.outputpath;
+  //     this.modalService.open(this.modalContent, { windowClass: 'modal-holder' });
+  //     this.router.navigate([`auth/reference-data`]);
+  //   }, (error) => {
+  //     this.isLoading = false;
+  //   });
+  // }
 
 
 

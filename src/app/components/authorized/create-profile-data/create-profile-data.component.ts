@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation, ViewChild, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
 import { Observable} from 'rxjs';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
@@ -14,13 +15,14 @@ import { S } from '@angular/cdk/keycodes';
 import * as moment from 'moment';
 
 
+
 @Component({
   selector: 'app-create-profile-data',
   templateUrl: './create-profile-data.component.html',
   styleUrls: ['./create-profile-data.component.scss']
 })
 export class CreateProfileDataComponent implements OnInit {
-
+  backType;
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
@@ -29,7 +31,7 @@ export class CreateProfileDataComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private authGuardService: AuthGuardService,
-    private messageService: MessageService) {
+    private messageService: MessageService, private location: Location) {
       this.appConfig = appConfig;
       this.route.queryParams.subscribe(params => {
          this.sourceId = params.sourceId;
@@ -37,8 +39,10 @@ export class CreateProfileDataComponent implements OnInit {
          if (!params.sourceId) {
           localStorage.removeItem('dq-source-data');
         }
+      });   
+      location.subscribe((back: PopStateEvent) => {
+        this.backType = back.type
       });
-
     }
 
   get afControls(): any { return this.analysisForm.controls; }

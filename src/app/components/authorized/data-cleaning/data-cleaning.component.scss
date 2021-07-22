@@ -1140,7 +1140,7 @@ $textColorCompleted: #fff;
       line-height: 24px;
       text-align: center;
       cursor: pointer;
-      top: 5px;
+      top: 0px;
       &:hover{
         background: #62529e;
       }
@@ -1154,7 +1154,7 @@ $textColorCompleted: #fff;
       line-height: 24px;
       text-align: center;
       cursor: pointer;
-      top: 5px;
+      top: 0px;
       &:hover{
         background: #62529e;
       }
@@ -3541,5 +3541,14 @@ h5.sub-title-label {
   opacity: 0.2;
   cursor: not-allowed;
   //background: gray !important;
+}
+.bullets{
+  font-size: 6px;
+    position: relative;
+    left: -5px;
+}
+.activeSubList{
+  font-weight: 400;
+  color: orange;
 }
 

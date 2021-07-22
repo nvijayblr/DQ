@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation, ViewChild, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable} from 'rxjs';
+import { Observable } from 'rxjs';
+import { Location } from '@angular/common';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { HttpService } from '../../../services/http-service.service';
@@ -20,7 +21,7 @@ import { DeactiveDialogComponent } from '../../../shared/deactive-dialog/deactiv
   styleUrls: ['./create-source.component.scss']
 })
 export class CreateSourceComponent implements OnInit {
-
+  backType;
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
@@ -29,7 +30,8 @@ export class CreateSourceComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private authGuardService: AuthGuardService,
-    private messageService: MessageService) {
+    private messageService: MessageService,
+    private location: Location) {
       this.appConfig = appConfig;
       this.route.queryParams.subscribe(params => {
          this.sourceId = params.sourceId;
@@ -38,7 +40,9 @@ export class CreateSourceComponent implements OnInit {
           localStorage.removeItem('dq-source-data');
         }
       });
-
+      location.subscribe((back: PopStateEvent) => {
+        this.backType = back.type
+      });
     }
 
   get afControls(): any { return this.analysisForm.controls; }

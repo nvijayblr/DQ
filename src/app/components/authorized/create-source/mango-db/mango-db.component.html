@@ -5,7 +5,7 @@
       <div class="clearfix my-community-body">
         <div class="home-panel">
           <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
-                <form [formGroup]="analysisForm" *ngIf="!collectionsForm">          
+                <form [formGroup]="analysisForm">          
                   <ng-template matStepLabel>Source Data</ng-template>                  
                       <div class="form-continer flex-containers">
                         <mat-card class="border no-rounded list shrare-post pbl card1">
@@ -106,12 +106,8 @@
                   </div>
                 </ng-template>
 
-                 <form [formGroup]="collectionForm" *ngIf="collectionsForm">          
-                  <ng-template matStepLabel>Source Data</ng-template>                  
-                      <div class="form-continer flex-containers">
-                        <mat-card class="border no-rounded list shrare-post pbl card1">
-                           <h1 class="share-post-title">Save Your<span class="yellow"> Collection</span></h1> 
-                          <!-- <h1 class="share-post-title"  *ngIf="isEditMode">Edit Your<span class="yellow"> Source</span></h1> -->
+                 <!-- <form [formGroup]="collectionForm" *ngIf="collectionsForm">          
+                 
                         <div class="list flex-containers flex-start wrap">
                         <div class="list-item-2 outline wth">
                         
@@ -120,7 +116,7 @@
                               <mat-form-field appearance="fill">
                                 <input matInput placeholder="Source Name" formControlName="sourceDataName" maxlength="50" autocomplete="off"/>
                               </mat-form-field>
-                              <!-- <mat-error class="errSty" *ngIf="!afControls.sourceDataName.value && afControls.sourceDataName.touched">Please Enter Source Name</mat-error> -->
+                           
                               </div>
                               <div class="list-item-2 outline splitR">
                               <mat-label class="mtop sub-title">Client URL <i class="fa fa-question-circle-o" aria-hidden="true"></i>
@@ -148,11 +144,7 @@
                                           
                               <div class="act-btn-wrapper m1t">
                                   <button mat-stroked-button class="btnBlueGreenN addico"    (click)="saveMangoDbCollection()">Submit <mat-icon>navigate_next</mat-icon></button>
-                                  <!-- <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"  *ngIf="isEditMode"  (click)="editSourceSave()">Submit <mat-icon>navigate_next</mat-icon></button> -->
-          
-                                  <!-- <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"
-                                  [disabled]="!afControls.sourceDataName.value || !sourceSettings.frequency || !sourceSettings.uploadDate || !flError"
-                                  (click)="validateSourceNameAndNext()">Next <mat-icon>navigate_next</mat-icon></button> -->
+                                 
                               </div>                                                     
                          </div>
                          </div>
@@ -160,7 +152,7 @@
 
                       </div>                                
                  </form>
-         
+          -->
         </div>
       </div>
     </div>

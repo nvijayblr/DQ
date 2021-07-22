@@ -107,7 +107,7 @@ td.mat-cell, td.mat-footer-cell{
  
 }
 .input-group{
-  margin: 20px 0 50px 0;
+  margin: 0px 0 10px 0;
 }
 
 .nTitle{
@@ -117,6 +117,7 @@ td.mat-cell, td.mat-footer-cell{
   position: relative;
   font-family: 'open-sans-condensed-bold';
   text-transform: uppercase;
+  margin-bottom: 30px;
   &:before {
     position: absolute;
     left: 0;
@@ -141,7 +142,7 @@ td.mat-cell, td.mat-footer-cell{
 .loader-12 {
   display: block;
 	position: relative;
-  left: 50%;
+  left: 40%;
   top:-30px;
 	&:before,
 	&:after {
@@ -212,6 +213,9 @@ td.mat-cell, td.mat-footer-cell{
      margin-right: 15px;
     //  box-shadow: none!important;
     margin-bottom: 30px;
+    &.wth{
+      width: 210px;
+    }
      &:hover{
        background:#059c60;
      }
@@ -233,8 +237,8 @@ td.mat-cell, td.mat-footer-cell{
 
   &.green{ 
     background:#17a2b8;
-    float: right;
-    width: 200px;
+    float: left;
+    width: 220px;
     &:hover{ 
       background:#1a8191;
     }
@@ -478,4 +482,102 @@ td.mat-cell, td.mat-footer-cell{
 .lMore{
   margin: 0 auto;
   width: 100%;
+}
+.err{
+  width: 100%;
+  display:block;
+  color: red;
+}
+
+.modal-holder{
+  animation-name: example;
+  animation-duration: 0.3s;
+}
+
+@keyframes example {
+  0%   {transform: scale(0.5)}
+  100% {transform: scale(1)}
+}
+
+// Spinners
+
+.spinner {
+  margin: 100px auto;
+  width: 40px;
+  height: 40px;
+  position: relative;
+  margin-left: 40%;
+}
+
+.cube1, .cube2 {
+  background-color: purple;
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  
+  -webkit-animation: sk-cubemove 1.8s infinite ease-in-out;
+  animation: sk-cubemove 1.8s infinite ease-in-out;
+}
+
+.cube2 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+@-webkit-keyframes sk-cubemove {
+  25% { -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5) }
+  50% { -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg) }
+  75% { -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5) }
+  100% { -webkit-transform: rotate(-360deg) }
+}
+
+@keyframes sk-cubemove {
+  25% { 
+    transform: translateX(42px) rotate(-90deg) scale(0.5);
+    -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
+  } 50% { 
+    transform: translateX(42px) translateY(42px) rotate(-179deg);
+    -webkit-transform: translateX(42px) translateY(42px) rotate(-179deg);
+  } 50.1% { 
+    transform: translateX(42px) translateY(42px) rotate(-180deg);
+    -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
+  } 75% { 
+    transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+    -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+  } 100% { 
+    transform: rotate(-360deg);
+    -webkit-transform: rotate(-360deg);
+  }
+}
+
+
+.spinner2 {
+  width: 40px;
+  height: 40px;
+  background-color:purple;
+  margin: 50px auto;
+  margin-left: 40%;
+  -webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
+  animation: sk-rotateplane 1.2s infinite ease-in-out;
+}
+
+@-webkit-keyframes sk-rotateplane {
+  0% { -webkit-transform: perspective(120px) }
+  50% { -webkit-transform: perspective(120px) rotateY(180deg) }
+  100% { -webkit-transform: perspective(120px) rotateY(180deg)  rotateX(180deg) }
+}
+
+@keyframes sk-rotateplane {
+  0% { 
+    transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+    -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg) 
+  } 50% { 
+    transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+    -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg) 
+  } 100% { 
+    transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+    -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+  }
 }

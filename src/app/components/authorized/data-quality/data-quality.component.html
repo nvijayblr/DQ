@@ -2,7 +2,7 @@
   <div class="dashBoard container">   
   <div class="flex-containers">
     <div class="dash-left">
-      <div class="srcTop"><mat-icon>widgets</mat-icon> Collection</div>
+      <div class="srcTop"><mat-icon>widgets</mat-icon>GLOBAL REFERENCE DATA</div>
       <mat-accordion>
         <!-- (opened)="setOpened(i)"
           (closed)="setClosed(i)" -->
@@ -19,31 +19,33 @@
             
 
             <mat-list-item role="listitem"  *ngFor="let column of dbValues" >
-                <div class="lftItem" matTooltip="{{column[item]}}" (click)="getDBPreview(item,column[item])" [class.activeList]="column[item] === selectdItem">
+                <div class="lftItem" matTooltip="{{column[item]}}" (click)="getDBPreview(item,column[item])" [class.activeList]="column[item].toString() === selectedColumn">
                 <mat-icon> layers</mat-icon> 
                 {{column[item]}}
                 </div>                      
-               <!-- <mat-icon class="ed" matTooltip="Edit Source" >edit</mat-icon>
-               <mat-icon class="de" matTooltip="Delete Source">delete</mat-icon> -->
+                <mat-icon class="ed" matTooltip="Save Source" *ngIf="column[item].toString() === selectedColumn" (click)="open(saveFile, item,column[item].toString())">save</mat-icon>
+               <mat-icon class="de" matTooltip="Copy Source" *ngIf="column[item].toString() === selectedColumn">file_copy</mat-icon> 
            </mat-list-item>
           </mat-list>                                
         </mat-expansion-panel>       
       </mat-accordion>
       <div class="createLft">
-        <button type="button" class="btnBlueGreenN addico fl"
+        <button  class="btnBlueGreenN green addico"  (click)="openSm(content)"><mat-icon>link</mat-icon> Connect to your Mongo DB Cluster</button>
+        <button *ngIf="uploadButton" type="button" class="btnBlueGreenN addico fl wth"
         routerLink="/auth/add-source-data/mango-db" matTooltip="" >
         <mat-icon>add</mat-icon>
-        UPLOAD SOURCE
+        UPLOAD REFERENCE DATA
         </button>
       </div>
     </div>
     <div class="dash-right"> 
-      <h1 class="no-margin ms nTitle">Reference Data</h1>
+      <h1 class="ms nTitle">Reference Data</h1>
     
      <div>
-      <button  class="btnBlueGreenN green addico"  (click)="open(content)"><mat-icon>get_app</mat-icon> Get DB Collections From API</button>
-      <button  class="btnBlueGreenN blue addico" routerLink="/auth/add-source-data/mango-db" [queryParams]="{ save: 'collection'}">
-        <mat-icon>save</mat-icon>  Save Collections</button>
+      <button  class="btnBlueGreenN green addico" (click)="downloadCSV()">Download CSV</button>
+      <!-- <button  class="btnBlueGreenN green addico"  (click)="openSm(content)"><mat-icon>link</mat-icon> Connect to your Mongo DB Cluster</button> -->
+      <!-- <button  class="btnBlueGreenN blue addico" routerLink="/auth/add-source-data/mango-db" [queryParams]="{ save: 'collection'}">
+        <mat-icon>save</mat-icon>  Save Collections</button> -->
     </div> 
 
     <!-- <input type="file" (change)="onFileChange($event)" multiple="false" /> -->
@@ -103,6 +105,12 @@
           </tbody>
         </table>
       </div> 
+      <!-- <div class="loader-12" *ngIf="isLoadingDB" style="margin-top:40px;"></div> -->
+      <div class="spinner2" *ngIf="isLoadingDB || isLoadingCDB"></div>
+      <!-- <div class="spinner" *ngIf="isLoadingCDB">
+        <div class="cube1"></div>
+        <div class="cube2"></div>
+      </div> -->
 
       <!-- <button  class="btnBlueGreenN addico blue" (click)="getDBCollections()">GET DB COLLECTIONS</button>
       <div class="loader-12" *ngIf="isLoadingDB" style="margin-top:40px;"></div>
@@ -176,14 +184,77 @@
   </div>
   <div class="modal-body">
       <div class="form-group">
-        <label for="dateOfBirth">Mongo DB Cluster Client URL</label>
+        <label for="clientUrl">Mongo DB Cluster Client URL</label>
         <div class="input-group">
-          <input type="text" class="form-control" [(ngModel)]='urlValue' id="url" placeholder="URL">
+          <input type="text" class="form-control" [(ngModel)]='clientUrl' id="url" placeholder="URL">
         </div>
       </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close(urlValue)">Submit</button>
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close(clientUrl)">Submit</button>
+  </div>
+</ng-template>
+
+<ng-template #saveFile let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Save File</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #f="ngForm">
+      <div class="form-group">
+        <label for="url">Mongo DB Cluster Client URL</label>
+        <div class="input-group">
+          <input type="text" class="form-control"  name="urlValue" #uname="ngModel"  [(ngModel)]="urlValue"  placeholder="URL" >
+          <ng-container *ngIf="uname.touched && uname.invalid">
+            <p class="err">Please enter your URL</p>
+          </ng-container>
+        </div>
+        <label for="fileName">File Name</label>
+        <div class="input-group">
+          <input type="text" class="form-control"  name="fileName" #fname="ngModel"  [(ngModel)]='fileName'  placeholder="fileName" required>
+          <ng-container *ngIf="fname.touched && fname.invalid">
+            <p class="err">Please enter your File Name</p>
+          </ng-container>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" [disabled]="f.invalid" class="btn btn-outline-dark" (click)="modal.close(f.value)">Submit</button>
+  </div>
+</ng-template>
+
+<ng-template #contentMsg let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title"> Collections Saved!!</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>{{alertMessage}}</p>
+    <p>Path : {{savePath}}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+  </div>
+</ng-template>
+
+<ng-template #contentErr let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title"> Connection Error!!</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>{{alertErrMessage}}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
   </div>
 </ng-template>
 

@@ -37,16 +37,49 @@
                   <mat-expansion-panel-header>
                     <mat-panel-title >{{ item.category }}</mat-panel-title>                   
                   </mat-expansion-panel-header>
-                  <mat-list role="list">
+                  <!-- <mat-list role="list">
                     <mat-list-item role="listitem" *ngFor='let selectedSource of item.sources;'>
                         <div class="lftItem" (click)="changeCategory(selectedSource)" [class.activeList]="selectedSource.sourceId === source.sourceId" matTooltip="{{ source.sourceDataName }}" >
                         <mat-icon> layers</mat-icon> 
-                        {{ selectedSource.sourceDataName }}              
-                        </div>                      
+                        {{ selectedSource.sourceDataName }}                                  
+                        </div> 
+                        <div>                                               
                        <mat-icon class="ed" matTooltip="Edit Source" *ngIf="selectedSource.sourceId === source.sourceId" (click)="editSourceData(selectedSource)">edit</mat-icon>
                        <mat-icon class="de" matTooltip="Delete Source" *ngIf="selectedSource.sourceId === source.sourceId" (click)="deleteSourceData(selectedSource)">delete</mat-icon>
+                      </div> 
+                      
+                       <mat-list style="margin-left:30px;">
+                        <div  *ngFor='let cleanFiles of cleanedFilesLog;'>
+                          <mat-list-item role="listitem">{{cleanFiles.outputFileName}}</mat-list-item>
+                        </div>
+                      </mat-list> 
+                     
                    </mat-list-item>
-                  </mat-list>                                
+                     
+                  </mat-list>  -->
+                  
+                  <ng-container  *ngFor='let selectedSource of item.sources;'>
+                    <mat-list-item > 
+                      <div class="lftItem" (click)="changeCategory(selectedSource)" [class.activeList]="selectedSource.sourceId === source.sourceId" matTooltip="{{ source.sourceDataName }}" >
+                        <mat-icon> layers</mat-icon> 
+                        {{ selectedSource.sourceDataName }}  
+                        <mat-icon class="ed" matTooltip="Edit Source" *ngIf="selectedSource.sourceId === source.sourceId" (click)="editSourceData(selectedSource)">edit</mat-icon>
+                        <mat-icon class="de" matTooltip="Delete Source" *ngIf="selectedSource.sourceId === source.sourceId" (click)="deleteSourceData(selectedSource)">delete</mat-icon>                                
+                      </div> 
+                  
+                    </mat-list-item>
+                    <mat-list style="margin-left:30px;">
+                      <div *ngFor='let cleanFiles of selectedSource.CleanedFilesLog;'>
+                        <mat-list-item> 	
+                          <div (click)="changeCategory(selectedSource, cleanFiles.outputPath)"  [class.activeSubList]="cleanFiles.outputPath === titleSrc">
+                            <i class="fa fa-circle bullets"></i> 
+                            {{cleanFiles.outputFileName}}</div>
+                          </mat-list-item>
+                      </div>
+                    </mat-list>
+                  </ng-container>
+
+
                 </mat-expansion-panel>
               </mat-accordion>
               <div class="createLft">
@@ -523,6 +556,70 @@
                   </div>
                 </div>
 
+                <ng-template #content let-modal>
+                  <div class="modal-header">
+                    <h4 class="modal-title">DOMAIN ANALYSIS</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <p>One fine body&hellip;</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+                  </div>
+                </ng-template>
+                
+                <ng-template #longContent let-modal>
+                  <div class="modal-header">
+                    <h4 class="modal-title">DOMAIN ANALYSIS</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <table class="table table-striped">
+                      <thead>
+                      <tr>
+                        <th scope="col">Continent</th>
+                        <th scope="col">Coordinates</th>
+                        <th scope="col">elevation_ft</th>
+                        <th scope="col">gps_code</th>
+                        <th scope="col">iata_code</th>
+                        <th scope="col">ident</th>
+                        <th scope="col">iso_country</th>
+                        <th scope="col">iso_region</th>
+                        <th scope="col">local_code</th>
+                        <th scope="col">municipality</th>
+                        <th scope="col">name</th>
+                        <th scope="col">type</th> 
+                      </tr>
+                      </thead>
+                      <tbody *ngFor="let val of newVal">
+                      <tr *ngFor="let airline of val.airportCodes; let i= index" style="width:100%;">
+                      <td>{{airline.continent}}</td>
+                      <td>{{airline.coordinates}}</td>
+                      <td>{{airline.elevation_ft}}</td>
+                      <td>{{airline.gps_code}}</td>
+                      <td>{{airline.iata_code}}</td>
+                      <td>{{airline.ident}}</td>
+                      <td>{{airline.iso_country}}</td>
+                      <td>{{airline.iso_region}}</td>
+                      <td>{{airline.local_code}}</td>
+                      <td>{{airline.municipality}}</td>
+                      <td>{{airline.name}}</td>
+                      <td>{{airline.type}}</td> 
+                    </tr>
+                      </tbody>
+                    </table>
+                    <div class="loader-12" *ngIf="isLoad" style="margin-top:40px;"></div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+                  </div>
+                </ng-template>
+
                 <div class="flex-containers"> 
                   <div class="lft-attr"> 
                     <h4 class="attr-tite"> <span class="subT mg">Frequency Groups</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
@@ -530,69 +627,7 @@
                       <div *ngFor="let domain of domainMatches" class="domain">
                          <button class="btn btn-outline-primary mb-2 mr-2 fs-b"  *ngIf="domain === profile.column" (click)="openScrollableContent(longContent)">View Domain Analysis</button>
                       </div>
-                      <ng-template #content let-modal>
-                        <div class="modal-header">
-                          <h4 class="modal-title">DOMAIN ANALYSIS</h4>
-                          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <p>One fine body&hellip;</p>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
-                        </div>
-                      </ng-template>
-                      
-                      <ng-template #longContent let-modal>
-                        <div class="modal-header">
-                          <h4 class="modal-title">DOMAIN ANALYSIS</h4>
-                          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <table class="table table-striped">
-                            <thead>
-                            <tr>
-                              <th scope="col">Continent</th>
-                              <th scope="col">Coordinates</th>
-                              <th scope="col">elevation_ft</th>
-                              <th scope="col">gps_code</th>
-                              <th scope="col">iata_code</th>
-                              <th scope="col">ident</th>
-                              <th scope="col">iso_country</th>
-                              <th scope="col">iso_region</th>
-                              <th scope="col">local_code</th>
-                              <th scope="col">municipality</th>
-                              <th scope="col">name</th>
-                              <th scope="col">type</th> 
-                            </tr>
-                            </thead>
-                            <tbody *ngFor="let val of newVal">
-                            <tr *ngFor="let airline of val.airportCodes; let i= index" style="width:100%;">
-                            <td>{{airline.continent}}</td>
-                            <td>{{airline.coordinates}}</td>
-                            <td>{{airline.elevation_ft}}</td>
-                            <td>{{airline.gps_code}}</td>
-                            <td>{{airline.iata_code}}</td>
-                            <td>{{airline.ident}}</td>
-                            <td>{{airline.iso_country}}</td>
-                            <td>{{airline.iso_region}}</td>
-                            <td>{{airline.local_code}}</td>
-                            <td>{{airline.municipality}}</td>
-                            <td>{{airline.name}}</td>
-                            <td>{{airline.type}}</td> 
-                          </tr>
-                            </tbody>
-                          </table>
-                          <div class="loader-12" *ngIf="isLoad" style="margin-top:40px;"></div>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
-                        </div>
-                      </ng-template>
+                     
                      
                       <div class="viewTableN"> 
                         <img src="assets/images/chart.svg" class="chartV" (click)="changeView('table')" />

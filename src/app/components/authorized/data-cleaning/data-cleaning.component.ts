@@ -259,10 +259,11 @@ export class DataCleaningComponent implements OnInit {
        }
     }, 10);
   }
-
+  cleanedFilesLog;
   getProfileSource() {
     this.http.getCleanSource().subscribe((result: any) => {
-      this.allSourceCategory = result.SourceDetailsList;
+      this.allSourceCategory = result.SourceDetailsList;     
+      this.cleanedFilesLog = result.SourceDetailsList[0].CleanedFilesLog ? result.SourceDetailsList[0].CleanedFilesLog : [];
       this.analysis = this.messageService.getSource();
       const uploadMethod = localStorage.getItem('dq-upload-data');
       if (this.analysis && uploadMethod === "clean") {
@@ -282,7 +283,6 @@ export class DataCleaningComponent implements OnInit {
           return;
         }
       }
-      console.log(this.analysis);
       this.loadProfile(this.source);
       this.sourceByCategory =
         _.chain(this.allSourceCategory).
@@ -311,14 +311,20 @@ export class DataCleaningComponent implements OnInit {
     this.profileSummary.sourceFileName = this.source.templateSourcePath;
     this.loadProfile(this.source);
   }
-
-  changeCategory(source) {
+  cleanedFilesPath;
+  changeCategory(source, path) {
     // localStorage.setItem('dq-source-data', JSON.stringify(source));
     localStorage.removeItem('dq-source-data');
     localStorage.removeItem('dq-upload-data');
     this.source = source;
+    this.cleanedFilesPath = path;
     this.initLoadProfile = false;
-    this.titleSrc = source.templateSourcePath;
+    if (path) {
+      this.titleSrc = this.cleanedFilesPath
+    } else {
+      this.titleSrc = source.templateSourcePath;
+    }
+    
     this.loadProfile(source);
     // this.loadReferencePreview();
     // this.loadCorrelation(this.selectedSource, this.datatype, this.method);
@@ -378,8 +384,8 @@ export class DataCleaningComponent implements OnInit {
 
    
   loadProfile(source, profile: any = '') {
-    if (source.CleanedFilesLog) {
-      this.titleSrc = source.CleanedFilesLog[source.CleanedFilesLog.length - 1].outputPath
+    if (this.cleanedFilesPath) {
+      this.titleSrc =this.cleanedFilesPath;
     } else {
       this.titleSrc = source.templateSourcePath;
     }
@@ -448,7 +454,6 @@ export class DataCleaningComponent implements OnInit {
        if (this.cleanLogs) {
          this.isCleanLog = true;
        }
-       console.log('From Clean Logs',this.cleanLogs)
       }, (error) => {
          this.isLogsLoading = false;
       });
@@ -703,7 +708,6 @@ export class DataCleaningComponent implements OnInit {
        if (this.delete.category === 'col_nan') {
          if (this.removeItemMessage && this.removeItemMessage.length > 0) {
           this.showMessage = true;
-           console.log(this.removeItemMessage.join(', '));
            this.messageDisplay = this.removeItemMessage.join(', ') ? this.removeItemMessage : [];
            this.newMessage = this.messageDisplay
          }        
@@ -735,7 +739,6 @@ export class DataCleaningComponent implements OnInit {
       });
       if (this.rowData.length) {
         Object.keys(this.rowData[0]).map((key, index) => {
-          console.log(key)
           this.columnDefs.push({
             field: key,
             ...this.defaultColDefs,
@@ -813,7 +816,8 @@ export class DataCleaningComponent implements OnInit {
           //localStorage.setItem('dq-source-data', JSON.stringify(result))
           if (this.savedFiles) {
             this.updateSourcePath(this.savedFiles.outputPath, this.savedFiles.outputFileName);
-         }
+          }
+          window.location.reload();
           // localStorage.setItem('dq-source-data', JSON.stringify(this.analysis));
         });
       } else {

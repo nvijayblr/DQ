@@ -1,11 +1,11 @@
-import {AfterViewInit, Component, ViewChild, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ViewChild, OnInit, TemplateRef} from '@angular/core';
 import { HttpService } from 'src/app/services/http-service.service';
 import * as _ from 'lodash';
 import { FormBuilder, FormGroup, FormArray, Validators, AbstractControl, FormControl } from '@angular/forms';
+import { Angular2Csv } from 'angular2-csv';
+
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-// import { DiffContent, DiffResults } from 'ngx-text-diff/lib/ngx-text-diff.model';
-// import * as XLSX from 'xlsx';
-// type AOA = any[][];
+
 
 
 @Component({
@@ -18,6 +18,8 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
   
   
 export class DataQualityComponent implements OnInit {
+  @ViewChild("contentMsg", { static: false }) modalContent: TemplateRef<any>;
+  @ViewChild("contentErr", {static: false}) modalErrContent: TemplateRef<any>;
   isPreviewLoaded = false;
   isPreviewLoading = false;
   defaultColDefs = { sortable: true, filter: true, minWidth: 180, resizable: true };
@@ -25,11 +27,6 @@ export class DataQualityComponent implements OnInit {
   columnDefs: any = [];
   getDB: FormGroup;
   closeResult = '';
-  left = `some text to\nbe compared!`
-  right = `A changed\n version \n of the text to\nbe compared!`
-  // fileName: string = 'SheetJS.xlsx';
-  // data: any;
-  // headData: any; // excel row header
   constructor(private http: HttpService, private fb: FormBuilder,private modalService: NgbModal) {
   
   }
@@ -43,67 +40,7 @@ export class DataQualityComponent implements OnInit {
 
   }
 
-  // onCompareResults(diffResults: DiffResults) {
-  //   console.log('diffResults', diffResults);
-  // }
-
-  // onFileChange(evt: any) {
-  //   /* wire up file reader */
-  //   const target: DataTransfer = <DataTransfer>evt.target;
-  //   if (target.files.length !== 1) throw new Error('Cannot use multiple files');
-  //   const reader: FileReader = new FileReader();
-  //   reader.onload = (e: any) => {
-  //     /* read workbook */
-  //     const bstr: string = e.target.result;
-  //     const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
-
-  //     /* grab first sheet */
-  //     const wsname: string = wb.SheetNames[0];
-  //     const ws: XLSX.WorkSheet = wb.Sheets[wsname];
-
-  //     /* save data */
-  //     this.data = <AOA>(
-  //       XLSX.utils.sheet_to_json(ws, { header: 1, raw: false, range: 10 })
-  //     );
-  //     console.log(this.data[1]);
-
-  //     this.headData = this.data[0];
-  //     this.data = this.data.slice(1); // remove first header record
-
-  //     const ws2: XLSX.WorkSheet = wb.Sheets[wb.SheetNames[1]];
-  //     this.readDataSheet(ws2, 10);
-  //   };
-  //   reader.readAsBinaryString(target.files[0]);
-  // }
-
-  // private readDataSheet(ws: XLSX.WorkSheet, startRow: number) {
-  //   /* save data */
-  //   let datas = <AOA>(
-  //     XLSX.utils.sheet_to_json(ws, { header: 1, raw: false, range: startRow })
-  //   );
-  //   console.log(datas[1]);
-  //   let headDatas = datas[0];
-  //   datas = datas.slice(1); // remove first header record
-
-  //   for (let i = 0; i < this.data.length; i++) {
-  //     this.data[i][this.headData.length] = datas.filter(
-  //       x => x[12] == this.data[i][0]
-  //     );
-  //   }
-  //   console.log(this.data[1]);
-  // }
-
-  // export(): void {
-  //   /* generate worksheet */
-  //   const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(this.data);
-
-  //   /* generate workbook and add the worksheet */
-  //   const wb: XLSX.WorkBook = XLSX.utils.book_new();
-  //   XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
-  //   /* save to file */
-  //   XLSX.writeFile(wb, this.fileName);
-  // }
+  
 
 
   
@@ -149,6 +86,7 @@ export class DataQualityComponent implements OnInit {
   newDB;
   dbValues: any = [];
   clientUrl;
+  uploadButton : boolean = false;
   getDBCollections() {
     this.isLoadingDB = true;
     this.showAllDetails = false;
@@ -162,6 +100,32 @@ export class DataQualityComponent implements OnInit {
       this.dataSource = _.values(result.Cluster_Contents);
       this.isLoadingDB = false;
       this.showAllDetails = true
+    }, (error) => {
+      alert(error);
+    })
+  }
+  alertErrMessage;
+  isLoadingCDB = false;
+  getDBCollectionsClient() {
+    this.isLoadingCDB = true;
+    this.showAllDetails = false;
+    this.uploadButton = false;
+    const payload = {
+      client_url: this.clientUrl || "",
+    }
+    this.http.getDBCollections(payload).subscribe((result: any) => {
+      console.log(result)
+      this.uploadButton = true;
+      this.newDB = result.Cluster_Contents;
+      this.db = _.keys(result.Cluster_Contents);
+      this.dbValues.push(this.newDB);
+      this.dataSource = _.values(result.Cluster_Contents);
+      this.isLoadingCDB = false;
+      this.showAllDetails = true
+    }, (error) => {
+      this.alertErrMessage = error.message;
+      this.isLoadingCDB = false;
+      this.modalService.open(this.modalErrContent, { windowClass: 'modal-holder' });           
     })
   }
 
@@ -179,8 +143,8 @@ export class DataQualityComponent implements OnInit {
   selectdItem;
   selectedColumn;
   isButtonShow: boolean = false;
-  startIndex: number = 0;
-  endIndex: number = 100;
+  startIndex = "";
+  endIndex = "";
 
   loadMoreDb() {
     this.startIndex = this.endIndex;
@@ -213,7 +177,8 @@ export class DataQualityComponent implements OnInit {
     })
   }
 
-  getDBPreview(item, column) {
+  collectionResult;
+  getDBPreview(item, column) {    
     this.selectedColumn = column.toString();
     this.selectdItem = item;
     this.isButtonShow = false;
@@ -226,6 +191,8 @@ export class DataQualityComponent implements OnInit {
     }
     this.isLoadingCO = true;
     this.http.getDBPreview(payload).subscribe((result: any) => {
+      console.log(result);
+      this.collectionResult = result.Preview;
       this.isLoadingCO = false;
       this.isButtonShow = true;
       this.rowData = [];
@@ -267,14 +234,37 @@ export class DataQualityComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
   urlValue;
-  open(content) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+  fileName;
+  alertMessage;
+  savePath;
+  open(saveFile, item, column) {    
+    this.modalService.open(saveFile, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      const payload = {  
+          client_url: result.urlValue || '',
+          db: item,
+          collection:column,   
+          output_filename : result.fileName + '.csv',
+        }
+      this.http.saveMangoDbCollection(payload).subscribe((result: any) => {
+          console.log(result);
+          this.alertMessage = result.Message;
+          this.savePath = result.outputpath;
+          this.modalService.open(this.modalContent, { windowClass: 'modal-holder' });
+        }, (error) => {
+          this.isLoading = false;
+        });
       this.closeResult = `Closed with: ${result}`;
-      this.clientUrl = result;
-      this.getDBCollections();
+      
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
+  }
+
+  openSm(content) {
+    this.modalService.open(content, { windowClass: 'modal-holder' }).result.then((result) => {
+      this.clientUrl = result;
+      this.getDBCollectionsClient();
+    })
   }
 
   private getDismissReason(reason: any): string {
@@ -286,5 +276,31 @@ export class DataQualityComponent implements OnInit {
       return `with: ${reason}`;
     }
   }
+
+
+   status: any[];
+  formula: string = 'mongoDb';
+  
+  downloadCSV() {
+    this.status = ['approved', 'rejected', 'pending'];
+    let data = this.collectionResult;
+    let fileHeaders = [];
+    Object.keys(this.collectionResult[0]).map((key, index) => {     
+      fileHeaders.push(key);
+    });
+    let options = {
+      title: '',
+      fieldSeparator: ',',
+      quoteStrings: '"',
+      decimalseparator: '.',
+      //showLabels: true,
+      //showTitle: true,
+      //useBom: true,
+      headers: fileHeaders
+    };
+
+    new Angular2Csv(data, this.formula, options);
+  }
+
 }
 

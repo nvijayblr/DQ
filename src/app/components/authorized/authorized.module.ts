@@ -10,7 +10,7 @@ import { Routes, RouterModule, CanActivate } from '@angular/router';
 import { AuthGuardService as AuthGaurd } from './../../services/auth-guard.service';
 import { SharedModule } from './../../shared/shared.module';
 import { CanDeactivateContact , CanDeactivateSource} from './candeactivate.route';
-
+import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { AuthorizedRoutingModule } from './authorized-routing.module';
 import { AuthorizedComponent } from './authorized.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -27,7 +27,6 @@ import { OracleComponent } from './create-source/oracle/oracle.component';
 import { SchemaTableComponent } from './create-source/schema-table/schema-table.component';
 import { MainDashboardComponent } from './main-dashboard/main-dashboard.component';
 import { MangoDBComponent } from './create-source/mango-db/mango-db.component';
-//import { NgxTextDiffModule } from 'ngx-text-diff';
 
 
 @NgModule({
@@ -60,9 +59,8 @@ import { MangoDBComponent } from './create-source/mango-db/mango-db.component';
      MatSelectFilterModule,
      NgbModule,
      Ng2SearchPipeModule,
-     //NgxTextDiffModule
   ],
-  providers:[CanDeactivateContact, CanDeactivateSource],
+  providers:[CanDeactivateContact, CanDeactivateSource, Location, {provide: LocationStrategy, useClass: PathLocationStrategy}],
    exports: [AttributeDetailsComponent, CorrelationDetailsComponent,NgbModule]
 
 })
