@@ -223,10 +223,11 @@
             </div>
             <mat-card class="border no-rounded list shrare-post mct">
               
-              <div class="previewView valign" *ngIf="previewTable">
+              <div class="previewView valign" *ngIf="previewTable" style="clear: both;">
                 <app-ag-grid
                 floatingFilter="true"
                 *ngIf="isPreviewLoaded"
+                class="ag-theme-material"
                 [rowData]="rowData"
                 [columnDefs]="columnDefs"
                 [pageSize]="50"

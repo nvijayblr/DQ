@@ -743,7 +743,8 @@ export class DataCleaningComponent implements OnInit {
           this.columnDefs.push({
             field: key,
             ...this.defaultColDefs,
-            cellClass : this.cellClass
+            cellClass: this.cellClass,
+            //headerClass : this.headerClass
             
           });
         });
@@ -756,6 +757,9 @@ export class DataCleaningComponent implements OnInit {
   cellClass(params) {
     return params.value === 'None' ? 'rag-green' : 'rag-amber';
   }
+  // headerClass(params) {
+  //   return params.value === 'Cabin' ? 'rag-green2' : 'rag-amber';
+  // }
 
     changeRemoveCategory(type) {
       if (type === 'column') {
