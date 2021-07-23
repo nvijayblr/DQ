@@ -441,6 +441,7 @@ export class RulesetComponent implements OnInit {
           rule: [rule.rule],
           operator: [rule.operator],
           value: [rule.value],
+          type: [rule.type],
           format: [rule.format],
           dimension: [rule.dimension],
         });
@@ -700,6 +701,7 @@ export class RulesetComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(data => {
       if (data.action === 'ok' && data.formula) {
+        rule.controls.type.setValue('SIMPLE');
         rule.controls.value.setValue(data.formula);
       }
     });
@@ -720,6 +722,7 @@ export class RulesetComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(data => {
       if (data.action === 'ok' && data.formula) {
+        rule.controls.type.setValue('ADVANCED');
         rule.controls.value.setValue(data.formula);
       }
     });
@@ -740,6 +743,7 @@ export class RulesetComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(data => {
       if (data.action === 'ok' && data.formula) {
+        rule.controls.type.setValue('CONDITIONAL');
         rule.controls.value.setValue(data.formula);
       }
     });
