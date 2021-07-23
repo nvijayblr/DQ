@@ -78,15 +78,16 @@
 
                             <div class="list-item-2 outline split">
                               <mat-label class="mtop sub-title">Data Steward</mat-label> 
-                                <mat-form-field appearance="fill">                                                   
-                                <mat-select #select3 multiple placeholder="Using Groups" (selectionChange)="setDataOwnerTollerance($event)" [(value)]="selected" formControlName="dataSteward">
+                                <mat-form-field appearance="fill">
+                                  <!-- (selectionChange)="setDataOwnerTollerance($event)"  -->
+                                <mat-select #select3 multiple placeholder="Using Groups" [(value)]="selected" formControlName="dataSteward">
                                     <mat-option *ngFor="let category of categoryList" [value]="category.value" color="accent">
                                       {{ category.label }}
                                     </mat-option>
                                   </mat-select>  
                               </mat-form-field>
 
-                              <div class="tollerance-wrapper">
+                              <!-- <div class="tollerance-wrapper">
                                 <mat-card *ngFor="let user of dataOwnerTollerance">
                                   <h2>Tollerance - {{user.user}}</h2>
                                   <div class="wrap">
@@ -153,7 +154,7 @@
                                   </div>
                                 </mat-card>
                                 
-                              </div>
+                              </div> -->
 
                             </div>
                             <div class="list-item-2 outline splitR">

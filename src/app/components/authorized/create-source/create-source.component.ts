@@ -41,7 +41,7 @@ export class CreateSourceComponent implements OnInit {
         }
       });
       location.subscribe((back: PopStateEvent) => {
-        this.backType = back.type
+        this.backType = back.type;
       });
     }
 
@@ -141,6 +141,13 @@ export class CreateSourceComponent implements OnInit {
     if (analysis.settings) {
       this.sourceSettings = analysis.settings;
     }
+    const dataUsers = [];
+    if (analysis.source.dataUser && analysis.source.dataUser.length) {
+      this.dataUserTollerance = analysis.source.dataUser;
+      analysis.source.dataUser.map(user => {
+        dataUsers.push(user.name);
+      });
+    }
 
     this.analysisForm = this.fb.group({
       sourceDataName: [analysis.source.sourceDataName, [Validators.required, Validators.maxLength(100)]],
@@ -149,7 +156,7 @@ export class CreateSourceComponent implements OnInit {
       sourceCategory: [analysis.source.sourceCategory, [Validators.required]],
       dataOwner: [analysis.source.dataOwner || ''],
       dataSteward: [analysis.source.dataSteward || ''],
-      dataUser : [analysis.source.dataUser || ''],
+      dataUser : [dataUsers || ''],
       templateSourcePath: [analysis.source.templateSourcePath || ''],
       settingsDate : ['', [Validators.required]],
       uploadTime : [''],
@@ -284,7 +291,9 @@ export class CreateSourceComponent implements OnInit {
         sourceCategory: analysis.sourceCategory,
         dataOwner: this.afControls.dataOwner.value ? this.afControls.dataOwner.value : analysis.dataOwner,
         dataSteward: this.afControls.dataSteward.value ? this.afControls.dataSteward.value : analysis.dataSteward,
-        dataUser : this.afControls.dataUser.value ? this.afControls.dataUser.value : analysis.dataUser
+        dataUser : this.dataUserTollerance,
+        type: '',
+        connectionDetails: {}
       },
       reference: refPayload,
       settings: this.sourceSettings
@@ -520,7 +529,12 @@ export class CreateSourceComponent implements OnInit {
     this.dataUserTollerance = [];
     e.value.map(user => {
       this.dataUserTollerance.push({
-        user
+        name: user,
+        Accuracy: 0,
+        Completeness: 0,
+        Integrity: 0,
+        Uniqueness: 0,
+        Validity: 0
       });
     });
   }
@@ -529,7 +543,12 @@ export class CreateSourceComponent implements OnInit {
     this.dataOwnerTollerance = [];
     e.value.map(user => {
       this.dataOwnerTollerance.push({
-        user
+        name: user,
+        Accuracy: 0,
+        Completeness: 0,
+        Integrity: 0,
+        Uniqueness: 0,
+        Validity: 0
       });
     });
   }
@@ -546,11 +565,11 @@ export class CreateSourceComponent implements OnInit {
 
   confirmDialog(): Observable<boolean> {
     const message = 'You have not saved your current work. Do you want to proceed and discard?';
-    const data = { 'message': message, 'toShowCancel': true, 'buttonYesCaption': 'Yes', 'buttonNoCaption': 'No' };
+    const data = { message, toShowCancel: true, buttonYesCaption: 'Yes', buttonNoCaption: 'No' };
     const dialogRef = this.dialog.open(DeactiveDialogComponent, {
       width: '400px',
       height: '200px',
-      data: data
+      data
     });
     return dialogRef.afterClosed();
   }
