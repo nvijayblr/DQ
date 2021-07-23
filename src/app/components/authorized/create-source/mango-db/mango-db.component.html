@@ -9,13 +9,13 @@
                   <ng-template matStepLabel>Source Data</ng-template>                  
                       <div class="form-continer flex-containers">
                         <mat-card class="border no-rounded list shrare-post pbl card1">
-                          <h1 class="share-post-title">Create Your<span class="yellow"> Source</span></h1>
+                          <h1 class="share-post-title"> Add your <span class="yellow"> reference data</span></h1>
                           <!-- <h1 class="share-post-title"  *ngIf="isEditMode">Edit Your<span class="yellow"> Source</span></h1> -->
                         <div class="list flex-containers flex-start wrap">
                         <div class="list-item-2 outline wth">
                           <div>
                           <div class="srcData">
-                            <mat-label>Source Data<span class="red">*</span>&nbsp;<span *ngIf="selectedType">({{selectedType}})</span></mat-label>
+                            <mat-label>Reference Data <span class="red">*</span>&nbsp;<span *ngIf="selectedType">({{selectedType}})</span></mat-label>
                           </div>                          
                             <div class="cfile"> 
                               <app-image-cropper 
@@ -33,36 +33,36 @@
                             </div>
                           </div>
                           <div class="list-item-2 outline split">
-                              <mat-label class="sub-title">Source Name<span class="red">*</span></mat-label>
+                              <mat-label class="sub-title">Reference Data Name<span class="red">*</span></mat-label>
                               <mat-form-field appearance="fill">
                                 <input matInput placeholder="Source Name" formControlName="sourceDataName" maxlength="50" autocomplete="off"/>
                               </mat-form-field>
                               <!-- <mat-error class="errSty" *ngIf="!afControls.sourceDataName.value && afControls.sourceDataName.touched">Please Enter Source Name</mat-error> -->
                               </div>
                               <div class="list-item-2 outline splitR">
-                              <mat-label class="mtop sub-title">Client URL <i class="fa fa-question-circle-o" aria-hidden="true"></i>
+                              <mat-label class="mtop sub-title">MongoDB Cluster Client URL <i class="fa fa-question-circle-o" aria-hidden="true"></i>
                               </mat-label>                                                    
                               <mat-form-field appearance="fill">
                                 <input matInput placeholder="Client URL" formControlName="clientUrl" maxlength="250" autocomplete="off"/>
                               </mat-form-field>
                               </div>
 
-                              <div class="list-item-2 outline split">
+                              <!-- <div class="list-item-2 outline split">
                                 <mat-label class="mtop sub-title">Database</mat-label>                                                    
                                 <mat-form-field appearance="fill">
                                   <input matInput placeholder="Database" formControlName="database" maxlength="250" autocomplete="off"/>
                                 </mat-form-field>
-                                </div>
+                                </div> -->
 
-                                <div class="list-item-2 outline splitR">
-                                  <mat-label class="mtop sub-title">Collection</mat-label>                                                    
+                                <div class="list-item-2 outline split">
+                                  <mat-label class="mtop sub-title">Reference Data Set (MongoDB collection)</mat-label>                                                    
                                   <mat-form-field appearance="fill">
                                     <input matInput placeholder="Collection" formControlName="collection" maxlength="250" autocomplete="off"/>
                                   </mat-form-field>
                                   </div>
 
-                                  <div class="list-item-2 outline split">
-                                    <mat-label class="mtop sub-title">Database/Category</mat-label>                                                    
+                                  <div class="list-item-2 outline splitR">
+                                    <mat-label class="mtop sub-title">Reference Data Category (MongoDB database)</mat-label>                                                    
                                     <mat-form-field appearance="fill">
                                       <mat-label >Category</mat-label> 
                                       <mat-select formControlName="sourceCategory">

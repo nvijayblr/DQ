@@ -52,7 +52,7 @@ export class MangoDBComponent implements OnInit {
       sourceDataName: ['', [Validators.required, Validators.maxLength(100)]],
       clientUrl: ['', [Validators.required]],
       sourceFileName: ['', []],
-      database: ['', [Validators.required, Validators.maxLength(100)]],
+      //database: ['', [Validators.required, Validators.maxLength(100)]],
       collection: ['', [Validators.required, Validators.maxLength(100)]],
       sourceCategory: ['', [Validators.required]],
     });

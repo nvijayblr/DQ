@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Options, LabelType } from '@angular-slider/ngx-slider';
 import { OwlOptions } from 'ngx-owl-carousel-o';
+import { Angular2Csv } from 'angular2-csv';
 import { MessageService } from 'src/app/services/message.service';
 import { HttpService } from 'src/app/services/http-service.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -263,7 +264,7 @@ export class DataCleaningComponent implements OnInit {
   getProfileSource() {
     this.http.getCleanSource().subscribe((result: any) => {
       this.allSourceCategory = result.SourceDetailsList;     
-      this.cleanedFilesLog = result.SourceDetailsList[0].CleanedFilesLog ? result.SourceDetailsList[0].CleanedFilesLog : [];
+      // this.cleanedFilesLog = result.SourceDetailsList[0].CleanedFilesLog ? result.SourceDetailsList[0].CleanedFilesLog : [];
       this.analysis = this.messageService.getSource();
       const uploadMethod = localStorage.getItem('dq-upload-data');
       if (this.analysis && uploadMethod === "clean") {
@@ -975,7 +976,47 @@ export class DataCleaningComponent implements OnInit {
      } else {
        return  `with: ${reason}`;
      }
-   }
+  }
+  collectionResult: any;
+  downloadSrcName:string;
+  downloadSource(sourcepath, fileName) {
+    this.downloadSrcName = fileName;
+    const payload = {
+      sourcepath: sourcepath
+    };
+    this.http.getProfileView(payload).subscribe((res: any) => {
+      this.collectionResult  = res.Preview ? res.Preview : {};
+      this.downloadCSV();
+      }, (error) => {
+        this.isPreviewLoaded = false;
+        this.isPreviewLoading = false;
+      });
+  }
+
+  status: any[];
+  
+  
+  downloadCSV() {
+    const formula = this.downloadSrcName;
+    this.status = ['approved', 'rejected', 'pending'];
+    let data = _.values(this.collectionResult);
+    let fileHeaders = [];
+    Object.keys(this.collectionResult[0]).map((key, index) => {     
+      fileHeaders.push(key);
+    });
+    let options = {
+      title: '',
+      fieldSeparator: ',',
+      quoteStrings: '"',
+      decimalseparator: '.',
+      //showLabels: true,
+      //showTitle: true,
+      //useBom: true,
+      headers: fileHeaders
+    };
+
+    new Angular2Csv(data, formula, options);
+  }
  }
 
 

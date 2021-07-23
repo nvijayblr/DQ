@@ -3,7 +3,7 @@
   <div class="flex-containers">
     <div class="dash-left">
       <div class="srcTop"><mat-icon>widgets</mat-icon>GLOBAL REFERENCE DATA</div>
-      <mat-accordion>
+      <mat-accordion *ngIf="loadingLocalData">
         <!-- (opened)="setOpened(i)"
           (closed)="setClosed(i)" -->
         <mat-expansion-panel *ngFor="let item of db; first as isFirst">
@@ -14,19 +14,38 @@
             <!-- <div class="search-hero form-group has-search">
               <span class="fa fa-search form-control-feedback"></span>
               <input class="form-control" type="text" name="search" [(ngModel)]="searchText" autocomplete="off" placeholder="Start searching for a Collections">
-            </div> -->
-
-            
-
+            </div> -->            
             <mat-list-item role="listitem"  *ngFor="let column of dbValues" >
-                <div class="lftItem" matTooltip="{{column[item]}}" (click)="getDBPreview(item,column[item])" [class.activeList]="column[item].toString() === selectedColumn">
+                <div  class="lftItem" matTooltip="{{column[item]}}" (click)="getDBPreview(item,column[item])" [class.activeList]="column[item].toString() === selectedColumn">
                 <mat-icon> layers</mat-icon> 
                 {{column[item]}}
-                </div>                      
+                </div> 
                 <mat-icon class="ed" matTooltip="Save Source" *ngIf="column[item].toString() === selectedColumn" (click)="open(saveFile, item,column[item].toString())">save</mat-icon>
                <mat-icon class="de" matTooltip="Copy Source" *ngIf="column[item].toString() === selectedColumn">file_copy</mat-icon> 
            </mat-list-item>
-          </mat-list>                                
+          </mat-list>                               
+        </mat-expansion-panel>       
+      </mat-accordion>
+
+      <mat-accordion *ngIf="loadingGlobalData">
+        <!-- (opened)="setOpened(i)"
+          (closed)="setClosed(i)" -->
+        <mat-expansion-panel *ngFor="let item of globalDataPath.Ref_data_files; first as isFirst">
+         
+          <mat-expansion-panel-header>
+            
+            <mat-panel-title >{{ item.db}}</mat-panel-title>                   
+          </mat-expansion-panel-header>
+          <mat-list role="list">
+            <mat-list-item role="listitem">
+                <div  class="lftItem" matTooltip="{{item.collection}}" (click)="loadReferencePreview(item.outputpath)" [class.activeList]="item.outputpath === titleSrc">
+                <mat-icon> layers</mat-icon> 
+                {{item.collection}}
+                </div> 
+                <mat-icon class="ed" matTooltip="Save Source" *ngIf="item.outputpath === titleSrc" (click)="open(saveFile, item.db,item.collection)">save</mat-icon>
+               <mat-icon class="de" matTooltip="Copy Source" *ngIf="item.outputpath === titleSrc">file_copy</mat-icon> 
+           </mat-list-item>
+          </mat-list>                               
         </mat-expansion-panel>       
       </mat-accordion>
       <div class="createLft">
@@ -84,6 +103,8 @@
         aria-describedby="search-addon" [(ngModel)]='searchValue' (keyup.enter)="applySearch($event.target.value)"/>
       <button type="button" class="btn btn-primary" (click)="applySearch(searchValue)">search</button>
     </div>
+    <!-- <div class="spinner2" *ngIf="loadingGlobalData"> </div>
+    <div class="lbd" *ngIf="loadingGlobalData">Please Wait Loading our global Reference data...</div> -->
     <!-- <div class="loader-12" *ngIf="isLoading"></div> -->
     <div class="spinner2" *ngIf="isLoading"></div>
        <div class="mbt" *ngFor="let header of allObjHeader; let i = index;">
@@ -167,11 +188,11 @@
             ></app-ag-grid>
       </div>
 
-      <button *ngIf="isButtonShow" type="button" class="btn btn-light lMore" (click)="loadMoreDb()">
+      <!-- <button *ngIf="isButtonShow" type="button" class="btn btn-light lMore" (click)="loadMoreDb()">
         <span *ngIf="isLoadingBt" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
            <span *ngIf="isLoadingBt"> Loading...</span>
           <span *ngIf="!isLoadingBt">Load More</span>
-        </button>
+        </button> -->
     </div>
   </div>
 </div>
@@ -209,7 +230,7 @@
       <div class="form-group">
         <label for="url">Mongo DB Cluster Client URL</label>
         <div class="input-group">
-          <input type="text" class="form-control"  name="urlValue" #uname="ngModel"  [(ngModel)]="urlValue"  placeholder="URL" required>
+          <input type="text" class="form-control"  name="urlValue" #uname="ngModel"  [(ngModel)]="urlValue"  placeholder="URL">
           <ng-container *ngIf="uname.touched && uname.invalid">
             <p class="err">Please enter your URL</p>
           </ng-container>

@@ -27,6 +27,10 @@ export class DataQualityComponent implements OnInit {
   columnDefs: any = [];
   getDB: FormGroup;
   closeResult = '';
+  globalData;
+  globalDataPath;
+  loadingGlobalData: boolean = false;
+  loadingLocalData:boolean = false;
   constructor(private http: HttpService, private fb: FormBuilder,private modalService: NgbModal) {
   
   }
@@ -36,12 +40,20 @@ export class DataQualityComponent implements OnInit {
       database: ['', []],
       databaseCollection: ['', []],
     });
-    this.getDBCollections();
-
+    this.globalData = localStorage.getItem('globalData');
+    if (!this.globalData) {
+      this.loadingLocalData = true;
+      this.getDBCollections();  
+    } else {
+      this.loadingGlobalData = true;
+      this.globalDataPath = JSON.parse(this.globalData);
+    }
+    console.log(this.globalDataPath.Ref_data_files);
+    
   }
 
   
-
+ 
 
   
   searchValue;
@@ -143,8 +155,8 @@ export class DataQualityComponent implements OnInit {
   selectdItem;
   selectedColumn;
   isButtonShow: boolean = false;
-  startIndex = "";
-  endIndex = "";
+  startIndex = 0;
+  endIndex = 100;
 
   loadMoreDb() {
     this.startIndex = this.endIndex;
@@ -191,7 +203,6 @@ export class DataQualityComponent implements OnInit {
     }
     this.isLoadingCO = true;
     this.http.getDBPreview(payload).subscribe((result: any) => {
-      console.log(result);
       this.collectionResult = result.Preview;
       this.isLoadingCO = false;
       this.isButtonShow = true;
@@ -209,6 +220,31 @@ export class DataQualityComponent implements OnInit {
       this.isLoadingCO = false;
       alert(error.message);
     })
+  }
+  titleSrc;
+  loadReferencePreview(path) {
+    this.titleSrc = path;   
+    const payload = {
+      sourcepath: this.titleSrc
+    };
+    this.isLoadingCO = true;
+    this.http.getProfileView(payload).subscribe((res: any) => {      
+      this.collectionResult = res.Preview;
+      this.isLoadingCO = false;
+      this.rowData = [];
+      this.columnDefs = [];
+      this.collectionTable = res.Preview;
+      if (this.collectionTable) {     
+        this.previewTable();
+    }
+  
+      this.isPreviewLoaded = true;
+      this.isPreviewLoading = false;
+      }, (error) => {
+        this.isPreviewLoaded = false;
+        this.isPreviewLoading = false;
+      });
+
   }
 
   previewTable() {
@@ -284,6 +320,8 @@ export class DataQualityComponent implements OnInit {
   downloadCSV() {
     this.status = ['approved', 'rejected', 'pending'];
     let data = this.collectionResult;
+    console.log(data);
+
     let fileHeaders = [];
     Object.keys(this.collectionResult[0]).map((key, index) => {     
       fileHeaders.push(key);

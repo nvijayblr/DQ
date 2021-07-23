@@ -416,6 +416,18 @@ export class HttpService  {
       }),
     );
   }
+
+  saveGlobalDbCollection(): Observable<any> {
+    return this.http.get<any>(`${this.rootUrl}/api/Save_MongoDB_GlobalRef`).pipe(
+      tap((res) => {
+
+      }),
+      catchError(err => {
+        return throwError(err);
+      })
+    )
+  }
+
   saveSourceMangoDB(payload, method): Observable<any> {
     return this.http[method]<any>(`${this.rootUrl}/api/createNewMongoDBSource`, payload).pipe(
       tap((res) => {

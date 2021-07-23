@@ -73,7 +73,7 @@
                         <mat-list-item> 	
                           <div (click)="changeCategory(selectedSource, cleanFiles.outputPath)"  [class.activeSubList]="cleanFiles.outputPath === titleSrc">
                             <i class="fa fa-circle bullets"></i> 
-                            {{cleanFiles.outputFileName}}</div>
+                            {{cleanFiles.sourceDataName}} <i *ngIf="cleanFiles.outputPath === titleSrc" class="fa fa-download down" aria-hidden="true"  matTooltip="Download Source" (click)="downloadSource(cleanFiles.outputPath, cleanFiles.sourceDataName)"></i></div>
                           </mat-list-item>
                       </div>
                     </mat-list>
