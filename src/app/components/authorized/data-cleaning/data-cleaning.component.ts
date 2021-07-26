@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Options, LabelType } from '@angular-slider/ngx-slider';
 import { OwlOptions } from 'ngx-owl-carousel-o';
-// import { Angular2Csv } from 'angular2-csv';
+import { Angular2Csv } from 'angular2-csv';
 import { MessageService } from 'src/app/services/message.service';
 import { HttpService } from 'src/app/services/http-service.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -25,8 +25,8 @@ export class DataCleaningComponent implements OnInit {
       private http: HttpService,
       private dialog: MatDialog,
       private route: ActivatedRoute,
-      private router: Router,
-      private modalService: NgbModal
+     private router: Router,
+     private modalService: NgbModal
    ) {
    }
   @ViewChild('stickyMenu', { static: false }) menuElement: ElementRef;
@@ -82,7 +82,7 @@ export class DataCleaningComponent implements OnInit {
   savedFiles;
   removeItemMessage;
   messageDisplay;
-  showMessage = false;
+  showMessage: boolean = false;
   newMessage;
   showtable = true;
   chartData: any = [];
@@ -231,40 +231,6 @@ export class DataCleaningComponent implements OnInit {
      ]
   };
   previewTable;
-  cleanedFilesLog;
-  cleanedFilesPath;
-  domainMatches;
-   isCleanLog = false;
-
-  showPreviewTable = false;
-
-    nullcounts: any;
-
- // ngAfterViewInit(){
-   //    this.elementPosition = this.menuElement.nativeElement.offsetTop;
-   // }
-
-   // @HostListener('window:scroll', ['$event'])
-   //  handleScroll(){
-   //    const windowScroll = window.pageYOffset;
-   //    if(windowScroll >= this.elementPosition){
-   //      this.sticky = true;
-   //    } else {
-   //      this.sticky = false;
-   //    }
-   //  }
-
-
-   uniqueName;
-
-   newVal;
-   isLoad = false;
-
-   closeResult: string;
-  collectionResult: any;
-  downloadSrcName: string;
-
-  status: any[];
 
   ngOnInit() {
     this.mode = this.route.snapshot.queryParamMap.get('mode');
@@ -294,13 +260,14 @@ export class DataCleaningComponent implements OnInit {
        }
     }, 10);
   }
+  cleanedFilesLog;
   getProfileSource() {
     this.http.getCleanSource().subscribe((result: any) => {
-      this.allSourceCategory = result.SourceDetailsList;
+      this.allSourceCategory = result.SourceDetailsList;     
       // this.cleanedFilesLog = result.SourceDetailsList[0].CleanedFilesLog ? result.SourceDetailsList[0].CleanedFilesLog : [];
       this.analysis = this.messageService.getSource();
       const uploadMethod = localStorage.getItem('dq-upload-data');
-      if (this.analysis && uploadMethod === 'clean') {
+      if (this.analysis && uploadMethod === "clean") {
         this.uploadId = this.analysis.sourceId;
         this.processTime = this.analysis.uploadDate;
         this.source = this.analysis;
@@ -308,7 +275,7 @@ export class DataCleaningComponent implements OnInit {
         this.uploadId = this.source.sourceId;
       } else {
         this.analysis = result.SourceDetailsList.length ? result.SourceDetailsList[0] : [];
-        this.source = this.analysis;
+        this.source = this.analysis;        
         this.sourcePathSelected();
         this.uploadId = this.source.sourceId;
         this.processTime = this.analysis.uploadDate;
@@ -345,6 +312,7 @@ export class DataCleaningComponent implements OnInit {
     this.profileSummary.sourceFileName = this.source.templateSourcePath;
     this.loadProfile(this.source);
   }
+  cleanedFilesPath;
   changeCategory(source, path) {
     // localStorage.setItem('dq-source-data', JSON.stringify(source));
     localStorage.removeItem('dq-source-data');
@@ -353,11 +321,11 @@ export class DataCleaningComponent implements OnInit {
     this.cleanedFilesPath = path;
     this.initLoadProfile = false;
     if (path) {
-      this.titleSrc = this.cleanedFilesPath;
+      this.titleSrc = this.cleanedFilesPath
     } else {
       this.titleSrc = source.templateSourcePath;
     }
-
+    
     this.loadProfile(source);
     // this.loadReferencePreview();
     // this.loadCorrelation(this.selectedSource, this.datatype, this.method);
@@ -401,23 +369,24 @@ export class DataCleaningComponent implements OnInit {
       this.router.navigate([currentUrl]);
     });
   }
+  domainMatches;
   changeProfile(profile) {
-    this.domainMatches = _.keys(this.domainType.Domain_Matches);
+    this.domainMatches = _.keys(this.domainType.Domain_Matches); 
     this.profile = profile;
-    const extractValues = ({ unique_values, counts }) => [unique_values.toString(), counts];
+    const extractValues = ({ unique_values, counts }) => [unique_values.toString(), counts];   
     this.chartData = this.profile.frequncyAnalysis.map(extractValues);
-    this.resetPreview();
-    this.attrubute = profile.column;
-    this.mask.column = profile.column;
-    this.impute.column = profile.column;
-    this.delete.column_name = profile.column;
-    this.duplicate.column_name = profile.column;
+      this.resetPreview();
+      this.attrubute = profile.column;
+      this.mask.column = profile.column;
+      this.impute.column = profile.column;
+      this.delete.column_name = profile.column;
+      this.duplicate.column_name = profile.column;
    }
 
-
+   
   loadProfile(source, profile: any = '') {
     if (this.cleanedFilesPath) {
-      this.titleSrc = this.cleanedFilesPath;
+      this.titleSrc =this.cleanedFilesPath;
     } else {
       this.titleSrc = source.templateSourcePath;
     }
@@ -429,13 +398,13 @@ export class DataCleaningComponent implements OnInit {
     this.getCleanedLogs();
     this.http.getProfiles(payload).subscribe((result: any) => {
       this.profiles = result.profile ? result.profile : [];
-      this.profileDetails = {
+        this.profileDetails = {
             nr_duplicates: result.nr_duplicates,
             nr_totalcols: result.nr_totalcols,
             nr_totalrecords: result.nr_totalrecords
          };
 
-      if (this.profiles.length) {
+        if (this.profiles.length) {
             if (profile) {
                const selectedProfile = this.profiles.filter(data => {
                   return data.column === profile.column;
@@ -446,14 +415,14 @@ export class DataCleaningComponent implements OnInit {
                this.changeProfile(this.profiles[0]);
             }
          }
-      this.profileSummary.duplicates = result.nr_duplicates ? result.nr_duplicates : 0;
+        this.profileSummary.duplicates = result.nr_duplicates ? result.nr_duplicates : 0;
 
-      this.profileSummary.numeric = 0;
-      this.profileSummary.alphabetic = 0;
-      this.profileSummary.alphanumeric = 0;
-      this.profileSummary.nullcounts = 0;
+        this.profileSummary.numeric = 0;
+        this.profileSummary.alphabetic = 0;
+        this.profileSummary.alphanumeric = 0;
+        this.profileSummary.nullcounts = 0;
 
-      this.profiles.map(data => {
+        this.profiles.map(data => {
             if (data.attributeSummary) {
                this.profileSummary.records = data.attributeSummary.records ? data.attributeSummary.records : this.profileSummary.records;
                if (data.attributeSummary.dataType === 'Numeric') {
@@ -468,11 +437,12 @@ export class DataCleaningComponent implements OnInit {
                this.profileSummary.nullcounts = this.profileSummary.nullcounts + parseInt(data.attributeSummary.null_records, 0);
             }
          });
-      this.isLoading = false;
+        this.isLoading = false;
       }, (error) => {
          this.isLoading = false;
       });
    }
+   isCleanLog : boolean = false;
   getCleanedLogs() {
      this.isLogsLoading = true;
      const payload = {
@@ -481,8 +451,8 @@ export class DataCleaningComponent implements OnInit {
       };
      this.http.getCleanedLogs(payload).subscribe((result: any) => {
          this.isLogsLoading = false;
-         this.cleanLogs = result ? result : [];
-         if (this.cleanLogs) {
+       this.cleanLogs = result ? result : [];
+       if (this.cleanLogs) {
          this.isCleanLog = true;
        }
       }, (error) => {
@@ -673,12 +643,14 @@ export class DataCleaningComponent implements OnInit {
 
 
    }
+
+  showPreviewTable:boolean = false;
   loadPreview(type, mask = '', callBack: any = '') {
     this.showPreviewTable = true;
-    this.delete.formula.cond_value1 = this.delete.formula.cond_value1 ? this.delete.formula.cond_value1 : '';
-    this.delete.formula.cond_value2 = this.delete.formula.cond_value2 ? this.delete.formula.cond_value2 : '';
+      this.delete.formula.cond_value1 = this.delete.formula.cond_value1 ? this.delete.formula.cond_value1 : '';
+      this.delete.formula.cond_value2 = this.delete.formula.cond_value2 ? this.delete.formula.cond_value2 : '';
 
-    const payloads = {
+      const payloads = {
          duplicate: {
             sourcepath: this.source.templateSourcePath,
             action: 'preview' ,
@@ -709,10 +681,10 @@ export class DataCleaningComponent implements OnInit {
             threshold : (this.delete.category === 'col_nan' || this.delete.category === 'row_nan') ? (this.delete.threshold / 100) : ''
          }
     };
-
-    this.loadProfilePreview(payloads[type], type, callBack);
+    
+     this.loadProfilePreview(payloads[type], type, callBack);     
   }
-
+  
 
   loadProfilePreview(payload, type, callBack) {
      this.loaderMsg = 'Loading preview...';
@@ -722,9 +694,9 @@ export class DataCleaningComponent implements OnInit {
      this.rowData = [];
      this.removeItems = '';
      this.http.getProfilePreview(payload, type).subscribe((res: any) => {
-       const details: any = res.Preview ? res.Preview : {};
+       const details: any = res.Preview ? res.Preview : {};     
        this.removeItemMessage = res.cols_removed;
-       if (type === 'data_remove') {
+         if (type === 'data_remove') {
             this.removeItems = {
                cols_removed: res.cols_removed,
                nr_cols_post: res.nr_cols_post,
@@ -737,13 +709,13 @@ export class DataCleaningComponent implements OnInit {
        if (this.delete.category === 'col_nan') {
          if (this.removeItemMessage && this.removeItemMessage.length > 0) {
           this.showMessage = true;
-          this.messageDisplay = this.removeItemMessage.join(', ') ? this.removeItemMessage : [];
-          this.newMessage = this.messageDisplay;
-         }
+           this.messageDisplay = this.removeItemMessage.join(', ') ? this.removeItemMessage : [];
+           this.newMessage = this.messageDisplay
+         }        
       }
-       this.parseSourcePreview(details);
-       this.isLoading = false;
-       if (callBack) {
+         this.parseSourcePreview(details);
+         this.isLoading = false;
+         if (callBack) {
             callBack();
          }
       }, (error) => {
@@ -771,8 +743,9 @@ export class DataCleaningComponent implements OnInit {
           this.columnDefs.push({
             field: key,
             ...this.defaultColDefs,
-            cellClass : this.cellClass
-
+            cellClass: this.cellClass,
+            //headerClass : this.headerClass
+            
           });
         });
       }
@@ -780,10 +753,13 @@ export class DataCleaningComponent implements OnInit {
       this.isPreviewLoaded = true;
       this.isPreviewLoading = false;
   }
-
+  
   cellClass(params) {
     return params.value === 'None' ? 'rag-green' : 'rag-amber';
   }
+  // headerClass(params) {
+  //   return params.value === 'Cabin' ? 'rag-green2' : 'rag-amber';
+  // }
 
     changeRemoveCategory(type) {
       if (type === 'column') {
@@ -829,7 +805,7 @@ export class DataCleaningComponent implements OnInit {
         reasonLabel : 'File Name'
       }
     });
-
+   
     dialogRef.afterClosed().subscribe(data => {
       if (data.action === 'ok') {
         const payload = {
@@ -840,9 +816,9 @@ export class DataCleaningComponent implements OnInit {
           outputPath : 'cleaned_data',
           outputFileName : data.reason + '.csv'
         };
-        this.http.saveCleanSource(payload).subscribe((result: any) => {
+        this.http.saveCleanSource(payload).subscribe((result: any) => {         
           this.savedFiles = result.SourceDetailsList[0].CleanedFilesLog[result.SourceDetailsList[0].CleanedFilesLog.length - 1];
-          // localStorage.setItem('dq-source-data', JSON.stringify(result))
+          //localStorage.setItem('dq-source-data', JSON.stringify(result))
           if (this.savedFiles) {
             this.updateSourcePath(this.savedFiles.outputPath, this.savedFiles.outputFileName);
           }
@@ -898,9 +874,11 @@ export class DataCleaningComponent implements OnInit {
   showCleanLogs() {
         this.dialog.open(CleanLogsComponent, {
           width: '900px',
-          data: this.cleanLogs
+          data: this.cleanLogs     
         });
   }
+  
+    nullcounts : any;
   showPreviewDetails() {
     const payload = {
       sourcepath: this.source.templateSourcePath,
@@ -919,9 +897,9 @@ export class DataCleaningComponent implements OnInit {
         this.isPreviewLoaded = false;
         this.isPreviewLoading = false;
       });
-
+   
  }
-
+  
     changeView(view) {
       if (view === 'table') {
         this.showtable = true;
@@ -929,19 +907,39 @@ export class DataCleaningComponent implements OnInit {
         this.showtable = false;
       }
     }
+
+ // ngAfterViewInit(){
+   //    this.elementPosition = this.menuElement.nativeElement.offsetTop;
+   // }
+
+   // @HostListener('window:scroll', ['$event'])
+   //  handleScroll(){
+   //    const windowScroll = window.pageYOffset;
+   //    if(windowScroll >= this.elementPosition){
+   //      this.sticky = true;
+   //    } else {
+   //      this.sticky = false;
+   //    }
+   //  }
+  
+
+   uniqueName;
    domainTypeIdentity() {
      const payload = {
        sourcepath: this.titleSrc
      };
      this.http.getDomainTypeIdentity(payload).subscribe((result: any) => {
-
+      
        this.domainType = result;
        this.uniqueName = result.Unique_values.DESTINATION_AIRPORT;
-
+       
      }, (error) => {
        console.log('ERROR', error);
-     });
+     })
    }
+ 
+   newVal;
+   isLoad = false;
    getAllSearchRequest() {
        this.http.getStartRequests().subscribe((result: any) => {
          this.newVal = _.values(result);
@@ -951,27 +949,29 @@ export class DataCleaningComponent implements OnInit {
          }
        });
    }
-
+ 
    searchMultipleNumbers() {
      const payload = this.uniqueName;
-     this.http.startRequests(payload);
+     this.http.startRequests(payload)
      this.getAllSearchRequest();
      if (this.closeResult) {
        return;
      }
-
+    
    }
+   
+   closeResult: string;
    openScrollableContent(longContent) {
-      this.searchMultipleNumbers();
-      this.modalService.open(longContent, { scrollable: true, size: 'xl' }).result.then((result) => {
+      this.searchMultipleNumbers(); 
+     this.modalService.open(longContent, { scrollable: true, size: 'xl' }).result.then((result) => {
        console.log(result);
        this.closeResult = `Closed with: ${result}`;
      }, (reason) => {
        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-       // window.location.reload();
-     });
+       //window.location.reload();
+     });       
    }
-
+ 
    private getDismissReason(reason: any): string {
      if (reason === ModalDismissReasons.ESC) {
        return 'by pressing ESC';
@@ -981,10 +981,12 @@ export class DataCleaningComponent implements OnInit {
        return  `with: ${reason}`;
      }
   }
+  collectionResult: any;
+  downloadSrcName:string;
   downloadSource(sourcepath, fileName) {
     this.downloadSrcName = fileName;
     const payload = {
-      sourcepath
+      sourcepath: sourcepath
     };
     this.http.getProfileView(payload).subscribe((res: any) => {
       this.collectionResult  = res.Preview ? res.Preview : {};
@@ -995,31 +997,29 @@ export class DataCleaningComponent implements OnInit {
       });
   }
 
-
+  status: any[];
+  
+  
   downloadCSV() {
-  //   const formula = this.downloadSrcName;
-  //   this.status = ['approved', 'rejected', 'pending'];
-  //   let data = _.values(this.collectionResult);
-  //   let fileHeaders = [];
-  //   Object.keys(this.collectionResult[0]).map((key, index) => {
-  //     fileHeaders.push(key);
-  //   });
-  //   let options = {
-  //     title: '',
-  //     fieldSeparator: ',',
-  //     quoteStrings: '"',
-  //     decimalseparator: '.',
-  //     //showLabels: true,
-  //     //showTitle: true,
-  //     //useBom: true,
-  //     headers: fileHeaders
-  //   };
+    const formula = this.downloadSrcName;
+    this.status = ['approved', 'rejected', 'pending'];
+    let data = _.values(this.collectionResult);
+    let fileHeaders = [];
+    Object.keys(this.collectionResult[0]).map((key, index) => {     
+      fileHeaders.push(key);
+    });
+    let options = {
+      title: '',
+      fieldSeparator: ',',
+      quoteStrings: '"',
+      decimalseparator: '.',
+      //showLabels: true,
+      //showTitle: true,
+      //useBom: true,
+      headers: fileHeaders
+    };
 
-  //   new Angular2Csv(data, formula, options);
-  // }
-
-
-  //   // new Angular2Csv(data, formula, options);
+    new Angular2Csv(data, formula, options);
   }
  }
 
