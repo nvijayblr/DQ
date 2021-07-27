@@ -417,6 +417,16 @@ export class HttpService  {
     );
   }
 
+  copyMangoDbCollection(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/MongoDB_Collection_Copy`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
   saveGlobalDbCollection(): Observable<any> {
     return this.http.get<any>(`${this.rootUrl}/api/Save_MongoDB_GlobalRef`).pipe(
       tap((res) => {
@@ -426,6 +436,24 @@ export class HttpService  {
         return throwError(err);
       })
     )
+  }
+
+  getMongoDBClientHistory(): Observable<any> {
+    return this.http.get<any>(`${this.rootUrl}/api/mongoDB_ClientHist_log`).pipe(
+      tap((res) => { }),
+      catchError(err => {
+        return throwError(err);
+      })
+    );
+  }
+
+  getMongoDBSaveLog(): Observable<any> {
+    return this.http.get<any>(`${this.rootUrl}/api/mongoDB_Savelog`).pipe(
+      tap((res) => { }),
+      catchError(err => {
+        return throwError(err);
+      })
+    );
   }
 
   saveSourceMangoDB(payload, method): Observable<any> {

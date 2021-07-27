@@ -28,10 +28,13 @@ export class MangoDBComponent implements OnInit {
   alertMessage;
   savePath;
   isLoading = false;
-  loaderMsg = '';
+  loaderMsg = 'Loading...';
   refFiles: any = [];
   summary: any = {};
   uploadMethod;
+  clientUrl: any = [];
+  dbList: any = [];
+  showDbCollectionName:boolean = false;
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -49,8 +52,9 @@ export class MangoDBComponent implements OnInit {
     //   this.collectionsForm = true;
     // }
     this.analysisForm = this.fb.group({
-      sourceDataName: ['', [Validators.required, Validators.maxLength(100)]],
-      clientUrl: ['', [Validators.required]],
+      //sourceDataName: ['', [Validators.required]],
+      clientUrlDb: ['', [Validators.required]],
+      clientUrlDbType: ['', [Validators.required]],
       sourceFileName: ['', []],
       //database: ['', [Validators.required, Validators.maxLength(100)]],
       collection: ['', [Validators.required, Validators.maxLength(100)]],
@@ -65,7 +69,37 @@ export class MangoDBComponent implements OnInit {
     // });
 
     this.getsourceCategory();
+    this.getMongoDBClientHistoryURL();
     
+  }
+
+  get clientUrlDb() {
+    return this.analysisForm.get('clientUrlDb');
+  }
+
+  onWriterChange() {
+    if (this.clientUrlDb.value === 'others') {
+      this.showDbCollectionName = true;
+      this.afControls.clientUrlDbType.setValue('');
+    } else {
+      this.afControls.clientUrlDbType.setValue(this.clientUrlDb.value);
+      this.showDbCollectionName = false;
+      this.getDBCollections();
+    }
+  }
+
+  getDBCollections() {
+    this.isLoading = true;
+    const payload = {
+      client_url: this.clientUrlDb.value,
+    };
+    this.http.getDBCollections(payload).subscribe((result: any) => {
+      this.isLoading = false;
+      console.log('DB', result.Databases)
+      this.dbList = result.Databases;
+    }, (error) => {
+      alert(error.message);
+    });
   }
 
   // saveMangoDbCollection() {
@@ -86,7 +120,13 @@ export class MangoDBComponent implements OnInit {
   // }
 
 
+  getMongoDBClientHistoryURL() {
+    this.http.getMongoDBClientHistory().subscribe((result: any) => {
+      this.clientUrl = result.ClientHist;
+      console.log(this.clientUrl);
 
+    })
+  }
   onSourceFileSelected(file) {
     this.sourceFile = file;
     this.flError = true;
@@ -115,7 +155,7 @@ export class MangoDBComponent implements OnInit {
            this.chooseOptions = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel';
         }
      }
-    this.afControls.sourceDataName.setValue(fName);
+    //this.afControls.sourceDataName.setValue(fName);
     //this.loadSourcePreview();
   }
 
@@ -140,8 +180,8 @@ export class MangoDBComponent implements OnInit {
 
     
     const payload = {
-      client_url: this.analysisForm.controls.clientUrl.value,
-      db: this.analysisForm.controls.database.value,
+      client_url: this.analysisForm.controls.clientUrlDbType.value,
+      db: this.analysisForm.controls.sourceCategory.value,
       collection:this.analysisForm.controls.collection.value     
     };
 

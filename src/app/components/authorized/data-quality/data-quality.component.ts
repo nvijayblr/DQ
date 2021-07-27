@@ -81,10 +81,15 @@ export class DataQualityComponent implements OnInit {
   fileName;
   alertMessage;
   savePath;
+  clientUrlLog: any = [];
+  
+  private options: string[] = ["10", "20", "50"];
+  selectedQuantity = "10";
 
 
   status: any[];
   formula = 'mongoDb';
+  selected;
 
   ngOnInit() {
     this.getDB = this.fb.group({
@@ -99,8 +104,22 @@ export class DataQualityComponent implements OnInit {
       this.loadingGlobalData = true;
       this.globalDataPath = JSON.parse(this.globalData);
     }
-    console.log(this.globalDataPath.Ref_data_files);
 
+    console.log(this.globalDataPath)
+    this.getMongoDBClientHistoryURL();
+  }
+
+  getMongoDBClientHistoryURL() {
+    this.http.getMongoDBClientHistory().subscribe((result: any) => {
+      this.clientUrlLog = result.ClientHist;
+      this.clientUrl = result.ClientHist[0].client_url;
+    })
+  }
+
+  getMongoDBSaveLog() {
+    this.http.getMongoDBSaveLog().subscribe((result: any) => {
+      console.log(result)
+    })
   }
 
   applySearch(event: Event) {
@@ -128,11 +147,13 @@ export class DataQualityComponent implements OnInit {
       alert(error.message);
     });
   }
+  
+
   getDBCollections() {
     this.isLoadingDB = true;
     this.showAllDetails = false;
     const payload = {
-      client_url: this.clientUrl || '',
+      client_url: '',
     };
     this.http.getDBCollections(payload).subscribe((result: any) => {
       this.newDB = result.Cluster_Contents;
@@ -142,9 +163,15 @@ export class DataQualityComponent implements OnInit {
       this.isLoadingDB = false;
       this.showAllDetails = true;
     }, (error) => {
-      alert(error);
+      alert(error.message);
     });
   }
+
+  newDBClient;
+  dbValuesClient: any = [];
+  dbClient;
+  dataSourceClient;
+  loadingClientDetails:boolean = false;
   getDBCollectionsClient() {
     this.isLoadingCDB = true;
     this.showAllDetails = false;
@@ -153,14 +180,13 @@ export class DataQualityComponent implements OnInit {
       client_url: this.clientUrl || '',
     };
     this.http.getDBCollections(payload).subscribe((result: any) => {
-      console.log(result);
       this.uploadButton = true;
-      this.newDB = result.Cluster_Contents;
-      this.db = _.keys(result.Cluster_Contents);
-      this.dbValues.push(this.newDB);
-      this.dataSource = _.values(result.Cluster_Contents);
+      this.newDBClient = result.Cluster_Contents;
+      this.dbClient = _.keys(result.Cluster_Contents);
+      this.dbValuesClient.push(this.newDBClient);
+      this.dataSourceClient = _.values(result.Cluster_Contents);
       this.isLoadingCDB = false;
-      this.showAllDetails = true;
+      this.loadingClientDetails = true;
     }, (error) => {
       this.alertErrMessage = error.message;
       this.isLoadingCDB = false;
@@ -202,6 +228,40 @@ export class DataQualityComponent implements OnInit {
       this.rowData = JSON.parse(JSON.stringify(this.rowData));
     });
   }
+
+  getDBPreviewCluster(item, column) {
+    this.getMongoDBSaveLog();
+    this.selectedColumn = column.toString();
+    this.selectdItem = item;
+    this.isButtonShow = false;
+    const payload = {
+      client_url : this.clientUrlConnection,
+      db: this.selectdItem,
+      collection: this.selectedColumn,
+      start_index: this.startIndex,
+      end_index : this.endIndex
+    };
+    this.isLoadingCO = true;
+    this.http.getDBPreview(payload).subscribe((result: any) => {
+      this.collectionResult = result.Preview;
+      this.isLoadingCO = false;
+      this.isButtonShow = true;
+      this.rowData = [];
+      this.columnDefs = [];
+      this.collectionTable = result.Preview;
+      if (this.collectionTable) {
+        this.previewTable();
+    }
+
+      this.isPreviewLoaded = true;
+      this.isPreviewLoading = false;
+
+    }, (error) => {
+      this.isLoadingCO = false;
+      alert(error.message);
+    });
+  }
+
   getDBPreview(item, column) {
     this.selectedColumn = column.toString();
     this.selectdItem = item;
@@ -233,6 +293,7 @@ export class DataQualityComponent implements OnInit {
       alert(error.message);
     });
   }
+
   loadReferencePreview(path) {
     this.titleSrc = path;
     const payload = {
@@ -273,20 +334,26 @@ export class DataQualityComponent implements OnInit {
       });
     }
   }
+
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-  open(saveFile, item, column) {
-    this.modalService.open(saveFile, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+
+
+  openSave(saveLocalFile, item, column, outputpath) {
+    this.modalService.open(saveLocalFile, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       const payload = {
-          client_url: result.urlValue || '',
+          client_url: result.clientUrl || '',
           db: item,
           collection: column,
+          //source_path: outputpath,
           output_filename : result.fileName + '.csv',
-        };
+      };
+      this.isLoadingCO = true;
       this.http.saveMangoDbCollection(payload).subscribe((result: any) => {
-          console.log(result);
+        this.isLoadingCO = false;
           this.alertMessage = result.Message;
           this.savePath = result.outputpath;
           this.modalService.open(this.modalContent, { windowClass: 'modal-holder' });
@@ -300,10 +367,38 @@ export class DataQualityComponent implements OnInit {
     });
   }
 
+  open(saveFile, item, column, outputpath) {
+    this.modalService.open(saveFile, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      const payload = {
+          client_url: result.clientUrl || '',
+          db: item,
+          collection: column,
+          source_path: outputpath,
+          //output_filename : result.fileName + '.csv',
+      };
+      this.isLoadingCO = true;
+      this.http.copyMangoDbCollection(payload).subscribe((result: any) => {
+        this.isLoadingCO = false;
+        this.alertMessage = result.message || result.errorMsg;
+          this.savePath = result.outputpath;
+          this.modalService.open(this.modalContent, { windowClass: 'modal-holder' });
+        }, (error) => {
+          this.isLoading = false;
+        });
+      this.closeResult = `Closed with: ${result}`;
+
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  clientUrlConnection;
   openSm(content) {
     this.modalService.open(content, { windowClass: 'modal-holder' }).result.then((result) => {
       this.clientUrl = result;
+      this.clientUrlConnection = result;
       this.getDBCollectionsClient();
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
 

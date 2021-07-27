@@ -32,20 +32,55 @@
                               <mat-error class="nerr ftw" *ngIf="selFileNameErr && flError">Please Select a File</mat-error> --> 
                             </div>
                           </div>
-                          <div class="list-item-2 outline split">
+                          <!-- <div class="list-item-2 outline split">
                               <mat-label class="sub-title">Reference Data Name<span class="red">*</span></mat-label>
                               <mat-form-field appearance="fill">
                                 <input matInput placeholder="Source Name" formControlName="sourceDataName" maxlength="50" autocomplete="off"/>
                               </mat-form-field>
-                              <!-- <mat-error class="errSty" *ngIf="!afControls.sourceDataName.value && afControls.sourceDataName.touched">Please Enter Source Name</mat-error> -->
-                              </div>
-                              <div class="list-item-2 outline splitR">
+                              <!-- <mat-error class="errSty" *ngIf="!afControls.sourceDataName.value && afControls.sourceDataName.touched">Please Enter Source Name</mat-error> 
+                              </div> -->
+                              <div class="list-item-2 outline split">
                               <mat-label class="mtop sub-title">MongoDB Cluster Client URL <i class="fa fa-question-circle-o" aria-hidden="true"></i>
                               </mat-label>                                                    
-                              <mat-form-field appearance="fill">
+                              <!-- <mat-form-field appearance="fill">
                                 <input matInput placeholder="Client URL" formControlName="clientUrl" maxlength="250" autocomplete="off"/>
-                              </mat-form-field>
+                              </mat-form-field> -->
+                              <mat-form-field appearance="fill">
+                                <mat-label >Cluster Client URL</mat-label> 
+                                <mat-select formControlName="clientUrlDb" (selectionChange)="onWriterChange()">
+                                  <mat-option *ngFor="let url of clientUrl" value="{{url.client_url}}" matTooltip="{{url.client_url}}">
+                                    {{url.client_url}}
+                                  </mat-option>
+                                  <mat-option value="others">Others</mat-option>                                    
+                                </mat-select>
+                                </mat-form-field>
                               </div>
+
+                              <div class="list-item-2 outline splitR">
+                                <mat-label class="mtop sub-title">Cluster Client URL</mat-label>                                                    
+                                <mat-form-field appearance="fill">
+                                  <input matInput placeholder="Cluster Client URL" formControlName="clientUrlDbType"  autocomplete="off"/>
+                                </mat-form-field>
+                                </div>
+
+                              <div class="list-item-2 outline split" *ngIf="!showDbCollectionName">
+                                <mat-label class="mtop sub-title">Reference Data Category (MongoDB database)</mat-label>                                                    
+                                <mat-form-field appearance="fill">
+                                  <mat-label >Category</mat-label> 
+                                  <mat-select formControlName="sourceCategory">
+                                    <mat-option *ngFor="let srcCat of dbList" value="{{srcCat}}">
+                                      {{srcCat}}
+                                    </mat-option>                                    
+                                  </mat-select>
+                                  </mat-form-field>
+                                </div>
+
+                                <div class="list-item-2 outline split" *ngIf="showDbCollectionName">
+                                  <mat-label class="mtop sub-title">Reference Data Category (MongoDB database)</mat-label>                                                    
+                                  <mat-form-field appearance="fill">
+                                    <input matInput placeholder="Source Name" formControlName="sourceCategory" maxlength="50" autocomplete="off"/>
+                                  </mat-form-field>
+                                  </div>
 
                               <!-- <div class="list-item-2 outline split">
                                 <mat-label class="mtop sub-title">Database</mat-label>                                                    
@@ -54,29 +89,19 @@
                                 </mat-form-field>
                                 </div> -->
 
-                                <div class="list-item-2 outline split">
+                                <div class="list-item-2 outline splitR">
                                   <mat-label class="mtop sub-title">Reference Data Set (MongoDB collection)</mat-label>                                                    
                                   <mat-form-field appearance="fill">
                                     <input matInput placeholder="Collection" formControlName="collection" maxlength="250" autocomplete="off"/>
                                   </mat-form-field>
                                   </div>
 
-                                  <div class="list-item-2 outline splitR">
-                                    <mat-label class="mtop sub-title">Reference Data Category (MongoDB database)</mat-label>                                                    
-                                    <mat-form-field appearance="fill">
-                                      <mat-label >Category</mat-label> 
-                                      <mat-select formControlName="sourceCategory">
-                                        <mat-option *ngFor="let srcCat of srcCategory" value="{{srcCat.label}}">
-                                          {{srcCat.value}}
-                                        </mat-option>                                    
-                                      </mat-select>
-                                      </mat-form-field>
-                                    </div>
+                              
                              
                               <div class="bdr"></div>
                                           
                               <div class="act-btn-wrapper m1t">
-                                  <button mat-stroked-button class="btnBlueGreenN addico"    (click)="saveSource()">Submit <mat-icon>navigate_next</mat-icon></button>
+                                  <button mat-stroked-button class="btnBlueGreenN addico" (click)="saveSource()">Submit <mat-icon>navigate_next</mat-icon></button>
                                   <!-- <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"  *ngIf="isEditMode"  (click)="editSourceSave()">Submit <mat-icon>navigate_next</mat-icon></button> -->
           
                                   <!-- <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"

@@ -15,11 +15,12 @@
               <span class="fa fa-search form-control-feedback"></span>
               <input class="form-control" type="text" name="search" [(ngModel)]="searchText" autocomplete="off" placeholder="Start searching for a Collections">
             </div> -->            
-            <mat-list-item role="listitem"  *ngFor="let column of dbValues" >
+            <mat-list-item role="listitem"  *ngFor="let column of dbValues" >             
                 <div  class="lftItem" matTooltip="{{column[item]}}" (click)="getDBPreview(item,column[item])" [class.activeList]="column[item].toString() === selectedColumn">
                 <mat-icon> layers</mat-icon> 
                 {{column[item]}}
                 </div> 
+                
                 <mat-icon class="ed" matTooltip="Save Source" *ngIf="column[item].toString() === selectedColumn" (click)="open(saveFile, item,column[item].toString())">save</mat-icon>
                <mat-icon class="de" matTooltip="Copy Source" *ngIf="column[item].toString() === selectedColumn">file_copy</mat-icon> 
            </mat-list-item>
@@ -42,8 +43,8 @@
                 <mat-icon> layers</mat-icon> 
                 {{item.collection}}
                 </div> 
-                <mat-icon class="ed" matTooltip="Save Source" *ngIf="item.outputpath === titleSrc" (click)="open(saveFile, item.db,item.collection)">save</mat-icon>
-               <mat-icon class="de" matTooltip="Copy Source" *ngIf="item.outputpath === titleSrc">file_copy</mat-icon> 
+                <!-- <mat-icon class="ed" matTooltip="Save Source" *ngIf="item.outputpath === titleSrc" (click)="getMongoDBSaveLog()">save</mat-icon> -->
+               <mat-icon class="de" matTooltip="Copy Source" *ngIf="item.outputpath === titleSrc" (click)="open(saveFile, item.db,item.collection, item.outputpath)">file_copy</mat-icon> 
            </mat-list-item>
           </mat-list>                               
         </mat-expansion-panel>       
@@ -56,12 +57,33 @@
         UPLOAD REFERENCE DATA
         </button>
       </div>
+      <div class="cb">
+      <mat-accordion *ngIf="loadingClientDetails">
+        <!-- (opened)="setOpened(i)"
+          (closed)="setClosed(i)" -->
+        <mat-expansion-panel *ngFor="let item of dbClient; first as isFirst">
+          <mat-expansion-panel-header>
+            <mat-panel-title >{{item}}</mat-panel-title>                   
+          </mat-expansion-panel-header>
+          <mat-list role="list">
+            <mat-list-item role="listitem"  *ngFor="let column of dbValuesClient" >  
+                <div  class="lftItem" matTooltip="{{column[item]}}" (click)="getDBPreviewCluster(item,column[item])" [class.activeList]="column[item].toString() === selectedColumn">
+                <mat-icon> layers</mat-icon> 
+                {{column[item]}}
+                </div>                 
+                <mat-icon class="ed rt" matTooltip="Save Source" *ngIf="column[item].toString() === selectedColumn" (click)="openSave(saveLocalFile, item,column[item].toString())">save</mat-icon>
+               <!-- <mat-icon class="de" matTooltip="Copy Source" *ngIf="column[item].toString() === selectedColumn">file_copy</mat-icon>  -->
+           </mat-list-item>
+          </mat-list>                               
+        </mat-expansion-panel>       
+      </mat-accordion>
+    </div>
     </div>
     <div class="dash-right"> 
       <h1 class="ms nTitle">Reference Data</h1>
     
      <div>
-      <button  class="btnBlueGreenN green addico" (click)="downloadCSV()">Download CSV</button>
+      <!-- <button  class="btnBlueGreenN green addico" (click)="downloadCSV()">Download CSV</button> -->
       <!-- <button  class="btnBlueGreenN green addico"  (click)="openSm(content)"><mat-icon>link</mat-icon> Connect to your Mongo DB Cluster</button> -->
       <!-- <button  class="btnBlueGreenN blue addico" routerLink="/auth/add-source-data/mango-db" [queryParams]="{ save: 'collection'}">
         <mat-icon>save</mat-icon>  Save Collections</button> -->
@@ -188,11 +210,11 @@
             ></app-ag-grid>
       </div>
 
-      <!-- <button *ngIf="isButtonShow" type="button" class="btn btn-light lMore" (click)="loadMoreDb()">
+    <button *ngIf="isButtonShow" type="button" class="btn btn-light lMore" (click)="loadMoreDb()">
         <span *ngIf="isLoadingBt" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
            <span *ngIf="isLoadingBt"> Loading...</span>
           <span *ngIf="!isLoadingBt">Load More</span>
-        </button> -->
+        </button> 
     </div>
   </div>
 </div>
@@ -208,9 +230,11 @@
   <div class="modal-body">
       <div class="form-group">
         <label for="clientUrl">Mongo DB Cluster Client URL</label>
-        <div class="input-group">
-          <input type="text" class="form-control" [(ngModel)]='clientUrl' id="url" placeholder="URL">
-        </div>
+       
+          <!-- <input type="text" class="form-control" [(ngModel)]='clientUrl' id="url" placeholder="URL"> -->
+          <select class="form-control" name="clientUrl"  [(ngModel)]='clientUrl' id="url" >           
+            <option  *ngFor="let url of clientUrlLog" [ngValue]="url.client_url" matTooltip="{{url.client_url}}" selected ="selected === url.client_url">{{url.client_url}}</option>            
+          </select>    
       </div>
   </div>
   <div class="modal-footer">
@@ -229,19 +253,23 @@
     <form #f="ngForm">
       <div class="form-group">
         <label for="url">Mongo DB Cluster Client URL</label>
-        <div class="input-group">
+        <!-- <div class="input-group">
           <input type="text" class="form-control"  name="urlValue" #uname="ngModel"  [(ngModel)]="urlValue"  placeholder="URL" >
           <ng-container *ngIf="uname.touched && uname.invalid">
             <p class="err">Please enter your URL</p>
           </ng-container>
-        </div>
-        <label for="fileName">File Name</label>
-        <div class="input-group">
+        </div> -->
+        <!-- <label for="fileName">File Name</label> -->
+        <!-- <div class="input-group">
           <input type="text" class="form-control"  name="fileName" #fname="ngModel"  [(ngModel)]='fileName'  placeholder="fileName" required>
           <ng-container *ngIf="fname.touched && fname.invalid">
             <p class="err">Please enter your File Name</p>
           </ng-container>
-        </div>
+        </div> -->
+        <select class="form-control" name="clientUrl"  [(ngModel)]='clientUrl' id="url" >           
+          <option  *ngFor="let url of clientUrlLog" [ngValue]="url.client_url" matTooltip="{{url.client_url}}" selected ="selected === url.client_url">{{url.client_url}}</option>
+          
+        </select>
       </div>
     </form>
   </div>
@@ -252,14 +280,15 @@
 
 <ng-template #contentMsg let-modal>
   <div class="modal-header">
-    <h4 class="modal-title"> Collections Saved!!</h4>
+    <h4 class="modal-title" *ngIf="savePath"> Collections Saved!!</h4>
+    <h4 class="modal-title" *ngIf="!savePath"> Collections Copied!!</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
     <p>{{alertMessage}}</p>
-    <p>Path : {{savePath}}</p>
+    <p *ngIf="savePath">Path : {{savePath}}</p>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
@@ -278,6 +307,41 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+  </div>
+</ng-template>
+
+<ng-template #saveLocalFile let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Save File</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #f="ngForm">
+      <div class="form-group">
+        <label for="url">Mongo DB Cluster Client URL</label>
+        <!-- <div class="input-group">
+          <input type="text" class="form-control"  name="urlValue" #uname="ngModel"  [(ngModel)]="urlValue"  placeholder="URL" >
+          <ng-container *ngIf="uname.touched && uname.invalid">
+            <p class="err">Please enter your URL</p>
+          </ng-container>
+        </div> -->
+        <label for="fileName">File Name</label> 
+         <div class="input-group">
+          <input type="text" class="form-control"  name="fileName" #fname="ngModel"  [(ngModel)]='fileName'  placeholder="fileName" required>
+          <ng-container *ngIf="fname.touched && fname.invalid">
+            <p class="err">Please enter your File Name</p>
+          </ng-container>
+        </div> 
+        <select class="form-control" name="clientUrl"  [(ngModel)]='clientUrl' id="url" >           
+          <option  *ngFor="let url of clientUrlLog" [ngValue]="url.client_url" matTooltip="{{url.client_url}}" selected ="selected === url.client_url">{{url.client_url}}</option>          
+        </select>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" [disabled]="f.invalid" class="btn btn-outline-dark" (click)="modal.close(f.value)">Submit</button>
   </div>
 </ng-template>
 
