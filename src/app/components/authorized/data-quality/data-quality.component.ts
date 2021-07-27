@@ -82,6 +82,7 @@ export class DataQualityComponent implements OnInit {
   alertMessage;
   savePath;
   clientUrlLog: any = [];
+  showConnectionList:boolean = false;
   
   private options: string[] = ["10", "20", "50"];
   selectedQuantity = "10";
@@ -90,6 +91,7 @@ export class DataQualityComponent implements OnInit {
   status: any[];
   formula = 'mongoDb';
   selected;
+  dbSaveLogs: any = [];
 
   ngOnInit() {
     this.getDB = this.fb.group({
@@ -105,20 +107,40 @@ export class DataQualityComponent implements OnInit {
       this.globalDataPath = JSON.parse(this.globalData);
     }
 
-    console.log(this.globalDataPath)
+    //console.log(this.globalDataPath)
     this.getMongoDBClientHistoryURL();
+    this.getMongoDBSaveLog();
   }
+
 
   getMongoDBClientHistoryURL() {
     this.http.getMongoDBClientHistory().subscribe((result: any) => {
       this.clientUrlLog = result.ClientHist;
-      this.clientUrl = result.ClientHist[0].client_url;
+      if (result.ClientHist.length) {
+        this.clientUrl = result.ClientHist[0].client_url;
+        this.showConnectionList = false;
+      } else {
+        this.showConnectionList = true;
+      }     
     })
   }
 
+  showDbCollectionName:boolean = false;
+
+
+  onWriterChange() {
+    if (this.clientUrl === 'others') {
+      this.showDbCollectionName = true;
+    } else {
+      this.showDbCollectionName = false;
+      this.getDBCollections();
+    }
+  }
+
+
   getMongoDBSaveLog() {
-    this.http.getMongoDBSaveLog().subscribe((result: any) => {
-      console.log(result)
+    this.http.getMongoDBSaveLog().subscribe((result: any) => {    
+      this.dbSaveLogs = result.SavedFilesLog;
     })
   }
 
@@ -229,37 +251,49 @@ export class DataQualityComponent implements OnInit {
     });
   }
 
+  getClusterKeys;
+  selectdItems: any = [];
   getDBPreviewCluster(item, column) {
-    this.getMongoDBSaveLog();
-    this.selectedColumn = column.toString();
-    this.selectdItem = item;
     this.isButtonShow = false;
-    const payload = {
-      client_url : this.clientUrlConnection,
-      db: this.selectdItem,
-      collection: this.selectedColumn,
-      start_index: this.startIndex,
-      end_index : this.endIndex
-    };
-    this.isLoadingCO = true;
-    this.http.getDBPreview(payload).subscribe((result: any) => {
-      this.collectionResult = result.Preview;
-      this.isLoadingCO = false;
-      this.isButtonShow = true;
-      this.rowData = [];
-      this.columnDefs = [];
-      this.collectionTable = result.Preview;
-      if (this.collectionTable) {
-        this.previewTable();
+    this.getClusterKeys = _.find(this.dbSaveLogs, item, item)
+
+    if (this.getClusterKeys) {
+      this.titleSrc = this.getClusterKeys[item].test.outputpath;
+      this.loadReferencePreview(this.titleSrc);
+      this.isButtonShow = false;
+    } else {
+      this.selectedColumn = column.toString();
+      this.selectdItem = item;
+      this.isButtonShow = false;
+      const payload = {
+        client_url : this.clientUrlConnection,
+        db: this.selectdItem,
+        collection: this.selectedColumn,
+        start_index: this.startIndex,
+        end_index : this.endIndex
+      };
+      this.isLoadingCO = true;
+      this.http.getDBPreview(payload).subscribe((result: any) => {
+        this.collectionResult = result.Preview;
+        this.isLoadingCO = false;
+        this.isButtonShow = true;
+        this.rowData = [];
+        this.columnDefs = [];
+        this.collectionTable = result.Preview;
+        if (this.collectionTable) {
+          this.previewTable();
+      }
+  
+        this.isPreviewLoaded = true;
+        this.isPreviewLoading = false;
+  
+      }, (error) => {
+        this.isLoadingCO = false;
+        alert(error.message);
+      });
     }
-
-      this.isPreviewLoaded = true;
-      this.isPreviewLoading = false;
-
-    }, (error) => {
-      this.isLoadingCO = false;
-      alert(error.message);
-    });
+    
+    
   }
 
   getDBPreview(item, column) {
@@ -295,6 +329,7 @@ export class DataQualityComponent implements OnInit {
   }
 
   loadReferencePreview(path) {
+    this.isButtonShow = false;
     this.titleSrc = path;
     const payload = {
       sourcepath: this.titleSrc
@@ -312,9 +347,12 @@ export class DataQualityComponent implements OnInit {
 
       this.isPreviewLoaded = true;
       this.isPreviewLoading = false;
-      }, (error) => {
+    }, (error) => {
+      this.isLoadingCO = false;
         this.isPreviewLoaded = false;
-        this.isPreviewLoading = false;
+      this.isPreviewLoading = false;
+      
+      alert(error.message);
       });
 
   }

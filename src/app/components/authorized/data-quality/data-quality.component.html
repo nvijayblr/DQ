@@ -231,10 +231,12 @@
       <div class="form-group">
         <label for="clientUrl">Mongo DB Cluster Client URL</label>
        
-          <!-- <input type="text" class="form-control" [(ngModel)]='clientUrl' id="url" placeholder="URL"> -->
-          <select class="form-control" name="clientUrl"  [(ngModel)]='clientUrl' id="url" >           
-            <option  *ngFor="let url of clientUrlLog" [ngValue]="url.client_url" matTooltip="{{url.client_url}}" selected ="selected === url.client_url">{{url.client_url}}</option>            
-          </select>    
+          <input *ngIf="showConnectionList" type="text" class="form-control" [(ngModel)]='clientUrl' id="url" placeholder="URL">
+          <select *ngIf="!showConnectionList" class="form-control" name="clientUrl"  [(ngModel)]='clientUrl' id="url" (change)="onWriterChange()">           
+            <option  *ngFor="let url of clientUrlLog" [ngValue]="url.client_url" matTooltip="{{url.client_url}}" selected ="selected === url.client_url">{{url.client_url}}</option> 
+            <option value="others">Others</option>           
+          </select> 
+          <input *ngIf="showDbCollectionName" type="text" class="form-control" [(ngModel)]='clientUrl' id="url" placeholder="URL">   
       </div>
   </div>
   <div class="modal-footer">
