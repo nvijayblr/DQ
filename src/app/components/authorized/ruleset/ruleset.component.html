@@ -70,12 +70,12 @@
                                </div>
      
                                <div class="list-item-0 add-remove-button">
-                                 <button type="button" class="button3d btnPush btnBlueGreen addico" (click)="addFormItem('referenceCSV')" *ngIf="isLast">
+                                 <button type="button" class="button3d  btnBlueGreen addico" (click)="addFormItem('referenceCSV')" *ngIf="isLast">
                                    <mat-icon>add</mat-icon>
                                  </button>
                                  </div>
                                  <div class="list-item-0 add-remove-button">
-                                 <button type="button" class="button3d btnPush btnOrange redico" (click)="removeFormItem('referenceCSV', i)" *ngIf="!isFirst || !isLast">
+                                 <button type="button" class="button3d  btnOrange redico" (click)="removeFormItem('referenceCSV', i)" *ngIf="!isFirst || !isLast">
                                    <mat-icon>delete_outline</mat-icon>
                                  </button>
                                </div>
@@ -85,7 +85,7 @@
                        </div>
  
                      <div class="act-btn-wrapper">
-                         <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"
+                         <button mat-stroked-button class="button3d  btnLightBlue tdBtn"
                          [disabled]="!afControls.name.value || fileTypeErr"
                          (click)="gotoStepper(1, 'CSV')">Next <mat-icon>navigate_next</mat-icon></button>
                      </div>
@@ -130,10 +130,10 @@
                      
                      <div class="list flex-containers flex-start">
                         <div class="list-item-2 outline">
-                           <button mat-stroked-button class="button3d btnPush btnPurple ebckBtn" (click)="gotoStepper(0)"><mat-icon>keyboard_arrow_left</mat-icon> Back</button>
+                           <button mat-stroked-button class="button3d  btnPurple ebckBtn" (click)="gotoStepper(0)"><mat-icon>keyboard_arrow_left</mat-icon> Back</button>
                            </div>
                            <div class="list-item-2 outline act-btn-wrapper1">
-                              <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn" 
+                              <button mat-stroked-button class="button3d  btnLightBlue tdBtn" 
                               [disabled]="columnsForm.controls.columns.value && !columnsForm.controls.columns.value.length"
                               (click)="gotoStepper(2); getColumnRules();">Next  <mat-icon>navigate_next</mat-icon></button>
                            </div>
@@ -276,12 +276,12 @@
                                           ></app-rule-selector>
                                        </div>
                                        <div class="list-item-0 add-remove-button">
-                                          <button type="button"  class="button3d btnPush btnBlueGreen addico" (click)="addRules(columns, 'rules')" *ngIf="isLast">
+                                          <button type="button"  class="button3d  btnBlueGreen addico" (click)="addRules(columns, 'rules')" *ngIf="isLast">
                                              <mat-icon>add</mat-icon>
                                           </button>
                                           </div>
                                           <div class="list-item-0 add-remove-button">
-                                          <button type="button" class="button3d btnPush btnOrange redico" (click)="removeRules(columns, 'rules', j)" *ngIf="!isFirst || !isLast">
+                                          <button type="button" class="button3d  btnOrange redico" (click)="removeRules(columns, 'rules', j)" *ngIf="!isFirst || !isLast">
                                              <mat-icon>delete_outline</mat-icon>
                                           </button>
                                        </div>
@@ -293,10 +293,10 @@
                            </mat-expansion-panel>
                            <div class="list flex-containers flex-start">
                               <div class="list-item-2 outline">
-                                 <button mat-stroked-button class="button3d btnPush btnPurple ebckBtn" (click)="gotoStepper(1);"><mat-icon>keyboard_arrow_left</mat-icon> Back</button>
+                                 <button mat-stroked-button class="button3d  btnPurple ebckBtn" (click)="gotoStepper(1);"><mat-icon>keyboard_arrow_left</mat-icon> Back</button>
                               </div>
                               <div class="list-item-2 outline act-btn-wrapper1">
-                                 <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn" 
+                                 <button mat-stroked-button class="button3d  btnLightBlue tdBtn" 
                                  [disabled]="isRulesLoading || !afControls.rulesetName.value || !afControls.columnRules.value.length || !afControls.startDate.value || !afControls.endDate.value"
                                  (click)="generatePreview();">Next <mat-icon>navigate_next</mat-icon></button>
                               </div>
@@ -418,7 +418,7 @@
                                           <h4>{{col.column}} </h4>
                                        </div>
                                      <div class="list-item-2 outline act-btn-wrapper1">
-                                          <button type="button" class="button3d btnPush btnBlueGreen addico" (click)="showEditDetails(i);">
+                                          <button type="button" class="button3d  btnBlueGreen addico" (click)="showEditDetails(i);">
                                              <mat-icon>add</mat-icon>
                                              </button>
                                        </div> 
@@ -452,10 +452,10 @@
 
                      <div class="list flex-containers flex-start">
                         <div class="list-item-2 outline">
-                           <button mat-stroked-button class="button3d btnPush btnPurple ebckBtn" (click)="gotoStepper(2);"><mat-icon>keyboard_arrow_left</mat-icon> Back</button>
+                           <button mat-stroked-button class="button3d  btnPurple ebckBtn" (click)="gotoStepper(2);"><mat-icon>keyboard_arrow_left</mat-icon> Back</button>
                         </div>
                         <div class="list-item-2 outline act-btn-wrapper1">
-                           <button mat-stroked-button class="button3d btnPush btnLightBlue compBtn" (click)="createEditRuleset()" [disabled]="isLoading">Complete <mat-icon>done_all</mat-icon></button>
+                           <button mat-stroked-button class="button3d  btnLightBlue compBtn" (click)="createEditRuleset()" [disabled]="isLoading">Complete <mat-icon>done_all</mat-icon></button>
                         </div>
                      </div>                    
                    </mat-card>

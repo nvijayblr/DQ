@@ -189,6 +189,7 @@ td.mat-cell, td.mat-footer-cell{
   color: #fff;
   position: relative;
     top: -45px;
+    float: left;
   
   &.addico{
     width: 70px;
@@ -199,7 +200,7 @@ td.mat-cell, td.mat-footer-cell{
      border: none;
      //padding-top: 3px;
      border-radius: 2px;
-     margin-right: 15px;
+     margin-left: 15px;
     //  box-shadow: none!important;
     margin-bottom: 30px;
     text-align: left;

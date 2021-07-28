@@ -605,13 +605,13 @@ $input-text-active: #BFD2FF;
    text-align: center;
    line-height: 50px;
    color: #FFF;
-   border-radius: 5px;
+   border-radius: 3px;
    transition: all 0.2s ;
    font-family: "open-sans-condensed-bold"!important;
    cursor: pointer;
    &:disabled{
       background: gray;
-      box-shadow: 0px 5px 0px 0px #484848;
+      //box-shadow: 0px 5px 0px 0px #484848;
       opacity: 0.5;
       cursor: not-allowed;
    }
@@ -619,6 +619,9 @@ $input-text-active: #BFD2FF;
  
  .btnBlueGreen {
    background: #00AE68;
+   &:hover{
+    background: #01613b;
+   }
    &.addico{
       width: 26px;
       height: 26px;
@@ -653,6 +656,9 @@ $input-text-active: #BFD2FF;
  
  .btnLightBlue {
    background: #7d6ecc;
+   &:hover{
+    background: #413774;
+   }
    &.addRef{
       height: 30px;
       width: 160px;
@@ -712,6 +718,9 @@ $input-text-active: #BFD2FF;
  
  .btnOrange {
    background: #e91b00;
+   &:hover{
+    background: #8f1303;
+   }
    &.redico{
       width: 26px;
       height: 26px;
@@ -729,6 +738,9 @@ $input-text-active: #BFD2FF;
  
  .btnPurple {
    background: #A74982;
+   &:hover{
+    background: #64264b;
+   }
    &.preview{
       width: 100px;
       height: 30px;
@@ -777,42 +789,42 @@ $input-text-active: #BFD2FF;
  }
  
  /* 3D */
- .btnBlueGreen.btnPush {
-   box-shadow: 0px 5px 0px 0px #007144;
- }
+//  .btnBlueGreen.btnPush {
+//    box-shadow: 0px 5px 0px 0px #007144;
+//  }
  
- .btnLightBlue.btnPush {
-   box-shadow: 0px 5px 0px 0px #322a54;
- }
+//  .btnLightBlue.btnPush {
+//    box-shadow: 0px 5px 0px 0px #322a54;
+//  }
  
- .btnOrange.btnPush {
-   box-shadow: 0px 5px 0px 0px #8c1808;
- }
+//  .btnOrange.btnPush {
+//    box-shadow: 0px 5px 0px 0px #8c1808;
+//  }
  
- .btnPurple.btnPush {
-   box-shadow: 0px 5px 0px 0px #6D184B;
- }
+//  .btnPurple.btnPush {
+//    box-shadow: 0px 5px 0px 0px #6D184B;
+//  }
  
  .btnPush:hover {
    margin-top: 15px;
    margin-bottom: 5px;
  }
  
- .btnBlueGreen.btnPush:hover {
-   box-shadow: 0px 0px 0px 0px #007144;
- }
+//  .btnBlueGreen.btnPush:hover {
+//    box-shadow: 0px 0px 0px 0px #007144;
+//  }
  
- .btnLightBlue.btnPush:hover {
-   box-shadow: 0px 0px 0px 0px #1E8185;
- }
+//  .btnLightBlue.btnPush:hover {
+//    box-shadow: 0px 0px 0px 0px #1E8185;
+//  }
  
- .btnOrange.btnPush:hover {
-   box-shadow: 0px 0px 0px 0px #A66615;
- }
+//  .btnOrange.btnPush:hover {
+//    box-shadow: 0px 0px 0px 0px #A66615;
+//  }
  
- .btnPurple.btnPush:hover {
-   box-shadow: 0px 0px 0px 0px #6D184B;
- }
+//  .btnPurple.btnPush:hover {
+//    box-shadow: 0px 0px 0px 0px #6D184B;
+//  }
 
  
  .act-btn-wrapper1{ 
@@ -977,8 +989,8 @@ tr:nth-child(odd) {background: #ffffff}
    background-color: #efa800;
 }
 ::ng-deep .mat-stepper-horizontal .mat-step-header .mat-step-icon-selected{
-   background-color: #efa800;
-   box-shadow: 0px 5px 0px 0px #977219;
+   background-color: #3bc766;
+   box-shadow: 0px 5px 0px 0px #158d1e;
 }
 ::ng-deep .mat-stepper-horizontal .mat-step-icon{
    background-color: #b8b7b7;

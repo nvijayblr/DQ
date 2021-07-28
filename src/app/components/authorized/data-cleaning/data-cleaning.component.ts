@@ -732,7 +732,8 @@ export class DataCleaningComponent implements OnInit {
       this.isPreviewLoaded = false;
    }
 
-    parseSourcePreview(details) {
+  parseSourcePreview(details) {
+    console.log(this.newMessage);
       Object.keys(details).map((key, index) => {
         this.rowData.push({
           ...details[key]
@@ -743,23 +744,30 @@ export class DataCleaningComponent implements OnInit {
           this.columnDefs.push({
             field: key,
             ...this.defaultColDefs,
-            cellClass: this.cellClass,
-            //headerClass : this.headerClass
-            
+           //cellClass: this.cellClass,
+            headerClass: this.newMessage.map((item, index) => {
+              if (key === item) {
+                return 'rag-green';
+              }
+            }),
           });
         });
-      }
-
+      }           
       this.isPreviewLoaded = true;
       this.isPreviewLoading = false;
   }
   
-  cellClass(params) {
-    return params.value === 'None' ? 'rag-green' : 'rag-amber';
-  }
-  // headerClass(params) {
-  //   return params.value === 'Cabin' ? 'rag-green2' : 'rag-amber';
+  // cellClass(params) {
+  //   return params.value === 'None' ? 'rag-green' : 'rag-amber';
   // }
+  // headerClass(params) {
+  //   console.log(this.newMessage);
+  //   console.log(params.colDef.field)
+  //   if (params.colDef.field === 'CANCELLATION_REASON') {
+  //     return 'rag-green';
+  //   }
+    //return params.value === 'Cabin' ? 'rag-green2' : 'rag-amber';
+  //}
 
     changeRemoveCategory(type) {
       if (type === 'column') {

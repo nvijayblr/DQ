@@ -237,12 +237,12 @@
                             </div>
 
                           </div>
-                          <div class="list-item-2 outline split">
-                            <button type="button" class="button3d btnPush btnBlueGreen tollico" (click)="openToleranceLevelDialog()">
+                          <!-- <div class="list-item-2 outline split">
+                            <button type="button" class="button3d  btnBlueGreen tollico" (click)="openToleranceLevelDialog()">
                             <mat-icon>add</mat-icon>
                             Tolerance Level
                             </button>
-                          </div>
+                          </div> -->
                           
                          </div>
 
@@ -316,11 +316,11 @@
                           <div class="bdr"></div>
                                           
                           <div class="act-btn-wrapper m1t">
-                              <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"
+                              <button mat-stroked-button class="button3d btnLightBlue tdBtn"
                              
                               (click)="validateSourceNameAndNext()">Next <mat-icon>navigate_next</mat-icon></button>
       
-                              <!-- <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"
+                              <!-- <button mat-stroked-button class="button3d  btnLightBlue tdBtn"
                               [disabled]="!afControls.sourceDataName.value || !sourceSettings.frequency || !sourceSettings.uploadDate || !flError"
                               (click)="validateSourceNameAndNext()">Next <mat-icon>navigate_next</mat-icon></button> -->
                           </div>
@@ -339,7 +339,7 @@
                     <!-- <h1 class="share-post-title">Create Your<span class="red"> Reference Data</span></h1> -->
 
                     <div class="list">
-                      <button type="button" mat-stroked-button class="button3d btnPush btnPurple  addRef" (click)="addFormItem('referenceData')" *ngIf="!analysisForm.get('referenceData')['controls'].length">
+                      <button type="button" mat-stroked-button class="button3d  btnPurple  addRef" (click)="addFormItem('referenceData')" *ngIf="!analysisForm.get('referenceData')['controls'].length">
                         Add Reference Data <mat-icon>add_box</mat-icon> 
                       </button>
 
@@ -372,12 +372,12 @@
                             </div>
     
                             <div class="list-item-0 add-remove-button">
-                              <button type="button"  class="button3d btnPush btnBlueGreen addico" (click)="addFormItem('referenceData')" *ngIf="isLast">
+                              <button type="button"  class="button3d  btnBlueGreen addico" (click)="addFormItem('referenceData')" *ngIf="isLast">
                                 <mat-icon>add</mat-icon>
                               </button>
                            </div>
                               <div class="list-item-0 add-remove-button">
-                              <button type="button" class="button3d btnPush btnOrange redico" (click)="removeFormItem('referenceData', i)">
+                              <button type="button" class="button3d  btnOrange redico" (click)="removeFormItem('referenceData', i)">
                                  <mat-icon>delete_outline</mat-icon>
                               </button>
                             </div>
@@ -388,16 +388,16 @@
 
                     <div class="list flex-containers flex-start">
                      <div class="list-item-2 outline">
-                        <button mat-stroked-button class="button3d btnPush btnPurple ebckBtn" (click)="prevoewBackClickFirst()"><mat-icon>keyboard_arrow_left</mat-icon> Back</button>
+                        <button mat-stroked-button class="button3d  btnPurple ebckBtn" (click)="prevoewBackClickFirst()"><mat-icon>keyboard_arrow_left</mat-icon> Back</button>
                      </div>
                      <div class="list-item-2 outline act-btn-wrapper1">
-                        <button mat-stroked-button class="button3d btnPush btnLightBlue svBtn"
+                        <button mat-stroked-button class="button3d  btnLightBlue svBtn"
                         (click)="saveSource()">Save & Summary <mat-icon>save_alt</mat-icon></button>
                      </div>
                   </div>
 
                     <!-- <div class="act-btn-wrapper">
-                      <button mat-stroked-button class="button3d btnPush btnLightBlue svBtn"
+                      <button mat-stroked-button class="button3d  btnLightBlue svBtn"
                       (click)="saveSource()">Save & Summary <mat-icon>save_alt</mat-icon></button>
                     </div> -->
 
@@ -473,10 +473,10 @@
 
                     <div class="list flex-containers flex-start">
                      <div class="list-item-2 outline">
-                        <button mat-stroked-button class="button3d btnPush btnPurple ebckBtn" (click)="prevoewBackClick()"><mat-icon>keyboard_arrow_left</mat-icon> Back</button>
+                        <button mat-stroked-button class="button3d  btnPurple ebckBtn" (click)="prevoewBackClick()"><mat-icon>keyboard_arrow_left</mat-icon> Back</button>
                      </div>
                      <div class="list-item-2 outline act-btn-wrapper1">
-                        <button mat-stroked-button class="button3d btnPush btnLightBlue compBtn" (click)="showSaveSuccess()" [disabled]="isLoading">Complete <mat-icon>done_all</mat-icon></button>
+                        <button mat-stroked-button class="button3d  btnLightBlue compBtn" (click)="showSaveSuccess()" [disabled]="isLoading">Complete <mat-icon>done_all</mat-icon></button>
                      </div>
                   </div>
                    
