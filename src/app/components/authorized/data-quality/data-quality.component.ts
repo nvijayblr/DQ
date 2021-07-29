@@ -380,7 +380,7 @@ export class DataQualityComponent implements OnInit {
   }
 
 
-  openSave(saveLocalFile, item, column, outputpath) {
+  openSave(saveLocalFile, item, column) {
     this.modalService.open(saveLocalFile, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       const payload = {
           client_url: result.clientUrl || '',

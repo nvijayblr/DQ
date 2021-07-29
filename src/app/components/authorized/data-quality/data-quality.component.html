@@ -21,7 +21,7 @@
                 {{column[item]}}
                 </div> 
                 
-                <mat-icon class="ed" matTooltip="Save Source" *ngIf="column[item].toString() === selectedColumn" (click)="open(saveFile, item,column[item].toString())">save</mat-icon>
+                <mat-icon class="ed" matTooltip="Save Source" *ngIf="column[item].toString() === selectedColumn" (click)="open(saveFile, item,column[item].toString(), '')">save</mat-icon>
                <mat-icon class="de" matTooltip="Copy Source" *ngIf="column[item].toString() === selectedColumn">file_copy</mat-icon> 
            </mat-list-item>
           </mat-list>                               
