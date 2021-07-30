@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener, AfterViewInit, DoCheck, Input} from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, AfterViewInit, DoCheck, Input,TemplateRef} from '@angular/core';
 import * as Highcharts from 'highcharts';
 import * as _ from 'lodash';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -22,7 +22,8 @@ export class AttributeDetailsComponent implements OnInit {
   constructor(private messageService: MessageService, private http: HttpService, private router: Router, public dialog: MatDialog,private modalService: NgbModal) {
    
    }
-   @ViewChild('stickyMenu', {static: false}) menuElement: ElementRef;
+  @ViewChild('stickyMenu', { static: false }) menuElement: ElementRef;
+  @ViewChild('contentErr', {static: false}) modalErrContent: TemplateRef<any>;
    
    rules: any = [];
    statistics: any = {};
@@ -55,6 +56,11 @@ export class AttributeDetailsComponent implements OnInit {
   chartData: any = [];
   domainType: any = {};
   showDomainType = false;
+  clientUrlConnection;
+  clientUrl;
+  showConnectionList: boolean = false;
+  clientUrlLog: any = [];
+  dbSaveLogs: any = [];
 
 
   profileDetails = {
@@ -199,8 +205,8 @@ export class AttributeDetailsComponent implements OnInit {
     //this.isLoading = true;
     this.showDomainType = false;
     this.getProfileSource();
-    
-    
+    this.getMongoDBClientHistoryURL();
+    this.getMongoDBSaveLog();
   }
   domainMatches;
   changeProfile(profile) {
@@ -243,9 +249,9 @@ export class AttributeDetailsComponent implements OnInit {
   loadProfile(source) {
     this.isLoading = true;
     this.loaderMsg = 'Loading Profile...';
-    this.titleSrc = source.templateSourcePath;
+    this.titleSrc = source.templateSourcePath ? source.templateSourcePath : this.titleSrc;
     const payload = {
-       sourcepath: source.templateSourcePath
+       sourcepath: this.titleSrc
    };
     this.http.getProfiles(payload).subscribe((result: any) => {
       this.profiles = result.profile ? result.profile : [];
@@ -311,7 +317,7 @@ export class AttributeDetailsComponent implements OnInit {
     //this.isLoading = true;
     //this.loaderMsg = 'Loading Correlation...';
     const payload = {
-      sourcepath: source.templateSourcePath,
+      sourcepath: source.templateSourcePath ? source.templateSourcePath : this.titleSrc,
       cols_data_type: type,
       method
     };
@@ -572,6 +578,117 @@ export class AttributeDetailsComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
       //window.location.reload();
     });       
+  }
+
+  getMongoDBClientHistoryURL() {
+    this.http.getMongoDBClientHistory().subscribe((result: any) => {
+      this.clientUrlLog = result.ClientHist;
+      if (result.ClientHist.length) {
+        this.clientUrl = result.ClientHist[0].client_url;
+        this.showConnectionList = false;
+      } else {
+        this.showConnectionList = true;
+      }     
+    })
+  }
+
+  showDbCollectionName:boolean = false;
+
+
+  onWriterChange() {
+    if (this.clientUrl === 'others') {
+      this.showDbCollectionName = true;
+    } else {
+      this.showDbCollectionName = false;
+      //this.getDBCollections();
+    }
+  }
+
+  getMongoDBSaveLog() {
+    this.http.getMongoDBSaveLog().subscribe((result: any) => {
+      console.log(result);
+      this.dbSaveLogs = result.SavedFilesLog;
+    })
+  }
+
+  getClusterKeys;
+  selectdItems: any = [];
+  selectedColumn;
+  getDBPreviewCluster(item, column) {
+    this.selectedColumn = column.toString();
+    this.getClusterKeys = _.find(this.dbSaveLogs, item, item);
+    if (this.getClusterKeys) {
+      this.selectedSource = this.getClusterKeys;      
+      this.titleSrc = this.getClusterKeys[item][this.selectedColumn].outputpath;
+      this.loadProfile(this.selectedSource);
+      this.loadReferencePreview();
+      this.loadCorrelation(this.selectedSource, this.datatype, this.method);
+    } else {
+      const payload = {
+        client_url: this.clientUrl || '',
+        db: item,
+        collection: this.selectedColumn,
+        output_filename : this.selectedColumn + '.csv',
+      };
+      this.isLoading = true;
+      this.loaderMsg = 'Loading...'
+      this.http.saveMangoDbCollection(payload).subscribe((result: any) => {
+        if (result) {
+          this.isLoading = false;
+          this.getMongoDBSaveLog();
+          this.selectedSource = result;
+          this.titleSrc = result.outputpath;
+          this.loadProfile(this.selectedSource);
+          this.loadReferencePreview();
+          this.loadCorrelation(this.selectedSource, this.datatype, this.method);
+        }
+      })
+      
+    }
+    
+    
+  }
+
+
+  newDBClient;
+  dbValuesClient: any = [];
+  dbClient;
+  dataSourceClient;
+  loadingClientDetails: boolean = false;
+  uploadButton = false;
+  alertErrMessage;
+  isLoadingCDB = false;
+  getDBCollectionsClient() {
+    this.isLoading = true;
+    this.loaderMsg = "Connecting..."
+    this.showAllDetails = false;
+    this.uploadButton = false;
+    const payload = {
+      client_url: this.clientUrl || '',
+    };
+    this.http.getDBCollections(payload).subscribe((result: any) => {
+      this.uploadButton = true;
+      this.newDBClient = result.Cluster_Contents;
+      this.dbClient = _.keys(result.Cluster_Contents);
+      this.dbValuesClient.push(this.newDBClient);
+      this.dataSourceClient = _.values(result.Cluster_Contents);
+      this.isLoading = false;
+      this.loadingClientDetails = true;
+    }, (error) => {
+      this.alertErrMessage = error.message;
+      this.isLoading = false;
+      this.modalService.open(this.modalErrContent, { windowClass: 'modal-holder' });
+    });
+  }
+
+  openSm(content) {
+    this.modalService.open(content, { windowClass: 'modal-holder' }).result.then((result) => {
+      this.clientUrl = result;
+      this.clientUrlConnection = result;
+      this.getDBCollectionsClient();
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
   }
 
   private getDismissReason(reason: any): string {

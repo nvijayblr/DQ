@@ -107,7 +107,7 @@ export class DataQualityComponent implements OnInit {
       this.globalDataPath = JSON.parse(this.globalData);
     }
 
-    //console.log(this.globalDataPath)
+    console.log(this.globalDataPath)
     this.getMongoDBClientHistoryURL();
     this.getMongoDBSaveLog();
   }
@@ -254,11 +254,12 @@ export class DataQualityComponent implements OnInit {
   getClusterKeys;
   selectdItems: any = [];
   getDBPreviewCluster(item, column) {
+    const colName = column.toString();
     this.isButtonShow = false;
     this.getClusterKeys = _.find(this.dbSaveLogs, item, item)
 
     if (this.getClusterKeys) {
-      this.titleSrc = this.getClusterKeys[item].test.outputpath;
+      this.titleSrc = this.getClusterKeys[item][colName].outputpath;
       this.loadReferencePreview(this.titleSrc);
       this.isButtonShow = false;
     } else {

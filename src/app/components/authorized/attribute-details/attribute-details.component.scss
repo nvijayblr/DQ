@@ -2102,8 +2102,8 @@ td.mat-cell, td.mat-footer-cell{
     border-color: lightcoral;
     width: 9%;
     position: relative;
-    top: 33px;
-    left: 219px;
+    top: 36px;
+    left: 231px;
     font-size: 12px;
     line-height: 12px;
     text-align: center;
@@ -2112,7 +2112,7 @@ td.mat-cell, td.mat-footer-cell{
     font-family: "open-sans-condensed-bold" !important;
     outline: none;
     border: none;
-    border-radius: 12px 12px 0 0;
+    border-radius: 4px 4px 0 0;
      .mat-icon{
        position: relative;
        top: -3px;
@@ -2126,8 +2126,8 @@ td.mat-cell, td.mat-footer-cell{
     border-color: lightcoral;
     width: 9%;
     position: relative;
-    top: 33px;
-    left: 290px;
+    top: 36px;
+    left: 231px;
     font-size: 12px;
     line-height: 12px;
     text-align: center;
@@ -2136,7 +2136,7 @@ td.mat-cell, td.mat-footer-cell{
     font-family: "open-sans-condensed-bold" !important;
     outline: none;
     border: none;
-    border-radius: 12px 12px 0 0;
+    border-radius: 4px 4px 0 0;
      .mat-icon{
        position: relative;
        top: -3px;
@@ -2330,6 +2330,7 @@ td.mat-cell, td.mat-footer-cell{
   background: #00AE68;
   color: #fff;
   
+  
   &.addico{
     width: 155px;
     height: 30px;
@@ -2370,6 +2371,15 @@ td.mat-cell, td.mat-footer-cell{
         top: -5px;
         left: 2px;
      }
+  }
+  &.green{ 
+    background:#17a2b8;
+    float: left;
+    width: 220px;
+    margin-top: 20px;
+    &:hover{ 
+      background:#1a8191;
+    }
   }
 }
 

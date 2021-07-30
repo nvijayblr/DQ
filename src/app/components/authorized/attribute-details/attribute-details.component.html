@@ -55,7 +55,33 @@
                 <mat-icon>add</mat-icon>
                 Create Source
                 </button>
+
+                <button  class="btnBlueGreenN addico green"  (click)="openSm(content)"><mat-icon>link</mat-icon> Connect to your Mongo DB Cluster</button>
+
               </div>
+
+              <div class="cb">
+                <mat-accordion *ngIf="loadingClientDetails">
+                  <!-- (opened)="setOpened(i)"
+                    (closed)="setClosed(i)" -->
+                  <mat-expansion-panel *ngFor="let item of dbClient; first as isFirst">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title >{{item}}</mat-panel-title>                   
+                    </mat-expansion-panel-header>
+                    <mat-list role="list">
+                      <mat-list-item role="listitem"  *ngFor="let column of dbValuesClient" >  
+                          <div  class="lftItem" matTooltip="{{column[item]}}" (click)="getDBPreviewCluster(item,column[item])" [class.activeList]="column[item].toString() === selectedColumn">
+                          <mat-icon> layers</mat-icon> 
+                          {{column[item]}}
+                          </div>                 
+                          <!-- <mat-icon class="ed rt" matTooltip="Save Source" *ngIf="column[item].toString() === selectedColumn" (click)="openSave(saveLocalFile, item,column[item].toString())">save</mat-icon> -->
+                         <!-- <mat-icon class="de" matTooltip="Copy Source" *ngIf="column[item].toString() === selectedColumn">file_copy</mat-icon>  -->
+                     </mat-list-item>
+                    </mat-list>                               
+                  </mat-expansion-panel>       
+                </mat-accordion>
+              </div>
+              
             </div>           
             <div class="dash-right">
               <h1 class="no-margin ms nTitle">Summary</h1>
@@ -126,7 +152,7 @@
                 <div *ngIf="isLoad">Loading...</div>
                </div> -->
               
-               <ng-template #content let-modal>
+               <!-- <ng-template #content let-modal>
                 <div class="modal-header">
                   <h4 class="modal-title">DOMAIN ANALYSIS</h4>
                   <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
@@ -139,7 +165,7 @@
                 <div class="modal-footer">
                   <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
                 </div>
-              </ng-template>
+              </ng-template> -->
               
               <ng-template #longContent let-modal>
                 <div class="modal-header">
@@ -701,3 +727,42 @@
 
   </div>
 </section>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Connect Your Cluster</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+      <div class="form-group">
+        <label for="clientUrl">Mongo DB Cluster Client URL</label>
+       
+          <input *ngIf="showConnectionList" type="text" class="form-control" [(ngModel)]='clientUrl' id="url" placeholder="URL">
+          <select *ngIf="!showConnectionList" class="form-control" name="clientUrl"  [(ngModel)]='clientUrl' id="url" (change)="onWriterChange()">           
+            <option  *ngFor="let url of clientUrlLog" [ngValue]="url.client_url" matTooltip="{{url.client_url}}" selected ="selected === url.client_url">{{url.client_url}}</option> 
+            <option value="others">Others</option>           
+          </select> 
+          <input *ngIf="showDbCollectionName" type="text" class="form-control" [(ngModel)]='clientUrl' id="url" placeholder="URL">   
+      </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close(clientUrl)">Submit</button>
+  </div>
+</ng-template>
+
+<ng-template #contentErr let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title"> Connection Error!!</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>{{alertErrMessage}}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+  </div>
+</ng-template>
