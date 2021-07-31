@@ -2353,6 +2353,10 @@ td.mat-cell, td.mat-footer-cell{
         top: 2px;
      }
   }
+  &.wth{
+    width:220px;
+    margin-top:15px;
+  }
   &.addico1{
      width: 105px;
      height: 40px;
@@ -2689,6 +2693,10 @@ td.mat-cell, td.mat-footer-cell{
 }
 .fs-b{
   font-size: 11px;
+}
+.cb{
+  clear: both;
+  padding-top: 20px;
 }
  
 

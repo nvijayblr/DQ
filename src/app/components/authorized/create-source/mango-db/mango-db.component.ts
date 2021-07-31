@@ -34,7 +34,8 @@ export class MangoDBComponent implements OnInit {
   uploadMethod;
   clientUrl: any = [];
   dbList: any = [];
-  showDbCollectionName:boolean = false;
+  showDbCollectionName: boolean = false;
+  profileType;
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -51,6 +52,7 @@ export class MangoDBComponent implements OnInit {
     // if (this.saveCollections) {
     //   this.collectionsForm = true;
     // }
+    this.profileType  = this.route.snapshot.queryParamMap.get('type');
     this.analysisForm = this.fb.group({
       //sourceDataName: ['', [Validators.required]],
       clientUrlDb: ['', [Validators.required]],
@@ -198,8 +200,13 @@ export class MangoDBComponent implements OnInit {
           alert(result.errorMsg);
           return;
         }
-        this.summary = result.SourceSettings;
-      this.router.navigate([`auth/reference-data`]);
+      this.summary = result.SourceSettings;
+      if (this.profileType === 'profile') {
+        this.router.navigate([`auth/attribute-details-data`]);
+      } else {
+        this.router.navigate([`auth/reference-data`]);
+      }
+      
       // if (this.uploadMethod === 'clean') {
       //   localStorage.setItem('dq-source-data', JSON.stringify(this.summary));
       //   localStorage.setItem('dq-upload-data', 'clean');

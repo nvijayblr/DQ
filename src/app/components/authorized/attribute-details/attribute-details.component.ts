@@ -673,7 +673,7 @@ export class AttributeDetailsComponent implements OnInit {
       this.dbValuesClient.push(this.newDBClient);
       this.dataSourceClient = _.values(result.Cluster_Contents);
       this.isLoading = false;
-      this.loadingClientDetails = true;
+      this.loadingClientDetails = true;      
     }, (error) => {
       this.alertErrMessage = error.message;
       this.isLoading = false;

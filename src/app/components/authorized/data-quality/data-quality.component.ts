@@ -201,7 +201,7 @@ export class DataQualityComponent implements OnInit {
     const payload = {
       client_url: this.clientUrl || '',
     };
-    this.http.getDBCollections(payload).subscribe((result: any) => {
+    this.http.getDBCollections(payload).subscribe((result: any) => {     
       this.uploadButton = true;
       this.newDBClient = result.Cluster_Contents;
       this.dbClient = _.keys(result.Cluster_Contents);
