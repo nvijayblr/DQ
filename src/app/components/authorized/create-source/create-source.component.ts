@@ -530,11 +530,13 @@ export class CreateSourceComponent implements OnInit {
     e.value.map(user => {
       this.dataUserTollerance.push({
         name: user,
-        Accuracy: 0,
-        Completeness: 0,
-        Integrity: 0,
-        Uniqueness: 0,
-        Validity: 0
+        tolerance: {
+          Accuracy: 0,
+          Completeness: 0,
+          Integrity: 0,
+          Uniqueness: 0,
+          Validity: 0
+        }
       });
     });
   }
@@ -544,11 +546,13 @@ export class CreateSourceComponent implements OnInit {
     e.value.map(user => {
       this.dataOwnerTollerance.push({
         name: user,
-        Accuracy: 0,
-        Completeness: 0,
-        Integrity: 0,
-        Uniqueness: 0,
-        Validity: 0
+        tolerance: {
+          Accuracy: 0,
+          Completeness: 0,
+          Integrity: 0,
+          Uniqueness: 0,
+          Validity: 0
+        }
       });
     });
   }

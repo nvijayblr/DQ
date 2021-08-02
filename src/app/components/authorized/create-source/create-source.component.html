@@ -174,62 +174,62 @@
                                   <div class="outline">
                                     <h3>Completeness</h3>
                                     <mat-slider
-                                      (change)="user.Completeness = $event.value"
+                                      (change)="user.tolerance.Completeness = $event.value"
                                       thumbLabel
                                       step="1"
                                       min="0"
                                       max="100"
                                       aria-label="units">
                                     </mat-slider>
-                                    <div class="value">{{user.Completeness ? user.Completeness : 0}}%</div>
+                                    <div class="value">{{(user.tolerance && user.tolerance.Completeness) ? user.tolerance.Completeness : 0}}%</div>
                                   </div>
                                   <div class="outline">
                                     <h3>Accuracy</h3>
                                     <mat-slider
-                                      (change)="user.Accuracy = $event.value"
+                                      (change)="user.tolerance.Accuracy = $event.value"
                                       thumbLabel
                                       step="1"
                                       min="0"
                                       max="100"
                                       aria-label="units">
                                     </mat-slider>
-                                    <div class="value">{{user.Accuracy ? user.Accuracy : 0}}%</div>
+                                    <div class="value">{{(user.tolerance && user.tolerance.Accuracy) ? user.tolerance.Accuracy : 0}}%</div>
                                   </div>
                                   <div class="outline">
                                     <h3>Uniqueness</h3>
                                     <mat-slider
-                                      (change)="user.Uniqueness = $event.value"
+                                      (change)="user.tolerance.Uniqueness = $event.value"
                                       thumbLabel
                                       step="1"
                                       min="0"
                                       max="100"
                                       aria-label="units">
                                     </mat-slider>
-                                    <div class="value">{{user.Uniqueness ? user.Uniqueness : 0}}%</div>
+                                    <div class="value">{{(user.tolerance && user.tolerance.Uniqueness) ? user.tolerance.Uniqueness : 0}}%</div>
                                   </div>
                                   <div class="outline">
                                     <h3>Validity</h3>
                                     <mat-slider
-                                      (change)="user.Validity = $event.value"
+                                      (change)="user.tolerance.Validity = $event.value"
                                       thumbLabel
                                       step="1"
                                       min="0"
                                       max="100"
                                       aria-label="units">
                                     </mat-slider>
-                                    <div class="value">{{user.Validity ? user.Validity : 0}}%</div>
+                                    <div class="value">{{(user.tolerance && user.tolerance.Validity) ? user.tolerance.Validity : 0}}%</div>
                                   </div>
                                   <div class="outline">
                                     <h3>Integrity</h3>
                                     <mat-slider
-                                      (change)="user.Integrity = $event.value"
+                                      (change)="user.tolerance.Integrity = $event.value"
                                       thumbLabel
                                       step="1"
                                       min="0"
                                       max="100"
                                       aria-label="units">
                                     </mat-slider>
-                                    <div class="value">{{user.Integrity ? user.Integrity : 0}}%</div>
+                                    <div class="value">{{(user.tolerance && user.tolerance.Integrity) ? user.tolerance.Integrity : 0}}%</div>
                                   </div>
                                 </div>
                               </mat-card>

@@ -475,6 +475,7 @@ export class RulesetComponent implements OnInit {
       this.fb.group({
         rule: [''],
         operator: [''],
+        type: [''],
         value: [''],
         format: [''],
         dimension: [''],
@@ -668,6 +669,8 @@ export class RulesetComponent implements OnInit {
         ...this.afControls.columnRules.value[index]
       };
     });
+    console.log(ruleLists);
+    return;
     const ruleset = {
       sourceId: this.selectedSource.sourceId,
       rulesetId: this.rulesetId ? this.rulesetId : undefined,
