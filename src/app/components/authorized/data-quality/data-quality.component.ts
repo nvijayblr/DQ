@@ -147,7 +147,8 @@ export class DataQualityComponent implements OnInit {
   applySearch(event: Event) {
     this.searchValue = event;
     const payload = {
-      query: this.searchValue
+      query: this.searchValue,
+      client_url : ""
     };
     this.isLoading = true;
     this.http.getSearchCollections(payload).subscribe((result: any) => {
