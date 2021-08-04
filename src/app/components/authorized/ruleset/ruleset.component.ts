@@ -670,7 +670,7 @@ export class RulesetComponent implements OnInit {
       };
     });
     console.log(ruleLists);
-    return;
+    //return;
     const ruleset = {
       sourceId: this.selectedSource.sourceId,
       rulesetId: this.rulesetId ? this.rulesetId : undefined,
