@@ -72,13 +72,13 @@
                     <mat-expansion-panel-header>
                       <mat-panel-title >{{item}}</mat-panel-title>                   
                     </mat-expansion-panel-header>
-                    <mat-list role="list">
-                      <mat-list-item role="listitem"  *ngFor="let column of dbValuesClient" >  
-                          <div  class="lftItem" matTooltip="{{column[item]}}" (click)="getDBPreviewCluster(item,column[item])" [class.activeList]="column[item].toString() === selectedColumn">
+                    <mat-list role="list" *ngFor="let column of dbValuesClient" >
+                      <mat-list-item role="listitem" *ngFor="let columnL of column[item]" >  
+                          <div  class="lftItem" matTooltip="{{columnL}}" (click)="getDBPreviewCluster(item,columnL)" [class.activeList]="columnL === selectedColumn">
                           <mat-icon> layers</mat-icon> 
-                          {{column[item]}}
+                          {{columnL}}
                           </div>                 
-                          <!-- <mat-icon class="ed rt" matTooltip="Save Source" *ngIf="column[item].toString() === selectedColumn" (click)="openSave(saveLocalFile, item,column[item].toString())">save</mat-icon> -->
+                          <mat-icon class="de rt" matTooltip="Save Source" *ngIf="columnL === selectedColumn" (click)="openSave(saveLocalFile, item,columnL)">save</mat-icon>
                          <!-- <mat-icon class="de" matTooltip="Copy Source" *ngIf="column[item].toString() === selectedColumn">file_copy</mat-icon>  -->
                      </mat-list-item>
                     </mat-list>                               

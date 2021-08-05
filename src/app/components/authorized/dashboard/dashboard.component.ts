@@ -177,14 +177,19 @@ export class DashboardComponent implements OnInit {
   sourceNames = [];
 
   nullcounts: any;
+  domainMatches;
 
 
    ngOnInit() {
-      localStorage.removeItem('dq-source-names');
+     localStorage.removeItem('dq-source-names');
+     localStorage.removeItem('selected-analysis');
+     localStorage.removeItem('selected-index');
      this.getAllSources();
-     console.log(this.selectedSource);
   }
-  domainMatches;
+
+ 
+
+  
   changeProfile(profile) {
     this.profile = profile;
     this.domainMatches = _.keys(this.domainType.Domain_Matches); 
@@ -213,7 +218,6 @@ export class DashboardComponent implements OnInit {
     this.selectedSource = source;
     this.initLoadProfile = false;
     this.titleSrc = source.templateSourcePath;
-    console.log(this.selectedSource);
   }
 
   loadProfile(source) {
@@ -256,7 +260,8 @@ export class DashboardComponent implements OnInit {
              this.profileSummary.nullcounts = this.profileSummary.nullcounts + parseInt(data.attributeSummary.null_records, 0);
          }
        });
-    this.isLoading = false;
+        this.isLoading = false;
+        
  }, (error) => {
     this.isLoading = false;
  });
@@ -275,19 +280,27 @@ export class DashboardComponent implements OnInit {
        const getSelectedItem = localStorage.getItem('selected-analysis');
        const getSelectedIndex = localStorage.getItem('selected-index');
        if (getSelectedItem && getSelectedIndex) {
-         this.selectedSource = JSON.parse(getSelectedItem);
+         this.selectedSource = JSON.parse(getSelectedItem);         
          this.showEditDetails(+getSelectedIndex, this.selectedSource);
-         console.log('this.selectedSource', this.selectedSource)
        } else {
-        this.selectedSource = this.sourceList[this.sourceList.length - 1];
+         this.selectedSource = this.sourceList[this.sourceList.length - 1];        
          this.showEditDetails(this.sourceList.length - 1, this.sourceList[this.sourceList.length - 1]);
-         console.log('this.selectedSource2', this.selectedSource)
        }
 
-        console.log(this.sourceList);
        this.isLoading = false;
-       this.loadProfile(this.sourceList[this.sourceList.length - 1].source);
-
+        this.loadProfile(this.sourceList[this.sourceList.length - 1].source);
+        
+        if (this.selectedSource.source.sourceDataName && !this.selectedSource.rules.length) {
+          this.actionTabId = '2';
+          this.showTab(this.actionTabId);
+        } else if (this.selectedSource.source.sourceDataName && this.selectedSource.rules.length > 0 && !this.selectedSource.UploadsHistory.length) {
+          this.actionTabId = '3';
+          this.showTab(this.actionTabId);
+        } else if (this.selectedSource.UploadsHistory.length && this.selectedSource.rules.length > 0) {
+          this.actionTabId = '4';
+          this.showTab(this.actionTabId);
+        }  
+  
        this.sourceByCategory =
        _.chain(this.sourceList).
        groupBy('source.sourceCategory')
@@ -299,6 +312,7 @@ export class DashboardComponent implements OnInit {
          });
            return { category: key, sources: sourcesList };
          }).value();
+        
       //  this.selectedSource = this.sourceList[0].source;
       //  console.log('this.selectedSource', this.sourceList[0].source.templateSourcePath)
       }, (error) => {
@@ -363,6 +377,16 @@ export class DashboardComponent implements OnInit {
     this.loadProfile(data.source);
     this.loadReferencePreview();
     this.loadCorrelation(data.source, this.datatype, this.method);
+    if (data.source.sourceDataName && !data.rules.length) {
+      this.actionTabId = '2';
+      this.showTab(this.actionTabId);
+    } else if (this.selectedSource.source.sourceDataName && this.selectedSource.rules.length > 0 && !this.selectedSource.UploadsHistory.length) {
+      this.actionTabId = '3';
+      this.showTab(this.actionTabId);
+    } else if (this.selectedSource.UploadsHistory.length && this.selectedSource.rules.length > 0) {
+      this.actionTabId = '4';
+      this.showTab(this.actionTabId);
+    } 
   }
 
   changeType(type) {
@@ -483,19 +507,26 @@ export class DashboardComponent implements OnInit {
       formData.append('data', JSON.stringify(payload));
       // this.isLoading = true;
       // this.loaderMsg = 'Saving Source data...';
-      this.http.uploadSource(formData).subscribe((result: any) => {
-         this.isLoading = false;
+     this.http.uploadSource(formData).subscribe((result: any) => {
+       this.isLoading = false;
          if (result.errorMsg) {
             this.showUploadError(result.errorMsg);
-         } else {
+         } else {         
             this.getAllSources();
-            alert('Source has been uploaded successfully.');
+           alert('Source has been uploaded successfully.');
+           this.reloadCurrentRoute();
          }
       }, (error) => {
          this.isLoading = false;
       });
-   }
-
+  }
+  
+  reloadCurrentRoute() {
+    let currentUrl = this.router.url;
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate([currentUrl]);
+    });
+  }
    showUploadError(msg) {
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
          width: '400px',
@@ -517,8 +548,8 @@ export class DashboardComponent implements OnInit {
    }
 
    initOverview(analysis) {
-      // console.log('initOverview');
-      this.selectedAnalysis = analysis;
+      
+     this.selectedAnalysis = analysis;
       const uploadDate = this.selectedAnalysis.uploadDate ? moment(this.selectedAnalysis.uploadDate).format('MM-DD-YYYY') : '';
       const uploadsHistory = this.selectedAnalysis.UploadsHistory ? this.selectedAnalysis.UploadsHistory : [];
      // console.log('uploadsHistory', uploadsHistory)
@@ -684,8 +715,6 @@ export class DashboardComponent implements OnInit {
 
 
   showTab(id) {
-    //console.log('has class', this.step1.nativeElement.classList.contains('uploaded'));
-
     this.actionTabId = id;
     if (id === '1') {
       this.showFirst = true;
@@ -800,7 +829,7 @@ export class DashboardComponent implements OnInit {
   openScrollableContent(longContent) {
      this.searchMultipleNumbers(); 
     this.modalService.open(longContent, { scrollable: true, size: 'xl' }).result.then((result) => {
-      console.log(result);
+     // console.log(result);
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;

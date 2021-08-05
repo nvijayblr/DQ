@@ -124,6 +124,7 @@ export class MangoDBComponent implements OnInit {
 
   getMongoDBClientHistoryURL() {
     this.http.getMongoDBClientHistory().subscribe((result: any) => {
+      console.log('HIST', result);
       this.clientUrl = result.ClientHist;
       console.log(this.clientUrl);
 

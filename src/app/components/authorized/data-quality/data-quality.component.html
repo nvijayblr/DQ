@@ -10,19 +10,19 @@
           <mat-expansion-panel-header>
             <mat-panel-title >{{item}}</mat-panel-title>                   
           </mat-expansion-panel-header>
-          <mat-list role="list">
+          <mat-list role="list" *ngFor="let column of dbValues" >
             <!-- <div class="search-hero form-group has-search">
               <span class="fa fa-search form-control-feedback"></span>
               <input class="form-control" type="text" name="search" [(ngModel)]="searchText" autocomplete="off" placeholder="Start searching for a Collections">
             </div> -->            
-            <mat-list-item role="listitem"  *ngFor="let column of dbValues" >             
-                <div  class="lftItem" matTooltip="{{column[item]}}" (click)="getDBPreview(item,column[item])" [class.activeList]="column[item].toString() === selectedColumn">
+            <mat-list-item role="listitem"  *ngFor="let columnL of column[item]">  
+                <div  class="lftItem" matTooltip="{{columnL}}" (click)="getDBPreview(item,columnL)" [class.activeList]="columnL === selectedColumn">
                 <mat-icon> layers</mat-icon> 
-                {{column[item]}}
+                {{columnL}}
                 </div> 
                 
-                <mat-icon class="ed" matTooltip="Save Source" *ngIf="column[item].toString() === selectedColumn" (click)="open(saveFile, item,column[item].toString(), '')">save</mat-icon>
-               <mat-icon class="de" matTooltip="Copy Source" *ngIf="column[item].toString() === selectedColumn">file_copy</mat-icon> 
+             <mat-icon class="de" matTooltip="Save Source" *ngIf="columnL === selectedColumn" (click)="openSave(saveLocalFile, item,columnL)">save</mat-icon> 
+              <!-- <mat-icon class="de" matTooltip="Copy Source" *ngIf="columnL === selectedColumn" (click)="open(saveFile, item,columnL, '')">file_copy</mat-icon>    -->
            </mat-list-item>
           </mat-list>                               
         </mat-expansion-panel>       
@@ -31,20 +31,21 @@
       <mat-accordion *ngIf="loadingGlobalData">
         <!-- (opened)="setOpened(i)"
           (closed)="setClosed(i)" -->
-        <mat-expansion-panel *ngFor="let item of globalDataPath.Ref_data_files; first as isFirst">
+        <mat-expansion-panel *ngFor="let item of globalDataGroup; first as isFirst">
          
           <mat-expansion-panel-header>
             
             <mat-panel-title >{{ item.db}}</mat-panel-title>                   
           </mat-expansion-panel-header>
           <mat-list role="list">
-            <mat-list-item role="listitem">
-                <div  class="lftItem" matTooltip="{{item.collection}}" (click)="loadReferencePreview(item.outputpath)" [class.activeList]="item.outputpath === titleSrc">
+            <mat-list-item role="listitem" *ngFor="let itemList of item.refdData">
+              <!-- <div > {{itemList.collection}}</div> -->
+               <div  class="lftItem" matTooltip="{{itemList.collection}}" (click)="loadReferencePreview(itemList.outputpath)" [class.activeList]="itemList.outputpath === titleSrc">
                 <mat-icon> layers</mat-icon> 
-                {{item.collection}}
-                </div> 
+                {{itemList.collection}}
+                </div>  
                 <!-- <mat-icon class="ed" matTooltip="Save Source" *ngIf="item.outputpath === titleSrc" (click)="getMongoDBSaveLog()">save</mat-icon> -->
-               <mat-icon class="de" matTooltip="Copy Source" *ngIf="item.outputpath === titleSrc" (click)="open(saveFile, item.db,item.collection, item.outputpath)">file_copy</mat-icon> 
+                <mat-icon class="de" matTooltip="Copy Source" *ngIf="itemList.outputpath === titleSrc" (click)="open(saveFile, itemList.db,itemList.collection, itemList.outputpath)">file_copy</mat-icon>  
            </mat-list-item>
           </mat-list>                               
         </mat-expansion-panel>       
@@ -65,13 +66,14 @@
           <mat-expansion-panel-header>
             <mat-panel-title >{{item}}</mat-panel-title>                   
           </mat-expansion-panel-header>
-          <mat-list role="list">
-            <mat-list-item role="listitem"  *ngFor="let column of dbValuesClient" >  
-                <div  class="lftItem" matTooltip="{{column[item]}}" (click)="getDBPreviewCluster(item,column[item])" [class.activeList]="column[item].toString() === selectedColumn">
+          <mat-list role="list" *ngFor="let column of dbValuesClient" >
+            <mat-list-item role="listitem" *ngFor="let columnN of column[item]" >  
+                <div  class="lftItem" matTooltip="{{columnN}}" (click)="getDBPreviewCluster(item,columnN)" [class.activeList]="columnN === selectedColumnN">
                 <mat-icon> layers</mat-icon> 
-                {{column[item]}}
+                {{columnN}}
                 </div>                 
-                <mat-icon class="ed rt" matTooltip="Save Source" *ngIf="column[item].toString() === selectedColumn" (click)="openSave(saveLocalFile, item,column[item].toString())">save</mat-icon>
+                 <mat-icon class="ed rt" matTooltip="Save Source" *ngIf="columnN === selectedColumnN" (click)="openSave(saveLocalFile, item,columnN)">save</mat-icon> 
+                <!-- <i *ngIf="columnN === selectedColumnN" class="fa fa-download down ed rt" aria-hidden="true"  matTooltip="Download Source" (click)="downloadSource(cleanFiles.outputPath, cleanFiles.sourceDataName)"></i> -->
                <!-- <mat-icon class="de" matTooltip="Copy Source" *ngIf="column[item].toString() === selectedColumn">file_copy</mat-icon>  -->
            </mat-list-item>
           </mat-list>                               

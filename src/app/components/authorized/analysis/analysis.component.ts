@@ -186,9 +186,9 @@ export class AnalysisComponent implements OnInit {
         if (result.errorCode && result.errorMsg) {
           this.isLoading = false;
           this.hideAnalysis = true
-            alert(result.errorMsg);           
-            this.gotoDashboard();
-            return;
+          alert(result.errorMsg);
+            //this.gotoDashboard();
+            //return;
          }
          this.analyseKeyData = result.results ? result.results : [];
          this.selectedKey = result.keyname ? result.keyname : this.selectedKey;

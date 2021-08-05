@@ -1,8 +1,9 @@
 import {AfterViewInit, Component, ViewChild, OnInit, TemplateRef} from '@angular/core';
 import { HttpService } from 'src/app/services/http-service.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { FormBuilder, FormGroup, FormArray, Validators, AbstractControl, FormControl } from '@angular/forms';
-// import { Angular2Csv } from 'angular2-csv';
+import { Angular2Csv } from 'angular2-csv';
 
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
@@ -18,7 +19,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 
 export class DataQualityComponent implements OnInit {
-  constructor(private http: HttpService, private fb: FormBuilder, private modalService: NgbModal) {
+  constructor(private http: HttpService, private fb: FormBuilder, private modalService: NgbModal,private router: Router, ) {
 
   }
   @ViewChild('contentMsg', { static: false }) modalContent: TemplateRef<any>;
@@ -82,7 +83,8 @@ export class DataQualityComponent implements OnInit {
   alertMessage;
   savePath;
   clientUrlLog: any = [];
-  showConnectionList:boolean = false;
+  showConnectionList: boolean = false;
+  globalDataGroup;
   
   private options: string[] = ["10", "20", "50"];
   selectedQuantity = "10";
@@ -105,11 +107,25 @@ export class DataQualityComponent implements OnInit {
     } else {
       this.loadingGlobalData = true;
       this.globalDataPath = JSON.parse(this.globalData);
+     this.globalDataGroup = 
+        _.chain(this.globalDataPath.Ref_data_files)
+          // Group the elements of Array based on `color` property
+          .groupBy("db")
+          // `key` is group's name (color), `value` is the array of objects
+          .map((value, key) => ({ db: key, refdData: value }))
+          .value()
+      
     }
-
+    console.log(this.globalDataGroup)
     console.log(this.globalDataPath)
     this.getMongoDBClientHistoryURL();
     this.getMongoDBSaveLog();
+    // const getUrl = localStorage.getItem("client_url");
+    // if (getUrl) {
+    //   this.clientUrl = getUrl;
+    //   this.getDBCollectionsClient()
+    // }
+    
   }
 
 
@@ -182,6 +198,8 @@ export class DataQualityComponent implements OnInit {
       this.newDB = result.Cluster_Contents;
       this.db = _.keys(result.Cluster_Contents);
       this.dbValues.push(this.newDB);
+      console.log(result.Cluster_Contents);
+      console.log(this.dbValues)
       this.dataSource = _.values(result.Cluster_Contents);
       this.isLoadingDB = false;
       this.showAllDetails = true;
@@ -210,6 +228,7 @@ export class DataQualityComponent implements OnInit {
       this.dataSourceClient = _.values(result.Cluster_Contents);
       this.isLoadingCDB = false;
       this.loadingClientDetails = true;
+      
     }, (error) => {
       this.alertErrMessage = error.message;
       this.isLoadingCDB = false;
@@ -254,23 +273,29 @@ export class DataQualityComponent implements OnInit {
 
   getClusterKeys;
   selectdItems: any = [];
+  selectedColumnN;
   getDBPreviewCluster(item, column) {
-    const colName = column.toString();
+    console.log(item);
+    console.log(column);
+    const colName = column;
     this.isButtonShow = false;
-    this.getClusterKeys = _.find(this.dbSaveLogs, item, item)
-
-    if (this.getClusterKeys) {
+    console.log(this.dbSaveLogs);
+    this.getClusterKeys = _.find(this.dbSaveLogs, item ? item : '', item ? item : '');
+    //console.log('this.', this.getClusterKeys[item][colName])
+    if (this.getClusterKeys && this.getClusterKeys[item][colName]) {
+      this.selectedColumnN = column;
+      this.selectdItem = item;
       this.titleSrc = this.getClusterKeys[item][colName].outputpath;
       this.loadReferencePreview(this.titleSrc);
       this.isButtonShow = false;
     } else {
-      this.selectedColumn = column.toString();
+      this.selectedColumnN = column;
       this.selectdItem = item;
       this.isButtonShow = false;
       const payload = {
         client_url : this.clientUrlConnection,
         db: this.selectdItem,
-        collection: this.selectedColumn,
+        collection: this.selectedColumnN,
         start_index: this.startIndex,
         end_index : this.endIndex
       };
@@ -299,7 +324,8 @@ export class DataQualityComponent implements OnInit {
   }
 
   getDBPreview(item, column) {
-    this.selectedColumn = column.toString();
+    console.log(item, 'sadasdas')
+    this.selectedColumn = column;
     this.selectdItem = item;
     this.isButtonShow = false;
     const payload = {
@@ -381,9 +407,10 @@ export class DataQualityComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-
+  resFilename;
   openSave(saveLocalFile, item, column) {
     this.modalService.open(saveLocalFile, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.resFilename = result.fileName;
       const payload = {
           client_url: result.clientUrl || '',
           db: item,
@@ -395,8 +422,13 @@ export class DataQualityComponent implements OnInit {
       this.http.saveMangoDbCollection(payload).subscribe((result: any) => {
         this.isLoadingCO = false;
           this.alertMessage = result.Message;
-          this.savePath = result.outputpath;
-          this.modalService.open(this.modalContent, { windowClass: 'modal-holder' });
+        this.savePath = result.outputpath;
+        //this.modalService.open(this.modalContent, { windowClass: 'modal-holder' });
+        if (result) {
+          this.downloadSource(result.outputpath, this.resFilename)
+        }
+        
+        this.reloadCurrentRoute();
         }, (error) => {
           this.isLoading = false;
         });
@@ -404,6 +436,7 @@ export class DataQualityComponent implements OnInit {
 
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      this.reloadCurrentRoute();
     });
   }
 
@@ -421,7 +454,8 @@ export class DataQualityComponent implements OnInit {
         this.isLoadingCO = false;
         this.alertMessage = result.message || result.errorMsg;
           this.savePath = result.outputpath;
-          this.modalService.open(this.modalContent, { windowClass: 'modal-holder' });
+        this.modalService.open(this.modalContent, { windowClass: 'modal-holder' });
+        this.reloadCurrentRoute();
         }, (error) => {
           this.isLoading = false;
         });
@@ -434,6 +468,7 @@ export class DataQualityComponent implements OnInit {
   clientUrlConnection;
   openSm(content) {
     this.modalService.open(content, { windowClass: 'modal-holder' }).result.then((result) => {
+      localStorage.setItem('client_url', result);
       this.clientUrl = result;
       this.clientUrlConnection = result;
       this.getDBCollectionsClient();
@@ -452,27 +487,52 @@ export class DataQualityComponent implements OnInit {
     }
   }
 
+  reloadCurrentRoute() {
+    let currentUrl = this.router.url;
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate([currentUrl]);
+      console.log(currentUrl);
+    });
+  }
+
+  collectionResultDown: any;
+  downloadSrcName:string;
+  downloadSource(sourcepath, fileName) {
+    this.downloadSrcName = fileName;
+    const payload = {
+      sourcepath: sourcepath
+    };
+    this.http.getProfileView(payload).subscribe((res: any) => {
+      this.collectionResultDown  = res.Preview ? res.Preview : {};
+      this.downloadCSV();
+      }, (error) => {
+        this.isPreviewLoaded = false;
+        this.isPreviewLoading = false;
+      });
+  }
+
+  //status: any[];
+
   downloadCSV() {
-    // this.status = ['approved', 'rejected', 'pending'];
-    // const data = this.collectionResult;
-    // console.log(data);
+    const formula = this.downloadSrcName;
+    this.status = ['approved', 'rejected', 'pending'];
+    let data = _.values(this.collectionResultDown);
+    let fileHeaders = [];
+    Object.keys(this.collectionResultDown[0]).map((key, index) => {     
+      fileHeaders.push(key);
+    });
+    let options = {
+      title: '',
+      fieldSeparator: ',',
+      quoteStrings: '"',
+      decimalseparator: '.',
+      //showLabels: true,
+      //showTitle: true,
+      //useBom: true,
+      headers: fileHeaders
+    };
 
-    // const fileHeaders = [];
-    // Object.keys(this.collectionResult[0]).map((key, index) => {
-    //   fileHeaders.push(key);
-    // });
-    // const options = {
-    //   title: '',
-    //   fieldSeparator: ',',
-    //   quoteStrings: '"',
-    //   decimalseparator: '.',
-    //   // showLabels: true,
-    //   // showTitle: true,
-    //   // useBom: true,
-    //   headers: fileHeaders
-    // };
-
-    // new Angular2Csv(data, this.formula, options);
+    new Angular2Csv(data, formula, options);
   }
 
 }

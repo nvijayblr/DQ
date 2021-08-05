@@ -48,7 +48,8 @@
                               <mat-form-field appearance="fill">
                                 <mat-label >Cluster Client URL</mat-label> 
                                 <mat-select formControlName="clientUrlDb" (selectionChange)="onWriterChange()">
-                                  <mat-option *ngFor="let url of clientUrl" value="{{url.client_url}}" matTooltip="{{url.client_url}}">
+                                  <mat-option *ngFor="let url of clientUrl" value="{{url.client_url}}"
+                                   matTooltip="{{url.client_url}}">
                                     {{url.client_url}}
                                   </mat-option>
                                   <mat-option value="others">Others</mat-option>                                    

@@ -615,9 +615,9 @@ export class AttributeDetailsComponent implements OnInit {
   selectdItems: any = [];
   selectedColumn;
   getDBPreviewCluster(item, column) {
-    this.selectedColumn = column.toString();
-    this.getClusterKeys = _.find(this.dbSaveLogs, item, item);
-    if (this.getClusterKeys) {
+    this.selectedColumn = column;
+    this.getClusterKeys = _.find(this.dbSaveLogs, item ? item : '', item ? item : '');
+    if (this.getClusterKeys && this.getClusterKeys[item][this.selectedColumn]) {
       this.selectedSource = this.getClusterKeys;      
       this.titleSrc = this.getClusterKeys[item][this.selectedColumn].outputpath;
       this.loadProfile(this.selectedSource);
