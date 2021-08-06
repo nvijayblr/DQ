@@ -681,6 +681,8 @@ export class AttributeDetailsComponent implements OnInit {
     });
   }
 
+  
+
   openSm(content) {
     this.modalService.open(content, { windowClass: 'modal-holder' }).result.then((result) => {
       this.clientUrl = result;
