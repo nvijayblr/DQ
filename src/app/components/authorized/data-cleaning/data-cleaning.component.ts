@@ -161,7 +161,8 @@ export class DataCleaningComponent implements OnInit {
       nr_totalrecords: 0
    };
 
-   cleanLogs: any = [];
+  cleanLogs: any = [];
+  cleanedFilesLog;
    isLogsLoading = false;
 
    removeItems: any = '';
@@ -250,20 +251,34 @@ export class DataCleaningComponent implements OnInit {
 
   getProfileFromMonitoring() {
     this.isLoading = true;
-    setTimeout(() => {
       this.analysis = this.messageService.getSource();
+    console.log('DQM', this.analysis)
+    this.allSourceCategory = this.analysis.ProfiledBHistory;
       this.uploadId = this.analysis.recentsourceUpload.uploadId;
       this.processTime = this.analysis.recentsourceUpload.uploadDate;
       this.source = this.analysis.source ? this.analysis.source : {};
       if (this.source) {
          this.sourcePathSelected();
-       }
-    }, 10);
+    }
+    this.source = this.analysis.ProfiledBHistory;  
+    this.source.sourceId = this.analysis.ProfiledBHistory.sourceId;
+    this.sourceByCategory =
+    _.chain(this.allSourceCategory).
+    groupBy('sourceCategory')
+    .map((sourcesList, key) => {
+      sourcesList.map(source => {
+        if (source.sourceId === this.source.sourceId) {
+          this.selectedCategoryKey = key;
+        }
+      });
+      return { category: key, sources: sourcesList };
+    }).value();
   }
-  cleanedFilesLog;
+
   getProfileSource() {
     this.http.getCleanSource().subscribe((result: any) => {
-      this.allSourceCategory = result.SourceDetailsList;     
+      this.allSourceCategory = result.SourceDetailsList;
+      console.log(result);
       // this.cleanedFilesLog = result.SourceDetailsList[0].CleanedFilesLog ? result.SourceDetailsList[0].CleanedFilesLog : [];
       this.analysis = this.messageService.getSource();
       const uploadMethod = localStorage.getItem('dq-upload-data');

@@ -504,12 +504,7 @@
    color: #b9b9b9;
  }
 
- .date-style {
-   ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex{
-      //background: #eee8f8!important;
-      padding-top: 0px;
-    }
- }
+
 
 
 
@@ -826,6 +821,12 @@ $input-text-active: #BFD2FF;
 //    box-shadow: 0px 0px 0px 0px #6D184B;
 //  }
 
+.date-style {
+  ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex{
+     //background: #eee8f8!important;
+     padding-top: 0px;
+   }
+}
  
  .act-btn-wrapper1{ 
    text-align: right;

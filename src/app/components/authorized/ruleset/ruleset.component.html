@@ -159,6 +159,7 @@
                                  </mat-form-field>
                               </div>
                               <div class="list-item-3 outline">
+                                <div class="date-style">
                                  <mat-label>Start Date<span class="red">*</span></mat-label>
                                  <mat-form-field appearance="fill">
                                  <mat-label class="tplabel">Start Date</mat-label>
@@ -167,8 +168,10 @@
                                  <mat-datepicker #frompicker></mat-datepicker>
                                  <mat-error class="ns" *ngIf="!afControls.startDate.value">Please select a Start Date</mat-error>
                                  </mat-form-field>
+                                </div>
                               </div>
                               <div class="list-item-3 outline">
+                                <div class="date-style">
                                  <mat-label>End Date<span class="red">*</span></mat-label>
                                  <mat-form-field appearance="fill">
                                  <mat-label class="tplabel">End Date</mat-label>
@@ -177,6 +180,7 @@
                                  <mat-datepicker #topicker></mat-datepicker>
                                  <mat-error class="ns" *ngIf="!afControls.endDate.value">Please select a End Date</mat-error>
                                  </mat-form-field>
+                                 </div>
                               </div>
                            </div>
 

@@ -84,8 +84,8 @@
                               <div class="bdr"></div>
                                           
                               <div class="act-btn-wrapper m1t">
-                                  <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"  *ngIf="!isEditMode"  (click)="saveSource()">Submit <mat-icon>navigate_next</mat-icon></button>
-                                  <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"  *ngIf="isEditMode"  (click)="editSourceSave()">Submit <mat-icon>navigate_next</mat-icon></button>
+                                  <button mat-stroked-button class="button3d btnLightBlue tdBtn"  *ngIf="!isEditMode"  (click)="saveSource()">Submit <mat-icon>navigate_next</mat-icon></button>
+                                  <button mat-stroked-button class="button3d btnLightBlue tdBtn"  *ngIf="isEditMode"  (click)="editSourceSave()">Submit <mat-icon>navigate_next</mat-icon></button>
           
                                   <!-- <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn"
                                   [disabled]="!afControls.sourceDataName.value || !sourceSettings.frequency || !sourceSettings.uploadDate || !flError"
