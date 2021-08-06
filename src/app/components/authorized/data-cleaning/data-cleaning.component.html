@@ -62,9 +62,9 @@
                     <mat-list-item > 
                       <div class="lftItem" (click)="changeCategory(selectedSource, '')" [class.activeList]="selectedSource.sourceId === source.sourceId" matTooltip="{{ source.sourceDataName }}" >
                         <mat-icon> layers</mat-icon> 
-                        {{ selectedSource.sourceDataName }}
+                        {{ selectedSource.sourceDataName }} 
                         <mat-icon class="ed" matTooltip="Edit Source" *ngIf="selectedSource.sourceId === source.sourceId" (click)="editSourceData(selectedSource)">edit</mat-icon>
-                        <mat-icon class="de" matTooltip="Delete Source" *ngIf="selectedSource.sourceId === source.sourceId" (click)="deleteSourceData(selectedSource)">delete</mat-icon>                                
+                        <mat-icon class="de" matTooltip="Delete Source" *ngIf="selectedSource.sourceId === source.sourceId" (click)="deleteSourceData(selectedSource)">delete</mat-icon>     
                       </div> 
                   
                     </mat-list-item>

@@ -260,8 +260,7 @@ export class DataCleaningComponent implements OnInit {
       if (this.source) {
          this.sourcePathSelected();
     }
-    this.source = this.analysis.ProfiledBHistory;  
-    this.source.sourceId = this.analysis.ProfiledBHistory.sourceId;
+    this.source = this.analysis.ProfiledBHistory[0];
     this.sourceByCategory =
     _.chain(this.allSourceCategory).
     groupBy('sourceCategory')
@@ -278,7 +277,6 @@ export class DataCleaningComponent implements OnInit {
   getProfileSource() {
     this.http.getCleanSource().subscribe((result: any) => {
       this.allSourceCategory = result.SourceDetailsList;
-      console.log(result);
       // this.cleanedFilesLog = result.SourceDetailsList[0].CleanedFilesLog ? result.SourceDetailsList[0].CleanedFilesLog : [];
       this.analysis = this.messageService.getSource();
       const uploadMethod = localStorage.getItem('dq-upload-data');
