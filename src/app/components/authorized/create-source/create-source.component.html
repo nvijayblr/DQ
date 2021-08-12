@@ -334,74 +334,128 @@
                 </mat-step>
 
                 <mat-step>
-                  <ng-template matStepLabel>Reference Data</ng-template>
-                  <mat-card class="border no-rounded list shrare-post">
-                    <!-- <h1 class="share-post-title">Create Your<span class="red"> Reference Data</span></h1> -->
-
-                    <div class="list">
-                      <button type="button" mat-stroked-button class="button3d  btnPurple  addRef" (click)="addFormItem('referenceData')" *ngIf="!analysisForm.get('referenceData')['controls'].length">
-                        Add Reference Data <mat-icon>add_box</mat-icon> 
-                      </button>
-
-                      <div class="flex-containers space-between ref-list-wrp" 
-                        formArrayName="referenceData" *ngFor="let reference of analysisForm.get('referenceData')['controls']; index as i; last as isLast; first as isFirst">
-                        <ng-container [formGroupName]="i">
-                          <div class="list flex-containers flex-start">
-                            <div class="list-item-3 outline">
-                              <mat-label>Reference Data #{{i+1}} <span class="red">*</span></mat-label>
-                              <app-image-cropper 
-                                [imageType]="'Reference'"
-                                [fileTypes]="'.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'"
-                                [imagePath]="''"
-                                (fileSelected)="onReferenceFileSelected($event, reference, i)"
-                              >
-                              </app-image-cropper>
-                            </div>
-
-                            <div class="list-item-3 outline">
-                              <mat-label>Reference Data Name <span class="red">*</span></mat-label>
-                              <mat-form-field appearance="fill">
-                                <input matInput placeholder="Reference Data Name" formControlName="referenceDataName" maxlength="50" autocomplete="off"/>
-                              </mat-form-field>
-                           </div>
-                           <div class="list-item-3 outline">
-                              <mat-label class="mtop">Reference Data Description</mat-label>
-                              <mat-form-field appearance="fill">
-                                <input matInput placeholder="Reference Data Description" formControlName="referenceDataDescription" maxlength="250" autocomplete="off"/>
-                              </mat-form-field>
-                            </div>
+                  <mat-tab-group mat-align-tabs="start"  animationDuration="0ms" [(selectedIndex)]="refTabIndex">
+                    <mat-tab label="Local Reference Data"> 
+                      <ng-template matStepLabel>Reference Data</ng-template>
+                      <mat-card class="border no-rounded list shrare-post">
+                        <!-- <h1 class="share-post-title">Create Your<span class="red"> Reference Data</span></h1> -->
     
-                            <div class="list-item-0 add-remove-button">
-                              <button type="button"  class="button3d  btnBlueGreen addico" (click)="addFormItem('referenceData')" *ngIf="isLast">
-                                <mat-icon>add</mat-icon>
-                              </button>
-                           </div>
-                              <div class="list-item-0 add-remove-button">
-                              <button type="button" class="button3d  btnOrange redico" (click)="removeFormItem('referenceData', i)">
-                                 <mat-icon>delete_outline</mat-icon>
-                              </button>
-                            </div>
+                        <div class="list">
+                          <button type="button" mat-stroked-button class="button3d  btnPurple  addRef" (click)="addFormItem('referenceData')" *ngIf="!analysisForm.get('referenceData')['controls'].length">
+                            Add Reference Data <mat-icon>add_box</mat-icon> 
+                          </button>
+    
+                          <div class="flex-containers space-between ref-list-wrp" 
+                            formArrayName="referenceData" *ngFor="let reference of analysisForm.get('referenceData')['controls']; index as i; last as isLast; first as isFirst">
+                            <ng-container [formGroupName]="i">
+                              <div class="list flex-containers flex-start">
+                                <div class="list-item-3 outline">
+                                  <mat-label>Reference Data #{{i+1}} <span class="red">*</span></mat-label>
+                                  <app-image-cropper 
+                                    [imageType]="'Reference'"
+                                    [fileTypes]="'.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'"
+                                    [imagePath]="''"
+                                    (fileSelected)="onReferenceFileSelected($event, reference, i)"
+                                  >
+                                  </app-image-cropper>
+                                </div>
+    
+                                <div class="list-item-3 outline">
+                                  <mat-label>Reference Data Name <span class="red">*</span></mat-label>
+                                  <mat-form-field appearance="fill">
+                                    <input matInput placeholder="Reference Data Name" formControlName="referenceDataName" maxlength="50" autocomplete="off"/>
+                                  </mat-form-field>
+                               </div>
+                               <div class="list-item-3 outline">
+                                  <mat-label class="mtop">Reference Data Description</mat-label>
+                                  <mat-form-field appearance="fill">
+                                    <input matInput placeholder="Reference Data Description" formControlName="referenceDataDescription" maxlength="250" autocomplete="off"/>
+                                  </mat-form-field>
+                                </div>
+        
+                                <div class="list-item-0 add-remove-button">
+                                  <button type="button"  class="button3d  btnBlueGreen addico" (click)="addFormItem('referenceData')" *ngIf="isLast">
+                                    <mat-icon>add</mat-icon>
+                                  </button>
+                               </div>
+                                  <div class="list-item-0 add-remove-button">
+                                  <button id="auto_trigger" type="button" class="button3d  btnOrange redico" (click)="removeFormItem('referenceData', i)">
+                                     <mat-icon>delete_outline</mat-icon>
+                                  </button>
+                                </div>
+                              </div>
+                            </ng-container>
                           </div>
-                        </ng-container>
+                        </div>
+    
+                        <div class="list flex-containers flex-start">
+                         <div class="list-item-2 outline">
+                            <button mat-stroked-button class="button3d  btnPurple ebckBtn" (click)="prevoewBackClickFirst()"><mat-icon>keyboard_arrow_left</mat-icon> Back</button>
+                         </div>
+                         <div class="list-item-2 outline act-btn-wrapper1">
+                            <button mat-stroked-button class="button3d  btnLightBlue svBtn"
+                            (click)="saveSource()">Save & Summary <mat-icon>save_alt</mat-icon></button>
+                         </div>
                       </div>
+    
+                        <!-- <div class="act-btn-wrapper">
+                          <button mat-stroked-button class="button3d  btnLightBlue svBtn"
+                          (click)="saveSource()">Save & Summary <mat-icon>save_alt</mat-icon></button>
+                        </div> -->
+    
+                      </mat-card>
+                    </mat-tab>
+                    <mat-tab label="Global Reference Data" >
+                      <mat-card class="border no-rounded list shrare-post">
+                        <button  class="btnBlueGreenN addico green"  (click)="getDBCollectionsClient()"><mat-icon>link</mat-icon> Connect to your Mongo DB Cluster</button>
+                      <div class="dashBoard flex-containers" *ngIf="showAllDetails">
+                        <div class="dash-left">                      
+                                          
+                      <div class="cb">
+                        <mat-accordion *ngIf="loadingClientDetails">
+                          <!-- (opened)="setOpened(i)"
+                            (closed)="setClosed(i)" -->
+                          <mat-expansion-panel *ngFor="let item of dbClient; first as isFirst" [expanded]="item === selectedCategoryKey">
+                            <mat-expansion-panel-header>
+                              <mat-panel-title >{{item}}</mat-panel-title>                   
+                            </mat-expansion-panel-header>
+                            <mat-list role="list" *ngFor="let column of dbValuesClient" >
+                              <mat-list-item role="listitem" *ngFor="let columnL of column[item]" >  
+                                  <div  class="lftItem" matTooltip="{{columnL}}" (click)="getDBPreviewCluster(item,columnL)" [class.activeList]="columnL === selectedColumn">
+                                  <mat-icon> layers</mat-icon> 
+                                  {{columnL}}
+                                  </div>                 
+                                  <!-- <mat-icon class="de rt" matTooltip="Save Source" *ngIf="columnL === selectedColumn" (click)="openSave(saveLocalFile, item,columnL)">save</mat-icon> -->
+                                 <!-- <mat-icon class="de" matTooltip="Copy Source" *ngIf="column[item].toString() === selectedColumn">file_copy</mat-icon>  -->
+                             </mat-list-item>
+                            </mat-list>                               
+                          </mat-expansion-panel>       
+                        </mat-accordion>
+                      </div>
+
+                      
                     </div>
-
-                    <div class="list flex-containers flex-start">
-                     <div class="list-item-2 outline">
-                        <button mat-stroked-button class="button3d  btnPurple ebckBtn" (click)="prevoewBackClickFirst()"><mat-icon>keyboard_arrow_left</mat-icon> Back</button>
-                     </div>
-                     <div class="list-item-2 outline act-btn-wrapper1">
-                        <button mat-stroked-button class="button3d  btnLightBlue svBtn"
-                        (click)="saveSource()">Save & Summary <mat-icon>save_alt</mat-icon></button>
-                     </div>
+                    <div class="dash-right">
+                      <button *ngIf="showRefTable"  class="btnBlueGreenN addico"  (click)="saveSource()"><mat-icon>link</mat-icon> Select</button>
+                      <div class="previewView valign" *ngIf="showRefTable" style="clear: both;">
+                        
+                        <app-ag-grid
+                        floatingFilter="true"
+                        *ngIf="isPreviewLoaded"
+                        class="ag-theme-material"
+                        [rowData]="rowData"
+                        [columnDefs]="columnDefs"
+                        [pageSize]="50"
+                        [rowSelection]="'multiple'"
+                        [suppressRowClickSelection]="false"
+                      ></app-ag-grid>
+                    </div>
+                    </div>
                   </div>
-
-                    <!-- <div class="act-btn-wrapper">
-                      <button mat-stroked-button class="button3d  btnLightBlue svBtn"
-                      (click)="saveSource()">Save & Summary <mat-icon>save_alt</mat-icon></button>
-                    </div> -->
-
-                  </mat-card>
+                </mat-card>
+                    </mat-tab>
+                  </mat-tab-group>
+                 
                 </mat-step>
 
                 <mat-step>
@@ -526,3 +580,42 @@
     
   </div>
 </section>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Connect Your Cluster</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+      <div class="form-group">
+        <label for="clientUrl">Mongo DB Cluster Client URL</label>
+       
+          <input *ngIf="showConnectionList" type="text" class="form-control" [(ngModel)]='clientUrl' id="url" placeholder="URL">
+          <select *ngIf="!showConnectionList" class="form-control" name="clientUrl"  [(ngModel)]='clientUrl' id="url" (change)="onWriterChange()">           
+            <option  *ngFor="let url of clientUrlLog" [ngValue]="url.client_url" matTooltip="{{url.client_url}}" selected ="selected === url.client_url">{{url.client_url}}</option> 
+            <option value="others">Others</option>           
+          </select> 
+          <input *ngIf="showDbCollectionName" type="text" class="form-control" [(ngModel)]='clientUrl' id="url" placeholder="URL">   
+      </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close(clientUrl)">Submit</button>
+  </div>
+</ng-template>
+
+<ng-template #contentErr let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title"> Connection Error!!</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>{{alertErrMessage}}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+  </div>
+</ng-template>

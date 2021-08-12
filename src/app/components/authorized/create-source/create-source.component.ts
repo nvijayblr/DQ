@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation, ViewChild, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation, ViewChild, QueryList, ViewChildren,TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Location } from '@angular/common';
@@ -11,9 +11,11 @@ import { appConfig } from '../../../app.config';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { S } from '@angular/cdk/keycodes';
+import * as _ from 'lodash';
 import * as moment from 'moment';
 import { ToleranceLevelDialogComponent } from '../../../shared/tolerance-level-dialog/tolerance-level-dialog.component';
 import { DeactiveDialogComponent } from '../../../shared/deactive-dialog/deactive-dialog.component';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-create-source',
@@ -21,7 +23,11 @@ import { DeactiveDialogComponent } from '../../../shared/deactive-dialog/deactiv
   styleUrls: ['./create-source.component.scss']
 })
 export class CreateSourceComponent implements OnInit {
+  @ViewChild('contentErr', {static: false}) modalErrContent: TemplateRef<any>;
   backType;
+  showConnectionList: boolean = false;
+  clientUrlLog: any = [];
+  dbSaveLogs: any = [];
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
@@ -31,6 +37,7 @@ export class CreateSourceComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private authGuardService: AuthGuardService,
     private messageService: MessageService,
+    private modalService: NgbModal,
     private location: Location) {
       this.appConfig = appConfig;
       this.route.queryParams.subscribe(params => {
@@ -108,6 +115,10 @@ export class CreateSourceComponent implements OnInit {
   public variables = [];
   dataUserTollerance: any = [];
   dataOwnerTollerance: any = [];
+  refDataType = "";
+  editRefSourceData;
+  refDateMethod;
+  
 
   public variablesGroups =
     [
@@ -190,11 +201,15 @@ export class CreateSourceComponent implements OnInit {
     if (this.selectedType === 'xlsx') {
           this.chooseOptions = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel';
     }
+    this.editRefSourceData = JSON.parse(localStorage.getItem('dq-source-data'));
+    this.refDateMethod = this.editRefSourceData.reference[0].ref_data_type;
+    
      // console.log(mode);
     this.minDate = moment().format('YYYY-MM-DD');
     this.analysis = analysis;
     this.getsourceCategory();
     this.getdataOwner();
+    this.getMongoDBClientHistoryURL();
   }
 
   intiFormArrays(field, reference: any = {}) {
@@ -235,6 +250,8 @@ export class CreateSourceComponent implements OnInit {
     });
   }
 
+
+
   saveSource() {
     let isRefFileErr = false;
     const analysis = this.analysisForm.value;
@@ -268,20 +285,46 @@ export class CreateSourceComponent implements OnInit {
     if (isRefFileErr) {
       return;
     }
+
+    // const newRefPayload = [{
+    //   referenceDataName: this.refColumn,
+    //   referenceDataDescription: this.refColumn + 'Details',
+    //   referenceFileName: this.refColumn + '.csv',
+    //   referencePath: "mongodb_data/" + this.refColumn + '.csv',
+    //   referenceId: ""
+    // }]
+
+   
     let sourceRefNameEqual = false;
-    const refPayload = analysis.referenceData.map((ref, index) => {
-      if (this.mode === 'create') {
-        delete ref.referenceId;
-      }
-      const sourceFileName = this.sourceFile.name ? this.sourceFile.name : analysis.sourceFileName;
-      if (this.refFiles[index] && this.refFiles[index].name === sourceFileName) {
-        sourceRefNameEqual = true;
-      }
-      return {
-        ...ref,
-        referenceFileName: this.refFiles.length ? this.refFiles[index].name : ref.referenceFileName
-      };
-    });
+    let refPayload;
+
+    if (this.refColumn) {
+      refPayload = [{
+        referenceDataName: this.refColumn,
+        referenceDataDescription: this.refColumn + 'Details',
+        referenceFileName: this.refColumn + '.csv',
+        referencePath: "mongodb_data/" + this.refColumn + '.csv',
+        referenceId: ""
+      }];
+      this.refDataType = "MongoDB_RefData";
+    } else {
+      this.refDataType = "User_LocalData"
+      refPayload = analysis.referenceData.map((ref, index) => {
+        if (this.mode === 'create') {
+          delete ref.referenceId;
+        }
+        const sourceFileName = this.sourceFile.name ? this.sourceFile.name : analysis.sourceFileName;
+        if (this.refFiles[index] && this.refFiles[index].name === sourceFileName) {
+          sourceRefNameEqual = true;
+        }
+        return {
+          ...ref,
+          referenceFileName: this.refFiles.length ? this.refFiles[index].name : ref.referenceFileName
+        };
+      });
+    }
+
+
     const payload = {
       sourceId: this.sourceId ? this.sourceId : undefined,
       source: {
@@ -295,6 +338,7 @@ export class CreateSourceComponent implements OnInit {
         type: '',
         connectionDetails: {}
       },
+      ref_data_type: this.refDataType ? this.refDataType : "",
       reference: refPayload,
       settings: this.sourceSettings
     };
@@ -392,7 +436,7 @@ export class CreateSourceComponent implements OnInit {
 
   onReferenceFileSelected(file, reference, index) {
     this.refFiles[index] = file;
-    const fName = file.name.split('.')[0];
+    const fName = file.name.split('.')[0];  
     reference.controls.referenceDataName.setValue(fName);
     this.loadReferencePreview();
   }
@@ -400,7 +444,8 @@ export class CreateSourceComponent implements OnInit {
   gotoStepper(index, tab = '') {
     this.stepIndex = index;
   }
-
+  refTabIndex;
+  selectedCategoryKey;
   validateSourceNameAndNext() {
     const sourceName = this.afControls.sourceDataName.value;
     if (this.selFileName === undefined && this.mode === 'create') {
@@ -416,6 +461,16 @@ export class CreateSourceComponent implements OnInit {
       return;
     }
     this.gotoStepper(1, 'CSV');
+
+    if (this.refDateMethod === 'MongoDB_RefData') {
+      let element:HTMLElement = document.getElementById('auto_trigger') as HTMLElement;
+      element.click();
+      this.refTabIndex = 1;
+      this.getDBCollectionsClient();
+      this.getDBPreviewCluster(localStorage.getItem('refItem'), localStorage.getItem('refColumn'));
+      this.selectedCategoryKey = localStorage.getItem('refItem')
+
+    }
   }
 
   stepperSelectionChange(event) {
@@ -576,5 +631,174 @@ export class CreateSourceComponent implements OnInit {
       data
     });
     return dialogRef.afterClosed();
+  }
+
+
+  getMongoDBClientHistoryURL() {
+    this.http.getMongoDBClientHistory().subscribe((result: any) => {
+      this.clientUrlLog = result.ClientHist;
+      if (result.ClientHist.length) {
+        this.clientUrl = result.ClientHist[0].client_url;
+        this.showConnectionList = false;
+      } else {
+        this.showConnectionList = true;
+      }     
+    })
+  }
+
+  showDbCollectionName:boolean = false;
+
+
+  onWriterChange() {
+    if (this.clientUrl === 'others') {
+      this.showDbCollectionName = true;
+    } else {
+      this.showDbCollectionName = false;
+      //this.getDBCollections();
+    }
+  }
+
+  getMongoDBSaveLog() {
+    this.http.getMongoDBSaveLog().subscribe((result: any) => {
+      this.dbSaveLogs = result.SavedFilesLog;
+    })
+  }
+  showRefTable = false;
+  loadReferencePreviewMD() {
+    this.isPreviewLoaded = false;
+    this.isPreviewLoading = true;
+    this.columnDefs = [];
+    this.rowData = [];
+    this.showRefTable = false;
+    const payload = {
+      sourcepath: this.titleSrc
+    };
+    this.http.getProfileView(payload).subscribe((res: any) => {
+      const details: any = res.Preview ? res.Preview : {};      
+      this.parseSourcePreviewMD(details);
+      this.showRefTable = true;
+      }, (error) => {
+        this.isPreviewLoaded = false;
+        this.isPreviewLoading = false;
+      });
+
+  }
+
+  parseSourcePreviewMD(details) {
+    Object.keys(details).map((key, index) => {
+      this.rowData.push({
+        ...details[key]
+      });
+    });
+    if (this.rowData.length) {
+      Object.keys(this.rowData[0]).map((key, index) => {
+        this.columnDefs.push({
+          field: key,
+          ...this.defaultColDefs
+        });
+      });
+
+    }
+    this.isPreviewLoaded = true;
+    this.isPreviewLoading = false;
+  }
+
+  getClusterKeys;
+  selectdItems: any = [];
+  selectedColumn;
+  selectedSource;
+  titleSrc;
+  refItem;
+  refColumn;
+  getDBPreviewCluster(item, column) {
+    this.refItem = item;
+    this.refColumn = column;
+    localStorage.setItem('refItem', this.refItem);
+    localStorage.setItem('refColumn', this.refColumn);
+    this.selectedColumn = column;
+    this.getClusterKeys = _.find(this.dbSaveLogs, item ? item : '', item ? item : '');
+    if (this.getClusterKeys && this.getClusterKeys[item][this.selectedColumn]) {
+      this.selectedSource = this.getClusterKeys;      
+      this.titleSrc = this.getClusterKeys[item][this.selectedColumn].outputpath;
+      this.loadReferencePreviewMD();
+    } else {
+      const payload = {
+        client_url: this.clientUrl || '',
+        db: item,
+        collection: this.selectedColumn,
+        output_filename : this.selectedColumn + '.csv',
+      };
+      this.isLoading = true;
+      this.loaderMsg = 'Loading...'
+      this.http.saveMangoDbCollection(payload).subscribe((result: any) => {
+        if (result) {
+          this.isLoading = false;
+          this.getMongoDBSaveLog();
+          this.selectedSource = result;
+          this.titleSrc = result.outputpath;
+          this.loadReferencePreviewMD();
+        }
+      })
+      
+    }
+    
+    
+  }
+
+  newDBClient;
+  dbValuesClient: any = [];
+  dbClient;
+  dataSourceClient;
+  loadingClientDetails: boolean = false;
+  uploadButton = false;
+  alertErrMessage;
+  isLoadingCDB = false;
+  showAllDetails = false;
+  getDBCollectionsClient() {
+    this.isLoading = true;
+    this.loaderMsg = "Connecting..."
+    this.showAllDetails = false;
+    this.uploadButton = false;
+    const payload = {
+      client_url: '',
+    };
+    this.http.getDBCollections(payload).subscribe((result: any) => {
+      this.uploadButton = true;
+      this.newDBClient = result.Cluster_Contents;
+      this.dbClient = _.keys(result.Cluster_Contents);
+      this.dbValuesClient.push(this.newDBClient);
+      this.dataSourceClient = _.values(result.Cluster_Contents);
+      this.isLoading = false;
+      this.loadingClientDetails = true;
+      this.showAllDetails = true;
+    }, (error) => {
+      this.alertErrMessage = error.message;
+      this.isLoading = false;
+      this.modalService.open(this.modalErrContent, { windowClass: 'modal-holder' });
+    });
+  }
+
+  clientUrlConnection;
+  clientUrl;
+  closeResult: string;
+
+  openSm(content) {
+    this.modalService.open(content, { windowClass: 'modal-holder' }).result.then((result) => {
+      this.clientUrl = result;
+      this.clientUrlConnection = result;
+      this.getDBCollectionsClient();
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return  `with: ${reason}`;
+    }
   }
 }
