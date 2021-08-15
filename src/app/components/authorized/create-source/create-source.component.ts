@@ -146,7 +146,7 @@ export class CreateSourceComponent implements OnInit {
     let analysis = this.messageService.getSource();
     if (!analysis.source) {
       analysis = {
-        source:  {}
+        source: {}
       };
     }
     if (analysis.settings) {
@@ -167,10 +167,10 @@ export class CreateSourceComponent implements OnInit {
       sourceCategory: [analysis.source.sourceCategory, [Validators.required]],
       dataOwner: [analysis.source.dataOwner || ''],
       dataSteward: [analysis.source.dataSteward || ''],
-      dataUser : [dataUsers || ''],
+      dataUser: [dataUsers || ''],
       templateSourcePath: [analysis.source.templateSourcePath || ''],
-      settingsDate : ['', [Validators.required]],
-      uploadTime : [''],
+      settingsDate: ['', [Validators.required]],
+      uploadTime: [''],
       referenceData: this.fb.array([]),
     });
 
@@ -199,10 +199,14 @@ export class CreateSourceComponent implements OnInit {
     }
 
     if (this.selectedType === 'xlsx') {
-          this.chooseOptions = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel';
+      this.chooseOptions = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel';
     }
     this.editRefSourceData = JSON.parse(localStorage.getItem('dq-source-data'));
-    this.refDateMethod = this.editRefSourceData.reference[0].ref_data_type;
+    console.log(this.editRefSourceData);
+    if (this.editRefSourceData && this.editRefSourceData.reference.length) {
+      this.refDateMethod = this.editRefSourceData.reference[0].ref_data_type;
+    }
+   
     
      // console.log(mode);
     this.minDate = moment().format('YYYY-MM-DD');
@@ -446,6 +450,7 @@ export class CreateSourceComponent implements OnInit {
   }
   refTabIndex;
   selectedCategoryKey;
+  selectedCategoryKeyL;
   validateSourceNameAndNext() {
     const sourceName = this.afControls.sourceDataName.value;
     if (this.selFileName === undefined && this.mode === 'create') {
@@ -467,8 +472,14 @@ export class CreateSourceComponent implements OnInit {
       element.click();
       this.refTabIndex = 1;
       this.getDBCollectionsClient();
-      this.getDBPreviewCluster(localStorage.getItem('refItem'), localStorage.getItem('refColumn'));
-      this.selectedCategoryKey = localStorage.getItem('refItem')
+      if (localStorage.getItem('refItem')) {
+        this.getDBPreviewCluster(localStorage.getItem('refItem'), localStorage.getItem('refColumn'));
+      }
+      if (localStorage.getItem('refItemL')) {
+        this.getDBPreview(localStorage.getItem('refItemL'), localStorage.getItem('refColumnL'))
+      }            
+      this.selectedCategoryKey = localStorage.getItem('refItem');
+      this.selectedCategoryKeyL = localStorage.getItem('refItemL')
 
     }
   }
@@ -633,6 +644,130 @@ export class CreateSourceComponent implements OnInit {
     return dialogRef.afterClosed();
   }
 
+  globalData;
+  globalDataPath;
+  loadingGlobalData = false;
+  loadingLocalData = false;
+  globalDataGroup;
+
+  showGlobalReferenceData(a) {
+    if (a.index === 1) {
+      this.globalData = localStorage.getItem('globalData');
+      if (!this.globalData) {
+        this.loadingLocalData = true;
+        this.getDBCollections();
+      } else {
+        this.loadingGlobalData = true;
+        this.globalDataPath = JSON.parse(this.globalData);
+       this.globalDataGroup = 
+          _.chain(this.globalDataPath.Ref_data_files)
+            // Group the elements of Array based on `color` property
+            .groupBy("db")
+            // `key` is group's name (color), `value` is the array of objects
+            .map((value, key) => ({ db: key, refdData: value }))
+            .value()
+        
+      }
+      console.log(this.globalDataGroup)
+      console.log(this.globalDataPath)
+    }
+  }
+
+  selectdItem;
+  selectedColumn;
+  isButtonShow = false;
+  startIndex = 0;
+  endIndex = 100;
+  isLoadingCO = false;
+  collectionResult;
+  collectionTable: any = [];
+  refItemL;
+  refColumnL;
+
+  getDBPreview(item, column) {
+    this.refItemL = item;
+    this.refColumnL = column;
+    localStorage.removeItem('refItem');
+    localStorage.removeItem('refColumn');
+    localStorage.setItem('refItemL', this.refItemL);
+    localStorage.setItem('refColumnL', this.refColumnL);
+    this.selectedColumn = column;
+    this.selectedColumnN = '';
+    this.selectdItem = item;
+    this.isButtonShow = false;
+    this.showRefTable = false;
+    this.isLoadingCDB = true;
+    const payload = {
+      client_url : '',
+      db: this.selectdItem,
+      collection: this.selectedColumn,
+      start_index: this.startIndex,
+      end_index : this.endIndex
+    };
+    this.isLoadingCO = true;
+    this.http.getDBPreview(payload).subscribe((result: any) => {
+      this.collectionResult = result.Preview;
+      this.isLoadingCO = false;
+      this.isButtonShow = true;
+      this.rowData = [];
+      this.columnDefs = [];
+      this.collectionTable = result.Preview;
+      if (this.collectionTable) {
+        this.previewTable();
+      }
+      this.isLoadingCDB = false;
+    this.showRefTable = true;
+      this.isPreviewLoaded = true;
+      this.isPreviewLoading = false;
+
+    }, (error) => {
+      this.isLoadingCO = false;
+      alert(error.message);
+    });
+  }
+
+  previewTable() {
+    Object.keys(this.collectionTable).map((key, index) => {
+      this.rowData.push({
+        ...this.collectionTable[key]
+      });
+    });
+    if (this.rowData.length) {
+      Object.keys(this.rowData[0]).map((key, index) => {
+        this.columnDefs.push({
+          field: key,
+          ...this.defaultColDefs
+        });
+      });
+    }
+  }
+
+
+  db;
+  dataSource;
+  isLoadingDB = false;
+  newDB;
+  dbValues: any = [];
+
+  getDBCollections() {
+    this.isLoadingDB = true;
+    this.showAllDetails = false;
+    const payload = {
+      client_url: '',
+    };
+    this.http.getDBCollections(payload).subscribe((result: any) => {
+      this.newDB = result.Cluster_Contents;
+      this.db = _.keys(result.Cluster_Contents);
+      this.dbValues.push(this.newDB);
+      console.log(result.Cluster_Contents);
+      console.log(this.dbValues)
+      this.dataSource = _.values(result.Cluster_Contents);
+      this.isLoadingDB = false;
+      this.showAllDetails = true;
+    }, (error) => {
+      alert(error.message);
+    });
+  }
 
   getMongoDBClientHistoryURL() {
     this.http.getMongoDBClientHistory().subscribe((result: any) => {
@@ -684,6 +819,37 @@ export class CreateSourceComponent implements OnInit {
 
   }
 
+  loadReferencePreviewGD(path) {
+    this.isButtonShow = false;
+    this.titleSrc = path;
+    this.showRefTable = false;
+    const payload = {
+      sourcepath: this.titleSrc
+    };
+    this.isLoadingCO = true;
+    this.http.getProfileView(payload).subscribe((res: any) => {
+      this.collectionResult = res.Preview;
+      this.isLoadingCO = false;
+      this.rowData = [];
+      this.columnDefs = [];
+      this.collectionTable = res.Preview;
+      if (this.collectionTable) {
+        this.previewTable();
+      }
+      this.showRefTable = true;
+
+      this.isPreviewLoaded = true;
+      this.isPreviewLoading = false;
+    }, (error) => {
+      this.isLoadingCO = false;
+        this.isPreviewLoaded = false;
+      this.isPreviewLoading = false;
+      
+      alert(error.message);
+      });
+
+  }
+
   parseSourcePreviewMD(details) {
     Object.keys(details).map((key, index) => {
       this.rowData.push({
@@ -705,28 +871,33 @@ export class CreateSourceComponent implements OnInit {
 
   getClusterKeys;
   selectdItems: any = [];
-  selectedColumn;
   selectedSource;
   titleSrc;
   refItem;
   refColumn;
+  selectedColumnN;
   getDBPreviewCluster(item, column) {
+    this.selectedColumn = '';
     this.refItem = item;
     this.refColumn = column;
+    localStorage.removeItem('refItemL');
+    localStorage.removeItem('refColumnL');
     localStorage.setItem('refItem', this.refItem);
     localStorage.setItem('refColumn', this.refColumn);
-    this.selectedColumn = column;
+    this.selectedColumnN = column;
     this.getClusterKeys = _.find(this.dbSaveLogs, item ? item : '', item ? item : '');
-    if (this.getClusterKeys && this.getClusterKeys[item][this.selectedColumn]) {
+    if (this.getClusterKeys && this.getClusterKeys[item][this.selectedColumnN]) {
       this.selectedSource = this.getClusterKeys;      
-      this.titleSrc = this.getClusterKeys[item][this.selectedColumn].outputpath;
+      this.titleSrc = this.getClusterKeys[item][this.selectedColumnN].outputpath;
       this.loadReferencePreviewMD();
+      this.selectedColumnN = column;
+      this.titleSrc = "";
     } else {
       const payload = {
         client_url: this.clientUrl || '',
         db: item,
-        collection: this.selectedColumn,
-        output_filename : this.selectedColumn + '.csv',
+        collection: this.selectedColumnN,
+        output_filename : this.selectedColumnN + '.csv',
       };
       this.isLoading = true;
       this.loaderMsg = 'Loading...'
@@ -760,7 +931,7 @@ export class CreateSourceComponent implements OnInit {
     this.showAllDetails = false;
     this.uploadButton = false;
     const payload = {
-      client_url: '',
+      client_url: this.clientUrl || '',
     };
     this.http.getDBCollections(payload).subscribe((result: any) => {
       this.uploadButton = true;

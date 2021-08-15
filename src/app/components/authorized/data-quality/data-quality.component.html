@@ -40,7 +40,7 @@
           <mat-list role="list">
             <mat-list-item role="listitem" *ngFor="let itemList of item.refdData">
               <!-- <div > {{itemList.collection}}</div> -->
-               <div  class="lftItem" matTooltip="{{itemList.collection}}" (click)="loadReferencePreview(itemList.outputpath)" [class.activeList]="itemList.outputpath === titleSrc">
+               <div  class="lftItem" matTooltip="{{itemList.collection}}" (click)="loadReferencePreview(itemList.outputpath)" [class.activeListG]="itemList.outputpath === titleSrc">
                 <mat-icon> layers</mat-icon> 
                 {{itemList.collection}}
                 </div>  
@@ -71,7 +71,7 @@
                 <div  class="lftItem" matTooltip="{{columnN}}" (click)="getDBPreviewCluster(item,columnN)" [class.activeList]="columnN === selectedColumnN">
                 <mat-icon> layers</mat-icon> 
                 {{columnN}}
-                </div>                 
+                </div>         
                  <mat-icon class="ed rt" matTooltip="Save Source" *ngIf="columnN === selectedColumnN" (click)="openSave(saveLocalFile, item,columnN)">save</mat-icon> 
                 <!-- <i *ngIf="columnN === selectedColumnN" class="fa fa-download down ed rt" aria-hidden="true"  matTooltip="Download Source" (click)="downloadSource(cleanFiles.outputPath, cleanFiles.sourceDataName)"></i> -->
                <!-- <mat-icon class="de" matTooltip="Copy Source" *ngIf="column[item].toString() === selectedColumn">file_copy</mat-icon>  -->

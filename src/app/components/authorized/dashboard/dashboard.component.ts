@@ -8,6 +8,7 @@ import { HttpService } from '../../../services/http-service.service';
 import { AuthGuardService } from 'src/app/services/auth-guard.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
+import { ScrollService } from '../../../services/scroll.service';
 import * as moment from 'moment';
 
 import {ElementRef, ViewChild} from '@angular/core';
@@ -29,12 +30,14 @@ import { ConditionalFormulaEditorComponent } from '../../../shared/conditional-f
 })
 export class DashboardComponent implements OnInit {
   @ViewChild('step1', { static: false }) step1: ElementRef;
+  @ViewChild('uploadOption', {static: false}) uploadOption: ElementRef;
 
    constructor(
       public dialog: MatDialog,
       private http: HttpService,
       private messageService: MessageService,
-      private auth: AuthGuardService,
+     private auth: AuthGuardService,
+     private scrollService: ScrollService,
       private router: Router, private modalService: NgbModal) {
       const rights = this.auth.getUserRole().rights;
       this.rights = rights ? rights : [];
@@ -187,8 +190,12 @@ export class DashboardComponent implements OnInit {
      this.getAllSources();
   }
 
- 
-
+  scrollToId(id: string) {  
+    this.changeMenu('profile');    
+    if (this.previewProfile) {
+      this.scrollService.scrollToElementById(id);
+    }       
+  }
   
   changeProfile(profile) {
     this.profile = profile;
@@ -458,8 +465,10 @@ export class DashboardComponent implements OnInit {
     this.isPreviewLoading = false;
   }
 
-
-   uploadSource(analysis, reason = '') {
+  isCleanedSource;
+  cleanedSourcePath;
+  uploadSource(analysis, reason = '') {
+    console.log('uploadSource', this.chooseOptions);
       if (!analysis.rules || (analysis.rules && !analysis.rules.length)) {
          alert('Please create the ruleset to upload the source.');
          return;
@@ -475,17 +484,30 @@ export class DashboardComponent implements OnInit {
          return;
       }
 
-      if (!analysis.file) {
+      if (!analysis.file && this.chooseOptions==='upload') {
          alert('Please select the source file to upload.');
          return;
-      }
+    }
+    if (this.chooseOptions === 'select' && this.selectedFileName === '') {
+      alert('Please Choose the source file Path.');
+         return;
+    }
+    if (this.chooseOptions === 'select' && this.selectedFileName) {
+      this.isCleanedSource = 'YES';
+      this.cleanedSourcePath='path'
+    } else {
+      this.isCleanedSource = '';
+      this.cleanedSourcePath=''
+    }
       if (!analysis.uploadDate) {
          alert('Please select the upload date.');
          return;
       }
       const payload = {
          type: '',
-         connectionDetails: {},
+        connectionDetails: {},
+        isCleanedSource: this.isCleanedSource ? this.isCleanedSource : '',
+        cleanedSourcePath:this.cleanedSourcePath ? this.cleanedSourcePath : '',
          sourceId: analysis.sourceId,
          rulesetId: analysis.rules.length ? analysis.rules[0].rulesetId : '',
          isMultiSource: isMultiSource ? 'Yes' : 'No',
@@ -503,7 +525,7 @@ export class DashboardComponent implements OnInit {
          // }
       };
       const formData: any = new FormData();
-      formData.append('file[]', analysis.file);
+      formData.append('file[]', analysis.file ? analysis.file : '');
       formData.append('data', JSON.stringify(payload));
       // this.isLoading = true;
       // this.loaderMsg = 'Saving Source data...';
@@ -844,6 +866,21 @@ export class DashboardComponent implements OnInit {
       return 'by clicking on a backdrop';
     } else {
       return  `with: ${reason}`;
+    }
+  }
+
+
+  selectedMethod = 'upload';
+  uploadFileMethod: boolean = true;
+  chooseOptions = 'upload';
+  selectedFileName = ''
+
+  onWriterChange(selectedMethod) {
+    this.chooseOptions = selectedMethod;
+    if (selectedMethod === 'upload') {
+      this.uploadFileMethod = true;
+    } else {
+      this.uploadFileMethod = false;
     }
   }
 }

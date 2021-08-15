@@ -83,7 +83,7 @@ export class DataCleaningComponent implements OnInit {
   removeItemMessage;
   messageDisplay;
   showMessage: boolean = false;
-  newMessage;
+  newMessage:any = [];
   showtable = true;
   chartData: any = [];
   domainType: any = {};
@@ -251,21 +251,53 @@ export class DataCleaningComponent implements OnInit {
 
   getProfileFromMonitoring() {
     this.isLoading = true;
-      this.analysis = this.messageService.getSource();
-    console.log('DQM', this.analysis)
-    this.allSourceCategory = this.analysis.ProfiledBHistory;
+
+    this.analysis = this.messageService.getSource();
+    const payload = {      
+      db : 'clean',
+      SourceSettings: {
+        sourcePath : this.analysis.source.templateSourcePath,
+        sourceId: this.analysis.sourceId,
+        sourceDataName: this.analysis.source.sourceDataName,
+        sourceDataDescription: this.analysis.source.sourceDataDescription,
+        sourceFileName: this.analysis.source.sourceFileName,
+        sourceCategory: this.analysis.source.sourceCategory,
+        dataOwner: this.analysis.source.dataOwner,
+        uploadDate: this.analysis.uploadDate,
+        department : this.analysis.source.department
+      },
+    };
+    const formData: any = new FormData();
+    formData.append('file[]', [""]);
+    formData.append('data', JSON.stringify(payload));
+    this.http.saveSourceProfile(formData, this.mode === 'edit' ? 'put' : 'post').subscribe((result: any) => {
+      console.log(result);
+    }, (error) => {
+      console.log(error);
+    })
+    //this.allSourceCategory = this.analysis.ProfiledBHistory;
+    console.log(this.analysis)
+    this.allSourceCategory = [{
+      sourceCategory: this.analysis.source.sourceCategory,
+      sourceDataDescription: this.analysis.source.sourceDataDescription,
+      sourceDataName: this.analysis.source.sourceDataName,
+      sourceFileName: this.analysis.source.sourceFileName,
+      templateSourcePath: this.analysis.source.templateSourcePath,
+      sourceId: this.analysis.sourceId,
+      uploadDate:this.analysis.uploadDate
+    }]
       this.uploadId = this.analysis.recentsourceUpload.uploadId;
       this.processTime = this.analysis.recentsourceUpload.uploadDate;
       this.source = this.analysis.source ? this.analysis.source : {};
       if (this.source) {
          this.sourcePathSelected();
     }
-    this.source = this.analysis.ProfiledBHistory[0];
+    this.source = this.allSourceCategory[0];
     this.sourceByCategory =
     _.chain(this.allSourceCategory).
     groupBy('sourceCategory')
-    .map((sourcesList, key) => {
-      sourcesList.map(source => {
+      .map((sourcesList, key) => {
+        sourcesList.map(source => {
         if (source.sourceId === this.source.sourceId) {
           this.selectedCategoryKey = key;
         }
@@ -276,6 +308,7 @@ export class DataCleaningComponent implements OnInit {
 
   getProfileSource() {
     this.http.getCleanSource().subscribe((result: any) => {
+      console.log(result);
       this.allSourceCategory = result.SourceDetailsList;
       // this.cleanedFilesLog = result.SourceDetailsList[0].CleanedFilesLog ? result.SourceDetailsList[0].CleanedFilesLog : [];
       this.analysis = this.messageService.getSource();
@@ -407,8 +440,13 @@ export class DataCleaningComponent implements OnInit {
     this.loaderMsg = 'Loading Profile...';
     const payload = {
          sourcepath: this.titleSrc
-      };
-    this.getCleanedLogs();
+    };
+    // if (this.cleanLogs) {
+    //   this.getCleanedLogs();
+    // } else {
+    //   console.log('here we go....')
+    // }
+    
     this.http.getProfiles(payload).subscribe((result: any) => {
       this.profiles = result.profile ? result.profile : [];
         this.profileDetails = {
@@ -723,7 +761,7 @@ export class DataCleaningComponent implements OnInit {
          if (this.removeItemMessage && this.removeItemMessage.length > 0) {
           this.showMessage = true;
            this.messageDisplay = this.removeItemMessage.join(', ') ? this.removeItemMessage : [];
-           this.newMessage = this.messageDisplay
+           this.newMessage = this.messageDisplay ? this.messageDisplay : [];
          }        
       }
          this.parseSourcePreview(details);
@@ -746,7 +784,6 @@ export class DataCleaningComponent implements OnInit {
    }
 
   parseSourcePreview(details) {
-    console.log(this.newMessage);
       Object.keys(details).map((key, index) => {
         this.rowData.push({
           ...details[key]
@@ -761,7 +798,7 @@ export class DataCleaningComponent implements OnInit {
             headerClass: this.newMessage.map((item, index) => {
               if (key === item) {
                 return 'rag-green';
-              }
+              } 
             }),
           });
         });
@@ -837,7 +874,8 @@ export class DataCleaningComponent implements OnInit {
           outputPath : 'cleaned_data',
           outputFileName : data.reason + '.csv'
         };
-        this.http.saveCleanSource(payload).subscribe((result: any) => {         
+        this.http.saveCleanSource(payload).subscribe((result: any) => {
+          console.log('Res',result)
           this.savedFiles = result.SourceDetailsList[0].CleanedFilesLog[result.SourceDetailsList[0].CleanedFilesLog.length - 1];
           //localStorage.setItem('dq-source-data', JSON.stringify(result))
           if (this.savedFiles) {

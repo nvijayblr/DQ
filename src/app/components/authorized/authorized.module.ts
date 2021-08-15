@@ -27,6 +27,7 @@ import { OracleComponent } from './create-source/oracle/oracle.component';
 import { SchemaTableComponent } from './create-source/schema-table/schema-table.component';
 import { MainDashboardComponent } from './main-dashboard/main-dashboard.component';
 import { MangoDBComponent } from './create-source/mango-db/mango-db.component';
+import { ScrollService } from '../../services/scroll.service';
 
 
 @NgModule({
@@ -60,7 +61,7 @@ import { MangoDBComponent } from './create-source/mango-db/mango-db.component';
      NgbModule,
      Ng2SearchPipeModule,
   ],
-  providers:[CanDeactivateContact, CanDeactivateSource, Location, {provide: LocationStrategy, useClass: PathLocationStrategy}],
+  providers:[CanDeactivateContact, CanDeactivateSource, Location, {provide: LocationStrategy, useClass: PathLocationStrategy},ScrollService],
    exports: [AttributeDetailsComponent, CorrelationDetailsComponent,NgbModule]
 
 })

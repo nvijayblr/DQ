@@ -221,7 +221,7 @@
                                                   <tr>
                                                       <td class="bd">
                                                         <div class="outline">
-                                                            <mat-form-field appearance="fill">
+                                                            <mat-form-field appearance="fill" style="width:130px;">
                                                               <mat-label class="lbl">Multi Source List</mat-label>
                                                               <mat-select [(ngModel)]="data.multisource" [disabled]="data.settings?.multiSourceOptions && data.settings?.multiSourceOptions.length<=1">
                                                                 <mat-option *ngFor="let multisource of data.settings?.multiSourceOptions;" [value]="multisource">
@@ -231,7 +231,16 @@
                                                             </mat-form-field>
                                                         </div>
                                                       </td>
-                                                      <td style="width: 25%;padding-top: 6px;" class="bd">
+                                                      <td>
+                                                        <mat-form-field appearance="fill" style="width:130px;">
+                                                          <mat-label >Select Option</mat-label>
+                                                        <mat-select [(value)]="selectedMethod"  (selectionChange)="onWriterChange(selectedMethod)">
+                                                          <mat-option value="upload">Upload File</mat-option>
+                                                          <mat-option value="select">Select File</mat-option>                                    
+                                                        </mat-select>
+                                                      </mat-form-field>
+                                                      </td>
+                                                      <td style="width: 25%;padding-top: 6px;" class="bd" *ngIf="uploadFileMethod">
                                                         <div *ngIf="rights.includes('ADD_SOURCEFILE')">
                                                           <app-image-cropper 
                                                             [imageType]="'Source'"
@@ -242,6 +251,17 @@
                                                           </app-image-cropper>
                                                         </div>
                                                       </td>
+
+                                                      <td *ngIf="!uploadFileMethod">
+                                                        <mat-form-field appearance="fill" style="width:130px;">
+                                                          <mat-label >Select a FileName</mat-label>
+                                                        <mat-select [(value)]="selectedFileName">
+                                                          <mat-option value="File 1">File 1</mat-option>
+                                                          <mat-option value="File 2">File 2</mat-option>                                    
+                                                        </mat-select>
+                                                      </mat-form-field>
+                                                      </td>
+
                                                       <td class="bd">
                                                         <div class="outline">
                                                             <mat-form-field appearance="fill">
@@ -267,7 +287,7 @@
                                                       <td style="padding-top:0px;" class="bd">
                                                         <div class="list flex-containers ml3" >
                                                           <div class=" list-item-0  inlb" *ngIf="rights.includes('ADD_SOURCEFILE')">
-                                                          <button mat-stroked-button class="button3d btnPush btnBlueGreen addico1" (click)="uploadSource(data)">Upload <mat-icon>cloud_upload</mat-icon></button>
+                                                          <button mat-stroked-button class="button3d btnPush btnBlueGreen addico1" (click)="uploadSource(data, selectedMethod)">Upload <mat-icon>cloud_upload</mat-icon></button>
                                                           </div>
                                                           <!-- <div class=" list-item-0  inlb">
                                                             <button class="button3d btnPush btnLightBlue addico v-a1">
@@ -308,7 +328,7 @@
                                                 <div class="list flex-containers ml4">
                                                   <div class=" list-item-0  inlb" *ngIf="rights.includes('VIEW_RESULTS')">
                                                     <button class="button3d btnPush btnPurple addico v-p" 
-                                                      (click)="launchProfileView(data)" 
+                                                    (click)="scrollToId('elId')" 
                                                       matTooltip="Profile">
                                                       <mat-icon>link</mat-icon>
                                                       Profile
@@ -399,7 +419,7 @@
             
            
 
-           <div class="allView">
+           <div class="allView" id="elId">
                 <div class="viewProfile">
                   <div class="prevMenu" (click)="changeMenu('profile')">
                     <img src="assets/images/profile-data.svg" class="prof"  />
@@ -419,7 +439,7 @@
             </div> 
             <mat-card class="border no-rounded list shrare-post mct">
               
-            <div class="profileView valign" *ngIf="previewProfile">
+            <div class="profileView valign" *ngIf="previewProfile" >
               <div class="analysis-infoDashboard">
                 <div class="category-list-wrapper clearfix">
                   <owl-carousel-o class="selected" [options]="profileOptions">

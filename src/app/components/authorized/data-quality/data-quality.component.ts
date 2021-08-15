@@ -275,18 +275,18 @@ export class DataQualityComponent implements OnInit {
   selectdItems: any = [];
   selectedColumnN;
   getDBPreviewCluster(item, column) {
-    console.log(item);
-    console.log(column);
+    this.selectedColumn = '';
     const colName = column;
     this.isButtonShow = false;
     console.log(this.dbSaveLogs);
     this.getClusterKeys = _.find(this.dbSaveLogs, item ? item : '', item ? item : '');
     //console.log('this.', this.getClusterKeys[item][colName])
-    if (this.getClusterKeys && this.getClusterKeys[item][colName]) {
-      this.selectedColumnN = column;
+    if (this.getClusterKeys && this.getClusterKeys[item][colName]) {    
       this.selectdItem = item;
       this.titleSrc = this.getClusterKeys[item][colName].outputpath;
       this.loadReferencePreview(this.titleSrc);
+      this.selectedColumnN = column;
+      this.titleSrc = "";
       this.isButtonShow = false;
     } else {
       this.selectedColumnN = column;
@@ -324,8 +324,8 @@ export class DataQualityComponent implements OnInit {
   }
 
   getDBPreview(item, column) {
-    console.log(item, 'sadasdas')
     this.selectedColumn = column;
+    this.selectedColumnN = '';
     this.selectdItem = item;
     this.isButtonShow = false;
     const payload = {
@@ -357,6 +357,7 @@ export class DataQualityComponent implements OnInit {
   }
 
   loadReferencePreview(path) {
+    this.selectedColumnN = '';
     this.isButtonShow = false;
     this.titleSrc = path;
     const payload = {
