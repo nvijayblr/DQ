@@ -493,8 +493,11 @@ export class DashboardComponent implements OnInit {
          return;
     }
     if (this.chooseOptions === 'select' && this.selectedFileName) {
+      // this.http.getCleanSource().subscribe((result: any) => {
+      //   console.log(result);
+      // });
       this.isCleanedSource = 'YES';
-      this.cleanedSourcePath='path'
+      this.cleanedSourcePath=this.selectedFileName
     } else {
       this.isCleanedSource = '';
       this.cleanedSourcePath=''
@@ -874,14 +877,27 @@ export class DashboardComponent implements OnInit {
   uploadFileMethod: boolean = true;
   chooseOptions = 'upload';
   selectedFileName = ''
-
-  onWriterChange(selectedMethod) {
+  allSourceCategory;
+  cleanFileLog;
+  onWriterChange(selectedMethod, data) {
     this.chooseOptions = selectedMethod;
     if (selectedMethod === 'upload') {
       this.uploadFileMethod = true;
     } else {
       this.uploadFileMethod = false;
+      
+      this.http.getCleanSource().subscribe((result: any) => {
+        this.allSourceCategory = result.SourceDetailsList;
+        const dataFromDq = _.find(result.SourceDetailsList, function (o) {
+          return o.sourceId === data.sourceId;
+        });
+        this.cleanFileLog = dataFromDq.CleanedFilesLog;
+        //console.log(this.cleanFileLog);
+      });
+      // this.isCleanedSource = 'YES';
+      // this.cleanedSourcePath='path'
     }
   }
+
 }
 

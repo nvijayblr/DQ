@@ -70,6 +70,7 @@ export class LoginComponent implements OnInit {
 
 
   doLogin() {
+    localStorage.removeItem('globalData');
     this.isSubmitted = true;
     if (this.loginForm.invalid) {
       return;
@@ -238,6 +239,7 @@ export class LoginComponent implements OnInit {
 
   signOut(): void {
     this.socialAuthService.signOut();
+    localStorage.removeItem('globalData');
   }
 
   openSm(content) {

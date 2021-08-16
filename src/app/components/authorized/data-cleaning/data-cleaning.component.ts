@@ -151,7 +151,8 @@ export class DataCleaningComponent implements OnInit {
    isPreviewLoading = false;
    defaultColDefs = { sortable: true, filter: true, minWidth: 180, resizable: true };
    rowData: any = [];
-   columnDefs: any = [];
+  columnDefs: any = [];
+  dqId;
 
    isSaveEnable = false;
 
@@ -235,7 +236,8 @@ export class DataCleaningComponent implements OnInit {
 
   ngOnInit() {
     this.mode = this.route.snapshot.queryParamMap.get('mode');
-    if (this.mode === 'dqm') {
+    localStorage.removeItem('dataDq');
+    if (this.mode === 'dqm') {      
       this.getProfileFromMonitoring();
     } else {
       this.getProfileSource();
@@ -248,62 +250,103 @@ export class DataCleaningComponent implements OnInit {
 
 
   }
-
-  getProfileFromMonitoring() {
+getProfileFromMonitoring() {
     this.isLoading = true;
-
+  
+  let dataGetDq = JSON.parse(localStorage.getItem('dataDq'));
+  let payload;
+  if (!dataGetDq) {
     this.analysis = this.messageService.getSource();
-    const payload = {      
+    payload = {      
       db : 'clean',
       SourceSettings: {
-        sourcePath : this.analysis.source.templateSourcePath,
+        sourcePath : this.analysis.source.templateSourcePath ,
         sourceId: this.analysis.sourceId,
-        sourceDataName: this.analysis.source.sourceDataName,
+        sourceDataName: this.analysis.source.sourceDataName ,
         sourceDataDescription: this.analysis.source.sourceDataDescription,
-        sourceFileName: this.analysis.source.sourceFileName,
+        sourceFileName: this.analysis.source.sourceFileName ,
         sourceCategory: this.analysis.source.sourceCategory,
         dataOwner: this.analysis.source.dataOwner,
         uploadDate: this.analysis.uploadDate,
         department : this.analysis.source.department
       },
     };
+  } else {
+    this.analysis = dataGetDq;
+     payload = {      
+      db : 'clean',
+      SourceSettings: {
+        sourcePath :  this.analysis.templateSourcePath,
+        sourceId: this.analysis.sourceId,
+        sourceDataName: this.analysis.sourceDataName,
+        sourceDataDescription: this.analysis.sourceDataDescription,
+        sourceFileName: this.analysis.sourceFileName,
+        sourceCategory: this.analysis.sourceCategory,
+        dataOwner: this.analysis.dataOwner,
+        uploadDate: this.analysis.uploadDate,
+        department : this.analysis.department
+      },
+    };
+  }
+  
+    // const payload = {      
+    //   db : 'clean',
+    //   SourceSettings: {
+    //     sourcePath : this.analysis.source.templateSourcePath ? this.analysis.source.templateSourcePath : this.analysis.templateSourcePath,
+    //     sourceId: this.analysis.sourceId,
+    //     sourceDataName: this.analysis.source.sourceDataName ? this.analysis.source.sourceDataName : this.analysis.sourceDataName,
+    //     sourceDataDescription: this.analysis.source.sourceDataDescription ? this.analysis.source.sourceDataDescription : this.analysis.sourceDataDescription,
+    //     sourceFileName: this.analysis.source.sourceFileName ? this.analysis.source.sourceFileName : this.analysis.sourceFileName,
+    //     sourceCategory: this.analysis.source.sourceCategory ? this.analysis.source.sourceCategory : this.analysis.sourceCategory,
+    //     dataOwner: this.analysis.source.dataOwner ? this.analysis.source.dataOwner : this.analysis.dataOwner,
+    //     uploadDate: this.analysis.uploadDate,
+    //     department : this.analysis.source.department ? this.analysis.source.department : this.analysis.department
+    //   },
+    // };
     const formData: any = new FormData();
-    formData.append('file[]', [""]);
+    formData.append('file[]', "");
     formData.append('data', JSON.stringify(payload));
-    this.http.saveSourceProfile(formData, this.mode === 'edit' ? 'put' : 'post').subscribe((result: any) => {
-      console.log(result);
+  this.http.saveSourceProfile(formData, this.mode === 'edit' ? 'put' : 'post').subscribe((result: any) => {
+    if (result.errorMsg) {
+      alert(result.errorMsg)
+    }
+      if (result) {       
+        this.http.getCleanSource().subscribe((result: any) => {
+          console.log(result)
+          this.allSourceCategory = result.SourceDetailsList;
+          let dqId = this.route.snapshot.queryParamMap.get('sourceId');
+          const dataFromDq = _.find(result.SourceDetailsList, function (o) {
+            return o.sourceId === dqId;
+          })
+          localStorage.setItem('dataDq', JSON.stringify(dataFromDq));
+          this.uploadId = dataFromDq.sourceId;
+          this.processTime = dataFromDq.uploadDate;
+          this.source = dataFromDq;
+          this.sourcePathSelected();
+          this.uploadId = this.source.sourceId;
+          this.loadProfile(this.source);
+          console.log(dataFromDq)
+          this.source = dataFromDq;
+          this.sourceByCategory =
+          _.chain(this.allSourceCategory).
+          groupBy('sourceCategory')
+            .map((sourcesList, key) => {
+              sourcesList.map(source => {
+              if (source.sourceId === this.source.sourceId) {
+                this.selectedCategoryKey = key;
+              }
+            });
+            return { category: key, sources: sourcesList };
+          }).value();
+        })
+      }       
     }, (error) => {
-      console.log(error);
+      console.log(error.errorMsg);
     })
     //this.allSourceCategory = this.analysis.ProfiledBHistory;
-    console.log(this.analysis)
-    this.allSourceCategory = [{
-      sourceCategory: this.analysis.source.sourceCategory,
-      sourceDataDescription: this.analysis.source.sourceDataDescription,
-      sourceDataName: this.analysis.source.sourceDataName,
-      sourceFileName: this.analysis.source.sourceFileName,
-      templateSourcePath: this.analysis.source.templateSourcePath,
-      sourceId: this.analysis.sourceId,
-      uploadDate:this.analysis.uploadDate
-    }]
-      this.uploadId = this.analysis.recentsourceUpload.uploadId;
-      this.processTime = this.analysis.recentsourceUpload.uploadDate;
-      this.source = this.analysis.source ? this.analysis.source : {};
-      if (this.source) {
-         this.sourcePathSelected();
-    }
-    this.source = this.allSourceCategory[0];
-    this.sourceByCategory =
-    _.chain(this.allSourceCategory).
-    groupBy('sourceCategory')
-      .map((sourcesList, key) => {
-        sourcesList.map(source => {
-        if (source.sourceId === this.source.sourceId) {
-          this.selectedCategoryKey = key;
-        }
-      });
-      return { category: key, sources: sourcesList };
-    }).value();
+    //console.log(this.analysis)
+
+     
   }
 
   getProfileSource() {

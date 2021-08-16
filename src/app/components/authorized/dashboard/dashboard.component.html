@@ -234,7 +234,7 @@
                                                       <td>
                                                         <mat-form-field appearance="fill" style="width:130px;">
                                                           <mat-label >Select Option</mat-label>
-                                                        <mat-select [(value)]="selectedMethod"  (selectionChange)="onWriterChange(selectedMethod)">
+                                                        <mat-select [(value)]="selectedMethod"  (selectionChange)="onWriterChange(selectedMethod, data)">
                                                           <mat-option value="upload">Upload File</mat-option>
                                                           <mat-option value="select">Select File</mat-option>                                    
                                                         </mat-select>
@@ -255,9 +255,9 @@
                                                       <td *ngIf="!uploadFileMethod">
                                                         <mat-form-field appearance="fill" style="width:130px;">
                                                           <mat-label >Select a FileName</mat-label>
-                                                        <mat-select [(value)]="selectedFileName">
-                                                          <mat-option value="File 1">File 1</mat-option>
-                                                          <mat-option value="File 2">File 2</mat-option>                                    
+                                                        <mat-select  [(value)]="selectedFileName">
+                                                          <mat-option *ngFor="let cleanLog of cleanFileLog" value="{{cleanLog.outputPath}}">{{cleanLog.outputFileName}}</mat-option>
+                                                         
                                                         </mat-select>
                                                       </mat-form-field>
                                                       </td>
