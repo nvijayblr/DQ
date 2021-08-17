@@ -887,12 +887,15 @@ export class DashboardComponent implements OnInit {
       this.uploadFileMethod = false;
       
       this.http.getCleanSource().subscribe((result: any) => {
+        console.log(result);
         this.allSourceCategory = result.SourceDetailsList;
         const dataFromDq = _.find(result.SourceDetailsList, function (o) {
           return o.sourceId === data.sourceId;
         });
         this.cleanFileLog = dataFromDq.CleanedFilesLog;
         //console.log(this.cleanFileLog);
+      },(error) => {
+        alert(error.message);
       });
       // this.isCleanedSource = 'YES';
       // this.cleanedSourcePath='path'

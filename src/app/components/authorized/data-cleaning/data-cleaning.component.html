@@ -250,13 +250,13 @@
                               class="btn btn-primary"
                               (click)="loadPreview('nan')"
                               style="margin-left: 0;"
-                            ><mat-icon> layers_clear</mat-icon> PREVIEW </button>
+                            ><mat-icon> visibility</mat-icon> PREVIEW </button>
       
                             <button 
                               type="button" 
                               class="btn btn-danger"
                               (click)="imputeColumns('numeric')"
-                              [disabled]="!profile.attributeSummary?.null_records || !impute.value"><mat-icon> layers_clear</mat-icon> IMPUTE 
+                              [disabled]="!profile.attributeSummary?.null_records || !impute.value"><mat-icon> delete</mat-icon> IMPUTE 
                             </button>
                           </div>
                       </div>
@@ -276,12 +276,12 @@
                           class="btn btn-primary"
                           (click)="loadPreview('nan')"
                           style="margin-left: 0;"
-                          ><mat-icon> layers_clear</mat-icon> PREVIEW </button>
+                          ><mat-icon> visibility</mat-icon> PREVIEW </button>
                         <button 
                           type="button" 
                           class="btn btn-danger"
                           (click)="imputeColumns('string')"
-                          [disabled]="!profile.attributeSummary?.null_records || !impute.value"><mat-icon> layers_clear</mat-icon> IMPUTE </button>
+                          [disabled]="!profile.attributeSummary?.null_records || !impute.value"><mat-icon> delete</mat-icon> IMPUTE </button>
                       </div>
                     </div>
                       </mat-tab>

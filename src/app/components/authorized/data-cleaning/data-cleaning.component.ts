@@ -530,7 +530,8 @@ getProfileFromMonitoring() {
                }
                this.profileSummary.nullcounts = this.profileSummary.nullcounts + parseInt(data.attributeSummary.null_records, 0);
             }
-         });
+        });
+        this.getCleanedLogs();
         this.isLoading = false;
       }, (error) => {
          this.isLoading = false;

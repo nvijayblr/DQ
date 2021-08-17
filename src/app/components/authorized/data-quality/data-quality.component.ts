@@ -160,6 +160,8 @@ export class DataQualityComponent implements OnInit {
     })
   }
 
+  showDivider :boolean = false;
+
   applySearch(event: Event) {
     this.searchValue = event;
     const payload = {
@@ -167,10 +169,12 @@ export class DataQualityComponent implements OnInit {
       client_url : ""
     };
     this.isLoading = true;
+    this.showDivider = false;
     this.http.getSearchCollections(payload).subscribe((result: any) => {
+      this.allObjKeys = [];
       this.isLoading = false;
       this.searchResult = result;
-      this.allObjHeader = _.keys(this.searchResult);
+      this.allObjHeader = _.keys(this.searchResult);      
       this.allObjValues = _.values(this.searchResult);
       for (let i = 0; i < this.allObjValues.length; i++) {
         this.allObjKeys.push(_.keys(this.allObjValues[i][0]));
@@ -181,6 +185,7 @@ export class DataQualityComponent implements OnInit {
         });
         this.collections.push(this.allObjKeysExt);
       }
+      this.showDivider = true;
 
     }, (error) => {
       alert(error.message);
