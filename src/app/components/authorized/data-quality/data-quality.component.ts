@@ -172,6 +172,7 @@ export class DataQualityComponent implements OnInit {
     this.showDivider = false;
     this.http.getSearchCollections(payload).subscribe((result: any) => {
       this.allObjKeys = [];
+      this.collections = [];
       this.isLoading = false;
       this.searchResult = result;
       this.allObjHeader = _.keys(this.searchResult);      

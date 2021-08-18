@@ -202,7 +202,6 @@ export class CreateSourceComponent implements OnInit {
       this.chooseOptions = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel';
     }
     this.editRefSourceData = JSON.parse(localStorage.getItem('dq-source-data'));
-    console.log(this.editRefSourceData);
     if (this.editRefSourceData && this.editRefSourceData.reference.length) {
       this.refDateMethod = this.editRefSourceData.reference[0].ref_data_type;
     }
@@ -302,12 +301,31 @@ export class CreateSourceComponent implements OnInit {
     let sourceRefNameEqual = false;
     let refPayload;
 
+
     if (this.refColumn) {
       refPayload = [{
         referenceDataName: this.refColumn,
         referenceDataDescription: this.refColumn + 'Details',
         referenceFileName: this.refColumn + '.csv',
         referencePath: "mongodb_data/" + this.refColumn + '.csv',
+        referenceId: ""
+      }];
+      this.refDataType = "MongoDB_RefData";
+    } else if (this.refColumnL) {
+      refPayload = [{
+        referenceDataName: this.refColumnL,
+        referenceDataDescription: this.refColumnL + 'Details',
+        referenceFileName: this.refColumnL + '.csv',
+        referencePath: "mongodb_data/" + this.refColumnL + '.csv',
+        referenceId: ""
+      }];
+      this.refDataType = "MongoDB_RefData";
+    } else if (this.refColumnG) {
+      refPayload = [{
+        referenceDataName: this.refColumnG,
+        referenceDataDescription: this.refColumnG + 'Details',
+        referenceFileName: this.refColumnG + '.csv',
+        referencePath: "mongodb_data/" + this.refColumnG + '.csv',
         referenceId: ""
       }];
       this.refDataType = "MongoDB_RefData";
@@ -451,6 +469,7 @@ export class CreateSourceComponent implements OnInit {
   refTabIndex;
   selectedCategoryKey;
   selectedCategoryKeyL;
+  selectedCategoryKeyG;
   validateSourceNameAndNext() {
     const sourceName = this.afControls.sourceDataName.value;
     if (this.selFileName === undefined && this.mode === 'create') {
@@ -477,10 +496,13 @@ export class CreateSourceComponent implements OnInit {
       }
       if (localStorage.getItem('refItemL')) {
         this.getDBPreview(localStorage.getItem('refItemL'), localStorage.getItem('refColumnL'))
-      }            
+      }
+      if (localStorage.getItem('refItemG')) {
+        this.loadReferencePreviewGD(localStorage.getItem('globalRefPath'), localStorage.getItem('refItemG'), localStorage.getItem('refColumnG'));
+      }
       this.selectedCategoryKey = localStorage.getItem('refItem');
-      this.selectedCategoryKeyL = localStorage.getItem('refItemL')
-
+      this.selectedCategoryKeyL = localStorage.getItem('refItemL');
+      this.selectedCategoryKeyG = localStorage.getItem('refItemG');
     }
   }
 
@@ -668,8 +690,7 @@ export class CreateSourceComponent implements OnInit {
             .value()
         
       }
-      console.log(this.globalDataGroup)
-      console.log(this.globalDataPath)
+
     }
   }
 
@@ -689,6 +710,9 @@ export class CreateSourceComponent implements OnInit {
     this.refColumnL = column;
     localStorage.removeItem('refItem');
     localStorage.removeItem('refColumn');
+    localStorage.removeItem('refItemG');
+    localStorage.removeItem('refColumnG');
+    localStorage.removeItem('globalRefPath');
     localStorage.setItem('refItemL', this.refItemL);
     localStorage.setItem('refColumnL', this.refColumnL);
     this.selectedColumn = column;
@@ -759,8 +783,6 @@ export class CreateSourceComponent implements OnInit {
       this.newDB = result.Cluster_Contents;
       this.db = _.keys(result.Cluster_Contents);
       this.dbValues.push(this.newDB);
-      console.log(result.Cluster_Contents);
-      console.log(this.dbValues)
       this.dataSource = _.values(result.Cluster_Contents);
       this.isLoadingDB = false;
       this.showAllDetails = true;
@@ -818,8 +840,19 @@ export class CreateSourceComponent implements OnInit {
       });
 
   }
-
-  loadReferencePreviewGD(path) {
+  refItemG;
+  refColumnG;
+  loadReferencePreviewGD(path, column, item) {
+    this.selectedColumn = '';
+    this.refItemG = item;
+    this.refColumnG = column;
+    localStorage.removeItem('refItemL');
+    localStorage.removeItem('refColumnL');
+    localStorage.removeItem('refItem');
+    localStorage.removeItem('refColumn');
+    localStorage.setItem('refItemG', this.refItemG);
+    localStorage.setItem('refColumnG', this.refColumnG);
+    localStorage.setItem('globalRefPath', path);
     this.isButtonShow = false;
     this.titleSrc = path;
     this.showRefTable = false;
@@ -882,6 +915,9 @@ export class CreateSourceComponent implements OnInit {
     this.refColumn = column;
     localStorage.removeItem('refItemL');
     localStorage.removeItem('refColumnL');
+    localStorage.removeItem('refItemG');
+    localStorage.removeItem('globalRefPath');
+    localStorage.removeItem('refColumnG');
     localStorage.setItem('refItem', this.refItem);
     localStorage.setItem('refColumn', this.refColumn);
     this.selectedColumnN = column;

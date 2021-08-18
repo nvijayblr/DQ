@@ -439,7 +439,7 @@
                       <mat-accordion *ngIf="loadingGlobalData">
                         <!-- (opened)="setOpened(i)"
                           (closed)="setClosed(i)" -->
-                        <mat-expansion-panel *ngFor="let item of globalDataGroup; first as isFirst">
+                        <mat-expansion-panel *ngFor="let item of globalDataGroup; first as isFirst" [expanded]="item.db === selectedCategoryKeyG">
                          
                           <mat-expansion-panel-header>
                             
@@ -448,7 +448,7 @@
                           <mat-list role="list">
                             <mat-list-item role="listitem" *ngFor="let itemList of item.refdData">
                               <!-- <div > {{itemList.collection}}</div> -->
-                               <div  class="lftItem" matTooltip="{{itemList.collection}}" (click)="loadReferencePreviewGD(itemList.outputpath)" [class.activeList]="itemList.outputpath === titleSrc">
+                               <div  class="lftItem" matTooltip="{{itemList.collection}}" (click)="loadReferencePreviewGD(itemList.outputpath, itemList.collection, item.db)" [class.activeList]="itemList.outputpath === titleSrc">
                                 <mat-icon> layers</mat-icon> 
                                 {{itemList.collection}}
                                 </div>  
