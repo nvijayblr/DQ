@@ -1,7 +1,7 @@
 <button class="close" mat-icon-button (click)="onNoClick()">
   <mat-icon>close</mat-icon>
 </button>
-<div mat-dialog-title class="space bg2">NULL COUNTS</div>
+<div mat-dialog-title class="space bg2">{{data.title}}</div>
 <div mat-dialog-content>
   <app-progress-bar [message]="'Loading preview...'" class="component" *ngIf="isPreviewLoading"></app-progress-bar>
     <app-ag-grid

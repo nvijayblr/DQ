@@ -209,9 +209,11 @@ export class AttributeDetailsComponent implements OnInit {
     this.getMongoDBSaveLog();
   }
   domainMatches;
+  columnMatches;
   changeProfile(profile) {
     this.profile = profile;
-    this.domainMatches = _.keys(this.domainType.Domain_Matches);  
+    this.columnMatches = this.domainType.Domain_Matches;
+    this.domainMatches = _.keys(this.domainType.Domain_Matches);
     const extractValues = ({ unique_values, counts }) => [unique_values.toString(), counts];   
     this.chartData = this.profile.frequncyAnalysis.map(extractValues);
     if (this.profile.LengthStatistics) {
@@ -497,7 +499,8 @@ export class AttributeDetailsComponent implements OnInit {
         width: '95%',
         // height: '95%',
         data: {
-         ...this.nullcounts
+          ...this.nullcounts,
+          title : 'Null Counts'
         }
      });
       }, (error) => {
@@ -606,7 +609,6 @@ export class AttributeDetailsComponent implements OnInit {
 
   getMongoDBSaveLog() {
     this.http.getMongoDBSaveLog().subscribe((result: any) => {
-      console.log(result);
       this.dbSaveLogs = result.SavedFilesLog;
     })
   }
@@ -701,6 +703,31 @@ export class AttributeDetailsComponent implements OnInit {
     } else {
       return  `with: ${reason}`;
     }
+  }
+
+  maskPreview: any;
+
+  getMaskAnalysisView(mask, col) {
+    console.log('getMaskAnalysisView', this.titleSrc);
+    const payload = {
+      sourcepath : this.titleSrc, 
+      column_name : col,
+      mask_query_value : mask
+    };
+    this.http.getMaskAnalysisView(payload).subscribe((result: any) => {
+      if (result) {
+        this.maskPreview = result.Preview ? result.Preview : {};
+        this.dialog.open(PreviewDialogComponent, {
+          width: '95%',
+          // height: '95%',
+          data: {
+            ...this.maskPreview,
+            title : 'Mask Analysis'
+          }
+       });        
+        }
+      
+    });
   }
 }
 

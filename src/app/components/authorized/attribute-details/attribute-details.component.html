@@ -549,9 +549,7 @@
                  </ng-template> -->
                  </mat-card>
                   
-                 <div *ngFor="let domain of domainMatches">
-                   
-                        
+                 <div *ngFor="let domain of domainMatches">                        
                   <mat-card  class="bg-violet ch" *ngIf="domain === profile.column"> 
                     <table>
                       <tr>
@@ -563,7 +561,7 @@
                                                 
                       </tr>
                       <tr >
-                        <td><span class="dp" *ngIf="domain === profile.column">{{domain}}</span></td>
+                        <td><span class="dp" *ngIf="domain === profile.column">{{columnMatches[domain]}}</span></td>
                         
                       </tr>                       
                     </table>                                          
@@ -625,7 +623,11 @@
                                <th style="width:20%">&nbsp;</th>
                             </tr>
                             <tr *ngFor="let mask of profile.maskAnalysis">
-                              <td>{{mask.unique_values}}</td>
+                              <td >
+                                <a href="javascript: void(0)" *ngIf="profile.maskAnalysis && profile.maskAnalysis.length" (click)="getMaskAnalysisView(mask.unique_values, profile.column)">
+                                  {{mask.unique_values}}
+                                </a>
+                               </td>
                               <td class="mid">{{mask.counts}}</td>
                               <td>
                                  <mat-progress-bar mode="determinate" [value]="(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(mask.counts * 100)/ profile.attributeSummary?.records | number:'1.0-2'}} %"></mat-progress-bar> 

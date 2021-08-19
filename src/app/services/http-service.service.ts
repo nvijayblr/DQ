@@ -712,6 +712,16 @@ export class HttpService  {
     );
   }
 
+  getMaskAnalysisView(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/maskAnalysis_query`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
   getProfilePreview(payload, type): Observable<any> {
     let typeUrl = 'show_remove_duplicates';
     if (type === 'duplicate') {

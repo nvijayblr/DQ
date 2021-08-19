@@ -414,6 +414,30 @@ export class DataQualityComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  saveMongoDbGlobal(item, column) {
+    const payload = {
+      client_url: '',
+      db: item,
+      collection: column,
+      //source_path: outputpath,
+      output_filename : column + '.csv',
+    };
+    this.isLoadingCO = true;
+    this.http.saveMangoDbCollection(payload).subscribe((result: any) => {
+      this.isLoadingCO = false;
+        this.alertMessage = result.Message;
+      this.savePath = result.outputpath;
+      //this.modalService.open(this.modalContent, { windowClass: 'modal-holder' });
+      if (result) {
+        this.downloadSource(result.outputpath, column)
+      }
+      
+      //this.reloadCurrentRoute();
+      }, (error) => {
+        this.isLoading = false;
+      });
+  }
+
   resFilename;
   openSave(saveLocalFile, item, column) {
     this.modalService.open(saveLocalFile, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
