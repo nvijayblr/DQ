@@ -589,7 +589,7 @@ export class RulesetComponent implements OnInit {
     this.selectedColumnsCopy = [...payload.selectedColumns];
 
     if (this.selectedColumnsCopy.length) {
-      payload.selectedColumns = this.selectedColumnsCopy.slice(0, 1);
+      payload.selectedColumns = this.selectedColumnsCopy.slice(0, 7);
     }
     this.getColumnnRuleBySync(this.selectedColumnsCopy, payload);
 
@@ -598,10 +598,9 @@ export class RulesetComponent implements OnInit {
 
   getColumnnRuleBySync = (selectedColumns, payload) => {
     this.getColumnnRuleRequest(payload, () => {
-      selectedColumns.splice(0, 1);
-      console.log(selectedColumns.length);
+      selectedColumns.splice(0, 7);
       if (selectedColumns.length) {
-        payload.selectedColumns = selectedColumns.slice(0, 1);
+        payload.selectedColumns = selectedColumns.slice(0, 7);
         this.getColumnnRuleBySync(selectedColumns, payload);
       } else {
         this.isRulesLoading = false;

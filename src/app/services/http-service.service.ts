@@ -23,7 +23,7 @@ export class HttpService  {
     // Prod
     this.rootUrl = 'https://zzv4j5kpjh.execute-api.us-west-2.amazonaws.com/dev';
     // Dev
-    this.rootUrl = 'http://localhost';
+    this.rootUrl = 'http://localhost:81';
   }
 
   uploadSourceCSV(payload): Observable<any> {
