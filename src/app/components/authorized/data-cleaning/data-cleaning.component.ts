@@ -233,6 +233,7 @@ export class DataCleaningComponent implements OnInit {
      ]
   };
   previewTable;
+  colPreviewData : boolean = true;
 
   ngOnInit() {
     this.mode = this.route.snapshot.queryParamMap.get('mode');
@@ -789,8 +790,9 @@ getProfileFromMonitoring() {
      this.rowData = [];
      this.removeItems = '';
      this.http.getProfilePreview(payload, type).subscribe((res: any) => {
-       const details: any = res.Preview ? res.Preview : {};     
-       this.removeItemMessage = res.cols_removed;
+       const details: any = res.Preview ? res.Preview : {};
+       this.colPreviewData = _.isEmpty(details);
+       this.removeItemMessage = res.Preview;
          if (type === 'data_remove') {
             this.removeItems = {
                cols_removed: res.cols_removed,

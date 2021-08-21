@@ -153,7 +153,249 @@
               </mat-card> -->
             </div>
              
-              
+            <mat-card class="tab-card noSdw">
+              <mat-tab-group mat-align-tabs="start"  animationDuration="0ms" class="mm2" #tabGroup (selectedTabChange)="resetPreview();">
+                <mat-tab label="Data Imputation">
+                  <div class="impute-wrapper" *ngIf="profile.attributeSummary?.dataType === 'Numeric'">
+                    <h5 class="sub-title-label">Impute Null Data</h5>
+                    <div class="form-row">
+                      <mat-form-field appearance="fill" class="mft">
+                        <mat-select placeholder="Impute Option" [(ngModel)]="impute.value" [disabled]="!profile.attributeSummary?.null_records">
+                          <mat-option value="MEAN">Mean</mat-option>
+                          <mat-option value="MEDIAN">Median</mat-option>
+                          <mat-option value="MODE">Mode</mat-option>
+                          <mat-option value="MIN">Min</mat-option>
+                          <mat-option value="MAX">Max</mat-option>
+                          <mat-option value="IQR25">IQR25</mat-option>
+                          <mat-option value="IQR75">IQR75</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div>
+                      <button 
+                        type="button" 
+                        class="btn btn-primary"
+                        (click)="loadPreview('nan')"
+                        style="margin-left: 0;"
+                      ><mat-icon> visibility</mat-icon> PREVIEW </button>
+
+                      <button 
+                        type="button" 
+                        class="btn btn-danger"
+                        (click)="imputeColumns('numeric')"
+                        [disabled]="!profile.attributeSummary?.null_records || !impute.value"><mat-icon> delete</mat-icon> IMPUTE 
+                      </button>
+                    </div>
+                </div>
+
+                  <div class="impute-wrapper" *ngIf="profile.attributeSummary?.dataType === 'Alphabetic' || profile.attributeSummary?.dataType === 'Alphanumeric'">
+                    <h5 class="sub-title-label">Impute Null Data</h5>
+                    <div class="form-row">
+                        <mat-form-field appearance="fill" class="mft">
+                          <mat-select placeholder="Select Value" [(ngModel)]="impute.value" [disabled]="!profile.attributeSummary?.null_records">
+                            <mat-option *ngFor="let frequency of profile.frequncyAnalysis" [value]="frequency.unique_values">{{frequency.unique_values}} - ({{frequency.counts}})</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                  </div>
+                  <div>
+                    <button 
+                    type="button" 
+                    class="btn btn-primary"
+                    (click)="loadPreview('nan')"
+                    style="margin-left: 0;"
+                    ><mat-icon> visibility</mat-icon> PREVIEW </button>
+                  <button 
+                    type="button" 
+                    class="btn btn-danger"
+                    (click)="imputeColumns('string')"
+                    [disabled]="!profile.attributeSummary?.null_records || !impute.value"><mat-icon> delete</mat-icon> IMPUTE </button>
+                </div>
+              </div>
+                </mat-tab>
+                
+                <mat-tab label="Duplicate Analysis">
+                  <div class="impute-wrapper">
+                    <h5 class="sub-title-label">Remove Duplicate Rows</h5>
+                    <div style="margin-top: 10px;">
+                      <mat-radio-group [(ngModel)]="duplicate.option" (ngModelChange)="duplicate.columns = []">
+                        <mat-radio-button value="all">All Columns</mat-radio-button>
+                        <mat-radio-button value="selected">Specific Column</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                    <div style="margin-top: 10px;">
+                      <mat-form-field appearance="fill" class="mft" *ngIf="duplicate.option === 'selected'">
+                        <mat-select placeholder="Select Columns" multiple [(ngModel)]="duplicate.columns">
+                          <mat-option *ngFor="let profile of profiles" [value]="profile.column">{{profile.column}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="form-row">
+                        <button 
+                          type="button" 
+                          (click)="loadPreview('duplicate')"
+                          class="btn btn-primary">
+                          <mat-icon> visibility</mat-icon> Preview 
+                        </button>
+                        <button 
+                          type="button" 
+                          (click)="deleteDuplicates()"
+                          class="btn btn-danger" [disabled]="colPreviewData">
+                          <mat-icon> delete</mat-icon> Remove 
+                        </button>
+                    </div>
+                  </div>
+                </mat-tab>  
+
+                <!-- <mat-tab label="Mask Analysis">
+                  <div class="impute-wrapper">
+                    <h5 class="sub-title-label">Mask Analysis Data</h5>
+                    <div class="form-row">
+                      <mat-form-field appearance="fill" class="mft">
+                        <mat-select placeholder="" [(ngModel)]="mask.value">
+                          <mat-option *ngFor="let mask of profile.maskAnalysis" [value]="mask.unique_values">{{mask.unique_values}} - ({{mask.counts}})</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      <button 
+                        type="button" 
+                        [disabled]="!mask.value"
+                        (click)="loadPreview('mask', mask.value)"
+                        class="button3d btnPush btnPurple addico w-t">
+                        <mat-icon> visibility</mat-icon> Preview 
+                      </button>
+                    </div>                    
+                  </div>
+                </mat-tab> -->
+
+                <mat-tab label="Data Removal">
+                  <div class="impute-wrapper">
+                    <h5 class="sub-title-label">Delete Column / Row</h5>
+                    <div class="form-row">
+                      <mat-radio-group [(ngModel)]="delete.type" (ngModelChange)="changeRemoveCategory(delete.type)">
+                        <mat-radio-button [checked]="true" value="column">Column</mat-radio-button>
+                        <mat-radio-button value="custom" value="row">Row</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+
+                    <div class="form-row" *ngIf="delete.type === 'column'">
+                      <mat-radio-group [(ngModel)]="delete.category">
+                        <mat-radio-button [checked]="true" value="col_nan">NaN</mat-radio-button>
+                        <mat-radio-button value="custom" value="col_with_value">Value</mat-radio-button>
+
+                        <div *ngIf="delete.category === 'col_with_value'" style="margin-top: 10px;">
+                          <mat-form-field appearance="fill" class="mft">
+                            <mat-select placeholder="Select Columns" [(ngModel)]="delete.column_name" disabled>
+                              <mat-option *ngFor="let profile of profiles" [value]="profile.column">{{profile.column}} - {{profile.attributeSummary?.dataType}}</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+
+                        <div *ngIf="delete.category === 'col_with_value' && profile.attributeSummary?.dataType === 'Alphabetic' || profile.attributeSummary?.dataType === 'Alphanumeric'">
+                          <mat-form-field appearance="fill" class="mft-200" style="width: 250px;">
+                            <mat-label>Value</mat-label>
+                            <input 
+                              matInput placeholder="" value="" 
+                              [(ngModel)]="delete.values"
+                              (ngModelChange)="delete.formula.cond_value1=''; delete.formula.cond_value2=''">
+                          </mat-form-field>
+                        </div>
+    
+                        <div style="margin-top: 10px;" class="formula-section" *ngIf="delete.category === 'col_with_value' && profile.attributeSummary?.dataType === 'Numeric'">
+                          <mat-form-field appearance="fill" class="mft">
+                            <mat-select placeholder="Operator" [(ngModel)]="delete.formula.operator1" (ngModelChange)="delete.values=''">
+                              <mat-option *ngFor="let operator of operators" [value]="operator">{{operator}}</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                          <mat-form-field appearance="fill" class="mft2">
+                            <mat-label>Value</mat-label>
+                            <input matInput placeholder="" type="number" value="" [(ngModel)]="delete.formula.cond_value1" (ngModelChange)="delete.values=''">
+                          </mat-form-field>
+
+                          <mat-form-field appearance="fill" class="mft">
+                            <mat-select placeholder="Operator" [(ngModel)]="delete.formula.operator2" (ngModelChange)="delete.values=''">
+                              <mat-option *ngFor="let operator of operators" [value]="operator">{{operator}}</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                          <mat-form-field appearance="fill" class="mft2">
+                            <mat-label>Value</mat-label>
+                            <input matInput placeholder="" type="number" value="" [(ngModel)]="delete.formula.cond_value2" (ngModelChange)="delete.values=''">
+                          </mat-form-field>
+                        </div>
+                      </mat-radio-group>
+                    </div>
+
+                    <div class="form-row" *ngIf="delete.type === 'row'">
+                      <mat-radio-group [(ngModel)]="delete.category">
+                        <mat-radio-button [checked]="true" value="row_nan">NaN</mat-radio-button>
+                        <!-- <mat-radio-button value="custom" value="">Value</mat-radio-button>
+                        <mat-form-field appearance="fill" class="mft2" *ngIf="delete.category === ''">
+                          <mat-label>Custom Value</mat-label>
+                          <input matInput placeholder="" value="" [(ngModel)]="delete.values">
+                        </mat-form-field> -->
+                      </mat-radio-group>
+                    </div>
+
+                    <div class="form-rows" style="margin-top: 10px;" *ngIf="delete.category === 'col_nan' || delete.category === 'row_nan'">
+                      <div style="font-weight: bold;">
+                        Threshold : {{delete.threshold}}%
+                      </div>
+                      <div style="margin: 10px 0 20px">
+                        <!-- row_nan -->
+                        <span *ngIf="delete.category === 'row_nan'">
+                          Considering NaNs across {{calulateRowNanThreshold()}} columns at least, per row.
+                        </span>
+                        <!-- col_nan -->
+                        <span *ngIf="delete.category === 'col_nan'">
+                          (Considering NaNs across {{calulateColNanThreshold()}} out of {{profileDetails.nr_totalrecords}} rows)
+                        </span>
+                      </div>
+                      <div class="form-row">
+                        <mat-slider thumbLabel min="0" max="100" step="1" [(ngModel)]="delete.threshold"></mat-slider>
+                      </div>
+                    </div>
+
+                    <div class="form-row">
+                      <button 
+                        type="button" 
+                        (click)="loadPreview('data_remove')"
+                        class="btn btn-primary">
+                        <mat-icon> visibility</mat-icon> Preview 
+                      </button>
+                      <button 
+                        type="button" 
+                        (click)="deleteColumnsRows()"
+                        class="btn btn-danger" [disabled]="colPreviewData">
+                        <mat-icon> delete</mat-icon> Remove 
+                      </button>
+                    </div>
+
+                    <span class="mSg" *ngIf="delete.category === 'col_nan' && showMessage">
+                      Columns  getting removed -  <span class="nMsg">{{newMessage}}</span>
+                    </span>
+
+                  </div>
+                </mat-tab>
+                
+              </mat-tab-group>
+            </mat-card> 
+            
+                <!-- Preview -->
+                <mat-card class="border no-rounded list shrare-post mat-card source-preview-card noSdwp" *ngIf="showPreviewTable">
+                  <div class="list">
+                    <h1 class="share-post-title">Preview</h1>
+                  </div>
+                  <app-progress-bar [message]="'Loading preview...'" class="component" *ngIf="isPreviewLoading"></app-progress-bar>
+                  <app-ag-grid
+                    floatingFilter="true"
+                    *ngIf="isPreviewLoaded"
+                    [rowData]="rowData"
+                    [columnDefs]="columnDefs"
+                    [pageSize]="50"
+                    [rowSelection]="'multiple'"
+                    [suppressRowClickSelection]="false"                    
+                  ></app-ag-grid>
+                  <!-- [moveToColumn]="profile.column" -->
+                </mat-card>
             
              
               <div class="allView">
@@ -226,249 +468,9 @@
               </div>
               <div class="flex-containers prof-details">
                 <div class="attribute-details">
-                  <mat-card class="tab-card">
-                    <mat-tab-group mat-align-tabs="start"  animationDuration="0ms" class="mm2" #tabGroup (selectedTabChange)="resetPreview();">
-                      <mat-tab label="Data Imputation">
-                        <div class="impute-wrapper" *ngIf="profile.attributeSummary?.dataType === 'Numeric'">
-                          <h5 class="sub-title-label">Impute Null Data</h5>
-                          <div class="form-row">
-                            <mat-form-field appearance="fill" class="mft">
-                              <mat-select placeholder="Impute Option" [(ngModel)]="impute.value" [disabled]="!profile.attributeSummary?.null_records">
-                                <mat-option value="MEAN">Mean</mat-option>
-                                <mat-option value="MEDIAN">Median</mat-option>
-                                <mat-option value="MODE">Mode</mat-option>
-                                <mat-option value="MIN">Min</mat-option>
-                                <mat-option value="MAX">Max</mat-option>
-                                <mat-option value="IQR25">IQR25</mat-option>
-                                <mat-option value="IQR75">IQR75</mat-option>
-                              </mat-select>
-                            </mat-form-field>
-                          </div>
-                          <div>
-                            <button 
-                              type="button" 
-                              class="btn btn-primary"
-                              (click)="loadPreview('nan')"
-                              style="margin-left: 0;"
-                            ><mat-icon> visibility</mat-icon> PREVIEW </button>
-      
-                            <button 
-                              type="button" 
-                              class="btn btn-danger"
-                              (click)="imputeColumns('numeric')"
-                              [disabled]="!profile.attributeSummary?.null_records || !impute.value"><mat-icon> delete</mat-icon> IMPUTE 
-                            </button>
-                          </div>
-                      </div>
-      
-                        <div class="impute-wrapper" *ngIf="profile.attributeSummary?.dataType === 'Alphabetic' || profile.attributeSummary?.dataType === 'Alphanumeric'">
-                          <h5 class="sub-title-label">Impute Null Data</h5>
-                          <div class="form-row">
-                              <mat-form-field appearance="fill" class="mft">
-                                <mat-select placeholder="Select Value" [(ngModel)]="impute.value" [disabled]="!profile.attributeSummary?.null_records">
-                                  <mat-option *ngFor="let frequency of profile.frequncyAnalysis" [value]="frequency.unique_values">{{frequency.unique_values}} - ({{frequency.counts}})</mat-option>
-                                </mat-select>
-                              </mat-form-field>
-                        </div>
-                        <div>
-                          <button 
-                          type="button" 
-                          class="btn btn-primary"
-                          (click)="loadPreview('nan')"
-                          style="margin-left: 0;"
-                          ><mat-icon> visibility</mat-icon> PREVIEW </button>
-                        <button 
-                          type="button" 
-                          class="btn btn-danger"
-                          (click)="imputeColumns('string')"
-                          [disabled]="!profile.attributeSummary?.null_records || !impute.value"><mat-icon> delete</mat-icon> IMPUTE </button>
-                      </div>
-                    </div>
-                      </mat-tab>
-                      
-                      <mat-tab label="Duplicate Analysis">
-                        <div class="impute-wrapper">
-                          <h5 class="sub-title-label">Remove Duplicate Rows</h5>
-                          <div style="margin-top: 10px;">
-                            <mat-radio-group [(ngModel)]="duplicate.option" (ngModelChange)="duplicate.columns = []">
-                              <mat-radio-button value="all">All Columns</mat-radio-button>
-                              <mat-radio-button value="selected">Specific Column</mat-radio-button>
-                            </mat-radio-group>
-                          </div>
-                          <div style="margin-top: 10px;">
-                            <mat-form-field appearance="fill" class="mft" *ngIf="duplicate.option === 'selected'">
-                              <mat-select placeholder="Select Columns" multiple [(ngModel)]="duplicate.columns">
-                                <mat-option *ngFor="let profile of profiles" [value]="profile.column">{{profile.column}}</mat-option>
-                              </mat-select>
-                            </mat-form-field>
-                          </div>
-      
-                          <div class="form-row">
-                              <button 
-                                type="button" 
-                                (click)="loadPreview('duplicate')"
-                                class="btn btn-primary">
-                                <mat-icon> visibility</mat-icon> Preview 
-                              </button>
-                              <button 
-                                type="button" 
-                                (click)="deleteDuplicates()"
-                                class="btn btn-danger">
-                                <mat-icon> delete</mat-icon> Remove 
-                              </button>
-                          </div>
-                        </div>
-                      </mat-tab>  
-      
-                      <!-- <mat-tab label="Mask Analysis">
-                        <div class="impute-wrapper">
-                          <h5 class="sub-title-label">Mask Analysis Data</h5>
-                          <div class="form-row">
-                            <mat-form-field appearance="fill" class="mft">
-                              <mat-select placeholder="" [(ngModel)]="mask.value">
-                                <mat-option *ngFor="let mask of profile.maskAnalysis" [value]="mask.unique_values">{{mask.unique_values}} - ({{mask.counts}})</mat-option>
-                              </mat-select>
-                            </mat-form-field>
-                            <button 
-                              type="button" 
-                              [disabled]="!mask.value"
-                              (click)="loadPreview('mask', mask.value)"
-                              class="button3d btnPush btnPurple addico w-t">
-                              <mat-icon> visibility</mat-icon> Preview 
-                            </button>
-                          </div>                    
-                        </div>
-                      </mat-tab> -->
-      
-                      <mat-tab label="Data Removal">
-                        <div class="impute-wrapper">
-                          <h5 class="sub-title-label">Delete Column / Row</h5>
-                          <div class="form-row">
-                            <mat-radio-group [(ngModel)]="delete.type" (ngModelChange)="changeRemoveCategory(delete.type)">
-                              <mat-radio-button [checked]="true" value="column">Column</mat-radio-button>
-                              <mat-radio-button value="custom" value="row">Row</mat-radio-button>
-                            </mat-radio-group>
-                          </div>
-      
-                          <div class="form-row" *ngIf="delete.type === 'column'">
-                            <mat-radio-group [(ngModel)]="delete.category">
-                              <mat-radio-button [checked]="true" value="col_nan">NaN</mat-radio-button>
-                              <mat-radio-button value="custom" value="col_with_value">Value</mat-radio-button>
-      
-                              <div *ngIf="delete.category === 'col_with_value'" style="margin-top: 10px;">
-                                <mat-form-field appearance="fill" class="mft">
-                                  <mat-select placeholder="Select Columns" [(ngModel)]="delete.column_name" disabled>
-                                    <mat-option *ngFor="let profile of profiles" [value]="profile.column">{{profile.column}} - {{profile.attributeSummary?.dataType}}</mat-option>
-                                  </mat-select>
-                                </mat-form-field>
-                              </div>
-      
-                              <div *ngIf="delete.category === 'col_with_value' && profile.attributeSummary?.dataType === 'Alphabetic' || profile.attributeSummary?.dataType === 'Alphanumeric'">
-                                <mat-form-field appearance="fill" class="mft-200" style="width: 250px;">
-                                  <mat-label>Value</mat-label>
-                                  <input 
-                                    matInput placeholder="" value="" 
-                                    [(ngModel)]="delete.values"
-                                    (ngModelChange)="delete.formula.cond_value1=''; delete.formula.cond_value2=''">
-                                </mat-form-field>
-                              </div>
-          
-                              <div style="margin-top: 10px;" class="formula-section" *ngIf="delete.category === 'col_with_value' && profile.attributeSummary?.dataType === 'Numeric'">
-                                <mat-form-field appearance="fill" class="mft">
-                                  <mat-select placeholder="Operator" [(ngModel)]="delete.formula.operator1" (ngModelChange)="delete.values=''">
-                                    <mat-option *ngFor="let operator of operators" [value]="operator">{{operator}}</mat-option>
-                                  </mat-select>
-                                </mat-form-field>
-                                <mat-form-field appearance="fill" class="mft2">
-                                  <mat-label>Value</mat-label>
-                                  <input matInput placeholder="" type="number" value="" [(ngModel)]="delete.formula.cond_value1" (ngModelChange)="delete.values=''">
-                                </mat-form-field>
-      
-                                <mat-form-field appearance="fill" class="mft">
-                                  <mat-select placeholder="Operator" [(ngModel)]="delete.formula.operator2" (ngModelChange)="delete.values=''">
-                                    <mat-option *ngFor="let operator of operators" [value]="operator">{{operator}}</mat-option>
-                                  </mat-select>
-                                </mat-form-field>
-                                <mat-form-field appearance="fill" class="mft2">
-                                  <mat-label>Value</mat-label>
-                                  <input matInput placeholder="" type="number" value="" [(ngModel)]="delete.formula.cond_value2" (ngModelChange)="delete.values=''">
-                                </mat-form-field>
-                              </div>
-                            </mat-radio-group>
-                          </div>
-      
-                          <div class="form-row" *ngIf="delete.type === 'row'">
-                            <mat-radio-group [(ngModel)]="delete.category">
-                              <mat-radio-button [checked]="true" value="row_nan">NaN</mat-radio-button>
-                              <!-- <mat-radio-button value="custom" value="">Value</mat-radio-button>
-                              <mat-form-field appearance="fill" class="mft2" *ngIf="delete.category === ''">
-                                <mat-label>Custom Value</mat-label>
-                                <input matInput placeholder="" value="" [(ngModel)]="delete.values">
-                              </mat-form-field> -->
-                            </mat-radio-group>
-                          </div>
-      
-                          <div class="form-rows" style="margin-top: 10px;" *ngIf="delete.category === 'col_nan' || delete.category === 'row_nan'">
-                            <div style="font-weight: bold;">
-                              Threshold : {{delete.threshold}}%
-                            </div>
-                            <div style="margin: 10px 0 20px">
-                              <!-- row_nan -->
-                              <span *ngIf="delete.category === 'row_nan'">
-                                Considering NaNs across {{calulateRowNanThreshold()}} columns at least, per row.
-                              </span>
-                              <!-- col_nan -->
-                              <span *ngIf="delete.category === 'col_nan'">
-                                (Considering NaNs across {{calulateColNanThreshold()}} out of {{profileDetails.nr_totalrecords}} rows)
-                              </span>
-                            </div>
-                            <div class="form-row">
-                              <mat-slider thumbLabel min="0" max="100" step="1" [(ngModel)]="delete.threshold"></mat-slider>
-                            </div>
-                          </div>
-      
-                          <div class="form-row">
-                            <button 
-                              type="button" 
-                              (click)="loadPreview('data_remove')"
-                              class="btn btn-primary">
-                              <mat-icon> visibility</mat-icon> Preview 
-                            </button>
-                            <button 
-                              type="button" 
-                              (click)="deleteColumnsRows()"
-                              class="btn btn-danger">
-                              <mat-icon> delete</mat-icon> Remove 
-                            </button>
-                          </div>
-
-                          <span class="mSg" *ngIf="delete.category === 'col_nan' && showMessage">
-                            Columns  getting removed -  <span class="nMsg">{{newMessage}}</span>
-                          </span>
-      
-                        </div>
-                      </mat-tab>
-                      
-                    </mat-tab-group>
-                  </mat-card>
+                
                  
-                <!-- Preview -->
-                <mat-card class="border no-rounded list shrare-post mat-card source-preview-card" *ngIf="showPreviewTable">
-                  <div class="list">
-                    <h1 class="share-post-title">Preview</h1>
-                  </div>
-                  <app-progress-bar [message]="'Loading preview...'" class="component" *ngIf="isPreviewLoading"></app-progress-bar>
-                  <app-ag-grid
-                    floatingFilter="true"
-                    *ngIf="isPreviewLoaded"
-                    [rowData]="rowData"
-                    [columnDefs]="columnDefs"
-                    [pageSize]="50"
-                    [rowSelection]="'multiple'"
-                    [suppressRowClickSelection]="false"                    
-                  ></app-ag-grid>
-                  <!-- [moveToColumn]="profile.column" -->
-                </mat-card>
+            
       
                 <div class="flex-containers">                                    
                   <div class="lft-attr">

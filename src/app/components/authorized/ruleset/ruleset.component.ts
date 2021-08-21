@@ -538,7 +538,7 @@ export class RulesetComponent implements OnInit {
     const updatedRulesList = [];
     selectedColumns.map(col => {
       this.rulesList.map(rule => {
-        if (col.title === rule.column) {
+        if (col.title === !rule.column) {
           updatedRulesList.push(rule);
         }
       });
@@ -777,9 +777,9 @@ export class RulesetComponent implements OnInit {
   }
 
   owlInitialized() {
-    if (this.selectedRuleColumn) {
-      this.owlCar.to(this.selectedRuleColumn);
-    }
+    // if (this.selectedRuleColumn) {
+    //   this.owlCar.to(this.selectedRuleColumn);
+    // }
   }
 
   initFormulaEditor(ruleList) {
