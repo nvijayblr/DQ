@@ -116,8 +116,8 @@ export class DataQualityComponent implements OnInit {
           .value()
       
     }
-    console.log(this.globalDataGroup)
-    console.log(this.globalDataPath)
+    // console.log(this.globalDataGroup)
+    // console.log(this.globalDataPath)
     this.getMongoDBClientHistoryURL();
     this.getMongoDBSaveLog();
     // const getUrl = localStorage.getItem("client_url");
@@ -160,14 +160,29 @@ export class DataQualityComponent implements OnInit {
     })
   }
 
-  showDivider :boolean = false;
+  showDivider: boolean = false;
+  
+  isChecked:any=true;
+  onChange($event:Event){
+     console.log($event);
+     console.log("value changed", this.isChecked);
+  }
 
   applySearch(event: Event) {
     this.searchValue = event;
-    const payload = {
-      query: this.searchValue,
-      client_url : ""
-    };
+    let payload;
+    if (this.isChecked) {
+       payload = {
+        query: this.searchValue,
+         client_url: "",
+         matchcase : ""
+      };
+    } else {
+      payload = {
+        query: this.searchValue,
+        client_url : ""
+      };
+    }    
     this.isLoading = true;
     this.showDivider = false;
     this.http.getSearchCollections(payload).subscribe((result: any) => {

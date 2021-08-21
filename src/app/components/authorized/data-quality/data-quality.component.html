@@ -121,10 +121,12 @@
     [right]="right"
     (compareResults)="onCompareResults($event)"
   > </td-ngx-text-diff> -->
+  <mat-checkbox (change)='onChange($event)' [(ngModel)]='isChecked'>Match Case</mat-checkbox>
      <div class="input-group has-search">
       <span class="fa fa-search form-control-feedback"></span>
+     
       <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
-        aria-describedby="search-addon" [(ngModel)]='searchValue' (keyup.enter)="applySearch($event.target.value)"/>
+        aria-describedby="search-addon" [(ngModel)]='searchValue' (keyup.enter)="applySearch($event.target.value)"/>       
       <button type="button" class="btn btn-primary" (click)="applySearch(searchValue)">search</button>
     </div>
     <!-- <div class="spinner2" *ngIf="loadingGlobalData"> </div>

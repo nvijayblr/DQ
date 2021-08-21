@@ -61,6 +61,8 @@ export class AttributeDetailsComponent implements OnInit {
   showConnectionList: boolean = false;
   clientUrlLog: any = [];
   dbSaveLogs: any = [];
+  domainPreview: any;
+  maskPreview: any;
 
 
   profileDetails = {
@@ -249,8 +251,8 @@ export class AttributeDetailsComponent implements OnInit {
   }
 
   loadProfile(source) {
-    this.isLoading = true;
     this.loaderMsg = 'Loading Profile...';
+    this.isLoading = true;    
     this.titleSrc = source.templateSourcePath ? source.templateSourcePath : this.titleSrc;
     const payload = {
        sourcepath: this.titleSrc
@@ -412,11 +414,9 @@ export class AttributeDetailsComponent implements OnInit {
     const payload = {
       sourcepath: this.selectedSource.templateSourcePath
     };
-    this.http.getDomainTypeIdentity(payload).subscribe((result: any) => {
-     
+    this.http.getDomainTypeIdentity(payload).subscribe((result: any) => {          
       this.domainType = result;
-      this.uniqueName = result.Unique_values.DESTINATION_AIRPORT;
-      
+      this.uniqueName = result.Unique_values;
     }, (error) => {
       console.log('ERROR', error);
     })
@@ -512,12 +512,42 @@ export class AttributeDetailsComponent implements OnInit {
   
   searchMultipleNumbers() {
     const payload = this.uniqueName;
+    
     this.http.startRequests(payload)
     this.getAllSearchRequest();
     if (this.closeResult) {
       return;
     }
    
+  }
+
+  domanResults: any;
+  viewDomainAnalysis(column) {
+    this.isLoading = true;
+    this.loaderMsg = 'Loading...'
+    const payload = {
+      client_url : "",
+      query: this.uniqueName[column],    
+      field : this.domainType.Domain_Matches[column]
+    }
+    this.http.viewDomainAnalysis(payload).subscribe((result: any) => {
+      console.log(result.airportCodes);
+      this.domanResults = result.airportCodes;
+      if (result) {
+        this.isLoading = false;
+        this.domainPreview = result.airportCodes ? result.airportCodes : {};
+        this.dialog.open(PreviewDialogComponent, {
+          width: '95%',
+          // height: '95%',
+          data: {
+            ...this.domainPreview,
+            title : 'Domain Analysis'
+          }
+       });        
+        }
+    }, (error) => {
+      console.log('error', error);
+    })
   }
  
   newVal;
@@ -705,10 +735,9 @@ export class AttributeDetailsComponent implements OnInit {
     }
   }
 
-  maskPreview: any;
+
 
   getMaskAnalysisView(mask, col) {
-    console.log('getMaskAnalysisView', this.titleSrc);
     const payload = {
       sourcepath : this.titleSrc, 
       column_name : col,
@@ -728,6 +757,30 @@ export class AttributeDetailsComponent implements OnInit {
         }
       
     });
+  }
+  frequencyPreview: any;
+  getFrequencyView(column, freq) {
+    const payload = {
+      sourcepath : this.titleSrc, 
+      column_name : column,
+      values : [freq]
+    };
+    this.http.getFrequencyView(payload).subscribe((result: any) => {
+      console.log('getFrequencyView', result);
+      if (result) {
+        this.frequencyPreview = result.Preview ? result.Preview : {};
+        this.dialog.open(PreviewDialogComponent, {
+          width: '95%',
+          // height: '95%',
+          data: {
+            ...this.frequencyPreview,
+            title : 'FREQUENCY GROUPS'
+          }
+       });        
+        }
+      
+    });
+    
   }
 }
 

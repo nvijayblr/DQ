@@ -466,6 +466,17 @@ export class HttpService  {
     );
   }
 
+  viewDomainAnalysis(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/MongoCluster_query`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+
+  }
+
   getSourceResults(payload): Observable<any> {
     return this.http.post<any>(`${this.rootUrl}/api/GetSourceResults`, payload).pipe(
       tap((res) => {
@@ -714,6 +725,16 @@ export class HttpService  {
 
   getMaskAnalysisView(payload): Observable<any> {
     return this.http.post<any>(`${this.rootUrl}/api/maskAnalysis_query`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  getFrequencyView(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/cat_col_preview`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {

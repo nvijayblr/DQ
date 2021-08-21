@@ -373,7 +373,7 @@
                       <h4 class="attr-tite"> <span class="subT mg">Frequency Groups</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
                       <mat-card class="nBg2">
                         <div *ngFor="let domain of domainMatches" class="domain">
-                           <button class="btn btn-outline-primary mb-2 mr-2 fs-b"  *ngIf="domain === profile.column" (click)="openScrollableContent(longContent)">View Domain Analysis</button>
+                           <button class="btn btn-outline-primary mb-2 mr-2 fs-b"  *ngIf="domain === profile.column" (click)="viewDomainAnalysis(profile.column)">View Domain Analysis</button>
                         </div>
                         
                        
@@ -393,7 +393,7 @@
                               <tr>
                                 <th scope="col">
                                   <div class="records">
-                                    <span><img src="assets/images/frequency.svg" class="record1" /> <span class="dp1"> Frequency</span></span>
+                                    <span><img src="assets/images/frequency.svg" class="record1" /> <span class="dp1"> Value</span></span>
                                  </div>
                                 </th>
                                 <th scope="col">
@@ -406,7 +406,11 @@
                             </thead>
                             <tbody>
                               <tr *ngFor="let frequency of profile.frequncyAnalysis">
-                                <td class="tdP">{{frequency.unique_values}}</td>
+                                <td class="tdP">
+                                  <a href="javascript: void(0)" (click)="getFrequencyView(profile.column, frequency.unique_values)">
+                                  {{frequency.unique_values}}
+                                </a>
+                                </td>
                                 <td class="tdP">{{frequency.counts}}</td>
                                 <td>
                                   <mat-progress-bar class="progressbar" mode="determinate" [value]="(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %" ></mat-progress-bar> 
