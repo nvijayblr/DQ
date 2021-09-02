@@ -212,8 +212,12 @@ export class AttributeDetailsComponent implements OnInit {
   }
   domainMatches;
   columnMatches;
+  staticalAnalysisKey;
+  staticalAnalysisValue;
   changeProfile(profile) {
     this.profile = profile;
+    this.staticalAnalysisKey = _.keys(this.profile.staticalAnalysis);
+    this.staticalAnalysisValue = _.values(this.profile.staticalAnalysis);
     this.columnMatches = this.domainType.Domain_Matches;
     this.domainMatches = _.keys(this.domainType.Domain_Matches);
     const extractValues = ({ unique_values, counts }) => [unique_values.toString(), counts];   
@@ -527,15 +531,19 @@ export class AttributeDetailsComponent implements OnInit {
     this.loaderMsg = 'Loading...'
     const payload = {
       client_url : "",
-      query: this.uniqueName[column],    
+      query: column,    
       field : this.domainType.Domain_Matches[column]
     }
     this.http.viewDomainAnalysis(payload).subscribe((result: any) => {
-      console.log(result.airportCodes);
-      this.domanResults = result.airportCodes;
+      this.domanResults = result;
+      if (result.msg) {
+        this.isLoading = false;
+        alert(result.msg);
+        return;
+      }
       if (result) {
         this.isLoading = false;
-        this.domainPreview = result.airportCodes ? result.airportCodes : {};
+        this.domainPreview = result.airportCodes ? result.airportCodes: {};
         this.dialog.open(PreviewDialogComponent, {
           width: '95%',
           // height: '95%',

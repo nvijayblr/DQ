@@ -285,7 +285,7 @@
                   <div class="flex-containers">                                    
                     <div class="lft-attr">
                       <h4 class="attr-tite"> <span class="subT m">Attribute Summary</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
-                      <mat-card class="bg-violet ch"> 
+                      <mat-card class="bg-violet ch" [class.chLength]="profile.outlier_len_statistics"> 
                         <table>
                           <tr>
                             <th>
@@ -325,7 +325,7 @@
                         </table>                                          
                       </mat-card> 
                     </div>
-                    <div class="rgt-attr">
+                    <div class="rgt-attr" *ngIf="!profile.outlier_len_statistics">
                       <h4 class="attr-tite"> <span class="subT hd">Length Statistics</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
                       <mat-card class="honeydew ch" > 
                                             
@@ -366,15 +366,56 @@
                        </div> -->
                      </mat-card>
                     </div>
+                    <div class="rgt-attr" *ngIf="profile.outlier_len_statistics">
+                      <h4 class="attr-tite"> <span class="subT hd">Outlier Length Statistics</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
+                      <mat-card class="honeydew ch" [class.chLength]="profile.outlier_len_statistics"> 
+                                            
+                          <div class="custom-slider" *ngIf="profile.outlier_len_statistics.Numeric_vars">
+                            <div class="minMax"> 
+                              <div class="values">Min(Numeric) {{profile.outlier_len_statistics.Numeric_vars.Min}}</div>
+                              <div class="values fr">Max(Numeric) {{profile.outlier_len_statistics.Numeric_vars.Max}}</div>
+                             </div>
+                            <div class="minMax">
+                             <div class="dot"></div>
+                             <div class="bar"></div>
+                             <div class="dot fr"></div>
+                            </div>
+                            
+                             <!-- <ngx-slider [(value)]="profile.LengthStatistics.Min" [(highValue)]="profile.LengthStatistics.Max" [options]="options"></ngx-slider> -->
+                          </div>
+
+                          <div class="custom-slider" *ngIf="profile.outlier_len_statistics.String_vars">
+                            <div class="minMax"> 
+                              <div class="values">Min(String) {{profile.outlier_len_statistics.String_vars.Min}}</div>
+                              <div class="values fr">Max(String) {{profile.outlier_len_statistics.String_vars.Max}}</div>
+                             </div>
+                            <div class="minMax">
+                             <div class="dot"></div>
+                             <div class="bar"></div>
+                             <div class="dot fr"></div>
+                            </div>
+                            
+                             <!-- <ngx-slider [(value)]="profile.LengthStatistics.Min" [(highValue)]="profile.LengthStatistics.Max" [options]="options"></ngx-slider> -->
+                          </div>
+                          <!-- <div class="custom-slider" *ngIf="!profile.LengthStatistics">
+                           <div class="not-found" *ngIf="!profile.LengthStatistics">
+                               Not Available
+                           </div>
+                        </div> -->
+                        <!-- <div class="not-found" *ngIf="!profile.LengthStatistics">
+                            Not Available
+                       </div> -->
+                     </mat-card>
+                    </div>
                   </div>
 
                   <div class="flex-containers"> 
                     <div class="lft-attr"> 
                       <h4 class="attr-tite"> <span class="subT mg">Frequency Groups</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
                       <mat-card class="nBg2">
-                        <div *ngFor="let domain of domainMatches" class="domain">
+                        <!-- <div *ngFor="let domain of domainMatches" class="domain">
                            <button class="btn btn-outline-primary mb-2 mr-2 fs-b"  *ngIf="domain === profile.column" (click)="viewDomainAnalysis(profile.column)">View Domain Analysis</button>
-                        </div>
+                        </div> -->
                         
                        
                         <div class="viewTableN"> 
@@ -407,11 +448,15 @@
                             <tbody>
                               <tr *ngFor="let frequency of profile.frequncyAnalysis">
                                 <td class="tdP">
-                                  <a href="javascript: void(0)" (click)="getFrequencyView(profile.column, frequency.unique_values)">
+                                  <a href="javascript: void(0)" (click)="viewDomainAnalysis(frequency.unique_values)">
                                   {{frequency.unique_values}}
                                 </a>
                                 </td>
-                                <td class="tdP">{{frequency.counts}}</td>
+                                <td class="tdP">
+                                  <a href="javascript: void(0)" (click)="getFrequencyView(profile.column, frequency.unique_values)">
+                                  {{frequency.counts}}
+                                </a>
+                                </td>
                                 <td>
                                   <mat-progress-bar class="progressbar" mode="determinate" [value]="(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'" matTooltip="{{(frequency.counts * 100) / profile.attributeSummary?.records | number:'1.0-2'}} %" ></mat-progress-bar> 
                                 </td>
@@ -683,12 +728,48 @@
                         <app-corelation-summary [summary]="profile.correlationSummary"></app-corelation-summary> 
                        
                      </mat-card> -->
+
+                    
       
-                  </div>  
+                  </div>
+                  
+                
                  
                 </div>
-                </div>             
+                </div>  
+                          
             </div>
+            <div class="prof-details margin-30">
+            <h4 class="attr-tite" *ngIf="profile.staticalAnalysis"> <span class="subT mg">Statical Analysis</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
+            <mat-card class="padding-5" *ngIf="profile.staticalAnalysis">
+                      
+            <div>
+              <div class="table-wrapper-scroll-y">
+
+                <table class="table table-bordered table-striped mb-0 attTable">
+                  <thead>
+                    <tr>
+                      <th scope="col" class="no-upper" *ngFor="let statKey of staticalAnalysisKey">
+                        {{statKey}}
+                      </th>
+                      
+                    </tr>
+                  </thead>
+                  <tbody>
+                   <tr>
+                     <td class="fs" *ngFor="let statVal of staticalAnalysisValue">
+                        {{statVal}}
+                     </td>
+                   </tr>
+                  
+                  </tbody>
+                </table>
+              
+              </div>
+  
+            </div>
+            </mat-card>
+          </div>
 
             </div>
 

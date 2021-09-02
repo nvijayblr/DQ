@@ -527,6 +527,12 @@ export class CreateSourceComponent implements OnInit {
       formData.append('file[]', this.sourceFile);
       this.http.getPreview(formData).subscribe((res: any) => {
         const details: any = res.sourcePreview ? res.sourcePreview : {};
+        if (res.errorMsg) {
+          this.isPreviewLoaded = false;
+          this.isPreviewLoading = false;
+          alert(res.errorMsg);
+          return;
+        }
         this.parseSourcePreview(details);
       }, (error) => {
         this.isPreviewLoaded = false;
@@ -577,6 +583,12 @@ export class CreateSourceComponent implements OnInit {
       formData.append('file[]', this.refFiles[0]);
       this.http.getPreview(formData).subscribe((res: any) => {
         const details: any = res.sourcePreview ? res.sourcePreview : {};
+        if (res.errorMsg) {
+          this.isPreviewLoaded = false;
+          this.isPreviewLoading = false;
+          alert(res.errorMsg);
+          return;
+        }
         this.parseReferencePreview(details);
       }, (error) => {
         this.isRefPreviewLoaded = false;

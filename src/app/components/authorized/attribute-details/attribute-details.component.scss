@@ -1701,6 +1701,10 @@ td.mat-cell, td.mat-footer-cell{
        font-weight: normal;
        text-transform: uppercase;
        width:150px;
+       &.no-upper {
+         text-transform:none;
+         color:#908ba1;
+       }
     }
     tr{
       font-size: 12px;
@@ -1712,6 +1716,9 @@ td.mat-cell, td.mat-footer-cell{
        font-family: 'open-sans-condensed-bold'!important;
         color: #000!important;
         font-size: 14px!important;
+        &.fs{
+          font-size: 12px!important;
+        }
        &.fst{
          padding-left: 40px;
        }
@@ -2251,6 +2258,9 @@ td.mat-cell, td.mat-footer-cell{
  .ch{
   height: 120px;
 }
+.chLength{
+  height: 160px;
+}
 .ch1{
  min-height: 200px;
 }
@@ -2697,6 +2707,12 @@ td.mat-cell, td.mat-footer-cell{
 .cb{
   clear: both;
   padding-top: 20px;
+}
+.margin-30 {
+  margin: 0 30px;
+}
+.padding-5 {
+  padding: 5px !important;
 }
  
 
