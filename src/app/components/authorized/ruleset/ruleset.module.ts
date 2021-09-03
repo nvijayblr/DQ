@@ -15,6 +15,6 @@ import { RulesetComponent } from './ruleset.component';
     RulesetRoutingModule,
     SharedModule,
     AuthorizedModule
-  ]
+  ],
 })
 export class RulesetModule { }

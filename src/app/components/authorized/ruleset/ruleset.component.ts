@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation, ViewChild, QueryList, ViewChildren } from '@angular/core';
 import {MatAccordion} from '@angular/material/expansion';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { HttpService } from '../../../services/http-service.service';
@@ -15,6 +16,8 @@ import { OwlOptions } from 'ngx-owl-carousel-o';
 import { S } from '@angular/cdk/keycodes';
 import { _ } from 'ag-grid-community';
 import * as moment from 'moment';
+import { DeactiveDialogComponent } from 'src/app/shared/deactive-dialog/deactive-dialog.component';
+import { Observable } from 'rxjs';
 
 /**
  * @title Basic expansion panel
@@ -26,7 +29,7 @@ import * as moment from 'moment';
   styleUrls: ['./ruleset.component.scss']
 })
 export class RulesetComponent implements OnInit {
-
+  backType;
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
@@ -35,7 +38,8 @@ export class RulesetComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private authGuardService: AuthGuardService,
-    private messageService: MessageService) {
+    private messageService: MessageService,
+    private location: Location) {
       this.appConfig = appConfig;
       this.route.queryParams.subscribe(params => {
          this.sourceId = params.sourceId;
@@ -44,6 +48,9 @@ export class RulesetComponent implements OnInit {
          if (!params.sourceId) {
           localStorage.removeItem('analysis');
         }
+      });
+      location.subscribe((back: PopStateEvent) => {
+        this.backType = back.type;
       });
     }
 
@@ -819,7 +826,18 @@ export class RulesetComponent implements OnInit {
        } else {
          this.visibleIndex = ind;
        }
-   }
+  }
+  
+  confirmDialog(): Observable<boolean> {
+    const message = 'You have not saved your current work. Do you want to proceed and discard?';
+    const data = { 'message': message, 'toShowCancel': true, 'buttonYesCaption': 'Yes', 'buttonNoCaption': 'No' };
+    const dialogRef = this.dialog.open(DeactiveDialogComponent, {
+      width: '400px',
+      height: '200px',
+      data: data
+    });
+    return dialogRef.afterClosed();
+  }
 
 }
 

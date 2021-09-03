@@ -9,7 +9,7 @@ import {MatSelectModule, MatFormFieldModule} from '@angular/material';
 import { Routes, RouterModule, CanActivate } from '@angular/router';
 import { AuthGuardService as AuthGaurd } from './../../services/auth-guard.service';
 import { SharedModule } from './../../shared/shared.module';
-import { CanDeactivateContact , CanDeactivateSource} from './candeactivate.route';
+import { CanDeactivateContact , CanDeactivateSource, CanDeactivateRules} from './candeactivate.route';
 import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { AuthorizedRoutingModule } from './authorized-routing.module';
 import { AuthorizedComponent } from './authorized.component';
@@ -61,7 +61,7 @@ import { ScrollService } from '../../services/scroll.service';
      NgbModule,
      Ng2SearchPipeModule,
   ],
-  providers:[CanDeactivateContact, CanDeactivateSource, Location, {provide: LocationStrategy, useClass: PathLocationStrategy},ScrollService],
+  providers:[CanDeactivateContact, CanDeactivateSource, CanDeactivateRules, Location, {provide: LocationStrategy, useClass: PathLocationStrategy},ScrollService],
    exports: [AttributeDetailsComponent, CorrelationDetailsComponent,NgbModule]
 
 })

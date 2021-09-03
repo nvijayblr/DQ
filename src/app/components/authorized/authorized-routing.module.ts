@@ -47,7 +47,9 @@ const routes: Routes = [
         path: 'ruleset',
         loadChildren: () => import('./ruleset/ruleset.module').then(m => m.RulesetModule),
         // canActivate: [AuthGaurd]
+       
       },
+      
       {
         path: 'notifications',
         loadChildren: () => import('./notifications/notifications.module').then(m => m.NotificationsModule),
