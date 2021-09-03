@@ -182,8 +182,10 @@ export class AnalysisComponent implements OnInit {
       this.isLoading = true;
       this.isLoadChart = false;
       this.http.launchAnalysisByKey(payload).subscribe((result: any) => {
-         this.isLoadingDetails = false;
+        this.isLoadingDetails = false;
+        this.isLoading = false;
         if (result.errorCode && result.errorMsg) {
+          this.isLoadingDetails = false;
           this.isLoading = false;
           this.hideAnalysis = true
           alert(result.errorMsg);

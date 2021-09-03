@@ -198,6 +198,14 @@
                                                     <mat-icon>edit</mat-icon> Edit Ruleset
                                                     </button>
                                                   </div>
+
+                                                  <div class=" list-item-0  inlb">
+                                                    <button type="button" class="button3d btnPush btnBlueGreen addico"
+                                                    (click)="viewRulesSet(data, longContent)" matTooltip="View Ruleset">
+                                                    <mat-icon>remove_red_eye</mat-icon>
+                                                    View Ruleset
+                                                    </button>
+                                                  </div>
                                             
                                                   <div class=" list-item-0  inlb">
                                                     <button type="button" class="button3d btnPush btnPurple addico w-t"
@@ -266,7 +274,7 @@
                                                         <div class="outline">
                                                             <mat-form-field appearance="fill">
                                                               <mat-label class="lbl">Date</mat-label>
-                                                            <input matInput [matDatepicker]="frompicker" [(ngModel)]="data.uploadDate" (click)="frompicker.open()" autocomplete="off">
+                                                            <input matInput [matDatepicker]="frompicker" [(ngModel)]="data.uploadDate" (click)="frompicker.open()" autocomplete="off" [min]="minDate">
                                                             <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
                                                             <mat-datepicker #frompicker (opened)="onOpenDatePicker(data)" [dateClass]="dateClass"></mat-datepicker>
                                                             </mat-form-field>
@@ -989,3 +997,59 @@
 
   </div>
 </section>
+
+<ng-template #longContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">View Rules</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button> 
+  </div>
+  <div class="modal-body">
+    <div class="expBtn">                               
+      <button class="horizontal align" (click)="accordion.openAll()"> <span class="text">Expand All </span></button>
+       <button class="horizontal align" (click)="accordion.closeAll()"> <span class="text"> Collapse All </span></button>
+    </div>
+    <div class="rulesPreview">
+    <div class="accordions">
+      <mat-accordion multi>
+         <mat-expansion-panel *ngFor="let col of showRules.ruleset; first as isFirst" [expanded]="isFirst">
+            <mat-expansion-panel-header>
+               <mat-panel-title>
+                  <div class="list flex-containers flex-start wtBg mm">
+                     <div class="list-item-2 outline">
+                        <h4>{{col.column}} </h4>
+                     </div>                                               
+                  </div>
+               </mat-panel-title>
+               
+             </mat-expansion-panel-header>
+             <table class="table rule-table">
+               <tbody>
+                 <tr *ngFor="let rule of col.rules; index as i">
+                   <td>Rule #{{i+1}}</td>
+                   <td><div class="label">{{rule.rule}}</div></td>
+                   <td>{{rule.operator}}</td>
+                   <td class="preview">
+                     <div *ngIf="rule.rule !== 'Formula'">{{rule.value}}</div>
+                     <div *ngIf="rule.rule === 'Formula'" class="formula-preview nob">
+                       <span *ngFor="let formula of rule.value">
+                         <span class="operator alcap1" *ngIf="formula.operator !== 'NULL'">{{formula.operator}}</span>
+                         <span class="cde alcap">{{formula.cde}}</span>
+                       </span>
+                     </div>
+                   </td>
+                   <td>{{rule.dimension}}</td>
+                 </tr>
+               </tbody>
+             </table>
+         </mat-expansion-panel>
+      </mat-accordion>
+  
+    </div>
+  </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+  </div>
+</ng-template>

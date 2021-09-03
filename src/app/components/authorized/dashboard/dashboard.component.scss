@@ -2561,3 +2561,33 @@ td.mat-cell, td.mat-footer-cell{
     top: 2px;
     border-right: 1px dotted #4caf50;
   }
+
+.rulesPreview {
+  color: #fff;
+  float: left;
+  width: 100%;
+
+.accordions{
+  .mat-expansion-panel {
+    background: #fff!important;
+    color: #373737;
+    font-size: 13px;
+    box-shadow: none!important;
+  }
+  .mat-expansion-panel-header.mat-expanded:focus, .mat-expansion-panel-header.mat-expanded:hover {
+    background: #dbdbdb!important;
+}
+  .mat-expansion-panel-header {
+    border-bottom: 1px solid #dfdfdf!important;
+    padding: 10px 20px 10px 10px !important;
+    h4{
+      font-size: 14px;
+      font-weight: bold;
+    }
+  }
+   ::ng-deep .mat-expansion-panel-body {
+          padding: 0 0px 0px 0px!important;
+      }
+      ::ng-deep .mat-expansion-panel .mat-expansion-panel-header.cdk-keyboard-focused:not([aria-disabled=true]), .mat-expansion-panel .mat-expansion-panel-header.cdk-program-focused:not([aria-disabled=true]), .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:hover:not([aria-disabled=true]){background : white !important}
+}
+}

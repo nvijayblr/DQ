@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OwlOptions } from 'ngx-owl-carousel-o';
+import {MatAccordion} from '@angular/material/expansion';
 import * as _ from 'lodash';
 import { Options } from '@angular-slider/ngx-slider';
 import { MessageService } from '../../../services/message.service';
@@ -30,7 +31,8 @@ import { ConditionalFormulaEditorComponent } from '../../../shared/conditional-f
 })
 export class DashboardComponent implements OnInit {
   @ViewChild('step1', { static: false }) step1: ElementRef;
-  @ViewChild('uploadOption', {static: false}) uploadOption: ElementRef;
+  @ViewChild('uploadOption', { static: false }) uploadOption: ElementRef;
+  @ViewChild(MatAccordion , { static: true }) accordion: MatAccordion;
 
    constructor(
       public dialog: MatDialog,
@@ -181,6 +183,7 @@ export class DashboardComponent implements OnInit {
 
   nullcounts: any;
   domainMatches;
+  minDate;
 
 
    ngOnInit() {
@@ -188,6 +191,8 @@ export class DashboardComponent implements OnInit {
      localStorage.removeItem('selected-analysis');
      localStorage.removeItem('selected-index');
      this.getAllSources();
+     this.minDate = moment().format('YYYY-MM-DD');
+     
   }
 
   scrollToId(id: string) {  
@@ -229,8 +234,8 @@ export class DashboardComponent implements OnInit {
 
   loadProfile(source) {
       // console.log('source.templateSourcePath', source)
-      this.isLoading = true;
-      this.loaderMsg = 'Loading Profile...';
+      //this.isLoading = true;
+      //this.loaderMsg = 'Loading Profile...';
       this.titleSrc = source.templateSourcePath;
       const payload = {
         sourcepath: source.templateSourcePath
@@ -279,7 +284,8 @@ export class DashboardComponent implements OnInit {
       this.loaderMsg = 'Loading Sources...';
       this.http.getSources().subscribe((result: any) => {
         this.sourceList = (result && result.Analysis) ? result.Analysis : [];
-        console.log(this.sourceList);
+        console.log('this.sourceList', this.sourceList);
+       
        if (this.sourceList.length === 0) {
          this.showAllDetails = true;
          return;
@@ -410,8 +416,8 @@ export class DashboardComponent implements OnInit {
   }
 
   loadCorrelation(source, type, method) {
-    this.isLoading = true;
-    this.loaderMsg = 'Loading Correlation...';
+    //this.isLoading = true;
+    //this.loaderMsg = 'Loading Correlation...';
     const payload = {
       sourcepath: source.templateSourcePath,
       cols_data_type: type,
@@ -736,7 +742,21 @@ export class DashboardComponent implements OnInit {
       });
 
  }
-
+  viewRules;
+  showRules;
+  viewRulesSet(data, longContent) {
+  this.viewRules = _.find(this.sourceList, function (o) {
+    return o.sourceId === data.sourceId;
+  });
+  this.modalService.open(longContent, { scrollable: true, size: 'xl' }).result.then((result) => {
+    console.log(result);
+     this.closeResult = `Closed with: ${result}`;
+   }, (reason) => {
+     this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+  });
+    this.showRules = this.viewRules.rules[0]
+  console.log('dataFromDq', this.showRules)
+}
 
 
   showTab(id) {
@@ -901,6 +921,5 @@ export class DashboardComponent implements OnInit {
       // this.cleanedSourcePath='path'
     }
   }
-
 }
 
