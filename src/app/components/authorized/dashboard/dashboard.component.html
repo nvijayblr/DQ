@@ -416,7 +416,7 @@
                 </div>
              <div class="chart" *ngIf="showtableAnalysis">  
                 <app-progress-bar [message]="'Loading...'" class="component" *ngIf="isOverviewLoading"></app-progress-bar>
-                <app-analysis *ngIf="showAnalysisOverview && !overviewErrorMsg" [isOverview]="true"></app-analysis> 
+                <app-analysis *ngIf="showAnalysisOverview && !overviewErrorMsg" [isOverview]="true" [selectedAnalysisdashboard]= "selectedAnalysis"></app-analysis> 
                 <h3 *ngIf="overviewErrorMsg">{{overviewErrorMsg}}</h3>
               </div>
               <div class="chart" *ngIf="!showtableAnalysis"> 
@@ -1006,10 +1006,10 @@
     </button> 
   </div>
   <div class="modal-body">
-    <div class="expBtn">                               
+    <!-- <div class="expBtn">                               
       <button class="horizontal align" (click)="accordion.openAll()"> <span class="text">Expand All </span></button>
        <button class="horizontal align" (click)="accordion.closeAll()"> <span class="text"> Collapse All </span></button>
-    </div>
+    </div> -->
     <div class="rulesPreview">
     <div class="accordions">
       <mat-accordion multi>

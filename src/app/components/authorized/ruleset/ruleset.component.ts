@@ -690,7 +690,7 @@ export class RulesetComponent implements OnInit {
     };
     this.http.createEditRuleset(ruleset, this.rulesetId ? 'put' : 'post').subscribe((result: any) => {
       this.isLoading = false;
-      this.router.navigate([`auth/data-quality-monitoring`]);
+      this.router.navigate([`auth/data-quality-monitoring`], {queryParams: {from: 'ruleset'}});
     }, (error) => {
       this.isLoading = false;
     });

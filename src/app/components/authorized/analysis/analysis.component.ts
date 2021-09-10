@@ -30,6 +30,7 @@ export class AnalysisComponent implements OnInit {
 
   @Input() isOverview = false;
   @Input() isOverviewTable = false;
+  @Input() selectedAnalysisdashboard;
 
   public stores: any[];
 
@@ -112,14 +113,19 @@ export class AnalysisComponent implements OnInit {
       private router: Router) {
    }
 
-   ngOnInit() {
-     const analysis = localStorage.getItem('selected-analysis');
+  ngOnInit() {
+    const analysis = localStorage.getItem('selected-analysis');
       if (analysis) {
         this.initAnalysis(JSON.parse(analysis));
       }
-   }
+  }
 
-   initAnalysis(analysis) {
+  ngOnChanges() {
+    this.initAnalysis(this.selectedAnalysisdashboard);
+  }
+  
+
+  initAnalysis(analysis) {
       this.selectedAnalysis = analysis;
       this.uploadsHistory = analysis.UploadsHistory ? analysis.UploadsHistory : [];
       const payload = {

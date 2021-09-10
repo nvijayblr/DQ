@@ -12,6 +12,7 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-d
 import { ScrollService } from '../../../services/scroll.service';
 import * as moment from 'moment';
 
+
 import {ElementRef, ViewChild} from '@angular/core';
 import {COMMA, ENTER, SPACE} from '@angular/cdk/keycodes';
 import {FormControl} from '@angular/forms';
@@ -40,6 +41,7 @@ export class DashboardComponent implements OnInit {
       private messageService: MessageService,
      private auth: AuthGuardService,
      private scrollService: ScrollService,
+     private route: ActivatedRoute,
       private router: Router, private modalService: NgbModal) {
       const rights = this.auth.getUserRole().rights;
       this.rights = rights ? rights : [];
@@ -184,7 +186,10 @@ export class DashboardComponent implements OnInit {
   nullcounts: any;
   domainMatches;
   minDate;
-
+  fromOrginSource;
+  isOriginalSource;
+  OriginalSourcePath;
+  originalSourceUploadDate;
 
    ngOnInit() {
      localStorage.removeItem('dq-source-names');
@@ -192,6 +197,16 @@ export class DashboardComponent implements OnInit {
      localStorage.removeItem('selected-index');
      this.getAllSources();
      this.minDate = moment().format('YYYY-MM-DD');
+     this.fromOrginSource = this.route.snapshot.queryParamMap.get('from');
+     setTimeout(() => {
+      if (this.fromOrginSource === 'ruleset') {
+        const analysis = JSON.parse(localStorage.getItem('selected-analysis'));
+        this.isOriginalSource = 'YES';
+        this.OriginalSourcePath = analysis.source.templateSourcePath;
+        this.originalSourceUploadDate = analysis.settings.uploadDate;
+        this.uploadSource(analysis);
+      }
+     }, 1000)
      
   }
 
@@ -233,9 +248,9 @@ export class DashboardComponent implements OnInit {
   }
 
   loadProfile(source) {
-      // console.log('source.templateSourcePath', source)
-      //this.isLoading = true;
-      //this.loaderMsg = 'Loading Profile...';
+      console.log('source.templateSourcePath', source.templateSourcePath)
+      this.isLoading = true;
+      this.loaderMsg = 'Loading Profile...';
       this.titleSrc = source.templateSourcePath;
       const payload = {
         sourcepath: source.templateSourcePath
@@ -473,8 +488,9 @@ export class DashboardComponent implements OnInit {
 
   isCleanedSource;
   cleanedSourcePath;
+  uploadErrorMessage;
   uploadSource(analysis, reason = '') {
-    console.log('uploadSource', this.chooseOptions);
+    console.log('uploadSource', analysis);
       if (!analysis.rules || (analysis.rules && !analysis.rules.length)) {
          alert('Please create the ruleset to upload the source.');
          return;
@@ -490,7 +506,7 @@ export class DashboardComponent implements OnInit {
          return;
       }
 
-      if (!analysis.file && this.chooseOptions==='upload') {
+      if (!analysis.file && this.chooseOptions==='upload' && this.fromOrginSource === '') {
          alert('Please select the source file to upload.');
          return;
     }
@@ -508,7 +524,7 @@ export class DashboardComponent implements OnInit {
       this.isCleanedSource = '';
       this.cleanedSourcePath=''
     }
-      if (!analysis.uploadDate) {
+      if (!analysis.uploadDate && this.fromOrginSource === '') {
          alert('Please select the upload date.');
          return;
       }
@@ -516,16 +532,18 @@ export class DashboardComponent implements OnInit {
          type: '',
         connectionDetails: {},
         isCleanedSource: this.isCleanedSource ? this.isCleanedSource : '',
-        cleanedSourcePath:this.cleanedSourcePath ? this.cleanedSourcePath : '',
+        cleanedSourcePath: this.cleanedSourcePath ? this.cleanedSourcePath : '',
+        isOriginalSource : this.isOriginalSource ? this.isOriginalSource : '',
+        OriginalSourcePath : this.OriginalSourcePath ? this.OriginalSourcePath : '',
          sourceId: analysis.sourceId,
          rulesetId: analysis.rules.length ? analysis.rules[0].rulesetId : '',
          isMultiSource: isMultiSource ? 'Yes' : 'No',
          multiSourceKey: analysis.multisource ? analysis.multisource : '',
-         uploadDate: analysis.uploadDate,
+         uploadDate: analysis.uploadDate ? analysis.uploadDate : this.originalSourceUploadDate,
          uploadTime: '20:28',
          uploadReason: reason ? reason : '',
-       settings: analysis.settings,
-       sourceObj : analysis.source
+         settings: analysis.settings,
+         sourceObj : analysis.source
         //  sourceObj: {
         //  ...analysis.source,
         //  type: "",
@@ -538,22 +556,26 @@ export class DashboardComponent implements OnInit {
       formData.append('data', JSON.stringify(payload));
       // this.isLoading = true;
       // this.loaderMsg = 'Saving Source data...';
-     this.http.uploadSource(formData).subscribe((result: any) => {
-       this.isLoading = false;
+    this.http.uploadSource(formData).subscribe((result: any) => {
+      this.isLoading = false;
+      this.uploadErrorMessage = result.errorMsg;
          if (result.errorMsg) {
             this.showUploadError(result.errorMsg);
          } else {         
             this.getAllSources();
            alert('Source has been uploaded successfully.');
            this.reloadCurrentRoute();
+           //this.router.navigate([`auth/data-quality-monitoring`]);
          }
       }, (error) => {
-         this.isLoading = false;
+      this.isLoading = false;
+      this.showUploadError(this.uploadErrorMessage);
       });
   }
   
   reloadCurrentRoute() {
-    let currentUrl = this.router.url;
+    let currentUrl = `auth/data-quality-monitoring`;
+    console.log(currentUrl);
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
         this.router.navigate([currentUrl]);
     });
@@ -577,10 +599,10 @@ export class DashboardComponent implements OnInit {
          }
       });
    }
-
+  selectedAnalysisdashboard = {};
    initOverview(analysis) {
-      
      this.selectedAnalysis = analysis;
+     this.selectedAnalysisdashboard = this.selectedAnalysis
       const uploadDate = this.selectedAnalysis.uploadDate ? moment(this.selectedAnalysis.uploadDate).format('MM-DD-YYYY') : '';
       const uploadsHistory = this.selectedAnalysis.UploadsHistory ? this.selectedAnalysis.UploadsHistory : [];
      // console.log('uploadsHistory', uploadsHistory)
@@ -601,7 +623,8 @@ export class DashboardComponent implements OnInit {
       localStorage.setItem('selected-analysis', JSON.stringify(this.selectedAnalysis));
 
       this.isOverviewLoading = false;
-      this.showAnalysisOverview = true;
+     this.showAnalysisOverview = true;
+     
    }
 
    launchAnalysis(analysis) {
