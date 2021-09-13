@@ -196,6 +196,7 @@ export class DashboardComponent implements OnInit {
      localStorage.removeItem('selected-analysis');
      localStorage.removeItem('selected-index');
      this.getAllSources();
+     this.getAllDetails();
      this.minDate = moment().format('YYYY-MM-DD');
      this.fromOrginSource = this.route.snapshot.queryParamMap.get('from');
      setTimeout(() => {
@@ -204,8 +205,9 @@ export class DashboardComponent implements OnInit {
         this.isOriginalSource = 'YES';
         this.OriginalSourcePath = analysis.source.templateSourcePath;
         this.originalSourceUploadDate = analysis.settings.uploadDate;
+        console.log(this.originalSourceUploadDate);
         this.uploadSource(analysis);
-      }
+        }
      }, 1000)
      
   }
@@ -248,7 +250,6 @@ export class DashboardComponent implements OnInit {
   }
 
   loadProfile(source) {
-      console.log('source.templateSourcePath', source.templateSourcePath)
       this.isLoading = true;
       this.loaderMsg = 'Loading Profile...';
       this.titleSrc = source.templateSourcePath;
@@ -346,7 +347,14 @@ export class DashboardComponent implements OnInit {
       }, (error) => {
          this.isLoading = false;
       });
-   }
+     
+  }
+  
+  getAllDetails() {
+    this.http.getSourcesDetails().subscribe((result: any) => {
+      console.log('From getAllDetails', result);
+    });
+  }
 
    editSourceData(sourceData) {
       localStorage.setItem('dq-source-data', JSON.stringify(sourceData));
@@ -558,18 +566,21 @@ export class DashboardComponent implements OnInit {
       // this.loaderMsg = 'Saving Source data...';
     this.http.uploadSource(formData).subscribe((result: any) => {
       this.isLoading = false;
+      console.log(result);
       this.uploadErrorMessage = result.errorMsg;
          if (result.errorMsg) {
             this.showUploadError(result.errorMsg);
          } else {         
-            this.getAllSources();
+           this.getAllSources();
+           this.getAllDetails();
            alert('Source has been uploaded successfully.');
            this.reloadCurrentRoute();
            //this.router.navigate([`auth/data-quality-monitoring`]);
          }
       }, (error) => {
       this.isLoading = false;
-      this.showUploadError(this.uploadErrorMessage);
+      console.log(error);
+      //this.showUploadError(this.uploadErrorMessage);
       });
   }
   

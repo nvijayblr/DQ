@@ -33,24 +33,27 @@
                         {{col}}
                       </mat-option>
                     </mat-select>
-                  </mat-form-field>
+                  </mat-form-field>                 
+                </div>
+                <div class="list-item-5 outline">
+                  <mat-checkbox>Cleaned Sources</mat-checkbox>
                 </div>
                 <div class="list-item-3 outline" *ngIf="!isOverview && !isOverviewTable">
                   <div class="act-btn-wrapper">
-                    <button mat-stroked-button class="button3d btnPush btnPurple ebckBtn" (click)="gotoDashboard();"><mat-icon>keyboard_arrow_left</mat-icon> Back</button>
+                    <button mat-stroked-button class="button3d btnPush btnPurple ebckBtn" (click)="gotoDashboard();"><mat-icon>keyboard_arrow_left</mat-icon> Back</button>                   
                   </div>
                 </div>
               </div>
 
               <!-- Date Carousel -->
               <div class="analysis-info">
-                <div class="category-list-wrapper clearfix">
+                <div class="category-list-wrapper clearfix">                 
                   <div class="left-arrow">
                      <button mat-stroked-button class="gv-secondary-btn primary-btn-gray prev-next-btn clr" (click)="owlCar.prev()">
                      <mat-icon class="pl">keyboard_arrow_left</mat-icon>
                      </button>
                   </div>
-                  <div class="category-list" #carouselHolder>
+                  <div class="category-list" #carouselHolder>                   
                      <owl-carousel-o [options]="OwlCategoryOptions" #owlCar>
                       <!-- Carousel Items -->
                       <ng-container *ngFor="let history of uploadsHistory">

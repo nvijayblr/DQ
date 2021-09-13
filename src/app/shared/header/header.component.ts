@@ -97,7 +97,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.isUserLoggedIn = this.authGuardService.isUserLoggedIn();
     this.isAdmin = this.authGuardService.isAdmin();
     this.user = this.authGuardService.getLoggedInUserDetails();
-    console.log(this.user, this.user.response);
+    //console.log(this.user, this.user.response);
     if (this.user.response) {
       this.notificationCount = this.user.response.notificationCount;
       this.notifications = this.user.response.notification;

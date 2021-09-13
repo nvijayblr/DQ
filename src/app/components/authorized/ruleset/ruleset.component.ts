@@ -675,7 +675,6 @@ export class RulesetComponent implements OnInit {
         ...this.afControls.columnRules.value[index]
       };
     });
-    console.log(ruleLists);
     //return;
     const ruleset = {
       sourceId: this.selectedSource.sourceId,
@@ -690,7 +689,12 @@ export class RulesetComponent implements OnInit {
     };
     this.http.createEditRuleset(ruleset, this.rulesetId ? 'put' : 'post').subscribe((result: any) => {
       this.isLoading = false;
-      this.router.navigate([`auth/data-quality-monitoring`], {queryParams: {from: 'ruleset'}});
+      if (this.selectedSource.UploadsHistory.length < 1) {
+        this.router.navigate([`auth/data-quality-monitoring`], {queryParams: {from: 'ruleset'}});
+      } else {
+        this.router.navigate([`auth/data-quality-monitoring`]);
+      }
+      
     }, (error) => {
       this.isLoading = false;
     });
