@@ -272,6 +272,16 @@ export class HttpService  {
     );
   }
 
+  getSourcesDetails(): Observable<any> {
+    return this.http.get<any>(`${this.rootUrl}/api/getAllDetails`).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
   getSourcePreview(sourceId): Observable<any> {
     return this.http.get<any>(`${this.rootUrl}/getSourcePreview?sourceId=${sourceId}`).pipe(
       tap((res) => {
