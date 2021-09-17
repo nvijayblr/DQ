@@ -36,7 +36,7 @@
                   </mat-form-field>                 
                 </div>
                 <div class="list-item-5 outline">
-                  <mat-checkbox>Cleaned Sources</mat-checkbox>
+                 
                 </div>
                 <div class="list-item-3 outline" *ngIf="!isOverview && !isOverviewTable">
                   <div class="act-btn-wrapper">
@@ -53,15 +53,21 @@
                      <mat-icon class="pl">keyboard_arrow_left</mat-icon>
                      </button>
                   </div>
-                  <div class="category-list" #carouselHolder>                   
+                  <div class="category-list" #carouselHolder>   
                      <owl-carousel-o [options]="OwlCategoryOptions" #owlCar>
                       <!-- Carousel Items -->
-                      <ng-container *ngFor="let history of uploadsHistory">
-                          <ng-template carouselSlide [id]="history.uploadId">
+                      <ng-container  *ngFor="let history of uploadsHistory">
+                        
+                          <ng-template carouselSlide [id]="history.datedUpload">
+                          
                             <div class="category-item" [class.selected]="history.uploadId === uploadId" (tap)="tapDateCarouselItem(history)">
-                            <h3 class="cat-title">{{formatDate(history.uploadDate)}}</h3>
+                            <h3 class="cat-title">{{formatDate(history.uploadDate)}}  
+                              <span class="cleaned-data"  *ngIf="history.isCleanedSource === 'YES' && history.uploadId === uploadId"> [Cleaned Sources]</span> 
+                              <mat-checkbox class="cleaned-source" *ngIf="history.isCleanedSource === 'YES' && history.uploadId === uploadId" checked="history.uploadId === uploadId"></mat-checkbox></h3>
                             </div>
+                           
                           </ng-template>
+                         
                       </ng-container>
                      </owl-carousel-o>
                   </div>

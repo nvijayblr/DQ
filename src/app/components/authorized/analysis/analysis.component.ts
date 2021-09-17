@@ -17,6 +17,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { _ } from 'ag-grid-community';
 import { ColDef } from 'ag-grid-community';
+import * as __ from 'lodash';
 
 @Component({
   selector: 'app-analysis',
@@ -122,12 +123,13 @@ export class AnalysisComponent implements OnInit {
 
   ngOnChanges() {
     this.initAnalysis(this.selectedAnalysisdashboard);
+    //console.log('this.selectedAnalysisdashboard', this.selectedAnalysisdashboard)
   }
   
-
+ datedUpload = [];
   initAnalysis(analysis) {
-      this.selectedAnalysis = analysis;
-      this.uploadsHistory = analysis.UploadsHistory ? analysis.UploadsHistory : [];
+    this.selectedAnalysis = analysis;    
+    this.uploadsHistory = analysis.UploadsHistory ? analysis.UploadsHistory : [];
       const payload = {
          sourceId: analysis.sourceId,
          rulesetId: analysis.rulesetId

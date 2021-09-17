@@ -66,7 +66,8 @@ export class CreateSourceComponent implements OnInit {
     isMuliSourceData: 'true',
     multiSourceOptions: [],
     frequency: 'Daily',
-    uploadDate: moment(this.minDate).format("YYYY-MM-DD[T]HH:mm:ss:000[Z]"),
+    uploadDate: moment(this.minDate).format("YYYY-MM-DD[T]HH:mm:ss.000[Z]"),
+    //uploadDate: this.minDate,
     uploadTime: '',
     department: []
   };

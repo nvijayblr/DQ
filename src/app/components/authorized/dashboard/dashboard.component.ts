@@ -187,6 +187,7 @@ export class DashboardComponent implements OnInit {
   domainMatches;
   minDate;
   fromOrginSource;
+  fromCleanSource;
   isOriginalSource;
   OriginalSourcePath;
   originalSourceUploadDate;
@@ -196,9 +197,9 @@ export class DashboardComponent implements OnInit {
      localStorage.removeItem('selected-analysis');
      localStorage.removeItem('selected-index');
      this.getAllSources();
-     this.getAllDetails();
      this.minDate = moment().format('YYYY-MM-DD');
      this.fromOrginSource = this.route.snapshot.queryParamMap.get('from');
+    //  this.fromCleanSource = this.route.snapshot.queryParamMap.get('cleaning');
      setTimeout(() => {
       if (this.fromOrginSource === 'ruleset') {
         const analysis = JSON.parse(localStorage.getItem('selected-analysis'));
@@ -207,7 +208,14 @@ export class DashboardComponent implements OnInit {
         this.originalSourceUploadDate = analysis.settings.uploadDate;
         console.log(this.originalSourceUploadDate);
         this.uploadSource(analysis);
-        }
+       }
+       if (this.fromOrginSource === 'cleaning') {
+        const analysis = JSON.parse(localStorage.getItem('dq-cleaned-data'));
+        console.log('analysis23456', analysis)
+        this.isCleanedSource = 'YES';
+         this.selectedFileName = analysis.SourceDetailsList.templateSourcePath;
+        this.uploadSource(analysis);
+      }
      }, 1000)
      
   }
@@ -298,7 +306,7 @@ export class DashboardComponent implements OnInit {
    getAllSources() {
       this.isLoading = true;
       this.loaderMsg = 'Loading Sources...';
-      this.http.getSources().subscribe((result: any) => {
+      this.http.getSourcesDetails().subscribe((result: any) => {
         this.sourceList = (result && result.Analysis) ? result.Analysis : [];
         console.log('this.sourceList', this.sourceList);
        
@@ -343,18 +351,18 @@ export class DashboardComponent implements OnInit {
          }).value();
         
       //  this.selectedSource = this.sourceList[0].source;
-      //  console.log('this.selectedSource', this.sourceList[0].source.templateSourcePath)
+      //console.log('this.selectedSource', this.selectedSource.DatedUploadHistory[0].uploadDetails)
       }, (error) => {
          this.isLoading = false;
       });
      
   }
   
-  getAllDetails() {
-    this.http.getSourcesDetails().subscribe((result: any) => {
-      console.log('From getAllDetails', result);
-    });
-  }
+  // getAllDetails() {
+  //   this.http.getSourcesDetails().subscribe((result: any) => {
+  //     console.log('From getAllDetails', result);
+  //   });
+  // }
 
    editSourceData(sourceData) {
       localStorage.setItem('dq-source-data', JSON.stringify(sourceData));
@@ -572,7 +580,7 @@ export class DashboardComponent implements OnInit {
             this.showUploadError(result.errorMsg);
          } else {         
            this.getAllSources();
-           this.getAllDetails();
+           //this.getAllDetails();
            alert('Source has been uploaded successfully.');
            this.reloadCurrentRoute();
            //this.router.navigate([`auth/data-quality-monitoring`]);
