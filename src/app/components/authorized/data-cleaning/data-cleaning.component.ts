@@ -921,12 +921,13 @@ getProfileFromMonitoring() {
           outputFileName : data.reason + '.csv'
         };
         this.http.saveCleanSource(payload).subscribe((result: any) => {
-          console.log('Res',result)
+          console.log('Res',result.SourceDetailsList)
           this.savedFiles = result.SourceDetailsList[0].CleanedFilesLog[result.SourceDetailsList[0].CleanedFilesLog.length - 1];
           localStorage.setItem('dq-cleaned-data', JSON.stringify(result))
           if (this.savedFiles) {
             this.updateSourcePath(this.savedFiles.outputPath, this.savedFiles.outputFileName);
           }
+          console.log('ddd', this.savedFiles)
           this.router.navigate([`auth/data-quality-monitoring`], {queryParams: {from: 'cleaning'}});
           //window.location.reload();
           // localStorage.setItem('dq-source-data', JSON.stringify(this.analysis));

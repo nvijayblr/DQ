@@ -62,7 +62,7 @@
                           
                             <div class="category-item" [class.selected]="history.uploadId === uploadId" (tap)="tapDateCarouselItem(history)">
                             <h3 class="cat-title">{{formatDate(history.uploadDate)}}  
-                              <span class="cleaned-data"  *ngIf="history.isCleanedSource === 'YES' && history.uploadId === uploadId"> [Cleaned Sources]</span> 
+                              <span class="cleaned-data"  *ngIf="history.isCleanedSource === 'YES' "> [Cleaned Sources]</span> 
                               <mat-checkbox class="cleaned-source" *ngIf="history.isCleanedSource === 'YES' && history.uploadId === uploadId" checked="history.uploadId === uploadId"></mat-checkbox></h3>
                             </div>
                            

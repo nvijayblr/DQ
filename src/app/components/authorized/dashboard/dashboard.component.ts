@@ -191,6 +191,7 @@ export class DashboardComponent implements OnInit {
   isOriginalSource;
   OriginalSourcePath;
   originalSourceUploadDate;
+  cleanedRuleSetID;
 
    ngOnInit() {
      localStorage.removeItem('dq-source-names');
@@ -211,9 +212,10 @@ export class DashboardComponent implements OnInit {
        }
        if (this.fromOrginSource === 'cleaning') {
         const analysis = JSON.parse(localStorage.getItem('dq-cleaned-data'));
-        console.log('analysis23456', analysis)
-        this.isCleanedSource = 'YES';
-         this.selectedFileName = analysis.SourceDetailsList.templateSourcePath;
+        console.log('analysis23456', analysis.SourceDetailsList[0].CleanedFilesLog[analysis.SourceDetailsList[0].CleanedFilesLog.length - 1].RulesetId)
+         this.isCleanedSource = 'YES';
+         this.cleanedRuleSetID = analysis.SourceDetailsList[0].CleanedFilesLog[analysis.SourceDetailsList[0].CleanedFilesLog.length - 1].RulesetId
+         this.selectedFileName = analysis.SourceDetailsList[0].CleanedFilesLog[analysis.SourceDetailsList[0].CleanedFilesLog.length - 1].outputPath;
         this.uploadSource(analysis);
       }
      }, 1000)
