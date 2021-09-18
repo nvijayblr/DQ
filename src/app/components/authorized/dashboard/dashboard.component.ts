@@ -202,7 +202,7 @@ export class DashboardComponent implements OnInit {
      this.fromOrginSource = this.route.snapshot.queryParamMap.get('from');
     //  this.fromCleanSource = this.route.snapshot.queryParamMap.get('cleaning');
      setTimeout(() => {
-      if (this.fromOrginSource === 'ruleset') {
+       if (this.fromOrginSource === 'ruleset') {
         const analysis = JSON.parse(localStorage.getItem('selected-analysis'));
         this.isOriginalSource = 'YES';
         this.OriginalSourcePath = analysis.source.templateSourcePath;
@@ -211,11 +211,11 @@ export class DashboardComponent implements OnInit {
         this.uploadSource(analysis);
        }
        if (this.fromOrginSource === 'cleaning') {
-        const analysis = JSON.parse(localStorage.getItem('dq-cleaned-data'));
-        console.log('analysis23456', analysis.SourceDetailsList[0].CleanedFilesLog[analysis.SourceDetailsList[0].CleanedFilesLog.length - 1].RulesetId)
+        const analysis = JSON.parse(localStorage.getItem('selected-analysis'));
+        const cleanedAnalysis = JSON.parse(localStorage.getItem('dq-cleaned-data'));
          this.isCleanedSource = 'YES';
-         this.cleanedRuleSetID = analysis.SourceDetailsList[0].CleanedFilesLog[analysis.SourceDetailsList[0].CleanedFilesLog.length - 1].RulesetId
-         this.selectedFileName = analysis.SourceDetailsList[0].CleanedFilesLog[analysis.SourceDetailsList[0].CleanedFilesLog.length - 1].outputPath;
+         this.chooseOptions = 'select'
+         this.selectedFileName = cleanedAnalysis.SourceDetailsList[0].CleanedFilesLog[cleanedAnalysis.SourceDetailsList[0].CleanedFilesLog.length - 1].outputPath;
         this.uploadSource(analysis);
       }
      }, 1000)
@@ -508,7 +508,7 @@ export class DashboardComponent implements OnInit {
   cleanedSourcePath;
   uploadErrorMessage;
   uploadSource(analysis, reason = '') {
-    console.log('uploadSource', analysis);
+    //console.log('uploadSource', analysis);
       if (!analysis.rules || (analysis.rules && !analysis.rules.length)) {
          alert('Please create the ruleset to upload the source.');
          return;
