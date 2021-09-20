@@ -799,21 +799,19 @@ export class DashboardComponent implements OnInit {
      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
   });
     this.showRules = this.viewRules.rules[0]
-  console.log('dataFromDq', this.showRules)
   }
-  
+  viewSources;
+  summary;
   viewSourcesDetails(data, longContent2) {
-    this.viewRules = _.find(this.sourceList, function (o) {
+    this.viewSources = _.find(this.sourceList, function (o) {
       return o.sourceId === data.sourceId;
     });
+    this.summary = this.viewSources;    
     this.modalService.open(longContent2, { scrollable: true, size: 'xl' }).result.then((result) => {
-      console.log(result);
        this.closeResult = `Closed with: ${result}`;
      }, (reason) => {
        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-      this.showRules = this.viewRules.rules[0]
-    console.log('dataFromDq', this.showRules)
     }
 
 

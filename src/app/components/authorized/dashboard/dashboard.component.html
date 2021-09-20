@@ -172,7 +172,7 @@
 
                                                   <div class=" list-item-0  inlb">
                                                     <button type="button" class="button3d btnPush btnBlueGreen addico"
-                                                    (click)="viewSourcesDetails(data, longContent)" matTooltip="View Sources">
+                                                    (click)="viewSourcesDetails(data, longContent2)" matTooltip="View Sources">
                                                     <mat-icon>remove_red_eye</mat-icon>
                                                     View Sources
                                                     </button>
@@ -1075,42 +1075,73 @@
        <button class="horizontal align" (click)="accordion.closeAll()"> <span class="text"> Collapse All </span></button>
     </div> -->
     <div class="rulesPreview">
-    <div class="accordions">
-      <mat-accordion multi>
-         <mat-expansion-panel *ngFor="let col of showRules.ruleset; first as isFirst" [expanded]="isFirst">
-            <mat-expansion-panel-header>
-               <mat-panel-title>
-                  <div class="list flex-containers flex-start wtBg mm">
-                     <div class="list-item-2 outline">
-                        <h4>{{col.column}} </h4>
-                     </div>                                               
-                  </div>
-               </mat-panel-title>
-               
-             </mat-expansion-panel-header>
-             <table class="table rule-table">
-               <tbody>
-                 <tr *ngFor="let rule of col.rules; index as i">
-                   <td>Rule #{{i+1}}</td>
-                   <td><div class="label">{{rule.rule}}</div></td>
-                   <td>{{rule.operator}}</td>
-                   <td class="preview">
-                     <div *ngIf="rule.rule !== 'Formula'">{{rule.value}}</div>
-                     <div *ngIf="rule.rule === 'Formula'" class="formula-preview nob">
-                       <span *ngFor="let formula of rule.value">
-                         <span class="operator alcap1" *ngIf="formula.operator !== 'NULL'">{{formula.operator}}</span>
-                         <span class="cde alcap">{{formula.cde}}</span>
-                       </span>
-                     </div>
-                   </td>
-                   <td>{{rule.dimension}}</td>
-                 </tr>
-               </tbody>
-             </table>
-         </mat-expansion-panel>
-      </mat-accordion>
-  
-    </div>
+      <mat-card class="border no-rounded list shrare-post mct3">
+        <!-- <h1 class="share-post-title">Summary</h1> -->
+        <div class="source-preview">
+          <table class="table">
+            <tbody>
+              <tr>
+                <td class="bd-tp"><div class="label1">Source Data</div></td>
+                <td class="bd-tp"></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="label2">Name</div>
+                  {{summary.source?.sourceDataName}}
+                </td>
+              <td>
+                <div class="label2">CDE</div>
+                <span class="spec" *ngFor="let column of summary.source?.availableColumns">
+                   {{column}}, 
+                </span>
+                </td>
+              </tr>
+              <tr>
+                <td><div class="label1" style="width: 200px;">Rerference Data</div></td>
+                <td></td>
+              </tr>
+              <tr *ngFor="let ref of summary.reference; index as i;">
+                <td>
+                  <div class="label2">Name</div>
+                  #{{i+1}}. {{ref.referenceDataName}}</td>
+                <td>
+                  <div class="label2">Reference CDE</div>
+                  <span *ngFor="let column of ref?.availableRefColumns">
+                    {{column}},
+                  </span>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td><div class="label1">Settings</div></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td><div class="label2">Multi source name</div></td>
+                  <td>{{summary.settings?.multiSourceOptions}} </td>
+                </tr>
+                <tr>
+                  <td><div class="label2">Frequency</div></td>
+                  <td>{{summary.settings?.frequency}}</td>
+                </tr>
+                <tr>
+                  <td><div class="label2">Upload Date</div></td>
+                  <td>{{summary.settings?.uploadDate}}</td>
+                </tr>
+                <tr>
+                  <td><div class="label2">Upload Time</div></td>
+                  <td>{{summary.settings?.uploadTime}}</td>
+                </tr>
+                <tr>
+                  <td><div class="label2">Department</div></td>
+                  <td>{{summary.settings?.department}}</td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+
+       
+      </mat-card>
   </div>
   </div>
   <div class="modal-footer">
