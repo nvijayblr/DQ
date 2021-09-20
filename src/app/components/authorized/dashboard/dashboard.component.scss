@@ -2591,3 +2591,8 @@ td.mat-cell, td.mat-footer-cell{
       ::ng-deep .mat-expansion-panel .mat-expansion-panel-header.cdk-keyboard-focused:not([aria-disabled=true]), .mat-expansion-panel .mat-expansion-panel-header.cdk-program-focused:not([aria-disabled=true]), .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:hover:not([aria-disabled=true]){background : white !important}
 }
 }
+.subtab {
+  ::ng-deep .mat-form-field-infix {
+    border-top: .84375em solid transparent!important;
+  }
+}

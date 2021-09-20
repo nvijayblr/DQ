@@ -70,7 +70,7 @@ export class AnalysisChartComponent implements OnInit, OnChanges {
          chartdata[1].data.push(parseFloat(data.results.Uniqueness));
          chartdata[2].data.push(parseFloat(data.results.Validity));
       });
-      console.log(chartdata);
+      console.log('ddddd',chartdata);
       this.chartOptions.xAxis.categories = category;
       this.chartOptions.series = chartdata;
       this.highcharts = Highcharts;

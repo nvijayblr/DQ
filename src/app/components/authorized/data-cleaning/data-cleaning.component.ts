@@ -233,15 +233,18 @@ export class DataCleaningComponent implements OnInit {
      ]
   };
   previewTable;
-  colPreviewData : boolean = true;
+  colPreviewData: boolean = true;
+  hideOptions:boolean = true;
 
   ngOnInit() {
     this.mode = this.route.snapshot.queryParamMap.get('mode');
     localStorage.removeItem('dataDq');
     if (this.mode === 'dqm') {      
       this.getProfileFromMonitoring();
+      this.hideOptions = false;
     } else {
       this.getProfileSource();
+      this.hideOptions = true;
     }
     // if (this.analysis.recentsourceUpload) {
     //    this.uploadId = this.analysis.recentsourceUpload.uploadId
@@ -251,6 +254,7 @@ export class DataCleaningComponent implements OnInit {
 
 
   }
+
 getProfileFromMonitoring() {
     this.isLoading = true;
   
@@ -313,7 +317,7 @@ getProfileFromMonitoring() {
     }
       if (result) {       
         this.http.getCleanSource().subscribe((result: any) => {
-          console.log(result)
+          //console.log(result)
           this.allSourceCategory = result.SourceDetailsList;
           let dqId = this.route.snapshot.queryParamMap.get('sourceId');
           const dataFromDq = _.find(result.SourceDetailsList, function (o) {
@@ -326,20 +330,21 @@ getProfileFromMonitoring() {
           this.sourcePathSelected();
           this.uploadId = this.source.sourceId;
           this.loadProfile(this.source);
-          console.log(dataFromDq)
+          //console.log(dataFromDq)
           this.source = dataFromDq;
           this.sourceByCategory =
-          _.chain(this.allSourceCategory).
-          groupBy('sourceCategory')
-            .map((sourcesList, key) => {
-              sourcesList.map(source => {
-              if (source.sourceId === this.source.sourceId) {
-                this.selectedCategoryKey = key;
-              }
-            });
-            return { category: key, sources: sourcesList };
-          }).value();
-        })
+            _.chain(this.allSourceCategory).
+              groupBy('sourceCategory')
+              .map((sourcesList, key) => {
+                sourcesList.map(source => {
+                  if (source.sourceId === this.source.sourceId) {
+                    this.selectedCategoryKey = key;
+                  }
+                });
+                return { category: key, sources: sourcesList };
+              }).value();
+        });
+        
       }       
     }, (error) => {
       console.log(error.errorMsg);
@@ -351,11 +356,11 @@ getProfileFromMonitoring() {
   }
 
   getProfileSource() {
-    this.http.getCleanSource().subscribe((result: any) => {
-      console.log(result);
+    this.http.getCleanSource().subscribe((result: any) => {      
       this.allSourceCategory = result.SourceDetailsList;
       // this.cleanedFilesLog = result.SourceDetailsList[0].CleanedFilesLog ? result.SourceDetailsList[0].CleanedFilesLog : [];
       this.analysis = this.messageService.getSource();
+      const cleanedFiles = JSON.parse(localStorage.getItem('dq-saved-data'));
       const uploadMethod = localStorage.getItem('dq-upload-data');
       if (this.analysis && uploadMethod === "clean") {
         this.uploadId = this.analysis.sourceId;
@@ -363,17 +368,24 @@ getProfileFromMonitoring() {
         this.source = this.analysis;
         this.sourcePathSelected();
         this.uploadId = this.source.sourceId;
+       
       } else {
         this.analysis = result.SourceDetailsList.length ? result.SourceDetailsList[0] : [];
         this.source = this.analysis;        
         this.sourcePathSelected();
         this.uploadId = this.source.sourceId;
         this.processTime = this.analysis.uploadDate;
+        if (cleanedFiles) {
+          this.cleanedFilesPath = cleanedFiles.outputPath;
+        }    
         if (this.source.length === 0) {
           this.showAllDetails = true;
           return;
         }
       }
+      
+     
+      
       this.loadProfile(this.source);
       this.sourceByCategory =
         _.chain(this.allSourceCategory).
@@ -407,6 +419,7 @@ getProfileFromMonitoring() {
     // localStorage.setItem('dq-source-data', JSON.stringify(source));
     localStorage.removeItem('dq-source-data');
     localStorage.removeItem('dq-upload-data');
+    localStorage.removeItem('dq-saved-data');
     this.source = source;
     this.cleanedFilesPath = path;
     this.initLoadProfile = false;
@@ -480,6 +493,7 @@ getProfileFromMonitoring() {
     } else {
       this.titleSrc = source.templateSourcePath;
     }
+
     this.isLoading = true;
     this.loaderMsg = 'Loading Profile...';
     const payload = {
@@ -921,20 +935,21 @@ getProfileFromMonitoring() {
           outputFileName : data.reason + '.csv'
         };
         this.http.saveCleanSource(payload).subscribe((result: any) => {
-          console.log('Res',result.SourceDetailsList)
           this.savedFiles = result.SourceDetailsList[0].CleanedFilesLog[result.SourceDetailsList[0].CleanedFilesLog.length - 1];
-          localStorage.setItem('dq-cleaned-data', JSON.stringify(result))
+          localStorage.setItem('dq-cleaned-data', JSON.stringify(result));
+         
           if (this.savedFiles) {
-            this.updateSourcePath(this.savedFiles.outputPath, this.savedFiles.outputFileName);
+            this.updateSourcePath(this.savedFiles.outputPath, this.savedFiles.outputFileName);           
           }
-          console.log('ddd', this.savedFiles)
-          this.router.navigate([`auth/data-quality-monitoring`], {queryParams: {from: 'cleaning'}});
-          //window.location.reload();
-          // localStorage.setItem('dq-source-data', JSON.stringify(this.analysis));
+          localStorage.setItem('dq-saved-data', JSON.stringify(this.savedFiles));
+          if (this.mode === 'dqm') {
+            this.router.navigate([`auth/data-quality-monitoring`], {queryParams: {from: 'cleaning'}});
+          } else {
+            window.location.reload();
+          }
         });
-      } else {
-
       }
+     
     });
       // this.showConfirmDialog({
       //    title: 'Save soruce',
@@ -1071,7 +1086,6 @@ getProfileFromMonitoring() {
    openScrollableContent(longContent) {
       this.searchMultipleNumbers(); 
      this.modalService.open(longContent, { scrollable: true, size: 'xl' }).result.then((result) => {
-       console.log(result);
        this.closeResult = `Closed with: ${result}`;
      }, (reason) => {
        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;

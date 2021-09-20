@@ -130,6 +130,7 @@ export class AnalysisComponent implements OnInit {
   initAnalysis(analysis) {
     this.selectedAnalysis = analysis;    
     this.uploadsHistory = analysis.UploadsHistory ? analysis.UploadsHistory : [];
+    console.log(this.uploadsHistory)
       const payload = {
          sourceId: analysis.sourceId,
          rulesetId: analysis.rulesetId
@@ -186,8 +187,8 @@ export class AnalysisComponent implements OnInit {
          keyname
       };
       this.viewAnalysisByTime(keyname, uploadId);
-      this.loaderMsg = 'Launching analysis...';
-      this.isLoading = true;
+      //this.loaderMsg = 'Launching analysis...';
+      //this.isLoading = true;
       this.isLoadChart = false;
       this.http.launchAnalysisByKey(payload).subscribe((result: any) => {
         this.isLoadingDetails = false;
@@ -241,7 +242,8 @@ export class AnalysisComponent implements OnInit {
          keyname
       };
       this.http.getAnalysisByTime(payload).subscribe((result: any) => {
-         this.analysisByTimeData = result ? result : [];
+        this.analysisByTimeData = result ? result : [];
+        console.log('this.analysisByTimeData',this.analysisByTimeData)
       }, (error) => {
       });
    }

@@ -261,7 +261,7 @@ export class DashboardComponent implements OnInit {
 
   loadProfile(source) {
       this.isLoading = true;
-      this.loaderMsg = 'Loading Profile...';
+      this.loaderMsg = 'Loading...';
       this.titleSrc = source.templateSourcePath;
       const payload = {
         sourcepath: source.templateSourcePath
@@ -307,7 +307,7 @@ export class DashboardComponent implements OnInit {
 
    getAllSources() {
       this.isLoading = true;
-      this.loaderMsg = 'Loading Sources...';
+      this.loaderMsg = 'Loading...';
       this.http.getSourcesDetails().subscribe((result: any) => {
         this.sourceList = (result && result.Analysis) ? result.Analysis : [];
         console.log('this.sourceList', this.sourceList);
@@ -375,8 +375,8 @@ export class DashboardComponent implements OnInit {
   }
 
    getAllAnalysis() {
-      this.isLoading = true;
-      this.loaderMsg = 'Loading Analysis...';
+      //this.isLoading = true;
+      //this.loaderMsg = 'Loading Analysis...';
       this.http.getAllAnalysis().subscribe((result: any) => {
          this.analysisList = result.Analysis ? result.Analysis : [];
          // console.log(this.analysisList);
@@ -800,7 +800,21 @@ export class DashboardComponent implements OnInit {
   });
     this.showRules = this.viewRules.rules[0]
   console.log('dataFromDq', this.showRules)
-}
+  }
+  
+  viewSourcesDetails(data, longContent2) {
+    this.viewRules = _.find(this.sourceList, function (o) {
+      return o.sourceId === data.sourceId;
+    });
+    this.modalService.open(longContent2, { scrollable: true, size: 'xl' }).result.then((result) => {
+      console.log(result);
+       this.closeResult = `Closed with: ${result}`;
+     }, (reason) => {
+       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+      this.showRules = this.viewRules.rules[0]
+    console.log('dataFromDq', this.showRules)
+    }
 
 
   showTab(id) {

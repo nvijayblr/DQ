@@ -59,17 +59,18 @@
                   </mat-list>  -->
                   
                   <ng-container  *ngFor='let selectedSource of item.sources;'>
-                    <mat-list-item > 
-                      <div class="lftItem" (click)="changeCategory(selectedSource, '')" [class.activeList]="selectedSource.sourceId === source.sourceId" matTooltip="{{ source.sourceDataName }}" >
+                    <mat-list-item> 
+                      <div  class="lftItem" (click)="changeCategory(selectedSource, '')" [class.activeList]="selectedSource.sourceId === source.sourceId" matTooltip="{{ source.sourceDataName }}">
                         <mat-icon> layers</mat-icon> 
                         {{ selectedSource.sourceDataName }} 
-                        <mat-icon class="ed" matTooltip="Edit Source" *ngIf="selectedSource.sourceId === source.sourceId" (click)="editSourceData(selectedSource)">edit</mat-icon>
-                        <mat-icon class="de" matTooltip="Delete Source" *ngIf="selectedSource.sourceId === source.sourceId" (click)="deleteSourceData(selectedSource)">delete</mat-icon>     
+                        <mat-icon  class="ed" matTooltip="Edit Source" *ngIf="selectedSource.sourceId === source.sourceId && hideOptions" (click)="editSourceData(selectedSource)">edit</mat-icon>
+                        <mat-icon class="de" matTooltip="Delete Source" *ngIf="selectedSource.sourceId === source.sourceId && hideOptions" (click)="deleteSourceData(selectedSource)">delete</mat-icon>     
                       </div> 
                   
                     </mat-list-item>
+                  
                     <mat-list style="margin-left:30px;">
-                      <div *ngFor='let cleanFiles of selectedSource.CleanedFilesLog;'>
+                      <div *ngFor='let cleanFiles of selectedSource.CleanedFilesLog;'>                        
                         <mat-list-item> 	
                           <div (click)="changeCategory(selectedSource, cleanFiles.outputPath)"  [class.activeSubList]="cleanFiles.outputPath === titleSrc">
                             <i class="fa fa-circle bullets"></i> 
