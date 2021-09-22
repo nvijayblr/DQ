@@ -223,7 +223,7 @@ export class DashboardComponent implements OnInit {
   }
 
   scrollToId(id: string) {  
-    this.changeMenu('profile');    
+    this.changeMenu('profile', '');    
     if (this.previewProfile) {
       this.scrollService.scrollToElementById(id);
     }       
@@ -261,7 +261,7 @@ export class DashboardComponent implements OnInit {
 
   loadProfile(source) {
       this.isLoading = true;
-      this.loaderMsg = 'Loading...';
+      this.loaderMsg = 'Loading Profile...';
       this.titleSrc = source.templateSourcePath;
       const payload = {
         sourcepath: source.templateSourcePath
@@ -306,8 +306,8 @@ export class DashboardComponent implements OnInit {
 }
 
    getAllSources() {
-      this.isLoading = true;
-      this.loaderMsg = 'Loading...';
+      //this.isLoading = true;
+      //this.loaderMsg = 'Loading...';
       this.http.getSourcesDetails().subscribe((result: any) => {
         this.sourceList = (result && result.Analysis) ? result.Analysis : [];
         console.log('this.sourceList', this.sourceList);
@@ -421,8 +421,8 @@ export class DashboardComponent implements OnInit {
     this.initOverview(this.selectedAnalysis);
     this.changeCategory(data);
     this.loadProfile(data.source);
-    this.loadReferencePreview();
-    this.loadCorrelation(data.source, this.datatype, this.method);
+    //this.loadReferencePreview();
+    //this.loadCorrelation(data.source, this.datatype, this.method);
     if (data.source.sourceDataName && !data.rules.length) {
       this.actionTabId = '2';
       this.showTab(this.actionTabId);
@@ -449,8 +449,8 @@ export class DashboardComponent implements OnInit {
   }
 
   loadCorrelation(source, type, method) {
-    //this.isLoading = true;
-    //this.loaderMsg = 'Loading Correlation...';
+    this.isLoading = true;
+    this.loaderMsg = 'Loading Correlation...';
     const payload = {
       sourcepath: source.templateSourcePath,
       cols_data_type: type,
@@ -856,19 +856,22 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  changeMenu(menu) {
+  changeMenu(menu, data) {
     if (menu === 'preview') {
       this.previewTable = true;
       this.previewProfile = false;
       this.previewCorrelation = false;
+      this.loadReferencePreview();    
     } else if (menu === 'profile') {
       this.previewTable = false;
       this.previewProfile = true;
       this.previewCorrelation = false;
     } else if (menu === 'correlation') {
+      console.log('changeMenu', data)
       this.previewTable = false;
       this.previewProfile = false;
       this.previewCorrelation = true;
+      this.loadCorrelation(data.source, this.datatype, this.method);
     } else {
       this.previewTable = false;
       this.previewProfile = true;

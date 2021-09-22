@@ -468,7 +468,7 @@ getProfileFromMonitoring() {
 
   reloadCurrentRoute() {
     const currentUrl = this.router.url;
-    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+    this.router.navigateByUrl('/auth/data-cleaning', { skipLocationChange: true }).then(() => {
       this.router.navigate([currentUrl]);
     });
   }
@@ -945,7 +945,9 @@ getProfileFromMonitoring() {
           if (this.mode === 'dqm') {
             this.router.navigate([`auth/data-quality-monitoring`], {queryParams: {from: 'cleaning'}});
           } else {
-            window.location.reload();
+            this.ngOnInit();
+            //this.reloadCurrentRoute();
+            //window.location.reload();
           }
         });
       }

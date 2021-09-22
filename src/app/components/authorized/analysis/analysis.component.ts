@@ -314,7 +314,7 @@ export class AnalysisComponent implements OnInit {
    }
 
    gotoDashboard() {
-      this.router.navigate([`auth/dashboard`]);
+      this.router.navigate([`auth/data-quality-monitoring`]);
    }
 
    openHighlightSettingsDialog(): void {

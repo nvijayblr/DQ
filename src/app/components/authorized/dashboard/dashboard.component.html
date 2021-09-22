@@ -423,7 +423,7 @@
                  <img src="assets/images/table.svg" class="tabV" (click)="changeViewAnlysis('chart')" />                  
                 </div>
              <div class="chart" *ngIf="showtableAnalysis">  
-                <app-progress-bar [message]="'Loading...'" class="component" *ngIf="isOverviewLoading"></app-progress-bar>
+                <!-- <app-progress-bar [message]="'Loading...'" class="component" *ngIf="isOverviewLoading"></app-progress-bar> -->
                 <app-analysis *ngIf="showAnalysisOverview && !overviewErrorMsg" [isOverview]="true" [selectedAnalysisdashboard]= "selectedAnalysis"></app-analysis> 
                 <h3 *ngIf="overviewErrorMsg">{{overviewErrorMsg}}</h3>
               </div>
@@ -437,17 +437,17 @@
 
            <div class="allView" id="elId">
                 <div class="viewProfile">
-                  <div class="prevMenu" (click)="changeMenu('profile')">
+                  <div class="prevMenu" (click)="changeMenu('profile', '')">
                     <img src="assets/images/profile-data.svg" class="prof"  />
                     <span [ngClass]="{act: previewProfile}">Profile</span>
                   </div>                 
                   <span class="divider"></span> 
-                  <div class="prevMenu" (click)="changeMenu('preview')">
+                  <div class="prevMenu" (click)="changeMenu('preview', '')">
                     <img src="assets/images/preview.svg" class="prev"  />
                     <span [ngClass]="{act: previewTable}">Preview</span>
                   </div> 
                   <span class="divider"></span> 
-                  <div class="prevMenu" (click)="changeMenu('correlation')">
+                  <div class="prevMenu" (click)="changeMenu('correlation',selectedSource)">
                     <img src="assets/images/correlation.svg" class="prof"  />
                     <span [ngClass]="{act: previewCorrelation}">Correlation</span>
                   </div>
