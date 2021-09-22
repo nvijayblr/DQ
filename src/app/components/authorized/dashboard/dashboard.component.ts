@@ -449,8 +449,8 @@ export class DashboardComponent implements OnInit {
   }
 
   loadCorrelation(source, type, method) {
-    this.isLoading = true;
-    this.loaderMsg = 'Loading Correlation...';
+    //this.isLoading = true;
+    //this.loaderMsg = 'Loading Correlation...';
     const payload = {
       sourcepath: source.templateSourcePath,
       cols_data_type: type,

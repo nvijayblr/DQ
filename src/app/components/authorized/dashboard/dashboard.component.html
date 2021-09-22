@@ -423,7 +423,7 @@
                  <img src="assets/images/table.svg" class="tabV" (click)="changeViewAnlysis('chart')" />                  
                 </div>
              <div class="chart" *ngIf="showtableAnalysis">  
-                <!-- <app-progress-bar [message]="'Loading...'" class="component" *ngIf="isOverviewLoading"></app-progress-bar> -->
+                <app-progress-bar [message]="'Loading...'" class="component" *ngIf="isOverviewLoading"></app-progress-bar>
                 <app-analysis *ngIf="showAnalysisOverview && !overviewErrorMsg" [isOverview]="true" [selectedAnalysisdashboard]= "selectedAnalysis"></app-analysis> 
                 <h3 *ngIf="overviewErrorMsg">{{overviewErrorMsg}}</h3>
               </div>
