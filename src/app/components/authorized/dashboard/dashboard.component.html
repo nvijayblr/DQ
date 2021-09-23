@@ -942,6 +942,7 @@
             </div>
 
             <div class="previewView valign" *ngIf="previewTable">
+              <app-progress-bar [message]="'Loading...'" class="component" *ngIf="isPreviewLoading"></app-progress-bar>
               <app-ag-grid
               floatingFilter="true"
               *ngIf="isPreviewLoaded"
