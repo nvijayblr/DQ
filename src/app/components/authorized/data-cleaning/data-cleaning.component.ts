@@ -416,6 +416,7 @@ getProfileFromMonitoring() {
   }
   cleanedFilesPath;
   changeCategory(source, path) {
+    this.analysis = source;
     // localStorage.setItem('dq-source-data', JSON.stringify(source));
     localStorage.removeItem('dq-source-data');
     localStorage.removeItem('dq-upload-data');
@@ -428,7 +429,7 @@ getProfileFromMonitoring() {
     } else {
       this.titleSrc = source.templateSourcePath;
     }
-    
+    this.getCleanedLogs();
     this.loadProfile(source);
     // this.loadReferencePreview();
     // this.loadCorrelation(this.selectedSource, this.datatype, this.method);
@@ -559,7 +560,7 @@ getProfileFromMonitoring() {
          query_col : 'sourceId',
          query_val : this.analysis.sourceId
       };
-     this.http.getCleanedLogs(payload).subscribe((result: any) => {
+    this.http.getCleanedLogs(payload).subscribe((result: any) => {
          this.isLogsLoading = false;
        this.cleanLogs = result ? result : [];
        if (this.cleanLogs) {
