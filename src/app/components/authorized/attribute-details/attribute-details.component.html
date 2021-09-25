@@ -254,6 +254,7 @@
             <mat-card class="border no-rounded list shrare-post mct">
               
               <div class="previewView valign" *ngIf="previewTable" style="clear: both;">
+                <app-progress-bar [message]="'Loading...'" class="component" *ngIf="isPreviewLoading"></app-progress-bar>
                 <app-ag-grid
                 floatingFilter="true"
                 *ngIf="isPreviewLoaded"
@@ -774,7 +775,7 @@
             </div>
 
             <div class="correlationView valign" *ngIf="previewCorrelation">            
-                <!-- <app-progress-bar [message]="'Loading'" class="component" *ngIf="isLoading"></app-progress-bar> -->
+              <app-progress-bar [message]="'Loading Correlation...'" class="component" *ngIf="loadingCorrelation"></app-progress-bar>
                 <h1 class="share-post-title"><span class="lgb">Correlation Summary</span></h1>
                 <div class="flex-containers">
                   <div class="list-item-4">
