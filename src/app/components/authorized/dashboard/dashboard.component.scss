@@ -908,6 +908,7 @@ $textColorCompleted: #fff;
 .step-indicator {
  margin-bottom: 20px;
  line-height: 30px;
+ display: flex;
 }
 
 .step {
@@ -2652,3 +2653,6 @@ tr:nth-child(odd) {background: #ffffff}
   box-shadow: none;
 }
 
+.overflow {
+  overflow: auto;
+}
