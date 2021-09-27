@@ -581,7 +581,8 @@ export class RulesetComponent implements OnInit {
     const dialogRef = this.dialog.open(ConditionalFormulaEditorComponent, {
       width: '1400px',
       data: {
-        columns: selectedColumns
+        columns: selectedColumns,
+        formula : rule.controls.value.value
       }
     });
 
@@ -676,6 +677,20 @@ export class RulesetComponent implements OnInit {
       return 'text';
     }
     return 'number';
+  }
+
+  getFormulaText(formulas) {
+    let formulaText = '';
+    if (formulas && formulas.length > 0) {
+      formulas.map(formula => {
+        formulaText += formula.logic;
+        formula.conditions.map(condition => {
+          formulaText += condition.start + condition.cde1 + condition.operator1 + condition.cde2 +
+            condition.value + condition.end + condition.condition + condition.operator2;
+        });
+      });
+    }
+    return formulaText;
   }
 
   confirmDialog(): Observable<boolean> {

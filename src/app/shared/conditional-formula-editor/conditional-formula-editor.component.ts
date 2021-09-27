@@ -10,14 +10,15 @@ import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 export class ConditionalFormulaEditorComponent implements OnInit {
 
   formulaDetailsForm: FormGroup;
+  conditionForm: FormGroup;
   logical = ['If', 'ElseIf', 'Else'];
-  logicoperators = [' ', '==', '!=',  '>', '>=', '<', '<='];
-  operators = [' ', '+', '-', '*', '/', '==', '!=',  '>', '>=', '<', '<='];
+  logicoperators = [' ', '==', '!=', '>', '>=', '<', '<='];
+  operators = [' ', '+', '-', '*', '/', '==', '!=', '>', '>=', '<', '<='];
   conditions = [' ', 'AND', 'OR'];
   startgroups = [' ', '(', '((', '((('];
   endgroups = [' ', ')', '))', ')))'];
   formulaObj: any = {
-    formula: [{start: '', cde1: '', operator1: '', cde2: '', end: '', condition: '', operator2: ''}]
+    formula: [{ start: '', cde1: '', operator1: '', cde2: '', end: '', conditions: [], operator2: '' }]
   };
   constructor(
     private fb: FormBuilder,
@@ -30,7 +31,11 @@ export class ConditionalFormulaEditorComponent implements OnInit {
 
   ngOnInit() {
     this.data.columns.unshift(' ');
-    this.initFormulaDetails(this.formulaObj);
+    if (this.data.formula && this.data.formula.length > 0) {
+      this.initFormulaDetails(this.data);
+    } else {
+      this.initFormulaDetails(this.formulaObj);
+    }
   }
 
   initFormulaDetails(fObject) {
@@ -47,27 +52,34 @@ export class ConditionalFormulaEditorComponent implements OnInit {
 
   intiFormArrays(field, value: any = {}) {
     if (field === 'formula') {
-      return this.fb.group({
+      this.conditionForm = this.fb.group({
         logic: [value.logic ? value.logic : ''],
-        conditions: this.fb.array([
-          this.initCondition()
-        ]),
+        conditions: this.fb.array([]),
         retcde1: [value.cde1 ? value.cde1 : ''],
         retoperator: [value.operator1 ? value.operator1 : ''],
         retcde2: [value.cde2 ? value.cde2 : ''],
         retvalue: [value.value ? value.value : ''],
       });
+      const formulaFA = this.conditionForm.controls.conditions as FormArray;
+      if (value.conditions && value.conditions.length > 0) {
+        value.conditions.map(condition => {
+          formulaFA.push(this.initCondition(condition))
+        });
+      } else {
+        formulaFA.push(this.initCondition())
+      }
+      return this.conditionForm;
     }
   }
 
   initCondition(value: any = {}) {
     return this.fb.group({
-      start: [value.cde1 ? value.cde1 : ''],
+      start: [value.start ? value.start : ''],
       cde1: [value.cde1 ? value.cde1 : ''],
       operator1: [value.operator1 ? value.operator1 : ''],
       cde2: [value.cde2 ? value.cde2 : ''],
       value: [value.value ? value.value : ''],
-      end: [value.cde1 ? value.cde1 : ''],
+      end: [value.end ? value.end : ''],
       condition: [value.condition ? value.condition : ''],
       operator2: [value.operator2 ? value.operator2 : ''],
     });
@@ -108,7 +120,7 @@ export class ConditionalFormulaEditorComponent implements OnInit {
   onCloseDialog(action) {
     this.ngZone.run(() => {
       console.log(this.formulaDetailsForm.value);
-      this.dialog.close({action, ...this.formulaDetailsForm.value});
+      this.dialog.close({ action, ...this.formulaDetailsForm.value });
     });
   }
 

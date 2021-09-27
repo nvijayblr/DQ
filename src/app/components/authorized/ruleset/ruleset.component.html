@@ -268,7 +268,10 @@
                                         </app-rule-selector>
                                       </div>
                                        <div class="list-item-5 outline" *ngIf="rule.get('rule').value === 'Formula'">
-                                          <div class="formula-preview">
+                                          <mat-form-field appearance="fill" (click)="showConditionalFormulaEditor(rule)">
+                                            <input matInput formControlName="value" [value]="getFormulaText(rule.get('value').value)" [readonly]="true">
+                                          </mat-form-field>
+                                          <!-- <div class="formula-preview" (click)="showConditionalFormulaEditor(rule)">
                                              <span *ngFor="let formula of rule.get('value').value">
                                              <span class="operator" *ngIf="formula.operator !== 'NULL'">{{formula.operator}}</span>
                                              <span class="cde">{{formula.cde}}</span>
@@ -276,7 +279,7 @@
                                           </div>
                                           <div class="edit-link" (click)="showConditionalFormulaEditor(rule)" style="margin-left: 2px; margin-bottom: 2px;">Conditional Formula Editor</div>
                                           <div class="edit-link" (click)="showAdvanedFormulaEditor(rule)" style="margin-left: 2px;">Advanced Formula Editor</div>
-                                          <div class="edit-link" (click)="showFormulaEditor(rule)">Formula Editor</div>
+                                          <div class="edit-link" (click)="showFormulaEditor(rule)">Formula Editor</div> -->
                                        </div>
                                        <div class="list-item-5 outline">
                                           <app-rule-selector 
