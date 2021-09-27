@@ -376,19 +376,21 @@ export class RulesetComponent implements OnInit {
     this.selectedColumns = [...selectedColumns];
     // Remove the column from ruleset if the column are removed form the list
     const updatedRulesList = [];
-    selectedColumns.map(col => {
-      this.rulesList.map(rule => {
-        if (col.title === !rule.column) {
-          updatedRulesList.push(rule);
-        }
-      });
+    let nameList = selectedColumns.map(col => { return col.title });
+
+    this.rulesList.map(rule => {
+      if (nameList.indexOf(rule.column) >= 0) {
+        rule.isAdded = false;
+        updatedRulesList.push(rule);
+      }
     });
+
     this.rulesList = [...updatedRulesList];
+    nameList = updatedRulesList.map(rule => { return rule.column })
 
     selectedColumns.map(col => {
       // Add only newly selected columns
-      const ruleColumn = this.rulesList.filter(rule => col.title === rule.column);
-      if (!ruleColumn.length) {
+      if (nameList.indexOf(col.title) === -1) {
         columns.push(col.title);
       }
     });
@@ -398,19 +400,6 @@ export class RulesetComponent implements OnInit {
       refSelectedColumns: this.columnsForm.controls.refernceColumns.value.map(col => col.title),
       sourcepath: this.afControls.sourcepath.value,
     };
-
-    if (!payload.selectedColumns.length && !payload.refSelectedColumns.length) {
-      this.isLoading = false;
-      if (this.rulesList.length) {
-        const firstRule = this.rulesList[0];
-        this.selectedRuleColumn = firstRule.column;
-        this.cdeStatistics = (firstRule.statistics && firstRule.statistics.length) ? firstRule.statistics[0] : {};
-        this.correlationSummary = firstRule.correlationSummary ? firstRule.correlationSummary : {};
-        this.initFormulaEditor(this.rulesList);
-      }
-      return;
-    }
-
     if (payload.refSelectedColumns && payload.refSelectedColumns.length) {
       this.ruleValueList.ReferenceCDE = [];
       payload.refSelectedColumns.map(column => {
@@ -420,20 +409,29 @@ export class RulesetComponent implements OnInit {
         });
       });
     }
-
-    this.afControls.columnRules = this.fb.array([]);
-
-    // Rules Sync loading Logic
-    this.isRulesLoading = true;
-    this.initRuleValue = true;
-    this.selectedColumnsCopy = [...payload.selectedColumns];
-
-    if (this.selectedColumnsCopy.length) {
-      payload.selectedColumns = this.selectedColumnsCopy.slice(0, 7);
-    }
-    this.getColumnnRuleBySync(this.selectedColumnsCopy, payload);
-
     // Clear the columns array
+    this.afControls.columnRules = this.fb.array([]);
+    if (!payload.selectedColumns.length) {
+      this.isLoading = false;
+      if (this.rulesList.length) {
+        const firstRule = this.rulesList[0];
+        this.selectedRuleColumn = firstRule.column;
+        this.cdeStatistics = (firstRule.statistics && firstRule.statistics.length) ? firstRule.statistics[0] : {};
+        this.correlationSummary = firstRule.correlationSummary ? firstRule.correlationSummary : {};
+        //this.initFormulaEditor(this.rulesList);
+        this.initRulesFormArray();
+      }
+    } else {
+      // Rules Sync loading Logic
+      this.isRulesLoading = true;
+      this.initRuleValue = true;
+      this.selectedColumnsCopy = [...payload.selectedColumns];
+
+      if (this.selectedColumnsCopy.length) {
+        payload.selectedColumns = this.selectedColumnsCopy.slice(0, 7);
+      }
+      this.getColumnnRuleBySync(this.selectedColumnsCopy, payload);
+    }
   }
 
   getColumnnRuleBySync = (selectedColumns, payload) => {
