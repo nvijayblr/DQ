@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation, ViewChild, QueryList, ViewChildren } from '@angular/core';
-import {MatAccordion} from '@angular/material/expansion';
+import { MatAccordion } from '@angular/material/expansion';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -18,7 +18,7 @@ import { _ } from 'ag-grid-community';
 import * as moment from 'moment';
 import { DeactiveDialogComponent } from 'src/app/shared/deactive-dialog/deactive-dialog.component';
 import { Observable } from 'rxjs';
-
+import * as RuleListConstant from './ruleset.constants';
 /**
  * @title Basic expansion panel
  */
@@ -40,34 +40,34 @@ export class RulesetComponent implements OnInit {
     private authGuardService: AuthGuardService,
     private messageService: MessageService,
     private location: Location) {
-      this.appConfig = appConfig;
-      this.route.queryParams.subscribe(params => {
-         this.sourceId = params.sourceId;
-         this.mode = params.mode;
-         this.rulesetId = params.rulesetId;
-         if (!params.sourceId) {
-          localStorage.removeItem('analysis');
-        }
-      });
-      location.subscribe((back: PopStateEvent) => {
-        this.backType = back.type;
-      });
-    }
+    this.appConfig = appConfig;
+    this.route.queryParams.subscribe(params => {
+      this.sourceId = params.sourceId;
+      this.mode = params.mode;
+      this.rulesetId = params.rulesetId;
+      if (!params.sourceId) {
+        localStorage.removeItem('analysis');
+      }
+    });
+    location.subscribe((back: PopStateEvent) => {
+      this.backType = back.type;
+    });
+  }
 
-//   Analysis View
-// - By Column Selection (Single Column, Multiple Column)
-// - Chart View
-// - Chart Drill View
-// - Highliht settings
+  //   Analysis View
+  // - By Column Selection (Single Column, Multiple Column)
+  // - Chart View
+  // - Chart Drill View
+  // - Highliht settings
 
-// - Ruleset - start and end
-// - Reference CDE (REF1 - COL_NAME)
+  // - Ruleset - start and end
+  // - Reference CDE (REF1 - COL_NAME)
 
 
 
   get afControls(): any { return this.analysisForm.controls; }
   @ViewChild('owlCar', { static: false }) owlCar;
-  @ViewChild(MatAccordion , { static: true }) accordion: MatAccordion;
+  @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
   isLinear = true;
   user: any = {};
   professional: any = {};
@@ -94,7 +94,7 @@ export class RulesetComponent implements OnInit {
     dots: false,
     margin: 5,
     navSpeed: 0,
-    navText: [ '<i class="fa-chevron-left"></i>', '<i class="fa-chevron-right></i>"' ],
+    navText: ['<i class="fa-chevron-left"></i>', '<i class="fa-chevron-right></i>"'],
     autoWidth: true,
     nav: false,
     items: 6,
@@ -143,179 +143,11 @@ export class RulesetComponent implements OnInit {
   ruleFormat = '';
   ruleDimenstion = '';
 
-  ruleTypeList = [{
-    label: 'Data Type',
-    value: 'DataType',
-  }, {
-    label: 'Length',
-    value: 'Length',
-  }, {
-    label: 'Value',
-    value: 'Value',
-  }, {
-    label: 'Reference CDE',
-    value: 'ReferenceCDE'
-  }, {
-    label: 'Formula',
-    value: 'Formula'
-  }];
-
-  ruleOperatorList = {
-    DataType: [{
-      label: 'Should be',
-      value: 'Shouldbe'
-    }],
-    ReferenceCDE: [{
-      label: 'Should be',
-      value: 'Shouldbe'
-    }],
-    Length: [{
-        label: '=',
-        value: 'euqualto'
-      }, {
-        label: '>=',
-        value: 'greaterthanequalto'
-      }, {
-        label: '<=',
-        value: 'lessthanequalto'
-      }, {
-        label: '>',
-        value: 'greaterthan'
-      }, {
-        label: '<',
-        value: 'lessthan'
-      }],
-    Formula: [{
-        label: 'Should be',
-        value: 'Shouldbe'
-      }, {
-        label: '=',
-        value: 'euqualto'
-      }, {
-        label: '>=',
-        value: 'greaterthanequalto'
-      }, {
-        label: '<=',
-        value: 'lessthanequalto'
-      }, {
-        label: '>',
-        value: 'greaterthan'
-      }, {
-        label: '<',
-        value: 'lessthan'
-      }],
-    Value: [{
-        label: '=',
-        value: 'euqualto'
-      }, {
-        label: '>=',
-        value: 'greaterthanequalto'
-      }, {
-        label: '<=',
-        value: 'lessthanequalto'
-      }, {
-        label: '>',
-        value: 'greaterthan'
-      }, {
-        label: '<',
-        value: 'lessthan'
-      }, {
-        label: 'Should be',
-        value: 'Shouldbe'
-      }, {
-        label: 'Should not include',
-        value: 'shouldnotinclude'
-      }, {
-        label: 'Same as',
-        value: 'sameas'
-      }, {
-        label: 'Should be in',
-        value: 'shouldbein'
-      }, {
-        label: 'Reference data',
-        value: 'referencedata'
-      }, {
-        label: 'Element',
-        value: 'element'
-      }]
-  };
-
-  ruleValueList = {
-    DataType: [{
-        label: 'Alpha',
-        value: 'alpha'
-      }, {
-        label: 'Alphanumeric',
-        value: 'Alphanumeric'
-      }, {
-        label: 'Integer',
-        value: 'Integer'
-      }, {
-        label: 'Numeric',
-        value: 'Numeric'
-      }, {
-        label: 'Date',
-        value: 'Date'
-      }, {
-        label: 'DateTime',
-        value: 'DateTime'
-      }],
-    Value: [{
-        label: 'Special Characters',
-        value: 'SpecialCharacters'
-      }, {
-        label: 'Amount',
-        value: 'Amount'
-      }],
-    ReferenceCDE: []
-  };
-
-  ruleFormatList = {
-    date: [{
-        label: 'YYYYMMDD',
-        value: 'YYYYMMDD'
-      }, {
-        label: 'DD-MMM-YYYY',
-        value: 'DDMMMYYYY'
-      }, {
-        label: 'DD-MMM-YY',
-        value: 'DD-MMM-YY'
-      }],
-    datetime: [{
-        label: 'YYYYMMDD HH:MM',
-        value: 'YYYYMMDD'
-      }, {
-        label: 'DD-MMM-YYYY HH:MM',
-        value: 'DDMMMYYYY'
-      }, {
-        label: 'DD-MMM-YY HH:MM',
-        value: 'DD-MMM-YY'
-      }],
-    amount: [{
-        label: '2 Decimals',
-        value: '2 Decimals'
-      }, {
-        label: '3 Decimals',
-        value: '3 Decimals'
-      }]
-  };
-
-  ruleDimenstionList = [{
-    label: 'Accuracy',
-    value: 'Accuracy'
-  }, {
-    label: 'Consistency',
-    value: 'Consistency'
-  }, {
-    label: 'Integrity',
-    value: 'Integrity'
-  }, {
-    label: 'Uniqueness',
-    value: 'Uniqueness'
-  }, {
-    label: 'Validity',
-    value: 'Validity'
-  }];
+  ruleTypeList = RuleListConstant.RuleTypeList;
+  ruleOperatorList = RuleListConstant.RuleOperatorList;
+  ruleValueList = RuleListConstant.RuleValueList;
+  ruleFormatList = RuleListConstant.RuleFormatList;
+  ruleDimenstionList = RuleListConstant.RuleDimenstionList;
 
   isPreviewLoaded = false;
   isPreviewLoading = false;
@@ -351,10 +183,10 @@ export class RulesetComponent implements OnInit {
     // const targetDate = moment(moment().add(60, 'days')).format('YYYY-MM-DD');
     this.analysisForm = this.fb.group({
 
-      sourceId: [{value: analysis.sourceId || '', disabled: true}],
-      name: [{value: analysis.source.sourceDataName || '', disabled: true}, [Validators.required, Validators.maxLength(100)]],
+      sourceId: [{ value: analysis.sourceId || '', disabled: true }],
+      name: [{ value: analysis.source.sourceDataName || '', disabled: true }, [Validators.required, Validators.maxLength(100)]],
       sourceFilename: [analysis.source.sourceFileName || ''],
-      description: [{value: analysis.source.sourceDataDescription, disabled: true} || ''],
+      description: [{ value: analysis.source.sourceDataDescription, disabled: true } || ''],
       sourcepath: [analysis.source.templateSourcePath || ''],
       rulesetName: [analysis.rulesetName || '', [Validators.required, Validators.maxLength(100)]],
       sourceCSV: [''],
@@ -365,7 +197,7 @@ export class RulesetComponent implements OnInit {
     });
 
     this.sourceNameText = analysis.source.sourceDataName;
-     // console.log(this.sourceNameText);
+    // console.log(this.sourceNameText);
 
     if (analysis) {
       this.selectedSource = analysis;
@@ -405,7 +237,7 @@ export class RulesetComponent implements OnInit {
     });
     if (this.mode === 'edit') {
       this.columnsForm.controls.refernceColumns.setValue(this.selectedReferenceColumns);
-     }
+    }
 
     this.minDate = moment().format('YYYY-MM-DDT[18:30:00.000Z]');
     this.maxDate = moment(moment().add(6, 'months')).format('YYYY-MM-DDT[18:30:00.000Z]');
@@ -416,12 +248,12 @@ export class RulesetComponent implements OnInit {
       this.analysisForm.controls.rulesetName.setValue(this.sourceNameText + '-ruleset' + ruleId);
       this.analysisForm.controls.startDate.setValue(this.minDate);
       this.analysisForm.controls.endDate.setValue(this.maxDate);
-     }
+    }
 
     this.loadSourcePreview();
   }
 
-   intiFormArrays(field, value: any = {}) {
+  intiFormArrays(field, value: any = {}) {
     if (field === 'referenceData') {
       if (!value.availableRefColumns) {
         value.availableRefColumns = [];
@@ -436,10 +268,10 @@ export class RulesetComponent implements OnInit {
       console.log(this.availableReferenceColumns);
       return this.fb.group({
         id: [value.id],
-        referenceDataName: [{value: value.referenceDataName, disabled: true}],
-        referenceDataDescription: [{value: value.referenceDataDescription, disabled: true}],
+        referenceDataName: [{ value: value.referenceDataName, disabled: true }],
+        referenceDataDescription: [{ value: value.referenceDataDescription, disabled: true }],
         referenceColumns: [refAvailableColumns],
-        referencePath: [{value: value.referenceFileName, disabled: true}]
+        referencePath: [{ value: value.referenceFileName, disabled: true }]
       });
     }
     if (field === 'columnRules') {
@@ -455,6 +287,7 @@ export class RulesetComponent implements OnInit {
       }));
       return this.fb.group({
         column: [value.column],
+        datatype: [value.DataType],
         rules: this.fb.array(rulesGroup)
       });
     }
@@ -520,8 +353,8 @@ export class RulesetComponent implements OnInit {
     this.selectedSource = this.sourceList.filter(item => item.sourceId === e.value)[0];
     this.availableColumns = this.selectedSource.source.availableColumns.map((column, index) => {
       return {
-          id: (index + 1),
-          title: column
+        id: (index + 1),
+        title: column
       };
     });
 
@@ -690,11 +523,11 @@ export class RulesetComponent implements OnInit {
     this.http.createEditRuleset(ruleset, this.rulesetId ? 'put' : 'post').subscribe((result: any) => {
       this.isLoading = false;
       if (this.selectedSource.UploadsHistory.length < 1) {
-        this.router.navigate([`auth/data-quality-monitoring`], {queryParams: {from: 'ruleset'}});
+        this.router.navigate([`auth/data-quality-monitoring`], { queryParams: { from: 'ruleset' } });
       } else {
         this.router.navigate([`auth/data-quality-monitoring`]);
       }
-      
+
     }, (error) => {
       this.isLoading = false;
     });
@@ -764,8 +597,8 @@ export class RulesetComponent implements OnInit {
   }
 
 
-   gotoStepper(index, tab = '') {
-      this.stepIndex = index;
+  gotoStepper(index, tab = '') {
+    this.stepIndex = index;
   }
 
 
@@ -794,7 +627,7 @@ export class RulesetComponent implements OnInit {
   }
 
   initFormulaEditor(ruleList) {
-     console.log(ruleList);
+    console.log(ruleList);
   }
 
   loadSourcePreview() {
@@ -823,15 +656,30 @@ export class RulesetComponent implements OnInit {
       this.isPreviewLoaded = false;
       this.isPreviewLoading = false;
     });
-   }
-   showEditDetails(ind) {
-      if (this.visibleIndex === ind) {
-         this.visibleIndex = -1;
-       } else {
-         this.visibleIndex = ind;
-       }
   }
-  
+  showEditDetails(ind) {
+    if (this.visibleIndex === ind) {
+      this.visibleIndex = -1;
+    } else {
+      this.visibleIndex = ind;
+    }
+  }
+
+  getOperatorList(ruleVal, datatype) {
+    let list = this.ruleOperatorList[ruleVal];
+    if (ruleVal === 'Value' && datatype === 'Numeric') {
+      list = list.concat(RuleListConstant.Operators.CompareOperator);
+    }
+    return list;
+  }
+
+  getType(ruleVal, datatype) {
+    if (ruleVal === 'Value' && datatype != 'Numeric') {
+      return 'text';
+    }
+    return 'number';
+  }
+
   confirmDialog(): Observable<boolean> {
     const message = 'You have not saved your current work. Do you want to proceed and discard?';
     const data = { 'message': message, 'toShowCancel': true, 'buttonYesCaption': 'Yes', 'buttonNoCaption': 'No' };

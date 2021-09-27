@@ -241,25 +241,32 @@
                                        <div class="list-item-5 outline">
                                           <app-rule-selector 
                                               [showAddItem]="false"
-                                              [ruleItems]="ruleOperatorList[rule.get('rule').value]" 
+                                              [ruleItems]="getOperatorList(rule.get('rule').value,columns['controls'].datatype.value)" 
                                               [initValue]="rule.get('operator').value" 
                                               (selectionChange)="rule.get('operator').setValue($event.value)"
                                           ></app-rule-selector>
                                        </div>
-                                       <div class="list-item-5 outline" [hidden]="rule.get('rule').value === 'Formula'">
-                                          <app-rule-selector 
-                                             *ngIf="rule.get('rule').value !== 'ReferenceCDE'"
-                                             [showAddItem]="false"
-                                             [ruleItems]="ruleValueList[rule.get('rule').value]" 
-                                             [initValue]="rule.get('value').value" 
-                                             (selectionChange)="rule.get('value').setValue($event.value)"
-                                          ></app-rule-selector>
-                                          <mat-form-field appearance="outline" *ngIf="rule.get('rule').value === 'ReferenceCDE'">
-                                             <mat-select formControlName="value" (change)="rule.get('value').setValue($event.value)">
-                                             <mat-option *ngFor="let item of columnsForm.controls.refernceColumns.value" [value]="item.title">{{item.title}}</mat-option>
-                                             </mat-select>
-                                          </mat-form-field>
-                                       </div>
+                                       <div class="list-item-5 outline" *ngIf="rule.get('rule').value === 'ReferenceCDE'">
+                                        <mat-form-field appearance="fill">
+                                          <mat-select formControlName="value"
+                                            (change)="rule.get('value').setValue($event.value)">
+                                            <mat-option *ngFor="let item of columnsForm.controls.refernceColumns.value"
+                                              [value]="item.title">{{item.title}}</mat-option>
+                                          </mat-select>
+                                        </mat-form-field>
+                                      </div>
+                                      <div class="list-item-5 outline"
+                                        *ngIf="['Formula','ReferenceCDE'].indexOf(rule.get('rule').value)==-1">
+                                        <mat-form-field appearance="fill" *ngIf="!ruleValueList[rule.get('rule').value]">
+                                          <input matInput formControlName="value"
+                                            [type]="getType(rule.get('rule').value,columns['controls'].datatype.value)">
+                                        </mat-form-field>
+                                        <app-rule-selector *ngIf="ruleValueList[rule.get('rule').value]"
+                                          [showAddItem]="false" [ruleItems]="ruleValueList[rule.get('rule').value]"
+                                          [initValue]="rule.get('value').value"
+                                          (selectionChange)="rule.get('value').setValue($event.value)">
+                                        </app-rule-selector>
+                                      </div>
                                        <div class="list-item-5 outline" *ngIf="rule.get('rule').value === 'Formula'">
                                           <div class="formula-preview">
                                              <span *ngFor="let formula of rule.get('value').value">
