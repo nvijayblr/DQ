@@ -249,12 +249,14 @@ export class AttributeDetailsComponent implements OnInit {
     this.selectedSource = source;
     this.initLoadProfile = false;
     this.titleSrc = source.templateSourcePath;
+    this.previewProfile = true;
     this.loadProfile(source);
-    this.loadReferencePreview();
+    //this.loadReferencePreview();
     // this.loadCorrelation(this.selectedSource, this.datatype, this.method);
   }
 
   loadProfile(source) {
+    this.previewProfile = true;
     this.loaderMsg = 'Loading Profile...';
     this.isLoading = true;    
     this.titleSrc = source.templateSourcePath ? source.templateSourcePath : this.titleSrc;
@@ -320,10 +322,10 @@ export class AttributeDetailsComponent implements OnInit {
      }
     this.loadCorrelation(this.selectedSource, this.datatype, this.method);
   }
-
+loadingCorrelation = false;
   loadCorrelation(source, type, method) {
-    //this.isLoading = true;
-    //this.loaderMsg = 'Loading Correlation...';
+    this.loadingCorrelation = true;
+    this.loaderMsg = 'Loading Correlation...';
     const payload = {
       sourcepath: source.templateSourcePath ? source.templateSourcePath : this.titleSrc,
       cols_data_type: type,
@@ -331,9 +333,9 @@ export class AttributeDetailsComponent implements OnInit {
     };
     this.http.getCorrMatrix(payload).subscribe((result: any) => {
       this.coMatrix = result ? result : {};
-      this.isLoading = false;
+      this.loadingCorrelation = false;
     }, (error) => {
-      this.isLoading = false;
+      this.loadingCorrelation = false;
       this.coMatrix = {};
   });
   }
@@ -397,8 +399,8 @@ export class AttributeDetailsComponent implements OnInit {
       //console.log('this.selectedSource', this.selectedSource)
 
       this.loadProfile(this.selectedSource);
-      this.loadReferencePreview();
-      this.loadCorrelation(this.selectedSource, this.datatype, this.method);
+      // this.loadReferencePreview();
+      // this.loadCorrelation(this.selectedSource, this.datatype, this.method);
       this.sourceByCategory =
         _.chain(this.allSourceCategory).
         groupBy('sourceCategory')
@@ -594,6 +596,7 @@ export class AttributeDetailsComponent implements OnInit {
       this.previewTable = true;
       this.previewProfile = false;
       this.previewCorrelation = false;
+      this.loadReferencePreview();
     } else if (menu === 'profile') {
       this.previewTable = false;
       this.previewProfile = true;
@@ -602,6 +605,8 @@ export class AttributeDetailsComponent implements OnInit {
       this.previewTable = false;
       this.previewProfile = false;
       this.previewCorrelation = true;
+      this.loadCorrelation(this.selectedSource, this.datatype, this.method);
+
     } else {
       this.previewTable = true;
       this.previewProfile = false;
@@ -661,8 +666,8 @@ export class AttributeDetailsComponent implements OnInit {
       this.selectedSource = this.getClusterKeys;      
       this.titleSrc = this.getClusterKeys[item][this.selectedColumn].outputpath;
       this.loadProfile(this.selectedSource);
-      this.loadReferencePreview();
-      this.loadCorrelation(this.selectedSource, this.datatype, this.method);
+      //this.loadReferencePreview();
+      //this.loadCorrelation(this.selectedSource, this.datatype, this.method);
     } else {
       const payload = {
         client_url: this.clientUrl || '',
@@ -679,8 +684,8 @@ export class AttributeDetailsComponent implements OnInit {
           this.selectedSource = result;
           this.titleSrc = result.outputpath;
           this.loadProfile(this.selectedSource);
-          this.loadReferencePreview();
-          this.loadCorrelation(this.selectedSource, this.datatype, this.method);
+          //this.loadReferencePreview();
+          //this.loadCorrelation(this.selectedSource, this.datatype, this.method);
         }
       })
       
