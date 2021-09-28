@@ -256,11 +256,13 @@ export class AnalysisComponent implements OnInit {
    genrateColDefs() {
       const columnDefs = [];
       columnDefs.push({
-         field: this.selectedKey
+         field: this.selectedKey,
+         colId : 0
       });
-      this.analysisKeys.map(col => {
+      this.analysisKeys.map((col,index) => {
          columnDefs.push({
             field: col,
+            colId : index + 1,
             filter: false, // 'agNumberColumnFilter'
             cellRenderer: (params) => {
                if (params.value && params.value.value) {
