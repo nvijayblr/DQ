@@ -260,7 +260,8 @@
                                         <mat-form-field appearance="fill" *ngIf="!ruleValueList[rule.get('rule').value]">
                                           <input matInput formControlName="value"
                                             [type]="getType(rule.get('rule').value,columns['controls'].datatype.value)"
-                                            [min]="getMinVal(rule.get('rule').value)">
+                                            [min]="getMinVal(rule.get('rule').value)"
+                                            oninput="(this.min == 0) && (validity.valid||(value=''))">
                                         </mat-form-field>
                                         <app-rule-selector *ngIf="ruleValueList[rule.get('rule').value]"
                                           [showAddItem]="false" [ruleItems]="ruleValueList[rule.get('rule').value]"
