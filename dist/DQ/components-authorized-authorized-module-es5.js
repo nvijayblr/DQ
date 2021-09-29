@@ -32426,6 +32426,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             _this199.uploadErrorMessage = result.errorMsg;
 
             if (result.errorMsg) {
+              if (result.errorCode == '103') {
+                result.errorMsg += '.Please correct the file and re-upload.';
+              }
+
               _this199.showUploadError(result.errorMsg);
             } else {
               _this199.getAllSources(); //this.getAllDetails();

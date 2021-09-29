@@ -4426,7 +4426,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         key: "ngOnInit",
         value: function ngOnInit() {
           this.data.columns.unshift(' ');
-          this.initFormulaDetails(this.formulaObj);
+
+          if (this.data.formula && this.data.formula.length > 0 && this.data.type === 'ADVANCED') {
+            this.initFormulaDetails(this.data);
+          } else {
+            this.initFormulaDetails(this.formulaObj);
+          }
         }
       }, {
         key: "initFormulaDetails",
@@ -4451,12 +4456,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
           if (field === 'formula') {
             return this.fb.group({
-              start: [value.cde1 ? value.cde1 : ''],
+              start: [value.start ? value.start : ''],
               cde1: [value.cde1 ? value.cde1 : ''],
               operator1: [value.operator1 ? value.operator1 : ''],
               cde2: [value.cde2 ? value.cde2 : ''],
               value: [value.value ? value.value : ''],
-              end: [value.cde1 ? value.cde1 : ''],
+              end: [value.end ? value.end : ''],
               condition: [value.condition ? value.condition : ''],
               operator2: [value.operator2 ? value.operator2 : '']
             });
@@ -6354,7 +6359,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function ngOnInit() {
           this.data.columns.unshift(' ');
 
-          if (this.data.formula && this.data.formula.length > 0) {
+          if (this.data.formula && this.data.formula.length > 0 && this.data.type === 'CONDITIONAL') {
             this.initFormulaDetails(this.data);
           } else {
             this.initFormulaDetails(this.formulaObj);
@@ -6455,6 +6460,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           // const formula = this.formulaDetailsForm.get(arrayName) as FormArray;
           // formula.removeAt(index);
           this.formulaCondition(formulaIndex).removeAt(condIndex);
+        }
+      }, {
+        key: "isConditional",
+        value: function isConditional(formula) {
+          return Array.isArray(formula[0].conditions);
         }
       }, {
         key: "onCloseDialog",
@@ -7424,7 +7434,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       _createClass(FormulaEditorComponent, [{
         key: "ngOnInit",
         value: function ngOnInit() {
-          this.initFormulaDetails(this.formulaObj);
+          this.data.columns.unshift(' ');
+
+          if (this.data.formula && this.data.formula.length > 0 && this.data.type === 'SIMPLE') {
+            this.initFormulaDetails(this.data);
+          } else {
+            this.initFormulaDetails(this.formulaObj);
+          }
         }
       }, {
         key: "initFormulaDetails",
@@ -7465,6 +7481,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function removeFormItem(arrayName, index) {
           var formula = this.formulaDetailsForm.get(arrayName);
           formula.removeAt(index);
+        }
+      }, {
+        key: "isSimpleFormula",
+        value: function isSimpleFormula(formula) {
+          return formula[0].cde || formula[0].operator;
         }
       }, {
         key: "onCloseDialog",

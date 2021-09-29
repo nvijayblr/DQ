@@ -19619,6 +19619,9 @@ let DashboardComponent = class DashboardComponent {
             console.log(result);
             this.uploadErrorMessage = result.errorMsg;
             if (result.errorMsg) {
+                if (result.errorCode == '103') {
+                    result.errorMsg += '.Please correct the file and re-upload.';
+                }
                 this.showUploadError(result.errorMsg);
             }
             else {

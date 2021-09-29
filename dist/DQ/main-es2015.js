@@ -2839,7 +2839,12 @@ let AdvancedFormulaEditorComponent = class AdvancedFormulaEditorComponent {
     }
     ngOnInit() {
         this.data.columns.unshift(' ');
-        this.initFormulaDetails(this.formulaObj);
+        if (this.data.formula && this.data.formula.length > 0 && this.data.type === 'ADVANCED') {
+            this.initFormulaDetails(this.data);
+        }
+        else {
+            this.initFormulaDetails(this.formulaObj);
+        }
     }
     initFormulaDetails(fObject) {
         this.formulaDetailsForm = this.fb.group({
@@ -2855,12 +2860,12 @@ let AdvancedFormulaEditorComponent = class AdvancedFormulaEditorComponent {
     intiFormArrays(field, value = {}) {
         if (field === 'formula') {
             return this.fb.group({
-                start: [value.cde1 ? value.cde1 : ''],
+                start: [value.start ? value.start : ''],
                 cde1: [value.cde1 ? value.cde1 : ''],
                 operator1: [value.operator1 ? value.operator1 : ''],
                 cde2: [value.cde2 ? value.cde2 : ''],
                 value: [value.value ? value.value : ''],
-                end: [value.cde1 ? value.cde1 : ''],
+                end: [value.end ? value.end : ''],
                 condition: [value.condition ? value.condition : ''],
                 operator2: [value.operator2 ? value.operator2 : ''],
             });
@@ -4163,7 +4168,7 @@ let ConditionalFormulaEditorComponent = class ConditionalFormulaEditorComponent 
     }
     ngOnInit() {
         this.data.columns.unshift(' ');
-        if (this.data.formula && this.data.formula.length > 0) {
+        if (this.data.formula && this.data.formula.length > 0 && this.data.type === 'CONDITIONAL') {
             this.initFormulaDetails(this.data);
         }
         else {
@@ -4238,6 +4243,9 @@ let ConditionalFormulaEditorComponent = class ConditionalFormulaEditorComponent 
         // const formula = this.formulaDetailsForm.get(arrayName) as FormArray;
         // formula.removeAt(index);
         this.formulaCondition(formulaIndex).removeAt(condIndex);
+    }
+    isConditional(formula) {
+        return Array.isArray(formula[0].conditions);
     }
     onCloseDialog(action) {
         this.ngZone.run(() => {
@@ -4827,7 +4835,13 @@ let FormulaEditorComponent = class FormulaEditorComponent {
         this.dialog.disableClose = true;
     }
     ngOnInit() {
-        this.initFormulaDetails(this.formulaObj);
+        this.data.columns.unshift(' ');
+        if (this.data.formula && this.data.formula.length > 0 && this.data.type === 'SIMPLE') {
+            this.initFormulaDetails(this.data);
+        }
+        else {
+            this.initFormulaDetails(this.formulaObj);
+        }
     }
     initFormulaDetails(fObject) {
         this.formulaDetailsForm = this.fb.group({
@@ -4855,6 +4869,9 @@ let FormulaEditorComponent = class FormulaEditorComponent {
     removeFormItem(arrayName, index) {
         const formula = this.formulaDetailsForm.get(arrayName);
         formula.removeAt(index);
+    }
+    isSimpleFormula(formula) {
+        return (formula[0].cde || formula[0].operator);
     }
     onCloseDialog(action) {
         this.ngZone.run(() => {
