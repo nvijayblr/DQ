@@ -24,7 +24,12 @@ export class FormulaEditorComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.initFormulaDetails(this.formulaObj);
+    this.data.columns.unshift(' ');
+    if (this.data.formula && this.data.formula.length > 0 && this.data.type === 'SIMPLE') {
+      this.initFormulaDetails(this.data);
+    } else {
+      this.initFormulaDetails(this.formulaObj);
+    }
   }
 
   initFormulaDetails(fObject) {
@@ -58,6 +63,9 @@ export class FormulaEditorComponent implements OnInit {
     formula.removeAt(index);
   }
 
+  isSimpleFormula(formula) {
+    return (formula[0].cde || formula[0].operator);
+  }
 
   onCloseDialog(action) {
     this.ngZone.run(() => {

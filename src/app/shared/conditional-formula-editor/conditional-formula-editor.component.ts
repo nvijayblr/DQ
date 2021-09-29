@@ -31,7 +31,7 @@ export class ConditionalFormulaEditorComponent implements OnInit {
 
   ngOnInit() {
     this.data.columns.unshift(' ');
-    if (this.data.formula && this.data.formula.length > 0) {
+    if (this.data.formula && this.data.formula.length > 0 && this.data.type === 'CONDITIONAL') {
       this.initFormulaDetails(this.data);
     } else {
       this.initFormulaDetails(this.formulaObj);
@@ -116,6 +116,9 @@ export class ConditionalFormulaEditorComponent implements OnInit {
     this.formulaCondition(formulaIndex).removeAt(condIndex);
   }
 
+  isConditional(formula) {
+    return Array.isArray(formula[0].conditions);
+  }
 
   onCloseDialog(action) {
     this.ngZone.run(() => {

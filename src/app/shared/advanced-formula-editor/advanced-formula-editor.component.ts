@@ -28,7 +28,11 @@ export class AdvancedFormulaEditorComponent implements OnInit {
 
   ngOnInit() {
     this.data.columns.unshift(' ');
-    this.initFormulaDetails(this.formulaObj);
+    if (this.data.formula && this.data.formula.length > 0 && this.data.type === 'ADVANCED') {
+      this.initFormulaDetails(this.data);
+    } else {
+      this.initFormulaDetails(this.formulaObj);
+    }
   }
 
   initFormulaDetails(fObject) {
@@ -46,12 +50,12 @@ export class AdvancedFormulaEditorComponent implements OnInit {
   intiFormArrays(field, value: any = {}) {
     if (field === 'formula') {
       return this.fb.group({
-        start: [value.cde1 ? value.cde1 : ''],
+        start: [value.start ? value.start : ''],
         cde1: [value.cde1 ? value.cde1 : ''],
         operator1: [value.operator1 ? value.operator1 : ''],
         cde2: [value.cde2 ? value.cde2 : ''],
         value: [value.value ? value.value : ''],
-        end: [value.cde1 ? value.cde1 : ''],
+        end: [value.end ? value.end : ''],
         condition: [value.condition ? value.condition : ''],
         operator2: [value.operator2 ? value.operator2 : ''],
       });
@@ -67,7 +71,6 @@ export class AdvancedFormulaEditorComponent implements OnInit {
     const formula = this.formulaDetailsForm.get(arrayName) as FormArray;
     formula.removeAt(index);
   }
-
 
   onCloseDialog(action) {
     this.ngZone.run(() => {

@@ -1097,3 +1097,8 @@ tr:nth-child(odd) {background: #f0f7f7}
     margin-left: 10px;
   }
 }
+
+.ruleTextarea {
+  resize: none;
+  height: 20px !important;
+}

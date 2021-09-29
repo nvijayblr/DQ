@@ -539,7 +539,9 @@ export class RulesetComponent implements OnInit {
     const dialogRef = this.dialog.open(FormulaEditorComponent, {
       width: '700px',
       data: {
-        columns: selectedColumns
+        columns: selectedColumns,
+        formula: rule.controls.value.value,
+        type : rule.controls.type.value
       }
     });
 
@@ -560,7 +562,9 @@ export class RulesetComponent implements OnInit {
     const dialogRef = this.dialog.open(AdvancedFormulaEditorComponent, {
       width: '1300px',
       data: {
-        columns: selectedColumns
+        columns: selectedColumns,
+        formula: rule.controls.value.value,
+        type : rule.controls.type.value
       }
     });
 
@@ -582,7 +586,8 @@ export class RulesetComponent implements OnInit {
       width: '1400px',
       data: {
         columns: selectedColumns,
-        formula : rule.controls.value.value
+        formula: rule.controls.value.value,
+        type : rule.controls.type.value
       }
     });
 
@@ -593,8 +598,7 @@ export class RulesetComponent implements OnInit {
       }
     });
 
-  }
-
+  } 
 
   gotoStepper(index, tab = '') {
     this.stepIndex = index;
@@ -679,19 +683,53 @@ export class RulesetComponent implements OnInit {
     return 'number';
   }
 
-  getFormulaText(formulas) {
+  getMinVal(ruleVal) {
+    if (['Length', 'MinLength', 'MaxLength'].indexOf(ruleVal) >= 0) {
+      return 0;
+    }
+    return false;
+  }
+
+  getFormulaText(formulas, type) {
     let formulaText = '';
-    if (formulas && formulas.length > 0) {
+    if (formulas && Array.isArray(formulas)) {
       formulas.map(formula => {
-        formulaText += formula.logic;
-        formula.conditions.map(condition => {
-          formulaText += condition.start + condition.cde1 + condition.operator1 + condition.cde2 +
-            condition.value + condition.end + condition.condition + condition.operator2;
-        });
+        switch (type) {
+          case 'CONDITIONAL':
+            formulaText += formula.logic;
+            formula.conditions.map(condition => {
+              formulaText += condition.start + condition.cde1 + condition.operator1 + condition.cde2 +
+                condition.value + condition.end + condition.condition + condition.operator2;
+            });
+            break;
+          case 'ADVANCED':
+            formulaText += formula.start + formula.cde1 + formula.operator1 + formula.cde2 +
+              formula.value + formula.end + formula.condition + formula.operator2;
+            break;
+          case 'SIMPLE':
+            formulaText += (formula.operator == 'NULL' ? '' : formula.operator) + formula.cde;
+        }
       });
     }
     return formulaText;
   }
+
+  openFormulaEditor(rule) {
+    let type = rule.controls.type.value;
+    switch(type){
+      default:
+      case 'CONDITIONAL':
+        this.showConditionalFormulaEditor(rule);
+        break;
+      case 'ADVANCED':
+        this.showAdvanedFormulaEditor(rule);
+          break;
+      case 'SIMPLE':
+        this.showFormulaEditor(rule);
+        break;
+    }
+  }
+
 
   confirmDialog(): Observable<boolean> {
     const message = 'You have not saved your current work. Do you want to proceed and discard?';

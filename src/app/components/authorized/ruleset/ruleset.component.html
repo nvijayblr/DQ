@@ -259,7 +259,8 @@
                                         *ngIf="['Formula','ReferenceCDE'].indexOf(rule.get('rule').value)==-1">
                                         <mat-form-field appearance="fill" *ngIf="!ruleValueList[rule.get('rule').value]">
                                           <input matInput formControlName="value"
-                                            [type]="getType(rule.get('rule').value,columns['controls'].datatype.value)">
+                                            [type]="getType(rule.get('rule').value,columns['controls'].datatype.value)"
+                                            [min]="getMinVal(rule.get('rule').value)">
                                         </mat-form-field>
                                         <app-rule-selector *ngIf="ruleValueList[rule.get('rule').value]"
                                           [showAddItem]="false" [ruleItems]="ruleValueList[rule.get('rule').value]"
@@ -268,18 +269,18 @@
                                         </app-rule-selector>
                                       </div>
                                        <div class="list-item-5 outline" *ngIf="rule.get('rule').value === 'Formula'">
-                                          <mat-form-field appearance="fill" (click)="showConditionalFormulaEditor(rule)">
-                                            <input matInput formControlName="value" [value]="getFormulaText(rule.get('value').value)" [readonly]="true">
+                                          <mat-form-field appearance="fill" (click)="openFormulaEditor(rule)">
+                                            <textarea matInput [readonly]="true" class="ruleTextarea">{{getFormulaText(rule.get('value').value,rule.get('type').value)}}</textarea>
                                           </mat-form-field>
                                           <!-- <div class="formula-preview" (click)="showConditionalFormulaEditor(rule)">
                                              <span *ngFor="let formula of rule.get('value').value">
                                              <span class="operator" *ngIf="formula.operator !== 'NULL'">{{formula.operator}}</span>
                                              <span class="cde">{{formula.cde}}</span>
                                              </span>
-                                          </div>
+                                          </div>-->
                                           <div class="edit-link" (click)="showConditionalFormulaEditor(rule)" style="margin-left: 2px; margin-bottom: 2px;">Conditional Formula Editor</div>
                                           <div class="edit-link" (click)="showAdvanedFormulaEditor(rule)" style="margin-left: 2px;">Advanced Formula Editor</div>
-                                          <div class="edit-link" (click)="showFormulaEditor(rule)">Formula Editor</div> -->
+                                          <div class="edit-link" (click)="showFormulaEditor(rule)">Formula Editor</div> 
                                        </div>
                                        <div class="list-item-5 outline">
                                           <app-rule-selector 
@@ -415,10 +416,11 @@
                                               <td class="preview">
                                                 <div *ngIf="rule.rule !== 'Formula'">{{rule.value}}</div>
                                                 <div *ngIf="rule.rule === 'Formula'" class="formula-preview nob">
-                                                  <span *ngFor="let formula of rule.value">
+                                                  <span>{{getFormulaText(rule.value,rule.type)}}</span>
+                                                  <!-- <span *ngFor="let formula of rule.value">
                                                     <span class="operator alcap1" *ngIf="formula.operator !== 'NULL'">{{formula.operator}}</span>
                                                     <span class="cde alcap">{{formula.cde}}</span>
-                                                  </span>
+                                                  </span> -->
                                                 </div>
                                               </td>
                                               <td>{{rule.dimension}}</td>
