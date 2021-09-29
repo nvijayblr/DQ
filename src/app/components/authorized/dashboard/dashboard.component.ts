@@ -607,9 +607,9 @@ export class DashboardComponent implements OnInit {
          data: {
             title: 'Upload Error',
             message: msg,
-            showReason: true,
-            reasongMsg: 'Please provide the reason to upload again. ',
-            cancelLable: 'Cancel',
+            // showReason: true,
+            // reasongMsg: 'Please provide the reason to upload again. ',
+            // cancelLable: 'Cancel',
             okLable: 'OK'
          }
       });
