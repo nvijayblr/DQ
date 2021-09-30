@@ -292,7 +292,7 @@
                                                         <div class="outline">
                                                             <mat-form-field appearance="fill">
                                                               <mat-label class="lbl">Ruleset Name</mat-label>
-                                                                <mat-select [(ngModel)]="data.rulesetId">
+                                                                <mat-select [(ngModel)]="data.rulesetId" (ngModelChange)="ruleSetType($event)">
                                                                   <mat-option *ngFor="let rule of data.rules;" [value]="rule.rulesetId">
                                                                       {{rule.rulesetName}}
                                                                   </mat-option>

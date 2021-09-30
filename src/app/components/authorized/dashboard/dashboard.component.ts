@@ -504,6 +504,12 @@ export class DashboardComponent implements OnInit {
     this.isPreviewLoading = false;
   }
 
+  selectedRuleSet;
+  ruleSetType(event) {
+    this.selectedRuleSet = event;
+    console.log(this.selectedRuleSet)
+  }
+
   isCleanedSource;
   cleanedSourcePath;
   uploadErrorMessage;
@@ -513,6 +519,8 @@ export class DashboardComponent implements OnInit {
       alert('Please create the ruleset to upload the source.');
       return;
     }
+
+    this.selectedRuleSet = this.selectedRuleSet ? this.selectedRuleSet : analysis.rules[analysis.rules.length - 1].rulesetId;
 
     this.selectedAnalysis = analysis;
     let isMultiSource = false;
@@ -554,7 +562,7 @@ export class DashboardComponent implements OnInit {
       isOriginalSource: this.isOriginalSource ? this.isOriginalSource : '',
       OriginalSourcePath: this.OriginalSourcePath ? this.OriginalSourcePath : '',
       sourceId: analysis.sourceId,
-      rulesetId: analysis.rules.length ? analysis.rules[0].rulesetId : '',
+      rulesetId:this.selectedRuleSet ? this.selectedRuleSet : '',
       isMultiSource: isMultiSource ? 'Yes' : 'No',
       multiSourceKey: analysis.multisource ? analysis.multisource : '',
       uploadDate: analysis.uploadDate ? analysis.uploadDate : this.originalSourceUploadDate,
