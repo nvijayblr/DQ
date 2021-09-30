@@ -257,13 +257,16 @@ export class AnalysisComponent implements OnInit {
       const columnDefs = [];
       columnDefs.push({
          field: this.selectedKey,
-         colId : 0
+         colId : 0,
+         unSortIcon: true
       });
       this.analysisKeys.map((col,index) => {
          columnDefs.push({
             field: col,
             colId : index + 1,
-            filter: false, // 'agNumberColumnFilter'
+            //filter: false, // 'agNumberColumnFilter'
+            unSortIcon: true,
+            valueGetter : params => params.data[col].value,
             cellRenderer: (params) => {
                if (params.value && params.value.value) {
                   return params.value.value;
@@ -283,7 +286,7 @@ export class AnalysisComponent implements OnInit {
                }
            },
             cellStyle: params => {
-               const { value } = params.value;
+               const { value } = params;
                const { bgSettings } = this.settings || [];
                const bg = bgSettings.filter(setting => (+value >= +setting.min && +value <= +setting.max));
                if (bg && bg.length) {
