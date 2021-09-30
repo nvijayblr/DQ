@@ -453,7 +453,8 @@ getProfileFromMonitoring() {
       localStorage.removeItem('dq-source-data');
       localStorage.removeItem('dq-upload-data');
       this.http.deleteSource(payload).subscribe((res: any) => {
-        this.reloadCurrentRoute();
+        //this.reloadCurrentRoute();
+        this.ngOnInit();
       });
     }
 
