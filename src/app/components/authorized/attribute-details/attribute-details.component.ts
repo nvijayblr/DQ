@@ -434,7 +434,8 @@ loadingCorrelation = false;
     this.columnDefs = [];
     this.rowData = [];
     const payload = {
-      sourcepath: this.titleSrc
+      sourcepath: this.titleSrc,
+      seeMoreEnabled: 'NO',
     };
     this.http.getProfileView(payload).subscribe((res: any) => {
       const details: any = res.Preview ? res.Preview : {};

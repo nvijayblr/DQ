@@ -415,6 +415,7 @@ getProfileFromMonitoring() {
     this.loadProfile(this.source);
   }
   cleanedFilesPath;
+  hideClass=true;
   changeCategory(source, path) {
     this.analysis = source;
     // localStorage.setItem('dq-source-data', JSON.stringify(source));
@@ -425,9 +426,12 @@ getProfileFromMonitoring() {
     this.cleanedFilesPath = path;
     this.initLoadProfile = false;
     if (path) {
-      this.titleSrc = this.cleanedFilesPath
+      this.titleSrc = this.cleanedFilesPath;
+      this.hideClass = false;
+      //source.sourceId = source.CleanedFilesLog.cleanSourceId
     } else {
       this.titleSrc = source.templateSourcePath;
+      this.hideClass = true;
     }
     this.getCleanedLogs();
     this.loadProfile(source);
@@ -937,6 +941,10 @@ getProfileFromMonitoring() {
           outputFileName : data.reason + '.csv'
         };
         this.http.saveCleanSource(payload).subscribe((result: any) => {
+          if (result.errorflag === 'True') {
+            alert(result.errorMsg);
+            return;
+          }
           this.savedFiles = result.SourceDetailsList[0].CleanedFilesLog[result.SourceDetailsList[0].CleanedFilesLog.length - 1];
           localStorage.setItem('dq-cleaned-data', JSON.stringify(result));
          
