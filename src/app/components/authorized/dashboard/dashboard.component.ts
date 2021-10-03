@@ -253,6 +253,9 @@ export class DashboardComponent implements OnInit {
   changeCategory(source) {
     // console.log('change category', source);
     // localStorage.setItem('dq-source-data', JSON.stringify(source));
+    this.previewProfile = true;
+    this.previewTable = false;
+    this.previewCorrelation = false;
     localStorage.removeItem('dq-source-data');
     this.selectedSource = source;
     this.initLoadProfile = false;
@@ -447,9 +450,9 @@ export class DashboardComponent implements OnInit {
     }
     this.loadCorrelation(this.selectedSource, this.datatype, this.method);
   }
-
+  isLoadingCorrelation = false;
   loadCorrelation(source, type, method) {
-    //this.isLoading = true;
+    this.isLoadingCorrelation = true;
     //this.loaderMsg = 'Loading Correlation...';
     const payload = {
       sourcepath: source.templateSourcePath,
@@ -458,9 +461,9 @@ export class DashboardComponent implements OnInit {
     };
     this.http.getCorrMatrix(payload).subscribe((result: any) => {
       this.coMatrix = result ? result : {};
-      this.isLoading = false;
+      this.isLoadingCorrelation = false;
     }, (error) => {
-      this.isLoading = false;
+      this.isLoadingCorrelation = false;
       this.coMatrix = {};
     });
   }
@@ -473,15 +476,19 @@ export class DashboardComponent implements OnInit {
     this.columnDefs = [];
     this.rowData = [];
     const payload = {
-      sourcepath: this.titleSrc
+      sourcepath: this.titleSrc,
+      seeMoreEnabled: 'NO',
     };
     this.http.getProfileView(payload).subscribe((res: any) => {
       const details: any = res.Preview ? res.Preview : {};
+      if (Object.keys(res.Preview).length >= 999) {
+        this.isButtonShow = true;
+      }
       this.parseSourcePreview(details);
-    }, (error) => {
-      this.isPreviewLoaded = false;
-      this.isPreviewLoading = false;
-    });
+      }, (error) => {
+        this.isPreviewLoaded = false;
+        this.isPreviewLoading = false;
+      });
 
   }
 
@@ -502,6 +509,27 @@ export class DashboardComponent implements OnInit {
     }
     this.isPreviewLoaded = true;
     this.isPreviewLoading = false;
+  }
+
+  isButtonShow: boolean = false;
+  isLoadingBt :boolean = false;
+  loadMoreDb() {
+    this.isLoadingBt = true;
+    const payload = {
+      sourcepath: this.titleSrc,
+      seeMoreEnabled: 'YES',
+    };
+    this.http.getProfileView(payload).subscribe((res: any) => {
+      const details: any = res.Preview ? res.Preview : {};
+      this.columnDefs = [];
+      this.rowData = [];
+      this.parseSourcePreview(details);
+      this.isLoadingBt = false;
+      this.isButtonShow = false;
+      }, (error) => {
+      this.isLoadingBt = false;
+      this.isButtonShow = true;
+      });
   }
 
   selectedRuleSet;

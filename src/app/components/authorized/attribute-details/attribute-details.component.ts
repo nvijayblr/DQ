@@ -250,6 +250,8 @@ export class AttributeDetailsComponent implements OnInit {
     this.initLoadProfile = false;
     this.titleSrc = source.templateSourcePath;
     this.previewProfile = true;
+    this.previewTable = false;
+    this.previewCorrelation = false;
     this.loadProfile(source);
     //this.loadReferencePreview();
     // this.loadCorrelation(this.selectedSource, this.datatype, this.method);
@@ -439,6 +441,9 @@ loadingCorrelation = false;
     };
     this.http.getProfileView(payload).subscribe((res: any) => {
       const details: any = res.Preview ? res.Preview : {};
+      if (Object.keys(res.Preview).length >= 999) {
+        this.isButtonShow = true;
+      }
       this.parseSourcePreview(details);
       }, (error) => {
         this.isPreviewLoaded = false;
@@ -464,6 +469,26 @@ loadingCorrelation = false;
     }
     this.isPreviewLoaded = true;
     this.isPreviewLoading = false;
+  }
+  isButtonShow: boolean = false;
+  isLoadingBt :boolean = false;
+  loadMoreDb() {
+    this.isLoadingBt = true;
+    const payload = {
+      sourcepath: this.titleSrc,
+      seeMoreEnabled: 'YES',
+    };
+    this.http.getProfileView(payload).subscribe((res: any) => {
+      const details: any = res.Preview ? res.Preview : {};
+      this.columnDefs = [];
+      this.rowData = [];
+      this.parseSourcePreview(details);
+      this.isLoadingBt = false;
+      this.isButtonShow = false;
+      }, (error) => {
+      this.isLoadingBt = false;
+      this.isButtonShow = true;
+      });
   }
 
    // ngAfterViewInit(){

@@ -265,6 +265,11 @@
                 [rowSelection]="'multiple'"
                 [suppressRowClickSelection]="false"
               ></app-ag-grid>
+              <button *ngIf="isButtonShow" type="button" class="btn btn-light lMore" (click)="loadMoreDb()">
+                <span *ngIf="isLoadingBt" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                   <span *ngIf="isLoadingBt"> Loading...</span>
+                  <span *ngIf="!isLoadingBt">Load More</span>
+                </button> 
             </div>
             <!-- <mat-progress-bar mode="indeterminate" *ngIf="innerLoader"></mat-progress-bar> -->
             <div class="profileView valign" *ngIf="previewProfile">

@@ -68,6 +68,7 @@ export class CreateSourceComponent implements OnInit {
     frequency: 'Daily',
     uploadDate: moment(this.minDate).format("YYYY-MM-DD[T]HH:mm:ss.000[Z]"),
     //uploadDate: this.minDate,
+    multiSourceColumn : '',
     uploadTime: '',
     department: []
   };
@@ -172,6 +173,7 @@ export class CreateSourceComponent implements OnInit {
       templateSourcePath: [analysis.source.templateSourcePath || ''],
       settingsDate: ['', [Validators.required]],
       uploadTime: [''],
+      multiSourcColumn: [''],
       referenceData: this.fb.array([]),
     });
 
@@ -347,7 +349,7 @@ export class CreateSourceComponent implements OnInit {
       });
     }
 
-
+    this.sourceSettings.multiSourceColumn = this.afControls.multiSourcColumn.value;
     const payload = {
       sourceId: this.sourceId ? this.sourceId : undefined,
       source: {
@@ -513,7 +515,7 @@ export class CreateSourceComponent implements OnInit {
 
   stepperAnimationDone() {
   }
-
+  multiSourceLists;
   loadSourcePreview() {
     if (this.mode === 'create' && !this.sourceFile.name) {
       alert('Please upload the source file.');
@@ -527,6 +529,7 @@ export class CreateSourceComponent implements OnInit {
       const formData: any = new FormData();
       formData.append('file[]', this.sourceFile);
       this.http.getPreview(formData).subscribe((res: any) => {
+        this.multiSourceLists = res.sourceColumns;
         const details: any = res.sourcePreview ? res.sourcePreview : {};
         if (res.errorMsg) {
           this.isPreviewLoaded = false;
