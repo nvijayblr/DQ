@@ -122,15 +122,14 @@ export class AnalysisComponent implements OnInit {
   }
 
   ngOnChanges() {
-    this.initAnalysis(this.selectedAnalysisdashboard);
-    //console.log('this.selectedAnalysisdashboard', this.selectedAnalysisdashboard)
+    const analysis = localStorage.getItem('selected-analysis');
+    this.initAnalysis(JSON.parse(analysis));
   }
   
  datedUpload = [];
   initAnalysis(analysis) {
     this.selectedAnalysis = analysis;    
     this.uploadsHistory = analysis.UploadsHistory ? analysis.UploadsHistory : [];
-    console.log(this.uploadsHistory)
       const payload = {
          sourceId: analysis.sourceId,
          rulesetId: analysis.rulesetId

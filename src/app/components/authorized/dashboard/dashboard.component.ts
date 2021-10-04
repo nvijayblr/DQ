@@ -255,6 +255,7 @@ export class DashboardComponent implements OnInit {
     // localStorage.setItem('dq-source-data', JSON.stringify(source));
     this.previewProfile = true;
     this.previewTable = false;
+    this.showtableAnalysis = true;
     this.previewCorrelation = false;
     localStorage.removeItem('dq-source-data');
     this.selectedSource = source;
@@ -662,7 +663,8 @@ export class DashboardComponent implements OnInit {
   selectedAnalysisdashboard = {};
   initOverview(analysis) {
     this.selectedAnalysis = analysis;
-    this.selectedAnalysisdashboard = this.selectedAnalysis
+    localStorage.setItem('selected-analysis', analysis);
+    this.selectedAnalysisdashboard = analysis
     const uploadDate = this.selectedAnalysis.uploadDate ? moment(this.selectedAnalysis.uploadDate).format('MM-DD-YYYY') : '';
     const uploadsHistory = this.selectedAnalysis.UploadsHistory ? this.selectedAnalysis.UploadsHistory : [];
     // console.log('uploadsHistory', uploadsHistory)
