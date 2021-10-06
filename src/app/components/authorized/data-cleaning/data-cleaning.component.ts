@@ -1119,7 +1119,8 @@ getProfileFromMonitoring() {
   downloadSource(sourcepath, fileName) {
     this.downloadSrcName = fileName;
     const payload = {
-      sourcepath: sourcepath
+      sourcepath: sourcepath,
+      seeMoreEnabled: 'YES',
     };
     this.http.getProfileView(payload).subscribe((res: any) => {
       this.collectionResult  = res.Preview ? res.Preview : {};
