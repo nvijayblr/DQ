@@ -12,6 +12,7 @@ import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-di
 import { CleanLogsComponent } from 'src/app/shared/clean-logs/clean-logs.component';
 import { PreviewDialogComponent } from '../../../shared/preview-dialog/preview-dialog.component';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-data-cleaning',
@@ -358,6 +359,7 @@ getProfileFromMonitoring() {
   getProfileSource() {
     this.http.getCleanSource().subscribe((result: any) => {      
       this.allSourceCategory = result.SourceDetailsList;
+      console.log(this.allSourceCategory)
       // this.cleanedFilesLog = result.SourceDetailsList[0].CleanedFilesLog ? result.SourceDetailsList[0].CleanedFilesLog : [];
       this.analysis = this.messageService.getSource();
       const cleanedFiles = JSON.parse(localStorage.getItem('dq-saved-data'));
@@ -492,8 +494,10 @@ getProfileFromMonitoring() {
       this.duplicate.column_name = profile.column;
    }
 
-   
+  activeSource;
   loadProfile(source, profile: any = '') {
+    this.activeSource = source;
+    console.log('Loading profile', this.activeSource);
     if (this.cleanedFilesPath) {
       this.titleSrc =this.cleanedFilesPath;
     } else {
@@ -1154,6 +1158,91 @@ getProfileFromMonitoring() {
     };
 
     new Angular2Csv(data, formula, options);
+  }
+
+  searchValue;
+  collectionTable;
+  findValue = false;
+  isfindPreviewLoading = false;
+  isFindPreviewLoaded = false;
+  applySearch(event: Event) {
+    this.findValue = false;
+    this.searchValue = event;
+    const payload = {
+      sourcepath:this.titleSrc,
+      find_value: this.searchValue
+    };
+    this.isfindPreviewLoading = true;
+    this.http.findReplacePreview(payload).subscribe((result: any) => {
+      this.rowData = [];
+      this.columnDefs = [];
+      this.collectionTable = result.Preview;
+      this.isfindPreviewLoading = false;
+      if (this.collectionTable) {
+        this.findValue = true;
+        this.previewTableFind();
+    }
+    }, (error) => {
+      this.findValue = false;
+      alert(error.message);
+    });
+  }
+
+  replaceValue;
+  applyReplaceSearch(event: Event) {
+    this.findValue = false;
+    this.replaceValue = event;
+    const current_timestamp = moment().format("ddd MMM D YYYY 00:00:00");
+    const payload = {
+      sourcepath:this.titleSrc,
+      find_value: this.searchValue,
+      replace_value: this.replaceValue,
+      sourceFileName: this.activeSource.sourceFileName,
+      sourceId:  this.activeSource.sourceId,
+      uploadId: this.activeSource.sourceId,
+      processTime: current_timestamp
+    };
+    this.http.replacePreview(payload).subscribe((result: any) => {
+      if (result.outputpath) {
+        const payload = {
+          sourcepath: result.outputpath,
+          seeMoreEnabled: 'NO',
+        };
+        this.http.getProfileView(payload).subscribe((res: any) => {
+          this.rowData = [];
+          this.columnDefs = [];
+          this.collectionTable = res.Preview ? res.Preview : {};
+          if (this.collectionTable) {
+            this.findValue = true;
+            this.previewTableFind();
+          }
+
+          this.isPreviewLoaded = true;
+          this.isPreviewLoading = false;
+        })
+    }
+      this.replaceValue = '';
+      this.searchValue = '';
+    }, (error) => {
+      this.findValue = false;
+      alert(error.message);
+    });
+  }
+
+  previewTableFind() {
+    Object.keys(this.collectionTable).map((key, index) => {
+      this.rowData.push({
+        ...this.collectionTable[key]
+      });
+    });
+    if (this.rowData.length) {
+      Object.keys(this.rowData[0]).map((key, index) => {
+        this.columnDefs.push({
+          field: key,
+          ...this.defaultColDefs
+        });
+      });
+    }
   }
  }
 

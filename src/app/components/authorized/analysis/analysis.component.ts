@@ -124,6 +124,12 @@ export class AnalysisComponent implements OnInit {
   ngOnChanges() {
     const analysis = localStorage.getItem('selected-analysis');
     this.initAnalysis(JSON.parse(analysis));
+    const viewMethod = localStorage.getItem('viewMethod');
+    if (viewMethod === 'table') {
+      this.isOverviewTable = false;
+    } else {
+      this.isOverviewTable = true;
+    }
   }
   
  datedUpload = [];
@@ -242,7 +248,7 @@ export class AnalysisComponent implements OnInit {
       };
       this.http.getAnalysisByTime(payload).subscribe((result: any) => {
         this.analysisByTimeData = result ? result : [];
-        console.log('this.analysisByTimeData',this.analysisByTimeData)
+       // console.log('this.analysisByTimeData',this.analysisByTimeData)
       }, (error) => {
       });
    }

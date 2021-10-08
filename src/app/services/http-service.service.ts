@@ -753,6 +753,27 @@ export class HttpService  {
     );
   }
 
+  findReplacePreview(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/find_preview`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  replacePreview(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/find_replace`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+
   getProfilePreview(payload, type): Observable<any> {
     let typeUrl = 'show_remove_duplicates';
     if (type === 'duplicate') {

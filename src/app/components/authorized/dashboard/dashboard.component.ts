@@ -261,6 +261,7 @@ export class DashboardComponent implements OnInit {
     this.selectedSource = source;
     this.initLoadProfile = false;
     this.titleSrc = source.templateSourcePath;
+   
   }
 
   loadProfile(source) {
@@ -882,6 +883,8 @@ export class DashboardComponent implements OnInit {
   }
 
   changeViewAnlysis(view) {
+    console.log('change view2', view);
+    localStorage.setItem('viewMethod', view);
     if (view === 'table') {
       this.showtableAnalysis = true;
     } else {
@@ -890,6 +893,7 @@ export class DashboardComponent implements OnInit {
   }
 
   changeView(view) {
+    console.log('change view', view);
     if (view === 'table') {
       this.showtable = true;
     } else {

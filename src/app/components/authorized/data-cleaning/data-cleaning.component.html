@@ -378,7 +378,38 @@
 
                   </div>
                 </mat-tab>
-                
+                <mat-tab label="Find / Replace">
+                  <div class="impute-wrapper">
+                    <div class="input-group has-search">
+                      <span class="fa fa-search form-control-feedback"></span>
+                    
+                      <input type="search" class="form-control rounded" placeholder="Find Value" aria-label="Find"
+                        aria-describedby="search-addon" [(ngModel)]='searchValue' (keyup.enter)="applySearch($event.target.value)"/>       
+                      <button type="button" class="btn btn-primary" (click)="applySearch(searchValue)">Find Value</button>
+                    </div>
+
+                    <div class="input-group has-search">
+                      <span class="fa fa-search form-control-feedback"></span>                    
+                      <input type="search" class="form-control rounded" placeholder="Replace Value" aria-label="Replace"
+                        aria-describedby="search-addon" [(ngModel)]='replaceValue' (keyup.enter)="applyReplaceSearch($event.target.value)"/>       
+                      <button type="button" class="btn btn-primary" (click)="applyReplaceSearch(replaceValue)">Replace</button>
+                    </div>
+
+                    <app-progress-bar [message]="'Loading...'" class="component" *ngIf="isfindPreviewLoading"></app-progress-bar>
+                    <div style="clear: both;">
+                      <app-ag-grid
+                          floatingFilter="true"
+                          *ngIf="findValue"
+                          class="ag-theme-material"
+                          [rowData]="rowData"
+                          [columnDefs]="columnDefs"
+                          [pageSize]="50"
+                          [rowSelection]="'multiple'"
+                          [suppressRowClickSelection]="false" 
+                          ></app-ag-grid>
+                    </div>
+                </div>
+                </mat-tab>
               </mat-tab-group>
             </mat-card> 
             
