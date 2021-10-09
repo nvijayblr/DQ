@@ -13,7 +13,8 @@ export class CleanLogsComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<CleanLogsComponent>,
     @Inject(MAT_DIALOG_DATA) public data:any,) { }
   
-    ngOnInit() {
+  ngOnInit() {
+      console.log('this', this.data)
       this.cleanLogSource = this.data.Preview[0];
       this.cleanLogDetails.push(_.values(this.data.Preview));
     }

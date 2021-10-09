@@ -317,8 +317,7 @@ getProfileFromMonitoring() {
       alert(result.errorMsg)
     }
       if (result) {       
-        this.http.getCleanSource().subscribe((result: any) => {
-          //console.log(result)
+        this.http.getCleanSource().subscribe((result: any) => {          
           this.allSourceCategory = result.SourceDetailsList;
           let dqId = this.route.snapshot.queryParamMap.get('sourceId');
           const dataFromDq = _.find(result.SourceDetailsList, function (o) {
@@ -357,10 +356,9 @@ getProfileFromMonitoring() {
   }
 
   getProfileSource() {
-    this.http.getCleanSource().subscribe((result: any) => {      
+    this.http.getCleanSource().subscribe((result: any) => {
+      console.log('getCleanSource', result);
       this.allSourceCategory = result.SourceDetailsList;
-      console.log(this.allSourceCategory)
-      // this.cleanedFilesLog = result.SourceDetailsList[0].CleanedFilesLog ? result.SourceDetailsList[0].CleanedFilesLog : [];
       this.analysis = this.messageService.getSource();
       const cleanedFiles = JSON.parse(localStorage.getItem('dq-saved-data'));
       const uploadMethod = localStorage.getItem('dq-upload-data');
@@ -420,6 +418,7 @@ getProfileFromMonitoring() {
   hideClass=true;
   changeCategory(source, path) {
     this.analysis = source;
+    this.findValue = false;
     // localStorage.setItem('dq-source-data', JSON.stringify(source));
     localStorage.removeItem('dq-source-data');
     localStorage.removeItem('dq-upload-data');
@@ -497,7 +496,6 @@ getProfileFromMonitoring() {
   activeSource;
   loadProfile(source, profile: any = '') {
     this.activeSource = source;
-    console.log('Loading profile', this.activeSource);
     if (this.cleanedFilesPath) {
       this.titleSrc =this.cleanedFilesPath;
     } else {
@@ -949,6 +947,7 @@ getProfileFromMonitoring() {
             alert(result.errorMsg);
             return;
           }
+          console.log(result)
           this.savedFiles = result.SourceDetailsList[0].CleanedFilesLog[result.SourceDetailsList[0].CleanedFilesLog.length - 1];
           localStorage.setItem('dq-cleaned-data', JSON.stringify(result));
          
@@ -1165,6 +1164,8 @@ getProfileFromMonitoring() {
   findValue = false;
   isfindPreviewLoading = false;
   isFindPreviewLoaded = false;
+  showPerviewValueNull = false;
+  searchDisabled = true;
   applySearch(event: Event) {
     this.findValue = false;
     this.searchValue = event;
@@ -1177,11 +1178,19 @@ getProfileFromMonitoring() {
       this.rowData = [];
       this.columnDefs = [];
       this.collectionTable = result.Preview;
+      if (Object.keys(this.collectionTable).length === 0) {
+        this.findValue = false;
+        this.showPerviewValueNull = true;
+        this.searchDisabled = true;
+      }
       this.isfindPreviewLoading = false;
-      if (this.collectionTable) {
+      if (this.collectionTable && (Object.keys(this.collectionTable).length) > 1) {
         this.findValue = true;
+        this.showPerviewValueNull = false;
+        this.isfindPreviewLoading = false;
+        this.searchDisabled = false;
         this.previewTableFind();
-    }
+      }
     }, (error) => {
       this.findValue = false;
       alert(error.message);
@@ -1189,10 +1198,13 @@ getProfileFromMonitoring() {
   }
 
   replaceValue;
+  showSaveButton = false;
+  replaceSourcepath;
+  replaceFileName;
   applyReplaceSearch(event: Event) {
     this.findValue = false;
     this.replaceValue = event;
-    const current_timestamp = moment().format("ddd MMM D YYYY 00:00:00");
+    const current_timestamp = moment().format();
     const payload = {
       sourcepath:this.titleSrc,
       find_value: this.searchValue,
@@ -1203,6 +1215,8 @@ getProfileFromMonitoring() {
       processTime: current_timestamp
     };
     this.http.replacePreview(payload).subscribe((result: any) => {
+      this.replaceSourcepath = result.outputpath;
+      this.replaceFileName = result.outputFileName;
       if (result.outputpath) {
         const payload = {
           sourcepath: result.outputpath,
@@ -1212,12 +1226,15 @@ getProfileFromMonitoring() {
           this.rowData = [];
           this.columnDefs = [];
           this.collectionTable = res.Preview ? res.Preview : {};
+          
           if (this.collectionTable) {
+            this.showSaveButton = true;
             this.findValue = true;
             this.previewTableFind();
+            this.getCleanedLogs();
           }
 
-          this.isPreviewLoaded = true;
+          this.isPreviewLoaded = false;
           this.isPreviewLoading = false;
         })
     }
@@ -1225,6 +1242,7 @@ getProfileFromMonitoring() {
       this.searchValue = '';
     }, (error) => {
       this.findValue = false;
+      this.showSaveButton = false;
       alert(error.message);
     });
   }
@@ -1244,6 +1262,61 @@ getProfileFromMonitoring() {
       });
     }
   }
- }
+
+  downloadReplacedSource(sourcepath, fileName) {
+    sourcepath = this.replaceSourcepath;
+    fileName = this.replaceFileName;
+    this.downloadSrcName = fileName;
+    const payload = {
+      sourcepath: sourcepath,
+      seeMoreEnabled: 'YES',
+    };
+    this.http.getProfileView(payload).subscribe((res: any) => {
+      this.collectionResult  = res.Preview ? res.Preview : {};
+      this.downloadCSV();
+      }, (error) => {
+        this.isPreviewLoaded = false;
+        this.isPreviewLoading = false;
+      });
+  }
+
+  closeAlert() {
+    this.showPerviewValueNull = false;
+  }
+
+  showSaveReplacedConfirm(source, path, fileName) {   
+        const payload = {
+          sourceId : source.sourceId,
+          sourcePath : source.templateSourcePath,
+          uploadId : source.sourceId,
+          uploadTime : source.uploadDate,
+          outputPath : 'cleaned_data',
+          outputFileName : fileName
+        };
+        this.http.saveCleanSource(payload).subscribe((result: any) => {
+          if (result.errorflag === 'True') {
+            alert(result.errorMsg);
+            return;
+          }
+          console.log(result)
+          this.savedFiles = result.SourceDetailsList[0].CleanedFilesLog[result.SourceDetailsList[0].CleanedFilesLog.length - 1];
+          localStorage.setItem('dq-cleaned-data', JSON.stringify(result));
+         
+          if (this.savedFiles) {
+            this.updateSourcePath(this.savedFiles.outputPath, this.savedFiles.outputFileName);           
+          }
+          localStorage.setItem('dq-saved-data', JSON.stringify(this.savedFiles));
+          if (this.mode === 'dqm') {
+            this.router.navigate([`auth/data-quality-monitoring`], {queryParams: {from: 'cleaning'}});
+          } else {
+            this.ngOnInit();
+          }
+        });
+      }
+     
+    };
+    
+    
+ 
 
 

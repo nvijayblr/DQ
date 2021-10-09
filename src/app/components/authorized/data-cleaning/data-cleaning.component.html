@@ -391,12 +391,36 @@
                     <div class="input-group has-search">
                       <span class="fa fa-search form-control-feedback"></span>                    
                       <input type="search" class="form-control rounded" placeholder="Replace Value" aria-label="Replace"
-                        aria-describedby="search-addon" [(ngModel)]='replaceValue' (keyup.enter)="applyReplaceSearch($event.target.value)"/>       
+                        aria-describedby="search-addon" [(ngModel)]='replaceValue' (keyup.enter)="applyReplaceSearch($event.target.value)" [disabled]="searchDisabled"/>       
                       <button type="button" class="btn btn-primary" (click)="applyReplaceSearch(replaceValue)">Replace</button>
                     </div>
 
+                    <div style="margin: 20px 10px; float: right;">
+                      <button 
+                        type="button" 
+                        (click)="showSaveReplacedConfirm(source, replaceSourcepath, replaceFileName)"
+                        *ngIf="showSaveButton"
+                        class="btn btn-success w-t"
+                        >
+                        <mat-icon> save</mat-icon> Save 
+                      </button>
+                    </div>
+                    <div style="text-align: right; float: right;margin: 20px 0px;">
+                      <button 
+                        type="button" 
+                        (click)="downloadReplacedSource('', '')"
+                        *ngIf="showSaveButton"
+                        class="btn btn-success w-t"
+                        >
+                        <mat-icon> cloud_download</mat-icon> Download Replaced Source 
+                      </button>
+                    </div>
                     <app-progress-bar [message]="'Loading...'" class="component" *ngIf="isfindPreviewLoading"></app-progress-bar>
                     <div style="clear: both;">
+                      <div *ngIf="showPerviewValueNull"> 
+                        <!-- No data available -->
+                        <ngb-alert type="danger" (click)="closeAlert()">No data available</ngb-alert>
+                      </div>
                       <app-ag-grid
                           floatingFilter="true"
                           *ngIf="findValue"
@@ -419,6 +443,7 @@
                     <h1 class="share-post-title">Preview</h1>
                   </div>
                   <app-progress-bar [message]="'Loading preview...'" class="component" *ngIf="isPreviewLoading"></app-progress-bar>
+                  <div style="clear: both;">
                   <app-ag-grid
                     floatingFilter="true"
                     *ngIf="isPreviewLoaded"
@@ -428,6 +453,7 @@
                     [rowSelection]="'multiple'"
                     [suppressRowClickSelection]="false"                    
                   ></app-ag-grid>
+                </div>
                   <!-- [moveToColumn]="profile.column" -->
                 </mat-card>
             
