@@ -5,7 +5,7 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { MatSelectFilterModule } from 'mat-select-filter';
-import {MatSelectModule, MatFormFieldModule} from '@angular/material';
+import { MatSelectModule, MatFormFieldModule} from '@angular/material';
 import { Routes, RouterModule, CanActivate } from '@angular/router';
 import { AuthGuardService as AuthGaurd } from './../../services/auth-guard.service';
 import { SharedModule } from './../../shared/shared.module';
@@ -28,6 +28,7 @@ import { SchemaTableComponent } from './create-source/schema-table/schema-table.
 import { MainDashboardComponent } from './main-dashboard/main-dashboard.component';
 import { MangoDBComponent } from './create-source/mango-db/mango-db.component';
 import { ScrollService } from '../../services/scroll.service';
+import { AdminComponent } from '../admin/admin.component';
 
 
 @NgModule({
@@ -47,7 +48,7 @@ import { ScrollService } from '../../services/scroll.service';
     SchemaTableComponent,
     MainDashboardComponent,
     MangoDBComponent,
-    
+    AdminComponent
   ],
    imports: [
     HighchartsChartModule,

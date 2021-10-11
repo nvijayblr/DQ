@@ -1,50 +1,43 @@
-import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MessageService } from '../../../services/message.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatTable } from '@angular/material';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpService } from '../../../services/http-service.service';
-import { AuthGuardService } from 'src/app/services/auth-guard.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
-import * as moment from 'moment';
-import { CreateEditRoleComponent } from './create-edit-role/create-edit-role.component';
 
 @Component({
   selector: 'app-roles',
   templateUrl: './roles.component.html',
-  styleUrls: ['./roles.component.scss']
+  styleUrls: ['./roles.component.scss', '../admin.component.scss']
 })
 export class RolesComponent implements OnInit {
-
   isLoading = false;
   loaderMsg = '';
+  editIndex = -1;
+
   rolesList: any = [];
   rightsList: any = [];
-  rightsListAll: any = [];
+  roleForm: FormGroup;
 
-   constructor(
-      public dialog: MatDialog,
-      private http: HttpService,
-      private messageService: MessageService,
-      private auth: AuthGuardService,
-      private router: Router,
-      private cd: ChangeDetectorRef) {
-   }
+  mode: any = {
+    EDIT: 'edit',
+    CREATE: 'create'
+  };
+  displayedColumns: string[] = ['name', 'display', 'rights', 'action'];
 
-   ngOnInit() {
-      this.getRightsList();
-   }
+  @ViewChild(MatTable, { static: true }) roleTable: MatTable<any>;
 
+  constructor(
+    private http: HttpService,
+    private formBuilder: FormBuilder
+  ) { };
 
-   getRightsList() {
+  ngOnInit() {
+    this.getRightsList();
+    this.initRoleForm({});
+  }
+
+  getRightsList() {
     this.http.getRightsList().subscribe((result: any) => {
-      const rightsList = result.rights ? result.rights : [];
-      this.rightsListAll = result.rights ? result.rights : [];
-      this.rightsList = rightsList.map(rights => {
-        return {
-          value: rights.Value,
-          label: rights.Text,
-        };
-      });
+      this.rightsList = result.rights ? result.rights : [];
       this.getRolesList();
     }, (error) => {
       this.rightsList = [];
@@ -57,9 +50,11 @@ export class RolesComponent implements OnInit {
     this.loaderMsg = 'Loading role...';
     this.http.getRolesList().subscribe((result: any) => {
       this.rolesList = result.roles ? result.roles : [];
+      this.roleTable.dataSource = this.rolesList;
+      this.roleTable.renderRows();
       this.isLoading = false;
     }, (error) => {
-       this.isLoading = false;
+      this.isLoading = false;
     });
   }
 
@@ -74,63 +69,61 @@ export class RolesComponent implements OnInit {
     });
   }
 
-  showAddEditRole(role, mode) {
-    const dialogRef = this.dialog.open(CreateEditRoleComponent, {
-        width: '450px',
-        data: {role: role ? role : {}, mode, rights: this.rightsList}
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        const rights = result.role.rights;
-        const selectedRights = [];
-        rights.map(right => {
-          selectedRights.push(this.rightsListAll.filter(rlist => rlist.Value === right)[0]);
-        });
-        result.role.rights = selectedRights;
-        this.createEditRole(result.role, result.mode);
-      }
-     });
-   }
+  compareRights(role1, role2) : boolean{
+    return role1 && role2 ? role1.Value === role2.Value : role1 === role2;
+  }
 
-   showHideAssignRights(role, isShow) {
-    this.rolesList.map(r => {
-      r.isShowRights = false;
+  initRoleForm(role: any) {
+    this.roleForm = this.formBuilder.group({
+      roleName: [role.roleName ? role.roleName : '', [Validators.required]],
+      roleText: [role.roleText ? role.roleText : '', [Validators.required]],
+      rights: [role.rights ? role.rights : '', [Validators.required]]
     });
-    this.rightsList.map(r => {
-      r.selected = false;
-    });
-    role.isShowRights = isShow;
-    role.rightsList = [...this.rightsList];
-    if (isShow) {
-      if (role.rights && role.rights.length) {
-        role.rightsList.map(rlist => {
-          const rights = role.rights.filter(right => rlist.value === right.Value);
-          if (rights.length) {
-            rlist.selected = true;
-          }
-        });
-        // this.cd.detectChanges();
+  }
+
+  addNewRole() {
+    if (this.rolesList[0].mode !== this.mode.CREATE) {
+      if (this.editIndex >= 0 && this.rolesList[this.editIndex]) {
+        this.cancel(this.rolesList[this.editIndex]);
       }
+      this.editIndex = 0;
+      this.rolesList.unshift({
+        edit: true,
+        mode: this.mode.CREATE
+      });
+      this.roleTable.dataSource = this.rolesList;
+      this.roleTable.renderRows();
+      this.initRoleForm({});
     }
-   }
+  }
 
-   onRightClick(right) {
-     right.selected = !right.selected;
-   }
-
-   saveRights(role) {
-    role.isShowRights = false;
-    const selectedRights = [];
-    role.rightsList.map(right => {
-      if (right.selected) {
-        selectedRights.push({
-          Value: right.value,
-          Text: right.label
-        });
+  editRole(role, index) {
+    if (this.editIndex >= 0 && this.rolesList[this.editIndex]) {
+      if (this.rolesList[this.editIndex].mode === this.mode.CREATE) {
+        index -= 1;
       }
-    });
-    role.rights = selectedRights;
-    this.createEditRole(role, 'edit');
-   }
+      this.cancel(this.rolesList[this.editIndex]);
+    }
+    this.editIndex = index;
+    role.edit = true;
+    role.mode = this.mode.EDIT;
+    this.initRoleForm(role);
+  }
+
+  saveRole(role) {
+    this.editIndex = -1;
+    role.edit = false;
+    this.createEditRole(this.roleForm.value, role.mode);
+  }
+
+  cancel(role) {
+    this.editIndex = -1;
+    role.edit = false;
+    if (role.mode === this.mode.CREATE) {
+      this.rolesList.splice(0, 1);
+      this.roleTable.dataSource = this.rolesList;
+      this.roleTable.renderRows();
+    }
+  }
 
 }

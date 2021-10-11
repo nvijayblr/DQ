@@ -1,70 +1,141 @@
-<section class="page-body home-bodys">
-  <div class="container">
-    <div class="home-wrapper">
-      <div class="clearfix my-community-body">
-        <div class="home-panel">
-          <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
-          <div class="shrare-post">
-            <!-- Users List --> 
-            <mat-card class="border no-rounded list shrare-post">
-              <div class="list flex-containers flex-start wrap no-margin dash-title">
-                <div class="list-item-2">
-                  <h1 class="share-post-title no-margin">Users<span class="yellow"> List</span></h1>
-                </div>
-                <div class="list-item-2 text-right">
-                  <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn" (click)="showAddEditUser({}, 'create');">New User <mat-icon>person_add</mat-icon></button>
-                </div>
-              </div>
-
-              <!-- Users List -->
-              <div class="analysis-preview">
-               <table class="table">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Email</th>
-                      <th>Username</th>
-                      <th>Role</th>
-                      <th>Type</th>
-                      <th>Department</th>
-                      <th>Status</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                     <tr *ngFor="let user of usersList; let i= index;" class="tableinner">
-                        <td>{{user.name}}</td>
-                        <td>{{user.email}}</td>
-                        <td>{{user.userName}}</td>
-                        <td><span *ngIf="user.role && user.role.length">{{user.role.join(', ')}}</span></td>
-                        <td><span *ngIf="user.type && user.type.length">{{user.type.join(', ')}}</span></td>
-                        <td><span *ngIf="user.department && user.department.length">{{user.department.join(', ')}}</span></td>
-                        <td class="{{user.status}}">{{user.status}}</td>
-                        <td>
-
-                          <button type="button" class="button3d btnPush btnOrange addico"
-                          (click)="showAddEditUser(user, 'edit');"  matTooltip="Edit User">
-                          <mat-icon>edit</mat-icon> Edit
-                          </button>
-
-                          <!-- <button mat-icon-button color="primary" class="icon-primary-btn" matTooltip="Edit User" (click)="showAddEditUser(user, 'edit');">
-                            <mat-icon>edit</mat-icon>
-                          </button> -->
-                          <!-- <button mat-stroked-button class="primary-btn-red btn-small" matTooltip="Edit User">
-                            In Active
-                          </button> -->
-                        </td>
-                     </tr>
-                   </tbody>
-               </table>
-              </div>
-            </mat-card>
-
-          </div>
-
-        </div>
-      </div> 
+<div class="listContainer">
+    <div class="listHeader">
+        <mat-icon>assignment_ind</mat-icon>
+        <h5>User Management</h5>
+        <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
     </div>
-
-  </div>
-</section>
+    <div class="listTable" [formGroup]="userForm">
+        <table mat-table matSort [dataSource]="userList">
+            <ng-container matColumnDef="name">
+                <th class="table-column-150" mat-header-cell mat-sort-header *matHeaderCellDef>Name</th>
+                <td mat-cell class="table-column-150" *matCellDef="let user">
+                    <span [hidden]="user.edit">{{user.name}}</span>
+                    <mat-form-field appearance="standard" class="column-width-150 m-14" [hidden]="!user.edit">
+                        <input formControlName="name" matInput />
+                    </mat-form-field>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="userName" sticky>
+                <th class="table-column-150" mat-header-cell *matHeaderCellDef>Username</th>
+                <td class="table-column-150" mat-cell *matCellDef="let user">
+                    <span [hidden]="user.edit">{{user.userName}}</span>
+                    <mat-form-field appearance="standard" class="column-width-150 m-14" [hidden]="!user.edit">
+                        <input formControlName="userName" matInput />
+                    </mat-form-field>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="password">
+                <th class="table-column-150" mat-header-cell *matHeaderCellDef>Password</th>
+                <td class="table-column-150" mat-cell *matCellDef="let user">
+                    <span [hidden]="user.edit">{{user.password}}</span>
+                    <mat-form-field appearance="standard" class="column-width-150 m-14" [hidden]="!user.edit">
+                        <input formControlName="password" matInput />
+                    </mat-form-field>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="role">
+                <th class="table-column-150" mat-header-cell *matHeaderCellDef>Role</th>
+                <td class="table-column-150" mat-cell *matCellDef="let user">
+                    <span [hidden]="user.edit">{{roleTextList[user.role] || user.role}}</span>
+                    <mat-form-field appearance="standard" class="column-width-150 m-15" [hidden]="!user.edit">
+                        <mat-select multiple formControlName="role">
+                            <mat-option *ngFor="let role of rolesList" [value]="role.roleName">
+                                {{role.roleText}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="type">
+                <th class="table-column-200" mat-header-cell *matHeaderCellDef>Type</th>
+                <td class="table-column-200" mat-cell *matCellDef="let user">
+                    <ul [hidden]="user.edit">
+                        <li *ngFor="let type of user.type">{{userTypes[type] || type}}</li>
+                    </ul>
+                    <mat-form-field appearance="standard" class="column-width-200 m-15" [hidden]="!user.edit">
+                        <mat-select multiple formControlName="type">
+                            <mat-option *ngFor="let type of userTypes | keyvalue" [value]="type.key">
+                                {{type.value}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="category">
+                <th class="table-column-150" mat-header-cell *matHeaderCellDef>User Category</th>
+                <td class="table-column-150" mat-cell *matCellDef="let user">
+                    <ul [hidden]="user.edit">
+                        <li *ngFor="let type of user.userCategory">{{categoryTextList[type] || type}}</li>
+                    </ul>
+                    <mat-form-field appearance="standard" class="column-width-150 m-15" [hidden]="!user.edit">
+                        <mat-select multiple formControlName="userCategory">
+                            <mat-option *ngFor="let category of categoryList" [value]="category.value">
+                                {{category.label}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="department">
+                <th class="table-column-100" mat-header-cell *matHeaderCellDef>Department</th>
+                <td class="table-column-100" mat-cell *matCellDef="let user">
+                    <span [hidden]="user.edit">{{departTextList[user.department] || user.department}}</span>
+                    <mat-form-field appearance="standard" class="column-width-100 m-15" [hidden]="!user.edit">
+                        <mat-select multiple formControlName="department">
+                            <mat-option *ngFor="let depart of departmentsList" [value]="depart.Name">
+                                {{depart.Display}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="status">
+                <th class="table-column-100 center" mat-header-cell *matHeaderCellDef>Status</th>
+                <td class="table-column-100 center" mat-cell *matCellDef="let user" [ngClass]="user.status">
+                    <span [hidden]="user.edit">
+                        <mat-icon *ngIf="user.status == 'Active'">check_circle_outline</mat-icon>
+                        <mat-icon *ngIf="user.status == 'Inactive'">block</mat-icon>
+                    </span>
+                    <mat-button-toggle-group formControlName="status" aria-label="Status" [hidden]="!user.edit">
+                        <mat-button-toggle value="Active">Active</mat-button-toggle>
+                        <mat-button-toggle value="Inactive">InActive</mat-button-toggle>
+                    </mat-button-toggle-group>
+                    <!-- <mat-slide-toggle [hidden]="!user.edit" formControlName="status"></mat-slide-toggle> -->
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="email">
+                <th class="table-column-150" mat-header-cell *matHeaderCellDef>Email</th>
+                <td class="table-column-150" mat-cell *matCellDef="let user">
+                    <span [hidden]="user.edit">{{user.email}}</span>
+                    <mat-form-field appearance="standard" class="column-width-150 m-14" [hidden]="!user.edit">
+                        <input formControlName="email" matInput />
+                    </mat-form-field>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="action" stickyEnd>
+                <th class="table-column-100 center" mat-header-cell *matHeaderCellDef>
+                    <button mat-mini-fab color="primary" aria-label="Add New" (click)="addNewUser()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </th>
+                <td class="table-column-100 center" mat-cell *matCellDef="let user;let i = index">
+                    <button mat-icon-button aria-label="editUser" [hidden]="user.edit" (click)="editUser(user,i)">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button aria-label="deleteUser" [hidden]="user.edit">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                    <button mat-icon-button aria-label="saveUser" [hidden]="!user.edit" [disabled]="userForm.invalid"
+                        (click)="saveUser(user)">
+                        <mat-icon>save</mat-icon>
+                    </button>
+                    <button mat-icon-button aria-label="editUser" [hidden]="!user.edit" (click)="cancel(user)">
+                        <mat-icon>cancel</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+</div>

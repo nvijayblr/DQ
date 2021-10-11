@@ -1,78 +1,72 @@
-<section class="page-body home-bodys">
-  <div class="container">
-    <div class="home-wrapper">
-      <div class="clearfix my-community-body">
-        <div class="home-panel">
-          <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
-          <div class="shrare-post">
-            <mat-card class="border no-rounded list shrare-post">
-              <div class="list flex-containers flex-start wrap no-margin dash-title">
-                <div class="list-item-2">
-                  <h1 class="share-post-title no-margin">Roles<span class="yellow"> List</span></h1>
-                </div>
-                <div class="list-item-2 text-right">
-                  <button  mat-stroked-button class="button3d btnPush btnLightBlue tdBtn" (click)="showAddEditRole({}, 'create');">New Role <mat-icon>person_add</mat-icon></button>
-                </div>
-              </div>
-
-              <!-- Roles List -->
-              <div class="analysis-preview">
-               <table class="table">
-                  <thead>
-                    <tr>
-                      <th style="width: 33%;">Name</th>
-                      <th style="width: 33%;">Display Text</th>
-                      <!-- <th>Status</th> -->
-                      <th style="width: 33%;">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                     <tr *ngFor="let role of rolesList; let i= index;" class="tableinner">
-                       <td colspan="3">
-                         <table class="table no-border">
-                           <tr>
-                            <td style="width: 33%;">{{role.roleName}}</td>
-                            <td style="width: 33%;">{{role.roleText}}</td>
-                            <!-- <td class="{{role.status}}">{{role.status}}</td> -->
-                            <td style="width: 33%;">
-                              <button type="button" class="button3d btnPush btnOrange addico"
-                                (click)="showAddEditRole(role, 'edit');"  matTooltip="Edit Role">
-                                <mat-icon>edit</mat-icon> Edit
-                              </button>
-                              <button type="button" class="button3d btnPush btnOrange addico" *ngIf="!role.isShowRights"
-                                (click)="showHideAssignRights(role, true);"  matTooltip="Assign Rights">
-                                Rights
-                              </button>
-                            </td>
-                           </tr>
-                         </table>
-                          <div class="assign-role-wrapper" *ngIf="role.isShowRights">
-                            <mat-chip-list aria-label="Rights selection">
-                              <mat-chip *ngFor="let right of role.rightsList" [class.selected]="right.selected" (click)="onRightClick(right)">{{right.label}}</mat-chip>
-                            </mat-chip-list>
-                            <div class="btn-wrapper right">
-                              <button type="button" class="button3d btnPush btnOrange addico"
-                              (click)="showHideAssignRights(role, false);">
-                                Cancel
-                              </button>
-                              <button type="button" class="button3d btnPush btnOrange addico"
-                              (click)="saveRights(role);">
-                                Save
-                              </button>
-                            </div>
-                          </div>
-                       </td>
-                     </tr>
-                   </tbody>
-               </table>
-              </div>
-            </mat-card>
-
-          </div>
-
-        </div>
-      </div> 
-    </div>
-
+<div class="listContainer">
+  <div class="listHeader">
+    <mat-icon>assignment_ind</mat-icon>
+    <h5>Role Management</h5>
+    <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
   </div>
-</section>
+  <div class="listTable" [formGroup]="roleForm">
+    <table mat-table [dataSource]="roleList">
+
+      <ng-container matColumnDef="name">
+        <th class="table-column-200" mat-header-cell *matHeaderCellDef>Name</th>
+        <td class="table-column-200" mat-cell *matCellDef="let role"> 
+          <span [hidden]="role.edit">{{role.roleName}}</span>
+          <mat-form-field appearance="standard" class="column-width-200 m-14" [hidden]="!role.edit">
+            <input formControlName="roleName" matInput />
+          </mat-form-field>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="display">
+        <th class="table-column-200" mat-header-cell *matHeaderCellDef>Display Text</th>
+        <td class="table-column-200" mat-cell *matCellDef="let role"> 
+          <span [hidden]="role.edit">{{role.roleText}}</span>
+          <mat-form-field appearance="standard" class="column-width-200 m-14" [hidden]="!role.edit">
+            <input formControlName="roleText" matInput />
+          </mat-form-field>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="rights">
+        <th class="table-column-200" mat-header-cell *matHeaderCellDef>Rights</th>
+        <td class="table-column-200" mat-cell *matCellDef="let role">
+          <ul class="column-3 column-width-450" [hidden]="role.edit">
+            <li *ngFor="let right of role.rights">{{right.Text}}</li>
+          </ul>
+          <mat-form-field appearance="standard" class="column-width-300 m-15" [hidden]="!role.edit">
+            <mat-select multiple formControlName="rights" [compareWith]="compareRights">
+                <mat-option *ngFor="let right of rightsList" [value]="right">
+                    {{right.Text}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th class="table-column-100  center" mat-header-cell *matHeaderCellDef>
+          <button mat-mini-fab color="primary" aria-label="Add New" (click)="addNewRole()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </th>
+        <td class="table-column-100  center" mat-cell *matCellDef="let role;let i = index">
+          <button mat-icon-button aria-label="editRole" [hidden]="role.edit" (click)="editRole(role,i)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button aria-label="deleteRole" [hidden]="role.edit">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button mat-icon-button aria-label="saveRole" [hidden]="!role.edit" [disabled]="roleForm.invalid" (click)="saveRole(role)">
+            <mat-icon>save</mat-icon>
+          </button>
+          <button mat-icon-button aria-label="editRole" [hidden]="!role.edit" (click)="cancel(role)">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>

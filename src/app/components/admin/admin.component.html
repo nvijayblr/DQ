@@ -1,1 +1,17 @@
-<router-outlet></router-outlet>
+<div class="adminSetting" fxLayout="row">
+    <div class="menuList">
+        <mat-nav-list>
+            <div class="menuItem" *ngFor="let menu of navLinks">
+                <h3 matSubheader>
+                   {{menu.label}}
+                </h3>
+                <mat-list-item *ngFor="let link of menu.children" [routerLinkActive]="['active']">
+                    <a matLine [routerLink]="link.link">{{ link.label }}</a>
+                </mat-list-item>
+            </div>
+        </mat-nav-list>
+    </div>
+    <mat-card class="listView">
+        <router-outlet></router-outlet>
+    </mat-card>
+</div>

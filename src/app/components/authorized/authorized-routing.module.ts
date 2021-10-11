@@ -16,6 +16,7 @@ import { SchemaTableComponent } from './create-source/schema-table/schema-table.
 import { MainDashboardComponent } from './main-dashboard/main-dashboard.component';
 import { MangoDBComponent } from './create-source/mango-db/mango-db.component';
 import { CanDeactivateContact, CanDeactivateSource } from './candeactivate.route';
+import { AdminComponent } from '../admin/admin.component';
 
 const routes: Routes = [
   {
@@ -30,6 +31,7 @@ const routes: Routes = [
       },
       {
         path: 'admin',
+        component: AdminComponent,
         loadChildren: () => import('../admin/admin.module').then(m => m.AdminModule),
         // canActivate: [AuthGaurd]
       },

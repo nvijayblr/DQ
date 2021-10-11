@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { AdminRoutingModule } from './admin-routing.module';
-import { AdminComponent } from './admin.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { UsersListComponent } from './users-list/users-list.component';
 import { CreateEditUserComponent } from './users-list/create-edit-user/create-edit-user.component';
@@ -22,7 +21,6 @@ import { CreateEditSourceCategoryComponent } from './source-category/create-edit
 
 @NgModule({
   declarations: [
-    AdminComponent,
     UsersListComponent,
     CreateEditUserComponent,
     RolesComponent,
