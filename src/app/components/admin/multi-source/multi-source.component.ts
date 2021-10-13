@@ -1,38 +1,40 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MessageService } from '../../../services/message.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatTable, MatSort } from '@angular/material';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpService } from '../../../services/http-service.service';
-import { AuthGuardService } from 'src/app/services/auth-guard.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
-import * as moment from 'moment';
-import { CreateEditMultiSourceComponent } from './create-edit-multi-source/create-edit-multi-source.component';
+import { AdminService } from '../admin.service';
 
 @Component({
   selector: 'app-multi-source',
   templateUrl: './multi-source.component.html',
-  styleUrls: ['./multi-source.component.scss']
+  styleUrls: ['../admin.component.scss']
 })
 export class MultiSourceComponent implements OnInit {
 
   isLoading = false;
   loaderMsg = '';
+  editIndex = -1;
+
   multisourceList: any = [];
+  multisourceForm: FormGroup;
 
-   constructor(
-      public dialog: MatDialog,
-      private http: HttpService,
-      private messageService: MessageService,
-      private auth: AuthGuardService,
-      private router: Router) {
-   }
+  displayedColumns: string[] = ['value', 'label', 'status', 'action'];
 
-   ngOnInit() {
-     this.getSourceList();
-   }
+  @ViewChild(MatTable, { static: true }) sourceTable: MatTable<any>;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
+  constructor(
+    private http: HttpService,
+    private formBuilder: FormBuilder,
+    private service: AdminService
+  ) { };
 
-   getSourceList() {
+  ngOnInit() {
+    this.getSourceList();
+    this.initSourceForm({});
+  }
+
+  getSourceList() {
     this.isLoading = true;
     this.loaderMsg = 'Loading multisource...';
     this.http.getMultisourceList().subscribe((result: any) => {
@@ -54,17 +56,34 @@ export class MultiSourceComponent implements OnInit {
     });
   }
 
-  showAddEditSource(source, mode) {
-    const dialogRef = this.dialog.open(CreateEditMultiSourceComponent, {
-        width: '450px',
-        data: {source: source ? source : {}, mode}
+  initSourceForm(source: any) {
+    this.multisourceForm = this.formBuilder.group({
+      value: [source.value ? source.value : '', [Validators.required]],
+      label: [source.label ? source.label : '', [Validators.required]],
+      status: [source.status ? source.status : '']
     });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.createEditMultisource(result.source, result.mode);
-      }
-     });
-   }
+  }
+
+  editSource(source, index) {
+    this.editIndex = this.service.editRow(source, index, this.multisourceList, this.sourceTable, this.editIndex);
+    this.initSourceForm(source);
+  }
+
+  addNewSource() {
+    this.editIndex = this.service.addNew(this.multisourceList, this.sourceTable, this.editIndex);
+    this.initSourceForm({});
+  }
+
+  saveSource(source) {
+    this.createEditMultisource(this.multisourceForm.value, source.mode);
+  }
+
+  cancel(source) {
+    this.editIndex = this.service.cancel(source, this.multisourceList, this.sourceTable, this.editIndex);
+  }
+
+  sortData(sort: MatSort) {
+    this.service.onSortData(sort, this.multisourceList, this.sourceTable);
+  }
 
 }
-

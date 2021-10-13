@@ -1,54 +1,71 @@
-<section class="page-body home-bodys">
-  <div class="container">
-    <div class="home-wrapper">
-      <div class="clearfix my-community-body">
-        <div class="home-panel">
-          <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
-          <div class="shrare-post">
-            <mat-card class="border no-rounded list shrare-post">
-              <div class="list flex-containers flex-start wrap no-margin dash-title">
-                <div class="list-item-2">
-                  <h1 class="share-post-title no-margin">Frequency<span class="yellow"> List</span></h1>
-                </div>
-                <div class="list-item-2 text-right">
-                  <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn" (click)="showAddEditFrequency({}, 'create');">New Frequency <mat-icon> layers</mat-icon></button>
-                </div>
-              </div>
-
-              <!-- Dept List -->
-              <div class="analysis-preview">
-               <table class="table">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Display Text</th>
-                      <th>Status</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                     <tr *ngFor="let frequency of frequencyList; let i= index;" class="tableinner">
-                      <td>{{frequency.value}}</td>
-                      <td>{{frequency.label}}</td>
-                        <td class="{{frequency.status}}">{{frequency.status}}</td>
-                        <td>
-
-                          <button type="button" class="button3d btnPush btnOrange addico"
-                          (click)="showAddEditFrequency(frequency, 'edit');"  matTooltip="Edit Frequency">
-                          <mat-icon>edit</mat-icon> Edit
-                          </button>
-                        </td>
-                     </tr>
-                   </tbody>
-               </table>
-              </div>
-            </mat-card>
-
-          </div>
-
-        </div>
-      </div> 
-    </div>
-
+<div class="listContainer">
+  <div class="listHeader">
+    <mat-icon>view_comfy</mat-icon>
+    <h5>Frequency Details</h5>
+    <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
   </div>
-</section>
+  <div class="listTable" [formGroup]="frequencyForm">
+    <table mat-table matSort [dataSource]="frequencyList" (matSortChange)="sortData($event)">
+
+      <ng-container matColumnDef="value">
+        <th class="table-column-200" mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <td class="table-column-200" mat-cell *matCellDef="let frequency">
+          <span [hidden]="frequency.edit">{{frequency.value}}</span>
+          <mat-form-field appearance="standard" class="column-width-200 m-14" [hidden]="!frequency.edit">
+            <input formControlName="value" matInput />
+          </mat-form-field>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="label">
+        <th class="table-column-200" mat-header-cell *matHeaderCellDef mat-sort-header>Display Text</th>
+        <td class="table-column-200" mat-cell *matCellDef="let frequency">
+          <span [hidden]="frequency.edit">{{frequency.label}}</span>
+          <mat-form-field appearance="standard" class="column-width-200 m-14" [hidden]="!frequency.edit">
+            <input formControlName="label" matInput />
+          </mat-form-field>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th class="table-column-100" mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <td class="table-column-100" mat-cell *matCellDef="let frequency" [ngClass]="frequency.status">
+          <span [hidden]="frequency.edit">
+            <mat-icon *ngIf="frequency.status == 'Active'">check_circle_outline</mat-icon>
+            <mat-icon *ngIf="frequency.status == 'Inactive'">block</mat-icon>
+          </span>
+          <mat-button-toggle-group formControlName="status" aria-label="Status" [hidden]="!frequency.edit">
+            <mat-button-toggle value="Active">Active</mat-button-toggle>
+            <mat-button-toggle value="Inactive">InActive</mat-button-toggle>
+          </mat-button-toggle-group>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th class="table-column-100 center" mat-header-cell *matHeaderCellDef>
+          <button mat-mini-fab color="primary" aria-label="Add New" (click)="addNewFrequency()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </th>
+        <td class="table-column-100 center" mat-cell *matCellDef="let frequency;let i = index">
+          <button mat-icon-button aria-label="editFrequency" [hidden]="frequency.edit" (click)="editFrequency(frequency,i)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button aria-label="deleteFrequency" [hidden]="frequency.edit">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button mat-icon-button aria-label="saveFrequency" [hidden]="!frequency.edit" [disabled]="frequencyForm.invalid"
+            (click)="saveFrequency(frequency)">
+            <mat-icon>save</mat-icon>
+          </button>
+          <button mat-icon-button aria-label="editFrequency" [hidden]="!frequency.edit" (click)="cancel(frequency)">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>

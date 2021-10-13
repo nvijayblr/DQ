@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatTable } from '@angular/material';
+import { MatTable, MatSort } from '@angular/material';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpService } from '../../../services/http-service.service';
+import { AdminService } from '../admin.service';
 
 @Component({
   selector: 'app-roles',
   templateUrl: './roles.component.html',
-  styleUrls: ['./roles.component.scss', '../admin.component.scss']
+  styleUrls: ['../admin.component.scss']
 })
 export class RolesComponent implements OnInit {
   isLoading = false;
@@ -24,10 +25,12 @@ export class RolesComponent implements OnInit {
   displayedColumns: string[] = ['name', 'display', 'rights', 'action'];
 
   @ViewChild(MatTable, { static: true }) roleTable: MatTable<any>;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
     private http: HttpService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private service: AdminService
   ) { };
 
   ngOnInit() {
@@ -69,7 +72,7 @@ export class RolesComponent implements OnInit {
     });
   }
 
-  compareRights(role1, role2) : boolean{
+  compareRights(role1, role2): boolean {
     return role1 && role2 ? role1.Value === role2.Value : role1 === role2;
   }
 
@@ -82,48 +85,25 @@ export class RolesComponent implements OnInit {
   }
 
   addNewRole() {
-    if (this.rolesList[0].mode !== this.mode.CREATE) {
-      if (this.editIndex >= 0 && this.rolesList[this.editIndex]) {
-        this.cancel(this.rolesList[this.editIndex]);
-      }
-      this.editIndex = 0;
-      this.rolesList.unshift({
-        edit: true,
-        mode: this.mode.CREATE
-      });
-      this.roleTable.dataSource = this.rolesList;
-      this.roleTable.renderRows();
-      this.initRoleForm({});
-    }
+    this.editIndex = this.service.addNew(this.rolesList, this.roleTable, this.editIndex);
+    this.initRoleForm({});
   }
 
-  editRole(role, index) {
-    if (this.editIndex >= 0 && this.rolesList[this.editIndex]) {
-      if (this.rolesList[this.editIndex].mode === this.mode.CREATE) {
-        index -= 1;
-      }
-      this.cancel(this.rolesList[this.editIndex]);
-    }
-    this.editIndex = index;
-    role.edit = true;
-    role.mode = this.mode.EDIT;
-    this.initRoleForm(role);
+  editRole(department, index) {
+    this.editIndex = this.service.editRow(department, index, this.rolesList, this.roleTable, this.editIndex);
+    this.initRoleForm(department);
   }
 
-  saveRole(role) {
-    this.editIndex = -1;
-    role.edit = false;
-    this.createEditRole(this.roleForm.value, role.mode);
+  saveRole(department) {
+    this.createEditRole(this.roleForm.value, department.mode);
   }
 
   cancel(role) {
-    this.editIndex = -1;
-    role.edit = false;
-    if (role.mode === this.mode.CREATE) {
-      this.rolesList.splice(0, 1);
-      this.roleTable.dataSource = this.rolesList;
-      this.roleTable.renderRows();
-    }
+    this.editIndex = this.service.cancel(role, this.rolesList, this.roleTable, this.editIndex);
+  }
+
+  sortData(sort: MatSort) {
+    this.service.onSortData(sort, this.rolesList, this.roleTable);
   }
 
 }

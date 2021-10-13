@@ -1,58 +1,71 @@
-<section class="page-body home-bodys">
-  <div class="container">
-    <div class="home-wrapper">
-      <div class="clearfix my-community-body">
-        <div class="home-panel">
-          <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
-          <div class="shrare-post">
-            <mat-card class="border no-rounded list shrare-post">
-              <div class="list flex-containers flex-start wrap no-margin dash-title">
-                <div class="list-item-2">
-                  <h1 class="share-post-title no-margin">Departments<span class="yellow"> List</span></h1>
-                </div>
-                <div class="list-item-2 text-right">
-                  <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn" (click)="showAddEditDept({}, 'create');">New Department <mat-icon> layers</mat-icon></button>
-                </div>
-              </div>
-
-              <!-- Dept List -->
-              <div class="analysis-preview">
-               <table class="table">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Display Text</th>
-                      <th>Status</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                     <tr *ngFor="let dept of departmentsList; let i= index;" class="tableinner">
-                        <td>{{dept.Name}}</td>
-                        <td>{{dept.Display}}</td>
-                        <td class="{{dept.status}}">{{dept.status}}</td>
-                        <td>
-
-                          <button type="button" class="button3d btnPush btnOrange addico"
-                          (click)="showAddEditDept(dept, 'edit');"  matTooltip="Edit Department">
-                          <mat-icon>edit</mat-icon> Edit
-                          </button>
-
-                          <!-- <button mat-icon-button color="primary" class="icon-primary-btn" matTooltip="Edit Department" (click)="showAddEditDept(dept, 'edit');">
-                            <mat-icon>edit</mat-icon>
-                          </button> -->
-                        </td>
-                     </tr>
-                   </tbody>
-               </table>
-              </div>
-            </mat-card>
-
-          </div>
-
-        </div>
-      </div> 
-    </div>
-
+<div class="listContainer">
+  <div class="listHeader">
+    <mat-icon>view_comfy</mat-icon>
+    <h5>Department Details</h5>
+    <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
   </div>
-</section>
+  <div class="listTable" [formGroup]="departmentForm">
+    <table mat-table matSort [dataSource]="departmentsList" (matSortChange)="sortData($event)">
+
+      <ng-container matColumnDef="Name">
+        <th class="table-column-200" mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <td class="table-column-200" mat-cell *matCellDef="let depart">
+          <span [hidden]="depart.edit">{{depart.Name}}</span>
+          <mat-form-field appearance="standard" class="column-width-200 m-14" [hidden]="!depart.edit">
+            <input formControlName="departName" matInput />
+          </mat-form-field>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Display">
+        <th class="table-column-200" mat-header-cell *matHeaderCellDef mat-sort-header>Display Text</th>
+        <td class="table-column-200" mat-cell *matCellDef="let depart">
+          <span [hidden]="depart.edit">{{depart.Display}}</span>
+          <mat-form-field appearance="standard" class="column-width-200 m-14" [hidden]="!depart.edit">
+            <input formControlName="departText" matInput />
+          </mat-form-field>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th class="table-column-100 center" mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <td class="table-column-100 center" mat-cell *matCellDef="let depart" [ngClass]="depart.status">
+          <span [hidden]="depart.edit">
+            <mat-icon *ngIf="depart.status == 'Active'">check_circle_outline</mat-icon>
+            <mat-icon *ngIf="depart.status == 'Inactive'">block</mat-icon>
+          </span>
+          <mat-button-toggle-group formControlName="status" aria-label="Status" [hidden]="!depart.edit">
+            <mat-button-toggle value="Active">Active</mat-button-toggle>
+            <mat-button-toggle value="Inactive">InActive</mat-button-toggle>
+          </mat-button-toggle-group>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th class="table-column-100 center" mat-header-cell *matHeaderCellDef>
+          <button mat-mini-fab color="primary" aria-label="Add New" (click)="addNewDepart()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </th>
+        <td class="table-column-100 center" mat-cell *matCellDef="let depart;let i = index">
+          <button mat-icon-button aria-label="editDepart" [hidden]="depart.edit" (click)="editDepart(depart,i)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button aria-label="deleteDepart" [hidden]="depart.edit">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button mat-icon-button aria-label="saveDepart" [hidden]="!depart.edit" [disabled]="departmentForm.invalid"
+            (click)="saveDepart(depart)">
+            <mat-icon>save</mat-icon>
+          </button>
+          <button mat-icon-button aria-label="editDepart" [hidden]="!depart.edit" (click)="cancel(depart)">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>

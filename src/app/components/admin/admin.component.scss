@@ -2,7 +2,7 @@ $columnSizes: 100, 150, 200;
 @each $size in $columnSizes {
     .table-column-#{$size} {
         min-width: #{$size}#{"px"};
-        padding: 0 5px;
+        padding: 5px;
     }
 }
 $controlSize: 100, 150, 200, 300, 450;
@@ -68,6 +68,9 @@ $controlSize: 100, 150, 200, 300, 450;
     }
     .listTable table {
         width: 100%;
+    }
+    .listTable tr {
+        height: 35px;
     }
     .mat-icon-button {
         height: 32px;

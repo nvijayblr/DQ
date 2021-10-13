@@ -1,45 +1,47 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MessageService } from '../../../services/message.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatTable, MatSort } from '@angular/material';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpService } from '../../../services/http-service.service';
-import { AuthGuardService } from 'src/app/services/auth-guard.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
-import * as moment from 'moment';
-import { CreateEditDeptComponent } from './create-edit-dept/create-edit-dept.component';
+import { AdminService } from '../admin.service';
 
 @Component({
   selector: 'app-departments',
   templateUrl: './departments.component.html',
-  styleUrls: ['./departments.component.scss']
+  styleUrls: ['../admin.component.scss']
 })
 export class DepartmentsComponent implements OnInit {
 
   isLoading = false;
   loaderMsg = '';
+  editIndex = -1;
+
   departmentsList: any = [];
+  departmentForm: FormGroup;
 
-   constructor(
-      public dialog: MatDialog,
-      private http: HttpService,
-      private messageService: MessageService,
-      private auth: AuthGuardService,
-      private router: Router) {
-   }
+  displayedColumns: string[] = ['Name', 'Display', 'status', 'action'];
 
-   ngOnInit() {
-     this.getDepartmentsList();
-   }
+  @ViewChild(MatTable, { static: true }) departmentTable: MatTable<any>;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
+  constructor(
+    private http: HttpService,
+    private formBuilder: FormBuilder,
+    private service: AdminService
+  ) { };
 
-   getDepartmentsList() {
+  ngOnInit() {
+    this.getDepartmentsList();
+    this.initDepartmentForm({});
+  }
+
+  getDepartmentsList() {
     this.isLoading = true;
     this.loaderMsg = 'Loading departments...';
     this.http.getDepartmentsList().subscribe((result: any) => {
       this.departmentsList = result.department ? result.department : [];
       this.isLoading = false;
     }, (error) => {
-       this.isLoading = false;
+      this.isLoading = false;
     });
   }
 
@@ -48,22 +50,41 @@ export class DepartmentsComponent implements OnInit {
     this.loaderMsg = 'Saving department details...';
     this.http.createEditDepartment(dept, mode).subscribe((result: any) => {
       this.isLoading = false;
+      this.editIndex = -1;
       this.getDepartmentsList();
     }, (error) => {
       this.isLoading = false;
     });
   }
 
-  showAddEditDept(dept, mode) {
-    const dialogRef = this.dialog.open(CreateEditDeptComponent, {
-        width: '450px',
-        data: {dept: dept ? dept : {}, mode}
+  initDepartmentForm(department: any) {
+    this.departmentForm = this.formBuilder.group({
+      departName: [department.Name ? department.Name : '', [Validators.required]],
+      departText: [department.Display ? department.Display : '', [Validators.required]],
+      status: [department.status ? department.status : '']
     });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.createEditDept(result.dept, result.mode);
-      }
-     });
-   }
+  }
+
+  editDepart(department, index) {
+    this.editIndex = this.service.editRow(department, index, this.departmentsList, this.departmentTable, this.editIndex);
+    this.initDepartmentForm(department);
+  }
+
+  addNewDepart() {
+    this.editIndex = this.service.addNew(this.departmentsList, this.departmentTable, this.editIndex);
+    this.initDepartmentForm({});
+  }
+
+  saveDepart(department) {
+    this.createEditDept(this.departmentForm.value, department.mode);
+  }
+
+  cancel(department) {
+    this.editIndex = this.service.cancel(department, this.departmentsList, this.departmentTable, this.editIndex);
+  }
+
+  sortData(sort: MatSort) {
+    this.service.onSortData(sort, this.departmentsList, this.departmentTable);
+  }
 
 }

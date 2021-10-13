@@ -1,6 +1,6 @@
 <div class="listContainer">
     <div class="listHeader">
-        <mat-icon>assignment_ind</mat-icon>
+        <mat-icon>people</mat-icon>
         <h5>User Management</h5>
         <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
     </div>
@@ -100,7 +100,6 @@
                         <mat-button-toggle value="Active">Active</mat-button-toggle>
                         <mat-button-toggle value="Inactive">InActive</mat-button-toggle>
                     </mat-button-toggle-group>
-                    <!-- <mat-slide-toggle [hidden]="!user.edit" formControlName="status"></mat-slide-toggle> -->
                 </td>
             </ng-container>
             <ng-container matColumnDef="email">

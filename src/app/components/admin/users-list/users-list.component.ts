@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatTable } from '@angular/material';
+import { MatTable, MatSort } from '@angular/material';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpService } from '../../../services/http-service.service';
+import { AdminService } from '../admin.service';
 
 @Component({
   selector: 'app-users-list',
   templateUrl: './users-list.component.html',
-  styleUrls: ['./users-list.component.scss', '../admin.component.scss']
+  styleUrls: ['../admin.component.scss']
 })
 export class UsersListComponent implements OnInit {
 
@@ -35,10 +36,12 @@ export class UsersListComponent implements OnInit {
   displayedColumns: string[] = ['userName', 'name', 'role', 'category', 'type', 'department', 'email', 'password', 'status', 'action'];
 
   @ViewChild(MatTable, { static: true }) userTable: MatTable<any>;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
     private http: HttpService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private service: AdminService
   ) { };
 
   ngOnInit() {
@@ -93,6 +96,7 @@ export class UsersListComponent implements OnInit {
     user.isEMailNotification = 1;
     this.http.createEditUser(user, mode).subscribe((result: any) => {
       this.isLoading = false;
+      this.editIndex = -1;
       this.getUsersList();
       alert('User detail saved successfully');
     }, (error) => {
@@ -133,48 +137,25 @@ export class UsersListComponent implements OnInit {
   }
 
   addNewUser() {
-    if (this.usersList[0].mode !== this.mode.CREATE) {
-      if (this.editIndex >= 0 && this.usersList[this.editIndex]) {
-        this.cancel(this.usersList[this.editIndex]);
-      }
-      this.editIndex = 0;
-      this.usersList.unshift({
-        edit: true,
-        mode: this.mode.CREATE
-      });
-      this.userTable.dataSource = this.usersList;
-      this.userTable.renderRows();
-      this.initUserForm({});
-    }
+    this.editIndex = this.service.addNew(this.usersList, this.userTable, this.editIndex);
+    this.initUserForm({});
   }
 
   editUser(user, index) {
-    if (this.editIndex >= 0 && this.usersList[this.editIndex]) {
-      if (this.usersList[this.editIndex].mode === this.mode.CREATE) {
-        index -= 1;
-      }
-      this.cancel(this.usersList[this.editIndex]);
-    }
-    this.editIndex = index;
-    user.edit = true;
-    user.mode = this.mode.EDIT;
+    this.editIndex = this.service.editRow(user, index, this.usersList, this.userTable, this.editIndex);
     this.initUserForm(user);
   }
 
   saveUser(user) {
-    this.editIndex = -1;
-    user.edit = false;
     this.createEditUser(this.userForm.value, user.mode);
   }
-  
+
   cancel(user) {
-    this.editIndex = -1;
-    user.edit = false;
-    if (user.mode === this.mode.CREATE) {
-      this.usersList.splice(0, 1);
-      this.userTable.dataSource = this.usersList;
-      this.userTable.renderRows();
-    }
+    this.editIndex = this.service.cancel(user, this.usersList, this.userTable, this.editIndex);
+  }
+
+  sortData(sort: MatSort) {
+    this.service.onSortData(sort,this.usersList,this.userTable);
   }
 
 }

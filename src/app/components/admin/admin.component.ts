@@ -31,7 +31,7 @@ export class AdminComponent implements OnInit {
           link: 'departments',
           index: 2
         }, {
-          label: 'Category',
+          label: 'User Category',
           link: 'category',
           index: 3
         }, {

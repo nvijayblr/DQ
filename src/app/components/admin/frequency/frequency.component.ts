@@ -1,38 +1,40 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MessageService } from '../../../services/message.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatTable, MatSort } from '@angular/material';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpService } from '../../../services/http-service.service';
-import { AuthGuardService } from 'src/app/services/auth-guard.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
-import * as moment from 'moment';
-import { CreateEditFrequencyComponent } from './create-edit-frequency/create-edit-frequency.component';
+import { AdminService } from '../admin.service';
 
 @Component({
   selector: 'app-frequency',
   templateUrl: './frequency.component.html',
-  styleUrls: ['./frequency.component.scss']
+  styleUrls: ['../admin.component.scss']
 })
 export class FrequencyComponent implements OnInit {
 
   isLoading = false;
   loaderMsg = '';
+  editIndex = -1;
+
   frequencyList: any = [];
+  frequencyForm: FormGroup;
 
-   constructor(
-      public dialog: MatDialog,
-      private http: HttpService,
-      private messageService: MessageService,
-      private auth: AuthGuardService,
-      private router: Router) {
-   }
+  displayedColumns: string[] = ['value', 'label', 'status', 'action'];
 
-   ngOnInit() {
-     this.getFrequencyList();
-   }
+  @ViewChild(MatTable, { static: true }) frequencyTable: MatTable<any>;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
+  constructor(
+    private http: HttpService,
+    private formBuilder: FormBuilder,
+    private service: AdminService
+  ) { };
 
-   getFrequencyList() {
+  ngOnInit() {
+    this.getFrequencyList();
+    this.initFrequencyForm({});
+  }
+
+  getFrequencyList() {
     this.isLoading = true;
     this.loaderMsg = 'Loading frequency...';
     this.http.getFrequencyList().subscribe((result: any) => {
@@ -54,17 +56,34 @@ export class FrequencyComponent implements OnInit {
     });
   }
 
-  showAddEditFrequency(frequency, mode) {
-    const dialogRef = this.dialog.open(CreateEditFrequencyComponent, {
-        width: '450px',
-        data: {frequency: frequency ? frequency : {}, mode}
+  initFrequencyForm(frequency: any) {
+    this.frequencyForm = this.formBuilder.group({
+      value: [frequency.value ? frequency.value : '', [Validators.required]],
+      label: [frequency.label ? frequency.label : '', [Validators.required]],
+      status: [frequency.status ? frequency.status : '']
     });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.createEditFrequency(result.frequency, result.mode);
-      }
-     });
-   }
+  }
+
+  editFrequency(frequency, index) {
+    this.editIndex = this.service.editRow(frequency, index, this.frequencyList, this.frequencyTable, this.editIndex);
+    this.initFrequencyForm(frequency);
+  }
+
+  addNewFrequency() {
+    this.editIndex = this.service.addNew(this.frequencyList, this.frequencyTable, this.editIndex);
+    this.initFrequencyForm({});
+  }
+
+  saveFrequency(frequency) {
+    this.createEditFrequency(this.frequencyForm.value, frequency.mode);
+  }
+
+  cancel(frequency) {
+    this.editIndex = this.service.cancel(frequency, this.frequencyList, this.frequencyTable, this.editIndex);
+  }
+
+  sortData(sort: MatSort) {
+    this.service.onSortData(sort, this.frequencyList, this.frequencyTable);
+  }
 
 }
-
