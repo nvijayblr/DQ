@@ -157,7 +157,7 @@
             </div>
              
             <mat-card class="tab-card noSdw">
-              <mat-tab-group mat-align-tabs="start"  animationDuration="0ms" class="mm2" #tabGroup (selectedTabChange)="resetPreview();">
+              <mat-tab-group mat-align-tabs="start"  animationDuration="0ms" class="mm2" #tabGroup (selectedTabChange)="resetPreview();"  [(selectedIndex)]="refTabIndex">
                 <mat-tab label="Data Imputation">
                   <div class="impute-wrapper" *ngIf="profile.attributeSummary?.dataType === 'Numeric'">
                     <h5 class="sub-title-label">Impute Null Data</h5>

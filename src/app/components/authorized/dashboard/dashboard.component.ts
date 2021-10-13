@@ -207,7 +207,7 @@ export class DashboardComponent implements OnInit {
         this.isOriginalSource = 'YES';
         this.OriginalSourcePath = analysis.source.templateSourcePath;
         this.originalSourceUploadDate = analysis.settings.uploadDate;
-        console.log(this.originalSourceUploadDate);
+        //console.log(this.originalSourceUploadDate);
         this.uploadSource(analysis);
       }
       if (this.fromOrginSource === 'cleaning') {
@@ -537,14 +537,15 @@ export class DashboardComponent implements OnInit {
   selectedRuleSet;
   ruleSetType(event) {
     this.selectedRuleSet = event;
-    console.log(this.selectedRuleSet)
+    //console.log(this.selectedRuleSet)
   }
 
   isCleanedSource;
   cleanedSourcePath;
   uploadErrorMessage;
+  recentUploadDate;
   uploadSource(analysis, reason = '') {
-    //console.log('uploadSource', analysis);
+    this.recentUploadDate = moment(analysis.uploadDate).format("YYYY-MM-DD[T]HH:mm:ss.000[Z]");
     if (!analysis.rules || (analysis.rules && !analysis.rules.length)) {
       alert('Please create the ruleset to upload the source.');
       return;
@@ -595,7 +596,7 @@ export class DashboardComponent implements OnInit {
       rulesetId:this.selectedRuleSet ? this.selectedRuleSet : '',
       isMultiSource: isMultiSource ? 'Yes' : 'No',
       multiSourceKey: analysis.multisource ? analysis.multisource : '',
-      uploadDate: analysis.uploadDate ? analysis.uploadDate : this.originalSourceUploadDate,
+      uploadDate: this.recentUploadDate ? this.recentUploadDate : this.originalSourceUploadDate,
       uploadTime: '20:28',
       uploadReason: reason ? reason : '',
       settings: analysis.settings,
@@ -610,11 +611,12 @@ export class DashboardComponent implements OnInit {
     const formData: any = new FormData();
     formData.append('file[]', analysis.file ? analysis.file : '');
     formData.append('data', JSON.stringify(payload));
+ 
     // this.isLoading = true;
     // this.loaderMsg = 'Saving Source data...';
     this.http.uploadSource(formData).subscribe((result: any) => {
       this.isLoading = false;
-      console.log(result);
+      //console.log(result);
       this.uploadErrorMessage = result.errorMsg;
       if (result.errorMsg) {
         if (result.errorCode == '103') {
@@ -637,7 +639,7 @@ export class DashboardComponent implements OnInit {
 
   reloadCurrentRoute() {
     let currentUrl = `auth/data-quality-monitoring`;
-    console.log(currentUrl);
+    //console.log(currentUrl);
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
       this.router.navigate([currentUrl]);
     });
@@ -835,7 +837,7 @@ export class DashboardComponent implements OnInit {
       return o.sourceId === data.sourceId;
     });
     this.modalService.open(longContent, { scrollable: true, size: 'xl' }).result.then((result) => {
-      console.log(result);
+      //console.log(result);
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -883,7 +885,7 @@ export class DashboardComponent implements OnInit {
   }
 
   changeViewAnlysis(view) {
-    console.log('change view2', view);
+    //console.log('change view2', view);
     localStorage.setItem('viewMethod', view);
     if (view === 'table') {
       this.showtableAnalysis = true;
@@ -893,7 +895,7 @@ export class DashboardComponent implements OnInit {
   }
 
   changeView(view) {
-    console.log('change view', view);
+    //console.log('change view', view);
     if (view === 'table') {
       this.showtable = true;
     } else {
@@ -912,7 +914,7 @@ export class DashboardComponent implements OnInit {
       this.previewProfile = true;
       this.previewCorrelation = false;
     } else if (menu === 'correlation') {
-      console.log('changeMenu', data)
+      //console.log('changeMenu', data)
       this.previewTable = false;
       this.previewProfile = false;
       this.previewCorrelation = true;
@@ -1011,7 +1013,7 @@ export class DashboardComponent implements OnInit {
       this.uploadFileMethod = false;
 
       this.http.getCleanSource().subscribe((result: any) => {
-        console.log(result);
+        //console.log(result);
         this.allSourceCategory = result.SourceDetailsList;
         const dataFromDq = _.find(result.SourceDetailsList, function (o) {
           return o.sourceId === data.sourceId;

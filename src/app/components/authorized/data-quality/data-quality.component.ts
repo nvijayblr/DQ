@@ -164,8 +164,8 @@ export class DataQualityComponent implements OnInit {
   
   isChecked:any=true;
   onChange($event:Event){
-     console.log($event);
-     console.log("value changed", this.isChecked);
+     //console.log($event);
+     //console.log("value changed", this.isChecked);
   }
 
   applySearch(event: Event) {
@@ -219,8 +219,8 @@ export class DataQualityComponent implements OnInit {
       this.newDB = result.Cluster_Contents;
       this.db = _.keys(result.Cluster_Contents);
       this.dbValues.push(this.newDB);
-      console.log(result.Cluster_Contents);
-      console.log(this.dbValues)
+      //console.log(result.Cluster_Contents);
+      //console.log(this.dbValues)
       this.dataSource = _.values(result.Cluster_Contents);
       this.isLoadingDB = false;
       this.showAllDetails = true;
@@ -299,7 +299,7 @@ export class DataQualityComponent implements OnInit {
     this.selectedColumn = '';
     const colName = column;
     this.isButtonShow = false;
-    console.log(this.dbSaveLogs);
+    //console.log(this.dbSaveLogs);
     this.getClusterKeys = _.find(this.dbSaveLogs, item ? item : '', item ? item : '');
     //console.log('this.', this.getClusterKeys[item][colName])
     if (this.getClusterKeys && this.getClusterKeys[item][colName]) {    
@@ -537,7 +537,7 @@ export class DataQualityComponent implements OnInit {
     let currentUrl = this.router.url;
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
       this.router.navigate([currentUrl]);
-      console.log(currentUrl);
+      //console.log(currentUrl);
     });
   }
 

@@ -55,9 +55,9 @@ export class MangoDBComponent implements OnInit {
     this.profileType  = this.route.snapshot.queryParamMap.get('type');
     this.analysisForm = this.fb.group({
       //sourceDataName: ['', [Validators.required]],
-      clientUrlDb: ['', [Validators.required]],
-      clientUrlDbType: ['', [Validators.required]],
-      sourceFileName: ['', []],
+      //clientUrlDb: ['', [Validators.required]],
+      //clientUrlDbType: ['', [Validators.required]],
+      // /sourceFileName: ['', []],
       //database: ['', [Validators.required, Validators.maxLength(100)]],
       collection: ['', [Validators.required, Validators.maxLength(100)]],
       sourceCategory: ['', [Validators.required]],
@@ -97,7 +97,7 @@ export class MangoDBComponent implements OnInit {
     };
     this.http.getDBCollections(payload).subscribe((result: any) => {
       this.isLoading = false;
-      console.log('DB', result.Databases)
+      //console.log('DB', result.Databases)
       this.dbList = result.Databases;
     }, (error) => {
       alert(error.message);
@@ -124,10 +124,7 @@ export class MangoDBComponent implements OnInit {
 
   getMongoDBClientHistoryURL() {
     this.http.getMongoDBClientHistory().subscribe((result: any) => {
-      console.log('HIST', result);
       this.clientUrl = result.ClientHist;
-      console.log(this.clientUrl);
-
     })
   }
   onSourceFileSelected(file) {
@@ -183,7 +180,7 @@ export class MangoDBComponent implements OnInit {
 
     
     const payload = {
-      client_url: this.analysisForm.controls.clientUrlDbType.value,
+      //client_url: this.analysisForm.controls.clientUrlDbType.value,
       db: this.analysisForm.controls.sourceCategory.value,
       collection:this.analysisForm.controls.collection.value     
     };

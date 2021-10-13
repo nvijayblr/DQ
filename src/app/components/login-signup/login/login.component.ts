@@ -83,13 +83,13 @@ export class LoginComponent implements OnInit {
     //   this.setLoginSessionAndRouting(loggedUser[0]);
     //   return;
     // }
-    this.globalData = localStorage.getItem('globalData');
+    //this.globalData = localStorage.getItem('globalData');
     this.isLoading = true;
     this.http.loginRequest(this.loginForm.value).subscribe((result: any) => {
       this.isLoading = false;
-      if (!this.globalData) {
-        this.saveGlobalDbCollection();
-      }
+      // if (!this.globalData) {
+      //   this.saveGlobalDbCollection();
+      // }
       
       if (result.errorMsg) {
         this.alertMessage = result.errorMsg;
@@ -246,10 +246,10 @@ export class LoginComponent implements OnInit {
     this.modalService.open(content, { size: 'sm' });
   }
 
-  saveGlobalDbCollection() {
-    this.http.saveGlobalDbCollection().subscribe((result: any) => {
-      localStorage.setItem('globalData', JSON.stringify(result));
-    })
-  }
+  // saveGlobalDbCollection() {
+  //   this.http.saveGlobalDbCollection().subscribe((result: any) => {
+  //     localStorage.setItem('globalData', JSON.stringify(result));
+  //   })
+  // }
 
 }
