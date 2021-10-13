@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1697" height="1076" viewBox="0 0 1697 1076">
+  <defs>
+    <clipPath id="clip-Join_Now_3">
+      <rect width="1697" height="1076"/>
+    </clipPath>
+  </defs>
+  <g id="Join_Now_3" data-name="Join Now – 3" clip-path="url(#clip-Join_Now_3)">
+    <rect width="1697" height="1076" fill="#fff"/>
+    <path id="Path_540" data-name="Path 540" d="M1044,0c576.585,0,1044,387.945,1044,866.5v4c0,248.848-395.19,168.5-628.93,312.5S1320.761,1737,1044,1737C467.415,1737,0,1349.055,0,870.5v-4C0,387.945,467.415,0,1044,0Z" transform="translate(-403 -451)" fill="#ca422e"/>
+  </g>
+</svg>

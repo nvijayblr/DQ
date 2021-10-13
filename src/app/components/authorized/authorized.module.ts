@@ -31,6 +31,7 @@ import { ScrollService } from '../../services/scroll.service';
 import { AdminComponent } from '../admin/admin.component';
 
 
+
 @NgModule({
   declarations: [
     AuthorizedComponent,

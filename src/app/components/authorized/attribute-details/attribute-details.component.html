@@ -256,17 +256,21 @@
               <div class="previewView valign" *ngIf="previewTable" style="clear: both;">
                 <app-progress-bar [message]="'Loading...'" class="component" *ngIf="isPreviewLoading"></app-progress-bar>
                 <app-ag-grid
-                floatingFilter="true"
-                *ngIf="isPreviewLoaded"
-                class="ag-theme-material"
-                [rowData]="rowData"
-                [columnDefs]="columnDefs"
-                [pageSize]="50"
-                [rowSelection]="'multiple'"
-                [suppressRowClickSelection]="false"
-              ></app-ag-grid>
+                  floatingFilter="true"
+                  *ngIf="isPreviewLoaded"
+                  [rowData]="rowData"
+                  [columnDefs]="columnDefs"
+                  [pageSize]="50"
+                  [rowSelection]="'multiple'"
+                  [suppressRowClickSelection]="false"
+                ></app-ag-grid>
+              <button *ngIf="isButtonShow" type="button" class="btn btn-light lMore" (click)="loadMoreDb()">
+                <span *ngIf="isLoadingBt" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                   <span *ngIf="isLoadingBt"> Loading...</span>
+                  <span *ngIf="!isLoadingBt">Load More</span>
+                </button> 
             </div>
-
+            <!-- <mat-progress-bar mode="indeterminate" *ngIf="innerLoader"></mat-progress-bar> -->
             <div class="profileView valign" *ngIf="previewProfile">
               <div class="analysis-infoDashboard">
                 <div class="category-list-wrapper clearfix">
@@ -286,6 +290,7 @@
                   <div class="flex-containers">                                    
                     <div class="lft-attr">
                       <h4 class="attr-tite"> <span class="subT m">Attribute Summary</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
+                     
                       <mat-card class="bg-violet ch" [class.chLength]="profile.outlier_len_statistics"> 
                         <table>
                           <tr>
@@ -326,14 +331,27 @@
                         </table>                                          
                       </mat-card> 
                     </div>
-                    <div class="rgt-attr" *ngIf="!profile.outlier_len_statistics">
+                    <div class="rgt-attr">
                       <h4 class="attr-tite"> <span class="subT hd">Length Statistics</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
-                      <mat-card class="honeydew ch" > 
+                      <mat-card class="honeydew ch" [class.chLength]="profile.LengthStatistics || profile.valueStatistics"> 
                                             
                           <div class="custom-slider" *ngIf="profile.LengthStatistics">
                             <div class="minMax"> 
                               <div class="values">Min {{profile.LengthStatistics.Min}}</div>
                               <div class="values fr">Max {{profile.LengthStatistics.Max}}</div>
+                             </div>
+                            <div class="minMax">
+                             <div class="dot"></div>
+                             <div class="bar"></div>
+                             <div class="dot fr"></div>
+                            </div>
+                            
+                             <!-- <ngx-slider [(value)]="profile.LengthStatistics.Min" [(highValue)]="profile.LengthStatistics.Max" [options]="options"></ngx-slider> -->
+                          </div>
+                          <div class="custom-slider" *ngIf="profile.LengthStatistics">
+                            <div class="minMax"> 
+                              <div class="values">Average {{profile.LengthStatistics.Average}}</div>
+                              <div class="values fr">Median {{profile.LengthStatistics.Median}}</div>
                              </div>
                             <div class="minMax">
                              <div class="dot"></div>
@@ -357,6 +375,19 @@
                             
                              <!-- <ngx-slider [(value)]="profile.LengthStatistics.Min" [(highValue)]="profile.LengthStatistics.Max" [options]="options"></ngx-slider> -->
                           </div>
+                          <div class="custom-slider" *ngIf="profile.valueStatistics">
+                            <div class="minMax"> 
+                              <div class="values">Minimum Value {{profile.valueStatistics.MinimumValue}}</div>
+                              <div class="values fr">Median Value {{profile.valueStatistics.MedianValue}}</div>
+                             </div>
+                            <div class="minMax">
+                             <div class="dot"></div>
+                             <div class="bar"></div>
+                             <div class="dot fr"></div>
+                            </div>
+                            
+                             <!-- <ngx-slider [(value)]="profile.LengthStatistics.Min" [(highValue)]="profile.LengthStatistics.Max" [options]="options"></ngx-slider> -->
+                          </div>
                           <!-- <div class="custom-slider" *ngIf="!profile.LengthStatistics">
                            <div class="not-found" *ngIf="!profile.LengthStatistics">
                                Not Available
@@ -367,6 +398,9 @@
                        </div> -->
                      </mat-card>
                     </div>
+                  
+                  </div>
+                  <div class="flex-containers">
                     <div class="rgt-attr" *ngIf="profile.outlier_len_statistics">
                       <h4 class="attr-tite"> <span class="subT hd">Outlier Length Statistics</span> <i class="fa fa-info-circle info"  matTooltip="Info about the action"></i></h4>
                       <mat-card class="honeydew ch" [class.chLength]="profile.outlier_len_statistics"> 
@@ -409,6 +443,7 @@
                      </mat-card>
                     </div>
                   </div>
+
 
                   <div class="flex-containers"> 
                     <div class="lft-attr"> 

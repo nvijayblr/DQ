@@ -292,7 +292,7 @@
                                                         <div class="outline">
                                                             <mat-form-field appearance="fill">
                                                               <mat-label class="lbl">Ruleset Name</mat-label>
-                                                                <mat-select [(ngModel)]="data.rulesetId">
+                                                                <mat-select [(ngModel)]="data.rulesetId" (ngModelChange)="ruleSetType($event)">
                                                                   <mat-option *ngFor="let rule of data.rules;" [value]="rule.rulesetId">
                                                                       {{rule.rulesetName}}
                                                                   </mat-option>
@@ -952,10 +952,15 @@
               [rowSelection]="'multiple'"
               [suppressRowClickSelection]="false"
             ></app-ag-grid>
+            <button *ngIf="isButtonShow" type="button" class="btn btn-light lMore" (click)="loadMoreDb()">
+              <span *ngIf="isLoadingBt" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                 <span *ngIf="isLoadingBt"> Loading...</span>
+                <span *ngIf="!isLoadingBt">Load More</span>
+              </button>
           </div>
 
           <div class="correlationView valign" *ngIf="previewCorrelation">            
-            <app-progress-bar [message]="'Loading'" class="component" *ngIf="isLoading"></app-progress-bar>
+            <app-progress-bar [message]="'Loading Correlation...'" class="component" *ngIf="isLoadingCorrelation"></app-progress-bar>
             <h1 class="share-post-title"><span class="lgb">Correlation Summary</span></h1>
             <div class="flex-containers">
               <div class="list-item-4">

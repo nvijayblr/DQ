@@ -207,7 +207,7 @@ export class DashboardComponent implements OnInit {
         this.isOriginalSource = 'YES';
         this.OriginalSourcePath = analysis.source.templateSourcePath;
         this.originalSourceUploadDate = analysis.settings.uploadDate;
-        console.log(this.originalSourceUploadDate);
+        //console.log(this.originalSourceUploadDate);
         this.uploadSource(analysis);
       }
       if (this.fromOrginSource === 'cleaning') {
@@ -253,10 +253,15 @@ export class DashboardComponent implements OnInit {
   changeCategory(source) {
     // console.log('change category', source);
     // localStorage.setItem('dq-source-data', JSON.stringify(source));
+    this.previewProfile = true;
+    this.previewTable = false;
+    this.showtableAnalysis = true;
+    this.previewCorrelation = false;
     localStorage.removeItem('dq-source-data');
     this.selectedSource = source;
     this.initLoadProfile = false;
     this.titleSrc = source.templateSourcePath;
+   
   }
 
   loadProfile(source) {
@@ -447,9 +452,9 @@ export class DashboardComponent implements OnInit {
     }
     this.loadCorrelation(this.selectedSource, this.datatype, this.method);
   }
-
+  isLoadingCorrelation = false;
   loadCorrelation(source, type, method) {
-    //this.isLoading = true;
+    this.isLoadingCorrelation = true;
     //this.loaderMsg = 'Loading Correlation...';
     const payload = {
       sourcepath: source.templateSourcePath,
@@ -458,9 +463,9 @@ export class DashboardComponent implements OnInit {
     };
     this.http.getCorrMatrix(payload).subscribe((result: any) => {
       this.coMatrix = result ? result : {};
-      this.isLoading = false;
+      this.isLoadingCorrelation = false;
     }, (error) => {
-      this.isLoading = false;
+      this.isLoadingCorrelation = false;
       this.coMatrix = {};
     });
   }
@@ -473,15 +478,19 @@ export class DashboardComponent implements OnInit {
     this.columnDefs = [];
     this.rowData = [];
     const payload = {
-      sourcepath: this.titleSrc
+      sourcepath: this.titleSrc,
+      seeMoreEnabled: 'NO',
     };
     this.http.getProfileView(payload).subscribe((res: any) => {
       const details: any = res.Preview ? res.Preview : {};
+      if (Object.keys(res.Preview).length >= 999) {
+        this.isButtonShow = true;
+      }
       this.parseSourcePreview(details);
-    }, (error) => {
-      this.isPreviewLoaded = false;
-      this.isPreviewLoading = false;
-    });
+      }, (error) => {
+        this.isPreviewLoaded = false;
+        this.isPreviewLoading = false;
+      });
 
   }
 
@@ -504,15 +513,45 @@ export class DashboardComponent implements OnInit {
     this.isPreviewLoading = false;
   }
 
+  isButtonShow: boolean = false;
+  isLoadingBt :boolean = false;
+  loadMoreDb() {
+    this.isLoadingBt = true;
+    const payload = {
+      sourcepath: this.titleSrc,
+      seeMoreEnabled: 'YES',
+    };
+    this.http.getProfileView(payload).subscribe((res: any) => {
+      const details: any = res.Preview ? res.Preview : {};
+      this.columnDefs = [];
+      this.rowData = [];
+      this.parseSourcePreview(details);
+      this.isLoadingBt = false;
+      this.isButtonShow = false;
+      }, (error) => {
+      this.isLoadingBt = false;
+      this.isButtonShow = true;
+      });
+  }
+
+  selectedRuleSet;
+  ruleSetType(event) {
+    this.selectedRuleSet = event;
+    //console.log(this.selectedRuleSet)
+  }
+
   isCleanedSource;
   cleanedSourcePath;
   uploadErrorMessage;
+  recentUploadDate;
   uploadSource(analysis, reason = '') {
-    //console.log('uploadSource', analysis);
+    this.recentUploadDate = moment(analysis.uploadDate).format("YYYY-MM-DD[T]HH:mm:ss.000[Z]");
     if (!analysis.rules || (analysis.rules && !analysis.rules.length)) {
       alert('Please create the ruleset to upload the source.');
       return;
     }
+
+    this.selectedRuleSet = this.selectedRuleSet ? this.selectedRuleSet : analysis.rules[analysis.rules.length - 1].rulesetId;
 
     this.selectedAnalysis = analysis;
     let isMultiSource = false;
@@ -554,10 +593,10 @@ export class DashboardComponent implements OnInit {
       isOriginalSource: this.isOriginalSource ? this.isOriginalSource : '',
       OriginalSourcePath: this.OriginalSourcePath ? this.OriginalSourcePath : '',
       sourceId: analysis.sourceId,
-      rulesetId: analysis.rules.length ? analysis.rules[0].rulesetId : '',
+      rulesetId:this.selectedRuleSet ? this.selectedRuleSet : '',
       isMultiSource: isMultiSource ? 'Yes' : 'No',
       multiSourceKey: analysis.multisource ? analysis.multisource : '',
-      uploadDate: analysis.uploadDate ? analysis.uploadDate : this.originalSourceUploadDate,
+      uploadDate: this.recentUploadDate ? this.recentUploadDate : this.originalSourceUploadDate,
       uploadTime: '20:28',
       uploadReason: reason ? reason : '',
       settings: analysis.settings,
@@ -572,11 +611,12 @@ export class DashboardComponent implements OnInit {
     const formData: any = new FormData();
     formData.append('file[]', analysis.file ? analysis.file : '');
     formData.append('data', JSON.stringify(payload));
+ 
     // this.isLoading = true;
     // this.loaderMsg = 'Saving Source data...';
     this.http.uploadSource(formData).subscribe((result: any) => {
       this.isLoading = false;
-      console.log(result);
+      //console.log(result);
       this.uploadErrorMessage = result.errorMsg;
       if (result.errorMsg) {
         if (result.errorCode == '103') {
@@ -599,7 +639,7 @@ export class DashboardComponent implements OnInit {
 
   reloadCurrentRoute() {
     let currentUrl = `auth/data-quality-monitoring`;
-    console.log(currentUrl);
+    //console.log(currentUrl);
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
       this.router.navigate([currentUrl]);
     });
@@ -626,7 +666,8 @@ export class DashboardComponent implements OnInit {
   selectedAnalysisdashboard = {};
   initOverview(analysis) {
     this.selectedAnalysis = analysis;
-    this.selectedAnalysisdashboard = this.selectedAnalysis
+    localStorage.setItem('selected-analysis', analysis);
+    this.selectedAnalysisdashboard = analysis
     const uploadDate = this.selectedAnalysis.uploadDate ? moment(this.selectedAnalysis.uploadDate).format('MM-DD-YYYY') : '';
     const uploadsHistory = this.selectedAnalysis.UploadsHistory ? this.selectedAnalysis.UploadsHistory : [];
     // console.log('uploadsHistory', uploadsHistory)
@@ -796,7 +837,7 @@ export class DashboardComponent implements OnInit {
       return o.sourceId === data.sourceId;
     });
     this.modalService.open(longContent, { scrollable: true, size: 'xl' }).result.then((result) => {
-      console.log(result);
+      //console.log(result);
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -844,6 +885,8 @@ export class DashboardComponent implements OnInit {
   }
 
   changeViewAnlysis(view) {
+    //console.log('change view2', view);
+    localStorage.setItem('viewMethod', view);
     if (view === 'table') {
       this.showtableAnalysis = true;
     } else {
@@ -852,6 +895,7 @@ export class DashboardComponent implements OnInit {
   }
 
   changeView(view) {
+    //console.log('change view', view);
     if (view === 'table') {
       this.showtable = true;
     } else {
@@ -870,7 +914,7 @@ export class DashboardComponent implements OnInit {
       this.previewProfile = true;
       this.previewCorrelation = false;
     } else if (menu === 'correlation') {
-      console.log('changeMenu', data)
+      //console.log('changeMenu', data)
       this.previewTable = false;
       this.previewProfile = false;
       this.previewCorrelation = true;
@@ -969,7 +1013,7 @@ export class DashboardComponent implements OnInit {
       this.uploadFileMethod = false;
 
       this.http.getCleanSource().subscribe((result: any) => {
-        console.log(result);
+        //console.log(result);
         this.allSourceCategory = result.SourceDetailsList;
         const dataFromDq = _.find(result.SourceDetailsList, function (o) {
           return o.sourceId === data.sourceId;

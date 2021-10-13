@@ -256,8 +256,8 @@
                           <div class="list-item-3 outline cat">
                            <div class="rule-selection-wrapper">
                               <div class="list flex-containers flex-start wrap cde-fields-wrp">
-                                <div class="list-item-1 outline">
-                                  <span class="sub-title">Multi Source</span>
+                                <div class="list-item-2 outline">
+                                  <span class="sub-title">Multi Source Value</span>
                                   <app-rule-selector 
                                     multiple="true" 
                                     [ruleItems]="multiSourceList" 
@@ -266,6 +266,17 @@
                                     (selectionChange)="sourceSettings.multiSourceOptions=$event.value"
                                   ></app-rule-selector>                                  
                                 </div>
+                                <div class="list-item-2 outline">
+                                  <mat-label class="mtop sub-title">Multi Source Column</mat-label> 
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>Multi Source Column</mat-label>
+                                    <mat-select formControlName="multiSourcColumn">
+                                      <mat-option *ngFor="let multiCat of multiSourceLists" value="{{multiCat}}">
+                                        {{multiCat}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                  </div>
                                 <div class="list-item-2 outline">
                                   <span class="sub-title">Frequency<span class="red">*</span></span>
                                   <app-rule-selector 
@@ -555,6 +566,10 @@
                             <tr>
                               <td><div class="label2">Multi source name</div></td>
                               <td>{{summary.settings?.multiSourceOptions}} </td>
+                            </tr>
+                            <tr>
+                              <td><div class="label2">Multi source Column</div></td>
+                              <td>{{summary.settings?.multiSourceColumn}} </td>
                             </tr>
                             <tr>
                               <td><div class="label2">Frequency</div></td>

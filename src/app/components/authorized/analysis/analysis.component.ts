@@ -122,15 +122,20 @@ export class AnalysisComponent implements OnInit {
   }
 
   ngOnChanges() {
-    this.initAnalysis(this.selectedAnalysisdashboard);
-    //console.log('this.selectedAnalysisdashboard', this.selectedAnalysisdashboard)
+    const analysis = localStorage.getItem('selected-analysis');
+    this.initAnalysis(JSON.parse(analysis));
+    const viewMethod = localStorage.getItem('viewMethod');
+    if (viewMethod === 'table') {
+      this.isOverviewTable = false;
+    } else {
+      this.isOverviewTable = true;
+    }
   }
   
  datedUpload = [];
   initAnalysis(analysis) {
     this.selectedAnalysis = analysis;    
     this.uploadsHistory = analysis.UploadsHistory ? analysis.UploadsHistory : [];
-    console.log(this.uploadsHistory)
       const payload = {
          sourceId: analysis.sourceId,
          rulesetId: analysis.rulesetId
@@ -243,7 +248,7 @@ export class AnalysisComponent implements OnInit {
       };
       this.http.getAnalysisByTime(payload).subscribe((result: any) => {
         this.analysisByTimeData = result ? result : [];
-        console.log('this.analysisByTimeData',this.analysisByTimeData)
+       // console.log('this.analysisByTimeData',this.analysisByTimeData)
       }, (error) => {
       });
    }
