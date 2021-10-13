@@ -691,7 +691,7 @@ export class RulesetComponent implements OnInit {
   }
 
   getFormulaText(formulas, type) {
-    let formulaText = '';
+    let formulaText = '', rectText = '';
     if (formulas && Array.isArray(formulas)) {
       formulas.map(formula => {
         switch (type) {
@@ -700,6 +700,10 @@ export class RulesetComponent implements OnInit {
             formula.conditions.map(condition => {
               formulaText += condition.start + condition.cde1 + condition.operator1 + condition.cde2 +
                 condition.value + condition.end + condition.condition + condition.operator2;
+                rectText = formula.retcde1 + formula.retoperator + formula.retcde2 + formula.retvalue;
+                if(rectText) {
+                  formulaText += '{' + rectText + '}';
+                }
             });
             break;
           case 'ADVANCED':

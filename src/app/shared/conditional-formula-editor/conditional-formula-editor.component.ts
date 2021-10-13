@@ -12,11 +12,11 @@ export class ConditionalFormulaEditorComponent implements OnInit {
   formulaDetailsForm: FormGroup;
   conditionForm: FormGroup;
   logical = ['If', 'ElseIf', 'Else'];
-  logicoperators = [' ', '==', '!=', '>', '>=', '<', '<='];
-  operators = [' ', '+', '-', '*', '/', '==', '!=', '>', '>=', '<', '<='];
-  conditions = [' ', 'AND', 'OR'];
-  startgroups = [' ', '(', '((', '((('];
-  endgroups = [' ', ')', '))', ')))'];
+  logicoperators = ['', '==', '!=', '>', '>=', '<', '<='];
+  operators = ['', '+', '-', '*', '/', '==', '!=', '>', '>=', '<', '<='];
+  conditions = ['', 'AND', 'OR'];
+  startgroups = ['', '(', '((', '((('];
+  endgroups = ['', ')', '))', ')))'];
   formulaObj: any = {
     formula: [{ start: '', cde1: '', operator1: '', cde2: '', end: '', conditions: [], operator2: '' }]
   };
@@ -30,7 +30,7 @@ export class ConditionalFormulaEditorComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.data.columns.unshift(' ');
+    this.data.columns.unshift('');
     if (this.data.formula && this.data.formula.length > 0 && this.data.type === 'CONDITIONAL') {
       this.initFormulaDetails(this.data);
     } else {
@@ -55,10 +55,10 @@ export class ConditionalFormulaEditorComponent implements OnInit {
       this.conditionForm = this.fb.group({
         logic: [value.logic ? value.logic : ''],
         conditions: this.fb.array([]),
-        retcde1: [value.cde1 ? value.cde1 : ''],
-        retoperator: [value.operator1 ? value.operator1 : ''],
-        retcde2: [value.cde2 ? value.cde2 : ''],
-        retvalue: [value.value ? value.value : ''],
+        retcde1: [value.retcde1 ? value.retcde1 : ''],
+        retoperator: [value.retoperator ? value.retoperator : ''],
+        retcde2: [value.retcde2 ? value.retcde2 : ''],
+        retvalue: [value.retvalue ? value.retvalue : ''],
       });
       const formulaFA = this.conditionForm.controls.conditions as FormArray;
       if (value.conditions && value.conditions.length > 0) {
