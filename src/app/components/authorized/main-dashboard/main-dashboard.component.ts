@@ -71,6 +71,7 @@ export class MainDashboardComponent implements OnInit {
     }
     this.http.getSourceResults(payload).subscribe((result: any) => {
       this.allSourceCategory = result.Aggresults;
+      console.log('this.allSourceCategory', result)
       this.detailedResults = result.detailedResults;
       this.detailedResults.map((result, i) => {
         console.log(result);

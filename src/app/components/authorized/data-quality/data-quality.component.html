@@ -333,7 +333,7 @@
   <div class="modal-body">
     <form #f="ngForm">
       <div class="form-group">
-        <label for="url">Mongo DB Cluster Client URL</label>
+        <!-- <label for="url">Mongo DB Cluster Client URL</label> -->
         <!-- <div class="input-group">
           <input type="text" class="form-control"  name="urlValue" #uname="ngModel"  [(ngModel)]="urlValue"  placeholder="URL" >
           <ng-container *ngIf="uname.touched && uname.invalid">
@@ -347,9 +347,9 @@
             <p class="err">Please enter your File Name</p>
           </ng-container>
         </div> 
-        <select class="form-control" name="clientUrl"  [(ngModel)]='clientUrl' id="url" >           
+        <!-- <select class="form-control" name="clientUrl"  [(ngModel)]='clientUrl' id="url" >           
           <option  *ngFor="let url of clientUrlLog" [ngValue]="url.client_url" matTooltip="{{url.client_url}}" selected ="selected === url.client_url">{{url.client_url}}</option>          
-        </select>
+        </select> -->
       </div>
     </form>
   </div>

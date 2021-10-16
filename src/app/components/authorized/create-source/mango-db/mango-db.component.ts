@@ -71,6 +71,7 @@ export class MangoDBComponent implements OnInit {
     // });
 
     this.getsourceCategory();
+    this.getDBCategory();
     this.getMongoDBClientHistoryURL();
     
   }
@@ -96,6 +97,21 @@ export class MangoDBComponent implements OnInit {
       client_url: this.clientUrlDb.value,
     };
     this.http.getDBCollections(payload).subscribe((result: any) => {
+      this.isLoading = false;
+      //console.log('DB', result.Databases)
+      this.dbList = result.Databases;
+    }, (error) => {
+      alert(error.message);
+    });
+  }
+
+  getDBCategory() {
+    this.isLoading = true;
+    // const payload = {
+    //   client_url: '',
+    // };
+    this.http.getDBCategoryGlobal().subscribe((result: any) => {
+      console.log('DB', result)
       this.isLoading = false;
       //console.log('DB', result.Databases)
       this.dbList = result.Databases;
@@ -227,6 +243,7 @@ export class MangoDBComponent implements OnInit {
 
   getsourceCategory() {
     this.http.getsourceCategory().subscribe((result: any) => {
+      console.log('result222', result);
       this.srcCategory = result.sourceCategory;
     });
   }
