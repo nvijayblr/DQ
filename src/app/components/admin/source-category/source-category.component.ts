@@ -25,7 +25,7 @@ export class SourceCategoryComponent implements OnInit {
   constructor(
     private http: HttpService,
     private formBuilder: FormBuilder,
-    private service: AdminService
+    public service: AdminService
   ) { };
 
   ngOnInit() {
