@@ -56,7 +56,7 @@
                 Create Source
                 </button>
 
-                <button  class="btnBlueGreenN addico green"  (click)="openSm(content)"><mat-icon>link</mat-icon> Connect to your Mongo DB Cluster</button>
+                <button  class="btnBlueGreenN addico green"  (click)="getDBCollectionsClient()"><mat-icon>link</mat-icon> Get your Global Reference Data</button>
                 <button *ngIf="uploadButton" type="button" class="btnBlueGreenN addico fl wth"
                 routerLink="/auth/add-source-data/mango-db" [queryParams]="{ type: 'profile'}" matTooltip="" >
                 <mat-icon>add</mat-icon>
@@ -74,7 +74,7 @@
                     </mat-expansion-panel-header>
                     <mat-list role="list" *ngFor="let column of dbValuesClient" >
                       <mat-list-item role="listitem" *ngFor="let columnL of column[item]" >  
-                          <div  class="lftItem" matTooltip="{{columnL}}" (click)="getDBPreviewCluster(item,columnL)" [class.activeList]="columnL === selectedColumn">
+                          <div  class="lftItem" matTooltip="{{columnL}}" (click)="profileGlobalRef(item,columnL)" [class.activeList]="columnL === selectedColumn">
                           <mat-icon> layers</mat-icon> 
                           {{columnL}}
                           </div>                 

@@ -407,6 +407,15 @@ export class HttpService  {
       }));   
   }
 
+  getDBCategoryGlobal(): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/GetDB_category`, '').pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }));   
+  }
+
   getDBPreview(payload): Observable<any> {
     return this.http.post<any>(`${this.rootUrl}/api/MongoDB_Collection_Preview`, payload).pipe(
       tap((res) => {
@@ -419,6 +428,16 @@ export class HttpService  {
 
   saveMangoDbCollection(payload): Observable<any> {
     return this.http.post<any>(`${this.rootUrl}/api/MongoDB_Collection_Save`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
+  saveProfileGlobalRef(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/profile_GlobalRef`, payload).pipe(
       tap((res) => {
       }),
       catchError(err => {

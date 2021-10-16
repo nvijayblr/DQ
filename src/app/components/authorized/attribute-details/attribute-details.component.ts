@@ -644,7 +644,6 @@ loadingCorrelation = false;
   openScrollableContent(longContent) {
      this.searchMultipleNumbers(); 
     this.modalService.open(longContent, { scrollable: true, size: 'xl' }).result.then((result) => {
-      console.log(result);
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -685,6 +684,61 @@ loadingCorrelation = false;
   getClusterKeys;
   selectdItems: any = [];
   selectedColumn;
+
+  profileGlobalRef(item, column) {
+     this.selectedColumn = column;
+    const payload = {
+      client_url: this.clientUrl || '',
+      db: item,
+      collection: this.selectedColumn,
+      output_filename : this.selectedColumn + '.csv',
+    };
+    this.isLoading = true;
+    this.loaderMsg = 'Loading...';
+    this.http.saveProfileGlobalRef(payload).subscribe((result: any) => {
+      // if (result) {
+      //   this.isLoading = false;
+      //   this.getMongoDBSaveLog();
+      //   this.selectedSource = result;
+      //   this.titleSrc = result.outputpath;
+      //   this.loadProfile(this.selectedSource);
+      //   //this.loadReferencePreview();
+      //   //this.loadCorrelation(this.selectedSource, this.datatype, this.method);
+      // }
+      this.profiles = result.profile ? result.profile : [];
+      this.profileDetails = {
+        nr_duplicates: result.nr_duplicates,
+        nr_totalcols: result.nr_totalcols,
+        nr_totalrecords: result.nr_totalrecords
+     };
+      if (this.profiles.length) {
+         this.changeProfile(this.profiles[0]);
+      }
+      this.profileSummary.duplicates = result.nr_duplicates ? result.nr_duplicates : 0;
+
+      this.profileSummary.numeric = 0;
+      this.profileSummary.alphabetic = 0;
+      this.profileSummary.alphanumeric = 0;
+      this.profileSummary.nullcounts = 0;
+
+      this.profiles.map(data => {
+            if (data.attributeSummary) {
+               this.profileSummary.records = data.attributeSummary.records ? data.attributeSummary.records : this.profileSummary.records;
+               if (data.attributeSummary.dataType === 'Numeric') {
+                  this.profileSummary.numeric = this.profileSummary.numeric + 1;
+               }
+               if (data.attributeSummary.dataType === 'Alphabetic') {
+                  this.profileSummary.alphabetic = this.profileSummary.alphabetic + 1;
+               }
+               if (data.attributeSummary.dataType === 'Alphanumeric') {
+                  this.profileSummary.alphanumeric = this.profileSummary.alphanumeric + 1;
+               }
+               this.profileSummary.nullcounts = this.profileSummary.nullcounts + parseInt(data.attributeSummary.null_records, 0);
+           }
+      });
+      this.isLoading = false;
+    })
+  }
   getDBPreviewCluster(item, column) {
     this.selectedColumn = column;
     this.getClusterKeys = _.find(this.dbSaveLogs, item ? item : '', item ? item : '');
@@ -805,7 +859,6 @@ loadingCorrelation = false;
       values : [freq]
     };
     this.http.getFrequencyView(payload).subscribe((result: any) => {
-      console.log('getFrequencyView', result);
       if (result) {
         this.frequencyPreview = result.Preview ? result.Preview : {};
         this.dialog.open(PreviewDialogComponent, {
