@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatTable, MatSort } from '@angular/material';
+import { MatTableDataSource, MatSort } from '@angular/material';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpService } from '../../../services/http-service.service';
 import { AdminService } from '../admin.service';
@@ -15,12 +15,9 @@ export class FrequencyComponent implements OnInit {
   loaderMsg = '';
   editIndex = -1;
 
-  frequencyList: any = [];
+  frequencyList = new MatTableDataSource();
   frequencyForm: FormGroup;
-
   displayedColumns: string[] = ['value', 'label', 'status', 'action'];
-
-  @ViewChild(MatTable, { static: true }) frequencyTable: MatTable<any>;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
@@ -38,10 +35,11 @@ export class FrequencyComponent implements OnInit {
     this.isLoading = true;
     this.loaderMsg = 'Loading frequency...';
     this.http.getFrequencyList().subscribe((result: any) => {
-      this.frequencyList = result.frequencyList ? result.frequencyList : [];
+      this.frequencyList.data = result.frequencyList ? result.frequencyList : [];
+      this.frequencyList.sort = this.sort;
       this.isLoading = false;
     }, (error) => {
-       this.isLoading = false;
+      this.isLoading = false;
     });
   }
 
@@ -50,9 +48,12 @@ export class FrequencyComponent implements OnInit {
     this.loaderMsg = 'Saving frequency details...';
     this.http.createEditFrequency(frequency, mode).subscribe((result: any) => {
       this.isLoading = false;
+      this.editIndex = -1;
       this.getFrequencyList();
+      alert('Frequency detail saved successfully');
     }, (error) => {
       this.isLoading = false;
+       alert('Unable to save the frequency details');
     });
   }
 
@@ -64,13 +65,17 @@ export class FrequencyComponent implements OnInit {
     });
   }
 
+  doFilter(value: string) {
+    this.frequencyList.filter = value.trim().toLocaleLowerCase();
+  }
+
   editFrequency(frequency, index) {
-    this.editIndex = this.service.editRow(frequency, index, this.frequencyList, this.frequencyTable, this.editIndex);
+    this.editIndex = this.service.editRow(frequency, index, this.frequencyList, this.editIndex);
     this.initFrequencyForm(frequency);
   }
 
   addNewFrequency() {
-    this.editIndex = this.service.addNew(this.frequencyList, this.frequencyTable, this.editIndex);
+    this.editIndex = this.service.addNew(this.frequencyList, this.editIndex);
     this.initFrequencyForm({});
   }
 
@@ -79,11 +84,6 @@ export class FrequencyComponent implements OnInit {
   }
 
   cancel(frequency) {
-    this.editIndex = this.service.cancel(frequency, this.frequencyList, this.frequencyTable, this.editIndex);
+    this.editIndex = this.service.cancel(frequency, this.frequencyList, this.editIndex);
   }
-
-  sortData(sort: MatSort) {
-    this.service.onSortData(sort, this.frequencyList, this.frequencyTable);
-  }
-
 }

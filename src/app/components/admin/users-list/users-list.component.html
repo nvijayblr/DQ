@@ -2,10 +2,11 @@
     <div class="listHeader">
         <mat-icon>people</mat-icon>
         <h5>User Management</h5>
+        <app-filter-input (onFilterChange)="doFilter($event)" class="alignEnd"></app-filter-input>
         <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
     </div>
     <div class="listTable" [formGroup]="userForm">
-        <table mat-table matSort [dataSource]="userList">
+        <table mat-table matSort [dataSource]="usersList">
             <ng-container matColumnDef="name">
                 <th class="table-column-150" mat-header-cell mat-sort-header *matHeaderCellDef>Name</th>
                 <td mat-cell class="table-column-150" *matCellDef="let user">
@@ -16,11 +17,11 @@
                 </td>
             </ng-container>
             <ng-container matColumnDef="userName" sticky>
-                <th class="table-column-150" mat-header-cell *matHeaderCellDef>Username</th>
+                <th class="table-column-150" mat-header-cell mat-sort-header *matHeaderCellDef>Username</th>
                 <td class="table-column-150" mat-cell *matCellDef="let user">
                     <span [hidden]="user.edit">{{user.userName}}</span>
                     <mat-form-field appearance="standard" class="column-width-150 m-14" [hidden]="!user.edit">
-                        <input formControlName="userName" matInput />
+                        <input formControlName="userName" matInput [readonly]="user.mode != service.mode.CREATE"/>
                     </mat-form-field>
                 </td>
             </ng-container>
@@ -34,7 +35,7 @@
                 </td>
             </ng-container>
             <ng-container matColumnDef="role">
-                <th class="table-column-150" mat-header-cell *matHeaderCellDef>Role</th>
+                <th class="table-column-150" mat-header-cell mat-sort-header *matHeaderCellDef>Role</th>
                 <td class="table-column-150" mat-cell *matCellDef="let user">
                     <span [hidden]="user.edit">{{roleTextList[user.role] || user.role}}</span>
                     <mat-form-field appearance="standard" class="column-width-150 m-15" [hidden]="!user.edit">
@@ -77,7 +78,7 @@
                 </td>
             </ng-container>
             <ng-container matColumnDef="department">
-                <th class="table-column-100" mat-header-cell *matHeaderCellDef>Department</th>
+                <th class="table-column-100" mat-header-cell mat-sort-header *matHeaderCellDef>Department</th>
                 <td class="table-column-100" mat-cell *matCellDef="let user">
                     <span [hidden]="user.edit">{{departTextList[user.department] || user.department}}</span>
                     <mat-form-field appearance="standard" class="column-width-100 m-15" [hidden]="!user.edit">
@@ -90,8 +91,8 @@
                 </td>
             </ng-container>
             <ng-container matColumnDef="status">
-                <th class="table-column-100 center" mat-header-cell *matHeaderCellDef>Status</th>
-                <td class="table-column-100 center" mat-cell *matCellDef="let user" [ngClass]="user.status">
+                <th class="table-column-100" mat-header-cell mat-sort-header *matHeaderCellDef>Status</th>
+                <td class="table-column-100" mat-cell *matCellDef="let user" [ngClass]="user.status">
                     <span [hidden]="user.edit">
                         <mat-icon *ngIf="user.status == 'Active'">check_circle_outline</mat-icon>
                         <mat-icon *ngIf="user.status == 'Inactive'">block</mat-icon>
@@ -103,7 +104,7 @@
                 </td>
             </ng-container>
             <ng-container matColumnDef="email">
-                <th class="table-column-150" mat-header-cell *matHeaderCellDef>Email</th>
+                <th class="table-column-150" mat-header-cell mat-sort-header *matHeaderCellDef>Email</th>
                 <td class="table-column-150" mat-cell *matCellDef="let user">
                     <span [hidden]="user.edit">{{user.email}}</span>
                     <mat-form-field appearance="standard" class="column-width-150 m-14" [hidden]="!user.edit">
@@ -133,8 +134,17 @@
                     </button>
                 </td>
             </ng-container>
+
+            <ng-container matColumnDef="noData">
+                <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length" class="center">
+                    No Records Found
+                </td>
+            </ng-container>
+
             <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-footer-row *matFooterRowDef="['noData']" [hidden]="usersList && usersList.filteredData.length > 0">
+            </tr>
         </table>
     </div>
 </div>

@@ -1,52 +1,81 @@
-<section class="page-body home-bodys">
-  <div class="container">
-    <div class="home-wrapper">
-      <div class="clearfix my-community-body">
-        <div class="home-panel">
-          <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
-          <div class="shrare-post">
-            <mat-card class="border no-rounded list shrare-post">
-              <div class="list flex-containers flex-start wrap no-margin dash-title">
-                <div class="list-item-2">
-                  <h1 class="share-post-title no-margin">Source Category<span class="yellow"> List</span></h1>
-                </div>
-                <div class="list-item-2 text-right">
-                  <button mat-stroked-button class="button3d btnPush btnLightBlue tdBtn" (click)="showAddEditCategory({}, 'create');">New Category <mat-icon> layers</mat-icon></button>
-                </div>
-              </div>
-
-              <!-- category List -->
-              <div class="analysis-preview">
-               <table class="table">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Display Text</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                     <tr *ngFor="let category of categoryList; let i= index;" class="tableinner">
-                        <td>{{category.label}}</td>
-                        <td>{{category.value}}</td>
-                        <td>
-
-                          <button type="button" class="button3d btnPush btnOrange addico"
-                          (click)="showAddEditCategory(category, 'edit');"  matTooltip="Edit Category">
-                          <mat-icon>edit</mat-icon> Edit
-                          </button>
-                        </td>
-                     </tr>
-                   </tbody>
-               </table>
-              </div>
-            </mat-card>
-
-          </div>
-
-        </div>
-      </div> 
-    </div>
-
+<div class="listContainer">
+  <div class="listHeader">
+    <mat-icon>view_comfy</mat-icon>
+    <h5>Source Category</h5>
+    <app-filter-input (onFilterChange)="doFilter($event)" class="alignEnd"></app-filter-input>
+    <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
   </div>
-</section>
+  <div class="listTable" [formGroup]="SCategoryForm">
+    <table mat-table matSort [dataSource]="SCategoryList">
+
+      <ng-container matColumnDef="value">
+        <th class="table-column-200" mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <td class="table-column-200" mat-cell *matCellDef="let category">
+          <span [hidden]="category.edit">{{category.value}}</span>
+          <mat-form-field appearance="standard" class="column-width-200 m-14" [hidden]="!category.edit">
+            <input formControlName="value" [readonly]="category.mode != service.mode.CREATE" matInput />
+          </mat-form-field>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="label">
+        <th class="table-column-200" mat-header-cell *matHeaderCellDef mat-sort-header>Display Text</th>
+        <td class="table-column-200" mat-cell *matCellDef="let category">
+          <span [hidden]="category.edit">{{category.label}}</span>
+          <mat-form-field appearance="standard" class="column-width-200 m-14" [hidden]="!category.edit">
+            <input formControlName="label" matInput />
+          </mat-form-field>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th class="table-column-100" mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <td class="table-column-100" mat-cell *matCellDef="let category" [ngClass]="category.status">
+          <span [hidden]="category.edit">
+            <mat-icon *ngIf="category.status == 'Active'">check_circle_outline</mat-icon>
+            <mat-icon *ngIf="category.status == 'Inactive'">block</mat-icon>
+          </span>
+          <mat-button-toggle-group formControlName="status" aria-label="Status" [hidden]="!category.edit">
+            <mat-button-toggle value="Active">Active</mat-button-toggle>
+            <mat-button-toggle value="Inactive">InActive</mat-button-toggle>
+          </mat-button-toggle-group>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th class="table-column-100  center" mat-header-cell *matHeaderCellDef>
+          <button mat-mini-fab color="primary" aria-label="Add New" (click)="addNewCategory()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </th>
+        <td class="table-column-100  center" mat-cell *matCellDef="let category;let i = index">
+          <button mat-icon-button aria-label="editCategory" [hidden]="category.edit" (click)="editCategory(category,i)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button aria-label="deleteCategory" [hidden]="category.edit">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button mat-icon-button aria-label="saveCategory" [hidden]="!category.edit" [disabled]="SCategoryForm.invalid"
+            (click)="saveCategory(category)">
+            <mat-icon>save</mat-icon>
+          </button>
+          <button mat-icon-button aria-label="editCategory" [hidden]="!category.edit" (click)="cancel(category)">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="noData">
+        <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length" class="center">
+          No Records Found
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-footer-row *matFooterRowDef="['noData']"
+        [hidden]="SCategoryList && SCategoryList.filteredData.length > 0">
+      </tr>
+    </table>
+  </div>
+</div>

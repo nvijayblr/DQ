@@ -2,17 +2,18 @@
   <div class="listHeader">
     <mat-icon>view_comfy</mat-icon>
     <h5>Department Details</h5>
+    <app-filter-input (onFilterChange)="doFilter($event)" class="alignEnd"></app-filter-input>
     <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
   </div>
   <div class="listTable" [formGroup]="departmentForm">
-    <table mat-table matSort [dataSource]="departmentsList" (matSortChange)="sortData($event)">
+    <table mat-table matSort [dataSource]="departmentsList">
 
       <ng-container matColumnDef="Name">
         <th class="table-column-200" mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
         <td class="table-column-200" mat-cell *matCellDef="let depart">
           <span [hidden]="depart.edit">{{depart.Name}}</span>
           <mat-form-field appearance="standard" class="column-width-200 m-14" [hidden]="!depart.edit">
-            <input formControlName="departName" matInput />
+            <input formControlName="departName" [readonly]="depart.mode != service.mode.CREATE" matInput />
           </mat-form-field>
         </td>
       </ng-container>
@@ -28,8 +29,8 @@
       </ng-container>
 
       <ng-container matColumnDef="status">
-        <th class="table-column-100 center" mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
-        <td class="table-column-100 center" mat-cell *matCellDef="let depart" [ngClass]="depart.status">
+        <th class="table-column-100" mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <td class="table-column-100" mat-cell *matCellDef="let depart" [ngClass]="depart.status">
           <span [hidden]="depart.edit">
             <mat-icon *ngIf="depart.status == 'Active'">check_circle_outline</mat-icon>
             <mat-icon *ngIf="depart.status == 'Inactive'">block</mat-icon>
@@ -64,8 +65,15 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="noData">
+        <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length" class="center">
+          No Records Found
+        </td>
+      </ng-container>
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-footer-row *matFooterRowDef="['noData']" [hidden]="departmentsList && departmentsList.filteredData.length > 0"></tr>
     </table>
   </div>
 </div>

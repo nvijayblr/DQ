@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatTable, MatSort } from '@angular/material';
+import { MatTableDataSource, MatSort } from '@angular/material';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpService } from '../../../services/http-service.service';
 import { AdminService } from '../admin.service';
@@ -15,12 +15,9 @@ export class DepartmentsComponent implements OnInit {
   loaderMsg = '';
   editIndex = -1;
 
-  departmentsList: any = [];
+  departmentsList = new MatTableDataSource();
   departmentForm: FormGroup;
-
   displayedColumns: string[] = ['Name', 'Display', 'status', 'action'];
-
-  @ViewChild(MatTable, { static: true }) departmentTable: MatTable<any>;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
@@ -38,7 +35,8 @@ export class DepartmentsComponent implements OnInit {
     this.isLoading = true;
     this.loaderMsg = 'Loading departments...';
     this.http.getDepartmentsList().subscribe((result: any) => {
-      this.departmentsList = result.department ? result.department : [];
+      this.departmentsList.data = result.department ? result.department : [];
+      this.departmentsList.sort = this.sort;
       this.isLoading = false;
     }, (error) => {
       this.isLoading = false;
@@ -52,8 +50,10 @@ export class DepartmentsComponent implements OnInit {
       this.isLoading = false;
       this.editIndex = -1;
       this.getDepartmentsList();
+      alert('Department detail saved successfully');
     }, (error) => {
       this.isLoading = false;
+      alert('Unable to save the Department details');
     });
   }
 
@@ -65,13 +65,17 @@ export class DepartmentsComponent implements OnInit {
     });
   }
 
+  doFilter(value: string) {
+    this.departmentsList.filter = value.trim().toLocaleLowerCase();
+  }
+
   editDepart(department, index) {
-    this.editIndex = this.service.editRow(department, index, this.departmentsList, this.departmentTable, this.editIndex);
+    this.editIndex = this.service.editRow(department, index, this.departmentsList, this.editIndex);
     this.initDepartmentForm(department);
   }
 
   addNewDepart() {
-    this.editIndex = this.service.addNew(this.departmentsList, this.departmentTable, this.editIndex);
+    this.editIndex = this.service.addNew(this.departmentsList, this.editIndex);
     this.initDepartmentForm({});
   }
 
@@ -80,11 +84,7 @@ export class DepartmentsComponent implements OnInit {
   }
 
   cancel(department) {
-    this.editIndex = this.service.cancel(department, this.departmentsList, this.departmentTable, this.editIndex);
-  }
-
-  sortData(sort: MatSort) {
-    this.service.onSortData(sort, this.departmentsList, this.departmentTable);
+    this.editIndex = this.service.cancel(department, this.departmentsList, this.editIndex);
   }
 
 }

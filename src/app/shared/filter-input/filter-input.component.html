@@ -1,0 +1,8 @@
+<mat-form-field appearance="standard" [class]="class">
+    <input matInput (keyup)="onChange(filterValue)" [(ngModel)]="filterValue" placeholder="Search">
+    <button mat-icon-button *ngIf="filterValue" matSuffix aria-label="Clear"
+        (click)="filterValue='';onChange(filterValue)">
+        <mat-icon>close</mat-icon>
+    </button>
+    <mat-icon matSuffix *ngIf="!filterValue">search</mat-icon>
+</mat-form-field>

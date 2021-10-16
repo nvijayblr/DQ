@@ -2,17 +2,18 @@
   <div class="listHeader">
     <mat-icon>view_comfy</mat-icon>
     <h5>Multi Source Details</h5>
+    <app-filter-input (onFilterChange)="doFilter($event)" class="alignEnd"></app-filter-input>
     <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
   </div>
   <div class="listTable" [formGroup]="multisourceForm">
-    <table mat-table matSort [dataSource]="multisourceList" (matSortChange)="sortData($event)">
+    <table mat-table matSort [dataSource]="multisourceList">
 
       <ng-container matColumnDef="value">
         <th class="table-column-200" mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
         <td class="table-column-200" mat-cell *matCellDef="let source">
           <span [hidden]="source.edit">{{source.value}}</span>
           <mat-form-field appearance="standard" class="column-width-200 m-14" [hidden]="!source.edit">
-            <input formControlName="value" matInput />
+            <input formControlName="value" [readonly]="source.mode != service.mode.CREATE" matInput />
           </mat-form-field>
         </td>
       </ng-container>
@@ -63,9 +64,16 @@
           </button>
         </td>
       </ng-container>
+      
+      <ng-container matColumnDef="noData">
+        <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length" class="center">
+          No Records Found
+        </td>
+      </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-footer-row *matFooterRowDef="['noData']" [hidden]="multisourceList && multisourceList.filteredData.length > 0"></tr>
     </table>
   </div>
 </div>

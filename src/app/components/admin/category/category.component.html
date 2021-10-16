@@ -2,27 +2,28 @@
   <div class="listHeader">
     <mat-icon>view_comfy</mat-icon>
     <h5>User Category</h5>
+    <app-filter-input (onFilterChange)="doFilter($event)" class="alignEnd"></app-filter-input>
     <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
   </div>
   <div class="listTable" [formGroup]="categoryForm">
     <table mat-table matSort [dataSource]="categoryList" (matSortChange)="sortData($event)">
 
-      <ng-container matColumnDef="label">
+      <ng-container matColumnDef="value">
         <th class="table-column-200" mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
         <td class="table-column-200" mat-cell *matCellDef="let category">
-          <span [hidden]="category.edit">{{category.label}}</span>
+          <span [hidden]="category.edit">{{category.value}}</span>
           <mat-form-field appearance="standard" class="column-width-200 m-14" [hidden]="!category.edit">
-            <input formControlName="label" matInput />
+            <input formControlName="value" [readonly]="category.mode != service.mode.CREATE" matInput />
           </mat-form-field>
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="value">
+      <ng-container matColumnDef="label">
         <th class="table-column-200" mat-header-cell *matHeaderCellDef mat-sort-header>Display Text</th>
         <td class="table-column-200" mat-cell *matCellDef="let category">
-          <span [hidden]="category.edit">{{category.value}}</span>
+          <span [hidden]="category.edit">{{category.label}}</span>
           <mat-form-field appearance="standard" class="column-width-200 m-14" [hidden]="!category.edit">
-            <input formControlName="value" matInput />
+            <input formControlName="label" matInput />
           </mat-form-field>
         </td>
       </ng-container>
@@ -50,8 +51,15 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="noData">
+        <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length" class="center">
+          No Records Found
+        </td>
+      </ng-container>
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-footer-row *matFooterRowDef="['noData']" [hidden]="categoryList && categoryList.filteredData.length > 0"></tr>
     </table>
   </div>
 </div>

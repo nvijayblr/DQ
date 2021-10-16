@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatTable, MatSort } from '@angular/material';
+import { MatTableDataSource, MatSort } from '@angular/material';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpService } from '../../../services/http-service.service';
 import { AdminService } from '../admin.service';
@@ -14,17 +14,10 @@ export class RolesComponent implements OnInit {
   loaderMsg = '';
   editIndex = -1;
 
-  rolesList: any = [];
+  rolesList = new MatTableDataSource();
   rightsList: any = [];
   roleForm: FormGroup;
-
-  mode: any = {
-    EDIT: 'edit',
-    CREATE: 'create'
-  };
-  displayedColumns: string[] = ['name', 'display', 'rights', 'action'];
-
-  @ViewChild(MatTable, { static: true }) roleTable: MatTable<any>;
+  displayedColumns: string[] = ['roleName', 'roleText', 'rights', 'action'];
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
@@ -52,9 +45,8 @@ export class RolesComponent implements OnInit {
     this.isLoading = true;
     this.loaderMsg = 'Loading role...';
     this.http.getRolesList().subscribe((result: any) => {
-      this.rolesList = result.roles ? result.roles : [];
-      this.roleTable.dataSource = this.rolesList;
-      this.roleTable.renderRows();
+      this.rolesList.data = result.roles ? result.roles : [];
+      this.rolesList.sort = this.sort;
       this.isLoading = false;
     }, (error) => {
       this.isLoading = false;
@@ -66,9 +58,12 @@ export class RolesComponent implements OnInit {
     this.loaderMsg = 'Saving role details...';
     this.http.createEditRole(role, mode).subscribe((result: any) => {
       this.isLoading = false;
+      this.editIndex = -1;
       this.getRolesList();
+      alert('Role detail saved successfully');
     }, (error) => {
       this.isLoading = false;
+      alert('Unable to save the role details');
     });
   }
 
@@ -84,13 +79,17 @@ export class RolesComponent implements OnInit {
     });
   }
 
+  doFilter(value: string) {
+    this.rolesList.filter = value.trim().toLocaleLowerCase();
+  }
+
   addNewRole() {
-    this.editIndex = this.service.addNew(this.rolesList, this.roleTable, this.editIndex);
+    this.editIndex = this.service.addNew(this.rolesList, this.editIndex);
     this.initRoleForm({});
   }
 
   editRole(department, index) {
-    this.editIndex = this.service.editRow(department, index, this.rolesList, this.roleTable, this.editIndex);
+    this.editIndex = this.service.editRow(department, index, this.rolesList, this.editIndex);
     this.initRoleForm(department);
   }
 
@@ -99,11 +98,6 @@ export class RolesComponent implements OnInit {
   }
 
   cancel(role) {
-    this.editIndex = this.service.cancel(role, this.rolesList, this.roleTable, this.editIndex);
+    this.editIndex = this.service.cancel(role, this.rolesList, this.editIndex);
   }
-
-  sortData(sort: MatSort) {
-    this.service.onSortData(sort, this.rolesList, this.roleTable);
-  }
-
 }

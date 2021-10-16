@@ -40,6 +40,7 @@ import { PieChartComponent } from './pie-chart/pie-chart.component';
 import { ConnectionTestComponent } from './connection-test/connection-test.component';
 import { CleanLogsComponent } from './clean-logs/clean-logs.component';
 import { DeactiveDialogComponent } from './deactive-dialog/deactive-dialog.component';
+import { FilterInputComponent } from './filter-input/filter-input.component';
 
 @NgModule({
    imports: [
@@ -87,6 +88,7 @@ import { DeactiveDialogComponent } from './deactive-dialog/deactive-dialog.compo
     ConnectionTestComponent,
     CleanLogsComponent,
     DeactiveDialogComponent,
+    FilterInputComponent,
   ],
   exports: [
     FormsModule,
@@ -123,6 +125,7 @@ import { DeactiveDialogComponent } from './deactive-dialog/deactive-dialog.compo
     ConditionalFormulaEditorComponent,
     PreviewDialogComponent,
     PieChartComponent,
+    FilterInputComponent,
   ],
   providers: [
      DatePipe,

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatTable, MatSort } from '@angular/material';
+import { MatTableDataSource, MatSort } from '@angular/material';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpService } from '../../../services/http-service.service';
 import { AdminService } from '../admin.service';
@@ -14,7 +14,8 @@ export class UsersListComponent implements OnInit {
   isLoading = false;
   loaderMsg = '';
   editIndex = -1;
-  usersList: any = [];
+
+  usersList = new MatTableDataSource();
   rolesList: any = [];
   departmentsList: any = [];
   categoryList: any = [];
@@ -29,13 +30,7 @@ export class UsersListComponent implements OnInit {
     DATA_USER: 'Data User',
     DATA_STEWARD: 'Data Steward'
   };
-  mode: any = {
-    EDIT: 'edit',
-    CREATE: 'create'
-  };
   displayedColumns: string[] = ['userName', 'name', 'role', 'category', 'type', 'department', 'email', 'password', 'status', 'action'];
-
-  @ViewChild(MatTable, { static: true }) userTable: MatTable<any>;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
@@ -80,9 +75,8 @@ export class UsersListComponent implements OnInit {
     this.isLoading = true;
     this.loaderMsg = 'Loading users...';
     this.http.getUsersList().subscribe((result: any) => {
-      this.usersList = result.userList ? result.userList : [];
-      this.userTable.dataSource = this.usersList;
-      this.userTable.renderRows();
+      this.usersList.data = result.userList ? result.userList : [];
+      this.usersList.sort = this.sort;
       this.isLoading = false;
     }, (error) => {
       this.isLoading = false;
@@ -101,6 +95,7 @@ export class UsersListComponent implements OnInit {
       alert('User detail saved successfully');
     }, (error) => {
       this.isLoading = false;
+      alert('Unable to save the user details');
     });
   }
 
@@ -136,13 +131,17 @@ export class UsersListComponent implements OnInit {
     });
   }
 
+  doFilter(value: string) {
+    this.usersList.filter = value.trim().toLocaleLowerCase();
+  }
+
   addNewUser() {
-    this.editIndex = this.service.addNew(this.usersList, this.userTable, this.editIndex);
+    this.editIndex = this.service.addNew(this.usersList, this.editIndex);
     this.initUserForm({});
   }
 
   editUser(user, index) {
-    this.editIndex = this.service.editRow(user, index, this.usersList, this.userTable, this.editIndex);
+    this.editIndex = this.service.editRow(user, index, this.usersList, this.editIndex);
     this.initUserForm(user);
   }
 
@@ -151,11 +150,7 @@ export class UsersListComponent implements OnInit {
   }
 
   cancel(user) {
-    this.editIndex = this.service.cancel(user, this.usersList, this.userTable, this.editIndex);
-  }
-
-  sortData(sort: MatSort) {
-    this.service.onSortData(sort,this.usersList,this.userTable);
+    this.editIndex = this.service.cancel(user, this.usersList, this.editIndex);
   }
 
 }

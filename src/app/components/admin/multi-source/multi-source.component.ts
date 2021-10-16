@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatTable, MatSort } from '@angular/material';
+import { MatTableDataSource, MatSort } from '@angular/material';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpService } from '../../../services/http-service.service';
 import { AdminService } from '../admin.service';
@@ -15,12 +15,9 @@ export class MultiSourceComponent implements OnInit {
   loaderMsg = '';
   editIndex = -1;
 
-  multisourceList: any = [];
+  multisourceList = new MatTableDataSource();
   multisourceForm: FormGroup;
-
   displayedColumns: string[] = ['value', 'label', 'status', 'action'];
-
-  @ViewChild(MatTable, { static: true }) sourceTable: MatTable<any>;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
@@ -38,10 +35,11 @@ export class MultiSourceComponent implements OnInit {
     this.isLoading = true;
     this.loaderMsg = 'Loading multisource...';
     this.http.getMultisourceList().subscribe((result: any) => {
-      this.multisourceList = result.multiSourceList ? result.multiSourceList : [];
+      this.multisourceList.data = result.multiSourceList ? result.multiSourceList : [];
+      this.multisourceList.sort = this.sort;
       this.isLoading = false;
     }, (error) => {
-       this.isLoading = false;
+      this.isLoading = false;
     });
   }
 
@@ -50,9 +48,12 @@ export class MultiSourceComponent implements OnInit {
     this.loaderMsg = 'Saving multisource details...';
     this.http.createEditMultisource(source, mode).subscribe((result: any) => {
       this.isLoading = false;
+      this.editIndex = -1;
       this.getSourceList();
+      alert('Source details saved successfully');
     }, (error) => {
       this.isLoading = false;
+      alert('Unable to save the source details');
     });
   }
 
@@ -64,13 +65,17 @@ export class MultiSourceComponent implements OnInit {
     });
   }
 
+  doFilter(value: string) {
+    this.multisourceList.filter = value.trim().toLocaleLowerCase();
+  }
+
   editSource(source, index) {
-    this.editIndex = this.service.editRow(source, index, this.multisourceList, this.sourceTable, this.editIndex);
+    this.editIndex = this.service.editRow(source, index, this.multisourceList, this.editIndex);
     this.initSourceForm(source);
   }
 
   addNewSource() {
-    this.editIndex = this.service.addNew(this.multisourceList, this.sourceTable, this.editIndex);
+    this.editIndex = this.service.addNew(this.multisourceList, this.editIndex);
     this.initSourceForm({});
   }
 
@@ -79,11 +84,6 @@ export class MultiSourceComponent implements OnInit {
   }
 
   cancel(source) {
-    this.editIndex = this.service.cancel(source, this.multisourceList, this.sourceTable, this.editIndex);
+    this.editIndex = this.service.cancel(source, this.multisourceList, this.editIndex);
   }
-
-  sortData(sort: MatSort) {
-    this.service.onSortData(sort, this.multisourceList, this.sourceTable);
-  }
-
 }

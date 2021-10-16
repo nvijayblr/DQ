@@ -12,13 +12,13 @@ export class AdminService {
 
   constructor() { }
 
-  editRow(rowData, index, list, table, editIndex) {
-    if (editIndex >= 0 && list[editIndex]) {
-      if (list[editIndex].mode === this.mode.CREATE) {
-        this.removeEmptyRow(list, table);
+  editRow(rowData, index, dataSource, editIndex) {
+    if (editIndex >= 0 && dataSource.data[editIndex]) {
+      if (dataSource.data[editIndex].mode === this.mode.CREATE) {
+        this.removeEmptyRow(dataSource);
         index -= 1;
       }
-      list[editIndex].edit = false;
+      dataSource.data[editIndex].edit = false;
     }
 
     rowData.edit = true;
@@ -26,7 +26,8 @@ export class AdminService {
     return index;
   }
 
-  addNew(list, table, editIndex) {
+  addNew(dataSource, editIndex) {
+    const list = dataSource.data;
     if (list[0].mode !== this.mode.CREATE) {
       if (editIndex >= 0 && list[editIndex]) {
         list[editIndex].edit = false;
@@ -35,22 +36,21 @@ export class AdminService {
         edit: true,
         mode: this.mode.CREATE
       });
-      table.dataSource = list;
-      table.renderRows();
+      dataSource.data = list;
     }
     return 0;
   }
 
-  removeEmptyRow(list, table) {
+  removeEmptyRow(dataSource) {
+    const list = dataSource.data;
     list.splice(0, 1);
-    table.dataSource = list;
-    table.renderRows();
+    dataSource.data = list;
   }
 
-  cancel(rowData, list, table, editIndex) {
+  cancel(rowData, dataSource, editIndex) {
     rowData.edit = false;
-    if (list[editIndex].mode === this.mode.CREATE) {
-      this.removeEmptyRow(list, table);
+    if (dataSource.data[editIndex].mode === this.mode.CREATE) {
+      this.removeEmptyRow(dataSource);
     }
     return -1;
   }

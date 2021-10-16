@@ -1,53 +1,47 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MessageService } from '../../../services/message.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatTableDataSource, MatSort } from '@angular/material';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpService } from '../../../services/http-service.service';
-import { AuthGuardService } from 'src/app/services/auth-guard.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
-import * as moment from 'moment';
-import { CreateEditSourceCategoryComponent } from './create-edit-source-category/create-edit-source-category.component';
+import { AdminService } from '../admin.service';
 
 @Component({
   selector: 'app-source-category',
   templateUrl: './source-category.component.html',
-  styleUrls: ['./source-category.component.scss']
+  styleUrls: ['../admin.component.scss']
 })
-
 export class SourceCategoryComponent implements OnInit {
+
   isLoading = false;
   loaderMsg = '';
-  categoryList: any = [];
+  editIndex = -1;
+
+  SCategoryList = new MatTableDataSource();
   departmentsList: any = [];
+  SCategoryForm: FormGroup;
 
-   constructor(
-      public dialog: MatDialog,
-      private http: HttpService,
-      private messageService: MessageService,
-      private auth: AuthGuardService,
-      private router: Router) {
-   }
+  displayedColumns: string[] = ['value', 'label', 'status', 'action'];
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-   ngOnInit() {
-     this.getDepartmentsList();
-     this.getCategoryList();
-   }
+  constructor(
+    private http: HttpService,
+    private formBuilder: FormBuilder,
+    private service: AdminService
+  ) { };
 
-   getDepartmentsList() {
-    this.http.getDepartmentsList().subscribe((result: any) => {
-      this.departmentsList = result.department ? result.department : [];
-    }, (error) => {
-    });
+  ngOnInit() {
+    this.getCategoryList();
+    this.initCategoryForm({});
   }
 
-   getCategoryList() {
+  getCategoryList() {
     this.isLoading = true;
     this.loaderMsg = 'Loading category...';
     this.http.getSourceCategoryList().subscribe((result: any) => {
-      this.categoryList = result.categoryList ? result.categoryList : [];
+      this.SCategoryList.data = result.sourceCategory ? result.sourceCategory : [];
+      this.SCategoryList.sort = this.sort;
       this.isLoading = false;
     }, (error) => {
-       this.isLoading = false;
+      this.isLoading = false;
     });
   }
 
@@ -62,16 +56,33 @@ export class SourceCategoryComponent implements OnInit {
     });
   }
 
-  showAddEditCategory(category, mode) {
-    const dialogRef = this.dialog.open(CreateEditSourceCategoryComponent, {
-        width: '450px',
-        data: {category: category ? category : {}, mode, departmentsList: this.departmentsList}
+  initCategoryForm(category: any) {
+    this.SCategoryForm = this.formBuilder.group({
+      label: [category.label ? category.label : '', [Validators.required]],
+      value: [category.value ? category.value : '', [Validators.required]],
+      status: [category.status ? category.status : '']
     });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.createEditCategory(result.category, result.mode);
-      }
-     });
-   }
+  }
+  doFilter(value: string) {
+    this.SCategoryList.filter = value.trim().toLocaleLowerCase();
+  }
+
+  editCategory(category, index) {
+    this.editIndex = this.service.editRow(category, index, this.SCategoryList, this.editIndex);
+    this.initCategoryForm(category);
+  }
+
+  addNewCategory() {
+    this.editIndex = this.service.addNew(this.SCategoryList, this.editIndex);
+    this.initCategoryForm({});
+  }
+
+  saveCategory(category) {
+    this.createEditCategory(this.SCategoryForm.value, category.mode);
+  }
+
+  cancel(category) {
+    this.editIndex = this.service.cancel(category, this.SCategoryList, this.editIndex);
+  }
 
 }

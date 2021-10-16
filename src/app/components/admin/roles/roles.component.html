@@ -2,23 +2,24 @@
   <div class="listHeader">
     <mat-icon>assignment_ind</mat-icon>
     <h5>Role Management</h5>
+    <app-filter-input (onFilterChange)="doFilter($event)" class="alignEnd"></app-filter-input>
     <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
   </div>
   <div class="listTable" [formGroup]="roleForm">
-    <table mat-table [dataSource]="roleList">
+    <table mat-table matSort [dataSource]="rolesList">
 
-      <ng-container matColumnDef="name">
-        <th class="table-column-200" mat-header-cell *matHeaderCellDef>Name</th>
+      <ng-container matColumnDef="roleName">
+        <th class="table-column-200" mat-header-cell mat-sort-header *matHeaderCellDef>Name</th>
         <td class="table-column-200" mat-cell *matCellDef="let role"> 
           <span [hidden]="role.edit">{{role.roleName}}</span>
           <mat-form-field appearance="standard" class="column-width-200 m-14" [hidden]="!role.edit">
-            <input formControlName="roleName" matInput />
+            <input formControlName="roleName" [readonly]="role.mode != service.mode.CREATE" matInput />
           </mat-form-field>
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="display">
-        <th class="table-column-200" mat-header-cell *matHeaderCellDef>Display Text</th>
+      <ng-container matColumnDef="roleText">
+        <th class="table-column-200" mat-header-cell mat-sort-header *matHeaderCellDef>Display Text</th>
         <td class="table-column-200" mat-cell *matCellDef="let role"> 
           <span [hidden]="role.edit">{{role.roleText}}</span>
           <mat-form-field appearance="standard" class="column-width-200 m-14" [hidden]="!role.edit">
@@ -65,8 +66,16 @@
         </td>
       </ng-container>
 
+      
+      <ng-container matColumnDef="noData">
+        <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length" class="center">
+          No Records Found
+        </td>
+      </ng-container>
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-footer-row *matFooterRowDef="['noData']" [hidden]="rolesList && rolesList.filteredData.length > 0"></tr>
     </table>
   </div>
 </div>

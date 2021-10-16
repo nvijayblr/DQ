@@ -54,12 +54,15 @@ $controlSize: 100, 150, 200, 300, 450;
 
     .listHeader {
         display: flex;
-        margin-left: 10px;
+        margin: 0 10px;
         color: #433683;
     }
     .listHeader h5 {
         padding: 1px 0 0 6px;
         font-weight: 900;
+    }
+    .alignEnd {
+        margin-left: auto;
     }
     .listTable {
         width: 100%;
