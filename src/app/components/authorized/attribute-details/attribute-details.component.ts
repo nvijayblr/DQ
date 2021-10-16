@@ -644,7 +644,6 @@ loadingCorrelation = false;
   openScrollableContent(longContent) {
      this.searchMultipleNumbers(); 
     this.modalService.open(longContent, { scrollable: true, size: 'xl' }).result.then((result) => {
-      console.log(result);
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -697,7 +696,6 @@ loadingCorrelation = false;
     this.isLoading = true;
     this.loaderMsg = 'Loading...';
     this.http.saveProfileGlobalRef(payload).subscribe((result: any) => {
-      console.log('result', result);
       // if (result) {
       //   this.isLoading = false;
       //   this.getMongoDBSaveLog();
@@ -861,7 +859,6 @@ loadingCorrelation = false;
       values : [freq]
     };
     this.http.getFrequencyView(payload).subscribe((result: any) => {
-      console.log('getFrequencyView', result);
       if (result) {
         this.frequencyPreview = result.Preview ? result.Preview : {};
         this.dialog.open(PreviewDialogComponent, {

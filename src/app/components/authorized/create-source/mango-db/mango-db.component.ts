@@ -111,7 +111,6 @@ export class MangoDBComponent implements OnInit {
     //   client_url: '',
     // };
     this.http.getDBCategoryGlobal().subscribe((result: any) => {
-      console.log('DB', result)
       this.isLoading = false;
       //console.log('DB', result.Databases)
       this.dbList = result.Databases;
@@ -243,7 +242,6 @@ export class MangoDBComponent implements OnInit {
 
   getsourceCategory() {
     this.http.getsourceCategory().subscribe((result: any) => {
-      console.log('result222', result);
       this.srcCategory = result.sourceCategory;
     });
   }
