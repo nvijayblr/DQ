@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 import { Options } from '@angular-slider/ngx-slider';
 import { MessageService } from '../../../services/message.service';
 import { HttpService } from '../../../services/http-service.service';
+import { CommonService } from '../../../services/common.service';
 import { AuthGuardService } from 'src/app/services/auth-guard.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
@@ -41,6 +42,7 @@ export class DashboardComponent implements OnInit {
     private messageService: MessageService,
     private auth: AuthGuardService,
     private scrollService: ScrollService,
+    public commonService : CommonService,
     private route: ActivatedRoute,
     private router: Router, private modalService: NgbModal) {
     const rights = this.auth.getUserRole().rights;

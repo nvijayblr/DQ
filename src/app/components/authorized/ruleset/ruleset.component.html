@@ -271,7 +271,7 @@
                                       </div>
                                        <div class="list-item-5 outline" *ngIf="rule.get('rule').value === 'Formula'">
                                           <mat-form-field appearance="fill" (click)="openFormulaEditor(rule)">
-                                            <textarea matInput [readonly]="true" class="ruleTextarea">{{getFormulaText(rule.get('value').value,rule.get('type').value)}}</textarea>
+                                            <textarea matInput [readonly]="true" class="ruleTextarea">{{commonService.getFormulaText(rule.get('value').value,rule.get('type').value)}}</textarea>
                                           </mat-form-field>
                                           <!-- <div class="formula-preview" (click)="showConditionalFormulaEditor(rule)">
                                              <span *ngFor="let formula of rule.get('value').value">
@@ -417,7 +417,7 @@
                                               <td class="preview">
                                                 <div *ngIf="rule.rule !== 'Formula'">{{rule.value}}</div>
                                                 <div *ngIf="rule.rule === 'Formula'" class="formula-preview nob">
-                                                  <span>{{getFormulaText(rule.value,rule.type)}}</span>
+                                                  <span>{{commonService.getFormulaText(rule.value,rule.type)}}</span>
                                                   <!-- <span *ngFor="let formula of rule.value">
                                                     <span class="operator alcap1" *ngIf="formula.operator !== 'NULL'">{{formula.operator}}</span>
                                                     <span class="cde alcap">{{formula.cde}}</span>

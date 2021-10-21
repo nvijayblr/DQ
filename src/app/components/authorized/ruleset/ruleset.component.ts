@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { HttpService } from '../../../services/http-service.service';
 import { AuthGuardService } from '../../../services/auth-guard.service';
 import { MessageService } from '../../../services/message.service';
+import { CommonService } from '../../../services/common.service';
 import { appConfig } from '../../../app.config';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
 import { FormulaEditorComponent } from '../../../shared/formula-editor/formula-editor.component';
@@ -39,6 +40,7 @@ export class RulesetComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private authGuardService: AuthGuardService,
     private messageService: MessageService,
+    public commonService : CommonService,
     private location: Location) {
     this.appConfig = appConfig;
     this.route.queryParams.subscribe(params => {
@@ -688,34 +690,6 @@ export class RulesetComponent implements OnInit {
       return 0;
     }
     return false;
-  }
-
-  getFormulaText(formulas, type) {
-    let formulaText = '', rectText = '';
-    if (formulas && Array.isArray(formulas)) {
-      formulas.map(formula => {
-        switch (type) {
-          case 'CONDITIONAL':
-            formulaText += formula.logic;
-            formula.conditions.map(condition => {
-              formulaText += condition.start + condition.cde1 + condition.operator1 + condition.cde2 +
-                condition.value + condition.end + condition.condition + condition.operator2;
-                rectText = formula.retcde1 + formula.retoperator + formula.retcde2 + formula.retvalue;
-                if(rectText) {
-                  formulaText += '{' + rectText + '}';
-                }
-            });
-            break;
-          case 'ADVANCED':
-            formulaText += formula.start + formula.cde1 + formula.operator1 + formula.cde2 +
-              formula.value + formula.end + formula.condition + formula.operator2;
-            break;
-          case 'SIMPLE':
-            formulaText += (formula.operator == 'NULL' ? '' : formula.operator) + formula.cde;
-        }
-      });
-    }
-    return formulaText;
   }
 
   openFormulaEditor(rule) {
