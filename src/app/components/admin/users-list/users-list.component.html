@@ -19,10 +19,7 @@
             <ng-container matColumnDef="userName" sticky>
                 <th class="table-column-150" mat-header-cell mat-sort-header *matHeaderCellDef>Username</th>
                 <td class="table-column-150" mat-cell *matCellDef="let user">
-                    <span [hidden]="user.edit">{{user.userName}}</span>
-                    <mat-form-field appearance="standard" class="column-width-150 m-14" [hidden]="!user.edit">
-                        <input formControlName="userName" matInput [readonly]="user.mode != service.mode.CREATE"/>
-                    </mat-form-field>
+                    <span>{{user.userName}}</span>
                 </td>
             </ng-container>
             <ng-container matColumnDef="password">
@@ -122,7 +119,7 @@
                     <button mat-icon-button aria-label="editUser" [hidden]="user.edit" (click)="editUser(user,i)">
                         <mat-icon>edit</mat-icon>
                     </button>
-                    <button mat-icon-button aria-label="deleteUser" [hidden]="user.edit">
+                    <button mat-icon-button aria-label="deleteUser" [hidden]="true">
                         <mat-icon>delete</mat-icon>
                     </button>
                     <button mat-icon-button aria-label="saveUser" [hidden]="!user.edit" [disabled]="userForm.invalid"

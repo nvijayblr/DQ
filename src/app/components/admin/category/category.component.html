@@ -11,10 +11,7 @@
       <ng-container matColumnDef="value">
         <th class="table-column-200" mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
         <td class="table-column-200" mat-cell *matCellDef="let category">
-          <span [hidden]="category.edit">{{category.value}}</span>
-          <mat-form-field appearance="standard" class="column-width-200 m-14" [hidden]="!category.edit">
-            <input formControlName="value" [readonly]="category.mode != service.mode.CREATE" matInput />
-          </mat-form-field>
+          <span>{{category.value}}</span>
         </td>
       </ng-container>
 
@@ -38,7 +35,7 @@
           <button mat-icon-button aria-label="editCategory" [hidden]="category.edit" (click)="editCategory(category,i)">
             <mat-icon>edit</mat-icon>
           </button>
-          <button mat-icon-button aria-label="deleteCategory" [hidden]="category.edit">
+          <button mat-icon-button aria-label="deleteCategory" [hidden]="true">
             <mat-icon>delete</mat-icon>
           </button>
           <button mat-icon-button aria-label="saveCategory" [hidden]="!category.edit" [disabled]="categoryForm.invalid"

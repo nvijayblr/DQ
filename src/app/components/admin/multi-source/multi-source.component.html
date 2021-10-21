@@ -11,10 +11,7 @@
       <ng-container matColumnDef="value">
         <th class="table-column-200" mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
         <td class="table-column-200" mat-cell *matCellDef="let source">
-          <span [hidden]="source.edit">{{source.value}}</span>
-          <mat-form-field appearance="standard" class="column-width-200 m-14" [hidden]="!source.edit">
-            <input formControlName="value" [readonly]="source.mode != service.mode.CREATE" matInput />
-          </mat-form-field>
+          <span>{{source.value}}</span>
         </td>
       </ng-container>
 
@@ -52,7 +49,7 @@
           <button mat-icon-button aria-label="editSource" [hidden]="source.edit" (click)="editSource(source,i)">
             <mat-icon>edit</mat-icon>
           </button>
-          <button mat-icon-button aria-label="deleteSource" [hidden]="source.edit">
+          <button mat-icon-button aria-label="deleteSource" [hidden]="true">
             <mat-icon>delete</mat-icon>
           </button>
           <button mat-icon-button aria-label="saveSource" [hidden]="!source.edit" [disabled]="multisourceForm.invalid"
@@ -64,7 +61,7 @@
           </button>
         </td>
       </ng-container>
-      
+
       <ng-container matColumnDef="noData">
         <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length" class="center">
           No Records Found
@@ -73,7 +70,8 @@
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      <tr mat-footer-row *matFooterRowDef="['noData']" [hidden]="multisourceList && multisourceList.filteredData.length > 0"></tr>
+      <tr mat-footer-row *matFooterRowDef="['noData']"
+        [hidden]="multisourceList && multisourceList.filteredData.length > 0"></tr>
     </table>
   </div>
 </div>

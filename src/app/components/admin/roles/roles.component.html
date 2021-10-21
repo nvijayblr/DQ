@@ -10,17 +10,14 @@
 
       <ng-container matColumnDef="roleName">
         <th class="table-column-200" mat-header-cell mat-sort-header *matHeaderCellDef>Name</th>
-        <td class="table-column-200" mat-cell *matCellDef="let role"> 
-          <span [hidden]="role.edit">{{role.roleName}}</span>
-          <mat-form-field appearance="standard" class="column-width-200 m-14" [hidden]="!role.edit">
-            <input formControlName="roleName" [readonly]="role.mode != service.mode.CREATE" matInput />
-          </mat-form-field>
+        <td class="table-column-200" mat-cell *matCellDef="let role">
+          <span>{{role.roleName}}</span>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="roleText">
         <th class="table-column-200" mat-header-cell mat-sort-header *matHeaderCellDef>Display Text</th>
-        <td class="table-column-200" mat-cell *matCellDef="let role"> 
+        <td class="table-column-200" mat-cell *matCellDef="let role">
           <span [hidden]="role.edit">{{role.roleText}}</span>
           <mat-form-field appearance="standard" class="column-width-200 m-14" [hidden]="!role.edit">
             <input formControlName="roleText" matInput />
@@ -36,11 +33,11 @@
           </ul>
           <mat-form-field appearance="standard" class="column-width-300 m-15" [hidden]="!role.edit">
             <mat-select multiple formControlName="rights" [compareWith]="compareRights">
-                <mat-option *ngFor="let right of rightsList" [value]="right">
-                    {{right.Text}}
-                </mat-option>
+              <mat-option *ngFor="let right of rightsList" [value]="right">
+                {{right.Text}}
+              </mat-option>
             </mat-select>
-        </mat-form-field>
+          </mat-form-field>
         </td>
       </ng-container>
 
@@ -54,10 +51,11 @@
           <button mat-icon-button aria-label="editRole" [hidden]="role.edit" (click)="editRole(role,i)">
             <mat-icon>edit</mat-icon>
           </button>
-          <button mat-icon-button aria-label="deleteRole" [hidden]="role.edit">
+          <button mat-icon-button aria-label="deleteRole" [hidden]="true">
             <mat-icon>delete</mat-icon>
           </button>
-          <button mat-icon-button aria-label="saveRole" [hidden]="!role.edit" [disabled]="roleForm.invalid" (click)="saveRole(role)">
+          <button mat-icon-button aria-label="saveRole" [hidden]="!role.edit" [disabled]="roleForm.invalid"
+            (click)="saveRole(role)">
             <mat-icon>save</mat-icon>
           </button>
           <button mat-icon-button aria-label="editRole" [hidden]="!role.edit" (click)="cancel(role)">
@@ -66,7 +64,7 @@
         </td>
       </ng-container>
 
-      
+
       <ng-container matColumnDef="noData">
         <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length" class="center">
           No Records Found
