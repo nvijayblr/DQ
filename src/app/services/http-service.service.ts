@@ -159,6 +159,16 @@ export class HttpService  {
     );
   }
 
+  checkSourceName(payload): Observable<any> {
+    return this.http.post<any>(`${this.rootUrl}/api/checkSourceNameAvailability`, payload).pipe(
+      tap((res) => {
+      }),
+      catchError(err => {
+        return throwError(err);
+      }),
+    );
+  }
+
    // Profile APIs
   
    saveSourceProfile(payload, method): Observable<any> {

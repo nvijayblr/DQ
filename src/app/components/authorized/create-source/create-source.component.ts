@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation, ViewChild, QueryList, ViewChildren,TemplateRef } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation, ViewChild, QueryList, ViewChildren, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Location } from '@angular/common';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, Validators, FormControl } from '@angular/forms';
 import { HttpService } from '../../../services/http-service.service';
 import { AuthGuardService } from '../../../services/auth-guard.service';
 import { MessageService } from '../../../services/message.service';
@@ -23,7 +23,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./create-source.component.scss']
 })
 export class CreateSourceComponent implements OnInit {
-  @ViewChild('contentErr', {static: false}) modalErrContent: TemplateRef<any>;
+  @ViewChild('contentErr', { static: false }) modalErrContent: TemplateRef<any>;
   backType;
   showConnectionList: boolean = false;
   clientUrlLog: any = [];
@@ -39,18 +39,18 @@ export class CreateSourceComponent implements OnInit {
     private messageService: MessageService,
     private modalService: NgbModal,
     private location: Location) {
-      this.appConfig = appConfig;
-      this.route.queryParams.subscribe(params => {
-         this.sourceId = params.sourceId;
-         this.mode = params.mode ? params.mode : 'create';
-         if (!params.sourceId) {
-          localStorage.removeItem('dq-source-data');
-        }
-      });
-      location.subscribe((back: PopStateEvent) => {
-        this.backType = back.type;
-      });
-    }
+    this.appConfig = appConfig;
+    this.route.queryParams.subscribe(params => {
+      this.sourceId = params.sourceId;
+      this.mode = params.mode ? params.mode : 'create';
+      if (!params.sourceId) {
+        localStorage.removeItem('dq-source-data');
+      }
+    });
+    location.subscribe((back: PopStateEvent) => {
+      this.backType = back.type;
+    });
+  }
 
   get afControls(): any { return this.analysisForm.controls; }
   minDate = moment().format();
@@ -68,7 +68,7 @@ export class CreateSourceComponent implements OnInit {
     frequency: 'Daily',
     uploadDate: moment(this.minDate).format("YYYY-MM-DD[T]HH:mm:ss.000[Z]"),
     //uploadDate: this.minDate,
-    multiSourceColumn : '',
+    multiSourceColumn: '',
     uploadTime: '',
     department: []
   };
@@ -120,16 +120,16 @@ export class CreateSourceComponent implements OnInit {
   refDataType = "";
   editRefSourceData;
   refDateMethod;
-  
+
 
   public variablesGroups =
     [
       {
         value: '127', values:
           [{ id: 267, value: 'Formosa', parentId: 127 },
-            { id: 268, value: 'Matacos', parentId: 127 },
-            { id: 266, value: 'Patiño', parentId: 127 },
-            { id: 265, value: 'Pilcomayo', parentId: 127 }, { id: 269, value: 'Pirané', parentId: 127 }]
+          { id: 268, value: 'Matacos', parentId: 127 },
+          { id: 266, value: 'Patiño', parentId: 127 },
+          { id: 265, value: 'Pilcomayo', parentId: 127 }, { id: 269, value: 'Pirané', parentId: 127 }]
       }];
 
   public groups = this.variablesGroups.slice();
@@ -163,7 +163,7 @@ export class CreateSourceComponent implements OnInit {
     }
 
     this.analysisForm = this.fb.group({
-      sourceDataName: [analysis.source.sourceDataName, [Validators.required, Validators.maxLength(100)]],
+      sourceDataName: [analysis.source.sourceDataName, [Validators.required, Validators.maxLength(100), this.uniqueSourceName.bind(this)]],
       sourceDataDescription: [analysis.source.sourceDataDescription || ''],
       sourceFileName: [analysis.source.sourceFileName || ''],
       sourceCategory: [analysis.source.sourceCategory, [Validators.required]],
@@ -208,9 +208,9 @@ export class CreateSourceComponent implements OnInit {
     if (this.editRefSourceData && this.editRefSourceData.reference.length) {
       this.refDateMethod = this.editRefSourceData.reference[0].ref_data_type;
     }
-   
-    
-     // console.log(mode);
+
+
+    // console.log(mode);
     this.minDate = moment().format('YYYY-MM-DD');
     this.analysis = analysis;
     this.getsourceCategory();
@@ -300,7 +300,7 @@ export class CreateSourceComponent implements OnInit {
     //   referenceId: ""
     // }]
 
-   
+
     let sourceRefNameEqual = false;
     let refPayload;
 
@@ -359,7 +359,7 @@ export class CreateSourceComponent implements OnInit {
         sourceCategory: analysis.sourceCategory,
         dataOwner: this.afControls.dataOwner.value ? this.afControls.dataOwner.value : analysis.dataOwner,
         dataSteward: this.afControls.dataSteward.value ? this.afControls.dataSteward.value : analysis.dataSteward,
-        dataUser : this.dataUserTollerance,
+        dataUser: this.dataUserTollerance,
         type: '',
         connectionDetails: {}
       },
@@ -397,7 +397,7 @@ export class CreateSourceComponent implements OnInit {
       width: '400px',
       data: {
         title: this.mode === 'edit' ? 'Source Updated' : 'Source Created',
-        message: this.mode === 'edit' ? `Source has been updated successfully.` : `Source has been added successfully.` ,
+        message: this.mode === 'edit' ? `Source has been updated successfully.` : `Source has been added successfully.`,
         cancelLable: '',
         okLable: 'OK'
       }
@@ -410,18 +410,18 @@ export class CreateSourceComponent implements OnInit {
       } else {
       }
     });
-   }
+  }
 
-   prevoewBackClickFirst() {
-      this.gotoStepper(0);
-    }
+  prevoewBackClickFirst() {
+    this.gotoStepper(0);
+  }
 
   prevoewBackClick() {
-    if (this. mode === 'create') {
+    if (this.mode === 'create') {
       localStorage.setItem('dq-source-data', JSON.stringify(this.summary));
       this.router.navigate(
         [`auth/create-source-data`],
-        {queryParams: {sourceId: this.summary.sourceId, mode: 'edit'}}
+        { queryParams: { sourceId: this.summary.sourceId, mode: 'edit' } }
       );
     }
     this.gotoStepper(1);
@@ -449,19 +449,19 @@ export class CreateSourceComponent implements OnInit {
     }
 
     if (this.selectedType === 'xlsx') {
-        if (fExt.includes('xls')) {
-           this.flError = true;
-           this.showPreview = true;
-           this.chooseOptions = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel';
-        }
-     }
+      if (fExt.includes('xls')) {
+        this.flError = true;
+        this.showPreview = true;
+        this.chooseOptions = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel';
+      }
+    }
     this.afControls.sourceDataName.setValue(fName);
     this.loadSourcePreview();
   }
 
   onReferenceFileSelected(file, reference, index) {
     this.refFiles[index] = file;
-    const fName = file.name.split('.')[0];  
+    const fName = file.name.split('.')[0];
     reference.controls.referenceDataName.setValue(fName);
     this.loadReferencePreview();
   }
@@ -469,43 +469,38 @@ export class CreateSourceComponent implements OnInit {
   gotoStepper(index, tab = '') {
     this.stepIndex = index;
   }
+
   refTabIndex;
   selectedCategoryKey;
   selectedCategoryKeyL;
   selectedCategoryKeyG;
   validateSourceNameAndNext() {
     const sourceName = this.afControls.sourceDataName.value;
+
     if (this.selFileName === undefined && this.mode === 'create') {
       this.selFileNameErr = true;
-      return;
     }
-    if (!sourceName) {
-      this.sourceNameErr = true;
-      return;
-    }
-    if (this.sourceNames.includes(sourceName) && this.mode === 'create') {
-      alert('Source name is already found. Please enter the different source name.');
-      return;
-    }
-    this.gotoStepper(1, 'CSV');
 
-    if (this.refDateMethod === 'MongoDB_RefData') {
-      let element:HTMLElement = document.getElementById('auto_trigger') as HTMLElement;
-      element.click();
-      this.refTabIndex = 1;
-      this.getDBCollectionsClient();
-      if (localStorage.getItem('refItem')) {
-        this.getDBPreviewCluster(localStorage.getItem('refItem'), localStorage.getItem('refColumn'));
+    if (this.analysisForm.valid && !this.selFileNameErr) {
+      this.gotoStepper(1, 'CSV');
+      if (this.refDateMethod === 'MongoDB_RefData') {
+        let element: HTMLElement = document.getElementById('auto_trigger') as HTMLElement;
+        element.click();
+        this.refTabIndex = 1;
+        this.getDBCollectionsClient();
+        if (localStorage.getItem('refItem')) {
+          this.getDBPreviewCluster(localStorage.getItem('refItem'), localStorage.getItem('refColumn'));
+        }
+        if (localStorage.getItem('refItemL')) {
+          this.getDBPreview(localStorage.getItem('refItemL'), localStorage.getItem('refColumnL'))
+        }
+        if (localStorage.getItem('refItemG')) {
+          this.loadReferencePreviewGD(localStorage.getItem('globalRefPath'), localStorage.getItem('refItemG'), localStorage.getItem('refColumnG'));
+        }
+        this.selectedCategoryKey = localStorage.getItem('refItem');
+        this.selectedCategoryKeyL = localStorage.getItem('refItemL');
+        this.selectedCategoryKeyG = localStorage.getItem('refItemG');
       }
-      if (localStorage.getItem('refItemL')) {
-        this.getDBPreview(localStorage.getItem('refItemL'), localStorage.getItem('refColumnL'))
-      }
-      if (localStorage.getItem('refItemG')) {
-        this.loadReferencePreviewGD(localStorage.getItem('globalRefPath'), localStorage.getItem('refItemG'), localStorage.getItem('refColumnG'));
-      }
-      this.selectedCategoryKey = localStorage.getItem('refItem');
-      this.selectedCategoryKeyL = localStorage.getItem('refItemL');
-      this.selectedCategoryKeyG = localStorage.getItem('refItemG');
     }
   }
 
@@ -697,14 +692,14 @@ export class CreateSourceComponent implements OnInit {
       } else {
         this.loadingGlobalData = true;
         this.globalDataPath = JSON.parse(this.globalData);
-       this.globalDataGroup = 
+        this.globalDataGroup =
           _.chain(this.globalDataPath.Ref_data_files)
             // Group the elements of Array based on `color` property
             .groupBy("db")
             // `key` is group's name (color), `value` is the array of objects
             .map((value, key) => ({ db: key, refdData: value }))
             .value()
-        
+
       }
 
     }
@@ -738,11 +733,11 @@ export class CreateSourceComponent implements OnInit {
     this.showRefTable = false;
     this.isLoadingCDB = true;
     const payload = {
-      client_url : '',
+      client_url: '',
       db: this.selectdItem,
       collection: this.selectedColumn,
       start_index: this.startIndex,
-      end_index : this.endIndex
+      end_index: this.endIndex
     };
     this.isLoadingCO = true;
     this.http.getDBPreview(payload).subscribe((result: any) => {
@@ -756,7 +751,7 @@ export class CreateSourceComponent implements OnInit {
         this.previewTable();
       }
       this.isLoadingCDB = false;
-    this.showRefTable = true;
+      this.showRefTable = true;
       this.isPreviewLoaded = true;
       this.isPreviewLoading = false;
 
@@ -815,11 +810,11 @@ export class CreateSourceComponent implements OnInit {
         this.showConnectionList = false;
       } else {
         this.showConnectionList = true;
-      }     
+      }
     })
   }
 
-  showDbCollectionName:boolean = false;
+  showDbCollectionName: boolean = false;
 
 
   onWriterChange() {
@@ -847,13 +842,13 @@ export class CreateSourceComponent implements OnInit {
       sourcepath: this.titleSrc
     };
     this.http.getProfileView(payload).subscribe((res: any) => {
-      const details: any = res.Preview ? res.Preview : {};      
+      const details: any = res.Preview ? res.Preview : {};
       this.parseSourcePreviewMD(details);
       this.showRefTable = true;
-      }, (error) => {
-        this.isPreviewLoaded = false;
-        this.isPreviewLoading = false;
-      });
+    }, (error) => {
+      this.isPreviewLoaded = false;
+      this.isPreviewLoading = false;
+    });
 
   }
   refItemG;
@@ -891,11 +886,11 @@ export class CreateSourceComponent implements OnInit {
       this.isPreviewLoading = false;
     }, (error) => {
       this.isLoadingCO = false;
-        this.isPreviewLoaded = false;
+      this.isPreviewLoaded = false;
       this.isPreviewLoading = false;
-      
+
       alert(error.message);
-      });
+    });
 
   }
 
@@ -939,7 +934,7 @@ export class CreateSourceComponent implements OnInit {
     this.selectedColumnN = column;
     this.getClusterKeys = _.find(this.dbSaveLogs, item ? item : '', item ? item : '');
     if (this.getClusterKeys && this.getClusterKeys[item][this.selectedColumnN]) {
-      this.selectedSource = this.getClusterKeys;      
+      this.selectedSource = this.getClusterKeys;
       this.titleSrc = this.getClusterKeys[item][this.selectedColumnN].outputpath;
       this.loadReferencePreviewMD();
       this.selectedColumnN = column;
@@ -949,7 +944,7 @@ export class CreateSourceComponent implements OnInit {
         client_url: this.clientUrl || '',
         db: item,
         collection: this.selectedColumnN,
-        output_filename : this.selectedColumnN + '.csv',
+        output_filename: this.selectedColumnN + '.csv',
       };
       this.isLoading = true;
       this.loaderMsg = 'Loading...'
@@ -962,10 +957,10 @@ export class CreateSourceComponent implements OnInit {
           this.loadReferencePreviewMD();
         }
       })
-      
+
     }
-    
-    
+
+
   }
 
   newDBClient;
@@ -1021,7 +1016,21 @@ export class CreateSourceComponent implements OnInit {
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
       return 'by clicking on a backdrop';
     } else {
-      return  `with: ${reason}`;
+      return `with: ${reason}`;
+    }
+  }
+
+  private uniqueSourceName(control: FormControl) {
+    if (control.value) {
+      this.http.checkSourceName({ 'sourceName': control.value }).subscribe((res: any) => {
+        if (res.errorCode === '101') {
+          control.setErrors({
+            duplicate: true
+          });
+        } else {
+          control.setErrors(null);
+        }
+      });
     }
   }
 }

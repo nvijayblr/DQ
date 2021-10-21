@@ -46,6 +46,7 @@
                                 <input matInput placeholder="Source Name" formControlName="sourceDataName" maxlength="50" autocomplete="off"/>
                               </mat-form-field>
                               <mat-error class="errSty" *ngIf="!afControls.sourceDataName.value && afControls.sourceDataName.touched">Please Enter Source Name</mat-error>
+                              <mat-error class="errSty" *ngIf="afControls.sourceDataName.hasError('duplicate')">Source NameAlready Exist</mat-error>
                               </div>
                               <div class="list-item-2 outline splitR">
                               <mat-label class="mtop sub-title">Source Description</mat-label>                                                    
@@ -54,7 +55,7 @@
                               </mat-form-field>
                               </div>
                               <div class="list-item-2 outline split">
-                                <mat-label class="mtop sub-title">Source Category</mat-label> 
+                                <mat-label class="mtop sub-title">Source Category<span class="red">*</span></mat-label> 
                                 <mat-form-field appearance="fill">
                                   <mat-label>Category</mat-label>
                                   <mat-select formControlName="sourceCategory">
