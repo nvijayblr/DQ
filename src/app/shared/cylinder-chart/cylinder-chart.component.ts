@@ -8,6 +8,7 @@ import Histogram from 'highcharts/modules/histogram-bellcurve';
 Histogram(Highcharts);
 
 import highcharts3D from 'highcharts/highcharts-3d';
+import { title } from 'process';
 highcharts3D(Highcharts);
 
 const Exporting = require('highcharts/modules/exporting');
@@ -33,7 +34,8 @@ export class CylinderChartComponent implements OnInit {
    @Input() options3d;
    @Input() analysisKeys;
    @Output() xLableClicked = new EventEmitter<any>();
-   @Output() barClicked = new EventEmitter<any>();
+  @Output() barClicked = new EventEmitter<any>();
+  
 
 
    public activity;
@@ -77,7 +79,7 @@ export class CylinderChartComponent implements OnInit {
                  align: 'high'
              },
              labels: {
-                 overflow: 'justify'
+               overflow: 'justify',
              }
          },
          tooltip: {
@@ -108,9 +110,10 @@ export class CylinderChartComponent implements OnInit {
          series: []
        };
  }
-
+ outlier;
  ngOnInit() {
    const agThis = this;
+   //console.log('agThis', this.chartData.isOutlier);
    this.chartOptions.xAxis = {
        categories: this.chartData.labels,
        title: {
@@ -120,11 +123,13 @@ export class CylinderChartComponent implements OnInit {
            events: {
                click(e) {
                    agThis.xLableClicked.emit({label: this.value});
-               }
            }
+          
+         }
        }
    };
 
+   
    this.chartOptions.chart.type = this.chartType ? this.chartType : 'column';
    this.chartOptions.chart.options3d.enabled = this.options3d ? this.options3d : false;
    this.chartOptions.series = [];
@@ -141,7 +146,30 @@ export class CylinderChartComponent implements OnInit {
             name: key,
             data
        });
-    });
+      
+     
+     let outlier = this.chartOptions.xAxis.categories[this.chartData.isOutlier.indexOf('true')]
+     if (this.chartData.isOutlier.indexOf('true')) {
+          this.chartOptions.xAxis.labels = {           
+            useHTML: true,
+            tooltip: {
+              valueSuffix: ' %'
+          },
+            formatter: function () {
+              if (outlier === this.value) {
+                return '<span id="tooltip" style="color: red; font-weight: bold; font-size: 16px;">' + this.value + '</span>';
+            } else {
+                return this.value;
+              }
+              
+            }
+           }
+     }
+
+    
+    
+   });
+   
    this.chartOptions.plotOptions = {
         bar: {
             dataLabels: {
@@ -186,9 +214,13 @@ export class CylinderChartComponent implements OnInit {
       Highcharts.chart('container', this.chartOptions);
    }
 
-   ngAfterViewInit() {
-      this.highcharts = Highcharts;
-      this.highcharts.chart(this.chartEl.nativeElement, this.chartOptions);
+  ngAfterViewInit() {
+    this.highcharts = Highcharts;
+    this.highcharts.chart(this.chartEl.nativeElement, this.chartOptions);
+    if (this.chartData.isOutlier.indexOf('true') > 0)  {         
+        let element: HTMLElement = document.getElementById('tooltip') as HTMLElement;
+        element.setAttribute('title', 'isOutlier');
+    }
    }
 
 
