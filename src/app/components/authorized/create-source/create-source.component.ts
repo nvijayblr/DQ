@@ -163,7 +163,7 @@ export class CreateSourceComponent implements OnInit {
     }
 
     this.analysisForm = this.fb.group({
-      sourceDataName: [analysis.source.sourceDataName, [Validators.required, Validators.maxLength(100), this.uniqueSourceName.bind(this)]],
+      sourceDataName: [analysis.source.sourceDataName, [Validators.required, Validators.maxLength(100), this.uniqueSourceName.bind(this, analysis.source.sourceDataName)]],
       sourceDataDescription: [analysis.source.sourceDataDescription || ''],
       sourceFileName: [analysis.source.sourceFileName || ''],
       sourceCategory: [analysis.source.sourceCategory, [Validators.required]],
@@ -1020,8 +1020,8 @@ export class CreateSourceComponent implements OnInit {
     }
   }
 
-  private uniqueSourceName(control: FormControl) {
-    if (control.value) {
+  private uniqueSourceName(sourceDataName, control: FormControl) {
+    if (control.value && sourceDataName !== control.value) {
       this.http.checkSourceName({ 'sourceName': control.value }).subscribe((res: any) => {
         if (res.errorCode === '101') {
           control.setErrors({
