@@ -32,6 +32,7 @@ export class AnalysisComponent implements OnInit {
   @Input() isOverview = false;
   @Input() isOverviewTable = false;
   @Input() selectedAnalysisdashboard;
+  @Input() isSelectedOverview:boolean = false;
 
   public stores: any[];
 
@@ -124,12 +125,12 @@ export class AnalysisComponent implements OnInit {
   ngOnChanges() {
     const analysis = localStorage.getItem('selected-analysis');
     this.initAnalysis(JSON.parse(analysis));
-    const viewMethod = localStorage.getItem('viewMethod');
-    if (viewMethod === 'table') {
-      this.isOverviewTable = false;
-    } else {
-      this.isOverviewTable = true;
-    }
+    // const viewMethod = localStorage.getItem('viewMethod');
+    // if (viewMethod === 'table') {
+    //   this.isOverviewTable = false;
+    // } else {
+    //   this.isOverviewTable = true;
+    // }
   }
   
  datedUpload = [];
@@ -178,11 +179,12 @@ export class AnalysisComponent implements OnInit {
       });
       this.showAnalysisByKey = true;
       this.isLoadingDetails = true;
-      this.selectedKey = keyname;
+     this.selectedKey = keyname;
       this.launchAnalysisByKeyDate('', this.uploadId);
    }
 
-  hideAnalysis:boolean = false;
+  hideAnalysis: boolean = false;
+  showErrorMessage: boolean = false;
   launchAnalysisByKeyDate(keyname, uploadId) {
       this.selectedKey = keyname;
       const payload = {
@@ -198,14 +200,20 @@ export class AnalysisComponent implements OnInit {
       this.http.launchAnalysisByKey(payload).subscribe((result: any) => {
         this.isLoadingDetails = false;
         this.isLoading = false;
-        if (result.errorCode && result.errorMsg) {
-          this.isLoadingDetails = false;
-          this.isLoading = false;
+        if (result.errorCode && result.errorMsg) {         
+          this.showErrorMessage = true;
+          // this.isLoadingDetails = false;
+          // this.isLoading = false;
           this.hideAnalysis = true
-          alert(result.errorMsg);
+          //alert(result.errorMsg);
+          //this.ngOnInit();
             //this.gotoDashboard();
             //return;
-         }
+        } else {
+          this.showErrorMessage = false;
+        }
+
+        this.hideAnalysis = false;
          this.analyseKeyData = result.results ? result.results : [];
          this.selectedKey = result.keyname ? result.keyname : this.selectedKey;
          this.selectedCDE = this.selectedKey;
@@ -314,12 +322,12 @@ export class AnalysisComponent implements OnInit {
    }
 
    onRulesetChange(rulesetId) {
-      this.selectedAnalysis.rulesetId = rulesetId;
+     this.selectedAnalysis.rulesetId = rulesetId;
       this.launchAnalysisByKeyDate(this.selectedKey, this.uploadId);
    }
 
    tapDateCarouselItem(history) {
-      this.uploadId = history.uploadId;
+     this.uploadId = history.uploadId;
       this.launchAnalysisByKeyDate(this.selectedKey, this.uploadId);
    }
 

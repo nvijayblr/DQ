@@ -157,7 +157,7 @@ export class CylinderChartComponent implements OnInit {
           },
             formatter: function () {
               if (outlier === this.value) {
-                return '<span id="tooltip" style="color: red; font-weight: bold; font-size: 16px;">' + this.value + '</span>';
+                return '<span id="tooltip" style="color: red; font-weight: bold; font-size: 16px;" >' + this.value + '</span>';
             } else {
                 return this.value;
               }

@@ -6,9 +6,9 @@
           <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
           <div class="shrare-post">
             <!-- Analysis by CDE-->
-            <mat-card class="border no-rounded list shrare-post" [class.overview-card]="isOverview" >
-              <div *ngIf="hideAnalysis">The processing is going on.Please try again after some time</div>
-              <div *ngIf="!hideAnalysis">
+            <mat-card class="border no-rounded list shrare-post" [class.overview-card]="isOverview">
+              <div *ngIf="showErrorMessage">The processing is going on.Please try again after some time</div>
+              <div *ngIf="!showErrorMessage">
               <!-- <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoadingDetails"></app-progress-bar> -->
               <div class="list flex-containers analysis-wrp tpBg2 flex-start wrap ">
                 <div class="list-item-4 outline">

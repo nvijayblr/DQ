@@ -6,7 +6,6 @@ import * as _ from 'lodash';
 import { Options } from '@angular-slider/ngx-slider';
 import { MessageService } from '../../../services/message.service';
 import { HttpService } from '../../../services/http-service.service';
-import { CommonService } from '../../../services/common.service';
 import { AuthGuardService } from 'src/app/services/auth-guard.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
@@ -42,7 +41,6 @@ export class DashboardComponent implements OnInit {
     private messageService: MessageService,
     private auth: AuthGuardService,
     private scrollService: ScrollService,
-    public commonService : CommonService,
     private route: ActivatedRoute,
     private router: Router, private modalService: NgbModal) {
     const rights = this.auth.getUserRole().rights;
@@ -68,6 +66,7 @@ export class DashboardComponent implements OnInit {
   actionTabId;
   showtable = true;
   showtableAnalysis = true;
+  showChartAnalysis = false;
   show = false;
   maskShow = false;
   frequencyShow = false;
@@ -196,12 +195,13 @@ export class DashboardComponent implements OnInit {
   cleanedRuleSetID;
 
   ngOnInit() {
-    localStorage.removeItem('dq-source-names');
     localStorage.removeItem('selected-analysis');
     localStorage.removeItem('selected-index');
+    localStorage.removeItem('dq-source-names');
     this.getAllSources();
     this.minDate = moment().format('YYYY-MM-DD');
     this.fromOrginSource = this.route.snapshot.queryParamMap.get('from');
+  
     //  this.fromCleanSource = this.route.snapshot.queryParamMap.get('cleaning');
     setTimeout(() => {
       if (this.fromOrginSource === 'ruleset') {
@@ -211,6 +211,9 @@ export class DashboardComponent implements OnInit {
         this.originalSourceUploadDate = analysis.settings.uploadDate;
         //console.log(this.originalSourceUploadDate);
         this.uploadSource(analysis);
+        // localStorage.removeItem('selected-analysis');
+        // localStorage.removeItem('selected-index');
+        // localStorage.removeItem('dq-source-names');
       }
       if (this.fromOrginSource === 'cleaning') {
         const analysis = JSON.parse(localStorage.getItem('selected-analysis'));
@@ -247,19 +250,23 @@ export class DashboardComponent implements OnInit {
   createSource() {
     localStorage.removeItem('selected-analysis');
     localStorage.removeItem('selected-index');
+    localStorage.removeItem('recent-upload');
     this.router.navigate(
       [`/auth/add-source-data`]);
   }
 
-
-  changeCategory(source) {
-    // console.log('change category', source);
-    // localStorage.setItem('dq-source-data', JSON.stringify(source));
+  hideAnalysis: boolean = false;
+  changedSource: boolean = false;
+  leftNavSelected : boolean = false;
+  changeCategory(source) {    
+    localStorage.removeItem('dq-source-data');   
+    localStorage.setItem('dq-source-data', JSON.stringify(source));
+    this.hideAnalysis = true;
     this.previewProfile = true;
     this.previewTable = false;
     this.showtableAnalysis = true;
-    this.previewCorrelation = false;
-    localStorage.removeItem('dq-source-data');
+    this.showChartAnalysis = false;
+    this.previewCorrelation = false;   
     this.selectedSource = source;
     this.initLoadProfile = false;
     this.titleSrc = source.templateSourcePath;
@@ -323,8 +330,17 @@ export class DashboardComponent implements OnInit {
         this.showAllDetails = true;
         return;
       }
+      const recentUpload = localStorage.getItem('recent-upload');
+      
+      this.viewRules = _.find(this.sourceList, function (o) {
+        return o.sourceId === recentUpload;
+      });
+      const indexCheck =  _.filter(_.range(this.sourceList.length), (i) => this.sourceList[i].sourceId === recentUpload);
+      localStorage.setItem('selected-analysis', JSON.stringify(this.viewRules));
+      localStorage.setItem('selected-index', indexCheck.join());
       const getSelectedItem = localStorage.getItem('selected-analysis');
       const getSelectedIndex = localStorage.getItem('selected-index');
+     
       if (getSelectedItem && getSelectedIndex) {
         this.selectedSource = JSON.parse(getSelectedItem);
         this.showEditDetails(+getSelectedIndex, this.selectedSource);
@@ -614,11 +630,11 @@ export class DashboardComponent implements OnInit {
     formData.append('file[]', analysis.file ? analysis.file : '');
     formData.append('data', JSON.stringify(payload));
  
-    // this.isLoading = true;
-    // this.loaderMsg = 'Saving Source data...';
+    this.isLoading = true;
+    this.loaderMsg = 'Saving Source data...';
     this.http.uploadSource(formData).subscribe((result: any) => {
+      console.log(result.sourceId);
       this.isLoading = false;
-      //console.log(result);
       this.uploadErrorMessage = result.errorMsg;
       if (result.errorMsg) {
         if (result.errorCode == '103') {
@@ -626,8 +642,15 @@ export class DashboardComponent implements OnInit {
         }
         this.showUploadError(result.errorMsg);
       } else {
-        this.getAllSources();
+        //this.changedSource = true;
+        //this.getAllSources();
         //this.getAllDetails();
+        if (this.fromOrginSource === 'ruleset') {
+          localStorage.removeItem('recent-upload');
+        } else {
+          localStorage.setItem('recent-upload', result.sourceId)
+        }
+        
         alert('Source has been uploaded successfully.');
         this.reloadCurrentRoute();
         //this.router.navigate([`auth/data-quality-monitoring`]);
@@ -638,6 +661,8 @@ export class DashboardComponent implements OnInit {
       //this.showUploadError(this.uploadErrorMessage);
     });
   }
+
+  
 
   reloadCurrentRoute() {
     let currentUrl = `auth/data-quality-monitoring`;

@@ -428,7 +428,7 @@
                 <h3 *ngIf="overviewErrorMsg">{{overviewErrorMsg}}</h3>
               </div>
               <div class="chart" *ngIf="!showtableAnalysis"> 
-                  <app-analysis *ngIf="showAnalysisOverview && !overviewErrorMsg" [isOverviewTable]="true"></app-analysis> 
+                  <app-analysis *ngIf="showAnalysisOverview && !overviewErrorMsg" [isOverviewTable]="true" [isSelectedOverview]="changedSource"></app-analysis> 
               </div>   
               </mat-card> 
            
@@ -1047,7 +1047,10 @@
                    <td class="preview">
                      <div *ngIf="rule.rule !== 'Formula'">{{rule.value}}</div>
                      <div *ngIf="rule.rule === 'Formula'" class="formula-preview nob">
-                       <span>{{commonService.getFormulaText(rule.value,rule.type)}}</span>
+                       <span *ngFor="let formula of rule.value">
+                         <span class="operator alcap1" *ngIf="formula.operator !== 'NULL'">{{formula.operator}}</span>
+                         <span class="cde alcap">{{formula.cde}}</span>
+                       </span>
                      </div>
                    </td>
                    <td>{{rule.dimension}}</td>
