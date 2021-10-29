@@ -358,6 +358,7 @@ getProfileFromMonitoring() {
   getProfileSource() {
     this.http.getCleanSource().subscribe((result: any) => {
       this.allSourceCategory = result.SourceDetailsList;
+      //console.log(this.allSourceCategory);
       this.analysis = this.messageService.getSource();
       const cleanedFiles = JSON.parse(localStorage.getItem('dq-saved-data'));
       const uploadMethod = localStorage.getItem('dq-upload-data');
@@ -414,7 +415,8 @@ getProfileFromMonitoring() {
     this.loadProfile(this.source);
   }
   cleanedFilesPath;
-  hideClass=true;
+  hideClass = true;
+  selectedSourcePath;;
   changeCategory(source, path) {
     this.analysis = source;
     this.findValue = false;
@@ -427,10 +429,12 @@ getProfileFromMonitoring() {
     this.initLoadProfile = false;
     if (path) {
       this.titleSrc = this.cleanedFilesPath;
+      this.selectedSourcePath = path;
       this.hideClass = false;
       //source.sourceId = source.CleanedFilesLog.cleanSourceId
     } else {
       this.titleSrc = source.templateSourcePath;
+      this.selectedSourcePath = source.sourcePath;
       this.hideClass = true;
     }
     this.getCleanedLogs();
@@ -496,9 +500,11 @@ getProfileFromMonitoring() {
   loadProfile(source, profile: any = '') {
     this.activeSource = source;
     if (this.cleanedFilesPath) {
-      this.titleSrc =this.cleanedFilesPath;
+      this.titleSrc = this.cleanedFilesPath;
+      this.selectedSourcePath = this.cleanedFilesPath;
     } else {
       this.titleSrc = source.templateSourcePath;
+      this.selectedSourcePath = source.sourcePath;
     }
 
     this.isLoading = true;
@@ -592,45 +598,71 @@ getProfileFromMonitoring() {
     this.findValue = false;
    }
 
-   imputeColumns(datatype) {
-      this.showConfirmDialog({
-         title: 'Impute columns',
-         message: `Are you sure want to impute the "${this.profile.column}" column with "${this.impute.value}" value?` ,
-         cancelLable: 'No',
-         okLable: 'Yes'
-       }, () => {
-         this.impute.column_data_type = datatype;
-         this.impute = {
-            ...this.impute,
-            sourceFileName: this.impute.sourceFileName,
-            sourceId: this.analysis.sourceId,
-            uploadId: this.uploadId,
-            processTime: this.processTime,
-         };
-         this.isLoading = true;
-         this.loaderMsg = 'Imputing columns...';
-         this.http.imputeColumnsReq(this.impute).subscribe((result: any) => {
-            this.isLoading = false;
-            if (result.outputpath) {
-               this.updateSourcePath(result.outputpath, result.outputFileName);
-            }
-            // this.loadProfile(this.source, this.profile);
-            this.showConfirmDialog({
-               title: 'Delete',
-               message: `Impution has been successfully completed.`,
-               cancelLable: '',
-               okLable: 'Ok'
-             }, () => {
-             }, () => {
-             });
-            this.getCleanedLogs();
-         }, (error) => {
-            this.isLoading = false;
-         });
-       }, () => {
-       });
+  imputeColumns(datatype) {
+    if (this.selectedSourcePath && this.selectedSourcePath.indexOf("cleaned_data") !== -1) {
+      this.showImputeDialog(datatype);
+    } else {
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        width: '400px',
+        data: {
+          title: 'Warning',
+          message: `Are You sure you want to Impute the Original Source ?`,
+          cancelLable: 'No',
+          okLable: 'Yes'
+        }
+      });
 
-   }
+     dialogRef.afterClosed().subscribe(data => {
+        if (data.action === 'ok') {
+          this.showImputeDialog(datatype);
+        } else {
+          return;
+        }
+      });
+    }
+      
+
+  }
+  
+  showImputeDialog(datatype) {
+    this.showConfirmDialog({
+      title: 'Impute columns',
+      message: `Are you sure want to impute the "${this.profile.column}" column with "${this.impute.value}" value?` ,
+      cancelLable: 'No',
+      okLable: 'Yes'
+    }, () => {
+      this.impute.column_data_type = datatype;
+      this.impute.sourcepath = this.titleSrc;
+      this.impute = {
+         ...this.impute,
+         sourceFileName: this.impute.sourceFileName,
+         sourceId: this.analysis.sourceId,
+         uploadId: this.uploadId,
+         processTime: this.processTime,
+      };
+      this.isLoading = true;
+      this.loaderMsg = 'Imputing columns...';
+      this.http.imputeColumnsReq(this.impute).subscribe((result: any) => {
+         this.isLoading = false;
+         if (result.outputpath) {
+            this.updateSourcePath(result.outputpath, result.outputFileName);
+         }
+         // this.loadProfile(this.source, this.profile);
+         this.showConfirmDialog({
+            title: 'Delete',
+            message: `Impution has been successfully completed.`,
+            cancelLable: '',
+            okLable: 'Ok'
+          }, () => {
+          }, () => {
+          });
+         this.getCleanedLogs();
+      }, (error) => {
+         this.isLoading = false;
+      });
+    }, () => {
+    });
+  }
 
    deleteColumnsRows() {
       const deleteObj = {...this.delete};
@@ -921,51 +953,196 @@ getProfileFromMonitoring() {
     }
 
   showSaveConfirm(source) {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '400px',
-      data: {
-        title: 'Save soruce',
-         message: `Are you sure want to save this updated source?` ,
-         cancelLable: 'No',
-        okLable: 'Yes',
-        showReason: true,
-        reasonLabel : 'File Name'
-      }
-    });
-   
-    dialogRef.afterClosed().subscribe(data => {
-      if (data.action === 'ok') {
-        const payload = {
-          sourceId : source.sourceId,
-          sourcePath : source.templateSourcePath,
-          uploadId : source.sourceId,
-          uploadTime : source.uploadDate,
-          outputPath : 'cleaned_data',
-          outputFileName : data.reason + '.csv'
-        };
-        this.http.saveCleanSource(payload).subscribe((result: any) => {
-          if (result.errorflag === 'True') {
-            alert(result.errorMsg);
-            return;
-          }
-          this.savedFiles = result.SourceDetailsList[0].CleanedFilesLog[result.SourceDetailsList[0].CleanedFilesLog.length - 1];
-          localStorage.setItem('dq-cleaned-data', JSON.stringify(result));
+
+    if (this.selectedSourcePath && this.selectedSourcePath.indexOf("cleaned_data") !== -1) {
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        width: '400px',
+        data: {
+          title: 'Save Sources',
+          message: `Are You sure you want to Save the same source ?`,
+          cancelLable: 'No',
+          okLable: 'Yes'
+        }
+      });
+  
+      dialogRef.afterClosed().subscribe(data => {
+        if (data.action === 'cancel') {
+          const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+            width: '400px',
+            data: {
+              title: 'Save soruce',
+               message: `Are you sure want to save this updated source?` ,
+               cancelLable: 'No',
+              okLable: 'Yes',
+              showReason: true,
+              reasonLabel : 'File Name'
+            }
+          });
          
-          if (this.savedFiles) {
-            this.updateSourcePath(this.savedFiles.outputPath, this.savedFiles.outputFileName);           
-          }
-          localStorage.setItem('dq-saved-data', JSON.stringify(this.savedFiles));
-          if (this.mode === 'dqm') {
-            this.router.navigate([`auth/data-quality-monitoring`], {queryParams: {from: 'cleaning'}});
-          } else {
-            this.ngOnInit();
-            //this.reloadCurrentRoute();
-            //window.location.reload();
-          }
-        });
-      }
+          dialogRef.afterClosed().subscribe(data => {
+            if (data.action === 'ok') {
+              const payload = {
+                sourceId : source.sourceId,
+                sourcePath : source.templateSourcePath,
+                uploadId : source.sourceId,
+                uploadTime : source.uploadDate,
+                outputPath : 'cleaned_data',
+                outputFileName : data.reason + '.csv'
+              };
+              this.http.saveCleanSource(payload).subscribe((result: any) => {
+                if (result.errorflag === 'True') {
+                  alert(result.errorMsg);
+                  return;
+                }
+                this.savedFiles = result.SourceDetailsList[0].CleanedFilesLog[result.SourceDetailsList[0].CleanedFilesLog.length - 1];
+                localStorage.setItem('dq-cleaned-data', JSON.stringify(result));
+               
+                if (this.savedFiles) {
+                  this.updateSourcePath(this.savedFiles.outputPath, this.savedFiles.outputFileName);           
+                }
+                localStorage.setItem('dq-saved-data', JSON.stringify(this.savedFiles));
+                if (this.mode === 'dqm') {
+                  this.router.navigate([`auth/data-quality-monitoring`], {queryParams: {from: 'cleaning'}});
+                } else {
+                  this.ngOnInit();
+                  //this.reloadCurrentRoute();
+                  //window.location.reload();
+                }
+              });
+            }
+           
+          });
+        } else {
+          const payload = {
+            sourceId : source.sourceId,
+            sourcePath : this.titleSrc,
+            uploadId : source.sourceId,
+            uploadTime : source.uploadDate,
+            outputPath: 'cleaned_data',
+            canOverwrite:"YES",
+            outputFileName : this.titleSrc.split('/')[1]
+          };
+          this.http.saveCleanSource(payload).subscribe((result: any) => {
+            //console.log(result);
+            if (result.errorflag === 'True') {
+              alert(result.errorMsg);
+              return;
+            }
+            this.savedFiles = result.SourceDetailsList[0].CleanedFilesLog[result.SourceDetailsList[0].CleanedFilesLog.length - 1];
+            localStorage.setItem('dq-cleaned-data', JSON.stringify(result));
+           
+            if (this.savedFiles) {
+              this.updateSourcePath(this.savedFiles.outputPath, this.savedFiles.outputFileName);           
+            }
+            localStorage.setItem('dq-saved-data', JSON.stringify(this.savedFiles));
+            if (this.mode === 'dqm') {
+              this.router.navigate([`auth/data-quality-monitoring`], {queryParams: {from: 'cleaning'}});
+            } else {
+              this.ngOnInit();
+              //this.reloadCurrentRoute();
+              //window.location.reload();
+            }
+          })
+        }
+      });
+    } else {
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        width: '400px',
+        data: {
+          title: 'Save soruce',
+           message: `Are you sure want to save this updated source?` ,
+           cancelLable: 'No',
+          okLable: 'Yes',
+          showReason: true,
+          reasonLabel : 'File Name'
+        }
+      });
      
-    });
+      dialogRef.afterClosed().subscribe(data => {
+        if (data.action === 'ok') {
+          const payload = {
+            sourceId : source.sourceId,
+            sourcePath : source.templateSourcePath,
+            uploadId : source.sourceId,
+            uploadTime : source.uploadDate,
+            outputPath : 'cleaned_data',
+            outputFileName : data.reason + '.csv'
+          };
+          this.http.saveCleanSource(payload).subscribe((result: any) => {
+            if (result.errorflag === 'True') {
+              alert(result.errorMsg);
+              return;
+            }
+            this.savedFiles = result.SourceDetailsList[0].CleanedFilesLog[result.SourceDetailsList[0].CleanedFilesLog.length - 1];
+            localStorage.setItem('dq-cleaned-data', JSON.stringify(result));
+           
+            if (this.savedFiles) {
+              this.updateSourcePath(this.savedFiles.outputPath, this.savedFiles.outputFileName);           
+            }
+            localStorage.setItem('dq-saved-data', JSON.stringify(this.savedFiles));
+            if (this.mode === 'dqm') {
+              this.router.navigate([`auth/data-quality-monitoring`], {queryParams: {from: 'cleaning'}});
+            } else {
+              this.ngOnInit();
+              //this.reloadCurrentRoute();
+              //window.location.reload();
+            }
+          });
+        }
+       
+      });
+    }
+
+    // if (this.selectedSourcePath && this.selectedSourcePath.indexOf("cleaned_data") !== -1) {
+    //   console.log("Cleaned Source")
+    // } else {
+    //   console.log("Origional Source")
+    // }
+    // const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+    //   width: '400px',
+    //   data: {
+    //     title: 'Save soruce',
+    //      message: `Are you sure want to save this updated source?` ,
+    //      cancelLable: 'No',
+    //     okLable: 'Yes',
+    //     showReason: true,
+    //     reasonLabel : 'File Name'
+    //   }
+    // });
+   
+    // dialogRef.afterClosed().subscribe(data => {
+    //   if (data.action === 'ok') {
+    //     const payload = {
+    //       sourceId : source.sourceId,
+    //       sourcePath : source.templateSourcePath,
+    //       uploadId : source.sourceId,
+    //       uploadTime : source.uploadDate,
+    //       outputPath : 'cleaned_data',
+    //       outputFileName : data.reason + '.csv'
+    //     };
+    //     this.http.saveCleanSource(payload).subscribe((result: any) => {
+    //       if (result.errorflag === 'True') {
+    //         alert(result.errorMsg);
+    //         return;
+    //       }
+    //       this.savedFiles = result.SourceDetailsList[0].CleanedFilesLog[result.SourceDetailsList[0].CleanedFilesLog.length - 1];
+    //       localStorage.setItem('dq-cleaned-data', JSON.stringify(result));
+         
+    //       if (this.savedFiles) {
+    //         this.updateSourcePath(this.savedFiles.outputPath, this.savedFiles.outputFileName);           
+    //       }
+    //       localStorage.setItem('dq-saved-data', JSON.stringify(this.savedFiles));
+    //       if (this.mode === 'dqm') {
+    //         this.router.navigate([`auth/data-quality-monitoring`], {queryParams: {from: 'cleaning'}});
+    //       } else {
+    //         this.ngOnInit();
+    //         //this.reloadCurrentRoute();
+    //         //window.location.reload();
+    //       }
+    //     });
+    //   }
+     
+    // });
       // this.showConfirmDialog({
       //    title: 'Save soruce',
       //    message: `Are you sure want to save this updated source?` ,
@@ -1184,7 +1361,7 @@ getProfileFromMonitoring() {
         this.searchDisabled = true;
       }
       this.isfindPreviewLoading = false;
-      if (this.collectionTable && (Object.keys(this.collectionTable).length) > 1) {
+      if (this.collectionTable && (Object.keys(this.collectionTable).length) >= 1) {
         this.findValue = true;
         this.showPerviewValueNull = false;
         this.isfindPreviewLoading = false;
