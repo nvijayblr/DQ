@@ -1047,10 +1047,7 @@
                    <td class="preview">
                      <div *ngIf="rule.rule !== 'Formula'">{{rule.value}}</div>
                      <div *ngIf="rule.rule === 'Formula'" class="formula-preview nob">
-                       <span *ngFor="let formula of rule.value">
-                         <span class="operator alcap1" *ngIf="formula.operator !== 'NULL'">{{formula.operator}}</span>
-                         <span class="cde alcap">{{formula.cde}}</span>
-                       </span>
+                       <span>{{commonService.getFormulaText(rule.value,rule.type)}}</span>
                      </div>
                    </td>
                    <td>{{rule.dimension}}</td>
