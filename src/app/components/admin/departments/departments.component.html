@@ -11,7 +11,10 @@
       <ng-container matColumnDef="Name">
         <th class="table-column-200" mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
         <td class="table-column-200" mat-cell *matCellDef="let depart">
-          <span>{{depart.Name}}</span>
+          <span [hidden]="depart.mode == service.mode.CREATE">{{depart.Name}}</span>
+          <mat-form-field appearance="standard" class="column-width-200 m-14" [hidden]="depart.mode != service.mode.CREATE">
+            <input formControlName="departName" matInput />
+          </mat-form-field>
         </td>
       </ng-container>
 

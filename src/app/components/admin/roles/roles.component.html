@@ -11,7 +11,10 @@
       <ng-container matColumnDef="roleName">
         <th class="table-column-200" mat-header-cell mat-sort-header *matHeaderCellDef>Name</th>
         <td class="table-column-200" mat-cell *matCellDef="let role">
-          <span>{{role.roleName}}</span>
+          <span [hidden]="role.mode == service.mode.CREATE">{{role.roleName}}</span>
+          <mat-form-field appearance="standard" class="column-width-200 m-14" [hidden]="role.mode != service.mode.CREATE">
+            <input formControlName="roleName" matInput />
+          </mat-form-field>
         </td>
       </ng-container>
 
