@@ -256,8 +256,19 @@ export class CreateSourceComponent implements OnInit {
     });
   }
 
-
-
+  deSelectRefSource() {
+    this.refDataType = '';
+    this.refColumn = ''
+    this.refColumnL = ''
+    this.refColumnG = ''
+    this.refPayload = '';
+    this.selectedColumnN = '';
+    this.selectedColumn = '';
+    localStorage.removeItem('refItemL');
+    localStorage.removeItem('refColumnL');
+    this.saveSource();
+  }
+  refPayload;
   saveSource() {
     let isRefFileErr = false;
     const analysis = this.analysisForm.value;
@@ -302,11 +313,11 @@ export class CreateSourceComponent implements OnInit {
 
 
     let sourceRefNameEqual = false;
-    let refPayload;
+    //let refPayload;
 
 
     if (this.refColumn) {
-      refPayload = [{
+      this.refPayload = [{
         referenceDataName: this.refColumn,
         referenceDataDescription: this.refColumn + 'Details',
         referenceFileName: this.refColumn + '.csv',
@@ -315,7 +326,7 @@ export class CreateSourceComponent implements OnInit {
       }];
       this.refDataType = "MongoDB_RefData";
     } else if (this.refColumnL) {
-      refPayload = [{
+      this.refPayload = [{
         referenceDataName: this.refColumnL,
         referenceDataDescription: this.refColumnL + 'Details',
         referenceFileName: this.refColumnL + '.csv',
@@ -324,7 +335,7 @@ export class CreateSourceComponent implements OnInit {
       }];
       this.refDataType = "MongoDB_RefData";
     } else if (this.refColumnG) {
-      refPayload = [{
+      this.refPayload = [{
         referenceDataName: this.refColumnG,
         referenceDataDescription: this.refColumnG + 'Details',
         referenceFileName: this.refColumnG + '.csv',
@@ -334,7 +345,7 @@ export class CreateSourceComponent implements OnInit {
       this.refDataType = "MongoDB_RefData";
     } else {
       this.refDataType = "User_LocalData"
-      refPayload = analysis.referenceData.map((ref, index) => {
+      this.refPayload = analysis.referenceData.map((ref, index) => {
         if (this.mode === 'create') {
           delete ref.referenceId;
         }
@@ -364,7 +375,7 @@ export class CreateSourceComponent implements OnInit {
         connectionDetails: {}
       },
       ref_data_type: this.refDataType ? this.refDataType : "",
-      reference: refPayload,
+      reference: this.refPayload,
       settings: this.sourceSettings
     };
 

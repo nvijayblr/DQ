@@ -500,6 +500,7 @@
                     <div class="dash-right">
                       <div class="spinner2" *ngIf="isLoadingDB || isLoadingCDB"></div>
                       <button *ngIf="showRefTable"  class="btnBlueGreenN addico"  (click)="saveSource()"><mat-icon>link</mat-icon> Select</button>
+                      <button *ngIf="showRefTable"  class="btnBlueGreenN addico"  (click)="deSelectRefSource()"><mat-icon>link</mat-icon> De Select</button>
                       <div class="previewView valign" *ngIf="showRefTable" style="clear: both;">
                         
                         <app-ag-grid
