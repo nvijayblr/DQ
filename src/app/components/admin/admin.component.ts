@@ -12,7 +12,7 @@ export class AdminComponent implements OnInit {
   constructor(private router: Router) {
     this.navLinks = [
       {
-        label: 'User Setting',
+        label: 'User Settings',
         icon: 'assignment_ind',
         children: [{
           label: 'Users',
@@ -24,7 +24,7 @@ export class AdminComponent implements OnInit {
           index: 1
         }]
       }, {
-        label: 'Setting',
+        label: 'Settings',
         icon: 'settings',
         children: [{
           label: 'Departments',

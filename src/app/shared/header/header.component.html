@@ -43,7 +43,7 @@
                <mat-icon *ngIf="!user.path">account_circle</mat-icon>
              </button>
              <mat-menu #menu="matMenu" xPosition="before">
-              <button class="nav-category-item" mat-menu-item routerLink="/auth/admin/frequency" *ngIf="user.rights.includes('USER_MANAGEMENT')">
+              <!-- <button class="nav-category-item" mat-menu-item routerLink="/auth/admin/frequency" *ngIf="user.rights.includes('USER_MANAGEMENT')">
                 <mat-icon matPrefix>settings</mat-icon>Manage Frequency
               </button>
               <button class="nav-category-item" mat-menu-item routerLink="/auth/admin/multi-source" *ngIf="user.rights.includes('USER_MANAGEMENT')">
@@ -63,7 +63,10 @@
               </button>
               <button class="nav-category-item" mat-menu-item routerLink="/auth/admin/users" *ngIf="user.rights.includes('USER_MANAGEMENT')">
                 <mat-icon matPrefix>settings</mat-icon>Users List
-              </button>
+              </button> -->
+              <button class="nav-category-item" mat-menu-item routerLink="/auth/admin/users" *ngIf="user.rights.includes('USER_MANAGEMENT')">
+                <mat-icon matPrefix>settings</mat-icon>Settings
+              </button> 
                <mat-divider></mat-divider>
                <button class="nav-category-item" mat-menu-item style="height: auto;">
                   <mat-icon>account_circle</mat-icon>
