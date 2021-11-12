@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { MessageService } from '../../../services/message.service';
 import { HttpService } from '../../../services/http-service.service';
 import { AuthGuardService } from 'src/app/services/auth-guard.service';
+import { AlertService } from '../../../shared/alert-dialog/alert-dialog.service';
 import { query } from '@angular/animations';
 import {PageEvent} from '@angular/material/paginator';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -112,6 +113,7 @@ export class AnalysisComponent implements OnInit {
       private http: HttpService,
       private messageService: MessageService,
       private auth: AuthGuardService,
+      private alertService : AlertService,
       private router: Router) {
    }
 
@@ -155,19 +157,19 @@ export class AnalysisComponent implements OnInit {
       const uploadsHistory = this.selectedAnalysis.UploadsHistory ? this.selectedAnalysis.UploadsHistory : [];
 
       if (!uploadsHistory.length) {
-         alert('Please upload the source to launch the analysis.');
+         this.alertService.showWarning('Please upload the source to launch the analysis.');
          this.gotoDashboard();
          return;
       }
 
       if (uploadsHistory.length && !uploadDate) {
-         alert('Please select the upload date.');
+         this.alertService.showWarning('Please select the upload date.');
          this.gotoDashboard();
          return;
       }
 
       if (uploadsHistory.length && uploadDate && !this.selectedAnalysis.highlightDates.includes(uploadDate)) {
-         alert('There is no source for selected date.');
+         this.alertService.showWarning('There is no source for selected date.');
          this.gotoDashboard();
          return;
       }

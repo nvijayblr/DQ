@@ -25,6 +25,7 @@ import { PreviewDialogComponent } from '../../../shared/preview-dialog/preview-d
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 import { ConditionalFormulaEditorComponent } from '../../../shared/conditional-formula-editor/conditional-formula-editor.component';
+import { AlertService } from '../../../shared/alert-dialog/alert-dialog.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -43,6 +44,7 @@ export class DashboardComponent implements OnInit {
     private auth: AuthGuardService,
     private scrollService: ScrollService,
     public commonService : CommonService,
+    private alertService : AlertService,
     private route: ActivatedRoute,
     private router: Router, private modalService: NgbModal) {
     const rights = this.auth.getUserRole().rights;
@@ -567,7 +569,7 @@ export class DashboardComponent implements OnInit {
   uploadSource(analysis, reason = '') {
     this.recentUploadDate = moment(analysis.uploadDate).format("YYYY-MM-DD[T]HH:mm:ss.000[Z]");
     if (!analysis.rules || (analysis.rules && !analysis.rules.length)) {
-      alert('Please create the ruleset to upload the source.');
+      this.alertService.showWarning('Please create the ruleset to upload the source.');
       return;
     }
 
@@ -579,16 +581,16 @@ export class DashboardComponent implements OnInit {
       isMultiSource = true;
     }
     if (isMultiSource && !analysis.multisource) {
-      alert('Please select the source name.');
+      this.alertService.showWarning('Please select the source name.');
       return;
     }
 
     if (!analysis.file && this.chooseOptions === 'upload' && this.fromOrginSource === '') {
-      alert('Please select the source file to upload.');
+      this.alertService.showWarning('Please select the source file to upload.');
       return;
     }
     if (this.chooseOptions === 'select' && this.selectedFileName === '') {
-      alert('Please Choose the source file Path.');
+      this.alertService.showWarning('Please Choose the source file Path.');
       return;
     }
     if (this.chooseOptions === 'select' && this.selectedFileName) {
@@ -602,7 +604,7 @@ export class DashboardComponent implements OnInit {
       this.cleanedSourcePath = ''
     }
     if (!analysis.uploadDate && this.fromOrginSource === '') {
-      alert('Please select the upload date.');
+      this.alertService.showWarning('Please select the upload date.');
       return;
     }
     const payload = {
@@ -653,7 +655,7 @@ export class DashboardComponent implements OnInit {
           localStorage.setItem('recent-upload', result.sourceId)
         }
         
-        alert('Source has been uploaded successfully.');
+        this.alertService.showAlert('Source has been uploaded successfully.');
         this.reloadCurrentRoute();
         //this.router.navigate([`auth/data-quality-monitoring`]);
       }
@@ -726,16 +728,16 @@ export class DashboardComponent implements OnInit {
     const uploadDate = this.selectedAnalysis.uploadDate ? moment(this.selectedAnalysis.uploadDate).format('MM-DD-YYYY') : '';
     const uploadsHistory = this.selectedAnalysis.UploadsHistory ? this.selectedAnalysis.UploadsHistory : [];
     if (!uploadsHistory.length) {
-      alert('Please upload the source to launch the analysis.');
+      this.alertService.showWarning('Please upload the source to launch the analysis.');
       return;
     }
     if (uploadsHistory.length && !uploadDate) {
-      alert('Please select the upload date.');
+      this.alertService.showWarning('Please select the upload date.');
       return;
     }
 
     if (uploadsHistory.length && uploadDate && !this.selectedAnalysis.highlightDates.includes(uploadDate)) {
-      alert('There is no source for selected date.');
+      this.alertService.showWarning('There is no source for selected date.');
       return;
     }
 
@@ -800,7 +802,7 @@ export class DashboardComponent implements OnInit {
 
   launchProfileView(sourceData): void {
     if (!sourceData.UploadsHistory.length || (sourceData.UploadsHistory.length && !sourceData.uploadDate)) {
-      alert('Please select the upload date.');
+      this.alertService.showWarning('Please select the upload date.');
       return;
     }
     localStorage.setItem('dq-source-data', JSON.stringify(sourceData));
@@ -812,7 +814,7 @@ export class DashboardComponent implements OnInit {
 
   launchDataCleaning(sourceData): void {
     if (!sourceData.UploadsHistory.length || (sourceData.UploadsHistory.length && !sourceData.uploadDate)) {
-      alert('Please select the upload date.');
+      this.alertService.showWarning('Please select the upload date.');
       return;
     }
     const selectedSource = sourceData.UploadsHistory.filter(history => history.uploadDate === sourceData.uploadDate);
@@ -1050,7 +1052,7 @@ export class DashboardComponent implements OnInit {
         this.cleanFileLog = dataFromDq.CleanedFilesLog;
         //console.log(this.cleanFileLog);
       }, (error) => {
-        alert(error.message);
+        this.alertService.showError(error.message);
       });
       // this.isCleanedSource = 'YES';
       // this.cleanedSourcePath='path'

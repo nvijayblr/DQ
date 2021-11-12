@@ -3,6 +3,7 @@ import { MatTableDataSource, MatSort } from '@angular/material';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpService } from '../../../services/http-service.service';
 import { AdminService } from '../admin.service';
+import { AlertService } from '../../../shared/alert-dialog/alert-dialog.service';
 
 @Component({
   selector: 'app-roles',
@@ -23,7 +24,8 @@ export class RolesComponent implements OnInit {
   constructor(
     private http: HttpService,
     private formBuilder: FormBuilder,
-    public service: AdminService
+    public service: AdminService,
+    private alertService : AlertService
   ) { };
 
   ngOnInit() {
@@ -60,10 +62,10 @@ export class RolesComponent implements OnInit {
       this.isLoading = false;
       this.editIndex = -1;
       this.getRolesList();
-      alert('Role detail saved successfully');
+      this.alertService.showAlert('Role detail saved successfully');
     }, (error) => {
       this.isLoading = false;
-      alert('Unable to save the role details');
+      this.alertService.showError('Unable to save the role details');
     });
   }
 

@@ -3,6 +3,7 @@ import { MatTableDataSource, MatSort } from '@angular/material';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpService } from '../../../services/http-service.service';
 import { AdminService } from '../admin.service';
+import { AlertService } from '../../../shared/alert-dialog/alert-dialog.service';
 
 @Component({
   selector: 'app-multi-source',
@@ -23,7 +24,8 @@ export class MultiSourceComponent implements OnInit {
   constructor(
     private http: HttpService,
     private formBuilder: FormBuilder,
-    public service: AdminService
+    public service: AdminService,
+    private alertService : AlertService
   ) { };
 
   ngOnInit() {
@@ -50,10 +52,10 @@ export class MultiSourceComponent implements OnInit {
       this.isLoading = false;
       this.editIndex = -1;
       this.getSourceList();
-      alert('Source details saved successfully');
+      this.alertService.showAlert('Source details saved successfully');
     }, (error) => {
       this.isLoading = false;
-      alert('Unable to save the source details');
+      this.alertService.showError('Unable to save the source details');
     });
   }
 

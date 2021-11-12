@@ -41,6 +41,7 @@ import { ConnectionTestComponent } from './connection-test/connection-test.compo
 import { CleanLogsComponent } from './clean-logs/clean-logs.component';
 import { DeactiveDialogComponent } from './deactive-dialog/deactive-dialog.component';
 import { FilterInputComponent } from './filter-input/filter-input.component';
+import { AlertDialogComponent } from './alert-dialog/alert-dialog.component';
 
 @NgModule({
    imports: [
@@ -89,6 +90,7 @@ import { FilterInputComponent } from './filter-input/filter-input.component';
     CleanLogsComponent,
     DeactiveDialogComponent,
     FilterInputComponent,
+    AlertDialogComponent,
   ],
   exports: [
     FormsModule,
@@ -126,6 +128,7 @@ import { FilterInputComponent } from './filter-input/filter-input.component';
     PreviewDialogComponent,
     PieChartComponent,
     FilterInputComponent,
+    AlertDialogComponent
   ],
   providers: [
      DatePipe,
@@ -142,7 +145,8 @@ import { FilterInputComponent } from './filter-input/filter-input.component';
     PieChartComponent,
     ConnectionTestComponent,
     CleanLogsComponent,
-    DeactiveDialogComponent
+    DeactiveDialogComponent,
+    AlertDialogComponent
   ]
 })
 export class SharedModule {}

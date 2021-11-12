@@ -13,6 +13,7 @@ import { CleanLogsComponent } from 'src/app/shared/clean-logs/clean-logs.compone
 import { PreviewDialogComponent } from '../../../shared/preview-dialog/preview-dialog.component';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
+import { AlertService } from '../../../shared/alert-dialog/alert-dialog.service';
 
 @Component({
   selector: 'app-data-cleaning',
@@ -24,6 +25,7 @@ export class DataCleaningComponent implements OnInit {
    constructor(
       private messageService: MessageService,
       private http: HttpService,
+      private alertService : AlertService,
       private dialog: MatDialog,
       private route: ActivatedRoute,
      private router: Router,
@@ -314,7 +316,7 @@ getProfileFromMonitoring() {
     formData.append('data', JSON.stringify(payload));
   this.http.saveSourceProfile(formData, this.mode === 'edit' ? 'put' : 'post').subscribe((result: any) => {
     if (result.errorMsg) {
-      alert(result.errorMsg)
+      this.alertService.showError(result.errorMsg)
     }
       if (result) {       
         this.http.getCleanSource().subscribe((result: any) => {          
@@ -991,7 +993,7 @@ getProfileFromMonitoring() {
               };
               this.http.saveCleanSource(payload).subscribe((result: any) => {
                 if (result.errorflag === 'True') {
-                  alert(result.errorMsg);
+                  this.alertService.showError(result.errorMsg);
                   return;
                 }
                 this.savedFiles = result.SourceDetailsList[0].CleanedFilesLog[result.SourceDetailsList[0].CleanedFilesLog.length - 1];
@@ -1025,7 +1027,7 @@ getProfileFromMonitoring() {
           this.http.saveCleanSource(payload).subscribe((result: any) => {
             //console.log(result);
             if (result.errorflag === 'True') {
-              alert(result.errorMsg);
+              this.alertService.showError(result.errorMsg);
               return;
             }
             this.savedFiles = result.SourceDetailsList[0].CleanedFilesLog[result.SourceDetailsList[0].CleanedFilesLog.length - 1];
@@ -1070,7 +1072,7 @@ getProfileFromMonitoring() {
           };
           this.http.saveCleanSource(payload).subscribe((result: any) => {
             if (result.errorflag === 'True') {
-              alert(result.errorMsg);
+              this.alertService.showError(result.errorMsg);
               return;
             }
             this.savedFiles = result.SourceDetailsList[0].CleanedFilesLog[result.SourceDetailsList[0].CleanedFilesLog.length - 1];
@@ -1370,7 +1372,7 @@ getProfileFromMonitoring() {
       }
     }, (error) => {
       this.findValue = false;
-      alert(error.message);
+      this.alertService.showError(error.message);
     });
   }
 
@@ -1420,7 +1422,7 @@ getProfileFromMonitoring() {
     }, (error) => {
       this.findValue = false;
       this.showSaveButton = false;
-      alert(error.message);
+      this.alertService.showError(error.message);
     });
   }
 
@@ -1485,7 +1487,7 @@ getProfileFromMonitoring() {
         };
         this.http.saveCleanSource(payload).subscribe((result: any) => {
           if (result.errorflag === 'True') {
-            alert(result.errorMsg);
+            this.alertService.showError(result.errorMsg);
             return;
           }
           this.savedFiles = result.SourceDetailsList[0].CleanedFilesLog[result.SourceDetailsList[0].CleanedFilesLog.length - 1];

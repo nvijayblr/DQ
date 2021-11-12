@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { HttpService } from '../../../services/http-service.service';
 import { AuthGuardService } from '../../../services/auth-guard.service';
 import { MessageService } from '../../../services/message.service';
+import { AlertService } from '../../../shared/alert-dialog/alert-dialog.service';
 import { appConfig } from '../../../app.config';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
 import { DeactiveDialogComponent } from '../../../shared/deactive-dialog/deactive-dialog.component';
@@ -28,6 +29,7 @@ export class CreateProfileDataComponent implements OnInit {
     private dialog: MatDialog,
     private route: ActivatedRoute,
     private http: HttpService,
+    private alertService : AlertService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private authGuardService: AuthGuardService,
@@ -218,7 +220,7 @@ export class CreateProfileDataComponent implements OnInit {
     const formData: any = new FormData();
     if (this.mode === 'create' && !this.sourceFile.name) {
       this.stepIndex = 0;
-      alert('Please upload the source file.');
+      this.alertService.showWarning('Please upload the source file.');
       return;
     }
 
@@ -234,7 +236,7 @@ export class CreateProfileDataComponent implements OnInit {
     analysis.referenceData.map((refernce, index) => {
       if (this.mode === 'create' && !this.refFiles[index]) {
         isRefFileErr = true;
-        alert(`Please upload the reference file #${index + 1}.`);
+        this.alertService.showWarning(`Please upload the reference file #${index + 1}.`);
         return;
       }
       if (this.refFiles[index]) {
@@ -278,7 +280,7 @@ export class CreateProfileDataComponent implements OnInit {
 
 
     if (sourceRefNameEqual) {
-      alert('The source file and reference file should not be same.');
+      this.alertService.showWarning('The source file and reference file should not be same.');
       return;
     }
 
@@ -291,7 +293,7 @@ export class CreateProfileDataComponent implements OnInit {
     this.http.saveSourceProfile(formData, this.mode === 'edit' ? 'put' : 'post').subscribe((result: any) => {
         this.isLoading = false;
         if (result.errorMsg) {
-          alert(result.errorMsg);
+          this.alertService.showError(result.errorMsg);
           return;
         }
         this.summary = result.SourceSettings;
@@ -346,7 +348,7 @@ export class CreateProfileDataComponent implements OnInit {
       this.isLoading = false;
       if (result.errorMsg) {
         // this.stepIndex = 0;
-        alert(result.errorMsg);
+        this.alertService.showError(result.errorMsg);
         return;
       }
       this.summary = result.SourceDetailsList[0];
@@ -457,7 +459,7 @@ export class CreateProfileDataComponent implements OnInit {
       return;
     }
     if (this.sourceNames.includes(sourceName) && this.mode === 'create') {
-      alert('Source name is already found. Please enter the different source name.');
+      this.alertService.showWarning('Source name is already found. Please enter the different source name.');
       return;
     }
     this.gotoStepper(1, 'CSV');
@@ -472,7 +474,7 @@ export class CreateProfileDataComponent implements OnInit {
 
   loadSourcePreview() {
     if (this.mode === 'create' && !this.sourceFile.name) {
-      alert('Please upload the source file.');
+      this.alertService.showWarning('Please upload the source file.');
       return;
     }
     this.isPreviewLoaded = false;
@@ -522,7 +524,7 @@ export class CreateProfileDataComponent implements OnInit {
 
   loadReferencePreview() {
     if (this.mode === 'create' && !this.sourceFile.name) {
-      alert('Please upload the source file.');
+      this.alertService.showWarning('Please upload the source file.');
       return;
     }
     this.isRefPreviewLoaded = false;

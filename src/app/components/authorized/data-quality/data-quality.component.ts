@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { FormBuilder, FormGroup, FormArray, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { Angular2Csv } from 'angular2-csv';
-
+import { AlertService } from '../../../shared/alert-dialog/alert-dialog.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 
@@ -19,7 +19,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 
 export class DataQualityComponent implements OnInit {
-  constructor(private http: HttpService, private fb: FormBuilder, private modalService: NgbModal,private router: Router, ) {
+  constructor(private http: HttpService, private alertService : AlertService ,private fb: FormBuilder, private modalService: NgbModal,private router: Router, ) {
 
   }
   @ViewChild('contentMsg', { static: false }) modalContent: TemplateRef<any>;
@@ -204,7 +204,7 @@ export class DataQualityComponent implements OnInit {
       this.showDivider = true;
 
     }, (error) => {
-      alert(error.message);
+      this.alertService.showError(error.message);
     });
   }
   
@@ -225,7 +225,7 @@ export class DataQualityComponent implements OnInit {
       this.isLoadingDB = false;
       this.showAllDetails = true;
     }, (error) => {
-      alert(error.message);
+      this.alertService.showError(error.message);
     });
   }
 
@@ -337,7 +337,7 @@ export class DataQualityComponent implements OnInit {
   
       }, (error) => {
         this.isLoadingCO = false;
-        alert(error.message);
+        this.alertService.showError(error.message);
       });
     }
     
@@ -373,7 +373,7 @@ export class DataQualityComponent implements OnInit {
 
     }, (error) => {
       this.isLoadingCO = false;
-      alert(error.message);
+      this.alertService.showError(error.message);
     });
   }
 
@@ -402,7 +402,7 @@ export class DataQualityComponent implements OnInit {
         this.isPreviewLoaded = false;
       this.isPreviewLoading = false;
       
-      alert(error.message);
+      this.alertService.showError(error.message);
       });
 
   }

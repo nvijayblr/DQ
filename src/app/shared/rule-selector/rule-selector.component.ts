@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
+import { AlertService } from '../alert-dialog/alert-dialog.service';
 
 @Component({
   selector: 'app-rule-selector',
@@ -20,7 +21,7 @@ export class RuleSelectorComponent implements OnInit {
   ruleItem = '';
   selectedRule: any = [];
   showAdd = false;
-  constructor() { }
+  constructor(private alertService : AlertService) { }
 
   ngOnInit() {
     if (this.initValue && !this.multiple) {
@@ -87,7 +88,7 @@ export class RuleSelectorComponent implements OnInit {
   addRuleItem(selectedRule) {
     const isItemFound = this.ruleItems.filter(item => item.value === this.ruleItem);
     if (isItemFound.length) {
-      alert('The value already found in the list.');
+      this.alertService.showWarning('The value already found in the list.');
       return;
     }
 
