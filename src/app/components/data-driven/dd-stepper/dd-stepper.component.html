@@ -1,0 +1,20 @@
+<section class="container" fxLayout="column">
+  <div class="header">
+    <ol>
+      <ng-container *ngFor="let step of steps; let i = index;">
+        <li (click)="selectedIndex = i" [ngClass]="(selectedIndex === i) ? activeClass : ''" [class.completed]="step.completed" [class.editable]="step.editable">
+          <a>
+            <ng-container *ngIf="step.stepLabel; else showLabelText" [ngTemplateOutlet]="step.stepLabel.template">
+            </ng-container>
+            <ng-template #showLabelText>
+              {{ step.label }}
+            </ng-template>
+          </a>
+        </li>
+      </ng-container>
+    </ol>
+  </div>
+  <div class="content">
+    <ng-container [ngTemplateOutlet]="selected.content"></ng-container>
+  </div>
+</section>

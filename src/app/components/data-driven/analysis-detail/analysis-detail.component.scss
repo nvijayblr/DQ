@@ -1,0 +1,223 @@
+.content {
+    background-clip: border-box;
+    border: 0 solid #f7f7f7;
+    border-radius: 0.25rem;
+    box-shadow: 0 0.75rem 6rem rgb(56 65 74 / 3%);
+    background-color: #fff;
+    width: calc(100vw - 270px);
+}
+
+.profileDetail .overflow { 
+    overflow: auto;
+    height: calc(100% - 10px);
+    height: 550px;
+    
+}
+
+.detailPanel {   
+    position: relative;
+    background-color: #f0f2f4;
+}
+.expandPanel {
+    margin: 4px;
+}
+.profileTable,
+.profileTable  table,
+.detailPanel table {
+    width: 100%;
+    background-color: transparent;
+
+    tr td {
+        font-size: 13px;
+    }  
+}
+
+.profileTable.collapsed {
+    width: 20%; 
+   
+    tr td.active {
+        background-color: rgb(63 135 222 / 50%);
+        font-weight: 500;
+        color: white;
+    }
+
+  
+} 
+.profileTable {
+    table {
+        border-collapse: separate;
+        border-spacing: 0 4px;       
+    }
+
+    table tr {
+        height: 40px;
+        cursor: pointer;
+    }
+
+    tr .center {
+        text-align: center;
+    }
+
+    table tr th {       
+        color:#49739e;
+        font-size: 13px;
+        background-color: #fff;
+    }
+
+    tr td:first-child , tr th:first-child {
+        border-top-left-radius: 6px;
+        border-bottom-left-radius: 6px;
+    }
+
+    tr td:last-child , tr th:last-child {
+        border-top-right-radius: 6px;
+        border-bottom-right-radius: 6px;
+    }
+
+
+}
+
+.circleIcon {
+    padding: 6px;   
+    border-radius: 50%;
+    font-size: 10px;   
+    font-weight: 500;
+    margin-right: 4px;
+}
+  .redIcon {
+    background-color: #ffd7d3;
+    color: #d22019;
+    box-shadow: 1px 1px #eee3dc;
+  }
+  .greenIcon {
+    background-color: #d5f6ba;
+    color: #1c944f;
+    box-shadow: 1px 1px #e3ecdb;
+  }
+  .blueIcon {
+    background-color: #dee9fa;
+    color: #585dc1;
+    box-shadow: 1px 1px #dee7ee;
+  }
+  .brownIcon {
+    background-color: #ffe5c1;
+    color: #bd6100;
+    box-shadow: 1px 1px #eed9bc;
+  }
+.detailPanel    {
+    .innerTable{
+        max-height: 200px;
+        overflow: auto;
+    }
+    .innerTable.analysis {
+        max-height: 96px;
+    }
+    table tr {
+        height: 24px;
+    }  
+   tr td.mat-cell {
+    border-bottom-width: 0px;
+  }
+  .valueText {
+    font-weight: 500;
+    color: #49739e;
+} 
+.paddingLeft {
+    padding-left: 4px;
+}
+}
+
+.detailPanel .closeDetail {
+   position:absolute;
+   top:0px;
+   right: 0px;
+   color: #49739e;
+   z-index: 3;
+}
+
+.minMaxbar {
+    display: flex;
+    justify-content: space-between;
+    list-style: none;
+    padding: 0;
+    margin: 1rem 1rem;
+    li {
+        flex: 2;
+        position: relative;
+        padding: 0 0 8px 0;
+        font-size: .875rem;
+        line-height: 1.5;
+        white-space: nowrap;
+        overflow: visible;
+        min-width: 0;
+        text-align: center;
+        border-bottom: 2px solid #ddd;
+      }
+
+    li:first-child,
+    li:last-child {
+        flex: 1;
+    }
+    li:last-child {
+        text-align: right;
+    }
+    li:first-child {
+        text-align: start;
+    }
+    li:before {
+        content: "";
+        display: block;
+        width: 8px;
+        height: 8px;
+        background-color: #49739e;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        position: absolute;
+        left: calc(50% - 6px);
+        bottom: -5px;
+        z-index: 3;
+        transition: all .2s ease-in-out;
+        } 
+        li:first-child:before {
+            left: 0;
+          }
+           li:last-child:before {
+            right: 0;
+            left: auto;
+          }
+          li span:last-child {
+            color: #49739e;
+            font-weight: 500;
+            padding-left: 2px;
+          }
+          
+}
+
+.dashboardCard {
+    padding: 6px;
+    border-bottom: 0;
+    margin: 5px;
+ }
+
+ .dashboardCard .title span {
+    font-size: 13px;
+    font-weight: 400;
+    color: #00000090;
+ }
+
+ 
+:host ::ng-deep .highcharts-background{fill : #fff}
+:host ::ng-deep .highcharts-title{display:none}
+:host ::ng-deep .highcharts-label text { fill: #49739e !important;}
+::ng-deep .highcharts-exporting-group{
+    display:none!important;
+ }
+#containerPie {
+  height:100%;
+  width:100%;
+  //position:absolute; 
+}
+:host ::ng-deep  .mat-tab-label-active {
+    background-color: #fff !important;
+}
+

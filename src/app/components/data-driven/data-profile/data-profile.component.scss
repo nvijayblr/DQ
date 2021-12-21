@@ -1,0 +1,43 @@
+.dashboard {
+    position: relative;
+    left:240px;
+    padding: 10px;
+
+    .topStatus {
+        margin: 8px 0 10px;
+       
+        .bottomText {       
+             font-size: 12px;
+             opacity: 0.7;
+        }
+        .card {
+            width: 170px;
+            margin-right: 8px;
+            padding: 6px 15px 6px 6px;
+            color: #666;
+            text-align: end;
+            background-clip: border-box;
+            border: 0 solid #f7f7f7;
+            border-radius: 0.25rem;
+            box-shadow: 0 0.75rem 6rem rgb(56 65 74 / 3%);
+        }
+        .topText {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #49739e;
+        }  
+        
+     }
+}
+
+ .breadCrumb {
+    color: #49739e;
+    font-size: 1rem;
+    font-weight: 600;
+    background-color: #fff;
+    padding: 4px 10px;
+}
+
+.correlationDetail .filter {
+    margin-right: 15px;
+}

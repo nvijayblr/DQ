@@ -1,0 +1,193 @@
+<div class="dashboard" fxFlex fxLayout="column">
+    <div class="breadCrumb">
+        <span> Data Quality Monitoring </span>
+        <span *ngIf="isSourceLoaded()"> >>
+            {{selectedSource.source.sourceCategory}} >>
+            {{selectedSource.source.sourceDataName}}</span>
+    </div>
+    <div class="detailStepper">
+        <app-dd-stepper #ddStepper linear>
+            <cdk-step [completed]="stepperDetail[0].completed">
+                <ng-template cdkStepLabel>
+                    <div fxLayoutAlign="center center" fxLayoutGap="4px">
+                        <mat-icon *ngIf="showCompleteIcon(0)">check_circle</mat-icon>
+                        <mat-icon *ngIf="showEditIcon(0)">edit</mat-icon>
+                        <span>{{stepperDetail[0].label}}</span>
+                    </div>
+                </ng-template>
+                <div class="container">
+                    <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="20px">
+                        <span class="titleText" *ngIf="isSourceLoaded()">{{selectedSource.source.sourceDataName}}</span>
+                        <button mat-flat-button color="primary" *ngIf="isSourceLoaded()" (click)="createOrEditSource(true)">Edit Source</button>
+                        <button mat-flat-button color="primary" *ngIf="isSourceLoaded()">View Source</button>
+                        <button mat-flat-button color="primary" (click)="createOrEditSource(false)" >Create Source</button>
+                    </div>
+                </div>
+            </cdk-step>
+            <cdk-step [completed]="stepperDetail[1].completed">
+                <ng-template cdkStepLabel>
+                    <div fxLayoutAlign="center center" fxLayoutGap="4px">
+                        <mat-icon *ngIf="showCompleteIcon(1)">check_circle</mat-icon>
+                        <mat-icon *ngIf="showEditIcon(1)">edit</mat-icon>
+                        <span>{{stepperDetail[1].label}}</span>
+                    </div>
+                </ng-template>
+                <div class="container">
+                    <div fxLayout="column" fxLayoutGap="10px">
+                        <div *ngFor="let rule of selectedSource.rules">
+                            <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="20px">
+                                <span fxFlex="30" class="titleText" *ngIf="isSourceLoaded()">{{rule.rulesetName}}</span>
+                                <button mat-flat-button color="primary">Edit Ruleset</button>
+                                <button mat-flat-button color="primary">View Ruleset</button>
+                            </div>
+                        </div>
+                        <div fxLayout="row" fxLayoutGap="20px">
+                            <span fxFlex="30" *ngIf="selectedSource.rules?.length"></span>
+                            <button mat-flat-button color="primary">Create Ruleset</button>
+                        </div>
+                    </div>
+
+                </div>
+            </cdk-step>
+            <cdk-step [completed]="stepperDetail[2].completed">
+                <ng-template cdkStepLabel>
+                    <div fxLayoutAlign="center center" fxLayoutGap="4px">
+                        <mat-icon *ngIf="showCompleteIcon(2)">check_circle</mat-icon>
+                        <mat-icon *ngIf="showEditIcon(2)">edit</mat-icon>
+                        <span>{{stepperDetail[2].label}}</span>
+                    </div>
+                </ng-template>
+                <div class="container">
+                    <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="20px">
+                        <mat-form-field appearance="standard">
+                            <mat-label>Multi Source List</mat-label>
+                            <mat-select [(ngModel)]="selectedSource.multisource"
+                                [disabled]="selectedSource.settings?.multiSourceOptions && selectedSource.settings?.multiSourceOptions.length<=1">
+                                <mat-option *ngFor="let multisource of selectedSource.settings?.multiSourceOptions"
+                                    [value]="multisource">
+                                    {{multisource}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="standard">
+                            <mat-label>Select Option</mat-label>
+                            <mat-select [(ngModel)]="uploadFileMethod" (selectionChange)="onUploadFileChange()">
+                                <mat-option [value]="true">Upload File</mat-option>
+                                <mat-option [value]="false">Select File</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <div class="uploadFile" *ngIf="uploadFileMethod && rights.includes('ADD_SOURCEFILE')">
+                            <app-image-cropper [imageType]="'Source'" [fileTypes]="'.csv, .xls, .xlsx'" [imagePath]="''"
+                                (fileSelected)="onSourceCSVSelected($event, selectedSource)">
+                            </app-image-cropper>
+                        </div>
+                        <div *ngIf="!uploadFileMethod">
+                            <mat-form-field appearance="standard">
+                                <mat-label>Select a FileName</mat-label>
+                                <mat-select [(value)]="selectedFileName">
+                                    <mat-option *ngFor="let cleanLog of cleanFileLog" value="{{cleanLog.outputPath}}">
+                                        {{cleanLog.outputFileName}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <mat-form-field appearance="standard">
+                            <mat-label>Date</mat-label>
+                            <input matInput [matDatepicker]="frompickerVA" [(ngModel)]="selectedSource.uploadDate"
+                                (click)="frompickerVA.open()" autocomplete="off" [min]="minDate">
+                            <mat-datepicker-toggle matSuffix [for]="frompickerVA"></mat-datepicker-toggle>
+                            <mat-datepicker #frompickerVA (opened)="onOpenDatePicker(selectedSource)"
+                                [dateClass]="dateClass">
+                            </mat-datepicker>
+                        </mat-form-field>
+                        <mat-form-field appearance="standard">
+                            <mat-label>Ruleset Name</mat-label>
+                            <mat-select [(ngModel)]="selectedSource.rulesetId" (ngModelChange)="ruleSetType($event)">
+                                <mat-option *ngFor="let rule of selectedSource.rules;" [value]="rule.rulesetId">
+                                    {{rule.rulesetName}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <div *ngIf="rights.includes('ADD_SOURCEFILE')">
+                            <button mat-flat-button color="primary" (click)="uploadSource(data, selectedMethod)">
+                                Upload <mat-icon>cloud_upload</mat-icon></button>
+                        </div>
+                    </div>
+                </div>
+            </cdk-step>
+            <cdk-step [completed]="stepperDetail[3].completed">
+                <ng-template cdkStepLabel>
+                    <div fxLayoutAlign="center center" fxLayoutGap="4px">
+                        <mat-icon *ngIf="showCompleteIcon(3)">check_circle</mat-icon>
+                        <mat-icon *ngIf="showEditIcon(3)">edit</mat-icon>
+                        <span>{{stepperDetail[3].label}}</span>
+                    </div>
+                </ng-template>
+                <div class="container">
+                    <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="20px">
+                        <mat-form-field appearance="standard">
+                            <mat-label>Date</mat-label>
+                            <input matInput [matDatepicker]="frompicker" [(ngModel)]="selectedSource.uploadDate"
+                                (click)="frompicker.open()" autocomplete="off">
+                            <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
+                            <mat-datepicker #frompicker (opened)="onOpenDatePicker(selectedSource)"
+                                [dateClass]="dateClass">
+                            </mat-datepicker>
+                        </mat-form-field>
+                        <mat-form-field appearance="standard">
+                            <mat-label>Ruleset Name</mat-label>
+                            <mat-select [(ngModel)]="selectedSource.rulesetId">
+                                <mat-option *ngFor="let rule of selectedSource.rules;" [value]="rule.rulesetId">
+                                    {{rule.rulesetName}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <button mat-flat-button color="primary" *ngIf="rights.includes('VIEW_RESULTS')" (click)="scrollToId('elId')"
+                            matTooltip="Profile">
+                            <mat-icon>link</mat-icon>
+                            Profile
+                        </button>
+                        <button mat-flat-button color="primary" *ngIf="rights.includes('VIEW_RESULTS')" [disabled]="!selectedSource.rulesetId"
+                            (click)="launchAnalysis(data)" matTooltip="View Analysis">
+                            <mat-icon>launch</mat-icon>
+                            View Analysis
+                        </button>
+                    </div>
+                </div>
+            </cdk-step>
+            <cdk-step [completed]="stepperDetail[4].completed">
+                <ng-template cdkStepLabel>
+                    <div fxLayoutAlign="center center" fxLayoutGap="4px">
+                        <mat-icon *ngIf="showCompleteIcon(4)">check_circle</mat-icon>
+                        <mat-icon *ngIf="showEditIcon(4)">edit</mat-icon>
+                        <span>{{stepperDetail[4].label}}</span>
+                    </div>
+                </ng-template>
+                <div class="container">
+                    <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="20px">
+                        <mat-form-field appearance="standard">
+                            <mat-label>Date</mat-label>
+                            <input matInput [matDatepicker]="frompickerDC" [(ngModel)]="selectedSource.uploadDate"
+                                (click)="frompickerDC.open()" autocomplete="off">
+                            <mat-datepicker-toggle matSuffix [for]="frompickerDC"></mat-datepicker-toggle>
+                            <mat-datepicker #frompickerDC (opened)="onOpenDatePicker(selectedSource)"
+                                [dateClass]="dateClass">
+                            </mat-datepicker>
+                        </mat-form-field>
+                        <mat-form-field appearance="standard">
+                            <mat-label>Ruleset Name</mat-label>
+                            <mat-select [(ngModel)]="selectedSource.rulesetId">
+                                <mat-option *ngFor="let rule of selectedSource.rules;" [value]="rule.rulesetId">
+                                    {{rule.rulesetName}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <button mat-flat-button color="primary" (click)="launchDataCleaning(data)" matTooltip="Data Cleaning">
+                            Data Cleaning
+                        </button>
+                    </div>
+                </div>
+            </cdk-step>
+        </app-dd-stepper>
+    </div>
+    <app-analysis-detail [profileData]="profile" [source]="source"></app-analysis-detail>
+</div>

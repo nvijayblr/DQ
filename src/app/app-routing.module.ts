@@ -7,18 +7,23 @@ import { SignupComponent } from './components/login-signup/signup/signup.compone
 
 const routes: Routes = [
   // { path: '', component: LandingComponent },
-   { path: '', component: LoginComponent },
+  { path: '', component: LoginComponent },
 
   // { path: 'signup', component: SignupComponent },
+  {
+    path: 'data-driven',
+    loadChildren: () => import('./components/data-driven/data-driven.module').then(m => m.DataDrivenModule),
+    canActivate: [AuthGaurd]
+  },
   {
     path: 'auth',
     loadChildren: () => import('./components/authorized/authorized.module').then(m => m.AuthorizedModule),
     canActivate: [AuthGaurd]
-   }, {
+  }, {
     path: '', redirectTo: '', pathMatch: 'full'
   }, {
     path: '**', redirectTo: '', pathMatch: 'full'
-  },
+  }
 ];
 
 @NgModule({

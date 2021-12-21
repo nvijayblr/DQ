@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
 import { GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
 import { SharedModule } from './shared/shared.module';
@@ -32,7 +33,8 @@ import { SignupComponent } from './components/login-signup/signup/signup.compone
     AppRoutingModule,
     SharedModule,
     SocialLoginModule,
-    NgbModule
+    NgbModule,
+    FontAwesomeModule
   ],
   providers: [
     NgbModule,

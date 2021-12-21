@@ -1,0 +1,69 @@
+.mat-flat-button.mat-primary {
+  background-color: #5ec3dd;
+}
+
+.detailStepper .header ol li {
+  width: 250px;
+}
+.SDcontainer {
+  .mat-form-field,
+  app-rule-selector {
+    width: 250px;
+  }
+  .mat-form-field {
+    margin-bottom: 10px;
+  }
+  .sourceLabel {
+    color: rgba(0, 0, 0, 0.6);
+    padding: 0 10px 5px 0;
+  }
+  h6 {
+    color: #49739e;
+    padding-bottom: 0.5rem;
+  }
+}
+.SCContainer {
+  margin: 10px;
+}
+
+.flipBox {
+  width: 140px;
+  height: 60px;
+  line-height: 60px;
+  cursor: pointer;
+
+  .innerBox {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+  }
+
+  &:hover .innerBox {
+    transform: rotateY(180deg);
+  }
+
+  .front,
+  .back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  .front {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  &.selected  .front{
+    background-color: #5cbc5c;
+  }
+
+  .back {
+    background-color: #5ec3dd;
+    color: white;
+    transform: rotateY(180deg);
+  }
+}

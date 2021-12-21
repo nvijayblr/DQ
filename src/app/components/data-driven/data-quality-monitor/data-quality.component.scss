@@ -1,0 +1,52 @@
+.dashboard {
+  position: relative;
+  left: 240px;
+  padding: 10px;
+}
+.breadCrumb {
+  color: #49739e;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background-color: #fff;
+  padding: 4px 10px;
+}
+
+.detailStepper {
+  margin: 10px 0;
+  background-color: #fff;
+
+  .mat-flat-button {
+    line-height: 28px;
+  }
+
+  .mat-flat-button.mat-primary {
+    background-color: #5ec3dd;
+  }
+
+  .mat-icon {
+    transform: scale(0.75);
+  }
+}
+.sourceDetail {
+  padding: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 6px;
+}
+.sourceDetail span {
+  color: #49739e;
+  font-weight: 500;
+  font-size: 0.85rem;
+}
+
+.titleText {
+  color: #49739d;
+  font-size: 0.8rem;
+}
+.container .uploadFile {
+  width: 195px;
+}
+
+::ng-deep .image-crop-wrapper .file-form-group .gv-file-input {
+  width: auto!important;
+  min-width: auto!important;
+}

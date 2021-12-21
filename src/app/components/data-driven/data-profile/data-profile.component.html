@@ -1,0 +1,14 @@
+<div class="dashboard" fxFlex fxLayout="column">
+    <div class="breadCrumb">
+        <span> Data Profiling</span>
+        <span *ngIf="source.sourceDataName"> >> {{source.sourceCategory}} >>
+            {{source.sourceDataName}}</span>
+    </div>
+    <div class="topStatus padding" fxLayout="row">
+        <div class="card" *ngFor="let property of profileSummary | keyvalue" fxLayout="column">
+            <span class="topText">{{property.value.count}}</span>
+            <span class="bottomText">{{property.key}}</span>
+        </div>
+    </div>
+    <app-analysis-detail [profileData]="profile" [source]="source"></app-analysis-detail>
+</div>

@@ -137,10 +137,10 @@
   }
   
   input[type=file]::file-selector-button {
-    border: 2px solid #7d6ecc;
+    border: 2px solid #5ec3dd;
     padding: .2em .9em;
     border-radius: .2em;
-    background-color: #7d6ecc;
+    background-color: #5ec3dd;
     transition: 1s;
     padding-left: 38px;
     padding-top: 10px;
@@ -162,5 +162,9 @@
     textarea:focus,
     button:focus {
        outline: none;
+    }
+
+    .file-form-group {
+      line-height: 16px;
     }
     

@@ -1,0 +1,104 @@
+@font-face {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    src: url(../../../assets/fonts/NunitoSans/NunitoSans-Regular.ttf) format('truetype');
+    unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+.layer > * {
+    font-family:"Nunito", Arial, Helvetica, sans-serif;;
+}
+.layer {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: #f5f6f8;
+    z-index: 1;
+   
+}
+.topBar {
+    height: 50px;
+    width: 240px;
+    border-bottom: 1px solid #fff;
+    background-color: #49739e;
+    box-shadow: 0 0 35px 0 rgb(154 161 171 / 15%);
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 1001;
+
+    .logo {
+        font-size: 24px;
+        line-height: 50px;
+        padding-left: 20px;
+        color: #fff;
+        width: 250px;
+    }
+    .AI {
+        padding-right: 5px;
+        font-weight: 600;
+    }
+    button {
+        vertical-align: 3px;
+    }
+}
+
+.sideBar {
+    width: 240px;
+    background: #49739e;
+    bottom: 0;
+    padding: 5px;
+    position: fixed;
+    transition: all .1s ease-out;
+    top: 50px;
+    box-shadow: 0 0 35px 0 rgb(154 161 171 / 15%);
+}
+
+.sideBar {
+    .mat-tree {       
+         background-color: transparent;
+         margin: 10px 0;
+     }
+     .menuTree .invisible {
+         display: none;
+     }
+     .menuTree .rightAlign {
+         margin-left: auto;
+     }
+     .mat-tree-node {       
+         padding: 5px;
+         color: #fff;
+         min-height: 42px;
+         cursor: pointer;
+     }
+     .mat-tree-node span {
+         padding-left: 4px;
+     }
+     .mat-tree-node .mat-icon {
+         line-height: 24px;
+         font-size: 16px;
+     }
+     .mat-nested-tree-node .childGroup {
+         padding-left: 15px;
+     }
+     .mat-tree-node.sourceNode {
+        border-radius: 4px;
+     }
+     .mat-tree-node.sourceNode span {
+        width: 70%;
+     }
+     .mat-tree-node.sourceNode:not(.selected) span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+     }
+     .mat-tree-node.sourceNode:hover:not(.selected) {
+        box-shadow: 1px 1px 0px 0px #ccc;
+     }
+     .mat-tree-node.selected {
+        background-color: #fff;
+        color: #49739e;
+     }    
+ }

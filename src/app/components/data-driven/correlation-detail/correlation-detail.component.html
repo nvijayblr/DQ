@@ -1,0 +1,26 @@
+<div class="correlationDetail" fxLayout="column">
+    <div class="filter" fxLayout="row"  fxLayoutAlign="end center" fxLayoutGap="40px">
+        <mat-form-field appearance="standard">
+            <mat-label class="lbl">Data Type</mat-label>
+            <mat-select [(ngModel)]="datatype" (ngModelChange)="changeType($event)">
+              <mat-option value="mixed">Mixed</mat-option>
+              <mat-option value="numeric">Numeric</mat-option>
+              <mat-option value="categorical">Categorical</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="standard">
+            <mat-label class="lbl">Method</mat-label>
+            <mat-select [(ngModel)]="method" (ngModelChange)="loadCorrelation(datatype, $event)">
+              <mat-option *ngIf="datatype === 'numeric'" value="pearson">Pearson</mat-option>
+              <mat-option *ngIf="datatype === 'numeric'" value="kendall">Kendall</mat-option>
+              <mat-option *ngIf="datatype === 'numeric'" value="spearman">Spearman</mat-option>
+              <mat-option *ngIf="datatype === 'categorical'" value="theils_u">Theils_U</mat-option>
+              <mat-option *ngIf="datatype === 'categorical'" value="cramers_v">Cramers_V</mat-option>
+              <mat-option *ngIf="datatype === 'mixed'" value="">Correlation Ratio</mat-option>
+            </mat-select>
+          </mat-form-field>
+    </div>
+    <div class="correletionChart">
+        <app-heat-map [columns]="coMatrix.columns" *ngIf="coMatrix.matrix" [data]="coMatrix.matrix" [isOverview]="true"></app-heat-map>
+    </div>
+</div>
