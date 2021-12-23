@@ -8,8 +8,7 @@
                 </td>
             </ng-container>
             <ng-container matColumnDef="noData">
-                <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length"
-                    class="center">
+                <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length" class="center">
                     No Records Found
                 </td>
             </ng-container>
@@ -20,4 +19,5 @@
                 [hidden]="previewDataSource && previewDataSource.data.length > 0"></tr>
         </table>
     </div>
+    <mat-paginator [pageSizeOptions]="[20, 40, 60, 80,100]" aria-label="Select page of Records"></mat-paginator>
 </div>

@@ -1,13 +1,16 @@
-import { Component, Input } from '@angular/core';
+import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
 import { HttpService } from '../../../services/http-service.service';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
     selector: 'app-preview-detail1',
-    templateUrl: './preview-detail.component.html'
+    templateUrl: './preview-detail.component.html',
+    styleUrls: ['./preview-detail.component.scss']
 })
 export class PreviewDetailComponent {
     @Input() source: any;
+    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
     displayedColumns: string[] = [];
     previewDataSource: MatTableDataSource<any>;
@@ -38,6 +41,7 @@ export class PreviewDetailComponent {
             });
         });
         this.previewDataSource = new MatTableDataSource(rowData);
+        this.previewDataSource.paginator = this.paginator;
 
         if (rowData.length) {
             Object.keys(rowData[0]).map((key, index) => {

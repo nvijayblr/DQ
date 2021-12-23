@@ -1,5 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { HttpService } from '../../../services/http-service.service';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
@@ -8,12 +7,15 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./analysis-detail.component.scss']
 })
 export class AnalysisDetailComponent implements OnInit {
+  @ViewChild('previewDetail', { static: false }) preview: any;
+  @ViewChild('correlationDetail', { static: false }) correlation: any;
 
   profileDetails = [];
   chartData: any = [];
   showDetail = false;
   profile: any = {};
   selectedSource: any = {};
+  selectedTab: any = 0;
 
 
   attributeSummary = [{
@@ -43,6 +45,7 @@ export class AnalysisDetailComponent implements OnInit {
 
   @Input() set source(value: string) {
     this.selectedSource = value;
+    this.onSelectTab(this.selectedTab);
   }
 
   ngOnInit() {
@@ -75,12 +78,13 @@ export class AnalysisDetailComponent implements OnInit {
     this.profileDetails = [];
   }
 
-  onSelectTab(selected, preview, correlation) {
-    if (selected.index == '1') {
-      preview.loadSourcePreview();
-    } else if (selected.index == '2') {
-      correlation.loadCorrelation()
+  onSelectTab(index) {
+    if (index == '1') {
+      this.preview.loadSourcePreview();
+    } else if (index == '2') {
+      this.correlation.loadCorrelation()
     }
+    this.selectedTab = index;
   }
 
 }
