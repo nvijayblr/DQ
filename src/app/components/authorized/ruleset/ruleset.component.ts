@@ -20,6 +20,7 @@ import * as moment from 'moment';
 import { DeactiveDialogComponent } from 'src/app/shared/deactive-dialog/deactive-dialog.component';
 import { Observable } from 'rxjs';
 import * as RuleListConstant from './ruleset.constants';
+import { AlertService } from '../../../shared/alert-dialog/alert-dialog.service';
 /**
  * @title Basic expansion panel
  */
@@ -36,6 +37,7 @@ export class RulesetComponent implements OnInit {
     private dialog: MatDialog,
     private route: ActivatedRoute,
     private http: HttpService,
+    private alertService : AlertService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private authGuardService: AuthGuardService,
@@ -481,18 +483,18 @@ export class RulesetComponent implements OnInit {
     const startDate = this.afControls.startDate.value;
     const endDate = this.afControls.endDate.value;
     if (!startDate || !endDate) {
-      alert('Please choose the ruleset start and end date.');
+      this.alertService.showWarning('Please choose the ruleset start and end date.');
       return;
     }
     if (!this.analysis.sourceName || !this.analysis.rulesetName) {
       return;
     }
     if (this.rulesetNames.includes(this.analysis.rulesetName) && this.mode !== 'edit') {
-      alert('The ruleset name already found.');
+      this.alertService.showWarning('The ruleset name already found.');
       return;
     }
     if (moment(startDate).diff(moment(endDate), 'days') >= 0) {
-      alert('Ruleset end date should be less than start date.');
+      this.alertService.showWarning('Ruleset end date should be less than start date.');
       return;
     }
     this.gotoStepper(3);

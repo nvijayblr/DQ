@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpService } from '../../../../services/http-service.service';
+import { AlertService } from '../../../../shared/alert-dialog/alert-dialog.service';
 
 @Component({
   selector: 'app-mango-db',
@@ -40,6 +41,7 @@ export class MangoDBComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private http: HttpService,
+    private alertService : AlertService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private modalService: NgbModal
@@ -101,7 +103,7 @@ export class MangoDBComponent implements OnInit {
       //console.log('DB', result.Databases)
       this.dbList = result.Databases;
     }, (error) => {
-      alert(error.message);
+      this.alertService.showError(error.message);
     });
   }
 
@@ -115,7 +117,7 @@ export class MangoDBComponent implements OnInit {
       //console.log('DB', result.Databases)
       this.dbList = result.Databases;
     }, (error) => {
-      alert(error.message);
+      this.alertService.showError(error.message);
     });
   }
 
@@ -180,12 +182,12 @@ export class MangoDBComponent implements OnInit {
     const analysis = this.analysisForm.value;
     const formData: any = new FormData();
     if (this.mode === 'create' && !this.sourceFile.name) {
-      alert('Please upload the source file.');
+      this.alertService.showWarning('Please upload the source file.');
       return;
     }
 
     if (!this.sourceFile.name) {
-      alert('Please upload the source file.');
+      this.alertService.showWarning('Please upload the source file.');
       return;
     }
 
@@ -208,9 +210,9 @@ export class MangoDBComponent implements OnInit {
 
     this.http.saveSourceMangoDB(formData, this.mode === 'edit' ? 'put' : 'post').subscribe((result: any) => {
       this.isLoading = false;
-      alert(result.message);
+      this.alertService.showAlert(result.message);
         if (result.errorMsg) {
-          alert(result.errorMsg);
+          this.alertService.showError(result.errorMsg);
           return;
         }
       this.summary = result.SourceSettings;

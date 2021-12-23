@@ -7,6 +7,7 @@ import { Options, LabelType } from '@angular-slider/ngx-slider';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MessageService } from 'src/app/services/message.service';
 import { HttpService } from 'src/app/services/http-service.service';
+import { AlertService } from '../../../shared/alert-dialog/alert-dialog.service';
 import { PreviewDialogComponent } from '../../../shared/preview-dialog/preview-dialog.component';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
@@ -19,7 +20,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./attribute-details.component.scss']
 })
 export class AttributeDetailsComponent implements OnInit {
-  constructor(private messageService: MessageService, private http: HttpService, private router: Router, public dialog: MatDialog,private modalService: NgbModal) {
+  constructor(private messageService: MessageService, private http: HttpService, private alertService: AlertService, private router: Router, public dialog: MatDialog,private modalService: NgbModal) {
    
    }
   @ViewChild('stickyMenu', { static: false }) menuElement: ElementRef;
@@ -566,7 +567,7 @@ loadingCorrelation = false;
       this.domanResults = result;
       if (result.msg) {
         this.isLoading = false;
-        alert(result.msg);
+        this.alertService.showAlert(result.msg);
         return;
       }
       if (result) {

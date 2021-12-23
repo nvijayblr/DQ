@@ -1,0 +1,15 @@
+.mat-dialog-title {
+    font-family: 'open-sans-semibold';
+    border-bottom: 1px solid lightgrey;
+}
+.mat-dialog-content {
+    margin-bottom: 20px;
+}
+.mat-dialog-title.Error {
+    color: red;
+    border-bottom-color: red;
+}
+.mat-dialog-title.Warning {
+    color: orangered;
+    border-bottom-color: orangered;
+}

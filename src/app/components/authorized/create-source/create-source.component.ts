@@ -16,6 +16,7 @@ import * as moment from 'moment';
 import { ToleranceLevelDialogComponent } from '../../../shared/tolerance-level-dialog/tolerance-level-dialog.component';
 import { DeactiveDialogComponent } from '../../../shared/deactive-dialog/deactive-dialog.component';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { AlertService } from '../../../shared/alert-dialog/alert-dialog.service';
 
 @Component({
   selector: 'app-create-source',
@@ -37,6 +38,7 @@ export class CreateSourceComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private authGuardService: AuthGuardService,
     private messageService: MessageService,
+    private alertService : AlertService,
     private modalService: NgbModal,
     private location: Location) {
     this.appConfig = appConfig;
@@ -275,7 +277,7 @@ export class CreateSourceComponent implements OnInit {
     const formData: any = new FormData();
     if (this.mode === 'create' && !this.sourceFile.name) {
       this.stepIndex = 0;
-      alert('Please upload the source file.');
+      this.alertService.showWarning('Please upload the source file.');
       return;
     }
 
@@ -291,7 +293,7 @@ export class CreateSourceComponent implements OnInit {
     analysis.referenceData.map((refernce, index) => {
       if (this.mode === 'create' && !this.refFiles[index]) {
         isRefFileErr = true;
-        alert(`Please upload the reference file #${index + 1}.`);
+        this.alertService.showWarning(`Please upload the reference file #${index + 1}.`);
         return;
       }
       if (this.refFiles[index]) {
@@ -380,7 +382,7 @@ export class CreateSourceComponent implements OnInit {
     };
 
     if (sourceRefNameEqual) {
-      alert('The source file and reference file should not be same.');
+      this.alertService.showWarning('The source file and reference file should not be same.');
       return;
     }
 
@@ -392,7 +394,7 @@ export class CreateSourceComponent implements OnInit {
       this.isLoading = false;
       if (result.errorMsg) {
         this.stepIndex = 0;
-        alert(result.errorMsg);
+        this.alertService.showError(result.errorMsg);
         return;
       }
       this.summary = result;
@@ -524,7 +526,7 @@ export class CreateSourceComponent implements OnInit {
   multiSourceLists;
   loadSourcePreview() {
     if (this.mode === 'create' && !this.sourceFile.name) {
-      alert('Please upload the source file.');
+      this.alertService.showWarning('Please upload the source file.');
       return;
     }
     this.isPreviewLoaded = false;
@@ -540,7 +542,7 @@ export class CreateSourceComponent implements OnInit {
         if (res.errorMsg) {
           this.isPreviewLoaded = false;
           this.isPreviewLoading = false;
-          alert(res.errorMsg);
+          this.alertService.showError(res.errorMsg);
           return;
         }
         this.parseSourcePreview(details);
@@ -581,7 +583,7 @@ export class CreateSourceComponent implements OnInit {
 
   loadReferencePreview() {
     if (this.mode === 'create' && !this.sourceFile.name) {
-      alert('Please upload the source file.');
+      this.alertService.showWarning('Please upload the source file.');
       return;
     }
     this.isRefPreviewLoaded = false;
@@ -596,7 +598,7 @@ export class CreateSourceComponent implements OnInit {
         if (res.errorMsg) {
           this.isPreviewLoaded = false;
           this.isPreviewLoading = false;
-          alert(res.errorMsg);
+          this.alertService.showError(res.errorMsg);
           return;
         }
         this.parseReferencePreview(details);
@@ -768,7 +770,7 @@ export class CreateSourceComponent implements OnInit {
 
     }, (error) => {
       this.isLoadingCO = false;
-      alert(error.message);
+      this.alertService.showError(error.message);
     });
   }
 
@@ -809,7 +811,7 @@ export class CreateSourceComponent implements OnInit {
       this.isLoadingDB = false;
       this.showAllDetails = true;
     }, (error) => {
-      alert(error.message);
+      this.alertService.showError(error.message);
     });
   }
 
@@ -900,7 +902,7 @@ export class CreateSourceComponent implements OnInit {
       this.isPreviewLoaded = false;
       this.isPreviewLoading = false;
 
-      alert(error.message);
+      this.alertService.showError(error.message);
     });
 
   }
