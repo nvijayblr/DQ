@@ -3,22 +3,23 @@ export const SourceTypes = [
         category: 'File Upload',
         children: [{
             text: 'Excel',
-            image: 'excel',          
-            options : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'
+            image: 'excel',
+            type: 'xlsx',
+            options: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'
         },
         {
             text: 'CSV',
-            image: 'csv',           
-            options : '.csv'
+            image: 'csv',
+            type: 'csv',
+            options: '.csv'
         },
         {
             text: 'JSON',
             image: 'json'
-           
         },
         {
             text: 'XML',
-            image: 'xml'            
+            image: 'xml'
         }]
     }, {
         category: 'Database',
@@ -51,3 +52,13 @@ export const SourceTypes = [
         }]
     }
 ];
+
+export const SourceSettings = {
+    isMuliSourceData: 'true',
+    multiSourceOptions: [],
+    frequency: 'DAILY',
+    uploadDate: '',
+    multiSourceColumn: '',
+    uploadTime: '',
+    department: []
+};

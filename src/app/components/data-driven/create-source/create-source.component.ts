@@ -6,7 +6,8 @@ import * as moment from 'moment';
 import { forkJoin } from 'rxjs';
 import { HttpService } from '../../../services/http-service.service';
 import { MessageService } from '../../../services/message.service';
-import { SourceTypes } from '../data-driven.constants';
+import { SourceTypes, SourceSettings } from '../data-driven.constants';
+import { AlertService } from '../../../shared/alert-dialog/alert-dialog.service';
 
 @Component({
   selector: 'app-create-source',
@@ -22,8 +23,10 @@ export class CreateSourceComponent implements OnInit {
   variables: any = [];
   filteredList: any = [];
   dataUserTollerance: any = [];
+  dataOwnerTollerance: any = [];
   sourceSettings: any;
   chooseOptions: string;
+  selectedType: string;
   isEditMode: boolean = false;
 
   multiSourceList: any = [];
@@ -32,36 +35,43 @@ export class CreateSourceComponent implements OnInit {
   categoryList: any = [];
   usersList: any = [];
   srcCategory: any = [];
-
+  sourceFile: any = {};
   sourceTypes = SourceTypes;
+  summary: any = {};
+
+  selFileName: any;
+  isCorrectFileType: boolean = true;
+  selFileNameErr: boolean = false;
 
   constructor(private http: HttpService,
     private fb: FormBuilder,
     private messageService: MessageService,
+    private alertService: AlertService,
     public dialogRef: MatDialogRef<CreateSourceComponent>,
     @Inject(MAT_DIALOG_DATA) public data) { }
 
   get CSControls(): any { return this.sourceForm.controls; }
 
   ngOnInit() {
-    let analysis: any = {}, source = {}, dataUsers = [];
+    let analysis: any = {}, source = {}, dataUsers = [], sourceId;
     this.isEditMode = this.data.isEditMode;
     if (this.data.isEditMode) {
       analysis = this.data.analysis;
+      sourceId = analysis.sourceId;
       source = analysis && analysis.source ? analysis.source : {};
       dataUsers = this.getDataUser(source);
       this.setFileType(source);
     }
-
-    this.initForm(source, dataUsers);
-    this.initReferenceForm(analysis);
     this.initSetting(analysis);
+    this.initForm(source, dataUsers, sourceId);
+    this.initReferenceForm(analysis);
     this.getDataOwner();
     this.initAppData();
   }
 
-  initForm(source, dataUsers) {
+  initForm(source, dataUsers, sourceId?) {
     this.sourceForm = this.fb.group({
+      sourceId: [sourceId],
       sourceDataName: [source.sourceDataName || '', [Validators.required, Validators.maxLength(100), this.uniqueSourceName.bind(this, source.sourceDataName)]],
       sourceDataDescription: [source.sourceDataDescription || ''],
       sourceFileName: [source.sourceFileName || ''],
@@ -69,7 +79,7 @@ export class CreateSourceComponent implements OnInit {
       dataOwner: [source.dataOwner || ''],
       dataSteward: [source.dataSteward || ''],
       dataUser: [dataUsers || ''],
-      settingsDate: ['', [Validators.required]],
+      settingsDate: [this.sourceSettings.uploadDate, [Validators.required]],
       uploadTime: [''],
       multiSourcColumn: [''],
       referenceData: this.fb.array([]),
@@ -160,31 +170,67 @@ export class CreateSourceComponent implements OnInit {
 
   setFileType(source) {
     if (!source.type) {
-      this.selectFileType(this.sourceTypes[0].children[0].options);
+      this.selectFileType(this.sourceTypes[0].children[0].type, this.sourceTypes[0].children[0].options);
     }
+  }
+
+  setDataUserTollerance(e) {
+    this.dataUserTollerance = [];
+    e.value.map(user => {
+      this.dataUserTollerance.push({
+        name: user,
+        tolerance: {
+          Accuracy: 0,
+          Completeness: 0,
+          Integrity: 0,
+          Uniqueness: 0,
+          Validity: 0
+        }
+      });
+    });
+  }
+
+  setDataOwnerTollerance(e) {
+    this.dataOwnerTollerance = [];
+    e.value.map(user => {
+      this.dataOwnerTollerance.push({
+        name: user,
+        tolerance: {
+          Accuracy: 0,
+          Completeness: 0,
+          Integrity: 0,
+          Uniqueness: 0,
+          Validity: 0
+        }
+      });
+    });
+  }
+
+  onSourceFileSelected(file) {
+    const fName = file.name.split('.')[0];
+    const fExt = file.name.split('.')[1];
+    this.sourceFile = file;
+    this.isCorrectFileType = (this.selectedType === fExt);
+    this.CSControls.sourceDataName.setValue(fName);
+    this.CSControls.sourceDataName.markAsTouched();
   }
 
   initSetting(analysis) {
-    let settings: any = {};
     if (analysis.settings) {
       this.sourceSettings = analysis.settings;
     } else {
-      settings.isMuliSourceData = 'true';
-      settings.multiSourceOptions = [];
-      settings.frequency = 'DAILY';
-      settings.uploadDate = moment().format("YYYY-MM-DD[T]HH:mm:ss.000[Z]");
-      //uploadDate: this.minDate,
-      settings.multiSourceColumn = '';
-      settings.uploadTime = '';
-      settings.department = [];
-      this.sourceSettings = settings;
+      this.sourceSettings = SourceSettings;
+      let minDate = moment().format()
+      this.sourceSettings.uploadDate = moment(minDate).format("YYYY-MM-DD[T]HH:mm:ss.000[Z]");
     }
   }
 
-  selectFileType(options) {
+  selectFileType(type, options) {
+    this.selectedType = type;
     this.chooseOptions = options;
+    if (this.sourceForm) this.initForm({}, []);
     if (this.chooseOptions) {
-      setTimeout(() => this.stepper.next());
+      setTimeout(() => this.stepper && this.stepper.next());
     }
   }
 
@@ -195,6 +241,49 @@ export class CreateSourceComponent implements OnInit {
     }
   }
 
+  saveSource() {
+    const source = this.sourceForm.value;
+    const formData: any = new FormData();
+
+    if (!this.isEditMode && !this.sourceFile.name) {
+      this.alertService.showWarning('Please upload the source file.');
+      return;
+    }
+
+    if (this.sourceFile.name) {
+      formData.append('file[]', this.sourceFile);
+    }
+
+    this.sourceSettings.multiSourceColumn = this.CSControls.multiSourcColumn.value;
+    const payload = {
+      sourceId: source.sourceId,
+      source: {
+        sourceDataName: source.sourceDataName,
+        sourceDataDescription: source.sourceDataDescription,
+        sourceFileName: this.sourceFile.name ? this.sourceFile.name : source.sourceFileName,
+        sourceCategory: source.sourceCategory,
+        dataOwner: this.CSControls.dataOwner.value ? this.CSControls.dataOwner.value : source.dataOwner,
+        dataSteward: this.CSControls.dataSteward.value ? this.CSControls.dataSteward.value : source.dataSteward,
+        dataUser: this.dataUserTollerance,
+        type: '',
+        connectionDetails: {}
+      },
+      ref_data_type: "User_LocalData",
+      reference: [],
+      settings: this.sourceSettings
+    };
+    formData.append('data', JSON.stringify(payload));
+
+    this.http.saveSource(formData, this.isEditMode ? 'put' : 'post').subscribe((result: any) => {
+      if (result.errorMsg) {
+        this.alertService.showError(result.errorMsg);
+        return;
+      }
+      this.summary = result;
+    }, (error) => {
+
+    });
+  }
 
   private uniqueSourceName(sourceDataName, control: FormControl) {
     if (control.value && sourceDataName !== control.value) {

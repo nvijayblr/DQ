@@ -22,7 +22,7 @@
                                     <div *ngFor="let source of type.children" class="flipBox"
                                         fxLayoutAlign="center center"
                                         [class.selected]="chooseOptions && source.options == chooseOptions">
-                                        <div class="innerBox" (click)="selectFileType(source.options)">
+                                        <div class="innerBox" (click)="selectFileType(source.type,source.options)">
                                             <div class="back">
                                                 <p>{{source.text}}</p>
                                             </div>
@@ -62,9 +62,10 @@
                                 <strong class="sourceLabel" *ngIf="isEditMode">
                                     {{CSControls.sourceFileName.value}}
                                 </strong>
-                                <!-- <mat-error class="nerr" *ngIf="!flError">Please Select a Correct File Type</mat-error>
+                                <mat-error class="nerr" *ngIf="!isCorrectFileType">Please Select a Correct File Type
+                                </mat-error>
                                 <mat-error class="nerr ftw" *ngIf="selFileNameErr && flError">Please Select a File
-                                </mat-error> -->
+                                </mat-error>
                             </div>
                         </div>
                     </div>
@@ -95,6 +96,8 @@
                                             {{srcCat.value}}
                                         </mat-option>
                                     </mat-select>
+                                    <mat-error *ngIf="CSControls.sourceCategory.hasError('required')">
+                                        Please Select Source Category</mat-error>
                                 </mat-form-field>
                                 <mat-form-field appearance="standard">
                                     <mat-label>Data Owner</mat-label>
@@ -202,8 +205,7 @@
                                 <mat-form-field appearance="standard">
                                     <mat-label>Start Date</mat-label>
                                     <input matInput [matDatepicker]="frompicker" formControlName="settingsDate"
-                                        [(ngModel)]="sourceSettings.uploadDate" autocomplete="off"
-                                        (click)="frompicker.open()">
+                                        autocomplete="off" (click)="frompicker.open()">
                                     <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
                                     <mat-datepicker #frompicker></mat-datepicker>
                                     <mat-error class="errSty ps">Please Select a Start Date</mat-error>
@@ -213,7 +215,7 @@
                                 <mat-form-field appearance="standard">
                                     <mat-label>Select a time</mat-label>
                                     <input matInput [ngxTimepicker]="timepicker" formControlName="uploadTime"
-                                        [(ngModel)]="sourceSettings.uploadTime" autocomplete="off">
+                                        autocomplete="off">
                                     <ngx-material-timepicker #timepicker></ngx-material-timepicker>
                                 </mat-form-field>
                                 <app-rule-selector multiple="true" [ruleItems]="departmentList"
@@ -221,12 +223,17 @@
                                     (selectionChange)="sourceSettings.department=$event.value" label="Department">
                                 </app-rule-selector>
                             </div>
-                            <div fxLayoutAlign="end center">
-                                <button mat-flat-button color="primary" matStepperNext>Next
-                                    <mat-icon>navigate_next</mat-icon>
-                                </button>
-                            </div>
+
                         </div>
+                    </div>
+                    <div fxLayoutAlign="space-between center">
+                        <button mat-flat-button color="primary" matStepperPrevious>
+                            <mat-icon>navigate_before</mat-icon>Previous
+                        </button>
+                        <button mat-flat-button color="primary" matStepperNext
+                            (click)="sourceForm.markAllAsTouched()">Next
+                            <mat-icon>navigate_next</mat-icon>
+                        </button>
                     </div>
                 </div>
             </cdk-step>
@@ -251,7 +258,7 @@
                                     <app-image-cropper [imageType]="'Reference'" *ngIf="isEditMode"
                                         [fileTypes]="'.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'"
                                         [imagePath]="''" (fileSelected)="onReferenceFileSelected($event, reference, i)">
-                                    </app-image-cropper>                                   
+                                    </app-image-cropper>
                                 </div>
                                 <mat-form-field appearance="standard">
                                     <mat-label>Reference Data Name</mat-label>
@@ -299,6 +306,93 @@
                         <span>Summary</span>
                     </div>
                 </ng-template>
+                <div class="SDcontainer">
+                    <div class="analysis-preview">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="label1">Source Data</div>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="label2">Name</div>
+                                        {{summary.source?.sourceDataName}}
+                                    </td>
+                                    <td>
+                                        <div class="label2">CDE</div>
+                                        <span class="spec" *ngFor="let column of summary.source?.availableColumns">
+                                            {{column}},
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="label1" style="width: 200px;">Rerference Data</div>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr *ngFor="let ref of summary.reference; index as i;">
+                                    <td>
+                                        <div class="label2">Name</div>
+                                        #{{i+1}}. {{ref.referenceDataName}}
+                                    </td>
+                                    <td>
+                                        <div class="label2">Reference CDE</div>
+                                        <span *ngFor="let column of ref?.availableRefColumns">
+                                            {{column}},
+                                        </span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <div class="label1">Settings</div>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="label2">Multi source name</div>
+                                    </td>
+                                    <td>{{summary.settings?.multiSourceOptions}} </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="label2">Multi source Column</div>
+                                    </td>
+                                    <td>{{summary.settings?.multiSourceColumn}} </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="label2">Frequency</div>
+                                    </td>
+                                    <td>{{summary.settings?.frequency}}</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="label2">Upload Date</div>
+                                    </td>
+                                    <td>{{summary.settings?.uploadDate}}</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="label2">Upload Time</div>
+                                    </td>
+                                    <td>{{summary.settings?.uploadTime}}</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="label2">Department</div>
+                                    </td>
+                                    <td>{{summary.settings?.department}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </cdk-step>
         </app-dd-stepper>
     </div>
