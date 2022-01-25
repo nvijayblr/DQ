@@ -6,6 +6,7 @@ import { CdkStepper } from '@angular/cdk/stepper';
 import { AuthGuardService } from "../../../services/auth-guard.service";
 import { MatDialog } from "@angular/material/dialog";
 import { CreateSourceComponent } from "../../data-driven/create-source/create-source.component";
+import { RulesetComponent } from "../../data-driven/ruleset/ruleset.component";
 
 @Component({
     selector: "app-data-quality",
@@ -148,5 +149,25 @@ export class DataQualityComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(data => {
         });
+    }
+
+    addOrUpdateRuleset(isEditMode, index: any = -1) {
+        const dialogRef = this.dialog.open(RulesetComponent, {
+            width: '85vw',
+            maxWidth: '85vw',
+            data: {
+                isEditMode,
+                analysis: this.selectedSource,
+                index: index
+            }
+        });
+
+        dialogRef.afterClosed().subscribe(data => {
+        });
+    }
+
+    onSourceCSVSelected(file) {
+    }
+    uploadSource(data, selectedMethod) {
     }
 }

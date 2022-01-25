@@ -1,0 +1,38 @@
+.sourceDetail {
+  .mat-form-field {
+    width: 250px;
+  }
+}
+
+.rulsetValue {
+  padding: 0 15px;
+
+  .mat-form-field:first-child {
+    width: 350px;
+  }
+}
+.columnList {
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  width: 200px;
+  margin-bottom: 4px;
+  cursor: pointer;
+}
+
+.columnList:hover {
+  background-color: #eee;
+}
+
+button.fabMini {
+  transform: scale(0.7) !important;
+}
+
+.ruleTitle {
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.finalize .mat-table {
+  width: 100%;
+}

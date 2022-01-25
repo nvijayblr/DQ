@@ -18,9 +18,11 @@
                 <div class="container">
                     <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="20px">
                         <span class="titleText" *ngIf="isSourceLoaded()">{{selectedSource.source.sourceDataName}}</span>
-                        <button mat-flat-button color="primary" *ngIf="isSourceLoaded()" (click)="createOrEditSource(true)">Edit Source</button>
+                        <button mat-flat-button color="primary" *ngIf="isSourceLoaded()"
+                            (click)="createOrEditSource(true)">Edit Source</button>
                         <button mat-flat-button color="primary" *ngIf="isSourceLoaded()">View Source</button>
-                        <button mat-flat-button color="primary" (click)="createOrEditSource(false)" >Create Source</button>
+                        <button mat-flat-button color="primary" (click)="createOrEditSource(false)">Create
+                            Source</button>
                     </div>
                 </div>
             </cdk-step>
@@ -34,16 +36,18 @@
                 </ng-template>
                 <div class="container">
                     <div fxLayout="column" fxLayoutGap="10px">
-                        <div *ngFor="let rule of selectedSource.rules">
+                        <div *ngFor="let rule of selectedSource.rules;index as i;">
                             <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="20px">
                                 <span fxFlex="30" class="titleText" *ngIf="isSourceLoaded()">{{rule.rulesetName}}</span>
-                                <button mat-flat-button color="primary">Edit Ruleset</button>
+                                <button mat-flat-button color="primary" (click)="addOrUpdateRuleset(true,i)">Edit
+                                    Ruleset</button>
                                 <button mat-flat-button color="primary">View Ruleset</button>
                             </div>
                         </div>
                         <div fxLayout="row" fxLayoutGap="20px">
                             <span fxFlex="30" *ngIf="selectedSource.rules?.length"></span>
-                            <button mat-flat-button color="primary">Create Ruleset</button>
+                            <button mat-flat-button color="primary" (click)="addOrUpdateRuleset(false)">Create
+                                Ruleset</button>
                         </div>
                     </div>
 
@@ -141,13 +145,14 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
-                        <button mat-flat-button color="primary" *ngIf="rights.includes('VIEW_RESULTS')" (click)="scrollToId('elId')"
-                            matTooltip="Profile">
+                        <button mat-flat-button color="primary" *ngIf="rights.includes('VIEW_RESULTS')"
+                            (click)="scrollToId('elId')" matTooltip="Profile">
                             <mat-icon>link</mat-icon>
                             Profile
                         </button>
-                        <button mat-flat-button color="primary" *ngIf="rights.includes('VIEW_RESULTS')" [disabled]="!selectedSource.rulesetId"
-                            (click)="launchAnalysis(data)" matTooltip="View Analysis">
+                        <button mat-flat-button color="primary" *ngIf="rights.includes('VIEW_RESULTS')"
+                            [disabled]="!selectedSource.rulesetId" (click)="launchAnalysis(data)"
+                            matTooltip="View Analysis">
                             <mat-icon>launch</mat-icon>
                             View Analysis
                         </button>
@@ -181,7 +186,8 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
-                        <button mat-flat-button color="primary" (click)="launchDataCleaning(data)" matTooltip="Data Cleaning">
+                        <button mat-flat-button color="primary" (click)="launchDataCleaning(data)"
+                            matTooltip="Data Cleaning">
                             Data Cleaning
                         </button>
                     </div>

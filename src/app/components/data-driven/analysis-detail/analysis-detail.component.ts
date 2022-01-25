@@ -10,7 +10,7 @@ export class AnalysisDetailComponent implements OnInit {
   @ViewChild('previewDetail', { static: false }) preview: any;
   @ViewChild('correlationDetail', { static: false }) correlation: any;
 
-  profileDetails = [];
+  profileDetails : any = {};
   chartData: any = [];
   showDetail = false;
   profile: any = {};

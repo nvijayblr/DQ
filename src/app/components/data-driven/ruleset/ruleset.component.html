@@ -1,0 +1,240 @@
+<div mat-dialog-title>Ruleset Details</div>
+<div class="rulsetValue" fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="30px" [formGroup]="rulesetForm">
+    <mat-form-field appearance="standard">
+        <mat-label>Ruleset Name</mat-label>
+        <input matInput placeholder="Ruleset Name" formControlName="rulesetName" maxlength="50" autocomplete="off" />
+    </mat-form-field>
+
+    <mat-form-field appearance="standard">
+        <mat-label>Start Date</mat-label>
+        <input matInput [matDatepicker]="frompicker" [min]="uploadedDate" formControlName="startDate" autocomplete="off"
+            (click)="frompicker.open()">
+        <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
+        <mat-datepicker #frompicker></mat-datepicker>
+        <mat-error class="ns" *ngIf="!RSControls.startDate.value">Please select a Start Date</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="standard">
+        <mat-label>End Date</mat-label>
+        <input matInput [matDatepicker]="topicker" [min]="uploadedDate" formControlName="endDate" autocomplete="off"
+            (click)="topicker.open()">
+        <mat-datepicker-toggle matSuffix [for]="topicker"></mat-datepicker-toggle>
+        <mat-datepicker #topicker></mat-datepicker>
+        <mat-error class="ns" *ngIf="!RSControls.endDate.value">Please select a End Date</mat-error>
+    </mat-form-field>
+</div>
+<div class="rulesetStepper" [formGroup]="rulesetForm">
+    <app-dd-stepper #rStepper linear>
+        <cdk-step [completed]="true">
+            <ng-template cdkStepLabel>
+                <div fxLayoutAlign="center center" fxLayoutGap="4px">
+                    <span>Source & Reference Data</span>
+                </div>
+            </ng-template>
+            <div class="container">
+                <div fxLayout="row" fxLayoutGap="20px">
+                    <mat-form-field appearance="standard">
+                        <mat-label>Source Data</mat-label>
+                        <input matInput placeholder="Source Name" formControlName="sourceFilename" maxlength="50"
+                            autocomplete="off" />
+                    </mat-form-field>
+                    <mat-form-field appearance="standard">
+                        <mat-label>Source Name</mat-label>
+                        <input matInput placeholder="Source Name" formControlName="name" maxlength="50"
+                            autocomplete="off" />
+                    </mat-form-field>
+                    <mat-form-field appearance="standard">
+                        <mat-label>Source Description</mat-label>
+                        <input matInput placeholder="Source Description" formControlName="description" maxlength="250"
+                            autocomplete="off" />
+                    </mat-form-field>
+                </div>
+                <div formArrayName="referenceCSV" fxLayout="row" fxLayoutGap="20px"
+                    *ngFor="let reference of rulesetForm.get('referenceCSV')['controls']; index as i; last as isLast; first as isFirst">
+                    <ng-container [formGroupName]="i">
+                        <mat-form-field appearance="standard">
+                            <mat-label>Reference Data (csv) #{{i+1}}</mat-label>
+                            <input matInput placeholder="Reference File" formControlName="referencePath" maxlength="50"
+                                autocomplete="off" />
+                        </mat-form-field>
+                        <mat-form-field appearance="standard">
+                            <mat-label>Reference Name</mat-label>
+                            <input matInput placeholder="Reference Name" formControlName="referenceDataName"
+                                maxlength="50" autocomplete="off" />
+                        </mat-form-field>
+                        <mat-form-field appearance="standard">
+                            <mat-label>Reference Data Description</mat-label>
+                            <input matInput placeholder="Source Description" formControlName="referenceDataDescription"
+                                maxlength="250" autocomplete="off" />
+                        </mat-form-field>
+                    </ng-container>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="end center">
+                    <button mat-raised-button color="primary" cdkStepperNext>Next</button>
+                </div>
+            </div>
+        </cdk-step>
+        <cdk-step>
+            <ng-template cdkStepLabel>
+                <div fxLayoutAlign="center center" fxLayoutGap="4px">
+                    <span>Critical Data Elements</span>
+                </div>
+            </ng-template>
+            <div class="container">
+                <div fxLayout="column">
+                    <mat-tab-group mat-align-tabs="start" animationDuration="0ms">
+                        <mat-tab label="Critical Source Elements">
+                            <div class="col-selector-wrapper">
+                                <app-column-selector [availableColumnsLabel]="'Available Columns'"
+                                    [selectedColumnsLabel]="'Selected Columns'" [availableColumns]="availableColumns"
+                                    [selectedColumns]="selectedColumns" [formControl]="columnsForm.controls.columns">
+                                </app-column-selector>
+                            </div>
+                        </mat-tab>
+                        <mat-tab label="Reference Source Element">
+                            <div class="col-selector-wrapper">
+                                <app-column-selector [availableColumnsLabel]="'Available Reference Columns'"
+                                    [selectedColumnsLabel]="'Selected Reference Columns'"
+                                    [availableColumns]="availableReferenceColumns"
+                                    [selectedColumns]="selectedReferenceColumns"
+                                    [formControl]="columnsForm.controls.refernceColumns">
+                                </app-column-selector>
+                            </div>
+                        </mat-tab>
+                    </mat-tab-group>
+                    <div fxLayout="row" fxLayoutAlign="space-between center">
+                        <button mat-raised-button color="primary" cdkStepperPrevious>Previous</button>
+                        <button mat-raised-button color="primary" cdkStepperNext>Next</button>
+                    </div>
+                </div>
+            </div>
+        </cdk-step>
+        <cdk-step>
+            <ng-template cdkStepLabel>
+                <div fxLayoutAlign="center center" fxLayoutGap="4px">
+                    <span>Rule Definition</span>
+                </div>
+            </ng-template>
+            <div class="container" fxLayout="column" fxLayoutGap="10px">
+                <div fxFlex fxLayout="row">
+                    <div fxLayout="column">
+                        <div class="columnList" *ngFor="let rule of rulesList"
+                            [class.selected]="rule.column === selectedRuleColumn" (click)="gotoRuleColumn(rule)">
+                            {{rule.column ? rule.column : '-'}}
+                        </div>
+                    </div>
+                    <mat-card *ngFor="let columns of RSControls.columnRules.controls; index as i;"
+                        formArrayName="columnRules" [hidden]="columns['controls'].column.value !== selectedRuleColumn">
+                        <ng-container [formGroupName]="i">
+                            <span class="ruleTitle">
+                                {{columns['controls'].column.value}}
+                            </span>
+                            <div *ngFor="let rule of columns.get('rules')['controls']; index as j; last as isLast; first as isFirst"
+                                formArrayName="rules">
+                                <ng-container [formGroupName]="j">
+                                    <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="10px">
+                                        <div class="rule-title">Rule #{{j+1}}</div>
+                                        <app-rule-selector [showAddItem]="false" [ruleItems]="ruleTypeList"
+                                            [initValue]="rule.get('rule').value"
+                                            (selectionChange)="rule.get('rule').setValue($event.value)">
+                                        </app-rule-selector>
+                                        <app-rule-selector [showAddItem]="false"
+                                            [ruleItems]="getOperatorList(rule.get('rule').value,columns['controls'].datatype.value)"
+                                            [initValue]="rule.get('operator').value"
+                                            (selectionChange)="rule.get('operator').setValue($event.value)">
+                                        </app-rule-selector>
+                                        <div *ngIf="rule.get('rule').value === 'ReferenceCDE'">
+                                            <mat-form-field appearance="standard">
+                                                <mat-select formControlName="value"
+                                                    (change)="rule.get('value').setValue($event.value)">
+                                                    <mat-option
+                                                        *ngFor="let item of columnsForm.controls.refernceColumns.value"
+                                                        [value]="item.title">{{item.title}}</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        <div *ngIf="['Formula','ReferenceCDE'].indexOf(rule.get('rule').value)==-1">
+                                            <mat-form-field appearance="standard"
+                                                *ngIf="!ruleValueList[rule.get('rule').value]">
+                                                <input matInput formControlName="value"
+                                                    [type]="getType(rule.get('rule').value,columns['controls'].datatype.value)"
+                                                    [min]="getMinVal(rule.get('rule').value)"
+                                                    oninput="(this.min == 0) && (validity.valid||(value=''))">
+                                            </mat-form-field>
+                                            <app-rule-selector *ngIf="ruleValueList[rule.get('rule').value]"
+                                                [showAddItem]="false"
+                                                [ruleItems]="ruleValueList[rule.get('rule').value]"
+                                                [initValue]="rule.get('value').value"
+                                                (selectionChange)="rule.get('value').setValue($event.value)">
+                                            </app-rule-selector>
+                                        </div>
+                                        <div *ngIf="rule.get('rule').value === 'Formula'">
+                                            <mat-form-field appearance="fill" (click)="openFormulaEditor(rule)">
+                                                <textarea matInput [readonly]="true"
+                                                    class="ruleTextarea">{{commonService.getFormulaText(rule.get('value').value,rule.get('type').value)}}</textarea>
+                                            </mat-form-field>
+                                            <div class="edit-link" (click)="showConditionalFormulaEditor(rule)"
+                                                style="margin-left: 2px; margin-bottom: 2px;">Conditional Formula Editor
+                                            </div>
+                                            <div class="edit-link" (click)="showAdvanedFormulaEditor(rule)"
+                                                style="margin-left: 2px;">Advanced Formula Editor</div>
+                                            <div class="edit-link" (click)="showFormulaEditor(rule)">Formula Editor
+                                            </div>
+                                        </div>
+                                        <app-rule-selector [showAddItem]="false" [ruleItems]="ruleDimenstionList"
+                                            [initValue]="rule.get('dimension').value"
+                                            (selectionChange)="rule.get('dimension').setValue($event.value)">
+                                        </app-rule-selector>
+                                        <div>
+                                            <button mat-mini-fab class="fabMini" color="warn" aria-label="removeIcon"
+                                                (click)="removeRules(columns, 'rules', j)" *ngIf="!isFirst || !isLast">
+                                                <mat-icon>remove</mat-icon>
+                                            </button>
+                                            <button mat-mini-fab class="fabMini" color="primary" aria-label="addIcon"
+                                                (click)="addRules(columns, 'rules')" *ngIf="isLast">
+                                                <mat-icon>add</mat-icon>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </ng-container>
+                    </mat-card>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <button mat-raised-button color="primary" cdkStepperPrevious>Previous</button>
+                    <button mat-raised-button color="primary" cdkStepperNext>Next</button>
+                </div>
+            </div>
+        </cdk-step>
+        <cdk-step>
+            <ng-template cdkStepLabel>
+                <div fxLayoutAlign="center center" fxLayoutGap="4px">
+                    <span>Finalize ruleset</span>
+                </div>
+            </ng-template>
+            <div class="container finalize">
+                <table class="mat-table">
+                    <tr class="mat-row">
+                        <td class="mat-cell">Source Name</td>
+                        <td class="mat-cell">{{analysis.sourceName}}</td>
+                    </tr>
+                    <tr class="mat-row">
+                        <td class="mat-cell">Selected CDE</td>
+                        <td class="mat-cell">
+                            <mat-chip-list cdkDropListOrientation="horizontal">
+                                <mat-chip *ngFor="let column of selectedColumns">
+                                    {{column.title}}
+                                </mat-chip>
+                            </mat-chip-list>
+                        </td>
+                    </tr>
+                    <tr class="mat-row">
+                        <td class="mat-cell">Ruleset Name</td>
+                        <td class="mat-cell">{{analysis.rulesetName}}</td>
+                    </tr>
+                </table>
+            </div>
+        </cdk-step>
+    </app-dd-stepper>
+</div>

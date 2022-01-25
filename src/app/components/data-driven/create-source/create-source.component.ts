@@ -43,6 +43,9 @@ export class CreateSourceComponent implements OnInit {
   isCorrectFileType: boolean = true;
   selFileNameErr: boolean = false;
 
+  selected: any;
+  selected1: any;
+
   constructor(private http: HttpService,
     private fb: FormBuilder,
     private messageService: MessageService,
@@ -283,6 +286,10 @@ export class CreateSourceComponent implements OnInit {
     }, (error) => {
 
     });
+  }
+
+  onReferenceFileSelected() {
+
   }
 
   private uniqueSourceName(sourceDataName, control: FormControl) {
