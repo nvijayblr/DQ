@@ -39,7 +39,7 @@
                         <div *ngFor="let rule of selectedSource.rules;index as i;">
                             <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="20px">
                                 <span fxFlex="30" class="titleText" *ngIf="isSourceLoaded()">{{rule.rulesetName}}</span>
-                                <button mat-flat-button color="primary" (click)="addOrUpdateRuleset(true,i)">Edit
+                                <button mat-flat-button color="primary" (click)="addOrUpdateRuleset(true,rule)">Edit
                                     Ruleset</button>
                                 <button mat-flat-button color="primary">View Ruleset</button>
                             </div>
@@ -112,7 +112,7 @@
                             </mat-select>
                         </mat-form-field>
                         <div *ngIf="rights.includes('ADD_SOURCEFILE')">
-                            <button mat-flat-button color="primary" (click)="uploadSource(data, selectedMethod)">
+                            <button mat-flat-button color="primary" (click)="uploadSource(selectedSource)">
                                 Upload <mat-icon>cloud_upload</mat-icon></button>
                         </div>
                     </div>
@@ -145,14 +145,14 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
-                        <button mat-flat-button color="primary" *ngIf="rights.includes('VIEW_RESULTS')"
-                            (click)="scrollToId('elId')" matTooltip="Profile">
-                            <mat-icon>link</mat-icon>
+                        <button mat-flat-button color="primary" matTooltip="Profile"
+                            *ngIf="rights.includes('VIEW_RESULTS')" (click)="scrollToId('elId')">
+                            <mat-icon>link </mat-icon>
                             Profile
                         </button>
-                        <button mat-flat-button color="primary" *ngIf="rights.includes('VIEW_RESULTS')"
-                            [disabled]="!selectedSource.rulesetId" (click)="launchAnalysis(data)"
-                            matTooltip="View Analysis">
+                        <button mat-flat-button color="primary" matTooltip="View Analysis"
+                            *ngIf="rights.includes('VIEW_RESULTS')" [disabled]="!selectedSource.rulesetId"
+                            (click)="launchAnalysis(selectedSource)">
                             <mat-icon>launch</mat-icon>
                             View Analysis
                         </button>
@@ -186,7 +186,7 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
-                        <button mat-flat-button color="primary" (click)="launchDataCleaning(data)"
+                        <button mat-flat-button color="primary" (click)="launchDataCleaning()"
                             matTooltip="Data Cleaning">
                             Data Cleaning
                         </button>
@@ -195,5 +195,6 @@
             </cdk-step>
         </app-dd-stepper>
     </div>
+    <app-source-analysis [analysisData]="selectedAnalysis"></app-source-analysis>
     <app-analysis-detail [profileData]="profile" [source]="selectedSource.source"></app-analysis-detail>
 </div>

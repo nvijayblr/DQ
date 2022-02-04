@@ -8,6 +8,7 @@ import { HttpService } from '../../../services/http-service.service';
 import { MessageService } from '../../../services/message.service';
 import { SourceTypes, SourceSettings } from '../data-driven.constants';
 import { AlertService } from '../../../shared/alert-dialog/alert-dialog.service';
+import { DataDrivenService } from '../data-driven.service';
 
 @Component({
   selector: 'app-create-source',
@@ -30,6 +31,7 @@ export class CreateSourceComponent implements OnInit {
   isEditMode: boolean = false;
 
   multiSourceList: any = [];
+  multiSourceLists: any = [];
   frequencyList: any = [];
   departmentList: any = [];
   categoryList: any = [];
@@ -38,17 +40,20 @@ export class CreateSourceComponent implements OnInit {
   sourceFile: any = {};
   sourceTypes = SourceTypes;
   summary: any = {};
+  referenceFiles: any = [];
+  isSourceMode: any = false;
 
   selFileName: any;
   isCorrectFileType: boolean = true;
   selFileNameErr: boolean = false;
+  flError: any;
 
   selected: any;
   selected1: any;
 
   constructor(private http: HttpService,
     private fb: FormBuilder,
-    private messageService: MessageService,
+    private ds: DataDrivenService,
     private alertService: AlertService,
     public dialogRef: MatDialogRef<CreateSourceComponent>,
     @Inject(MAT_DIALOG_DATA) public data) { }
@@ -58,6 +63,7 @@ export class CreateSourceComponent implements OnInit {
   ngOnInit() {
     let analysis: any = {}, source = {}, dataUsers = [], sourceId;
     this.isEditMode = this.data.isEditMode;
+    this.isSourceMode = this.data.isSourceMode;
     if (this.data.isEditMode) {
       analysis = this.data.analysis;
       sourceId = analysis.sourceId;
@@ -67,9 +73,11 @@ export class CreateSourceComponent implements OnInit {
     }
     this.initSetting(analysis);
     this.initForm(source, dataUsers, sourceId);
-    this.initReferenceForm(analysis);
     this.getDataOwner();
     this.initAppData();
+    if (!this.isSourceMode) {
+      this.initReferenceForm(analysis);
+    }
   }
 
   initForm(source, dataUsers, sourceId?) {
@@ -244,9 +252,11 @@ export class CreateSourceComponent implements OnInit {
     }
   }
 
-  saveSource() {
+  validateSource() {
     const source = this.sourceForm.value;
+    const referControl = this.sourceForm.get('referenceData') as FormArray;
     const formData: any = new FormData();
+    let sourceRefNameEqual, isFileNotFound = false;
 
     if (!this.isEditMode && !this.sourceFile.name) {
       this.alertService.showWarning('Please upload the source file.');
@@ -257,6 +267,43 @@ export class CreateSourceComponent implements OnInit {
       formData.append('file[]', this.sourceFile);
     }
 
+    if (!this.isSourceMode) {
+      const sourceFileName = this.sourceFile.name ? this.sourceFile.name : source.sourceFileName;
+      source.referenceData.map((refernce, index) => {
+        if (!this.referenceFiles[index] && !refernce.referenceId) {
+          isFileNotFound = true;
+          referControl.at(index).get('referenceDataName').setErrors({
+            'required': true
+          });
+        }
+        if (this.referenceFiles[index]) {
+          referControl.at(index).get('referenceDataName').setErrors(null);
+          if (this.referenceFiles[index].name === sourceFileName) {
+            sourceRefNameEqual = true;
+          }
+          formData.append('reffile[]', this.referenceFiles[index]);
+        }
+      });
+      if (isFileNotFound) return;
+
+      if (sourceRefNameEqual) {
+        this.alertService.showWarning('The source file and reference file should not be same.');
+        return;
+      }
+    }
+    if (this.isSourceMode) {
+      if (this.isEditMode) {
+        this.editSource(formData, source);
+      } else {
+        this.saveSource(formData, source);
+      }
+    } else {
+      this.saveSourceAndRef(formData, source);
+    }
+  }
+
+  saveSourceAndRef(formData, source) {
+    let refPayload = this.getReferencePayload(source);
     this.sourceSettings.multiSourceColumn = this.CSControls.multiSourcColumn.value;
     const payload = {
       sourceId: source.sourceId,
@@ -271,8 +318,8 @@ export class CreateSourceComponent implements OnInit {
         type: '',
         connectionDetails: {}
       },
-      ref_data_type: "User_LocalData",
-      reference: [],
+      ref_data_type: refPayload.datatype,
+      reference: refPayload.payload,
       settings: this.sourceSettings
     };
     formData.append('data', JSON.stringify(payload));
@@ -283,13 +330,96 @@ export class CreateSourceComponent implements OnInit {
         return;
       }
       this.summary = result;
+      setTimeout(() => this.stepper && this.stepper.next());
     }, (error) => {
+      this.alertService.showError(error);
+    });
 
+  }
+
+  saveSource(formData, source) {
+    const payload = {
+      sourceId: source.sourceId,
+      db: 'profile',
+      SourceSettings: {
+        sourceDataName: source.sourceDataName,
+        sourceDataDescription: source.sourceDataDescription,
+        sourceFileName: this.sourceFile.name ? this.sourceFile.name : source.sourceFileName,
+        sourceCategory: source.sourceCategory,
+        dataOwner: this.CSControls.dataOwner.value ? this.CSControls.dataOwner.value : source.dataOwner,
+        uploadDate: this.sourceSettings.uploadDate,
+        department: this.sourceSettings.department
+      }
+    };
+    formData.append('data', JSON.stringify(payload));
+
+    this.http.saveSourceProfile(formData, this.isEditMode ? 'put' : 'post').subscribe((result: any) => {
+      if (result.errorMsg) {
+        this.alertService.showError(result.errorMsg);
+        return;
+      }
+      this.ds.setRefresh(source);
+      this.alertService.showAlert('Source Created Successfully');
+      this.dialogRef.close();
+    }, (error) => {
+      this.alertService.showError(error);
     });
   }
 
-  onReferenceFileSelected() {
+  editSource(formData, source) {
+    let oldSource = this.data.analysis && this.data.analysis.source ? this.data.analysis.source : {};
+    const payload = {
+      action: 'edit',
+      db: 'profile',
+      old_source: {
+        sourceDataName: oldSource.sourceDataName,
+        sourceFileName: oldSource.sourceFileName,
+        sourceCategory: oldSource.sourceCategory,
+        dataOwner: oldSource.dataOwner,
+        sourceId: oldSource.sourceId,
+      },
+      new_source: {
+        sourceDataName: source.sourceDataName,
+        sourceDataDescription: source.sourceDataDescription,
+        sourceFileName: this.sourceFile.name ? this.sourceFile.name : source.sourceFileName,
+        sourceCategory: source.sourceCategory,
+        dataOwner: source.dataOwner,
+        uploadDate: this.sourceSettings.uploadDate,
+        department: this.sourceSettings.department
+      },
+    };
+    this.http.saveEditSourceProfile(payload).subscribe((result: any) => {
+      if (result.errorMsg) {
+        this.alertService.showError(result.errorMsg);
+        return;
+      }
+      this.ds.setRefresh(source);
+      this.alertService.showError('Source Updated Successfully');
+      this.dialogRef.close();
+    }, (error) => {
+      this.alertService.showError(error);
+    });
+  }
 
+  onReferenceFileSelected(file, reference, index) {
+    this.referenceFiles[index] = file;
+    const fName = file.name.split('.')[0];
+    reference.controls.referenceDataName.setValue(fName);
+    // this.loadReferencePreview();
+  }
+
+  getReferencePayload(source) {
+    let payload: any = {};
+
+    payload.datatype = "User_LocalData"
+    payload.payload = source.referenceData.map((reference, index) => {
+      return {
+        ...reference,
+        referenceFileName: this.referenceFiles.length ? this.referenceFiles[index].name : reference.referenceFileName
+      };
+    });
+
+    return payload;
   }
 
   private uniqueSourceName(sourceDataName, control: FormControl) {

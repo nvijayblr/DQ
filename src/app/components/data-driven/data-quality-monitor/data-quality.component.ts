@@ -6,7 +6,10 @@ import { CdkStepper } from '@angular/cdk/stepper';
 import { AuthGuardService } from "../../../services/auth-guard.service";
 import { MatDialog } from "@angular/material/dialog";
 import { CreateSourceComponent } from "../../data-driven/create-source/create-source.component";
-import { RulesetComponent } from "../../data-driven/ruleset/ruleset.component";
+import { DDRulesetComponent } from "../../data-driven/ruleset/ruleset.component";
+import { AlertService } from "src/app/shared/alert-dialog/alert-dialog.service";
+import * as moment from 'moment';
+import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 
 @Component({
     selector: "app-data-quality",
@@ -18,12 +21,28 @@ export class DataQualityComponent implements OnInit {
 
     profile = [];
     selectedSource: any = {};
+    selectedAnalysis: any = {};
     selectedStep: any = 0;
     subscription: Subscription;
     uploadFileMethod = true;
     allSourceCategory: any;
     cleanFileLog: any;
-    rights: [];
+    rights: any;
+    minDate: any;
+    dateClass: any;
+
+    selectedFileName: any;
+    uploadsHistory: any;
+    highlightDates: any[];
+    isCleanedSource: string;
+    cleanedSourcePath: any;
+    fromOrginSource: string;
+    selectedRuleSet: any;
+    recentUploadDate: string;
+    isOriginalSource: any;
+    OriginalSourcePath: any;
+    isMultiSource: any;
+    originalSourceUploadDate: any;
 
     stepperDetail = [
         { label: "Data Source", completed: false },
@@ -33,13 +52,17 @@ export class DataQualityComponent implements OnInit {
         { label: "Data Cleaning", completed: false },
     ];
 
+
     constructor(private http: HttpService,
         private ds: DataDrivenService,
         private auth: AuthGuardService,
+        private alertService: AlertService,
         private dialog: MatDialog) {
         this.subscription = this.ds.getDQMSource().subscribe((data) => {
             if (data) {
                 this.selectedSource = data;
+                this.selectedAnalysis = data;
+                this.setSourceSetting(data);
                 this.setStepDetails();
                 this.getProfileDetail(this.selectedSource.source.templateSourcePath);
             }
@@ -54,6 +77,20 @@ export class DataQualityComponent implements OnInit {
 
     initSettings() {
         this.uploadFileMethod = true;
+    }
+
+    setSourceSetting(data: any) {
+        const uploadsHistory = data.UploadsHistory;
+        const rules = data.rules;
+        if (uploadsHistory && uploadsHistory.length) {
+            const upload = uploadsHistory[uploadsHistory.length - 1];
+            this.onOpenDatePicker(data);
+            data.uploadDate = upload.uploadDate;
+        }
+        if (rules && rules.length) {
+            const ruleset = rules[rules.length - 1];
+            data.rulesetId = ruleset.rulesetId;
+        }
     }
 
     getProfileDetail(filePath) {
@@ -151,23 +188,173 @@ export class DataQualityComponent implements OnInit {
         });
     }
 
-    addOrUpdateRuleset(isEditMode, index: any = -1) {
-        const dialogRef = this.dialog.open(RulesetComponent, {
+    addOrUpdateRuleset(isEditMode, rule: any = {}) {
+        const dialogRef = this.dialog.open(DDRulesetComponent, {
             width: '85vw',
             maxWidth: '85vw',
             data: {
                 isEditMode,
                 analysis: this.selectedSource,
-                index: index
+                ruleset: rule
             }
         });
 
         dialogRef.afterClosed().subscribe(data => {
+            this.selectedSource.rulesetId = data.rulsetId;
+            if (!data.isUploaded) {
+                this.isOriginalSource = 'YES';
+                this.OriginalSourcePath = this.selectedSource.source.templateSourcePath;
+                this.originalSourceUploadDate = this.selectedSource.settings.uploadDate;
+                this.uploadSource(this.selectedSource);
+            }
+            setTimeout(() => (this.stepper.selectedIndex = 3), 0);
         });
     }
 
-    onSourceCSVSelected(file) {
+    onSourceCSVSelected(file, source) {
     }
-    uploadSource(data, selectedMethod) {
+
+    uploadSource(analysis, reason = '') {
+        if (this.validateSource(analysis)) {
+            const payload = {
+                type: '',
+                connectionDetails: {},
+                isCleanedSource: this.isCleanedSource ? this.isCleanedSource : '',
+                cleanedSourcePath: this.cleanedSourcePath ? this.cleanedSourcePath : '',
+                isOriginalSource: this.isOriginalSource ? this.isOriginalSource : '',
+                OriginalSourcePath: this.OriginalSourcePath ? this.OriginalSourcePath : '',
+                sourceId: analysis.sourceId,
+                rulesetId: this.selectedRuleSet ? this.selectedRuleSet : '',
+                isMultiSource: this.isMultiSource ? 'Yes' : 'No',
+                multiSourceKey: analysis.multisource ? analysis.multisource : '',
+                uploadDate: this.recentUploadDate ? this.recentUploadDate : this.originalSourceUploadDate,
+                uploadTime: '20:28',
+                uploadReason: reason ? reason : '',
+                settings: analysis.settings,
+                sourceObj: analysis.source
+            };
+            const formData: any = new FormData();
+            formData.append('file[]', analysis.file ? analysis.file : '');
+            formData.append('data', JSON.stringify(payload));
+
+            this.http.uploadSource(formData).subscribe((result: any) => {
+                if (result.errorMsg) {
+                    if (result.errorCode == '103') {
+                        result.errorMsg += '.Please correct the file and re-upload.';
+                    }
+                    this.showUploadError(result.errorMsg);
+                } else {
+                    this.alertService.showAlert('Source has been uploaded successfully.');
+                }
+            }, (error) => {
+                this.alertService.showError(error);
+
+            });
+        }
+    }
+
+    validateSource(analysis) {
+        this.recentUploadDate = moment(analysis.uploadDate).format("YYYY-MM-DD[T]HH:mm:ss.000[Z]");
+        if (!analysis.rules || (analysis.rules && !analysis.rules.length)) {
+            this.alertService.showWarning('Please create the ruleset to upload the source.');
+            return;
+        }
+
+        this.selectedRuleSet = this.selectedRuleSet ? this.selectedRuleSet : analysis.rules[analysis.rules.length - 1].rulesetId;
+
+        this.selectedAnalysis = analysis;
+        this.isMultiSource = false;
+        if (analysis.settings && analysis.settings.multiSourceOptions && analysis.settings.multiSourceOptions.length > 1) {
+            this.isMultiSource = true;
+        }
+        if (this.isMultiSource && !analysis.multisource) {
+            this.alertService.showWarning('Please select the source name.');
+            return;
+        }
+
+        if (!analysis.file && this.uploadFileMethod && this.fromOrginSource === '') {
+            this.alertService.showWarning('Please select the source file to upload.');
+            return;
+        }
+        if (!this.uploadFileMethod && this.selectedFileName === '') {
+            this.alertService.showWarning('Please Choose the source file Path.');
+            return;
+        }
+        if (!this.uploadFileMethod && this.selectedFileName) {
+            // this.http.getCleanSource().subscribe((result: any) => {
+            //   console.log(result);
+            // });
+            this.isCleanedSource = 'YES';
+            this.cleanedSourcePath = this.selectedFileName
+        } else {
+            this.isCleanedSource = '';
+            this.cleanedSourcePath = ''
+        }
+        if (!analysis.uploadDate && this.fromOrginSource === '') {
+            this.alertService.showWarning('Please select the upload date.');
+            return;
+        }
+        return true;
+    }
+
+    showUploadError(msg) {
+        const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+            width: '400px',
+            data: {
+                title: 'Upload Error',
+                message: msg,
+                okLable: 'OK'
+            }
+        });
+
+        dialogRef.afterClosed().subscribe(data => {
+            if (data.action === 'ok' && data.reason) {
+                this.uploadSource(this.selectedAnalysis, data.reason);
+            }
+        });
+    }
+
+
+    scrollToId(ele) {
+
+    }
+
+    launchAnalysis(analysis) {
+        this.selectedAnalysis = analysis;
+        const uploadDate = this.selectedAnalysis.uploadDate ? moment(this.selectedAnalysis.uploadDate).format('MM-DD-YYYY') : '';
+        const uploadsHistory = this.selectedAnalysis.UploadsHistory ? this.selectedAnalysis.UploadsHistory : [];
+        if (!uploadsHistory.length) {
+            this.alertService.showWarning('Please upload the source to launch the analysis.');
+            return;
+        }
+
+        if (!uploadDate) {
+            this.alertService.showWarning('Please select the upload date.');
+            return;
+        }
+
+        if (!this.selectedAnalysis.highlightDates.includes(uploadDate)) {
+            this.alertService.showWarning('There is no source for selected date.');
+            return;
+        }
+
+
+    }
+
+    onOpenDatePicker(data: any) {
+        this.uploadsHistory = data.UploadsHistory ? data.UploadsHistory : [];
+        this.highlightDates = [];
+        this.uploadsHistory.map(history => {
+            this.highlightDates.push(moment(history.uploadDate).format('MM-DD-YYYY'));
+        });
+        data.highlightDates = this.highlightDates;
+    }
+
+    launchDataCleaning() {
+
+    }
+
+    ruleSetType(event) {
+        this.selectedRuleSet = event;
     }
 }

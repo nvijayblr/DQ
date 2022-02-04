@@ -1,8 +1,14 @@
 <div class="dashboard" fxFlex fxLayout="column">
-    <div class="breadCrumb">
+    <div class="breadCrumb" fxLayout="row">
         <span> Data Profiling</span>
         <span *ngIf="source.sourceDataName"> >> {{source.sourceCategory}} >>
             {{source.sourceDataName}}</span>
+        <div fxFlex fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
+            <button mat-flat-button color="primary" *ngIf="isSourceLoaded()" (click)="createOrEditSource(true)">Edit
+                Source</button>
+            <button mat-flat-button color="primary" (click)="createOrEditSource(false)">Create
+                Source</button>
+        </div>
     </div>
     <div class="topStatus padding" fxLayout="row">
         <div class="card" *ngFor="let property of profileSummary | keyvalue" fxLayout="column">

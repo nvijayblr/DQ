@@ -1,0 +1,57 @@
+<button class="close" mat-icon-button (click)="onClose()">
+    <mat-icon>close</mat-icon>
+</button>
+<div class="tabGroup">
+    <mat-tab-group mat-align-tabs="start" animationDuration="0ms" [selectedIndex]="selectedTabIndex"
+        (selectedTabChange)="selectedTabChange($event)">
+        <mat-tab *ngFor="let tab of analysisKeys" label="{{tab}}">
+            <div class="cardTitle">
+                {{key}} - {{selectedKey}} - {{selectedValue}}
+                <span *ngIf="selectedColumn.column"> - {{selectedColumn.column}}</span>
+                - {{analysisItem[key].value}}%
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+    <div mat-dialog-content class="content">
+        <div fxLayout="row" *ngIf="analysisItem[key].details && analysisItem[key].details.length">
+            <div fxLayoutAlign="center center">
+                <button color="primary" mat-flat-button (click)="owlCar.prev()">
+                    <mat-icon>keyboard_arrow_left</mat-icon>
+                </button>
+            </div>
+            <div fxFlex class="category-list" #carouselHolder>
+                <owl-carousel-o [options]="OwlCategoryOptions" #owlCar>
+                    <ng-container *ngFor="let rowItem of analysisItem[key].details; let i = index">
+                        <ng-template carouselSlide [id]="i">
+                            <mat-card (click)="launchAnalysisDetails(rowItem);"
+                                [class.selected]="rowItem.column === selectedColumn.column">
+                                <div *ngFor="let item of rowItem | keyvalue" [hidden]="item.key === 'outlier'">
+                                    <span *ngIf="item.key !== 'column'" class="field-label">{{item.key}}: </span>
+                                    <span class="field-value"
+                                        (click)="launchAnalysisDetails(rowItem);">{{item.value}}</span>
+                                </div>
+                            </mat-card>
+                        </ng-template>
+                    </ng-container>
+                </owl-carousel-o>
+            </div>
+            <div fxLayoutAlign="center center">
+                <button color="primary" mat-flat-button (click)="owlCar.next()">
+                    <mat-icon>keyboard_arrow_right</mat-icon>
+                </button>
+            </div>
+        </div>
+        <div class="tableView" *ngIf="showDetails">
+            <table mat-table [dataSource]="tableDataSource">
+                <ng-container *ngFor="let columndef of displayedColumns;let index = index" matColumnDef="{{columndef}}">
+                    <th mat-header-cell *matHeaderCellDef>{{columndef}}</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element[columndef]}}
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </div>
+    </div>

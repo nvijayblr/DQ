@@ -3,6 +3,8 @@ import { HttpService } from '../../../services/http-service.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DataDrivenService } from '../data-driven.service';
 import { Subscription } from 'rxjs';
+import { CreateSourceComponent } from '../create-source/create-source.component';
+import { MatDialog } from '@angular/material';
 
 
 @Component({
@@ -58,7 +60,8 @@ export class DataProfileComponent implements OnInit {
 
 
   constructor(private http: HttpService,
-    private ds: DataDrivenService) {
+    private ds: DataDrivenService,
+    private dialog: MatDialog) {
 
     this.subscription = this.ds.getProfileSource().subscribe(data => {
       this.source = data || {};
@@ -110,6 +113,27 @@ export class DataProfileComponent implements OnInit {
         this.profileSummary['Total Null Counts'].count += parseInt(data.attributeSummary.null_records, 0);
       }
     });
+  }
+
+  createOrEditSource(isEditMode) {
+    const dialogRef = this.dialog.open(CreateSourceComponent, {
+      width: '1400px',
+      data: {
+        isEditMode,
+        analysis: {
+          sourceId: this.source.sourceId,
+          source: this.source
+        },
+        isSourceMode: true
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(data => {
+    });
+  }
+
+  isSourceLoaded() {
+    return this.source && this.source.sourceDataName;
   }
 
 }

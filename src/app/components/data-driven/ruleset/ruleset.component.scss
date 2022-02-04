@@ -33,6 +33,22 @@ button.fabMini {
   font-weight: 400;
 }
 
-.finalize .mat-table {
+.preview .mat-table {
   width: 100%;
+}
+
+.columnList.selected {
+  background-color: #5ec3dd;
+  color: #fff;
+}
+.preview mat-expansion-panel {
+  margin: 10px 0;
+}
+
+.previewTable {
+  max-height: calc(100vh - 320px);
+  overflow: auto;
+}
+.container {
+  min-height: 300px;
 }

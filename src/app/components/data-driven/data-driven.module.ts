@@ -17,7 +17,9 @@ import { SharedModule } from './../../shared/shared.module';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { DdStepperComponent } from './dd-stepper/dd-stepper.component';
 import { CreateSourceComponent } from './create-source/create-source.component';
-import { RulesetComponent } from './ruleset/ruleset.component';
+import { DDRulesetComponent } from './ruleset/ruleset.component';
+import { SourceAnalysisComponent } from './source-analysis/source-analysis.component';
+import { CompletenessDetailComponent } from './completeness-detail/completeness-detail.component';
 
 @NgModule({
     declarations: [
@@ -29,7 +31,9 @@ import { RulesetComponent } from './ruleset/ruleset.component';
         AnalysisDetailComponent,
         DdStepperComponent,
         CreateSourceComponent,
-        RulesetComponent
+        DDRulesetComponent,
+        SourceAnalysisComponent,
+        CompletenessDetailComponent
     ],
     imports: [
         FlexLayoutModule,
@@ -44,7 +48,7 @@ import { RulesetComponent } from './ruleset/ruleset.component';
         MatSelectFilterModule
     ],
     providers: [DataDrivenService],
-    entryComponents: [CreateSourceComponent, RulesetComponent],
+    entryComponents: [CreateSourceComponent, DDRulesetComponent, CompletenessDetailComponent],
     exports: []
 })
 export class DataDrivenModule { }

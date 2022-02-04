@@ -1,0 +1,40 @@
+.container {
+  background-clip: border-box;
+  border: 0 solid #f7f7f7;
+  border-radius: 0.25rem;
+  box-shadow: 0 0.75rem 6rem rgb(56 65 74 / 3%);
+  background-color: #fff;
+  width: calc(100vw - 270px);
+  margin-bottom: 10px;
+}
+.header {
+  .title {
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: 600;
+    font-size: 16px;
+  }
+}
+
+.content {
+  border: 1px solid #eee;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.historyList {
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  width: 200px;
+  margin-bottom: 4px;
+  cursor: pointer;
+}
+
+.historyList:hover {
+  background-color: #eee;
+}
+
+.historyList.selected {
+  background-color: #5ec3dd;
+  color: #fff;
+}

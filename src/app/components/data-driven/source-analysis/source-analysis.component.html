@@ -1,0 +1,59 @@
+<div class="container" fxFlex fxLayout="column">
+    <div class="content" fxFlexOffset="15px" *ngIf="!uploadsHistory.length">Please upload the source to preview the
+        analysis.</div>
+    <ng-container *ngIf="uploadsHistory.length">
+        <div class="header" fxLayout="row" fxLayoutAlign="space-between center">
+            <span fxFlex="30" class="title">Analysis</span>
+            <mat-button-toggle-group appearance="legacy" [value]="isGraphView" name="viewtype" aria-label="viewtype"
+                (change)="changeView($event.value)">
+                <mat-button-toggle [value]="true" matTooltip="Chart View"><mat-icon>bar_chart</mat-icon></mat-button-toggle>
+                <mat-button-toggle [value]="false" matTooltip="Table View"><mat-icon>view_headline</mat-icon></mat-button-toggle>
+            </mat-button-toggle-group>
+            <div fxFlex="30" fxLayout="row" fxLayoutGap="20px">
+                <mat-form-field appearance="standard">
+                    <mat-label class="lbl">Ruleset Name</mat-label>
+                    <mat-select [(ngModel)]="analysis.rulesetId" (ngModelChange)="onRulesetChange(analysis.rulesetId)">
+                        <mat-option *ngFor="let rule of analysis.rules;" [value]="rule.rulesetId">
+                            {{rule.rulesetName}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="standard">
+                    <mat-select [(ngModel)]="selectedCDE" (ngModelChange)="launchAnalysisByKeyDate($event, uploadId)">
+                        <mat-option *ngFor="let col of selectedColumns;" [value]="col">
+                            {{col}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div fxFlex fxLayout="row" class="content">
+            <ng-container *ngIf="!showErrorMessage">
+                <div fxLayout="column">
+                    <div class="historyList" *ngFor="let history of uploadsHistory"
+                        [class.selected]="history.uploadId === uploadId" (click)="onUploadHistoryChange(history)">
+                        {{ history.uploadDate | date:'MMM, dd yyyy'}}
+                    </div>
+                </div>
+
+                <mat-card fxFlex fxLayout="column">
+                    <div class="graphView" *ngIf="isGraphView">
+                        <app-cylinder-chart *ngIf="analyseKeyData.length" [analysisKeys]="analysisKeys"
+                            [chartData]="analyseKeyChartData" [chartType]="'column'" [options3d]=false
+                            (barClicked)="onBarClicked($event)">
+                        </app-cylinder-chart>
+                    </div>
+                    <div class="tableView" *ngIf="!isGraphView">
+                        <ag-grid-angular #agGrid style="width:100%; height: 500px;" class="ag-theme-balham"
+                            autoSizeColumns [defaultColDef]="defaultColDef" [columnDefs]="columnDefs"
+                            [rowData]="rowData" [pagination]="true" [floatingFilter]="true"
+                            (gridReady)="onGridReady($event)" (cellClicked)="onCellClicked($event)">
+                        </ag-grid-angular>
+                    </div>
+                </mat-card>
+            </ng-container>
+            <div *ngIf="showErrorMessage">The processing is going on.Please try again after some time</div>
+
+        </div>
+    </ng-container>
+</div>

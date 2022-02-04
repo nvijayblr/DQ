@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
- 
+
 @Injectable()
 export class DataDrivenService {
     private profile = new BehaviorSubject<any>(null);
     private DQM = new BehaviorSubject<any>(null);
- 
+    private refreshMenu = new BehaviorSubject<any>(null);
+
     setProfileSource(source: any) {
         this.profile.next(source);
     }
@@ -23,10 +24,18 @@ export class DataDrivenService {
         return this.DQM.asObservable();
     }
 
+    setRefresh(source: any) {
+        this.refreshMenu.next(source);
+    }
+
+    getRefresh(): Observable<any> {
+        return this.refreshMenu.asObservable();
+    }
+
     clearData() {
         this.profile.next(null);
         this.DQM.next(null);
     }
- 
-   
+
+
 }

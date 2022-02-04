@@ -1,0 +1,61 @@
+.tabGroup {
+  text-transform: capitalize;
+}
+.cardTitle {
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #eee;
+  font-weight: 500;
+  background-color: #49739e;
+  color: #fff;
+  border-radius: 3px;
+}
+.field-label {
+  text-transform: uppercase;
+  background: palegoldenrod;
+  padding: 5px 10px;
+  font-family: "open-sans-condensed-bold";
+  display: inline-block;
+  vertical-align: top;
+}
+
+.field-value {
+  background: #49739e;
+  color: #fff;
+  padding: 5px 10px;
+  display: inline-block;
+  margin-bottom: 5px;
+  vertical-align: top;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.category-list .mat-card {
+  margin: 0 10px;
+  cursor: pointer;
+
+  &.selected {
+    opacity: 1;
+  }
+}
+.content {
+  padding: 10px 40px;
+}
+.tableView {
+  margin-top: 10px;
+  max-height: calc(100vh - 400px);
+  border-top:1px solid #eee;
+  border-bottom:1px solid #eee;
+
+  overflow: auto;
+
+  .mat-table {
+    width: 100%;
+  }
+
+  .mat-row,
+  .mat-header-row {
+    height: 36px;
+  }
+
+}

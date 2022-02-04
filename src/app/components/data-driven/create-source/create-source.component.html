@@ -12,8 +12,7 @@
                 </ng-template>
                 <div class="container">
                     <div fxLayout="column">
-                        <mat-tab-group mat-align-tabs="start"
-                            (selectedTabChange)="onSelectTab($event,previewDetail,correlationDetail)">
+                        <mat-tab-group mat-align-tabs="start">
                             <mat-tab *ngFor="let type of sourceTypes">
                                 <ng-template mat-tab-label>
                                     {{type.category}}
@@ -231,13 +230,16 @@
                             <mat-icon>navigate_before</mat-icon>Previous
                         </button>
                         <button mat-flat-button color="primary" matStepperNext
-                            (click)="sourceForm.markAllAsTouched()">Next
+                            (click)="sourceForm.markAllAsTouched()" *ngIf="!isSourceMode">Next
                             <mat-icon>navigate_next</mat-icon>
+                        </button>
+                        <button mat-flat-button color="primary" *ngIf="isSourceMode" (click)="validateSource()">
+                            Save & Summary <mat-icon>save_alt</mat-icon>
                         </button>
                     </div>
                 </div>
             </cdk-step>
-            <cdk-step [optional]="true">
+            <cdk-step [optional]="true" *ngIf="!isSourceMode">
                 <ng-template cdkStepLabel>
                     <div fxLayoutAlign="center center" fxLayoutGap="4px">
                         <!-- <mat-icon *ngIf="showCompleteIcon(0)">check_circle</mat-icon>
@@ -246,7 +248,7 @@
                     </div>
                 </ng-template>
                 <div class="SDcontainer">
-                    <div fxLayout="column" fxLayoutGap="20px">
+                    <div fxLayout="column">
                         <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="20px" formArrayName="referenceData"
                             *ngFor="let reference of sourceForm.get('referenceData')['controls']; index as i; last as isLast; first as isFirst">
                             <ng-container [formGroupName]="i">
@@ -255,7 +257,7 @@
                                         Reference Data #{{i+1}}
                                         <span class="red">*</span>
                                     </div>
-                                    <app-image-cropper [imageType]="'Reference'" *ngIf="isEditMode"
+                                    <app-image-cropper [imageType]="'Reference'" [name]="reference.value.referenceId"
                                         [fileTypes]="'.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'"
                                         [imagePath]="''" (fileSelected)="onReferenceFileSelected($event, reference, i)">
                                     </app-image-cropper>
@@ -264,6 +266,8 @@
                                     <mat-label>Reference Data Name</mat-label>
                                     <input matInput placeholder="Reference Data Name"
                                         formControlName="referenceDataName" maxlength="50" autocomplete="off" />
+                                    <mat-error *ngIf="reference.controls.referenceDataName.hasError('required')">Please
+                                        upload the reference file</mat-error>
                                 </mat-form-field>
                                 <mat-form-field appearance="standard">
                                     <mat-label>Reference Data Description</mat-label>
@@ -283,14 +287,14 @@
                                 Add Reference Data <mat-icon>add_box</mat-icon>
                             </button>
                         </div>
-                        <div fxLayout="row">
+                        <div fxFlexOffset="20px" fxLayout="row">
                             <div fxFlex="50" fxLayoutAlign="start center">
                                 <button mat-flat-button color="primary" matStepperPrevious>
                                     <mat-icon>keyboard_arrow_left</mat-icon> Back
                                 </button>
                             </div>
                             <div fxFlex="50" fxLayoutAlign="end center">
-                                <button mat-flat-button color="primary" matStepperNext (click)="saveSource()">
+                                <button mat-flat-button color="primary" (click)="validateSource()">
                                     Save & Summary <mat-icon>save_alt</mat-icon>
                                 </button>
                             </div>
@@ -298,7 +302,7 @@
                     </div>
                 </div>
             </cdk-step>
-            <cdk-step [optional]="true">
+            <cdk-step [optional]="true" *ngIf="!isSourceMode">
                 <ng-template cdkStepLabel>
                     <div fxLayoutAlign="center center" fxLayoutGap="4px">
                         <!-- <mat-icon *ngIf="showCompleteIcon(0)">check_circle</mat-icon>
@@ -308,88 +312,44 @@
                 </ng-template>
                 <div class="SDcontainer">
                     <div class="analysis-preview">
-                        <table class="table">
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <div class="label1">Source Data</div>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="label2">Name</div>
-                                        {{summary.source?.sourceDataName}}
-                                    </td>
-                                    <td>
-                                        <div class="label2">CDE</div>
-                                        <span class="spec" *ngFor="let column of summary.source?.availableColumns">
-                                            {{column}},
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="label1" style="width: 200px;">Rerference Data</div>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr *ngFor="let ref of summary.reference; index as i;">
-                                    <td>
-                                        <div class="label2">Name</div>
-                                        #{{i+1}}. {{ref.referenceDataName}}
-                                    </td>
-                                    <td>
-                                        <div class="label2">Reference CDE</div>
-                                        <span *ngFor="let column of ref?.availableRefColumns">
-                                            {{column}},
-                                        </span>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <div class="label1">Settings</div>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="label2">Multi source name</div>
-                                    </td>
-                                    <td>{{summary.settings?.multiSourceOptions}} </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="label2">Multi source Column</div>
-                                    </td>
-                                    <td>{{summary.settings?.multiSourceColumn}} </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="label2">Frequency</div>
-                                    </td>
-                                    <td>{{summary.settings?.frequency}}</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="label2">Upload Date</div>
-                                    </td>
-                                    <td>{{summary.settings?.uploadDate}}</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="label2">Upload Time</div>
-                                    </td>
-                                    <td>{{summary.settings?.uploadTime}}</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="label2">Department</div>
-                                    </td>
-                                    <td>{{summary.settings?.department}}</td>
-                                </tr>
-                            </tbody>
+                        <table class="mat-table">
+                            <tr class="mat-row">
+                                <td class="mat-cell title" colspan="4">Source Data</td>
+                            </tr>
+                            <tr class="mat-row">
+                                <td class="mat-cell sub-title">Source Name</td>
+                                <td class="mat-cell">{{summary.source?.sourceDataName}}</td>
+                                <td class="mat-cell sub-title">Source CDE</td>
+                                <td class="mat-cell">
+                                    <mat-chip-list cdkDropListOrientation="horizontal">
+                                        <mat-chip *ngFor="let column of summary.source?.availableColumns">
+                                            {{column}}
+                                        </mat-chip>
+                                    </mat-chip-list>
+                                </td>
+                            </tr>
+                            <tr class="mat-row">
+                                <td class="mat-cell title" colspan="4">Rerference Data</td>
+                            </tr>
+                            <tr class="mat-row" *ngFor="let ref of summary.reference; index as i;">
+                                <td class="mat-cell sub-title">Reference Name</td>
+                                <td class="mat-cell">#{{i+1}}. {{ref.referenceDataName}}</td>
+                                <td class="mat-cell sub-title">Reference CDE</td>
+                                <td class="mat-cell">
+                                    <mat-chip-list cdkDropListOrientation="horizontal">
+                                        <mat-chip *ngFor="let column of ref?.availableRefColumns">
+                                            {{column}}
+                                        </mat-chip>
+                                    </mat-chip-list>
+                                </td>
+                            </tr>
+                            <tr class="mat-row">
+                                <td class="mat-cell title" colspan="4">Settings</td>
+                            </tr>
+                            <tr class="mat-row" *ngFor="let setting of summary?.settings  | keyvalue; index as i;">
+                                <td class="mat-cell sub-title capitalize">{{setting.key}}</td>
+                                <td class="mat-cell" colspan="3">{{setting.value}}</td>
+                            </tr>
                         </table>
                     </div>
                 </div>

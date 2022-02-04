@@ -16,7 +16,7 @@ import { AuthorizedComponent } from './authorized.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DelayAnalysisComponent } from './delay-analysis/delay-analysis.component';
 import { CreateSourceComponent } from './create-source/create-source.component';
-import { RulesetComponent } from "./ruleset/ruleset.component";
+// import { RulesetComponent } from "./ruleset/ruleset.component";
 import { ProfileComponent } from './profile/profile.component';
 import { AttributeDetailsComponent } from './attribute-details/attribute-details.component';
 import { CorrelationDetailsComponent } from './correlation-details/correlation-details.component';
@@ -39,7 +39,7 @@ import { AdminComponent } from '../admin/admin.component';
     DashboardComponent,
     DelayAnalysisComponent,
     CreateSourceComponent,
-    RulesetComponent,
+  //  RulesetComponent,
     ProfileComponent,
     AttributeDetailsComponent,
     CorrelationDetailsComponent,

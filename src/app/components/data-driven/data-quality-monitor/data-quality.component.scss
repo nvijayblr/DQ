@@ -2,6 +2,8 @@
   position: relative;
   left: 240px;
   padding: 10px;
+  max-height: 100vh;
+  overflow-y: auto;
 }
 .breadCrumb {
   color: #49739e;

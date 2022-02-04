@@ -4,6 +4,7 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { HttpService } from '../../services/http-service.service';
 import { DataDrivenService } from './data-driven.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-data-driven',
@@ -11,18 +12,18 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./data-driven.component.scss']
 })
 export class DataDrivenComponent implements OnInit {
-
+  subscription: Subscription;
   menuList: Array<any> = [
     {
       name: 'Data Profiling',
       icon: 'fa-qrcode',
-      route: 'data-profile',      
+      route: 'data-profile',
       children: []
 
     }, {
       name: 'Data Quality Monitoring',
       icon: 'fa-object-group',
-      route: 'data-quality-monitoring',   
+      route: 'data-quality-monitoring',
       children: []
 
     }, {
@@ -45,7 +46,12 @@ export class DataDrivenComponent implements OnInit {
   constructor(private http: HttpService,
     private ds: DataDrivenService,
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router) {
+
+    this.subscription = this.ds.getRefresh().subscribe(data => {
+      this.ngOnInit();
+    });
+  }
 
   ngOnInit() {
     this.getProfileSource();
@@ -63,6 +69,8 @@ export class DataDrivenComponent implements OnInit {
       this.getProfileSourceList(result.SourceDetailsList || []);
     });
   }
+
+
 
   getProfileSourceList(list) {
     let categoryObject = {},
@@ -105,7 +113,7 @@ export class DataDrivenComponent implements OnInit {
         categoryObject[item.source.sourceCategory].children.push({
           name: item.source.sourceDataName,
           id: item.sourceId,
-          source : item,
+          source: item,
           route: route
         });
       }
@@ -117,14 +125,14 @@ export class DataDrivenComponent implements OnInit {
   }
 
   loadSourceProfile(source) {
-    this.router.navigate([source.route], { relativeTo: this.route });    
+    this.router.navigate([source.route], { relativeTo: this.route });
     this.selectedSource = source;
-    if(source.route === this.menuList[0].route){
+    if (source.route === this.menuList[0].route) {
       this.ds.setProfileSource(this.selectedSource.source);
     }
-    if(source.route === this.menuList[1].route){
+    if (source.route === this.menuList[1].route) {
       this.ds.setDQMSource(this.selectedSource.source);
-    }  
+    }
   }
 
 }
