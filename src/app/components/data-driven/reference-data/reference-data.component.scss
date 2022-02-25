@@ -1,0 +1,35 @@
+.content {
+  position: relative;
+  left: 240px;
+  padding: 10px;
+  max-height: 100vh;
+  width: calc(100vw - 240px);
+  overflow-y: auto;
+}
+.breadCrumb {
+  color: #49739e;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background-color: #fff;
+  padding: 4px 10px;
+  .mat-flat-button {
+    line-height: 28px;
+  }
+}
+.search {
+  background-color: #fff;
+  padding: 4px 10px;
+  margin: 10px 0;
+}
+.tableView {
+  max-width: 100%;
+  overflow: auto;
+
+  .mat-table {
+    width: 100%;
+  }
+  .mat-row,
+  .mat-header-row {
+    height: 38px;
+  }
+}

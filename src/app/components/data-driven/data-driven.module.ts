@@ -20,6 +20,10 @@ import { CreateSourceComponent } from './create-source/create-source.component';
 import { DDRulesetComponent } from './ruleset/ruleset.component';
 import { SourceAnalysisComponent } from './source-analysis/source-analysis.component';
 import { CompletenessDetailComponent } from './completeness-detail/completeness-detail.component';
+import { ReferenceDataComponent } from './reference-data/reference-data.component';
+import { CreateReferenceComponent } from './create-reference/create-reference.component';
+import { DataCleaningComponent } from './data-cleaning/data-cleaning.component';
+import { ProfileDetailComponent } from './profile-detail/profile-detail.component';
 
 @NgModule({
     declarations: [
@@ -33,7 +37,11 @@ import { CompletenessDetailComponent } from './completeness-detail/completeness-
         CreateSourceComponent,
         DDRulesetComponent,
         SourceAnalysisComponent,
-        CompletenessDetailComponent
+        CompletenessDetailComponent,
+        ReferenceDataComponent,
+        CreateReferenceComponent,
+        DataCleaningComponent,
+        ProfileDetailComponent
     ],
     imports: [
         FlexLayoutModule,
@@ -48,7 +56,7 @@ import { CompletenessDetailComponent } from './completeness-detail/completeness-
         MatSelectFilterModule
     ],
     providers: [DataDrivenService],
-    entryComponents: [CreateSourceComponent, DDRulesetComponent, CompletenessDetailComponent],
+    entryComponents: [CreateSourceComponent, DDRulesetComponent, CompletenessDetailComponent, CreateReferenceComponent],
     exports: []
 })
 export class DataDrivenModule { }

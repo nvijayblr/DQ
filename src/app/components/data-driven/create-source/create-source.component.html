@@ -1,4 +1,8 @@
-<div mat-dialog-title>{{ isEditMode ? 'Edit' : 'Create' }} Source</div>
+<div mat-dialog-title>{{ isEditMode ? 'Edit' : 'Create' }} Source
+    <button class="close" mat-icon-button (click)="onClose()">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
 <div mat-dialog-content>
     <div class="detailStepper" [formGroup]="sourceForm">
         <app-dd-stepper #csStepper linear>
@@ -61,14 +65,12 @@
                                 <strong class="sourceLabel" *ngIf="isEditMode">
                                     {{CSControls.sourceFileName.value}}
                                 </strong>
-                                <mat-error class="nerr" *ngIf="!isCorrectFileType">Please Select a Correct File Type
-                                </mat-error>
-                                <mat-error class="nerr ftw" *ngIf="selFileNameErr && flError">Please Select a File
+                                <mat-error *ngIf="!isCorrectFileType">Please Select a Correct File Type
                                 </mat-error>
                             </div>
                         </div>
                     </div>
-                    <div fxLayout="row">
+                    <div fxLayout="row" fxLayoutGap="20px">
                         <div fxLayout="column">
                             <div fxLayout="row" fxLayoutGap="20px">
                                 <mat-form-field appearance="standard">
@@ -109,7 +111,7 @@
                                     </mat-select>
                                 </mat-form-field>
                             </div>
-                            <div fxLayout="row" fxLayoutGap="20px">
+                            <div fxLayout="row" fxLayoutGap="20px" *ngIf="!isSourceMode">
                                 <mat-form-field appearance="standard">
                                     <mat-label class="mtop sub-title">Data Steward</mat-label>
                                     <mat-select #select3 multiple placeholder="Using Groups" [(value)]="selected"
@@ -131,7 +133,7 @@
                                         </mat-option>
                                     </mat-select>
                                 </mat-form-field>
-                                <div class="tollerance-wrapper">
+                                <div class="tollerance-wrapper" *ngIf="dataUserTollerance.length">
                                     <mat-card *ngFor="let user of dataUserTollerance">
                                         <h2>Tollerance - {{user.user}}</h2>
                                         <div class="wrap">
@@ -182,7 +184,7 @@
                             </div>
                         </div>
                         <div fxLayout="column">
-                            <div fxLayout="row" fxLayoutGap="20px">
+                            <div fxLayout="row" fxLayoutGap="20px" *ngIf="!isSourceMode">
                                 <app-rule-selector multiple="true" [ruleItems]="multiSourceList"
                                     [initValue]="sourceSettings.multiSourceOptions" [showAddItem]="false"
                                     (selectionChange)="sourceSettings.multiSourceOptions=$event.value"
@@ -197,7 +199,7 @@
                                     </mat-select>
                                 </mat-form-field>
                             </div>
-                            <div fxLayout="row" fxLayoutGap="20px">
+                            <div fxLayout="row" fxLayoutGap="20px" *ngIf="!isSourceMode">
                                 <app-rule-selector [ruleItems]="frequencyList" [initValue]="sourceSettings.frequency"
                                     [showAddItem]="false" (selectionChange)="sourceSettings.frequency=$event.value"
                                     label="Frequency"></app-rule-selector>
@@ -211,7 +213,7 @@
                                 </mat-form-field>
                             </div>
                             <div fxLayout="row" fxLayoutGap="20px">
-                                <mat-form-field appearance="standard">
+                                <mat-form-field appearance="standard" *ngIf="!isSourceMode">
                                     <mat-label>Select a time</mat-label>
                                     <input matInput [ngxTimepicker]="timepicker" formControlName="uploadTime"
                                         autocomplete="off">
@@ -229,8 +231,8 @@
                         <button mat-flat-button color="primary" matStepperPrevious>
                             <mat-icon>navigate_before</mat-icon>Previous
                         </button>
-                        <button mat-flat-button color="primary" matStepperNext
-                            (click)="sourceForm.markAllAsTouched()" *ngIf="!isSourceMode">Next
+                        <button mat-flat-button color="primary" matStepperNext (click)="sourceForm.markAllAsTouched()"
+                            *ngIf="!isSourceMode">Next
                             <mat-icon>navigate_next</mat-icon>
                         </button>
                         <button mat-flat-button color="primary" *ngIf="isSourceMode" (click)="validateSource()">
@@ -310,8 +312,8 @@
                         <span>Summary</span>
                     </div>
                 </ng-template>
-                <div class="SDcontainer">
-                    <div class="analysis-preview">
+                <div class="analysis-preview" fxLayout="column">
+                    <div class="SDcontainer">
                         <table class="mat-table">
                             <tr class="mat-row">
                                 <td class="mat-cell title" colspan="4">Source Data</td>
@@ -351,6 +353,11 @@
                                 <td class="mat-cell" colspan="3">{{setting.value}}</td>
                             </tr>
                         </table>
+                    </div>
+                    <div fxFlexOffset="20px" fxLayoutAlign="end center">
+                        <button mat-raised-button color="primary" (click)="onClose()">Complete
+                            <mat-icon>done_all</mat-icon>
+                        </button>
                     </div>
                 </div>
             </cdk-step>

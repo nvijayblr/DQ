@@ -6,7 +6,7 @@
   width: 250px;
 }
 .SDcontainer {
-  max-height: 380px;
+  max-height: calc(100vh - 400px);
   overflow: auto;
 
   .mat-form-field,
@@ -23,6 +23,10 @@
   h6 {
     color: #49739e;
     padding-bottom: 0.5rem;
+  }
+
+  .mat-table {
+    width: 100%;
   }
 }
 .SCContainer {
@@ -85,44 +89,3 @@
   text-transform: capitalize;
 }
 
-.table {
-  td {
-    font-size: 13px;
-  }
-  tr:first-child td {
-    border: none;
-  }
-  .label {
-    font-weight: 500;
-    font-family: "open-sans-regular";
-    font-size: 13px;
-    color: #373737;
-  }
-  .label2 {
-    font-family: "open-sans-condensed-bold";
-    font-size: 14px;
-    color: #373737;
-  }
-  .label1 {
-    font-family: "open-sans-condensed-bold";
-    font-size: 18px;
-    color: #efa800;
-    width: 400px;
-    display: inline-block;
-  }
-  h4 {
-    font-weight: 400;
-    margin-top: 24px;
-    font-family: "open-sans-condensed-bold";
-  }
-
-  .spec {
-    display: inline-block;
-    margin-right: 2px;
-    background: #433683;
-    margin-bottom: 4px;
-    padding: 0 7px;
-    font-size: 12px;
-    color: #fff;
-  }
-}

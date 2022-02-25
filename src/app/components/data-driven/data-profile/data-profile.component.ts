@@ -118,13 +118,15 @@ export class DataProfileComponent implements OnInit {
   createOrEditSource(isEditMode) {
     const dialogRef = this.dialog.open(CreateSourceComponent, {
       width: '1400px',
+      disableClose : true,
       data: {
         isEditMode,
         analysis: {
           sourceId: this.source.sourceId,
           source: this.source
         },
-        isSourceMode: true
+        isSourceMode: true,
+        uploadMethod : 'profile'
       }
     });
 

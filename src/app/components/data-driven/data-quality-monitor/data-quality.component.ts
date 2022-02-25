@@ -178,13 +178,16 @@ export class DataQualityComponent implements OnInit {
     createOrEditSource(isEditMode) {
         const dialogRef = this.dialog.open(CreateSourceComponent, {
             width: '1400px',
+            disableClose: true,
             data: {
                 isEditMode,
                 analysis: this.selectedSource
-            }
+            },
+
         });
 
         dialogRef.afterClosed().subscribe(data => {
+
         });
     }
 
@@ -192,6 +195,7 @@ export class DataQualityComponent implements OnInit {
         const dialogRef = this.dialog.open(DDRulesetComponent, {
             width: '85vw',
             maxWidth: '85vw',
+            disableClose: true,
             data: {
                 isEditMode,
                 analysis: this.selectedSource,
@@ -200,16 +204,23 @@ export class DataQualityComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe(data => {
-            this.selectedSource.rulesetId = data.rulsetId;
-            if (!data.isUploaded) {
-                this.isOriginalSource = 'YES';
-                this.OriginalSourcePath = this.selectedSource.source.templateSourcePath;
-                this.originalSourceUploadDate = this.selectedSource.settings.uploadDate;
-                this.uploadSource(this.selectedSource);
+            if (data) {
+                this.onRulsetClosed(data);
             }
-            setTimeout(() => (this.stepper.selectedIndex = 3), 0);
         });
     }
+
+    onRulsetClosed(data: any) {
+        this.selectedSource.rules.push(data.ruleset);
+        if (!data.isUploaded) {
+            this.isOriginalSource = 'YES';
+            this.OriginalSourcePath = this.selectedSource.source.templateSourcePath;
+            this.originalSourceUploadDate = this.selectedSource.settings.uploadDate;
+            this.uploadSource(this.selectedSource);
+        }
+        setTimeout(() => (this.stepper.selectedIndex = 3), 0);
+    }
+
 
     onSourceCSVSelected(file, source) {
     }
@@ -245,6 +256,7 @@ export class DataQualityComponent implements OnInit {
                     this.showUploadError(result.errorMsg);
                 } else {
                     this.alertService.showAlert('Source has been uploaded successfully.');
+                    this.ds.setRefreshMenu(this.selectedSource, 1);
                 }
             }, (error) => {
                 this.alertService.showError(error);

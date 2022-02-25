@@ -1,52 +1,48 @@
-<h1 mat-dialog-title class="nTitle"> CLEAN LOGS</h1>
-<div mat-dialog-content>
-  <!-- <div class="loader-12"></div> -->
-    <div class="">
-      <div class="flex-containers">
-        <mat-card class="border no-rounded list shrare-post mct pad10">
-            <div class="summaryBlock fst">
-              <div class="mid-cnt">Source ID</div>
-              <div class="topTitle green">{{cleanLogSource.sourceId}}</div>                  
-            </div>
-             <div class="dividerTop"></div>
-            <div class="summaryBlock">
-              <div class="mid-cnt">Source FileName </div>
-              <div class="topTitle red">{{cleanLogSource.sourcepath}}</div>                  
-            </div>
-            <div class="dividerTop"></div>
-            <div class="summaryBlock">
-              <div class="mid-cnt">Output Path </div>
-              <div class="topTitle green">{{cleanLogSource.outputpath}}</div>                  
-            </div>             
-        </mat-card>
-      </div>
-       <div class="list-item">
-        <div class="table-wrapper-scroll-y my-custom-scrollbar"> 
-        <table class="table table-bordered table-striped mb-0 attTable">
-          <thead>
-            <tr>
-              <th scope="col">
-                Process Time
-              </th>
-              <th scope="col">
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody *ngFor="let preview of cleanLogDetails;let i= index;">           
-            <tr *ngFor="let clean of preview">
-              <td>{{clean.processTime | date:'medium'  }}</td>
-              <td> {{clean.action}}</td>
-            </tr>
-          
-          </tbody>
-        </table>
-        </div>
-      </div>
-
-    </div>
+<div mat-dialog-title>Clean Logs
+  <button class="close" mat-icon-button (click)="onClose()">
+    <mat-icon>close</mat-icon>
+  </button>
 </div>
-<div mat-dialog-actions>
-  <button mat-button class="btn btn-secondary" (click)="onNoClick()">Close</button>
-  <button mat-button class="btn btn-primary" [mat-dialog-close]="" cdkFocusInitial>Ok</button>
+<div mat-dialog-content fxLayout="column" fxLayoutGap="10px">
+  <div class="topStatus padding" fxLayout="row">
+    <div class="card" fxLayout="column">
+      <span class="topText">Source ID</span>
+      <span class="bottomText">{{cleanLogDetails.sourceId}}</span>
+    </div>
+    <div class="card" fxLayout="column">
+      <span class="topText">Source FileName</span>
+      <span class="bottomText">{{cleanLogDetails.sourcepath}}</span>
+    </div>
+    <div class="card" fxLayout="column">
+      <span class="topText">Output Path</span>
+      <span class="bottomText">{{cleanLogDetails.outputpath}}</span>
+    </div>
+  </div>
+  <div class="tableView">
+    <table mat-table [dataSource]="cleanLogSource">
+
+      <ng-container matColumnDef="processTime">
+        <th mat-header-cell *matHeaderCellDef> Process Time</th>
+        <td class="table-column-220" mat-cell *matCellDef="let element">
+          {{element.processTime | date:'medium' }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>Action</th>
+        <td class="table-column-220" mat-cell *matCellDef="let element">
+          {{element.action}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="noData">
+        <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length" class="center">
+          No Records Found
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true"></tr>
+      <tr mat-row *matRowDef="let element;let row; columns: displayedColumns;"></tr>
+      <tr mat-footer-row *matFooterRowDef="['noData']" [hidden]="cleanLogSource && cleanLogSource.data.length > 0"></tr>
+    </table>
+  </div>
 </div>

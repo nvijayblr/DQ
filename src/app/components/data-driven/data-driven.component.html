@@ -11,13 +11,13 @@
     <div fxLayout="row" fxFlex>
         <div class="sideBar" fxLayout="column">
             <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="menuTree">
-                <mat-tree-node *matTreeNodeDef="let node"
-                    [class.selected]="node.id && node.id === selectedSource.id" [class.sourceNode]="node.id"
-                    (click)="node.id && loadSourceProfile(node)">
+                <mat-tree-node *matTreeNodeDef="let node" [class.selected]="node.id && node.id === selectedSource.id"
+                    [class.sourceNode]="node.id" (click)="node.route && loadSourceProfile(node)"
+                    [class.cleanLog]="node.cleanLogFile">
                     <mat-icon *ngIf="node.icon" fontSet="fa" [fontIcon]="node.icon"></mat-icon>
                     <span>{{node.name}}</span>
-                    <mat-icon *ngIf="node.id" class="rightAlign">edit</mat-icon>
-                    <mat-icon *ngIf="node.id">delete</mat-icon>
+                    <!-- <mat-icon *ngIf="node.id" class="rightAlign">edit</mat-icon>
+                    <mat-icon *ngIf="node.id">delete</mat-icon> -->
                 </mat-tree-node>
                 <mat-nested-tree-node *matTreeNodeDef="let node;when: hasChild"
                     [ngClass]="{'expanded':treeControl.isExpanded(node)}">

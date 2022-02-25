@@ -1,0 +1,138 @@
+.dashboard {
+  position: relative;
+  left: 240px;
+  padding: 10px;
+  max-height: 100vh;
+  width: calc(100vw - 240px);
+  overflow-y: auto;
+
+  .topStatus {
+    margin: 8px 0 10px;
+
+    .bottomText {
+      font-size: 12px;
+      opacity: 0.7;
+    }
+    .card {
+      width: 170px;
+      margin-right: 8px;
+      padding: 6px 15px 6px 6px;
+      color: #666;
+      text-align: end;
+      background-clip: border-box;
+      border: 0 solid #f7f7f7;
+      border-radius: 0.25rem;
+      box-shadow: 0 0.75rem 6rem rgb(56 65 74 / 3%);
+    }
+    .topText {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: #49739e;
+    }
+  }
+}
+
+.breadCrumb {
+  color: #49739e;
+  font-size: 1rem;
+  font-weight: 600;
+  background-color: #fff;
+  padding: 4px 10px;
+
+  .mat-flat-button {
+    line-height: 28px;
+  }
+}
+
+.cleaningTab {
+  background-color: #fff;
+  position: relative;
+
+  .floatRight {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 5;
+  }
+
+  .mat-flat-button {
+    line-height: 28px;
+
+    .mat-icon {
+      transform: scale(0.8);
+    }
+  }
+
+  .mat-slider {
+    width: 300px;
+    margin-top: 25px;
+  }
+
+  .numericValue .mat-form-field {
+    width: 120px;
+  }
+
+  .DBButton {
+    margin: 0 10px 10px;
+
+    > span {
+      padding-left: 10px;
+    }
+  }
+
+  .bold {
+    font-weight: 600;
+  }
+}
+
+.profileDetail {
+  background-color: #fff;
+  margin-top: 10px;
+}
+
+.tabContent .label {
+  font-weight: 500;
+  color: #49739e;
+  padding-left: 24px;
+}
+
+:host ::ng-deep .tabContent .mat-radio-group .mat-radio-label {
+  margin-bottom: 0;
+  margin-right: 10px;
+  font-size: 13px;
+}
+
+.previewDetail {
+  margin-top: 10px;
+
+  .mat-table {
+    width: 100%;
+  }
+
+  table tr {
+    height: 40px;
+  }
+
+  table tr th,
+  table tr td,
+  .mat-paginator {
+    font-size: 13px;
+  }
+
+  .center {
+    text-align: center;
+  }
+
+}
+
+.findReplace {
+  margin: 12px;
+  
+  input {
+    width: 80%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    height: 28px;
+    padding-left: 8px;
+  }
+}

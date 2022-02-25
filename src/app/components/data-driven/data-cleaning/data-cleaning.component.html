@@ -1,0 +1,259 @@
+<div class="dashboard" fxFlex fxLayout="column">
+    <div class="breadCrumb" fxLayout="row">
+        <span> Data Cleaning</span>
+        <span *ngIf="source.sourceDataName"> >> {{source.sourceCategory}} >>
+            {{source.sourceDataName}}</span>
+        <div fxFlex fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
+            <button mat-flat-button color="primary" *ngIf="isSourceLoaded()" (click)="createOrEditSource(true)">Edit
+                Source</button>
+            <button mat-flat-button color="primary" (click)="createOrEditSource(false)">Create
+                Source</button>
+        </div>
+    </div>
+    <div class="topStatus padding" fxLayout="row">
+        <div class="card" *ngFor="let property of profileSummary | keyvalue" fxLayout="column">
+            <span class="topText">{{property.value.count}}</span>
+            <span class="bottomText">{{property.key}}</span>
+        </div>
+    </div>
+    <div class="cleaningTab">
+        <div fxLayout="row" fxLayoutGap="20px" class="floatRight">
+            <button mat-flat-button color="primary" (click)="showCleanLogs()" [disabled]="!cleanLogs.length">
+                <mat-icon> history</mat-icon> Logs
+            </button>
+            <button mat-flat-button color="primary" (click)="showSaveConfirm()" [disabled]="!isSaveEnable">
+                <mat-icon> save</mat-icon> Save
+            </button>
+        </div>
+        <mat-tab-group mat-align-tabs="start">
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    Data Imputation
+                </ng-template>
+                <div class="tabContent" fxLayout="column">
+                    <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+                        <span class="label">Impute Null Data</span>
+                        <mat-form-field appearance="standard">
+                            <mat-select placeholder="Select Columns" [(ngModel)]="impute.column"
+                                (ngModelChange)="setDatatype(impute.column,impute)">
+                                <ng-container *ngFor="let item of profile">
+                                    <mat-option *ngIf="item.attributeSummary?.null_records > 0" [value]="item.column">
+                                        {{item.column}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="standard" [hidden]="impute.column_data_type !== 'Numeric'">
+                            <mat-select placeholder="Impute Option" [(ngModel)]="impute.value">
+                                <mat-option *ngFor="let value of numbericValues" [value]="value.toUpperCase()">
+                                    {{value}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="standard"
+                            [hidden]="!(impute.column_data_type === 'Alphabetic' || impute.column_data_type === 'Alphanumeric')">
+                            <mat-select placeholder="Select Value" [(ngModel)]="impute.value">
+                                <mat-option *ngFor="let frequency of frequncyAnalysis"
+                                    [value]="frequency.unique_values">{{frequency.unique_values}} -
+                                    ({{frequency.counts}})</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <button mat-flat-button color="primary" (click)="loadPreview('nan')"
+                            [disabled]="!impute.column">
+                            <mat-icon> visibility</mat-icon> Preview
+                        </button>
+                        <button mat-flat-button color="primary" (click)="confirmImputeColumn()"
+                            [disabled]="!impute.value">
+                            <mat-icon> delete</mat-icon> Impute
+                        </button>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    Duplicate Analysis
+                </ng-template>
+                <div class="tabContent" fxLayout="column">
+                    <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+                        <span class="label">Remove Duplicate Rows</span>
+                        <mat-radio-group [(ngModel)]="duplicate.option" (ngModelChange)="duplicate.columns = []">
+                            <mat-radio-button value="all">All Columns</mat-radio-button>
+                            <mat-radio-button value="selected">Specific Column</mat-radio-button>
+                        </mat-radio-group>
+                        <mat-form-field appearance="standard">
+                            <mat-select placeholder="Select Columns" multiple [(ngModel)]="duplicate.columns"
+                                [disabled]="duplicate.option !== 'selected'">
+                                <mat-option *ngFor="let item of profile" [value]="item.column">{{item.column}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <button mat-flat-button color="primary" (click)="loadPreview('duplicate')">
+                            <mat-icon> visibility</mat-icon> Preview
+                        </button>
+                        <button mat-flat-button color="warn" (click)="confirmDeleteDuplicates()"
+                            [disabled]="NoPreviewData">
+                            <mat-icon> delete</mat-icon> Remove
+                        </button>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    Data Removal
+                </ng-template>
+                <div class="tabContent">
+                    <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign=" center">
+                        <span class="label">Delete Column/Row</span>
+                        <mat-radio-group [(ngModel)]="delete.type" (ngModelChange)="changeRemoveCategory(delete.type)">
+                            <mat-radio-button [checked]="true" value="column">Column</mat-radio-button>
+                            <mat-radio-button value="custom" value="row">Row</mat-radio-button>
+                        </mat-radio-group>
+                        <mat-radio-group [(ngModel)]="delete.category">
+                            <mat-radio-button [checked]="true" [value]="delete.type === 'row' ? 'row_nan':'col_nan'">NaN
+                            </mat-radio-button>
+                            <mat-radio-button [hidden]="delete.type === 'row'" value="col_with_value">Value
+                            </mat-radio-button>
+                        </mat-radio-group>
+
+                        <div fxLayout="row" fxLayoutGap="20px" [hidden]="delete.category !== 'col_with_value'">
+                            <mat-form-field appearance="standard">
+                                <mat-select placeholder="Select Columns" [(ngModel)]="delete.column_name"
+                                    (ngModelChange)="setDatatype(delete.column_name,delete)">
+                                    <mat-option *ngFor="let item of profile" [value]="item.column">
+                                        {{item.column}} - {{item.attributeSummary?.dataType}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="standard"
+                                [hidden]="!(delete.column_data_type === 'Alphabetic' || delete.column_data_type === 'Alphanumeric')">
+                                <mat-label>Value</mat-label>
+                                <input matInput placeholder="" value="" [(ngModel)]=" delete.values"
+                                    (ngModelChange)="delete.formula.cond_value1=''; delete.formula.cond_value2=''">
+                            </mat-form-field>
+
+                            <div fxLayout="row" fxLayoutGap="15px" class="numericValue"
+                                [hidden]="delete.column_data_type !== 'Numeric'">
+                                <mat-form-field appearance="standard">
+                                    <mat-select placeholder="Operator" [(ngModel)]="delete.formula.operator1"
+                                        (ngModelChange)="delete.values=''">
+                                        <mat-option *ngFor="let operator of operators" [value]="operator">{{operator}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="standard">
+                                    <mat-label>Value</mat-label>
+                                    <input matInput placeholder="" type="number" value=""
+                                        [(ngModel)]="delete.formula.cond_value1" (ngModelChange)="delete.values=''">
+                                </mat-form-field>
+
+                                <mat-form-field appearance="standard">
+                                    <mat-select placeholder="Operator" [(ngModel)]="delete.formula.operator2"
+                                        (ngModelChange)="delete.values=''">
+                                        <mat-option *ngFor="let operator of operators" [value]="operator">{{operator}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="standard">
+                                    <mat-label>Value</mat-label>
+                                    <input matInput placeholder="" type="number" value=""
+                                        [(ngModel)]="delete.formula.cond_value2" (ngModelChange)="delete.values=''">
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div fxLayout="row" fxLayoutAlign=" center"
+                            [hidden]="!(delete.category === 'col_nan' || delete.category === 'row_nan')">
+                            <div fxLayout="column">
+                                <span>Threshold : {{delete.threshold}}%</span>
+                                <span [hidden]="delete.category === 'col_nan'">
+                                    Considering NaNs across {{calulateRowNanThreshold()}} columns at least, per row.
+                                </span>
+                                <span [hidden]="delete.category === 'row_nan'">
+                                    (Considering NaNs across {{calulateColNanThreshold()}} out of
+                                    {{this.profileSummary['Records'].count}} rows)
+                                </span>
+                            </div>
+                            <mat-slider thumbLabel min="0" max="100" step="1" [(ngModel)]="delete.threshold">
+                            </mat-slider>
+                        </div>
+                    </div>
+                    <div class="DBButton" fxLayout="row" fxLayoutAlign=" center">
+                        <div fxFlexOffset="40" fxFlex="20" fxLayoutGap="20px" fxLayoutAlign="center center">
+                            <button mat-flat-button color="primary" (click)="loadPreview('data_remove')">
+                                <mat-icon> visibility</mat-icon> Preview
+                            </button>
+                            <button mat-flat-button color="warn" (click)="confirmColumnsRows()"
+                                [disabled]="NoPreviewData">
+                                <mat-icon> delete</mat-icon> Remove
+                            </button>
+                        </div>
+                        <span *ngIf="delete.category === 'col_nan' && messageDisplay">
+                            Columns getting removed - <span class="bold">{{messageDisplay}}</span>
+                        </span>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    Find / Replace
+                </ng-template>
+                <div class="tabContent">
+                    <div class="findReplace" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign=" center">
+                        <div fxFlex="40">
+                            <input type="search" placeholder="Find Value" aria-label="Find" [(ngModel)]='searchValue'
+                                (keyup.enter)="applySearch()" />
+                            <button mat-flat-button color="primary" (click)="applySearch()">Find
+                                Value</button>
+                        </div>
+                        <div fxFlex="40">
+                            <input type="search" placeholder="Replace Value" aria-label="Replace"
+                                [(ngModel)]='replaceValue' (keyup.enter)="applyReplaceSearch()"
+                                [disabled]="searchDisabled" />
+                            <button mat-flat-button color="primary" (click)="applyReplaceSearch()">Replace</button>
+                        </div>
+                        <button mat-flat-button color="primary" (click)="downloadReplacedSource()"
+                            *ngIf="showSaveButton">
+                            <mat-icon> cloud_download</mat-icon> Download Replaced Source
+                        </button>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+    <div class="previewDetail" [hidden]="!showPreviewTable">
+        <table mat-table [dataSource]="previewDataSource">
+            <ng-container *ngFor="let column of displayedColumns; let colIndex = index" matColumnDef="{{column}}">
+                <th class="table-column-220" mat-header-cell *matHeaderCellDef>{{column}}</th>
+                <td class="table-column-220" mat-cell *matCellDef="let element">
+                    {{element[column]}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="noData">
+                <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length" class="center">
+                    No Records Found
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true"
+                [hidden]="!previewDataSource || !previewDataSource.data.length"></tr>
+            <tr mat-row *matRowDef="let element;let row; columns: displayedColumns;"></tr>
+            <tr mat-footer-row *matFooterRowDef="['noData']"
+                [hidden]="previewDataSource && previewDataSource.data.length > 0"></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[10,20, 40, 60, 80,100]" aria-label="Select page of Records"></mat-paginator>
+    </div>
+    <div class="profileDetail">
+        <mat-tab-group mat-align-tabs="start">
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    Profile
+                </ng-template>
+                <app-profile-detail [profileData]="profile" (impute)="setColumnForImpute($event)" [isDataClean]="true"
+                    #analysisDetail>
+                </app-profile-detail>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>

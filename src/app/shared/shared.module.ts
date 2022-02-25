@@ -42,6 +42,7 @@ import { CleanLogsComponent } from './clean-logs/clean-logs.component';
 import { DeactiveDialogComponent } from './deactive-dialog/deactive-dialog.component';
 import { FilterInputComponent } from './filter-input/filter-input.component';
 import { AlertDialogComponent } from './alert-dialog/alert-dialog.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
    imports: [
@@ -57,6 +58,7 @@ import { AlertDialogComponent } from './alert-dialog/alert-dialog.component';
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     ColorPickerModule,
+    FlexLayoutModule,
     AgGridModule.withComponents([]),
   ],
   declarations: [

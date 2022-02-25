@@ -11,6 +11,9 @@
   font-weight: 600;
   background-color: #fff;
   padding: 4px 10px;
+  .mat-flat-button {
+    line-height: 28px;
+  }
 }
 
 .detailStepper {
@@ -49,6 +52,6 @@
 }
 
 ::ng-deep .image-crop-wrapper .file-form-group .gv-file-input {
-  width: auto!important;
-  min-width: auto!important;
+  width: auto !important;
+  min-width: auto !important;
 }

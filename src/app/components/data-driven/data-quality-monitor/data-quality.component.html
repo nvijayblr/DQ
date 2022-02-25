@@ -4,6 +4,12 @@
         <span *ngIf="isSourceLoaded()"> >>
             {{selectedSource.source.sourceCategory}} >>
             {{selectedSource.source.sourceDataName}}</span>
+        <!-- <div fxFlex fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
+            <button mat-flat-button color="primary" *ngIf="isSourceLoaded()" (click)="createOrEditSource(true)">Edit
+                Source</button>
+            <button mat-flat-button color="primary" (click)="createOrEditSource(false)">Create
+                Source</button>
+        </div> -->
     </div>
     <div class="detailStepper">
         <app-dd-stepper #ddStepper linear>

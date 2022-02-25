@@ -1,0 +1,31 @@
+<div mat-dialog-title>Add Reference data
+    <button class="close" mat-icon-button (click)="onClose()">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+<div mat-dialog-content fxLayout="column">
+    <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+        <mat-label>Reference Data</mat-label>
+        <app-image-cropper [imageType]="'Source'" [fileTypes]="chooseOptions" [imagePath]="''"
+            (fileSelected)="onSourceFileSelected($event)">
+        </app-image-cropper>
+    </div>
+    <div fxLayout="row" fxLayoutGap="20px" [formGroup]="referenceForm">
+        <mat-form-field appearance="standard">
+            <mat-label>Reference Data Category</mat-label>
+            <mat-select formControlName="db">
+                <mat-option *ngFor="let category of categoryList" [value]="category">
+                    {{category}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="standard">
+            <mat-label>Reference Data Set</mat-label>
+            <input matInput placeholder="Collection" formControlName="collection" maxlength="250" autocomplete="off" />
+        </mat-form-field>
+    </div>
+    <div fxFlex fxLayoutAlign="end center">
+        <button mat-flat-button color="primary" (click)="saveReference()">Submit</button>
+    </div>
+</div>

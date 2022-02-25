@@ -1,8 +1,13 @@
-<div mat-dialog-title>Ruleset Details</div>
+<div mat-dialog-title>
+    Ruleset Details
+    <button class="close" mat-icon-button (click)="onClose()">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
 <div class="rulsetValue" fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="30px" [formGroup]="rulesetForm">
     <mat-form-field appearance="standard">
         <mat-label>Ruleset Name</mat-label>
-        <input matInput placeholder="Ruleset Name" formControlName="rulesetName" maxlength="50" autocomplete="off" />
+        <input matInput placeholder="Ruleset Name" formControlName="rulesetName" autocomplete="off" />
         <mat-error *ngIf="RSControls.rulesetName.hasError('required')">Please Enter Ruleset Name</mat-error>
         <mat-error *ngIf="RSControls.rulesetName.hasError('duplicate')">Ruleset Name Already Exist</mat-error>
     </mat-form-field>

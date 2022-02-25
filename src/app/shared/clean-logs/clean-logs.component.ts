@@ -1,4 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
+import { MatTableDataSource } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as _ from 'lodash';
 
@@ -8,22 +9,20 @@ import * as _ from 'lodash';
   styleUrls: ['./clean-logs.component.scss']
 })
 export class CleanLogsComponent implements OnInit {
-  cleanLogSource;
-  cleanLogDetails: any = [];
+  cleanLogSource: MatTableDataSource<any>;
+  cleanLogDetails: any = {};
+  displayedColumns = ["processTime", "action"];
+
   constructor(public dialogRef: MatDialogRef<CleanLogsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data:any,) { }
-  
+    @Inject(MAT_DIALOG_DATA) public data: any,) { }
+
   ngOnInit() {
-      console.log('this', this.data)
-      this.cleanLogSource = this.data.Preview[0];
-      this.cleanLogDetails.push(_.values(this.data.Preview));
-    }
-  
-    onNoClick(): void {
-      this.dialogRef.close();
-    }
-    closeSettings() {
-      this.dialogRef.close();
-    }
+    this.cleanLogDetails = this.data[0] || {};
+    this.cleanLogSource = new MatTableDataSource(this.data || []);
+  }
+
+  onClose(): void {
+    this.dialogRef.close();
+  }
 
 }

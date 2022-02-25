@@ -45,7 +45,6 @@ export class CreateSourceComponent implements OnInit {
 
   selFileName: any;
   isCorrectFileType: boolean = true;
-  selFileNameErr: boolean = false;
   flError: any;
 
   selected: any;
@@ -221,7 +220,7 @@ export class CreateSourceComponent implements OnInit {
     const fName = file.name.split('.')[0];
     const fExt = file.name.split('.')[1];
     this.sourceFile = file;
-    this.isCorrectFileType = (this.selectedType === fExt);
+    this.isCorrectFileType = (this.selectedType.indexOf(fExt) >= 0);
     this.CSControls.sourceDataName.setValue(fName);
     this.CSControls.sourceDataName.markAsTouched();
   }
@@ -257,6 +256,9 @@ export class CreateSourceComponent implements OnInit {
     const referControl = this.sourceForm.get('referenceData') as FormArray;
     const formData: any = new FormData();
     let sourceRefNameEqual, isFileNotFound = false;
+
+    this.sourceForm.markAllAsTouched();
+    if (this.sourceForm.invalid) return;
 
     if (!this.isEditMode && !this.sourceFile.name) {
       this.alertService.showWarning('Please upload the source file.');
@@ -330,6 +332,7 @@ export class CreateSourceComponent implements OnInit {
         return;
       }
       this.summary = result;
+      this.ds.setRefreshMenu(result || {}, 1);
       setTimeout(() => this.stepper && this.stepper.next());
     }, (error) => {
       this.alertService.showError(error);
@@ -340,7 +343,7 @@ export class CreateSourceComponent implements OnInit {
   saveSource(formData, source) {
     const payload = {
       sourceId: source.sourceId,
-      db: 'profile',
+      db: this.data.uploadMethod,
       SourceSettings: {
         sourceDataName: source.sourceDataName,
         sourceDataDescription: source.sourceDataDescription,
@@ -358,7 +361,8 @@ export class CreateSourceComponent implements OnInit {
         this.alertService.showError(result.errorMsg);
         return;
       }
-      this.ds.setRefresh(source);
+
+      this.ds.setRefreshMenu(result.SourceSettings || {}, this.data.uploadMethod === 'clean' ? 2 : 0);
       this.alertService.showAlert('Source Created Successfully');
       this.dialogRef.close();
     }, (error) => {
@@ -370,7 +374,7 @@ export class CreateSourceComponent implements OnInit {
     let oldSource = this.data.analysis && this.data.analysis.source ? this.data.analysis.source : {};
     const payload = {
       action: 'edit',
-      db: 'profile',
+      db: this.data.uploadMethod,
       old_source: {
         sourceDataName: oldSource.sourceDataName,
         sourceFileName: oldSource.sourceFileName,
@@ -393,8 +397,8 @@ export class CreateSourceComponent implements OnInit {
         this.alertService.showError(result.errorMsg);
         return;
       }
-      this.ds.setRefresh(source);
-      this.alertService.showError('Source Updated Successfully');
+      this.ds.setRefreshMenu(result.SourceSettings, this.data.uploadMethod === 'clean' ? 2 : 0);
+      this.alertService.showAlert('Source Updated Successfully');
       this.dialogRef.close();
     }, (error) => {
       this.alertService.showError(error);
@@ -434,5 +438,9 @@ export class CreateSourceComponent implements OnInit {
         }
       });
     }
+  }
+
+  onClose() {
+    this.dialogRef.close();
   }
 }

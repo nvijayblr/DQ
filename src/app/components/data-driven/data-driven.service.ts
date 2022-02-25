@@ -6,7 +6,9 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 export class DataDrivenService {
     private profile = new BehaviorSubject<any>(null);
     private DQM = new BehaviorSubject<any>(null);
+    private cleaningData = new BehaviorSubject<any>(null);
     private refreshMenu = new BehaviorSubject<any>(null);
+    private referenceData = new BehaviorSubject<any>(null);
 
     setProfileSource(source: any) {
         this.profile.next(source);
@@ -24,11 +26,31 @@ export class DataDrivenService {
         return this.DQM.asObservable();
     }
 
-    setRefresh(source: any) {
-        this.refreshMenu.next(source);
+    setCleaningSource(source: any) {
+        this.cleaningData.next(source);
     }
 
-    getRefresh(): Observable<any> {
+    getCleaningSource(): Observable<any> {
+        return this.cleaningData.asObservable();
+    }
+
+    setReferenceData(source: any) {
+        this.referenceData.next(source);
+    }
+
+    getReferenceData(): Observable<any> {
+        return this.referenceData.asObservable();
+    }
+
+    setRefreshMenu(source: any, index: any, fromOrginSource: any = '') {
+        this.refreshMenu.next({
+            menuIndex: index,
+            source: source,
+            fromOrginSource: fromOrginSource,
+        });
+    }
+
+    getRefreshMenu(): Observable<any> {
         return this.refreshMenu.asObservable();
     }
 
@@ -36,6 +58,4 @@ export class DataDrivenService {
         this.profile.next(null);
         this.DQM.next(null);
     }
-
-
 }

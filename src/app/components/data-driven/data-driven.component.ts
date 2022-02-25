@@ -13,6 +13,8 @@ import { Subscription } from 'rxjs';
 })
 export class DataDrivenComponent implements OnInit {
   subscription: Subscription;
+  initPFSource: any;
+  initDQMSource: any;
   menuList: Array<any> = [
     {
       name: 'Data Profiling',
@@ -29,10 +31,12 @@ export class DataDrivenComponent implements OnInit {
     }, {
       name: 'Data Cleaning',
       icon: 'fa-recycle',
+      route: 'data-cleaning',
       children: []
     }, {
       name: 'Reference Data',
       icon: 'fa-server',
+      route: 'reference-data',
       children: []
     }
   ];
@@ -48,14 +52,29 @@ export class DataDrivenComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router) {
 
-    this.subscription = this.ds.getRefresh().subscribe(data => {
-      this.ngOnInit();
+    this.subscription = this.ds.getRefreshMenu().subscribe(data => {
+      data = data || {};
+      if (data.menuIndex === 0) {
+        this.initPFSource = data.source;
+        this.getProfileSource();
+      } else if (data.menuIndex === 1) {
+        this.initDQMSource = data.source;
+        this.getDQMSource();
+      } else if (data.menuIndex === 2) {
+        this.getCleaningSource();
+      } else if (data.menuIndex === 3) {
+        this.getReferenceData();
+      }
     });
+
+
   }
 
   ngOnInit() {
     this.getProfileSource();
     this.getDQMSource();
+    this.getCleaningSource();
+    this.getReferenceData();
   }
 
   getDQMSource() {
@@ -70,10 +89,20 @@ export class DataDrivenComponent implements OnInit {
     });
   }
 
+  getCleaningSource() {
+    this.http.getCleanSource().subscribe((result: any) => {
+      this.getCleaningSourceList(result.SourceDetailsList || []);
+    });
+  }
 
+  getReferenceData() {
+    this.http.getDBCollections({ client_url: '' }).subscribe((result: any) => {
+      this.getReferenceDataList(result.Cluster_Contents || {});
+    });
+  }
 
   getProfileSourceList(list) {
-    let categoryObject = {},
+    let categoryObject = {}, item: any, initSource: any, openCat: any,
       route = this.menuList[0].route;
     this.menuList[0].children = [];
     list.forEach((source, index) => {
@@ -84,21 +113,30 @@ export class DataDrivenComponent implements OnInit {
           children: []
         };
       }
-      categoryObject[source.sourceCategory].children.push({
+      item = {
         name: source.sourceDataName,
         id: source.sourceId,
         source: source,
         route: route
-      });
+      };
+      categoryObject[source.sourceCategory].children.push(item);
+      if (!initSource && ((!this.initPFSource && index === 0) || (source.sourceId == this.initPFSource.sourceId))) {
+        initSource = item;
+        openCat = categoryObject[source.sourceCategory];
+      }
     });
     for (let key of Object.keys(categoryObject)) {
       this.menuList[0].children.push(categoryObject[key]);
     }
     this.dataSource.data = this.menuList;
+    this.treeControl.dataNodes = this.menuList;
+    if (initSource) {
+      this.loadSourceProfile(initSource);
+    }
   }
 
   getDQMSourceList(list) {
-    let categoryObject = {},
+    let categoryObject = {}, source: any, initSource: any, openCat: any,
       route = this.menuList[1].route;
     this.menuList[1].children = [];
     list.forEach((item, index) => {
@@ -110,29 +148,119 @@ export class DataDrivenComponent implements OnInit {
             children: []
           };
         }
-        categoryObject[item.source.sourceCategory].children.push({
+        source = {
           name: item.source.sourceDataName,
           id: item.sourceId,
           source: item,
           route: route
-        });
+        };
+        categoryObject[item.source.sourceCategory].children.push(source);
+        if (!initSource && ((!(this.initDQMSource || this.initDQMSource) && index === 0) || (item.sourceId == this.initDQMSource.sourceId))) {
+          //source.isUploaded = this.initDQMSource.isUploaded;
+          initSource = source;
+          openCat = categoryObject[source.sourceCategory];
+        }
       }
     });
     for (let key of Object.keys(categoryObject)) {
       this.menuList[1].children.push(categoryObject[key]);
     }
     this.dataSource.data = JSON.parse(JSON.stringify(this.menuList));
+    if (initSource) {
+      this.loadSourceProfile(initSource);
+    }
+  }
+
+  getReferenceDataList(list) {
+    let categoryObject = {},
+      route = this.menuList[3].route;
+    this.menuList[3].children = [];
+    for (let key in list) {
+      if (!categoryObject[key]) {
+        categoryObject[key] = {
+          name: key,
+          icon: 'fa-folder-o',
+          children: []
+        }
+      }
+      list[key].forEach(item => {
+        categoryObject[key].children.push({
+          name: item,
+          id: item,
+          key: key,
+          route: route
+        })
+      });
+    }
+    for (let key of Object.keys(categoryObject)) {
+      this.menuList[3].children.push(categoryObject[key]);
+    }
+    this.dataSource.data = JSON.parse(JSON.stringify(this.menuList));
+  }
+
+  getCleaningSourceList(list) {
+    let item, categoryObject = {}, log,
+      route = this.menuList[2].route;
+    this.menuList[2].children = [];
+    list.forEach((source) => {
+      if (!categoryObject[source.sourceCategory]) {
+        categoryObject[source.sourceCategory] = {
+          name: source.sourceCategory,
+          icon: 'fa-folder-o',
+          children: []
+        };
+      }
+      item = {
+        name: source.sourceDataName,
+        id: source.sourceId,
+        source: source,
+        route: route
+      };
+      categoryObject[source.sourceCategory].children.push(item);
+      if (source.CleanedFilesLog && source.CleanedFilesLog.length > 0) {
+        source.CleanedFilesLog.forEach((file) => {
+          log = {
+            name: file.sourceDataName,
+            id: file.cleanSourceId,
+            source: source,
+            cleanLogFile: file,
+            route: route,
+            icon: 'fa-download'
+          };
+          categoryObject[source.sourceCategory].children.push(log);
+        });
+      }
+    });
+    for (let key of Object.keys(categoryObject)) {
+      this.menuList[2].children.push(categoryObject[key]);
+    }
+    this.dataSource.data = JSON.parse(JSON.stringify(this.menuList));
   }
 
   loadSourceProfile(source) {
     this.router.navigate([source.route], { relativeTo: this.route });
-    this.selectedSource = source;
-    if (source.route === this.menuList[0].route) {
-      this.ds.setProfileSource(this.selectedSource.source);
+    if (source.id) {
+      this.selectedSource = source;
+      switch (source.route) {
+        case this.menuList[0].route:
+          this.ds.setProfileSource(this.selectedSource.source);
+          break;
+        case this.menuList[1].route:
+          this.ds.setDQMSource(this.selectedSource.source);
+          break;
+        case this.menuList[2].route:
+          this.ds.setCleaningSource(this.selectedSource);
+          break;
+        case this.menuList[3].route:
+          this.ds.setReferenceData(this.selectedSource);
+          break;
+      }
     }
-    if (source.route === this.menuList[1].route) {
-      this.ds.setDQMSource(this.selectedSource.source);
-    }
+    this.treeControl.expand(this.treeControl.dataNodes[0]);
+  }
+
+  check(node) {
+    console.log(node);
   }
 
 }

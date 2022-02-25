@@ -40,13 +40,13 @@ export class PreviewDetailComponent {
                 ...details[key]
             });
         });
-        this.previewDataSource = new MatTableDataSource(rowData);
-        this.previewDataSource.paginator = this.paginator;
 
         if (rowData.length) {
             Object.keys(rowData[0]).map((key, index) => {
                 this.displayedColumns.push(key);
             });
         }
+        this.previewDataSource = new MatTableDataSource(rowData);
+        this.previewDataSource.paginator = this.paginator;
     }
 }

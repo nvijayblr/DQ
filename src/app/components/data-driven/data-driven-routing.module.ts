@@ -3,6 +3,8 @@ import { Routes, RouterModule, CanActivate } from '@angular/router';
 import { DataProfileComponent } from './data-profile/data-profile.component';
 import { DataQualityComponent } from './data-quality-monitor/data-quality.component'
 import { DataDrivenComponent } from './data-driven.component';
+import { ReferenceDataComponent } from './reference-data/reference-data.component';
+import { DataCleaningComponent } from './data-cleaning/data-cleaning.component';
 
 const routes: Routes = [
     {
@@ -10,6 +12,8 @@ const routes: Routes = [
         children: [
             { path: 'data-profile', component: DataProfileComponent },
             { path: 'data-quality-monitoring', component: DataQualityComponent },
+            { path: 'data-cleaning', component: DataCleaningComponent },
+            { path: 'reference-data', component: ReferenceDataComponent }            
         ]
     },
 ];

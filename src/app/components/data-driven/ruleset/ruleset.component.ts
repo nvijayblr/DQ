@@ -73,7 +73,7 @@ export class DDRulesetComponent implements OnInit {
       sourceFilename: [{ value: this.analysis.source.sourceFileName || '', disabled: true }],
       sourcepath: [this.analysis.source.templateSourcePath || ''],
       // sourceCSV: [''],
-      rulesetName: [this.ruleset.rulesetName || '', [Validators.required, Validators.maxLength(100), this.uniqueRulesetName.bind(this, this.ruleset.rulesetName)]],
+      rulesetName: [this.ruleset.rulesetName || '', [Validators.required, Validators.maxLength(200), this.uniqueRulesetName.bind(this, this.ruleset.rulesetName)]],
       startDate: [this.ruleset.startDate || this.minDate, [Validators.required]],
       endDate: [this.ruleset.endDate || this.maxDate, [Validators.required]],
       referenceCSV: this.fb.array([]),
@@ -357,9 +357,11 @@ export class DDRulesetComponent implements OnInit {
       endDate: this.RSControls.endDate.value,
     };
     this.http.createEditRuleset(ruleset, ruleset.rulesetId ? 'put' : 'post').subscribe((result: any) => {
-      this.alertService.showAlert('Ruleset ' + (ruleset.rulesetId ? 'Updated' : 'Created') + ' Successfully');
+      if(this.analysis.UploadsHistory.length){
+        this.alertService.showAlert('Ruleset ' + (ruleset.rulesetId ? 'Updated' : 'Created') + ' Successfully');
+      }    
       this.dialogRef.close({
-        rulsetId: result.rulesetId,
+        ruleset: result,
         isUploaded: this.analysis.UploadsHistory.length
       });
     }, (error) => {
@@ -462,6 +464,10 @@ export class DDRulesetComponent implements OnInit {
       this.RSControls.startDate.setErrors(null);
       this.RSControls.endDate.setErrors(null);
     }
+  }
+  
+  onClose () {
+    this.dialogRef.close();
   }
 
   private uniqueRulesetName(rulesetName, control: AbstractControl) {
