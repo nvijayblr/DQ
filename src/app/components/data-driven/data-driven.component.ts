@@ -169,6 +169,7 @@ export class DataDrivenComponent implements OnInit {
     if (initSource) {
       this.loadSourceProfile(initSource);
     }
+    setTimeout(() => (this.treeControl.expand(this.treeControl.dataNodes[1])), 1000);
   }
 
   getReferenceDataList(list) {
@@ -260,7 +261,19 @@ export class DataDrivenComponent implements OnInit {
   }
 
   check(node) {
-    console.log(node);
+    this.expandToNode(this.menuList, this.menuList[2].children[0].children[0].name);
+  }
+
+  expandToNode(data: any, name: string): any {
+    data.forEach(node => {
+      if (node.children && node.children.find(c => c.name === name)) {
+        this.treeControl.expand(node);
+        this.expandToNode(this.treeControl.dataNodes, node.name);
+      }
+      else if (node.children && node.children.find(c => c.children)) {
+        this.expandToNode(node.children, name);
+      }
+    });
   }
 
 }
