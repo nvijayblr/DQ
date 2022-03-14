@@ -29,7 +29,7 @@ import { SchemaTableComponent } from './create-source/schema-table/schema-table.
 import { MainDashboardComponent } from './main-dashboard/main-dashboard.component';
 import { MangoDBComponent } from './create-source/mango-db/mango-db.component';
 import { ScrollService } from '../../services/scroll.service';
-import { AdminComponent } from '../admin/admin.component';
+// import { AdminComponent } from '../admin/admin.component';
 
 
 
@@ -51,7 +51,7 @@ import { AdminComponent } from '../admin/admin.component';
     SchemaTableComponent,
     MainDashboardComponent,
     MangoDBComponent,
-    AdminComponent
+    //AdminComponent
   ],
    imports: [
     HighchartsChartModule,

@@ -219,7 +219,7 @@ export class LoginComponent implements OnInit {
     localStorage.setItem('dq_token', JSON.stringify(session));
     localStorage.setItem('dq_rights', JSON.stringify(session));
     localStorage.setItem('isInitLoad', JSON.stringify({isInitLoad: true}));
-    this.router.navigate([`auth/dashboard`]);
+    this.router.navigate([`data-driven/dashboard`]);
   }
 
   signInWithGoogle(): void {

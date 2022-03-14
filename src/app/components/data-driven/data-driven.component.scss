@@ -33,7 +33,7 @@
   .logo {
     font-size: 24px;
     line-height: 50px;
-    padding-left: 20px;
+    padding-left: 10px;
     color: #fff;
     width: 250px;
   }
@@ -43,6 +43,8 @@
   }
   button {
     vertical-align: 3px;
+    width: 36px;
+    margin-left: auto;
   }
 }
 
@@ -106,4 +108,12 @@
     padding-left: 10px;
     margin-left: 20px;
   }
+}
+.mat-icon-button.userimage {
+  width: 52px;
+  height: 52px;
+  line-height: 52px;
+  position: relative;
+  top: 17px;
+  margin-left: 15px;
 }

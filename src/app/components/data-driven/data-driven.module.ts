@@ -24,6 +24,7 @@ import { ReferenceDataComponent } from './reference-data/reference-data.componen
 import { CreateReferenceComponent } from './create-reference/create-reference.component';
 import { DataCleaningComponent } from './data-cleaning/data-cleaning.component';
 import { ProfileDetailComponent } from './profile-detail/profile-detail.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
     declarations: [
@@ -41,7 +42,8 @@ import { ProfileDetailComponent } from './profile-detail/profile-detail.componen
         ReferenceDataComponent,
         CreateReferenceComponent,
         DataCleaningComponent,
-        ProfileDetailComponent
+        ProfileDetailComponent,
+        DashboardComponent
     ],
     imports: [
         FlexLayoutModule,

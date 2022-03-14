@@ -1,0 +1,64 @@
+<div class="dashboard" fxFlex fxLayout="column">
+    <div class="breadCrumb" fxLayout="row">
+        <span>My Dashboard</span>
+    </div>
+    <div class="content" fxFlex>
+        <mat-tab-group mat-align-tabs="start" (selectedTabChange)="onSelectTab($event.index)">
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    Data Quality Overview
+                </ng-template>
+                <div class="tabContent" fxLayout="column">
+                    <mat-form-field appearance="standard" fxFlex="auto">
+                        <mat-icon matPrefix>search</mat-icon>
+                        <input matInput placeholder="Search" [(ngModel)]='searchValue'
+                            (keyup.enter)="applySearch($event.target.value)">
+                    </mat-form-field>
+                    <table mat-table [dataSource]="tableDataSource">
+                        <ng-container matColumnDef="Completeness">
+                            <th mat-header-cell *matHeaderCellDef>Completeness</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.Completeness}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Accuracy">
+                            <th mat-header-cell *matHeaderCellDef>Accuracy</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.Accuracy}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Uniqueness">
+                            <th mat-header-cell *matHeaderCellDef>Uniqueness</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.Uniqueness}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Validity">
+                            <th mat-header-cell *matHeaderCellDef>Validity</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.Validity}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="noData">
+                            <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length" class="center">
+                                No Records Found
+                            </td>
+                        </ng-container>
+                        
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        <tr mat-footer-row *matFooterRowDef="['noData']"
+                        [hidden]="tableDataSource && tableDataSource.data.length > 0"></tr>
+                    </table>
+                </div>
+            </mat-tab>
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    My Tasks
+                </ng-template>
+                <div class="tabContent">
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>

@@ -5,6 +5,8 @@ import { HttpService } from '../../services/http-service.service';
 import { DataDrivenService } from './data-driven.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { AuthGuardService } from 'src/app/services/auth-guard.service';
+import { SocialAuthService } from 'angularx-social-login';
 
 @Component({
   selector: 'app-data-driven',
@@ -15,41 +17,48 @@ export class DataDrivenComponent implements OnInit {
   subscription: Subscription;
   initPFSource: any;
   initDQMSource: any;
-  menuList: Array<any> = [
-    {
-      name: 'Data Profiling',
-      icon: 'fa-qrcode',
-      route: 'data-profile',
-      children: []
+  menuList: Array<any> = [{
+    name: 'Dashboard',
+    icon: 'fa-table',
+    route: 'dashboard',
+    children: []
+  }, {
+    name: 'Data Profiling',
+    icon: 'fa-qrcode',
+    route: 'data-profile',
+    children: []
 
-    }, {
-      name: 'Data Quality Monitoring',
-      icon: 'fa-object-group',
-      route: 'data-quality-monitoring',
-      children: []
+  }, {
+    name: 'Data Quality Monitoring',
+    icon: 'fa-object-group',
+    route: 'data-quality-monitoring',
+    children: []
 
-    }, {
-      name: 'Data Cleaning',
-      icon: 'fa-recycle',
-      route: 'data-cleaning',
-      children: []
-    }, {
-      name: 'Reference Data',
-      icon: 'fa-server',
-      route: 'reference-data',
-      children: []
-    }
+  }, {
+    name: 'Data Cleaning',
+    icon: 'fa-recycle',
+    route: 'data-cleaning',
+    children: []
+  }, {
+    name: 'Reference Data',
+    icon: 'fa-server',
+    route: 'reference-data',
+    children: []
+  }
   ];
 
   treeControl = new NestedTreeControl<any>(node => node.children);
   dataSource = new MatTreeNestedDataSource<any>();
   selectedSource: any = {};
+  user: any = {};
 
   hasChild = (_: number, node) => !!node.children && node.children.length > 0;
 
   constructor(private http: HttpService,
     private ds: DataDrivenService,
     private route: ActivatedRoute,
+    private authGuardService: AuthGuardService,
+    private socialAuthService: SocialAuthService,
     private router: Router) {
 
     this.subscription = this.ds.getRefreshMenu().subscribe(data => {
@@ -75,6 +84,14 @@ export class DataDrivenComponent implements OnInit {
     this.getDQMSource();
     this.getCleaningSource();
     this.getReferenceData();
+    this.setUserDetail();
+  }
+
+  setUserDetail() {
+    this.user = this.authGuardService.getLoggedInUserDetails();
+    if (!this.user.rights) {
+      this.logout();
+    }
   }
 
   getDQMSource() {
@@ -130,9 +147,9 @@ export class DataDrivenComponent implements OnInit {
     }
     this.dataSource.data = this.menuList;
     this.treeControl.dataNodes = this.menuList;
-    if (initSource) {
-      this.loadSourceProfile(initSource);
-    }
+    // if (initSource) {
+    //   this.loadSourceProfile(initSource);
+    // }
   }
 
   getDQMSourceList(list) {
@@ -166,9 +183,9 @@ export class DataDrivenComponent implements OnInit {
       this.menuList[1].children.push(categoryObject[key]);
     }
     this.dataSource.data = JSON.parse(JSON.stringify(this.menuList));
-    if (initSource) {
-      this.loadSourceProfile(initSource);
-    }
+    // if (initSource) {
+    //   this.loadSourceProfile(initSource);
+    // }
     setTimeout(() => (this.treeControl.expand(this.treeControl.dataNodes[1])), 1000);
   }
 
@@ -274,6 +291,15 @@ export class DataDrivenComponent implements OnInit {
         this.expandToNode(node.children, name);
       }
     });
+  }
+
+  logout() {
+    const userSession = this.authGuardService.getLoggedUser();
+    if (userSession.isSocial) {
+      this.socialAuthService.signOut();
+    }
+    localStorage.removeItem('dq_token');
+    this.router.navigate([`/login`]);
   }
 
 }

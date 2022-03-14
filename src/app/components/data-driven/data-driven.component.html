@@ -1,11 +1,30 @@
 <div class="layer" fxLayout="column">
     <div class="topBar" fxLayout="row">
-        <div class="logo">
+        <div class="logo" fxLayout="row" fxLayoutAlign="center center">
             <span class="AI">AI</span>
             <span>DataDriven</span>
-            <button mat-icon-button>
-                <mat-icon (click)="check()">menu</mat-icon>
+            <button mat-icon-button [matMenuTriggerFor]="menu" [class.userimage]="user.path">
+                <div *ngIf="user.path"
+                    [ngStyle]="{'background-image': 'url(' + appConfig.imgBaseUrl + user.path + ')'}"></div>
+                <mat-icon *ngIf="!user.path">account_circle</mat-icon>
             </button>
+            <mat-menu #menu="matMenu" xPosition="before">
+                <button class="nav-category-item" mat-menu-item routerLink="/admin"
+                    *ngIf="user?.rights?.includes('USER_MANAGEMENT')">
+                    <mat-icon matPrefix>settings</mat-icon>Settings
+                </button>
+                <mat-divider></mat-divider>
+                <button class="nav-category-item" mat-menu-item style="height: auto;">
+                    <mat-icon>account_circle</mat-icon>
+                    {{user.name}} ({{user.role}}) <br>{{user.email}}
+                </button>
+                <button class="nav-category-item" mat-menu-item (click)="logout()">
+                    <mat-icon>exit_to_app</mat-icon>Logout
+                </button>
+            </mat-menu>
+            <!-- <button mat-icon-button>
+                <mat-icon (click)="check()">menu</mat-icon>
+            </button> -->
         </div>
     </div>
     <div fxLayout="row" fxFlex>

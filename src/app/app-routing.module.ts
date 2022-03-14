@@ -3,6 +3,7 @@ import { Routes, RouterModule, CanActivate } from '@angular/router';
 import { AuthGuardService as AuthGaurd } from './services/auth-guard.service';
 import { LoginComponent } from './components/login-signup/login/login.component';
 import { SignupComponent } from './components/login-signup/signup/signup.component';
+import { AdminComponent } from './components/admin/admin.component';
 
 
 const routes: Routes = [
@@ -16,10 +17,11 @@ const routes: Routes = [
     canActivate: [AuthGaurd]
   },
   {
-    path: 'auth',
-    loadChildren: () => import('./components/authorized/authorized.module').then(m => m.AuthorizedModule),
-    canActivate: [AuthGaurd]
-  }, {
+    path: 'admin',
+    component: AdminComponent,
+    loadChildren: () => import('./components/admin/admin.module').then(m => m.AdminModule)
+  },
+  {
     path: '', redirectTo: '', pathMatch: 'full'
   }, {
     path: '**', redirectTo: '', pathMatch: 'full'
