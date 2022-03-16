@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthGuardService } from 'src/app/services/auth-guard.service';
 import { SocialAuthService } from 'angularx-social-login';
+import { appConfig } from '../../app.config';
 
 @Component({
   selector: 'app-data-driven',
@@ -50,6 +51,7 @@ export class DataDrivenComponent implements OnInit {
   treeControl = new NestedTreeControl<any>(node => node.children);
   dataSource = new MatTreeNestedDataSource<any>();
   selectedSource: any = {};
+  appConfig: any = {};
   user: any = {};
 
   hasChild = (_: number, node) => !!node.children && node.children.length > 0;
@@ -89,6 +91,7 @@ export class DataDrivenComponent implements OnInit {
 
   setUserDetail() {
     this.user = this.authGuardService.getLoggedInUserDetails();
+    this.appConfig = appConfig;
     if (!this.user.rights) {
       this.logout();
     }
@@ -120,8 +123,8 @@ export class DataDrivenComponent implements OnInit {
 
   getProfileSourceList(list) {
     let categoryObject = {}, item: any, initSource: any, openCat: any,
-      route = this.menuList[0].route;
-    this.menuList[0].children = [];
+      route = this.menuList[1].route;
+    this.menuList[1].children = [];
     list.forEach((source, index) => {
       if (!categoryObject[source.sourceCategory]) {
         categoryObject[source.sourceCategory] = {
@@ -137,25 +140,25 @@ export class DataDrivenComponent implements OnInit {
         route: route
       };
       categoryObject[source.sourceCategory].children.push(item);
-      if (!initSource && ((!this.initPFSource && index === 0) || (source.sourceId == this.initPFSource.sourceId))) {
+      if (!initSource && (this.initPFSource && (source.sourceId == this.initPFSource.sourceId))) {
         initSource = item;
         openCat = categoryObject[source.sourceCategory];
       }
     });
     for (let key of Object.keys(categoryObject)) {
-      this.menuList[0].children.push(categoryObject[key]);
+      this.menuList[1].children.push(categoryObject[key]);
     }
     this.dataSource.data = this.menuList;
     this.treeControl.dataNodes = this.menuList;
-    // if (initSource) {
-    //   this.loadSourceProfile(initSource);
-    // }
+    if (initSource) {
+      this.loadSourceProfile(initSource);
+    }
   }
 
   getDQMSourceList(list) {
     let categoryObject = {}, source: any, initSource: any, openCat: any,
-      route = this.menuList[1].route;
-    this.menuList[1].children = [];
+      route = this.menuList[2].route;
+    this.menuList[2].children = [];
     list.forEach((item, index) => {
       if (item.source) {
         if (!categoryObject[item.source.sourceCategory]) {
@@ -172,7 +175,7 @@ export class DataDrivenComponent implements OnInit {
           route: route
         };
         categoryObject[item.source.sourceCategory].children.push(source);
-        if (!initSource && ((!(this.initDQMSource || this.initDQMSource) && index === 0) || (item.sourceId == this.initDQMSource.sourceId))) {
+        if (!initSource && (this.initDQMSource && (item.sourceId == this.initDQMSource.sourceId))) {
           //source.isUploaded = this.initDQMSource.isUploaded;
           initSource = source;
           openCat = categoryObject[source.sourceCategory];
@@ -180,19 +183,19 @@ export class DataDrivenComponent implements OnInit {
       }
     });
     for (let key of Object.keys(categoryObject)) {
-      this.menuList[1].children.push(categoryObject[key]);
+      this.menuList[2].children.push(categoryObject[key]);
     }
     this.dataSource.data = JSON.parse(JSON.stringify(this.menuList));
-    // if (initSource) {
-    //   this.loadSourceProfile(initSource);
-    // }
-    setTimeout(() => (this.treeControl.expand(this.treeControl.dataNodes[1])), 1000);
+    if (initSource) {
+      this.loadSourceProfile(initSource);
+    }
+    setTimeout(() => (this.treeControl.expand(this.treeControl.dataNodes[2])), 1000);
   }
 
   getReferenceDataList(list) {
     let categoryObject = {},
-      route = this.menuList[3].route;
-    this.menuList[3].children = [];
+      route = this.menuList[4].route;
+    this.menuList[4].children = [];
     for (let key in list) {
       if (!categoryObject[key]) {
         categoryObject[key] = {
@@ -211,15 +214,15 @@ export class DataDrivenComponent implements OnInit {
       });
     }
     for (let key of Object.keys(categoryObject)) {
-      this.menuList[3].children.push(categoryObject[key]);
+      this.menuList[4].children.push(categoryObject[key]);
     }
     this.dataSource.data = JSON.parse(JSON.stringify(this.menuList));
   }
 
   getCleaningSourceList(list) {
     let item, categoryObject = {}, log,
-      route = this.menuList[2].route;
-    this.menuList[2].children = [];
+      route = this.menuList[3].route;
+    this.menuList[3].children = [];
     list.forEach((source) => {
       if (!categoryObject[source.sourceCategory]) {
         categoryObject[source.sourceCategory] = {
@@ -250,7 +253,7 @@ export class DataDrivenComponent implements OnInit {
       }
     });
     for (let key of Object.keys(categoryObject)) {
-      this.menuList[2].children.push(categoryObject[key]);
+      this.menuList[3].children.push(categoryObject[key]);
     }
     this.dataSource.data = JSON.parse(JSON.stringify(this.menuList));
   }
@@ -260,16 +263,16 @@ export class DataDrivenComponent implements OnInit {
     if (source.id) {
       this.selectedSource = source;
       switch (source.route) {
-        case this.menuList[0].route:
+        case this.menuList[1].route:
           this.ds.setProfileSource(this.selectedSource.source);
           break;
-        case this.menuList[1].route:
+        case this.menuList[2].route:
           this.ds.setDQMSource(this.selectedSource.source);
           break;
-        case this.menuList[2].route:
+        case this.menuList[3].route:
           this.ds.setCleaningSource(this.selectedSource);
           break;
-        case this.menuList[3].route:
+        case this.menuList[4].route:
           this.ds.setReferenceData(this.selectedSource);
           break;
       }

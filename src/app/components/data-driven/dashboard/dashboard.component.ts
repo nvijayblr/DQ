@@ -16,6 +16,8 @@ import { MatTableDataSource } from '@angular/material';
 })
 export class DashboardComponent implements OnInit {
 
+  searchValue: any = '';
+
   displayedColumns: string[] = ['Completeness', 'Accuracy', 'Uniqueness', 'Validity'];
   tableDataSource: MatTableDataSource<any>;
 
@@ -23,6 +25,10 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.tableDataSource = new MatTableDataSource([]);
+  }
+
+  applySearch(value) {
+
   }
 
 }
