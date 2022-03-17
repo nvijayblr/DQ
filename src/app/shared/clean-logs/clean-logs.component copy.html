@@ -1,0 +1,52 @@
+<h1 mat-dialog-title class="nTitle"> CLEAN LOGS</h1>
+<div mat-dialog-content>
+  <!-- <div class="loader-12"></div> -->
+    <div class="">
+      <div class="flex-containers">
+        <mat-card class="border no-rounded list shrare-post mct pad10">
+            <div class="summaryBlock fst">
+              <div class="mid-cnt">Source ID</div>
+              <div class="topTitle green">{{cleanLogSource.sourceId}}</div>                  
+            </div>
+             <div class="dividerTop"></div>
+            <div class="summaryBlock">
+              <div class="mid-cnt">Source FileName </div>
+              <div class="topTitle red">{{cleanLogSource.sourcepath}}</div>                  
+            </div>
+            <div class="dividerTop"></div>
+            <div class="summaryBlock">
+              <div class="mid-cnt">Output Path </div>
+              <div class="topTitle green">{{cleanLogSource.outputpath}}</div>                  
+            </div>             
+        </mat-card>
+      </div>
+       <div class="list-item">
+        <div class="table-wrapper-scroll-y my-custom-scrollbar"> 
+        <table class="table table-bordered table-striped mb-0 attTable">
+          <thead>
+            <tr>
+              <th scope="col">
+                Process Time
+              </th>
+              <th scope="col">
+                Action
+              </th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let preview of cleanLogDetails;let i= index;">           
+            <tr *ngFor="let clean of preview">
+              <td>{{clean.processTime | date:'medium'  }}</td>
+              <td> {{clean.action}}</td>
+            </tr>
+          
+          </tbody>
+        </table>
+        </div>
+      </div>
+
+    </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button class="btn btn-secondary" (click)="onNoClick()">Close</button>
+  <button mat-button class="btn btn-primary" [mat-dialog-close]="" cdkFocusInitial>Ok</button>
+</div>
