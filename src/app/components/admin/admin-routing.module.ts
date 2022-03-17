@@ -11,6 +11,10 @@ import { SourceCategoryComponent } from './source-category/source-category.compo
 
 const routes: Routes = [
   {
+    path: '',
+    redirectTo : 'users'
+  },
+  {
     path: 'users',
     component: UsersListComponent,
   }, {

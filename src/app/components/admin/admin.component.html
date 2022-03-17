@@ -1,5 +1,27 @@
 <div class="adminSetting" fxLayout="row">
     <div class="menuList">
+        <div class="logo" fxLayout="row" fxLayoutAlign="center center">
+            <span class="AI">AI</span>
+            <span>DataDriven</span>
+            <button mat-icon-button [matMenuTriggerFor]="menu" [class.userimage]="user.path">
+                <div *ngIf="user.path"
+                    [ngStyle]="{'background-image': 'url(' + appConfig.imgBaseUrl + user.path + ')'}"></div>
+                <mat-icon *ngIf="!user.path">account_circle</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="before">
+                <button class="nav-category-item" mat-menu-item routerLink="/data-driven/dashboard">
+                    <mat-icon matPrefix>home</mat-icon>Home
+                </button>
+                <mat-divider></mat-divider>
+                <button class="nav-category-item" mat-menu-item>
+                    <mat-icon>account_circle</mat-icon>
+                    {{user.name}} ({{user.role}}) <br>{{user.email}}
+                </button>
+                <button class="nav-category-item" mat-menu-item (click)="logout()">
+                    <mat-icon>exit_to_app</mat-icon>Logout
+                </button>
+            </mat-menu>
+        </div>
         <mat-nav-list>
             <div class="menuItem" *ngFor="let menu of navLinks">
                 <h3 matSubheader>

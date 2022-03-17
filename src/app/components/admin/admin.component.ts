@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { SocialAuthService } from 'angularx-social-login';
+import { AuthGuardService } from 'src/app/services/auth-guard.service';
+import { appConfig } from '../../app.config';
 
 @Component({
   selector: 'app-admin',
@@ -9,7 +12,12 @@ import { Router } from '@angular/router';
 export class AdminComponent implements OnInit {
   navLinks: any[];
   activeLinkIndex = -1;
-  constructor(private router: Router) {
+  appConfig: any = {};
+  user: any = {};
+
+  constructor(private router: Router,
+    private authGuardService: AuthGuardService,
+    private socialAuthService: SocialAuthService) {
     this.navLinks = [
       {
         label: 'User Settings',
@@ -51,6 +59,24 @@ export class AdminComponent implements OnInit {
     ];
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.setUserDetail();
+  }
 
+  setUserDetail() {
+    this.user = this.authGuardService.getLoggedInUserDetails();
+    this.appConfig = appConfig;
+    if (!this.user.rights) {
+      this.logout();
+    }
+  }
+
+  logout() {
+    const userSession = this.authGuardService.getLoggedUser();
+    if (userSession.isSocial) {
+      this.socialAuthService.signOut();
+    }
+    localStorage.removeItem('dq_token');
+    this.router.navigate([`/login`]);
+  }
 }
