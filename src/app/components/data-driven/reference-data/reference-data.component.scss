@@ -24,6 +24,7 @@
 .tableView {
   max-width: 100%;
   overflow: auto;
+  position: relative;
 
   .mat-table {
     width: 100%;

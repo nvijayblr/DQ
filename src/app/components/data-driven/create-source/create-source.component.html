@@ -1,366 +1,376 @@
-<div mat-dialog-title>{{ isEditMode ? 'Edit' : 'Create' }} Source
-    <button class="close" mat-icon-button (click)="onClose()">
-        <mat-icon>close</mat-icon>
-    </button>
-</div>
-<div mat-dialog-content>
-    <div class="detailStepper" [formGroup]="sourceForm">
-        <app-dd-stepper #csStepper linear>
-            <cdk-step [completed]="isCompleted(0)">
-                <ng-template cdkStepLabel>
-                    <div fxLayoutAlign="center center" fxLayoutGap="4px">
-                        <!-- <mat-icon *ngIf="showCompleteIcon(0)">check_circle</mat-icon>
+<div class="dialog">
+    <div mat-dialog-title>{{ isEditMode ? 'Edit' : 'Create' }} Source
+        <button class="close" mat-icon-button (click)="onClose()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div mat-dialog-content>
+        <div class="detailStepper" [formGroup]="sourceForm">
+            <app-dd-stepper #csStepper linear>
+                <cdk-step [completed]="isCompleted(0)">
+                    <ng-template cdkStepLabel>
+                        <div fxLayoutAlign="center center" fxLayoutGap="4px">
+                            <!-- <mat-icon *ngIf="showCompleteIcon(0)">check_circle</mat-icon>
                         <mat-icon *ngIf="showEditIcon(0)">edit</mat-icon> -->
-                        <span>Source Type</span>
-                    </div>
-                </ng-template>
-                <div class="container">
-                    <div fxLayout="column">
-                        <mat-tab-group mat-align-tabs="start">
-                            <mat-tab *ngFor="let type of sourceTypes">
-                                <ng-template mat-tab-label>
-                                    {{type.category}}
-                                </ng-template>
-                                <div class="SCContainer" fxLayout="row" fxLayoutGap="20px">
-                                    <div *ngFor="let source of type.children" class="flipBox"
-                                        fxLayoutAlign="center center"
-                                        [class.selected]="chooseOptions && source.options == chooseOptions">
-                                        <div class="innerBox" (click)="selectFileType(source.type,source.options)">
-                                            <div class="back">
-                                                <p>{{source.text}}</p>
-                                            </div>
-                                            <div class="front">
-                                                <img [src]="'assets/images/' + source.image +'.png'" />
+                            <span>Source Type</span>
+                        </div>
+                    </ng-template>
+                    <div class="container">
+                        <div fxLayout="column">
+                            <mat-tab-group mat-align-tabs="start">
+                                <mat-tab *ngFor="let type of sourceTypes">
+                                    <ng-template mat-tab-label>
+                                        {{type.category}}
+                                    </ng-template>
+                                    <div class="SCContainer" fxLayout="row" fxLayoutGap="20px">
+                                        <div *ngFor="let source of type.children" class="flipBox"
+                                            fxLayoutAlign="center center"
+                                            [class.selected]="chooseOptions && source.options == chooseOptions">
+                                            <div class="innerBox" (click)="selectFileType(source.type,source.options)">
+                                                <div class="back">
+                                                    <p>{{source.text}}</p>
+                                                </div>
+                                                <div class="front">
+                                                    <img [src]="'assets/images/' + source.image +'.png'" />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </mat-tab>
-                        </mat-tab-group>
+                                </mat-tab>
+                            </mat-tab-group>
+                        </div>
                     </div>
-                </div>
-            </cdk-step>
-            <cdk-step [stepControl]="sourceForm">
-                <ng-template cdkStepLabel>
-                    <div fxLayoutAlign="center center" fxLayoutGap="4px">
-                        <!-- <mat-icon *ngIf="showCompleteIcon(0)">check_circle</mat-icon>
+                </cdk-step>
+                <cdk-step [stepControl]="sourceForm">
+                    <ng-template cdkStepLabel>
+                        <div fxLayoutAlign="center center" fxLayoutGap="4px">
+                            <!-- <mat-icon *ngIf="showCompleteIcon(0)">check_circle</mat-icon>
                         <mat-icon *ngIf="showEditIcon(0)">edit</mat-icon> -->
-                        <span>Source Detail</span>
-                    </div>
-                </ng-template>
-                <div class="SDcontainer">
-                    <div fxLayout="row">
-                        <div fxFlex="50" fxLayout="column">
-                            <h6>Create Your Source</h6>
-                            <div fxLayout="row" fxLayoutAlign=" center">
-                                <div class="sourceLabel" fxLayout="row">
-                                    Source Data
-                                    <span class="red">*</span>&nbsp;
-                                    <!-- <span *ngIf="selectedType">({{selectedType}})</span> -->
-                                </div>
-                                <app-image-cropper *ngIf="!isEditMode" [imageType]="'Source'"
-                                    [fileTypes]="chooseOptions" [imagePath]="''" [disabled]="isEditMode"
-                                    (fileSelected)="onSourceFileSelected($event)">
-                                </app-image-cropper>
-                                <strong class="sourceLabel" *ngIf="isEditMode">
-                                    {{CSControls.sourceFileName.value}}
-                                </strong>
-                                <mat-error *ngIf="!isCorrectFileType">Please Select a Correct File Type
-                                </mat-error>
-                            </div>
+                            <span>Source Detail</span>
                         </div>
-                    </div>
-                    <div fxLayout="row" fxLayoutGap="20px">
-                        <div fxLayout="column">
-                            <div fxLayout="row" fxLayoutGap="20px">
-                                <mat-form-field appearance="standard">
-                                    <mat-label>Source Name</mat-label>
-                                    <input matInput placeholder="Source Name" formControlName="sourceDataName"
-                                        maxlength="50" autocomplete="off" />
-                                    <mat-error
-                                        *ngIf="!CSControls.sourceDataName.value && CSControls.sourceDataName.touched">
-                                        Please Enter Source Name</mat-error>
-                                    <mat-error *ngIf="CSControls.sourceDataName.hasError('duplicate')">
-                                        Source Name Already Exist</mat-error>
-                                </mat-form-field>
-                                <mat-form-field appearance="standard">
-                                    <mat-label>Source Description</mat-label>
-                                    <input matInput placeholder="Source Description"
-                                        formControlName="sourceDataDescription" maxlength="250" autocomplete="off" />
-                                </mat-form-field>
-                            </div>
-                            <div fxLayout="row" fxLayoutGap="20px">
-                                <mat-form-field appearance="standard">
-                                    <mat-label>Source Category</mat-label>
-                                    <mat-select formControlName="sourceCategory">
-                                        <mat-option *ngFor="let srcCat of srcCategory" value="{{srcCat.label}}">
-                                            {{srcCat.value}}
-                                        </mat-option>
-                                    </mat-select>
-                                    <mat-error *ngIf="CSControls.sourceCategory.hasError('required')">
-                                        Please Select Source Category</mat-error>
-                                </mat-form-field>
-                                <mat-form-field appearance="standard">
-                                    <mat-label>Data Owner</mat-label>
-                                    <mat-select #select placeholder="Data Owner" formControlName="dataOwner">
-                                        <mat-select-filter *ngIf="select.focused" [array]="variables"
-                                            (filteredReturn)="filteredList =$event"></mat-select-filter>
-                                        <mat-option *ngFor="let item of filteredList" [value]="item">
-                                            {{item}}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                            </div>
-                            <div fxLayout="row" fxLayoutGap="20px" *ngIf="!isSourceMode">
-                                <mat-form-field appearance="standard">
-                                    <mat-label class="mtop sub-title">Data Steward</mat-label>
-                                    <mat-select #select3 multiple placeholder="Using Groups" [(value)]="selected"
-                                        formControlName="dataSteward">
-                                        <mat-option *ngFor="let category of categoryList" [value]="category.value"
-                                            color="accent">
-                                            {{ category.label }}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                                <mat-form-field appearance="standard">
-                                    <mat-label class="mtop sub-title">Data User</mat-label>
-                                    <mat-select #select4 multiple placeholder="Using Groups"
-                                        (selectionChange)="setDataUserTollerance($event)" [(value)]="selected1"
-                                        formControlName="dataUser">
-                                        <mat-option *ngFor="let category of categoryList" [value]="category.value"
-                                            color="accent">
-                                            {{ category.label }}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                                <div class="tollerance-wrapper" *ngIf="dataUserTollerance.length">
-                                    <mat-card *ngFor="let user of dataUserTollerance">
-                                        <h2>Tollerance - {{user.user}}</h2>
-                                        <div class="wrap">
-                                            <div class="outline">
-                                                <h3>Completeness</h3>
-                                                <mat-slider (change)="user.tolerance.Completeness = $event.value"
-                                                    thumbLabel step="1" min="0" max="100" aria-label="units">
-                                                </mat-slider>
-                                                <div class="value">{{(user.tolerance && user.tolerance.Completeness) ?
-                                                    user.tolerance.Completeness : 0}}%</div>
-                                            </div>
-                                            <div class="outline">
-                                                <h3>Accuracy</h3>
-                                                <mat-slider (change)="user.tolerance.Accuracy = $event.value" thumbLabel
-                                                    step="1" min="0" max="100" aria-label="units">
-                                                </mat-slider>
-                                                <div class="value">{{(user.tolerance && user.tolerance.Accuracy) ?
-                                                    user.tolerance.Accuracy : 0}}%</div>
-                                            </div>
-                                            <div class="outline">
-                                                <h3>Uniqueness</h3>
-                                                <mat-slider (change)="user.tolerance.Uniqueness = $event.value"
-                                                    thumbLabel step="1" min="0" max="100" aria-label="units">
-                                                </mat-slider>
-                                                <div class="value">{{(user.tolerance && user.tolerance.Uniqueness) ?
-                                                    user.tolerance.Uniqueness : 0}}%</div>
-                                            </div>
-                                            <div class="outline">
-                                                <h3>Validity</h3>
-                                                <mat-slider (change)="user.tolerance.Validity = $event.value" thumbLabel
-                                                    step="1" min="0" max="100" aria-label="units">
-                                                </mat-slider>
-                                                <div class="value">{{(user.tolerance && user.tolerance.Validity) ?
-                                                    user.tolerance.Validity : 0}}%</div>
-                                            </div>
-                                            <div class="outline">
-                                                <h3>Integrity</h3>
-                                                <mat-slider (change)="user.tolerance.Integrity = $event.value"
-                                                    thumbLabel step="1" min="0" max="100" aria-label="units">
-                                                </mat-slider>
-                                                <div class="value">{{(user.tolerance && user.tolerance.Integrity) ?
-                                                    user.tolerance.Integrity : 0}}%</div>
-                                            </div>
-                                        </div>
-                                    </mat-card>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div fxLayout="column">
-                            <div fxLayout="row" fxLayoutGap="20px" *ngIf="!isSourceMode">
-                                <app-rule-selector multiple="true" [ruleItems]="multiSourceList"
-                                    [initValue]="sourceSettings.multiSourceOptions" [showAddItem]="false"
-                                    (selectionChange)="sourceSettings.multiSourceOptions=$event.value"
-                                    label="Multi Source Value">
-                                </app-rule-selector>
-                                <mat-form-field appearance="standard">
-                                    <mat-label>Multi Source Column</mat-label>
-                                    <mat-select formControlName="multiSourcColumn">
-                                        <mat-option *ngFor="let multiCat of multiSourceLists" value="{{multiCat}}">
-                                            {{multiCat}}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                            </div>
-                            <div fxLayout="row" fxLayoutGap="20px" *ngIf="!isSourceMode">
-                                <app-rule-selector [ruleItems]="frequencyList" [initValue]="sourceSettings.frequency"
-                                    [showAddItem]="false" (selectionChange)="sourceSettings.frequency=$event.value"
-                                    label="Frequency"></app-rule-selector>
-                                <mat-form-field appearance="standard">
-                                    <mat-label>Start Date</mat-label>
-                                    <input matInput [matDatepicker]="frompicker" formControlName="settingsDate"
-                                        autocomplete="off" (click)="frompicker.open()">
-                                    <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
-                                    <mat-datepicker #frompicker></mat-datepicker>
-                                    <mat-error class="errSty ps">Please Select a Start Date</mat-error>
-                                </mat-form-field>
-                            </div>
-                            <div fxLayout="row" fxLayoutGap="20px">
-                                <mat-form-field appearance="standard" *ngIf="!isSourceMode">
-                                    <mat-label>Select a time</mat-label>
-                                    <input matInput [ngxTimepicker]="timepicker" formControlName="uploadTime"
-                                        autocomplete="off">
-                                    <ngx-material-timepicker #timepicker></ngx-material-timepicker>
-                                </mat-form-field>
-                                <app-rule-selector multiple="true" [ruleItems]="departmentList"
-                                    [initValue]="sourceSettings.department" [showAddItem]="false"
-                                    (selectionChange)="sourceSettings.department=$event.value" label="Department">
-                                </app-rule-selector>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div fxLayoutAlign="space-between center">
-                        <button mat-flat-button color="primary" matStepperPrevious>
-                            <mat-icon>navigate_before</mat-icon>Previous
-                        </button>
-                        <button mat-flat-button color="primary" matStepperNext (click)="sourceForm.markAllAsTouched()"
-                            *ngIf="!isSourceMode">Next
-                            <mat-icon>navigate_next</mat-icon>
-                        </button>
-                        <button mat-flat-button color="primary" *ngIf="isSourceMode" (click)="validateSource()">
-                            Save & Summary <mat-icon>save_alt</mat-icon>
-                        </button>
-                    </div>
-                </div>
-            </cdk-step>
-            <cdk-step [optional]="true" *ngIf="!isSourceMode">
-                <ng-template cdkStepLabel>
-                    <div fxLayoutAlign="center center" fxLayoutGap="4px">
-                        <!-- <mat-icon *ngIf="showCompleteIcon(0)">check_circle</mat-icon>
-                        <mat-icon *ngIf="showEditIcon(0)">edit</mat-icon> -->
-                        <span>Reference Data</span>
-                    </div>
-                </ng-template>
-                <div class="SDcontainer">
-                    <div fxLayout="column">
-                        <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="20px" formArrayName="referenceData"
-                            *ngFor="let reference of sourceForm.get('referenceData')['controls']; index as i; last as isLast; first as isFirst">
-                            <ng-container [formGroupName]="i">
+                    </ng-template>
+                    <div class="SDcontainer">
+                        <div fxLayout="row">
+                            <div fxFlex="50" fxLayout="column">
+                                <h6>Create Your Source</h6>
                                 <div fxLayout="row" fxLayoutAlign=" center">
                                     <div class="sourceLabel" fxLayout="row">
-                                        Reference Data #{{i+1}}
-                                        <span class="red">*</span>
+                                        Source Data
+                                        <span class="red">*</span>&nbsp;
+                                        <!-- <span *ngIf="selectedType">({{selectedType}})</span> -->
                                     </div>
-                                    <app-image-cropper [imageType]="'Reference'" [name]="reference.value.referenceId"
-                                        [fileTypes]="'.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'"
-                                        [imagePath]="''" (fileSelected)="onReferenceFileSelected($event, reference, i)">
+                                    <app-image-cropper *ngIf="!isEditMode" [imageType]="'Source'"
+                                        [fileTypes]="chooseOptions" [imagePath]="''" [disabled]="isEditMode"
+                                        (fileSelected)="onSourceFileSelected($event)">
                                     </app-image-cropper>
+                                    <strong class="sourceLabel" *ngIf="isEditMode">
+                                        {{CSControls.sourceFileName.value}}
+                                    </strong>
+                                    <mat-error *ngIf="!isCorrectFileType">Please Select a Correct File Type
+                                    </mat-error>
                                 </div>
-                                <mat-form-field appearance="standard">
-                                    <mat-label>Reference Data Name</mat-label>
-                                    <input matInput placeholder="Reference Data Name"
-                                        formControlName="referenceDataName" maxlength="50" autocomplete="off" />
-                                    <mat-error *ngIf="reference.controls.referenceDataName.hasError('required')">Please
-                                        upload the reference file</mat-error>
-                                </mat-form-field>
-                                <mat-form-field appearance="standard">
-                                    <mat-label>Reference Data Description</mat-label>
-                                    <input matInput placeholder="Reference Data Description"
-                                        formControlName="referenceDataDescription" maxlength="250" autocomplete="off" />
-                                </mat-form-field>
-                                <div fxLayoutAlign=" center">
-                                    <button mat-mini-fab (click)="removeFormItem('referenceData', i)">
-                                        <mat-icon>delete</mat-icon>
-                                    </button>
-                                </div>
-                            </ng-container>
+                            </div>
                         </div>
-                        <div fxLayout="row" fxLayoutAlign="start center">
-                            <button type="button" mat-flat-button color="primary"
-                                (click)="addFormItem('referenceData')">
-                                Add Reference Data <mat-icon>add_box</mat-icon>
+                        <div fxLayout="row" fxLayoutGap="20px">
+                            <div fxLayout="column">
+                                <div fxLayout="row" fxLayoutGap="20px">
+                                    <mat-form-field appearance="standard">
+                                        <mat-label>Source Name</mat-label>
+                                        <input matInput placeholder="Source Name" formControlName="sourceDataName"
+                                            maxlength="50" autocomplete="off" />
+                                        <mat-error
+                                            *ngIf="!CSControls.sourceDataName.value && CSControls.sourceDataName.touched">
+                                            Please Enter Source Name</mat-error>
+                                        <mat-error *ngIf="CSControls.sourceDataName.hasError('duplicate')">
+                                            Source Name Already Exist</mat-error>
+                                    </mat-form-field>
+                                    <mat-form-field appearance="standard">
+                                        <mat-label>Source Description</mat-label>
+                                        <input matInput placeholder="Source Description"
+                                            formControlName="sourceDataDescription" maxlength="250"
+                                            autocomplete="off" />
+                                    </mat-form-field>
+                                </div>
+                                <div fxLayout="row" fxLayoutGap="20px">
+                                    <mat-form-field appearance="standard">
+                                        <mat-label>Source Category</mat-label>
+                                        <mat-select formControlName="sourceCategory">
+                                            <mat-option *ngFor="let srcCat of srcCategory" value="{{srcCat.label}}">
+                                                {{srcCat.value}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error *ngIf="CSControls.sourceCategory.hasError('required')">
+                                            Please Select Source Category</mat-error>
+                                    </mat-form-field>
+                                    <mat-form-field appearance="standard">
+                                        <mat-label>Data Owner</mat-label>
+                                        <mat-select #select placeholder="Data Owner" formControlName="dataOwner">
+                                            <mat-select-filter *ngIf="select.focused" [array]="variables"
+                                                (filteredReturn)="filteredList =$event"></mat-select-filter>
+                                            <mat-option *ngFor="let item of filteredList" [value]="item">
+                                                {{item}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div fxLayout="row" fxLayoutGap="20px" *ngIf="!isSourceMode">
+                                    <mat-form-field appearance="standard">
+                                        <mat-label class="mtop sub-title">Data Steward</mat-label>
+                                        <mat-select #select3 multiple placeholder="Using Groups" [(value)]="selected"
+                                            formControlName="dataSteward">
+                                            <mat-option *ngFor="let category of categoryList" [value]="category.value"
+                                                color="accent">
+                                                {{ category.label }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <mat-form-field appearance="standard">
+                                        <mat-label class="mtop sub-title">Data User</mat-label>
+                                        <mat-select #select4 multiple placeholder="Using Groups"
+                                            (selectionChange)="setDataUserTollerance($event)" [(value)]="selected1"
+                                            formControlName="dataUser">
+                                            <mat-option *ngFor="let category of categoryList" [value]="category.value"
+                                                color="accent">
+                                                {{ category.label }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <div class="tollerance-wrapper" *ngIf="dataUserTollerance.length">
+                                        <mat-card *ngFor="let user of dataUserTollerance">
+                                            <h2>Tollerance - {{user.user}}</h2>
+                                            <div class="wrap">
+                                                <div class="outline">
+                                                    <h3>Completeness</h3>
+                                                    <mat-slider (change)="user.tolerance.Completeness = $event.value"
+                                                        thumbLabel step="1" min="0" max="100" aria-label="units">
+                                                    </mat-slider>
+                                                    <div class="value">{{(user.tolerance && user.tolerance.Completeness)
+                                                        ?
+                                                        user.tolerance.Completeness : 0}}%</div>
+                                                </div>
+                                                <div class="outline">
+                                                    <h3>Accuracy</h3>
+                                                    <mat-slider (change)="user.tolerance.Accuracy = $event.value"
+                                                        thumbLabel step="1" min="0" max="100" aria-label="units">
+                                                    </mat-slider>
+                                                    <div class="value">{{(user.tolerance && user.tolerance.Accuracy) ?
+                                                        user.tolerance.Accuracy : 0}}%</div>
+                                                </div>
+                                                <div class="outline">
+                                                    <h3>Uniqueness</h3>
+                                                    <mat-slider (change)="user.tolerance.Uniqueness = $event.value"
+                                                        thumbLabel step="1" min="0" max="100" aria-label="units">
+                                                    </mat-slider>
+                                                    <div class="value">{{(user.tolerance && user.tolerance.Uniqueness) ?
+                                                        user.tolerance.Uniqueness : 0}}%</div>
+                                                </div>
+                                                <div class="outline">
+                                                    <h3>Validity</h3>
+                                                    <mat-slider (change)="user.tolerance.Validity = $event.value"
+                                                        thumbLabel step="1" min="0" max="100" aria-label="units">
+                                                    </mat-slider>
+                                                    <div class="value">{{(user.tolerance && user.tolerance.Validity) ?
+                                                        user.tolerance.Validity : 0}}%</div>
+                                                </div>
+                                                <div class="outline">
+                                                    <h3>Integrity</h3>
+                                                    <mat-slider (change)="user.tolerance.Integrity = $event.value"
+                                                        thumbLabel step="1" min="0" max="100" aria-label="units">
+                                                    </mat-slider>
+                                                    <div class="value">{{(user.tolerance && user.tolerance.Integrity) ?
+                                                        user.tolerance.Integrity : 0}}%</div>
+                                                </div>
+                                            </div>
+                                        </mat-card>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div fxLayout="column">
+                                <div fxLayout="row" fxLayoutGap="20px" *ngIf="!isSourceMode">
+                                    <app-rule-selector multiple="true" [ruleItems]="multiSourceList"
+                                        [initValue]="sourceSettings.multiSourceOptions" [showAddItem]="false"
+                                        (selectionChange)="sourceSettings.multiSourceOptions=$event.value"
+                                        label="Multi Source Value">
+                                    </app-rule-selector>
+                                    <mat-form-field appearance="standard">
+                                        <mat-label>Multi Source Column</mat-label>
+                                        <mat-select formControlName="multiSourcColumn">
+                                            <mat-option *ngFor="let multiCat of multiSourceLists" value="{{multiCat}}">
+                                                {{multiCat}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div fxLayout="row" fxLayoutGap="20px" *ngIf="!isSourceMode">
+                                    <app-rule-selector [ruleItems]="frequencyList"
+                                        [initValue]="sourceSettings.frequency" [showAddItem]="false"
+                                        (selectionChange)="sourceSettings.frequency=$event.value" label="Frequency">
+                                    </app-rule-selector>
+                                    <mat-form-field appearance="standard">
+                                        <mat-label>Start Date</mat-label>
+                                        <input matInput [matDatepicker]="frompicker" formControlName="settingsDate"
+                                            autocomplete="off" (click)="frompicker.open()">
+                                        <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
+                                        <mat-datepicker #frompicker></mat-datepicker>
+                                        <mat-error class="errSty ps">Please Select a Start Date</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div fxLayout="row" fxLayoutGap="20px">
+                                    <mat-form-field appearance="standard" *ngIf="!isSourceMode">
+                                        <mat-label>Select a time</mat-label>
+                                        <input matInput [ngxTimepicker]="timepicker" formControlName="uploadTime"
+                                            autocomplete="off">
+                                        <ngx-material-timepicker #timepicker></ngx-material-timepicker>
+                                    </mat-form-field>
+                                    <app-rule-selector multiple="true" [ruleItems]="departmentList"
+                                        [initValue]="sourceSettings.department" [showAddItem]="false"
+                                        (selectionChange)="sourceSettings.department=$event.value" label="Department">
+                                    </app-rule-selector>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div fxLayoutAlign="space-between center">
+                            <button mat-flat-button color="primary" matStepperPrevious>
+                                <mat-icon>navigate_before</mat-icon>Previous
+                            </button>
+                            <button mat-flat-button color="primary" matStepperNext
+                                (click)="sourceForm.markAllAsTouched()" *ngIf="!isSourceMode">Next
+                                <mat-icon>navigate_next</mat-icon>
+                            </button>
+                            <button mat-flat-button color="primary" *ngIf="isSourceMode" (click)="validateSource()">
+                                Save & Summary <mat-icon>save_alt</mat-icon>
                             </button>
                         </div>
-                        <div fxFlexOffset="20px" fxLayout="row">
-                            <div fxFlex="50" fxLayoutAlign="start center">
-                                <button mat-flat-button color="primary" matStepperPrevious>
-                                    <mat-icon>keyboard_arrow_left</mat-icon> Back
+                    </div>
+                </cdk-step>
+                <cdk-step [optional]="true" *ngIf="!isSourceMode">
+                    <ng-template cdkStepLabel>
+                        <div fxLayoutAlign="center center" fxLayoutGap="4px">
+                            <!-- <mat-icon *ngIf="showCompleteIcon(0)">check_circle</mat-icon>
+                        <mat-icon *ngIf="showEditIcon(0)">edit</mat-icon> -->
+                            <span>Reference Data</span>
+                        </div>
+                    </ng-template>
+                    <div class="SDcontainer">
+                        <div fxLayout="column">
+                            <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="20px" formArrayName="referenceData"
+                                *ngFor="let reference of sourceForm.get('referenceData')['controls']; index as i; last as isLast; first as isFirst">
+                                <ng-container [formGroupName]="i">
+                                    <div fxLayout="row" fxLayoutAlign=" center">
+                                        <div class="sourceLabel" fxLayout="row">
+                                            Reference Data #{{i+1}}
+                                            <span class="red">*</span>
+                                        </div>
+                                        <app-image-cropper [imageType]="'Reference'"
+                                            [name]="reference.value.referenceId"
+                                            [fileTypes]="'.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'"
+                                            [imagePath]="''"
+                                            (fileSelected)="onReferenceFileSelected($event, reference, i)">
+                                        </app-image-cropper>
+                                    </div>
+                                    <mat-form-field appearance="standard">
+                                        <mat-label>Reference Data Name</mat-label>
+                                        <input matInput placeholder="Reference Data Name"
+                                            formControlName="referenceDataName" maxlength="50" autocomplete="off" />
+                                        <mat-error *ngIf="reference.controls.referenceDataName.hasError('required')">
+                                            Please
+                                            upload the reference file</mat-error>
+                                    </mat-form-field>
+                                    <mat-form-field appearance="standard">
+                                        <mat-label>Reference Data Description</mat-label>
+                                        <input matInput placeholder="Reference Data Description"
+                                            formControlName="referenceDataDescription" maxlength="250"
+                                            autocomplete="off" />
+                                    </mat-form-field>
+                                    <div fxLayoutAlign=" center">
+                                        <button mat-mini-fab (click)="removeFormItem('referenceData', i)">
+                                            <mat-icon>delete</mat-icon>
+                                        </button>
+                                    </div>
+                                </ng-container>
+                            </div>
+                            <div fxLayout="row" fxLayoutAlign="start center">
+                                <button type="button" mat-flat-button color="primary"
+                                    (click)="addFormItem('referenceData')">
+                                    Add Reference Data <mat-icon>add_box</mat-icon>
                                 </button>
                             </div>
-                            <div fxFlex="50" fxLayoutAlign="end center">
-                                <button mat-flat-button color="primary" (click)="validateSource()">
-                                    Save & Summary <mat-icon>save_alt</mat-icon>
-                                </button>
+                            <div fxFlexOffset="20px" fxLayout="row">
+                                <div fxFlex="50" fxLayoutAlign="start center">
+                                    <button mat-flat-button color="primary" matStepperPrevious>
+                                        <mat-icon>keyboard_arrow_left</mat-icon> Back
+                                    </button>
+                                </div>
+                                <div fxFlex="50" fxLayoutAlign="end center">
+                                    <button mat-flat-button color="primary" (click)="validateSource()">
+                                        Save & Summary <mat-icon>save_alt</mat-icon>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </cdk-step>
-            <cdk-step [optional]="true" *ngIf="!isSourceMode">
-                <ng-template cdkStepLabel>
-                    <div fxLayoutAlign="center center" fxLayoutGap="4px">
-                        <!-- <mat-icon *ngIf="showCompleteIcon(0)">check_circle</mat-icon>
+                </cdk-step>
+                <cdk-step [optional]="true" *ngIf="!isSourceMode">
+                    <ng-template cdkStepLabel>
+                        <div fxLayoutAlign="center center" fxLayoutGap="4px">
+                            <!-- <mat-icon *ngIf="showCompleteIcon(0)">check_circle</mat-icon>
                         <mat-icon *ngIf="showEditIcon(0)">edit</mat-icon> -->
-                        <span>Summary</span>
+                            <span>Summary</span>
+                        </div>
+                    </ng-template>
+                    <div class="analysis-preview" fxLayout="column">
+                        <div class="SPContainer">
+                            <table class="mat-table">
+                                <tr class="mat-row">
+                                    <td class="mat-cell title" colspan="4">Source Data</td>
+                                </tr>
+                                <tr class="mat-row">
+                                    <td class="mat-cell sub-title">Source Name</td>
+                                    <td class="mat-cell">{{summary.source?.sourceDataName}}</td>
+                                    <td class="mat-cell sub-title">Source CDE</td>
+                                    <td class="mat-cell">
+                                        <mat-chip-list cdkDropListOrientation="horizontal">
+                                            <mat-chip *ngFor="let column of summary.source?.availableColumns">
+                                                {{column}}
+                                            </mat-chip>
+                                        </mat-chip-list>
+                                    </td>
+                                </tr>
+                                <tr class="mat-row">
+                                    <td class="mat-cell title" colspan="4">Rerference Data</td>
+                                </tr>
+                                <tr class="mat-row" *ngFor="let ref of summary.reference; index as i;">
+                                    <td class="mat-cell sub-title">Reference Name</td>
+                                    <td class="mat-cell">#{{i+1}}. {{ref.referenceDataName}}</td>
+                                    <td class="mat-cell sub-title">Reference CDE</td>
+                                    <td class="mat-cell">
+                                        <mat-chip-list cdkDropListOrientation="horizontal">
+                                            <mat-chip *ngFor="let column of ref?.availableRefColumns">
+                                                {{column}}
+                                            </mat-chip>
+                                        </mat-chip-list>
+                                    </td>
+                                </tr>
+                                <tr class="mat-row">
+                                    <td class="mat-cell title" colspan="4">Settings</td>
+                                </tr>
+                                <tr class="mat-row" *ngFor="let setting of summary?.settings  | keyvalue; index as i;">
+                                    <td class="mat-cell sub-title capitalize">{{setting.key}}</td>
+                                    <td class="mat-cell" colspan="3">{{setting.value}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div fxFlexOffset="20px" fxLayoutAlign="end center">
+                            <button mat-raised-button color="primary" (click)="onClose()">Complete
+                                <mat-icon>done_all</mat-icon>
+                            </button>
+                        </div>
                     </div>
-                </ng-template>
-                <div class="analysis-preview" fxLayout="column">
-                    <div class="SDcontainer">
-                        <table class="mat-table">
-                            <tr class="mat-row">
-                                <td class="mat-cell title" colspan="4">Source Data</td>
-                            </tr>
-                            <tr class="mat-row">
-                                <td class="mat-cell sub-title">Source Name</td>
-                                <td class="mat-cell">{{summary.source?.sourceDataName}}</td>
-                                <td class="mat-cell sub-title">Source CDE</td>
-                                <td class="mat-cell">
-                                    <mat-chip-list cdkDropListOrientation="horizontal">
-                                        <mat-chip *ngFor="let column of summary.source?.availableColumns">
-                                            {{column}}
-                                        </mat-chip>
-                                    </mat-chip-list>
-                                </td>
-                            </tr>
-                            <tr class="mat-row">
-                                <td class="mat-cell title" colspan="4">Rerference Data</td>
-                            </tr>
-                            <tr class="mat-row" *ngFor="let ref of summary.reference; index as i;">
-                                <td class="mat-cell sub-title">Reference Name</td>
-                                <td class="mat-cell">#{{i+1}}. {{ref.referenceDataName}}</td>
-                                <td class="mat-cell sub-title">Reference CDE</td>
-                                <td class="mat-cell">
-                                    <mat-chip-list cdkDropListOrientation="horizontal">
-                                        <mat-chip *ngFor="let column of ref?.availableRefColumns">
-                                            {{column}}
-                                        </mat-chip>
-                                    </mat-chip-list>
-                                </td>
-                            </tr>
-                            <tr class="mat-row">
-                                <td class="mat-cell title" colspan="4">Settings</td>
-                            </tr>
-                            <tr class="mat-row" *ngFor="let setting of summary?.settings  | keyvalue; index as i;">
-                                <td class="mat-cell sub-title capitalize">{{setting.key}}</td>
-                                <td class="mat-cell" colspan="3">{{setting.value}}</td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div fxFlexOffset="20px" fxLayoutAlign="end center">
-                        <button mat-raised-button color="primary" (click)="onClose()">Complete
-                            <mat-icon>done_all</mat-icon>
-                        </button>
-                    </div>
-                </div>
-            </cdk-step>
-        </app-dd-stepper>
+                </cdk-step>
+            </app-dd-stepper>
+        </div>
     </div>
+    <app-spinner *ngIf="isLoading"></app-spinner>
 </div>

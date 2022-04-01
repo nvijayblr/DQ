@@ -17,7 +17,8 @@ export class ReferenceDataComponent {
   tableDataSource: MatTableDataSource<any>;
   subscription: Subscription;
   isChecked: boolean = false;
-  searchValue : any;
+  isLoading: boolean = false;
+  searchValue: any;
 
   constructor(private http: HttpService,
     private ds: DataDrivenService,
@@ -39,6 +40,7 @@ export class ReferenceDataComponent {
       end_index: 100
     };
     this.displayedColumns = [];
+    this.isLoading = true;
     this.http.getDBPreview(payload).subscribe((result: any) => {
       let list = result.Preview || [];
       if (list.length) {
@@ -48,8 +50,10 @@ export class ReferenceDataComponent {
       }
       this.tableDataSource = new MatTableDataSource(list);
       this.tableDataSource.paginator = this.paginator;
+      this.isLoading = false;
     }, (error) => {
       this.alertService.showError(error.message);
+      this.isLoading = false;
     });
   }
 
@@ -75,9 +79,9 @@ export class ReferenceDataComponent {
       this.alertService.showError(error.message);
     });
   }
-  
-  onChange($event){
-    
+
+  onChange($event) {
+
   }
 
 }

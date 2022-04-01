@@ -28,4 +28,5 @@
     <div fxFlex fxLayoutAlign="end center">
         <button mat-flat-button color="primary" (click)="saveReference()">Submit</button>
     </div>
+    <app-spinner *ngIf="isLoading"></app-spinner>
 </div>

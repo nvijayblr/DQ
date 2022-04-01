@@ -5,6 +5,7 @@ import { DataDrivenService } from '../data-driven.service';
 import { Subscription } from 'rxjs';
 import { CreateSourceComponent } from '../create-source/create-source.component';
 import { MatDialog } from '@angular/material';
+import { AlertService } from 'src/app/shared/alert-dialog/alert-dialog.service';
 
 
 @Component({
@@ -21,6 +22,7 @@ import { MatDialog } from '@angular/material';
 })
 export class DataProfileComponent implements OnInit {
 
+  isLoading: boolean = false;
   profile = [];
   profileSummary: any = {};
   source: any = {};
@@ -61,11 +63,14 @@ export class DataProfileComponent implements OnInit {
 
   constructor(private http: HttpService,
     private ds: DataDrivenService,
+    private alertService: AlertService,
     private dialog: MatDialog) {
 
     this.subscription = this.ds.getProfileSource().subscribe(data => {
       this.source = data || {};
-      this.getProfileDetail(this.source.sourcePath);
+      if (this.source.sourcePath) {
+        this.getProfileDetail(this.source.sourcePath);
+      }
     });
   }
 
@@ -78,12 +83,17 @@ export class DataProfileComponent implements OnInit {
   }
 
   getProfileDetail(filePath) {
+    this.isLoading = true;
     const payload = {
       sourcepath: filePath
     };
     this.http.getProfiles(payload).subscribe((result: any) => {
       this.profile = result.profile ? result.profile : [];
       this.getProfileSummary(result);
+      this.isLoading = false;
+    }, (error) => {
+      this.isLoading = false;
+      this.alertService.showError(error);
     });
     this.initProfileDetail();
   }
@@ -118,7 +128,7 @@ export class DataProfileComponent implements OnInit {
   createOrEditSource(isEditMode) {
     const dialogRef = this.dialog.open(CreateSourceComponent, {
       width: '1400px',
-      disableClose : true,
+      disableClose: true,
       data: {
         isEditMode,
         analysis: {
@@ -126,7 +136,7 @@ export class DataProfileComponent implements OnInit {
           source: this.source
         },
         isSourceMode: true,
-        uploadMethod : 'profile'
+        uploadMethod: 'profile'
       }
     });
 

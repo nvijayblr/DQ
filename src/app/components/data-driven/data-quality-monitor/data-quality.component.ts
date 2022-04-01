@@ -30,6 +30,8 @@ export class DataQualityComponent implements OnInit {
     rights: any;
     minDate: any;
     dateClass: any;
+    isLoading: boolean = false;
+    loaderMsg: any;
 
     selectedFileName: any;
     uploadsHistory: any;
@@ -97,8 +99,14 @@ export class DataQualityComponent implements OnInit {
         const payload = {
             sourcepath: filePath,
         };
+
+        this.isLoading = true;
+        this.loaderMsg = 'Loading Profile...';
         this.http.getProfiles(payload).subscribe((result: any) => {
             this.profile = result.profile ? result.profile : [];
+            this.isLoading = false;
+        }, (error) => {
+            this.isLoading = false;
         });
     }
 
@@ -170,7 +178,7 @@ export class DataQualityComponent implements OnInit {
                 dataFromDq = result.SourceDetailsList.find(source => source.sourceId === this.selectedSource.sourceId);
                 this.cleanFileLog = dataFromDq.CleanedFilesLog;
             }, (error) => {
-                alert(error.message);
+                this.alertService.showError(error.message);
             });
         }
     }
@@ -248,6 +256,8 @@ export class DataQualityComponent implements OnInit {
             formData.append('file[]', analysis.file ? analysis.file : '');
             formData.append('data', JSON.stringify(payload));
 
+            this.isLoading = true;
+            this.loaderMsg = 'Saving Source data...';
             this.http.uploadSource(formData).subscribe((result: any) => {
                 if (result.errorMsg) {
                     if (result.errorCode == '103') {
@@ -258,9 +268,10 @@ export class DataQualityComponent implements OnInit {
                     this.alertService.showAlert('Source has been uploaded successfully.');
                     this.ds.setRefreshMenu(this.selectedSource, 1);
                 }
+                this.isLoading = false;
             }, (error) => {
+                this.isLoading = false;
                 this.alertService.showError(error);
-
             });
         }
     }

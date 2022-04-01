@@ -43,6 +43,7 @@ import { DeactiveDialogComponent } from './deactive-dialog/deactive-dialog.compo
 import { FilterInputComponent } from './filter-input/filter-input.component';
 import { AlertDialogComponent } from './alert-dialog/alert-dialog.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { SpinnerComponent } from './spinner/spinner.component';
 
 @NgModule({
    imports: [
@@ -93,6 +94,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     DeactiveDialogComponent,
     FilterInputComponent,
     AlertDialogComponent,
+    SpinnerComponent,
   ],
   exports: [
     FormsModule,
@@ -130,7 +132,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     PreviewDialogComponent,
     PieChartComponent,
     FilterInputComponent,
-    AlertDialogComponent
+    AlertDialogComponent,
+    SpinnerComponent,
   ],
   providers: [
      DatePipe,

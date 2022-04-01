@@ -15,6 +15,7 @@ export class CreateReferenceComponent implements OnInit {
   categoryList: any = [];
   referenceFile: any;
   chooseOptions: any = [];
+  isLoading: boolean = false;
 
   constructor(private http: HttpService,
     public dialogRef: MatDialogRef<CreateReferenceComponent>,
@@ -37,10 +38,13 @@ export class CreateReferenceComponent implements OnInit {
   }
 
   getCategoryList() {
+    this.isLoading = true;
     this.http.getDBCategoryGlobal().subscribe((result: any) => {
       this.categoryList = result.Databases || [];
+      this.isLoading = false;
     }, (error) => {
       this.alertService.showError(error.message);
+      this.isLoading = false;
     });
   }
 
@@ -58,7 +62,7 @@ export class CreateReferenceComponent implements OnInit {
     formData.append('file[]', this.referenceFile);
     const payload = this.referenceForm.value;
     formData.append('data', JSON.stringify(payload));
-
+    this.isLoading = true;
     this.http.saveSourceMangoDB(formData, 'post').subscribe((result: any) => {
       if (result.errorMsg) {
         this.alertService.showError(result.errorMsg);
@@ -67,15 +71,16 @@ export class CreateReferenceComponent implements OnInit {
       this.alertService.showAlert(result.message);
       this.ds.setRefreshMenu({}, 3);
       this.dialogRef.close();
-
+      this.isLoading = false;
     }, (error) => {
       this.alertService.showError(error);
+      this.isLoading = false;
     });
 
   }
 
   onClose() {
-
+    this.dialogRef.close();
   }
 
 }

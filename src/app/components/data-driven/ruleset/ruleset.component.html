@@ -130,13 +130,13 @@
             </ng-template>
             <div class="container" fxLayout="column" fxLayoutGap="10px">
                 <div fxFlex fxLayout="row">
-                    <div fxLayout="column">
+                    <div fxLayout="column" class="rulesetContainer">
                         <div class="columnList" *ngFor="let rule of rulesList"
                             [class.selected]="rule.column === selectedRuleColumn" (click)="gotoRuleColumn(rule)">
                             {{rule.column ? rule.column : '-'}}
                         </div>
                     </div>
-                    <mat-card *ngFor="let columns of RSControls.columnRules.controls; index as i;"
+                    <mat-card class="rulesetContainer" *ngFor="let columns of RSControls.columnRules.controls; index as i;"
                         formArrayName="columnRules" [hidden]="columns['controls'].column.value !== selectedRuleColumn">
                         <ng-container [formGroupName]="i">
                             <span class="ruleTitle">
@@ -216,6 +216,10 @@
                 </div>
                 <div fxLayout="row" fxLayoutAlign="space-between center">
                     <button mat-raised-button color="primary" cdkStepperPrevious>Previous</button>
+                    <div fxLayout="row" *ngIf="isRulesLoading">
+                        Loading {{rulesList.length}} of {{selectedColumnsCopy.length + rulesList.length}} Completed
+                        <mat-spinner diameter="20"></mat-spinner>
+                    </div>
                     <button mat-raised-button color="primary" cdkStepperNext>Next</button>
                 </div>
             </div>
@@ -288,3 +292,4 @@
         </cdk-step>
     </app-dd-stepper>
 </div>
+<app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>

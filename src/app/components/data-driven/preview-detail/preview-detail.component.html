@@ -13,11 +13,12 @@
                 </td>
             </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true"></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true" [hidden]="!displayedColumns || displayedColumns.length == 0"></tr>
             <tr mat-row *matRowDef="let element;let row; columns: displayedColumns;"></tr>
             <tr mat-footer-row *matFooterRowDef="['noData']"
                 [hidden]="previewDataSource && previewDataSource.data.length > 0"></tr>
         </table>
     </div>
     <mat-paginator [pageSizeOptions]="[20, 40, 60, 80,100]" aria-label="Select page of Records"></mat-paginator>
+    <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
 </div>

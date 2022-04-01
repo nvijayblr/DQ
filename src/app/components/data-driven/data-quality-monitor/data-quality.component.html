@@ -203,4 +203,5 @@
     </div>
     <app-source-analysis [analysisData]="selectedAnalysis"></app-source-analysis>
     <app-analysis-detail [profileData]="profile" [source]="selectedSource.source"></app-analysis-detail>
+    <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
 </div>

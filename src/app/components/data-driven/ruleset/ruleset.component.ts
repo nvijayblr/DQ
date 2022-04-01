@@ -20,7 +20,9 @@ export class DDRulesetComponent implements OnInit {
   rulesetForm: FormGroup;
   columnsForm: FormGroup;
 
-  isEditMode: false;
+  isEditMode: boolean = false;
+  isLoading: boolean = false;
+  loaderMsg: any;
   analysis: any;
   ruleset: any;
   isRulesLoading = false;
@@ -199,6 +201,8 @@ export class DDRulesetComponent implements OnInit {
   }
 
   getColumnRules() {
+    this.isLoading = true;
+    this.loaderMsg = 'Fetching column rules...';
     this.selectedColumns = this.columnsForm.value.columns;
 
     let updatedRulesList = [];
@@ -241,6 +245,7 @@ export class DDRulesetComponent implements OnInit {
     // Clear the columns array
     this.RSControls.columnRules = this.fb.array([]);
     if (!payload.selectedColumns.length) {
+      this.isLoading = false;
       if (this.rulesList.length) {
         const firstRule = this.rulesList[0];
         this.selectedRuleColumn = firstRule.column;
@@ -251,7 +256,7 @@ export class DDRulesetComponent implements OnInit {
       }
     } else {
       // Rules Sync loading Logic
-      //this.isRulesLoading = true;
+      this.isRulesLoading = true;
       this.initRuleValue = true;
       this.selectedColumnsCopy = [...payload.selectedColumns];
 
@@ -285,8 +290,10 @@ export class DDRulesetComponent implements OnInit {
         this.initRuleValue = false;
       }
       this.initRulesFormArray();
+      this.isLoading = false;
       callBack();
     }, (error) => {
+      this.isLoading = false;
       callBack();
     });
   }
@@ -339,6 +346,8 @@ export class DDRulesetComponent implements OnInit {
   }
 
   createEditRuleset() {
+    this.isLoading = true;
+    this.loaderMsg = 'Saving Ruleset...';
     const ruleLists = this.rulesList.map((rule, index) => {
       return {
         ...rule,
@@ -357,15 +366,17 @@ export class DDRulesetComponent implements OnInit {
       endDate: this.RSControls.endDate.value,
     };
     this.http.createEditRuleset(ruleset, ruleset.rulesetId ? 'put' : 'post').subscribe((result: any) => {
-      if(this.analysis.UploadsHistory.length){
+      if (this.analysis.UploadsHistory.length) {
         this.alertService.showAlert('Ruleset ' + (ruleset.rulesetId ? 'Updated' : 'Created') + ' Successfully');
-      }    
+      }
       this.dialogRef.close({
         ruleset: result,
         isUploaded: this.analysis.UploadsHistory.length
       });
+      this.isLoading = false;
     }, (error) => {
       this.alertService.showError(error);
+      this.isLoading = false;
     });
   }
 
@@ -465,8 +476,8 @@ export class DDRulesetComponent implements OnInit {
       this.RSControls.endDate.setErrors(null);
     }
   }
-  
-  onClose () {
+
+  onClose() {
     this.dialogRef.close();
   }
 

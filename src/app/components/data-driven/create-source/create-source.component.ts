@@ -29,6 +29,7 @@ export class CreateSourceComponent implements OnInit {
   chooseOptions: string;
   selectedType: string;
   isEditMode: boolean = false;
+  isLoading: boolean = false;
 
   multiSourceList: any = [];
   multiSourceLists: any = [];
@@ -137,6 +138,7 @@ export class CreateSourceComponent implements OnInit {
     apiCalls.push(this.http.getCategoryList());
     apiCalls.push(this.http.getUsersList());
     apiCalls.push(this.http.getsourceCategory());
+    this.isLoading = true;
     forkJoin(apiCalls).subscribe((result: any) => {
       const departments = result[0].department ? result[0].department : [];
       const deptList = [];
@@ -152,8 +154,9 @@ export class CreateSourceComponent implements OnInit {
       this.categoryList = result[3].categoryList ? result[3].categoryList : [];
       this.usersList = result[4].userList ? result[4].userList : [];
       this.srcCategory = result[5].sourceCategory ? result[5].sourceCategory : [];
+      this.isLoading = false;
     }, (error) => {
-
+      this.isLoading = false;
     });
   }
 
@@ -325,7 +328,7 @@ export class CreateSourceComponent implements OnInit {
       settings: this.sourceSettings
     };
     formData.append('data', JSON.stringify(payload));
-
+    this.isLoading = true;
     this.http.saveSource(formData, this.isEditMode ? 'put' : 'post').subscribe((result: any) => {
       if (result.errorMsg) {
         this.alertService.showError(result.errorMsg);
@@ -334,8 +337,10 @@ export class CreateSourceComponent implements OnInit {
       this.summary = result;
       this.ds.setRefreshMenu(result || {}, 1);
       setTimeout(() => this.stepper && this.stepper.next());
+      this.isLoading = false;
     }, (error) => {
       this.alertService.showError(error);
+      this.isLoading = false;
     });
 
   }
@@ -355,7 +360,7 @@ export class CreateSourceComponent implements OnInit {
       }
     };
     formData.append('data', JSON.stringify(payload));
-
+    this.isLoading = true;
     this.http.saveSourceProfile(formData, this.isEditMode ? 'put' : 'post').subscribe((result: any) => {
       if (result.errorMsg) {
         this.alertService.showError(result.errorMsg);
@@ -367,6 +372,7 @@ export class CreateSourceComponent implements OnInit {
       this.dialogRef.close();
     }, (error) => {
       this.alertService.showError(error);
+      this.isLoading = false;
     });
   }
 
@@ -392,6 +398,7 @@ export class CreateSourceComponent implements OnInit {
         department: this.sourceSettings.department
       },
     };
+    this.isLoading = true;
     this.http.saveEditSourceProfile(payload).subscribe((result: any) => {
       if (result.errorMsg) {
         this.alertService.showError(result.errorMsg);
@@ -402,6 +409,7 @@ export class CreateSourceComponent implements OnInit {
       this.dialogRef.close();
     }, (error) => {
       this.alertService.showError(error);
+      this.isLoading = false;
     });
   }
 

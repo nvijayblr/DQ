@@ -1,5 +1,4 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-analysis-detail',
@@ -20,7 +19,7 @@ export class AnalysisDetailComponent implements OnInit {
 
   @Input() set source(value: string) {
     this.selectedSource = value;
-    this.onSelectTab(this.selectedTab);
+    setTimeout(()=> this.onSelectTab(this.selectedTab), 0);
   }
 
   ngOnInit() {

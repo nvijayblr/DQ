@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatPaginator, MatTabGroup, MatTableDataSource } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { HttpService } from 'src/app/services/http-service.service';
 import { AlertService } from 'src/app/shared/alert-dialog/alert-dialog.service';
@@ -18,6 +18,7 @@ import { Angular2Csv } from 'angular2-csv';
 })
 export class DataCleaningComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatTabGroup, { static: true }) tabGroup: MatTabGroup;
 
   profile: any = [];
   profileSummary: any = {};
@@ -27,6 +28,9 @@ export class DataCleaningComponent implements OnInit {
   cleanLogs: any = [];
   removeItems: any = '';
   messageDisplay: any = '';
+  loaderMsg: any = '';
+  isLoading: boolean = false;
+  isPreviewLoading: boolean = false;
 
   searchValue: any = '';
   replaceValue: any = '';
@@ -155,6 +159,7 @@ export class DataCleaningComponent implements OnInit {
   }
 
   getProfileDetail(filePath, profile: any = '') {
+    this.isLoading = true;
     const payload = {
       sourcepath: filePath
     };
@@ -162,6 +167,10 @@ export class DataCleaningComponent implements OnInit {
       this.profile = result.profile ? result.profile : [];
       this.isSaveEnable = (profile && this.profile.length);
       this.getProfileSummary(result);
+      this.isLoading = false;
+    }, (error) => {
+      this.isLoading = false;
+      this.alertService.showError(error);
     });
     this.initProfileDetail();
   }
@@ -195,6 +204,7 @@ export class DataCleaningComponent implements OnInit {
   }
 
   getCleanedLogs() {
+    this.isLoading = true;
     this.cleanLogs = [];
     const payload = {
       query_col: 'sourceId',
@@ -207,7 +217,9 @@ export class DataCleaningComponent implements OnInit {
           ...list[key]
         });
       });
+      this.isLoading = false;
     }, (error) => {
+      this.isLoading = false;
       this.alertService.showError(error);
     });
   }
@@ -242,15 +254,18 @@ export class DataCleaningComponent implements OnInit {
     this.previewDataSource = new MatTableDataSource([]);
     this.removeItems = '';
     this.messageDisplay = '';
+    this.isPreviewLoading = true;
     this.http.getProfilePreview(payload, type).subscribe((res: any) => {
       const details: any = res.Preview ? res.Preview : {};
       this.NoPreviewData = !Object.keys(details).length;
       this.setRemoveItemMessage(res, type);
       this.parseSourcePreview(details);
+      this.isPreviewLoading = false;
       if (callBack) {
         callBack();
       }
     }, (error) => {
+      this.isPreviewLoading = false;
       this.alertService.showWarning(error);
     });
 
@@ -406,6 +421,8 @@ export class DataCleaningComponent implements OnInit {
       uploadId: this.uploadId,
       processTime: this.processTime,
     };
+    this.isLoading = true;
+    this.loaderMsg = 'Imputing columns...';
     this.http.imputeColumnsReq(this.impute).subscribe((result: any) => {
 
       if (result.outputpath) {
@@ -413,7 +430,9 @@ export class DataCleaningComponent implements OnInit {
       }
       this.alertService.showAlert(`Impution has been successfully completed.`);
       this.getCleanedLogs();
+      this.isLoading = false;
     }, (error) => {
+      this.isLoading = false;
       this.alertService.showError(error);
     });
   }
@@ -421,6 +440,7 @@ export class DataCleaningComponent implements OnInit {
   setColumnForImpute(event) {
     this.impute.column = event.column;
     this.setDatatype(this.impute.column, this.impute);
+    this.tabGroup.selectedIndex = 0;
   }
 
   confirmDeleteDuplicates() {
@@ -453,13 +473,16 @@ export class DataCleaningComponent implements OnInit {
       uploadId: this.uploadId,
       processTime: this.processTime,
     };
-
+    this.isLoading = true;
+    this.loaderMsg = 'Deleting duplicate records...';
     this.http.deleteDuplicatesReq(payload).subscribe((result: any) => {
       if (result.outputpath) {
         this.updateSourcePath(result.outputpath, result.outputFileName);
       }
+      this.isLoading = false;
       this.alertService.showAlert('Duplicate records are deleted successfully.');
     }, (error) => {
+      this.isLoading = false;
       this.alertService.showError(error);
     });
   }
@@ -541,14 +564,17 @@ export class DataCleaningComponent implements OnInit {
     }
 
     payload.values = payload.values ? [payload.values] : '';
-
+    this.isLoading = true;
+    this.loaderMsg = 'Deleting columns...';
     this.http.deleteColumnsRowsReq(payload).subscribe((result: any) => {
       if (result.outputpath) {
         this.updateSourcePath(result.outputpath, result.outputFileName);
       }
       this.removeItems = '';
+      this.isLoading = false;
       this.alertService.showAlert(`${this.delete === 'column' ? 'Columns' : 'Rows'} are deleted successfully.`);
     }, (error) => {
+      this.isLoading = false;
       this.alertService.showError(error);
     });
   }
@@ -561,6 +587,7 @@ export class DataCleaningComponent implements OnInit {
     this.showSaveButton = false;
     this.previewDataSource = new MatTableDataSource([]);
     this.displayedColumns = [];
+    this.isPreviewLoading = true;
     this.http.findReplacePreview(payload).subscribe((result: any) => {
       let details = result.Preview ? result.Preview : {};
       this.showPreviewTable = true;
@@ -570,7 +597,9 @@ export class DataCleaningComponent implements OnInit {
         this.searchDisabled = false;
         this.parseSourcePreview(details);
       }
+      this.isPreviewLoading = false;
     }, (error) => {
+      this.isPreviewLoading = false;
       this.alertService.showError(error.message);
     });
   }
@@ -590,6 +619,7 @@ export class DataCleaningComponent implements OnInit {
     this.displayedColumns = [];
     this.showPreviewTable = false;
     this.showSaveButton = false;
+    this.isPreviewLoading = true;
     this.http.replacePreview(payload).subscribe((result: any) => {
       if (result.outputpath) {
         this.replaceSourcepath = result.outputpath;
@@ -605,12 +635,14 @@ export class DataCleaningComponent implements OnInit {
             this.parseSourcePreview(details);
             this.getCleanedLogs();
           }
+          this.isPreviewLoading = false;
         });
       }
       this.alertService.showAlert(result.result);
       this.replaceValue = '';
       this.searchValue = '';
     }, (error) => {
+      this.isPreviewLoading = false;
       this.alertService.showError(error.message);
     });
   }
@@ -691,6 +723,7 @@ export class DataCleaningComponent implements OnInit {
         outputFileName: reason + '.csv'
       };
     }
+    this.isLoading = true;
     this.http.saveCleanSource(payload).subscribe((result: any) => {
       if (result.errorflag === 'True') {
         this.alertService.showError(result.errorMsg);
@@ -701,6 +734,10 @@ export class DataCleaningComponent implements OnInit {
         this.updateSourcePath(savedFiles.outputPath, savedFiles.outputFileName);
       }
       this.ds.setRefreshMenu(result, 2);
+      this.isLoading = false;
+    }, (error) => {
+      this.isLoading = false;
+      this.alertService.showError(error);
     });
   }
 
@@ -711,11 +748,14 @@ export class DataCleaningComponent implements OnInit {
       sourcepath: sourcepath,
       seeMoreEnabled: 'YES',
     };
+    this.isLoading = true;
     this.http.getProfileView(payload).subscribe((res: any) => {
       let detail = res.Preview ? res.Preview : {};
       this.downloadCSV(fileName, detail);
+      this.isLoading = false;
     }, (error) => {
       this.alertService.showError(error);
+      this.isLoading = false;
     });
   }
 

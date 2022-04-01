@@ -12,6 +12,7 @@ export class CorrelationDetailComponent {
     coMatrix: any = {};
     method: any = '';
     datatype: any = 'mixed';
+    isLoading: boolean = false;
 
     constructor(private http: HttpService) { }
 
@@ -21,10 +22,13 @@ export class CorrelationDetailComponent {
             cols_data_type: this.datatype,
             method: this.method
         };
+        this.isLoading = true;
         this.http.getCorrMatrix(payload).subscribe((result: any) => {
             this.coMatrix = result ? result : {};
+            this.isLoading = false;
         }, (error) => {
             this.coMatrix = {};
+            this.isLoading = false;
         });
     }
 

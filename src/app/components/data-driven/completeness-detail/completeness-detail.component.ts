@@ -2,6 +2,7 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { HttpService } from 'src/app/services/http-service.service';
+import { AlertService } from 'src/app/shared/alert-dialog/alert-dialog.service';
 
 
 @Component({
@@ -12,6 +13,7 @@ import { HttpService } from 'src/app/services/http-service.service';
 export class CompletenessDetailComponent implements OnInit {
 
   showDetails: boolean = false;
+  isLoading: boolean = false;
   tableDataSource: MatTableDataSource<any>;
   selectedColumn: any = {};
   selectedTabIndex: any;
@@ -41,7 +43,8 @@ export class CompletenessDetailComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<CompletenessDetailComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private http: HttpService) {
+    private http: HttpService,
+    private alertService: AlertService) {
     this.initData(data);
   }
 
@@ -70,6 +73,7 @@ export class CompletenessDetailComponent implements OnInit {
   launchAnalysisDetails(rowItem) {
     this.selectedColumn = rowItem;
     this.showDetails = false;
+    this.isLoading = true;
     this.http.launchAnalysisDetails(rowItem.outlier).subscribe((res: any) => {
       const details: any = res.result ? res.result : {};
       const rowData = [];
@@ -87,8 +91,10 @@ export class CompletenessDetailComponent implements OnInit {
         });
       }
       this.tableDataSource = new MatTableDataSource(rowData);
+      this.isLoading = false;
     }, (error) => {
-
+      this.isLoading = false;
+      this.alertService.showError(error);
     });
   }
 

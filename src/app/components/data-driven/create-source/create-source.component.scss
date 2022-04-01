@@ -5,8 +5,13 @@
 .detailStepper .header ol li {
   width: 250px;
 }
+
+.dialog {
+  position: relative;
+}
+
 .SDcontainer {
-  max-height: calc(100vh - 400px);
+  max-height: calc(100vh - 350px);
   overflow: auto;
 
   .mat-form-field,
@@ -23,14 +28,20 @@
   h6 {
     color: #49739e;
     padding-bottom: 0.5rem;
-  }
+  }  
+}
+
+.SCContainer {
+  margin: 10px;
+}
+
+.SPContainer {
+  max-height: calc(100vh - 400px);
+  overflow: auto;
 
   .mat-table {
     width: 100%;
   }
-}
-.SCContainer {
-  margin: 10px;
 }
 
 .flipBox {

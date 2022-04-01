@@ -11,6 +11,12 @@
     width: 350px;
   }
 }
+
+.rulesetContainer {
+  max-height: calc(100vh - 370px);
+  overflow: auto;
+}
+
 .columnList {
   padding: 10px;
   border: 1px solid #eee;
@@ -50,5 +56,5 @@ button.fabMini {
   overflow: auto;
 }
 .container {
-  min-height: 300px;
+  min-height: 100px;
 }

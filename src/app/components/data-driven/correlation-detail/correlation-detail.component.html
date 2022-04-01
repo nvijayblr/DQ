@@ -1,4 +1,4 @@
-<div class="correlationDetail" fxLayout="column">
+<div class="correlationDetail" fxLayout="column" fxFlex>
   <div class="filter" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="40px">
     <mat-form-field appearance="standard">
       <mat-label class="lbl">Data Type</mat-label>
@@ -24,4 +24,5 @@
     <app-heat-map [columns]="coMatrix.columns" *ngIf="coMatrix.matrix" [data]="coMatrix.matrix" [isOverview]="true">
     </app-heat-map>
   </div>
+  <app-spinner *ngIf="isLoading"></app-spinner>
 </div>

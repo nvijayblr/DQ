@@ -41,6 +41,10 @@
   }
 }
 
-.correlationDetail .filter {
-  margin-right: 15px;
+.correlationDetail {
+   min-height: 50vh;
+
+  .filter {
+    margin-right: 15px;
+  }
 }

@@ -27,6 +27,7 @@ export class SourceAnalysisComponent implements OnInit {
   displayedColumns: any = [];
   selectedColumns: any = [];
   isGraphView: boolean = true;
+  isLoading: any = 0;
 
   private gridApi;
   private gridColumnApi;
@@ -99,6 +100,7 @@ export class SourceAnalysisComponent implements OnInit {
   }
 
   launchAnalysisByKeyDate(keyname: any, uploadId: any) {
+    this.isLoading++;
     this.selectedKey = keyname;
     const payload = {
       sourceId: this.analysis.sourceId,
@@ -117,12 +119,15 @@ export class SourceAnalysisComponent implements OnInit {
       this.selectedKey = result.keyname ? result.keyname : this.selectedKey;
       this.selectedCDE = this.selectedKey;
       this.getChartData();
+      this.isLoading--;
     }, (error) => {
       this.analyseKeyData = [];
+      this.isLoading--;
     });
   }
 
   viewAnalysisByTime(keyname, uploadId) {
+    this.isLoading++;
     this.selectedKey = keyname;
     const payload = {
       sourceId: this.analysis.sourceId,
@@ -132,8 +137,10 @@ export class SourceAnalysisComponent implements OnInit {
     };
     this.http.getAnalysisByTime(payload).subscribe((result: any) => {
       this.analysisByTimeData = result ? result : [];
+      this.isLoading--;
     }, (error) => {
       this.alertService.showError(error);
+      this.isLoading--;
     });
   }
 

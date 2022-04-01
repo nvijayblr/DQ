@@ -243,6 +243,7 @@
                 [hidden]="previewDataSource && previewDataSource.data.length > 0"></tr>
         </table>
         <mat-paginator [pageSizeOptions]="[10,20, 40, 60, 80,100]" aria-label="Select page of Records"></mat-paginator>
+        <app-spinner *ngIf="isPreviewLoading"></app-spinner>
     </div>
     <div class="profileDetail">
         <mat-tab-group mat-align-tabs="start">
@@ -256,4 +257,5 @@
             </mat-tab>
         </mat-tab-group>
     </div>
+    <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
 </div>

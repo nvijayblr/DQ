@@ -17,4 +17,5 @@
         </div>
     </div>
     <app-analysis-detail [profileData]="profile" [source]="source"></app-analysis-detail>
+    <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
 </div>
