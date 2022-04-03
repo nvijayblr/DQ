@@ -1,5 +1,5 @@
 <div class="previewDetail">
-    <div class="previewTable overflow">
+    <div class="previewTable overflow" [formGroup]="filterForm">
         <table mat-table [dataSource]="previewDataSource">
             <ng-container *ngFor="let column of displayedColumns; let colIndex = index" matColumnDef="{{column}}">
                 <th class="table-column-220" mat-header-cell *matHeaderCellDef>{{column}}</th>
@@ -7,13 +7,27 @@
                     {{element[column]}}
                 </td>
             </ng-container>
+
+            <ng-container *ngFor="let column of displayedColumns_Filter; let colIndex = index"
+                matColumnDef="{{column}}">
+                <th class="table-column-220" mat-header-cell *matHeaderCellDef>
+                    <mat-form-field apperance="standard">
+                        <input matInput [formControlName]="displayedColumns[colIndex]">
+                        <mat-icon matSuffix>filter_list</mat-icon>
+                    </mat-form-field>
+                </th>
+            </ng-container>
+
             <ng-container matColumnDef="noData">
                 <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length" class="center">
                     No Records Found
                 </td>
             </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true" [hidden]="!displayedColumns || displayedColumns.length == 0"></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true"
+                [hidden]="!displayedColumns || displayedColumns.length == 0"></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns_Filter;sticky:true"
+                [hidden]="!displayedColumns_Filter || displayedColumns_Filter.length == 0"></tr>
             <tr mat-row *matRowDef="let element;let row; columns: displayedColumns;"></tr>
             <tr mat-footer-row *matFooterRowDef="['noData']"
                 [hidden]="previewDataSource && previewDataSource.data.length > 0"></tr>
