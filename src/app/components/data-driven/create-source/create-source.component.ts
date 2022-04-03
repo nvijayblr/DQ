@@ -404,7 +404,7 @@ export class CreateSourceComponent implements OnInit {
         this.alertService.showError(result.errorMsg);
         return;
       }
-      this.ds.setRefreshMenu(result.SourceSettings, this.data.uploadMethod === 'clean' ? 2 : 0);
+      this.ds.setRefreshMenu(source, this.data.uploadMethod === 'clean' ? 2 : 0);
       this.alertService.showAlert('Source Updated Successfully');
       this.dialogRef.close();
     }, (error) => {

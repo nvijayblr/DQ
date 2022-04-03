@@ -69,7 +69,7 @@ export class CreateReferenceComponent implements OnInit {
         return;
       }
       this.alertService.showAlert(result.message);
-      this.ds.setRefreshMenu({}, 3);
+      this.ds.setRefreshMenu(payload.collection, 3);
       this.dialogRef.close();
       this.isLoading = false;
     }, (error) => {

@@ -72,8 +72,10 @@ export class DataDrivenComponent implements OnInit {
         this.initDQMSource = data.source;
         this.getDQMSource();
       } else if (data.menuIndex === 2) {
+        this.initPFSource = data.source;
         this.getCleaningSource();
       } else if (data.menuIndex === 3) {
+        this.initDQMSource = data.source;
         this.getReferenceData();
       }
     });
@@ -122,7 +124,7 @@ export class DataDrivenComponent implements OnInit {
   }
 
   getProfileSourceList(list) {
-    let categoryObject = {}, item: any, initSource: any, openCat: any,
+    let categoryObject = {}, item: any, initSource: any,
       route = this.menuList[1].route;
     this.menuList[1].children = [];
     list.forEach((source, index) => {
@@ -142,21 +144,22 @@ export class DataDrivenComponent implements OnInit {
       categoryObject[source.sourceCategory].children.push(item);
       if (!initSource && (this.initPFSource && (source.sourceId == this.initPFSource.sourceId))) {
         initSource = item;
-        openCat = categoryObject[source.sourceCategory];
       }
     });
     for (let key of Object.keys(categoryObject)) {
       this.menuList[1].children.push(categoryObject[key]);
     }
+    this.dataSource.data = null;
     this.dataSource.data = this.menuList;
     this.treeControl.dataNodes = this.menuList;
     if (initSource) {
       this.loadSourceProfile(initSource);
+      this.expandToNode(this.menuList, initSource);
     }
   }
 
   getDQMSourceList(list) {
-    let categoryObject = {}, source: any, initSource: any, openCat: any,
+    let categoryObject = {}, source: any, initSource: any,
       route = this.menuList[2].route;
     this.menuList[2].children = [];
     list.forEach((item, index) => {
@@ -176,24 +179,24 @@ export class DataDrivenComponent implements OnInit {
         };
         categoryObject[item.source.sourceCategory].children.push(source);
         if (!initSource && (this.initDQMSource && (item.sourceId == this.initDQMSource.sourceId))) {
-          //source.isUploaded = this.initDQMSource.isUploaded;
+          source.isUploaded = this.initDQMSource.isUploaded;
           initSource = source;
-          openCat = categoryObject[source.sourceCategory];
         }
       }
     });
     for (let key of Object.keys(categoryObject)) {
       this.menuList[2].children.push(categoryObject[key]);
     }
-    this.dataSource.data = JSON.parse(JSON.stringify(this.menuList));
+    this.dataSource.data = null;
+    this.dataSource.data = this.menuList;
     if (initSource) {
       this.loadSourceProfile(initSource);
+      this.expandToNode(this.menuList, initSource);
     }
-    setTimeout(() => (this.treeControl.expand(this.treeControl.dataNodes[2])), 1000);
   }
 
   getReferenceDataList(list) {
-    let categoryObject = {},
+    let categoryObject = {}, source: any, initSource: any,
       route = this.menuList[4].route;
     this.menuList[4].children = [];
     for (let key in list) {
@@ -205,22 +208,32 @@ export class DataDrivenComponent implements OnInit {
         }
       }
       list[key].forEach(item => {
-        categoryObject[key].children.push({
+        source = {
           name: item,
           id: item,
           key: key,
           route: route
-        })
+        };
+        categoryObject[key].children.push(source);
+        if (!initSource && (this.initDQMSource && (item == this.initDQMSource))) {
+          source.isUploaded = this.initDQMSource.isUploaded;
+          initSource = source;
+        }
       });
     }
     for (let key of Object.keys(categoryObject)) {
       this.menuList[4].children.push(categoryObject[key]);
     }
-    this.dataSource.data = JSON.parse(JSON.stringify(this.menuList));
+    this.dataSource.data = null;
+    this.dataSource.data = this.menuList;
+    if (initSource) {
+      this.loadSourceProfile(initSource);
+      this.expandToNode(this.menuList, initSource);
+    }
   }
 
   getCleaningSourceList(list) {
-    let item, categoryObject = {}, log,
+    let item, categoryObject = {}, log, initSource: any,
       route = this.menuList[3].route;
     this.menuList[3].children = [];
     list.forEach((source) => {
@@ -238,6 +251,9 @@ export class DataDrivenComponent implements OnInit {
         route: route
       };
       categoryObject[source.sourceCategory].children.push(item);
+      if (!initSource && (this.initPFSource && (source.sourceId == this.initPFSource.sourceId))) {
+        initSource = item;
+      }
       if (source.CleanedFilesLog && source.CleanedFilesLog.length > 0) {
         source.CleanedFilesLog.forEach((file) => {
           log = {
@@ -255,7 +271,12 @@ export class DataDrivenComponent implements OnInit {
     for (let key of Object.keys(categoryObject)) {
       this.menuList[3].children.push(categoryObject[key]);
     }
-    this.dataSource.data = JSON.parse(JSON.stringify(this.menuList));
+    this.dataSource.data = null;
+    this.dataSource.data = this.menuList;
+    if (initSource) {
+      this.loadSourceProfile(initSource);
+      this.expandToNode(this.menuList, initSource);
+    }
   }
 
   loadSourceProfile(source) {
@@ -277,21 +298,20 @@ export class DataDrivenComponent implements OnInit {
           break;
       }
     }
-    this.treeControl.expand(this.treeControl.dataNodes[0]);
   }
 
   check(node) {
     this.expandToNode(this.menuList, this.menuList[2].children[0].children[0].name);
   }
 
-  expandToNode(data: any, name: string): any {
+  expandToNode(data: any, source: any): any {
     data.forEach(node => {
-      if (node.children && node.children.find(c => c.name === name)) {
+      if (node.children && node.children.find(c => c.id === source.id)) {
         this.treeControl.expand(node);
-        this.expandToNode(this.treeControl.dataNodes, node.name);
+        this.expandToNode(this.treeControl.dataNodes, node);
       }
       else if (node.children && node.children.find(c => c.children)) {
-        this.expandToNode(node.children, name);
+        this.expandToNode(node.children, source);
       }
     });
   }

@@ -21,7 +21,7 @@ export class SourceAnalysisComponent implements OnInit {
   analysisByTimeData: any = [];
   showErrorMessage: boolean = false;
   analyseKeyData: any;
-  selectedCDE: any;
+  selectedCDE: any = '';
   analyseKeyChartData: any = {};
   analysisKeys: any = [];
   displayedColumns: any = [];
