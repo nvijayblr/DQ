@@ -19,6 +19,7 @@ export class PreviewDetailComponent {
     previewDataSource: MatTableDataSource<any>;
     filterForm: FormGroup;
     isLoading: boolean = false;
+    loaderMsg : any;
 
     constructor(private http: HttpService,
         private alertService: AlertService) {

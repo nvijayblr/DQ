@@ -23,6 +23,7 @@ import { AlertService } from 'src/app/shared/alert-dialog/alert-dialog.service';
 export class DataProfileComponent implements OnInit {
 
   isLoading: boolean = false;
+  loaderMsg : any;
   profile = [];
   profileSummary: any = {};
   source: any = {};

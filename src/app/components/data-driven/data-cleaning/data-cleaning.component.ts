@@ -243,8 +243,24 @@ export class DataCleaningComponent implements OnInit {
     });
   }
 
+  downloadSource() {
+    let collectionResult, downloadSrcName = this.source.sourceDataName;
+    const payload = {
+      sourcepath: this.source.outputPath,
+      seeMoreEnabled: 'YES',
+    };
+    this.isLoading = true;
+    this.http.getProfileView(payload).subscribe((res: any) => {
+      collectionResult = res.Preview ? res.Preview : {};
+      this.downloadCSV(downloadSrcName, collectionResult);
+    }, (error) => {
+      this.alertService.showError(error.message);
+      this.isLoading = false;
+    });
+  }
+
   isSourceLoaded() {
-    return this.source && this.source.sourceDataName;
+    return this.source && this.source.sourceDataName && !this.cleanedFilesPath;
   }
 
   loadPreview(type: any, mask = '', callBack: any = '') {

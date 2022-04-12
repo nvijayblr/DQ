@@ -38,7 +38,7 @@
 
                 <mat-card fxFlex fxLayout="column">
                     <div class="graphView" *ngIf="isGraphView">
-                        <app-cylinder-chart *ngIf="analyseKeyData.length" [analysisKeys]="analysisKeys"
+                        <app-cylinder-chart *ngIf="analyseKeyData.length && isLoadChart" [analysisKeys]="analysisKeys"
                             [chartData]="analyseKeyChartData" [chartType]="'column'" [options3d]=false
                             (barClicked)="onBarClicked($event)">
                         </app-cylinder-chart>

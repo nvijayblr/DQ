@@ -55,7 +55,7 @@ export class CreateReferenceComponent implements OnInit {
   saveReference() {
     const formData: any = new FormData();
     if (this.referenceForm.invalid) return;
-    if (!this.referenceFile.name) {
+    if (!this.referenceFile || !this.referenceFile.name) {
       this.alertService.showWarning('Please upload the reference file.');
       return;
     }
@@ -66,10 +66,11 @@ export class CreateReferenceComponent implements OnInit {
     this.http.saveSourceMangoDB(formData, 'post').subscribe((result: any) => {
       if (result.errorMsg) {
         this.alertService.showError(result.errorMsg);
+        this.isLoading = false;
         return;
       }
       this.alertService.showAlert(result.message);
-      this.ds.setRefreshMenu(payload.collection, 3);
+      //this.ds.setRefreshMenu(payload.collection, 3);
       this.dialogRef.close();
       this.isLoading = false;
     }, (error) => {

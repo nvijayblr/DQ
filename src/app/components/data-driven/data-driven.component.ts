@@ -262,7 +262,7 @@ export class DataDrivenComponent implements OnInit {
             source: source,
             cleanLogFile: file,
             route: route,
-            icon: 'fa-download'
+            icon: 'fa-clone'
           };
           categoryObject[source.sourceCategory].children.push(log);
         });
@@ -298,10 +298,6 @@ export class DataDrivenComponent implements OnInit {
           break;
       }
     }
-  }
-
-  check(node) {
-    this.expandToNode(this.menuList, this.menuList[2].children[0].children[0].name);
   }
 
   expandToNode(data: any, source: any): any {

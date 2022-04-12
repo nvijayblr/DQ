@@ -220,7 +220,7 @@
                         Loading {{rulesList.length}} of {{selectedColumnsCopy.length + rulesList.length}} Completed
                         <mat-spinner diameter="20"></mat-spinner>
                     </div>
-                    <button mat-raised-button color="primary" cdkStepperNext>Next</button>
+                    <button mat-raised-button color="primary" [disabled]="isRulesLoading" cdkStepperNext>Next</button>
                 </div>
             </div>
         </cdk-step>

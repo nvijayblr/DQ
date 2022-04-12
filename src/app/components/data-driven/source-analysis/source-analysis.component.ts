@@ -28,6 +28,8 @@ export class SourceAnalysisComponent implements OnInit {
   selectedColumns: any = [];
   isGraphView: boolean = true;
   isLoading: any = 0;
+  isLoadChart: boolean = false;
+  retryCount: any = 0;
 
   private gridApi;
   private gridColumnApi;
@@ -67,6 +69,7 @@ export class SourceAnalysisComponent implements OnInit {
     this.uploadsHistory = this.analysis.UploadsHistory ? this.analysis.UploadsHistory : [];
     this.selectedColumns = (this.analysis.source && this.analysis.source.categorialColumns) ? this.analysis.source.categorialColumns : [];
     if (this.selectedColumns && this.selectedColumns.length) {
+      this.retryCount = 0;
       this.selectedCDE = this.selectedColumns[0];
       this.validateAnalysis(this.selectedCDE);
     }
@@ -101,6 +104,8 @@ export class SourceAnalysisComponent implements OnInit {
 
   launchAnalysisByKeyDate(keyname: any, uploadId: any) {
     this.isLoading++;
+    this.retryCount++;
+    this.isLoadChart = false;
     this.selectedKey = keyname;
     const payload = {
       sourceId: this.analysis.sourceId,
@@ -112,6 +117,11 @@ export class SourceAnalysisComponent implements OnInit {
     this.http.launchAnalysisByKey(payload).subscribe((result: any) => {
       if (result.errorCode && result.errorMsg) {
         this.showErrorMessage = true;
+        if (!keyname && this.retryCount < 10) {
+          setTimeout(() => {
+            this.launchAnalysisByKeyDate(keyname, uploadId);
+          }, 1000);
+        }
       } else {
         this.showErrorMessage = false;
       }
@@ -166,6 +176,7 @@ export class SourceAnalysisComponent implements OnInit {
       });
     });
     this.analyseKeyChartData = chartData;
+    this.isLoadChart = true;
     this.genrateColDefs();
   }
 
