@@ -117,11 +117,11 @@ export class SourceAnalysisComponent implements OnInit {
     this.http.launchAnalysisByKey(payload).subscribe((result: any) => {
       if (result.errorCode && result.errorMsg) {
         this.showErrorMessage = true;
-        if (!keyname && this.retryCount < 10) {
-          setTimeout(() => {
-            this.launchAnalysisByKeyDate(keyname, uploadId);
-          }, 1000);
-        }
+        // if (!keyname && this.retryCount < 10) {
+        //   setTimeout(() => {
+        //     this.launchAnalysisByKeyDate(keyname, uploadId);
+        //   }, 10000);
+        // }
       } else {
         this.showErrorMessage = false;
       }

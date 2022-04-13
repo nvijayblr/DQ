@@ -19,14 +19,20 @@ export class ReferenceDataComponent {
   isChecked: boolean = false;
   isLoading: boolean = false;
   searchValue: any;
+  reference: any;
 
   constructor(private http: HttpService,
     private ds: DataDrivenService,
     private dialog: MatDialog,
     private alertService: AlertService) {
     this.subscription = this.ds.getReferenceData().subscribe((data) => {
+      this.reference = data || {};
       if (data) {
-        this.getPreviewData(data);
+        this.getPreviewData(this.reference);
+      } else {
+        this.displayedColumns = [];
+        this.tableDataSource = new MatTableDataSource([]);
+        this.reference = '';
       }
     });
   }

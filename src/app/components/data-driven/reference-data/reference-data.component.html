@@ -1,6 +1,7 @@
 <div class="content" fxFlex fxLayout="column">
     <div class="breadCrumb">
         <span>Reference Data </span>
+        <span *ngIf="reference"> >> {{reference.key}} >> {{reference.id}} </span>
         <div fxFlex fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
             <button mat-flat-button color="primary" (click)="createReference()"> Upload Reference Data</button>
         </div>
@@ -9,7 +10,8 @@
         <mat-checkbox (change)='onChange($event)' [(ngModel)]='isChecked'>Match Case</mat-checkbox>
         <mat-form-field appearance="standard" fxFlex="auto">
             <mat-icon matPrefix>search</mat-icon>
-            <input matInput placeholder="Search" [(ngModel)]='searchValue' (keyup.enter)="applySearch($event.target.value)">
+            <input matInput placeholder="Search" [(ngModel)]='searchValue'
+                (keyup.enter)="applySearch($event.target.value)">
         </mat-form-field>
         <button color="primary" mat-flat-button (click)="applySearch(searchValue)">search</button>
     </div>

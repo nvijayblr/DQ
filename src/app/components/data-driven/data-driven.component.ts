@@ -227,8 +227,8 @@ export class DataDrivenComponent implements OnInit {
     this.dataSource.data = null;
     this.dataSource.data = this.menuList;
     if (initSource) {
-      this.loadSourceProfile(initSource);
-      this.expandToNode(this.menuList, initSource);
+      this.ds.setReferenceData(null);
+      this.expandToNode(this.menuList, this.menuList[4]);
     }
   }
 
