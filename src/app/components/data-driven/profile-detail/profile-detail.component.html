@@ -30,28 +30,28 @@
                 <th class="table-column-150" mat-header-cell *matHeaderCellDef> Min </th>
                 <td class="table-column-150" mat-cell *matCellDef="let col">
                     {{col.LengthStatistics ?
-                    col.LengthStatistics.Min : 0}}
+                    col.LengthStatistics.Min : (col.valueStatistics? col.valueStatistics.MinValLength : 0)}}
                 </td>
             </ng-container>
             <ng-container matColumnDef="maxLength">
                 <th class="table-column-100" mat-header-cell *matHeaderCellDef> Max </th>
                 <td class="table-column-100" mat-cell *matCellDef="let col">
                     {{col.LengthStatistics ?
-                    col.LengthStatistics.Max : 0}}
+                    col.LengthStatistics.Max : (col.valueStatistics? col.valueStatistics.MaxValLength : 0)}}
                 </td>
             </ng-container>
             <ng-container matColumnDef="averageLength">
                 <th class="table-column-100" mat-header-cell *matHeaderCellDef> Average </th>
                 <td class="table-column-100" mat-cell *matCellDef="let col">
                     {{col.LengthStatistics ?
-                    col.LengthStatistics.Average : 0}}
+                    col.LengthStatistics.Average : (col.valueStatistics? col.valueStatistics.MinimumValue : 0)}}
                 </td>
             </ng-container>
             <ng-container matColumnDef="medianLength">
                 <th class="table-column-100" mat-header-cell *matHeaderCellDef> Median </th>
                 <td class="table-column-100" mat-cell *matCellDef="let col">
                     {{col.LengthStatistics ?
-                    col.LengthStatistics.Median : 0}}
+                    col.LengthStatistics.Median : (col.valueStatistics? col.valueStatistics.MedianValue : 0)}}
                 </td>
             </ng-container>
             <ng-container matColumnDef="expand">

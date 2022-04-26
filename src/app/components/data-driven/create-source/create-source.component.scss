@@ -99,4 +99,9 @@
 .mat-cell.capitalize {
   text-transform: capitalize;
 }
-
+.tollerance {
+  mat-card {
+    width: 95%;
+    margin-bottom: 20px;
+  }
+}

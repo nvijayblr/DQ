@@ -106,7 +106,7 @@ export class SourceAnalysisComponent implements OnInit {
     this.isLoading++;
     this.retryCount++;
     this.isLoadChart = false;
-    this.selectedKey = keyname;
+    this.selectedKey = keyname || this.selectedCDE;
     const payload = {
       sourceId: this.analysis.sourceId,
       rulesetId: this.analysis.rulesetId,

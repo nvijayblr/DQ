@@ -135,55 +135,6 @@
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
-                                    <div class="tollerance-wrapper" *ngIf="dataUserTollerance.length">
-                                        <mat-card *ngFor="let user of dataUserTollerance">
-                                            <h2>Tollerance - {{user.user}}</h2>
-                                            <div class="wrap">
-                                                <div class="outline">
-                                                    <h3>Completeness</h3>
-                                                    <mat-slider (change)="user.tolerance.Completeness = $event.value"
-                                                        thumbLabel step="1" min="0" max="100" aria-label="units">
-                                                    </mat-slider>
-                                                    <div class="value">{{(user.tolerance && user.tolerance.Completeness)
-                                                        ?
-                                                        user.tolerance.Completeness : 0}}%</div>
-                                                </div>
-                                                <div class="outline">
-                                                    <h3>Accuracy</h3>
-                                                    <mat-slider (change)="user.tolerance.Accuracy = $event.value"
-                                                        thumbLabel step="1" min="0" max="100" aria-label="units">
-                                                    </mat-slider>
-                                                    <div class="value">{{(user.tolerance && user.tolerance.Accuracy) ?
-                                                        user.tolerance.Accuracy : 0}}%</div>
-                                                </div>
-                                                <div class="outline">
-                                                    <h3>Uniqueness</h3>
-                                                    <mat-slider (change)="user.tolerance.Uniqueness = $event.value"
-                                                        thumbLabel step="1" min="0" max="100" aria-label="units">
-                                                    </mat-slider>
-                                                    <div class="value">{{(user.tolerance && user.tolerance.Uniqueness) ?
-                                                        user.tolerance.Uniqueness : 0}}%</div>
-                                                </div>
-                                                <div class="outline">
-                                                    <h3>Validity</h3>
-                                                    <mat-slider (change)="user.tolerance.Validity = $event.value"
-                                                        thumbLabel step="1" min="0" max="100" aria-label="units">
-                                                    </mat-slider>
-                                                    <div class="value">{{(user.tolerance && user.tolerance.Validity) ?
-                                                        user.tolerance.Validity : 0}}%</div>
-                                                </div>
-                                                <div class="outline">
-                                                    <h3>Integrity</h3>
-                                                    <mat-slider (change)="user.tolerance.Integrity = $event.value"
-                                                        thumbLabel step="1" min="0" max="100" aria-label="units">
-                                                    </mat-slider>
-                                                    <div class="value">{{(user.tolerance && user.tolerance.Integrity) ?
-                                                        user.tolerance.Integrity : 0}}%</div>
-                                                </div>
-                                            </div>
-                                        </mat-card>
-
-                                    </div>
                                 </div>
                             </div>
                             <div fxLayout="column">
@@ -230,6 +181,52 @@
                                 </div>
 
                             </div>
+                        </div>
+                        <div class="tollerance" fxLayout="column" fxLayoutGap="20px" *ngIf="dataUserTollerance.length">
+                            <mat-card fxLayout="row" *ngFor="let user of dataUserTollerance">
+                                <span>Tollerance - {{user.name}}</span>
+                                <div>
+                                    <span>Completeness</span>
+                                    <mat-slider (change)="user.tolerance.Completeness = $event.value" thumbLabel
+                                        step="1" min="0" max="100" aria-label="units" [value]="user.tolerance.Completeness">
+                                    </mat-slider>
+                                    <div class="value">{{(user.tolerance && user.tolerance.Completeness)
+                                        ?
+                                        user.tolerance.Completeness : 0}}%</div>
+                                </div>
+                                <div>
+                                    <span>Accuracy</span>
+                                    <mat-slider (change)="user.tolerance.Accuracy = $event.value" thumbLabel step="1"
+                                        min="0" max="100" aria-label="units" [value]="user.tolerance.Accuracy">
+                                    </mat-slider>
+                                    <div class="value">{{(user.tolerance && user.tolerance.Accuracy) ?
+                                        user.tolerance.Accuracy : 0}}%</div>
+                                </div>
+                                <div class="outline">
+                                    <span>Uniqueness</span>
+                                    <mat-slider (change)="user.tolerance.Uniqueness = $event.value" thumbLabel step="1"
+                                        min="0" max="100" aria-label="units" [value]="user.tolerance.Uniqueness">
+                                    </mat-slider>
+                                    <div class="value">{{(user.tolerance && user.tolerance.Uniqueness) ?
+                                        user.tolerance.Uniqueness : 0}}%</div>
+                                </div>
+                                <div class="outline">
+                                    <span>Validity</span>
+                                    <mat-slider (change)="user.tolerance.Validity = $event.value" thumbLabel step="1"
+                                        min="0" max="100" aria-label="units" [value]="user.tolerance.Validity">
+                                    </mat-slider>
+                                    <div class="value">{{(user.tolerance && user.tolerance.Validity) ?
+                                        user.tolerance.Validity : 0}}%</div>
+                                </div>
+                                <div class="outline">
+                                    <span>Integrity</span>
+                                    <mat-slider (change)="user.tolerance.Integrity = $event.value" thumbLabel step="1"
+                                        min="0" max="100" aria-label="units" [value]="user.tolerance.Integrity">
+                                    </mat-slider>
+                                    <div class="value">{{(user.tolerance && user.tolerance.Integrity) ?
+                                        user.tolerance.Integrity : 0}}%</div>
+                                </div>
+                            </mat-card>
                         </div>
                         <div fxLayoutAlign="space-between center">
                             <button mat-flat-button color="primary" matStepperPrevious>
