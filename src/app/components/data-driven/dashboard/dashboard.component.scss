@@ -27,11 +27,28 @@
 }
 
 table {
+  width: 100%;
+
   tr td {
     font-size: 13px;
   }
 
   .center {
     text-align: center;
+  }
+}
+
+.detailRow {
+  height: 0;
+   
+  td {
+    border-bottom-width: 0;
+  }
+}
+.detailView {
+  padding: 10px;
+
+  th {
+    background-color: #49739e59;
   }
 }
