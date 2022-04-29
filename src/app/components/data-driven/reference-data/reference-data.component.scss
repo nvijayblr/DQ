@@ -11,13 +11,13 @@
   font-size: 0.9rem;
   font-weight: 600;
   background-color: #fff;
-  padding: 4px 10px;
+  padding: 4px 10px 8px;
   .mat-flat-button {
     line-height: 28px;
   }
 
   span {
-   padding-right: 5px;
+    padding-right: 5px;
   }
 }
 .search {
@@ -30,16 +30,42 @@
   overflow: auto;
   position: relative;
 
-  .mat-table {
-    width: 100%;
+  &.loader {
+    min-height: 80px;
+    overflow: hidden;
   }
-  .mat-row,
-  .mat-header-row {
-    height: 38px;
+
+  &.searchView {
+    margin-bottom: 20px;
   }
 }
+
+.mat-table {
+  width: 100%;
+
+  tr td,
+  tr th {
+    padding-right: 8px;
+  }
+}
+
+.mat-row,
+.mat-header-row {
+  height: 38px;
+}
+
 .mat-paginator,
 .mat-paginator .mat-select-value {
   font-size: 14px;
   font-weight: 400;
+}
+.searchHeader {
+  padding: 10px 20px;
+  background-color: white;
+  margin-top: 10px;
+}
+
+.modalTable {
+  max-height: calc(100vh - 220px);
+  overflow: auto;
 }

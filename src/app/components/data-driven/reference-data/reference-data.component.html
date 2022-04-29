@@ -6,16 +6,7 @@
             <button mat-flat-button color="primary" (click)="createReference()"> Upload Reference Data</button>
         </div>
     </div>
-    <div class="search" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
-        <mat-checkbox (change)='onChange($event)' [(ngModel)]='isChecked'>Match Case</mat-checkbox>
-        <mat-form-field appearance="standard" fxFlex="auto">
-            <mat-icon matPrefix>search</mat-icon>
-            <input matInput placeholder="Search" [(ngModel)]='searchValue'
-                (keyup.enter)="applySearch($event.target.value)">
-        </mat-form-field>
-        <button color="primary" mat-flat-button (click)="applySearch(searchValue)">search</button>
-    </div>
-    <div class="tableView">
+    <div class="tableView" [class.loader]="!!isLoading">
         <table mat-table [dataSource]="tableDataSource">
             <ng-container *ngFor="let columndef of displayedColumns;let index = index" matColumnDef="{{columndef}}">
                 <th mat-header-cell *matHeaderCellDef>{{columndef}}</th>
@@ -24,10 +15,80 @@
                 </td>
             </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true"></tr>
+            <ng-container matColumnDef="noData">
+                <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length" class="center">
+                    No Records Found
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true" [hidden]="!displayedColumns.length"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-footer-row *matFooterRowDef="['noData']"
+                [hidden]="tableDataSource && tableDataSource.data.length > 0"></tr>
+
         </table>
+        <mat-paginator #referencePaginator [pageSizeOptions]="[10,20, 40, 60, 80,100]"
+            aria-label="Select page of Records"></mat-paginator>
         <app-spinner *ngIf="!!isLoading"></app-spinner>
     </div>
-    <mat-paginator [pageSizeOptions]="[10,20, 40, 60, 80,100]" aria-label="Select page of Records"></mat-paginator>
+    <div class="search" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+        <mat-checkbox [(ngModel)]='isChecked'>Match Case</mat-checkbox>
+        <mat-form-field appearance="standard" fxFlex="auto">
+            <mat-icon matPrefix>search</mat-icon>
+            <input matInput placeholder="Search" [(ngModel)]='searchValue'
+                (keyup.enter)="applySearch($event.target.value)">
+        </mat-form-field>
+        <button color="primary" mat-flat-button (click)="applySearch(searchValue)"
+            [disabled]="searchValue?.length < 3">Search</button>
+        <button color="primary" mat-flat-button (click)="resetSearch()">Reset</button>
+    </div>
+    <div class="tableView searchView" [class.loader]="!!searchLoading">
+        <div class="searchTable" fxLayout="column" *ngFor="let tableName of searchTables; let i = index;">
+            <div class="searchHeader" fxLayout="row" fxLayoutAlign="space-between center">
+                <span fxFlex="75">{{tableName}}</span>
+                <span>{{searchData[i].length}} row found</span>
+                <button mat-flat-button color="accent" (click)="viewAllData(i)">View All</button>
+            </div>
+            <table class="mat-table">
+                <thead>
+                    <tr class="mat-header-row">
+                        <th class="mat-header-cell" *ngFor="let header of searchHeader[i]">
+                            {{header}} </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="mat-row" *ngFor="let collection of searchData[i].slice(0,3)">
+                        <td class="mat-cell" *ngFor="let item of collection | keyvalue">{{item.value}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="searchHeader" *ngIf="noDataFound">
+            <span>No Data Found for this search</span>
+        </div>
+        <app-spinner *ngIf="!!searchLoading"></app-spinner>
+    </div>
 </div>
+<ng-template #viewReference let-data>
+    <div fxLayout="column">
+        <div class="breadCrumb">Search Result : {{data.title}}</div>
+        <div class="modalTable">
+            <table mat-table [dataSource]="data.dataSource">
+                <ng-container *ngFor="let columndef of  data.headers;" matColumnDef="{{columndef}}">
+                    <th mat-header-cell *matHeaderCellDef>{{columndef}}</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element[columndef]}}
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="data.headers;sticky:true"></tr>
+                <tr mat-row *matRowDef="let row; columns: data.headers;"></tr>
+            </table>
+        </div>
+        <mat-paginator #modalPaginator [pageSizeOptions]="[10,20, 40, 60, 80,100]" aria-label="Select page of Records">
+        </mat-paginator>
+        <div fxFlexOffset="10px" fxLayoutAlign="end center">
+            <button mat-flat-button color="primary" mat-dialog-close="close">Close</button>
+        </div>
+    </div>
+</ng-template>

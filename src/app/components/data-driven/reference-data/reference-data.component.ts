@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { HttpService } from 'src/app/services/http-service.service';
@@ -12,13 +12,26 @@ import { DataDrivenService } from '../data-driven.service';
   styleUrls: ['./reference-data.component.scss']
 })
 export class ReferenceDataComponent {
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild('referencePaginator', { static: true }) refPaginator: MatPaginator;
+  @ViewChild('viewReference', { static: true }) dialogRef!: TemplateRef<any>;
+
+  @ViewChild('modalPaginator', { static: false }) set paginator(value: MatPaginator) {
+    this.modalPaginator = value;
+  }
+
   displayedColumns: any = [];
   tableDataSource: MatTableDataSource<any>;
+  modalDataSource: MatTableDataSource<any>;
+  modalPaginator: MatPaginator;
   subscription: Subscription;
   isChecked: boolean = false;
   isLoading: boolean = false;
+  searchLoading: boolean = false;
+  noDataFound: boolean = false;
   searchValue: any;
+  searchHeader: any = [];
+  searchTables: any = [];
+  searchData: any = [];
   reference: any;
 
   constructor(private http: HttpService,
@@ -55,7 +68,7 @@ export class ReferenceDataComponent {
         });
       }
       this.tableDataSource = new MatTableDataSource(list);
-      this.tableDataSource.paginator = this.paginator;
+      this.tableDataSource.paginator = this.refPaginator;
       this.isLoading = false;
     }, (error) => {
       this.alertService.showError(error.message);
@@ -80,14 +93,51 @@ export class ReferenceDataComponent {
     if (this.isChecked) {
       payload.matchcase = "";
     }
+    this.searchLoading = true;
+    this.initSearch();
     this.http.getSearchCollections(payload).subscribe((result: any) => {
+      result = result || {};
+      if (result.msg) {
+        this.noDataFound = true;
+      } else {
+        this.searchTables = Object.keys(result);
+        this.searchTables.map((key: any) => {
+          this.searchHeader.push(Object.keys(result[key][0] || {}));
+          this.searchData.push(result[key]);
+        });
+      }
+      this.searchLoading = false;
     }, (error) => {
+      this.searchLoading = false;
       this.alertService.showError(error.message);
     });
   }
 
-  onChange($event) {
+  initSearch() {
+    this.searchHeader = [];
+    this.searchTables = [];
+    this.searchData = [];
+    this.noDataFound = false;
+  }
 
+  resetSearch() {
+    this.searchValue = '';
+    this.initSearch();
+  }
+
+  viewAllData(index) {
+    this.modalDataSource = new MatTableDataSource(this.searchData[index]);
+
+    const viewDialog = this.dialog.open(this.dialogRef, {
+      data: {
+        title: this.searchTables[index],
+        headers: this.searchHeader[index],
+        dataSource: this.modalDataSource
+      }
+    });
+    viewDialog.afterOpened().subscribe(data => {
+      this.modalDataSource.paginator = this.modalPaginator;
+    });
   }
 
 }
