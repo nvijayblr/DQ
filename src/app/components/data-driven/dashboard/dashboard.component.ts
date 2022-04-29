@@ -27,6 +27,7 @@ export class DashboardComponent implements OnInit {
   detailedResults: any;
   sourceByCategory: any;
   showDetailedTable: boolean = false;
+  expandedElement: PeriodicElementDetails | null;
 
   displayedColumns: string[] = ['Completeness', 'Accuracy', 'Uniqueness', 'Validity'];
   displayedColumnsDetails: string[] = ['sourceName', 'completeness', 'Accuracy', 'Uniqueness', 'Validity'];
