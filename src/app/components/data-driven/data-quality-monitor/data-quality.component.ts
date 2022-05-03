@@ -236,8 +236,10 @@ export class DataQualityComponent implements OnInit {
             width: '85vw',
             disableClose: true,
             data: {
-                analysis: this.selectedSource,
-                ruleset: rule,
+                sourceName:  this.selectedSource.source.sourceDataName,
+                rulesetName: rule.rulesetName,
+                selectedColumns: rule.selectedColumns,
+                rules: rule.ruleset,
                 isRuleset: true,
                 isDialog: true
             }
