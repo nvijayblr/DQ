@@ -221,7 +221,8 @@
                         Loading {{rulesList.length}} of {{selectedColumnsCopy.length + rulesList.length}} Completed
                         <mat-spinner diameter="20"></mat-spinner>
                     </div>
-                    <button mat-raised-button color="primary" [disabled]="isRulesLoading" cdkStepperNext>Next</button>
+                    <button mat-raised-button color="primary" [disabled]="isRulesLoading" cdkStepperNext
+                        (click)="generatePreview()">Next</button>
                 </div>
             </div>
         </cdk-step>
@@ -232,8 +233,7 @@
                 </div>
             </ng-template>
             <div fxLayout="column" fxLayoutGap="10px" class="container preview">
-                <app-view-source-ruleset [analysis]="analysis" [ruleset]="ruleset" [rulesList]="rulesList"
-                   [selectedColumns]="selectedColumns" [isRuleset]="true"></app-view-source-ruleset>
+                <app-view-source-ruleset [rulesetValue]="previewRules" [isRuleset]="true"></app-view-source-ruleset>
                 <div fxLayout="row" fxLayoutAlign="space-between center">
                     <button mat-raised-button color="primary" cdkStepperPrevious>Previous</button>
                     <button mat-raised-button color="primary" (click)="createEditRuleset()">Complete

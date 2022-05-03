@@ -47,7 +47,7 @@ export class DDRulesetComponent implements OnInit {
   selectedRuleColumn: any;
   cdeStatistics: any;
   correlationSummary: any;
-  panelOpenState: any;
+  previewRules: any = {};
 
   get RSControls(): any { return this.rulesetForm.controls; }
 
@@ -464,6 +464,15 @@ export class DDRulesetComponent implements OnInit {
       }
     });
 
+  }
+
+  generatePreview() {
+    this.previewRules = {
+      sourceName: this.RSControls.name.value,
+      rulesetName: this.RSControls.rulesetName.value,
+      selectedColumns: this.selectedColumns,
+      rules: this.RSControls.columnRules.value
+    };
   }
 
   dateValidator() {
