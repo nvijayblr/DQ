@@ -25,6 +25,7 @@ import { CreateReferenceComponent } from './create-reference/create-reference.co
 import { DataCleaningComponent } from './data-cleaning/data-cleaning.component';
 import { ProfileDetailComponent } from './profile-detail/profile-detail.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ViewSourceRulesetComponent } from './view-source-ruleset/view-source-ruleset.component';
 
 @NgModule({
     declarations: [
@@ -43,7 +44,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
         CreateReferenceComponent,
         DataCleaningComponent,
         ProfileDetailComponent,
-        DashboardComponent
+        DashboardComponent,
+        ViewSourceRulesetComponent
     ],
     imports: [
         FlexLayoutModule,
@@ -58,7 +60,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
         MatSelectFilterModule
     ],
     providers: [DataDrivenService],
-    entryComponents: [CreateSourceComponent, DDRulesetComponent, CompletenessDetailComponent, CreateReferenceComponent],
+    entryComponents: [CreateSourceComponent, DDRulesetComponent, CompletenessDetailComponent, CreateReferenceComponent, ViewSourceRulesetComponent],
     exports: []
 })
 export class DataDrivenModule { }

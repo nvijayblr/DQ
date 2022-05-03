@@ -1,0 +1,97 @@
+<div mat-dialog-title *ngIf="isDialog">View {{title}}
+    <button class="close" mat-icon-button (click)="onClose()">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+<div class="SPContainer" *ngIf="isSource">
+    <table class="mat-table">
+        <tr class="mat-row">
+            <td class="mat-cell title" colspan="4">Source Data</td>
+        </tr>
+        <tr class="mat-row">
+            <td class="mat-cell sub-title">Source Name</td>
+            <td class="mat-cell">{{summary.source?.sourceDataName}}</td>
+            <td class="mat-cell sub-title">Source CDE</td>
+            <td class="mat-cell">
+                <mat-chip-list cdkDropListOrientation="horizontal">
+                    <mat-chip *ngFor="let column of summary.source?.availableColumns">
+                        {{column}}
+                    </mat-chip>
+                </mat-chip-list>
+            </td>
+        </tr>
+        <tr class="mat-row">
+            <td class="mat-cell title" colspan="4">Rerference Data</td>
+        </tr>
+        <tr class="mat-row" *ngFor="let ref of summary.reference; index as i;">
+            <td class="mat-cell sub-title">Reference Name</td>
+            <td class="mat-cell">#{{i+1}}. {{ref.referenceDataName}}</td>
+            <td class="mat-cell sub-title">Reference CDE</td>
+            <td class="mat-cell">
+                <mat-chip-list cdkDropListOrientation="horizontal">
+                    <mat-chip *ngFor="let column of ref?.availableRefColumns">
+                        {{column}}
+                    </mat-chip>
+                </mat-chip-list>
+            </td>
+        </tr>
+        <tr class="mat-row">
+            <td class="mat-cell title" colspan="4">Settings</td>
+        </tr>
+        <tr class="mat-row" *ngFor="let setting of summary?.settings  | keyvalue; index as i;">
+            <td class="mat-cell sub-title capitalize">{{setting.key}}</td>
+            <td class="mat-cell" colspan="3">{{setting.value}}</td>
+        </tr>
+    </table>
+</div>
+<div class="previewTable" *ngIf="isRuleset">
+    <table class="mat-table">
+        <tr class="mat-row">
+            <td class="mat-cell">Source Name</td>
+            <td class="mat-cell">{{analysis.source.sourceDataName}}</td>
+        </tr>
+        <tr class="mat-row">
+            <td class="mat-cell">Selected CDE</td>
+            <td class="mat-cell">
+                <mat-chip-list cdkDropListOrientation="horizontal">
+                    <mat-chip *ngFor="let column of selectedColumns">
+                        {{column.title}}
+                    </mat-chip>
+                </mat-chip-list>
+            </td>
+        </tr>
+        <tr class="mat-row">
+            <td class="mat-cell">Ruleset Name</td>
+            <td class="mat-cell">{{ruleset.rulesetName}}</td>
+        </tr>
+        <tr class="mat-row">
+            <td class="mat-cell" colspan="2">Rules</td>
+        </tr>
+        <tr>
+            <td class="mat-cell" colspan="2">
+                <mat-expansion-panel *ngFor="let column of rulesList" (opened)="panelOpenState = true"
+                    (closed)="panelOpenState = false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            {{column.column}}
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <table class="mat-table">
+                        <tr class="mat-row" *ngFor="let rule of column.rules; index as i">
+                            <td class="mat-cell">Rule #{{i+1}}</td>
+                            <td class="mat-cell">{{rule.rule}}</td>
+                            <td class="mat-cell">{{rule.operator}}</td>
+                            <td class="mat-cell">
+                                <span *ngIf="rule.rule !== 'Formula'">{{rule.value}}</span>
+                                <span *ngIf="rule.rule === 'Formula'">
+                                    {{commonService.getFormulaText(rule.value,rule.type)}}
+                                </span>
+                            </td>
+                            <td class="mat-cell">{{rule.dimension}}</td>
+                        </tr>
+                    </table>
+                </mat-expansion-panel>
+            </td>
+        </tr>
+    </table>
+</div>

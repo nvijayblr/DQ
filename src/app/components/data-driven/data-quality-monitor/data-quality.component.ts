@@ -10,6 +10,7 @@ import { DDRulesetComponent } from "../../data-driven/ruleset/ruleset.component"
 import { AlertService } from "src/app/shared/alert-dialog/alert-dialog.service";
 import * as moment from 'moment';
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { ViewSourceRulesetComponent } from "../view-source-ruleset/view-source-ruleset.component";
 
 @Component({
     selector: "app-data-quality",
@@ -199,6 +200,18 @@ export class DataQualityComponent implements OnInit {
         });
     }
 
+    viewSource() {
+        const dialogRef = this.dialog.open(ViewSourceRulesetComponent, {
+            width: '1400px',
+            disableClose: true,
+            data: {
+                summary: this.selectedSource,
+                isSource: true,
+                isDialog: true
+            }
+        });
+    }
+
     addOrUpdateRuleset(isEditMode, rule: any = {}) {
         const dialogRef = this.dialog.open(DDRulesetComponent, {
             width: '85vw',
@@ -218,8 +231,23 @@ export class DataQualityComponent implements OnInit {
         });
     }
 
+    viewRuleset(rule) {
+        const dialogRef = this.dialog.open(ViewSourceRulesetComponent, {
+            width: '85vw',
+            disableClose: true,
+            data: {
+                analysis: this.selectedSource,
+                ruleset: rule,
+                isRuleset: true,
+                isDialog: true
+            }
+        });
+    }
+
     onRulsetClosed(data: any) {
-        this.selectedSource.rules.push(data.ruleset);
+        if (!data.isEditMode) {
+            this.selectedSource.rules.push(data.ruleset);
+        }
         if (!data.isUploaded) {
             this.isOriginalSource = 'YES';
             this.OriginalSourcePath = this.selectedSource.source.templateSourcePath;

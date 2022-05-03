@@ -1,0 +1,41 @@
+.SPContainer {
+  max-height: calc(100vh - 400px);
+  overflow: auto;
+
+  .mat-table {
+    width: 100%;
+  }
+
+  .mat-cell.title {
+    font-weight: 500;
+    font-size: 18px;
+    color: #666;
+  }
+  .mat-cell {
+    padding: 10px 24px;
+  }
+  .mat-cell.sub-title {
+    font-weight: 400;
+  }
+  .mat-cell.capitalize {
+    text-transform: capitalize;
+  }
+}
+.previewTable {
+  max-height: calc(100vh - 320px);
+  overflow: auto;
+  
+  mat-expansion-panel {
+    margin: 10px 0;
+  }
+
+  .mat-table {
+    width: 100%;
+  }
+  .mat-cell {
+    padding: 10px;
+  }
+  .mat-cell:first-child{
+    width: 150px;
+  }
+}

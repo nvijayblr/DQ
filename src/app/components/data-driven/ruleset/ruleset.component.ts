@@ -371,6 +371,7 @@ export class DDRulesetComponent implements OnInit {
       }
       this.dialogRef.close({
         ruleset: result,
+        isEditMode: this.isEditMode,
         isUploaded: this.analysis.UploadsHistory.length
       });
       this.isLoading = false;

@@ -318,47 +318,7 @@
                         </div>
                     </ng-template>
                     <div class="analysis-preview" fxLayout="column">
-                        <div class="SPContainer">
-                            <table class="mat-table">
-                                <tr class="mat-row">
-                                    <td class="mat-cell title" colspan="4">Source Data</td>
-                                </tr>
-                                <tr class="mat-row">
-                                    <td class="mat-cell sub-title">Source Name</td>
-                                    <td class="mat-cell">{{summary.source?.sourceDataName}}</td>
-                                    <td class="mat-cell sub-title">Source CDE</td>
-                                    <td class="mat-cell">
-                                        <mat-chip-list cdkDropListOrientation="horizontal">
-                                            <mat-chip *ngFor="let column of summary.source?.availableColumns">
-                                                {{column}}
-                                            </mat-chip>
-                                        </mat-chip-list>
-                                    </td>
-                                </tr>
-                                <tr class="mat-row">
-                                    <td class="mat-cell title" colspan="4">Rerference Data</td>
-                                </tr>
-                                <tr class="mat-row" *ngFor="let ref of summary.reference; index as i;">
-                                    <td class="mat-cell sub-title">Reference Name</td>
-                                    <td class="mat-cell">#{{i+1}}. {{ref.referenceDataName}}</td>
-                                    <td class="mat-cell sub-title">Reference CDE</td>
-                                    <td class="mat-cell">
-                                        <mat-chip-list cdkDropListOrientation="horizontal">
-                                            <mat-chip *ngFor="let column of ref?.availableRefColumns">
-                                                {{column}}
-                                            </mat-chip>
-                                        </mat-chip-list>
-                                    </td>
-                                </tr>
-                                <tr class="mat-row">
-                                    <td class="mat-cell title" colspan="4">Settings</td>
-                                </tr>
-                                <tr class="mat-row" *ngFor="let setting of summary?.settings  | keyvalue; index as i;">
-                                    <td class="mat-cell sub-title capitalize">{{setting.key}}</td>
-                                    <td class="mat-cell" colspan="3">{{setting.value}}</td>
-                                </tr>
-                            </table>
-                        </div>
+                        <app-view-source-ruleset [summary]="summary" [isSource]="true"></app-view-source-ruleset>
                         <div fxFlexOffset="20px" fxLayoutAlign="end center">
                             <button mat-raised-button color="primary" (click)="onClose()">Complete
                                 <mat-icon>done_all</mat-icon>
