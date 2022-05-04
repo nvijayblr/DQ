@@ -12,6 +12,7 @@ export class ProfileDetailComponent implements OnInit {
   profile: any = {};
   profileDetails: any = {};
   chartData: any = [];
+  isGraphView : boolean = false;
 
   attributeSummary = [{
     column: 'Type',
@@ -76,4 +77,7 @@ export class ProfileDetailComponent implements OnInit {
     event.stopPropagation();
   }
 
+  changeView(value) {
+    this.isGraphView = value;
+  }
 }

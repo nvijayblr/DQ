@@ -191,23 +191,41 @@
   color: #00000090;
 }
 
-:host ::ng-deep .highcharts-background {
-  fill: #fff;
-}
-:host ::ng-deep .highcharts-title {
-  display: none;
-}
-:host ::ng-deep .highcharts-label text {
-  fill: #49739e !important;
-}
-::ng-deep .highcharts-exporting-group {
-  display: none !important;
-}
 #containerPie {
   height: 100%;
   width: 100%;
   //position:absolute;
 }
-:host ::ng-deep .mat-tab-label-active {
-  background-color: #fff !important;
+
+.freqencyTable {
+  max-height: 250px;
+  overflow: auto;
+
+  table {
+    background-color: white;
+  }
+}
+
+:host ::ng-deep {
+  .highcharts-background {
+    fill: #fff;
+  }
+  .highcharts-title {
+    display: none;
+  }
+  .highcharts-label text {
+    fill: #49739e !important;
+  }
+  .highcharts-exporting-group {
+    display: none !important;
+  }
+  .mat-tab-label-active {
+    background-color: #fff !important;
+  }
+  .frequency
+    .mat-button-toggle-appearance-standard
+    .mat-button-toggle-label-content {
+    line-height: 20px;
+    padding: 0 12px;
+  }
 }

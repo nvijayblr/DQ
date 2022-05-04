@@ -123,9 +123,52 @@
             </div>
             <div fxLayout="row">
                 <mat-card class="dashboardCard" fxFlex="50">
-                    <div class="title"><span>Frequency Groups</span></div>
-                    <div>
+                    <div class="title frequency" fxLayout="row" fxLayoutAlign="space-between center">
+                        <span>Frequency Groups</span>
+                        <mat-button-toggle-group appearance="standard" [value]="isGraphView" name="viewtype"
+                            aria-label="viewtype" (change)="changeView($event.value)">
+                            <mat-button-toggle [value]="true" matTooltip="Chart View">
+                                <mat-icon>bar_chart</mat-icon>
+                            </mat-button-toggle>
+                            <mat-button-toggle [value]="false" matTooltip="Table View">
+                                <mat-icon>view_headline</mat-icon>
+                            </mat-button-toggle>
+                        </mat-button-toggle-group>
+                    </div>
+                    <div *ngIf="isGraphView">
                         <app-pie-chart [pieChartData]="chartData"></app-pie-chart>
+                    </div>
+                    <div *ngIf="!isGraphView" class="freqencyTable">
+                        <table mat-table [dataSource]="profileDetails.frequncyAnalysis">
+                            <ng-container matColumnDef="value">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <img src="assets/images/frequency.svg" height="32px" />
+                                    Value
+                                </th>
+                                <td mat-cell *matCellDef="let frequency">
+                                    {{frequency.unique_values}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="count">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <img src="assets/images/counting.svg" height="32px" />
+                                    Count
+                                </th>
+                                <td mat-cell *matCellDef="let frequency">
+                                    {{frequency.counts}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="noData">
+                                <td mat-footer-cell *matFooterCellDef colspan="2" class="center">
+                                    No Records Found
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="['value','count'];sticky:true;"></tr>
+                            <tr mat-row *matRowDef="let row; columns: ['value','count'];"></tr>
+                            <tr mat-footer-row *matFooterRowDef="['noData']"
+                                [hidden]="profileDetails.frequncyAnalysis && profileDetails.frequncyAnalysis.length > 0">
+                            </tr>
+                        </table>
                     </div>
                 </mat-card>
                 <mat-card class="dashboardCard" fxFlex="50">
