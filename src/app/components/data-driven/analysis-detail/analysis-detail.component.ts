@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { MatTabGroup } from '@angular/material';
 
 @Component({
   selector: 'app-analysis-detail',
@@ -8,6 +9,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 export class AnalysisDetailComponent implements OnInit {
   @ViewChild('previewDetail', { static: false }) preview: any;
   @ViewChild('correlationDetail', { static: false }) correlation: any;
+  @ViewChild(MatTabGroup, { static: false }) tabGroup: MatTabGroup;
 
   profile: any = {};
   selectedSource: any = {};
@@ -19,12 +21,10 @@ export class AnalysisDetailComponent implements OnInit {
 
   @Input() set source(value: string) {
     this.selectedSource = value;
-    setTimeout(()=> this.onSelectTab(this.selectedTab), 0);
+    setTimeout(() => this.onSelectTab(this.selectedTab), 0);
   }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() { }
 
   onSelectTab(index) {
     if (index == '1') {
@@ -35,4 +35,7 @@ export class AnalysisDetailComponent implements OnInit {
     this.selectedTab = index;
   }
 
+  selectProfile() {
+    this.tabGroup.selectedIndex = 0;
+  }
 }

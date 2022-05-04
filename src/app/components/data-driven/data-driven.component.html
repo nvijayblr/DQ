@@ -27,7 +27,7 @@
     <div fxLayout="row" fxFlex>
         <div class="sideBar" fxLayout="column">
             <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="menuTree">
-                <mat-tree-node *matTreeNodeDef="let node" [class.selected]="node.id && node.id === selectedSource.id"
+                <mat-tree-node *matTreeNodeDef="let node" [class.selected]="node.id && node.id === selectedSource.id && node.route === selectedSource.route"
                     [class.sourceNode]="node.id" (click)="node.route && loadSourceProfile(node)"
                     [class.cleanLog]="node.cleanLogFile">
                     <mat-icon *ngIf="node.icon" fontSet="fa" [fontIcon]="node.icon"></mat-icon>

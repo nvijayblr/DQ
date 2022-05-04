@@ -34,5 +34,5 @@
         </table>
     </div>
     <mat-paginator [pageSizeOptions]="[20, 40, 60, 80,100]" aria-label="Select page of Records"></mat-paginator>
-    <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
+    <app-progress-bar message="Loading Preview..." class="page" *ngIf="isLoading"></app-progress-bar>
 </div>

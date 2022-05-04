@@ -302,7 +302,7 @@ export class DataDrivenComponent implements OnInit {
 
   expandToNode(data: any, source: any): any {
     data.forEach(node => {
-      if (node.children && node.children.find(c => c.id === source.id)) {
+      if (node.children && node.children.find(c => c.id === source.id && c.route === source.route)) {
         this.treeControl.expand(node);
         this.expandToNode(this.treeControl.dataNodes, node);
       }

@@ -11,6 +11,7 @@ import { AlertService } from "src/app/shared/alert-dialog/alert-dialog.service";
 import * as moment from 'moment';
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 import { ViewSourceRulesetComponent } from "../view-source-ruleset/view-source-ruleset.component";
+import { ScrollService } from "src/app/services/scroll.service";
 
 @Component({
     selector: "app-data-quality",
@@ -19,6 +20,7 @@ import { ViewSourceRulesetComponent } from "../view-source-ruleset/view-source-r
 })
 export class DataQualityComponent implements OnInit {
     @ViewChild('ddStepper', { static: false }) stepper: CdkStepper;
+    @ViewChild('analysisDetail', { static: false }) analysisTab: any;
 
     profile = [];
     selectedSource: any = {};
@@ -60,6 +62,7 @@ export class DataQualityComponent implements OnInit {
         private ds: DataDrivenService,
         private auth: AuthGuardService,
         private alertService: AlertService,
+        private scrollService: ScrollService,
         private dialog: MatDialog) {
         this.subscription = this.ds.getDQMSource().subscribe((data) => {
             if (data) {
@@ -236,7 +239,7 @@ export class DataQualityComponent implements OnInit {
             width: '85vw',
             disableClose: true,
             data: {
-                sourceName:  this.selectedSource.source.sourceDataName,
+                sourceName: this.selectedSource.source.sourceDataName,
                 rulesetName: rule.rulesetName,
                 selectedColumns: rule.selectedColumns,
                 rules: rule.ruleset,
@@ -368,8 +371,9 @@ export class DataQualityComponent implements OnInit {
     }
 
 
-    scrollToId(ele) {
-
+    scrollToId(id: any) {
+        this.analysisTab.selectProfile();
+        this.scrollService.scrollToElementById(id);
     }
 
     launchAnalysis(analysis) {
@@ -403,8 +407,48 @@ export class DataQualityComponent implements OnInit {
         data.highlightDates = this.highlightDates;
     }
 
-    launchDataCleaning() {
+    launchDataCleaning(sourceData) {
+        if (!sourceData.UploadsHistory.length || (sourceData.UploadsHistory.length && !sourceData.uploadDate)) {
+            this.alertService.showWarning('Please select the upload date.');
+            return;
+        }
+        const selectedSource = sourceData.UploadsHistory.filter(history => history.uploadDate === sourceData.uploadDate);
+        if (selectedSource && selectedSource.length) {
+            sourceData.source.templateSourcePath = selectedSource[0].sourceFileName;
+        }
+        this.createCleaningSource(sourceData);
+    }
 
+    createCleaningSource(sourceData) {
+        let payload = {
+            db: 'clean',
+            SourceSettings: {
+                sourcePath: sourceData.source.templateSourcePath,
+                sourceId: sourceData.sourceId,
+                sourceDataName: sourceData.source.sourceDataName,
+                sourceDataDescription: sourceData.source.sourceDataDescription,
+                sourceFileName: sourceData.source.sourceFileName,
+                sourceCategory: sourceData.source.sourceCategory,
+                dataOwner: sourceData.source.dataOwner,
+                uploadDate: sourceData.uploadDate,
+                department: sourceData.source.department
+            }
+        };
+        const formData: any = new FormData();
+        formData.append('file[]', "");
+        formData.append('data', JSON.stringify(payload));
+        this.isLoading = true;
+        this.http.saveSourceProfile(formData, 'post').subscribe((result: any) => {
+            this.isLoading = false;
+            if (result.errorMsg) {
+                this.alertService.showError(result.errorMsg);
+                return;
+            }
+            this.ds.setRefreshMenu(result.SourceSettings || {}, 2);
+        }, (error) => {
+            this.isLoading = false;
+            this.alertService.showError(error.errorMsg);
+        });
     }
 
     ruleSetType(event) {

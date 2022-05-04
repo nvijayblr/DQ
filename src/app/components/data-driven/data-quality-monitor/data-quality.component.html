@@ -152,7 +152,7 @@
                             </mat-select>
                         </mat-form-field>
                         <button mat-flat-button color="primary" matTooltip="Profile"
-                            *ngIf="rights.includes('VIEW_RESULTS')" (click)="scrollToId('elId')">
+                            *ngIf="rights.includes('VIEW_RESULTS')" (click)="scrollToId('analysisDetail')">
                             <mat-icon>link </mat-icon>
                             Profile
                         </button>
@@ -192,7 +192,7 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
-                        <button mat-flat-button color="primary" (click)="launchDataCleaning()"
+                        <button mat-flat-button color="primary" (click)="launchDataCleaning(selectedSource)"
                             matTooltip="Data Cleaning">
                             Data Cleaning
                         </button>
@@ -202,6 +202,6 @@
         </app-dd-stepper>
     </div>
     <app-source-analysis [analysisData]="selectedAnalysis"></app-source-analysis>
-    <app-analysis-detail [profileData]="profile" [source]="selectedSource.source"></app-analysis-detail>
+    <app-analysis-detail [profileData]="profile" [source]="selectedSource.source" id="analysisDetail" #analysisDetail></app-analysis-detail>
     <app-progress-bar [message]="loaderMsg" class="page" *ngIf="isLoading"></app-progress-bar>
 </div>
