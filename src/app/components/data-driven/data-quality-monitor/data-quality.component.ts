@@ -93,9 +93,11 @@ export class DataQualityComponent implements OnInit {
             this.onOpenDatePicker(data);
             data.uploadDate = upload.uploadDate;
         }
+        this.selectedRuleSet = '';
         if (rules && rules.length) {
             const ruleset = rules[rules.length - 1];
             data.rulesetId = ruleset.rulesetId;
+            this.selectedRuleSet = data.rulesetId;
         }
     }
 
@@ -297,11 +299,14 @@ export class DataQualityComponent implements OnInit {
                         result.errorMsg += '.Please correct the file and re-upload.';
                     }
                     this.showUploadError(result.errorMsg);
+                    this.isLoading = false;
                 } else {
-                    this.alertService.showAlert('Source has been uploaded successfully.');
-                    this.ds.setRefreshMenu(this.selectedSource, 1);
+                    setTimeout(() => {
+                        this.alertService.showAlert('Source has been uploaded successfully.');
+                        this.ds.setRefreshMenu(this.selectedSource, 1);
+                        this.isLoading = false;
+                    }, 5000);
                 }
-                this.isLoading = false;
             }, (error) => {
                 this.isLoading = false;
                 this.alertService.showError(error);
