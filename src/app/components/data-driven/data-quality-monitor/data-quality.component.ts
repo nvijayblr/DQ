@@ -93,6 +93,9 @@ export class DataQualityComponent implements OnInit {
             this.onOpenDatePicker(data);
             data.uploadDate = upload.uploadDate;
         }
+
+        this.isOriginalSource = 'YES';
+        this.OriginalSourcePath = data.source.templateSourcePath;
         this.selectedRuleSet = '';
         if (rules && rules.length) {
             const ruleset = rules[rules.length - 1];
@@ -261,7 +264,8 @@ export class DataQualityComponent implements OnInit {
             this.originalSourceUploadDate = this.selectedSource.settings.uploadDate;
             this.uploadSource(this.selectedSource);
         }
-        setTimeout(() => (this.stepper.selectedIndex = 3), 0);
+        this.setStepDetails();
+        setTimeout(() => (this.stepper.selectedIndex = 2), 0);
     }
 
 
@@ -292,7 +296,7 @@ export class DataQualityComponent implements OnInit {
             formData.append('data', JSON.stringify(payload));
 
             this.isLoading = true;
-            this.loaderMsg = 'Saving Source data...';
+            this.loaderMsg = 'Uploading Source data...';
             this.http.uploadSource(formData).subscribe((result: any) => {
                 if (result.errorMsg) {
                     if (result.errorCode == '103') {
