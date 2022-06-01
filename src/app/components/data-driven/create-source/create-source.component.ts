@@ -226,6 +226,7 @@ export class CreateSourceComponent implements OnInit {
     this.isCorrectFileType = (this.selectedType.indexOf(fExt) >= 0);
     this.CSControls.sourceDataName.setValue(fName);
     this.CSControls.sourceDataName.markAsTouched();
+    this.loadSourceColumn();
   }
 
   initSetting(analysis) {
@@ -433,6 +434,19 @@ export class CreateSourceComponent implements OnInit {
     });
 
     return payload;
+  }
+
+
+  loadSourceColumn() {
+    this.isLoading = true;
+    const formData: any = new FormData();
+    formData.append('file[]', this.sourceFile);
+    this.http.getPreview(formData).subscribe((res: any) => {
+      this.multiSourceLists = res.sourceColumns;
+      this.isLoading = false;
+    }, (error) => {
+      this.isLoading = false;
+    });
   }
 
   private uniqueSourceName(sourceDataName, control: FormControl) {

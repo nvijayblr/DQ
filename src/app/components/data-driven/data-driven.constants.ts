@@ -1,4 +1,4 @@
-export const SourceTypes = [
+export const SourceTypes: any = [
     {
         category: 'File Upload',
         children: [{
@@ -15,11 +15,15 @@ export const SourceTypes = [
         },
         {
             text: 'JSON',
-            image: 'json'
+            image: 'json',
+            type: 'json',
+            options: '.json'
         },
         {
             text: 'XML',
-            image: 'xml'
+            image: 'xml',
+            type: 'xml',
+            options: '.xml'
         }]
     }, {
         category: 'Database',
