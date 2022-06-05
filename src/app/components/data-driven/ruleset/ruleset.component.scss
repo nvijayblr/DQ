@@ -47,3 +47,20 @@ button.fabMini {
 .container {
   min-height: 100px;
 }
+
+.configColumns {
+  max-height: 250px;
+  overflow: auto;
+  border: 1px solid #ccc;
+  margin: 0px 0px 20px 20px;
+  padding: 10px;
+
+  .mat-radio-button {
+    padding-right: 10px;
+  }
+}
+
+.isMColumnEnable {
+  opacity: 0.5 !important;
+  pointer-events: none;
+}

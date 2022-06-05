@@ -33,6 +33,7 @@ export class DDRulesetComponent implements OnInit {
   selectedReferenceColumns: any = [];
   rulesList: any = [];
   selectedColumnsCopy: any = [];
+  isMColumnEnable: boolean = false;
 
   ruleTypeList = RuleListConstant.RuleTypeList;
   ruleOperatorList = RuleListConstant.RuleOperatorList;
@@ -92,13 +93,17 @@ export class DDRulesetComponent implements OnInit {
   }
 
   initColumnForm() {
-    let selectedColumns = [], refSelectedColumns = [];
+    let selectedColumns = [], refSelectedColumns = [], ruleConfigColumns = [];
 
     this.columnsForm = this.fb.group({
       columns: ['', [Validators.required]],
       sourceColumns: [''],
-      refernceColumns: [[]]
+      refernceColumns: [[]],
+      ruleConfigfor2Cols: [''],
+      ruleConfigfor3Cols: [''],
+      ruleConfigforMultiCols: this.fb.array([])
     });
+
     this.selectedColumns = [];
     this.selectedReferenceColumns = [];
     this.availableColumns = [];
@@ -107,6 +112,7 @@ export class DDRulesetComponent implements OnInit {
       this.rulesList = this.ruleset.ruleset || [];
       selectedColumns = this.ruleset.selectedColumns || [];
       refSelectedColumns = this.ruleset.refSelectedColumns || [];
+      ruleConfigColumns = this.ruleset.ruleConfigforMultiCols || [];
 
       this.selectedColumns = selectedColumns.map((column, index) => {
         return {
@@ -124,6 +130,14 @@ export class DDRulesetComponent implements OnInit {
           title: column
         };
       });
+
+      this.columnsForm.controls.ruleConfigfor2Cols.setValue(this.ruleset.ruleConfigfor2Cols);
+      this.columnsForm.controls.ruleConfigfor3Cols.setValue(this.ruleset.ruleConfigfor3Cols);
+      const configArray = this.columnsForm.controls.ruleConfigforMultiCols as FormArray;
+      ruleConfigColumns.map(column => {
+        configArray.controls.push(new FormControl(column));
+      });
+
     } else {
       const ruleId = this.rulesetNames.length ? '-' + this.rulesetNames.length : '';
       this.RSControls.rulesetName.setValue(this.analysis.source.sourceDataName + '-ruleset' + ruleId);
@@ -200,6 +214,40 @@ export class DDRulesetComponent implements OnInit {
     });
   }
 
+  isColumnEnable(event: any, control: FormControl) {
+    if (event.checked) {
+      control.setValue("Sample");
+      control.enable();
+    } else {
+      control.setValue("");
+      control.disable();
+    }
+  }
+
+  onColumnChecked(checked: any, value: any) {
+    const configArray = this.columnsForm.controls.ruleConfigforMultiCols as FormArray;
+    if (checked) {
+      configArray.controls.push(new FormControl(value));
+      setTimeout(() => {
+        configArray.updateValueAndValidity()
+      })
+    } else {
+      const i = configArray.controls.findIndex(title => title.value === value);
+      configArray.removeAt(i);
+    }
+  }
+
+  enableValidation(checked: any) {
+    this.isMColumnEnable = checked;
+    const configArray = this.columnsForm.controls.ruleConfigforMultiCols as FormArray;
+    if (checked) {
+      configArray.setValidators([minLengthArray(3)]);
+    } else {
+      configArray.clearValidators();
+    }
+    this.columnsForm.controls.ruleConfigforMultiCols.updateValueAndValidity();
+  }
+
   getColumnRules() {
     this.isLoading = true;
     this.loaderMsg = 'Fetching column rules...';
@@ -230,7 +278,10 @@ export class DDRulesetComponent implements OnInit {
     const payload = {
       selectedColumns: columns,
       refSelectedColumns: this.columnsForm.controls.refernceColumns.value.map(col => col.title),
-      sourcepath: this.RSControls.sourcepath.value
+      sourcepath: this.RSControls.sourcepath.value,
+      ruleConfigfor2Cols: this.columnsForm.controls.ruleConfigfor2Cols.value,
+      ruleConfigfor3Cols: this.columnsForm.controls.ruleConfigfor3Cols.value,
+      ruleConfigforMultiCols: this.isMColumnEnable ? this.columnsForm.controls.ruleConfigforMultiCols.value : []
     };
     //update referenceCDE value
     if (payload.refSelectedColumns && payload.refSelectedColumns.length) {
@@ -497,5 +548,14 @@ export class DDRulesetComponent implements OnInit {
     } else {
       return false;
     }
+  }
+}
+
+export const minLengthArray = (min: number) => {
+  return (c: AbstractControl): { [key: string]: any } => {
+    if (c.value.length >= min)
+      return null;
+
+    return { MinLengthArray: true };
   }
 }

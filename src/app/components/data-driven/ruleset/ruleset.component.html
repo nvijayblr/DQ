@@ -116,8 +116,58 @@
                     <div fxLayout="row" fxLayoutAlign="space-between center">
                         <button mat-raised-button color="primary" cdkStepperPrevious>Previous</button>
                         <button mat-raised-button color="primary" cdkStepperNext
-                            [disabled]="columnsForm.controls.columns.value && !columnsForm.controls.columns.value.length"
-                            (click)="getColumnRules()">Next</button>
+                            [disabled]="columnsForm.controls.columns.value && !columnsForm.controls.columns.value.length">Next</button>
+                    </div>
+                </div>
+            </div>
+        </cdk-step>
+        <cdk-step>
+            <ng-template cdkStepLabel>
+                <div fxLayoutAlign="center center" fxLayoutGap="4px">
+                    <span>Relationship Exploration</span>
+                </div>
+            </ng-template>
+            <div class="container">
+                <div fxLayout="column">
+                    <div fxLayout="row" fxLayoutGap="15px">
+                        <mat-checkbox [checked]="is2ColumnEnable"
+                            (change)="isColumnEnable($event,columnsForm.controls.ruleConfigfor2Cols)"> Find
+                            relationships between two
+                            columns </mat-checkbox>
+                        <span>Based On</span>
+                        <mat-radio-group aria-label="2Column" [formControl]="columnsForm.controls.ruleConfigfor2Cols"
+                            fxLayoutGap="10px">
+                            <mat-radio-button value="Sample">Sample data</mat-radio-button>
+                            <mat-radio-button value="Full">Full data set</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="15px">
+                        <mat-checkbox [checked]="is3ColumnEnable"
+                            (change)="isColumnEnable($event,columnsForm.controls.ruleConfigfor3Cols)"> Find
+                            relationships between two
+                            columns </mat-checkbox>
+                        <span>Based On</span>
+                        <mat-radio-group aria-label="3Column" [formControl]="columnsForm.controls.ruleConfigfor3Cols"
+                            fxLayoutGap="10px">
+                            <mat-radio-button value="Sample">Sample data</mat-radio-button>
+                            <mat-radio-button value="Full">Full data set</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                    <div fxLayout="column">
+                        <mat-checkbox (change)="enableValidation($event.checked)">Find relationships between selected
+                            columns (Choose minimum three column)</mat-checkbox>
+                        <ul class="configColumns" [class.isMColumnEnable]="!isMColumnEnable">
+                            <li *ngFor="let column of selectedColumns">
+                                <mat-checkbox (change)="onColumnChecked($event.checked,column.title)">
+                                    {{column.title}}
+                                </mat-checkbox>
+                            </li>
+                        </ul>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="space-between center">
+                        <button mat-raised-button color="primary" cdkStepperPrevious>Previous</button>
+                        <button mat-raised-button color="primary" cdkStepperNext
+                        [disabled]="columnsForm.invalid" (click)="getColumnRules()">Next</button>
                     </div>
                 </div>
             </div>
