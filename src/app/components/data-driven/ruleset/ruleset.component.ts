@@ -99,9 +99,9 @@ export class DDRulesetComponent implements OnInit {
       columns: ['', [Validators.required]],
       sourceColumns: [''],
       refernceColumns: [[]],
-      ruleConfigfor2Cols: [''],
-      ruleConfigfor3Cols: [''],
-      ruleConfigforMultiCols: this.fb.array([])
+      rulesfor2cols: [''],
+      rulesfor3cols: [''],
+      rulesformulticols: this.fb.array([])
     });
 
     this.selectedColumns = [];
@@ -112,7 +112,7 @@ export class DDRulesetComponent implements OnInit {
       this.rulesList = this.ruleset.ruleset || [];
       selectedColumns = this.ruleset.selectedColumns || [];
       refSelectedColumns = this.ruleset.refSelectedColumns || [];
-      ruleConfigColumns = this.ruleset.ruleConfigforMultiCols || [];
+      ruleConfigColumns = this.ruleset.rulesformulticols || [];
 
       this.selectedColumns = selectedColumns.map((column, index) => {
         return {
@@ -131,9 +131,9 @@ export class DDRulesetComponent implements OnInit {
         };
       });
 
-      this.columnsForm.controls.ruleConfigfor2Cols.setValue(this.ruleset.ruleConfigfor2Cols);
-      this.columnsForm.controls.ruleConfigfor3Cols.setValue(this.ruleset.ruleConfigfor3Cols);
-      const configArray = this.columnsForm.controls.ruleConfigforMultiCols as FormArray;
+      this.columnsForm.controls.rulesfor2cols.setValue(this.ruleset.rulesfor2cols);
+      this.columnsForm.controls.rulesfor3cols.setValue(this.ruleset.rulesfor3cols);
+      const configArray = this.columnsForm.controls.rulesformulticols as FormArray;
       ruleConfigColumns.map(column => {
         configArray.controls.push(new FormControl(column));
       });
@@ -214,7 +214,7 @@ export class DDRulesetComponent implements OnInit {
     });
   }
 
-  isColumnEnable(event: any, control: FormControl) {
+  isColumnEnable(event: any, control: AbstractControl) {
     if (event.checked) {
       control.setValue("Sample");
       control.enable();
@@ -225,7 +225,7 @@ export class DDRulesetComponent implements OnInit {
   }
 
   onColumnChecked(checked: any, value: any) {
-    const configArray = this.columnsForm.controls.ruleConfigforMultiCols as FormArray;
+    const configArray = this.columnsForm.controls.rulesformulticols as FormArray;
     if (checked) {
       configArray.controls.push(new FormControl(value));
       setTimeout(() => {
@@ -239,13 +239,13 @@ export class DDRulesetComponent implements OnInit {
 
   enableValidation(checked: any) {
     this.isMColumnEnable = checked;
-    const configArray = this.columnsForm.controls.ruleConfigforMultiCols as FormArray;
+    const configArray = this.columnsForm.controls.rulesformulticols as FormArray;
     if (checked) {
       configArray.setValidators([minLengthArray(3)]);
     } else {
       configArray.clearValidators();
     }
-    this.columnsForm.controls.ruleConfigforMultiCols.updateValueAndValidity();
+    this.columnsForm.controls.rulesformulticols.updateValueAndValidity();
   }
 
   getColumnRules() {
@@ -279,9 +279,9 @@ export class DDRulesetComponent implements OnInit {
       selectedColumns: columns,
       refSelectedColumns: this.columnsForm.controls.refernceColumns.value.map(col => col.title),
       sourcepath: this.RSControls.sourcepath.value,
-      ruleConfigfor2Cols: this.columnsForm.controls.ruleConfigfor2Cols.value,
-      ruleConfigfor3Cols: this.columnsForm.controls.ruleConfigfor3Cols.value,
-      ruleConfigforMultiCols: this.isMColumnEnable ? this.columnsForm.controls.ruleConfigforMultiCols.value : []
+      rulesfor2cols: this.columnsForm.controls.rulesfor2cols.value,
+      rulesfor3cols: this.columnsForm.controls.rulesfor3cols.value,
+      rulesformulticols: this.isMColumnEnable ? this.columnsForm.controls.rulesformulticols.value : []
     };
     //update referenceCDE value
     if (payload.refSelectedColumns && payload.refSelectedColumns.length) {
