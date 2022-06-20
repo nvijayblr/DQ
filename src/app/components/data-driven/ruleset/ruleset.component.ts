@@ -189,7 +189,7 @@ export class DDRulesetComponent implements OnInit {
   initRulesFormArray() {
     const selectedRuleColumns = this.RSControls.columnRules as FormArray;
     this.rulesList.map(rule => {
-      if (!rule.isAdded) {
+      if (!rule.isAdded && rule.column) {
         selectedRuleColumns.push(this.intiColumnArray(rule));
       }
       rule.isAdded = true;
