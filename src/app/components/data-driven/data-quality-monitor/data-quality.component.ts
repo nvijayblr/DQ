@@ -270,6 +270,7 @@ export class DataQualityComponent implements OnInit {
 
 
     onSourceCSVSelected(file, source) {
+        source.file = file;
     }
 
     uploadSource(analysis, reason = '') {
